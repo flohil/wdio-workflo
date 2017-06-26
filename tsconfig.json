@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "outDir": "lib/",
+        "types": ["jasmine", "jasmine-expect", "node", "webdriverio"]
+    },
+    "include": [
+        "index.d.ts",
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

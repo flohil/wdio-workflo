@@ -2,10 +2,11 @@ const _ = require( 'lodash' )
 const fs = require( 'fs' )
 const workfloConf = require( './workflo.conf.js' )
 const dateTime = require('../src/utils/report.js').getDateTime()
-const AllureReporter = require('jasmine-allure-reporter')
 
 if ( typeof process.env.LATEST_RUN === 'undefined' ) {
-  fs.writeFile(`${workfloConf.testDir}/results/latestRun`, dateTime, err => {
+  const filepath = `${workfloConf.testDir}/results/latestRun`
+
+  fs.writeFile(filepath, dateTime, err => {
     if (err) {
       return console.error(err)
     }
@@ -46,7 +47,7 @@ exports.config = {
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: 10000,
   framework: 'workflo-jasmine',
-  reporters: ['workflo-spec', /*'junit',*/ 'workflo-allure' /*'allure-addons'/*, 'allure'*/],
+  reporters: [/*'spec',*/ 'workflo-allure' /*'allure-addons'*/],
   reporterOptions: {
     outputDir: `${workfloConf.testDir}/results/${dateTime}`,
     /*allure: {
