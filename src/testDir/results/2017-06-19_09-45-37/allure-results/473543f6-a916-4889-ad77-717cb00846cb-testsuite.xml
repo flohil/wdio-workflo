@@ -1,0 +1,36 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1497858342693' stop='1497858343822'>
+    <name>DuckDuckGo search</name>
+    <title>DuckDuckGo search</title>
+    <test-cases>
+        <test-case start='1497858342694' status='passed' stop='1497858343821'>
+            <name>its alright</name>
+            <title>its alright</title>
+            <labels/>
+            <parameters>
+                <parameter kind='environment-variable' name='capabilities' value='{"maxInstances":1,"browserName":"internet explorer","requireWindowFocus":true,"nativeEvents":true,"unexpectedAlertBehaviour":"accept","ignoreProtectedModeSettings":true,"disable-popup-blocking":true,"enablePersistentHover":true}'/>
+                <parameter kind='environment-variable' name='spec files' value='["/home/fh0045/peterpan/frontend/test/workflo/src/example.spec.ts"]'/>
+            </parameters>
+            <steps>
+                <step start='1497858342735' status='passed' stop='1497858343784'>
+                    <name>POST /wd/hub/session/efe33573-09b1-4b12-8f17-9a6c179376c8/url</name>
+                    <title>POST /wd/hub/session/efe33573-09b1-4b12-8f17-9a6c179376c8/url</title>
+                    <attachments>
+                        <attachment title='Request' source='bffdace0-cfca-4543-befd-ab74e5ab2b53-attachment.json' type='application/json' size='40'/>
+                        <attachment title='Response' source='6761ae1c-6141-4b20-af1f-3f42158c78cc-attachment.json' type='application/json' size='194'/>
+                    </attachments>
+                    <steps/>
+                </step>
+                <step start='1497858343790' status='passed' stop='1497858343815'>
+                    <name>GET /wd/hub/session/efe33573-09b1-4b12-8f17-9a6c179376c8/title</name>
+                    <title>GET /wd/hub/session/efe33573-09b1-4b12-8f17-9a6c179376c8/title</title>
+                    <attachments>
+                        <attachment title='Response' source='5d331503-915c-47e1-964e-3a31ca84d849-attachment.json' type='application/json' size='202'/>
+                    </attachments>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

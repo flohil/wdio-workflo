@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1497858245258' stop='1497858246338'>
+    <name>DuckDuckGo search</name>
+    <title>DuckDuckGo search</title>
+    <test-cases>
+        <test-case start='1497858245258' status='passed' stop='1497858246338'>
+            <name>its alright</name>
+            <title>its alright</title>
+            <labels/>
+            <parameters>
+                <parameter kind='environment-variable' name='capabilities' value='{"maxInstances":1,"browserName":"internet explorer","requireWindowFocus":true,"nativeEvents":true,"unexpectedAlertBehaviour":"accept","ignoreProtectedModeSettings":true,"disable-popup-blocking":true,"enablePersistentHover":true}'/>
+                <parameter kind='environment-variable' name='spec files' value='["/home/fh0045/peterpan/frontend/test/workflo/src/example.spec.ts"]'/>
+            </parameters>
+            <steps>
+                <step start='1497858245294' status='passed' stop='1497858246331'>
+                    <name>POST /wd/hub/session/a3194edb-f82c-4b09-a128-3849858c8835/url</name>
+                    <title>POST /wd/hub/session/a3194edb-f82c-4b09-a128-3849858c8835/url</title>
+                    <attachments>
+                        <attachment title='Request' source='3b798126-7467-4052-83e8-1e89b0141b5d-attachment.json' type='application/json' size='40'/>
+                        <attachment title='Response' source='01e659ce-e3b3-47a5-b606-a9d65b36e3a3-attachment.json' type='application/json' size='194'/>
+                    </attachments>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

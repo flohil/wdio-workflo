@@ -1,0 +1,60 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1497867695051' stop='1497867695080'>
+    <name>Proposal Creation 7.0.1 - Create a proposal</name>
+    <title>Proposal Creation 7.0.1 - Create a proposal</title>
+    <test-cases>
+        <test-case start='1497867695051' status='passed' stop='1497867695064'>
+            <name>Given an administrator opens the proposals page
+            And the admin is older than 18
+            When the administrator hits the create proposal button
+            Then the created proposal should be displayed in the proposal manager table</name>
+            <title>Given an administrator opens the proposals page
+            And the admin is older than 18
+            When the administrator hits the create proposal button
+            Then the created proposal should be displayed in the proposal manager table</title>
+            <labels/>
+            <parameters>
+                <parameter kind='environment-variable' name='capabilities' value='{"maxInstances":1,"browserName":"internet explorer","requireWindowFocus":true,"nativeEvents":true,"unexpectedAlertBehaviour":"accept","ignoreProtectedModeSettings":true,"disable-popup-blocking":true,"enablePersistentHover":true}'/>
+                <parameter kind='environment-variable' name='spec files' value='["/home/fh0045/peterpan/frontend/test/workflo/src/experimental/specs.ts"]'/>
+            </parameters>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1497867695065' status='passed' stop='1497867695073'>
+            <name>Given an administrator opens the proposals page
+            And the admin is older than 18
+            When the administrator hits the create proposal button
+            And the admin filters by today's date
+            Then only proposal's last edited today should be displayed</name>
+            <title>Given an administrator opens the proposals page
+            And the admin is older than 18
+            When the administrator hits the create proposal button
+            And the admin filters by today's date
+            Then only proposal's last edited today should be displayed</title>
+            <labels/>
+            <parameters>
+                <parameter kind='environment-variable' name='capabilities' value='{"maxInstances":1,"browserName":"internet explorer","requireWindowFocus":true,"nativeEvents":true,"unexpectedAlertBehaviour":"accept","ignoreProtectedModeSettings":true,"disable-popup-blocking":true,"enablePersistentHover":true}'/>
+                <parameter kind='environment-variable' name='spec files' value='["/home/fh0045/peterpan/frontend/test/workflo/src/experimental/specs.ts"]'/>
+            </parameters>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1497867695074' status='passed' stop='1497867695080'>
+            <name>Given an administrator opens the proposals page
+            And the admin is younger than 18
+            When the admin hits the xxx logo
+            Then nothing should be displayed</name>
+            <title>Given an administrator opens the proposals page
+            And the admin is younger than 18
+            When the admin hits the xxx logo
+            Then nothing should be displayed</title>
+            <labels/>
+            <parameters>
+                <parameter kind='environment-variable' name='capabilities' value='{"maxInstances":1,"browserName":"internet explorer","requireWindowFocus":true,"nativeEvents":true,"unexpectedAlertBehaviour":"accept","ignoreProtectedModeSettings":true,"disable-popup-blocking":true,"enablePersistentHover":true}'/>
+                <parameter kind='environment-variable' name='spec files' value='["/home/fh0045/peterpan/frontend/test/workflo/src/experimental/specs.ts"]'/>
+            </parameters>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

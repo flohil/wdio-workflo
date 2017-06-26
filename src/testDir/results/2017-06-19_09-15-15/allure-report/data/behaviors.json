@@ -1,0 +1,82 @@
+{
+  "features" : [ {
+    "title" : "Flos Feature",
+    "statistic" : {
+      "total" : 1,
+      "passed" : 1,
+      "pending" : 0,
+      "canceled" : 0,
+      "failed" : 0,
+      "broken" : 0
+    },
+    "stories" : [ {
+      "uid" : "756ef72fa343ab88",
+      "title" : "Flos Story",
+      "statistic" : {
+        "total" : 1,
+        "passed" : 1,
+        "pending" : 0,
+        "canceled" : 0,
+        "failed" : 0,
+        "broken" : 0
+      },
+      "testCases" : [ {
+        "uid" : "3049e2b486110b3a",
+        "name" : "passing step",
+        "title" : "passing step",
+        "time" : {
+          "start" : 1497856519662,
+          "stop" : 1497856524693,
+          "duration" : 5031
+        },
+        "severity" : "BLOCKER",
+        "status" : "PASSED"
+      } ]
+    } ]
+  }, {
+    "title" : "Without feature",
+    "statistic" : {
+      "total" : 2,
+      "passed" : 0,
+      "pending" : 0,
+      "canceled" : 0,
+      "failed" : 1,
+      "broken" : 1
+    },
+    "stories" : [ {
+      "uid" : "7c76db138a03da8a",
+      "title" : "Without story",
+      "statistic" : {
+        "total" : 2,
+        "passed" : 0,
+        "pending" : 0,
+        "canceled" : 0,
+        "failed" : 1,
+        "broken" : 1
+      },
+      "testCases" : [ {
+        "uid" : "b8f71dfa5a4f9afb",
+        "name" : "failing step",
+        "title" : "failing step",
+        "time" : {
+          "start" : 1497856524693,
+          "stop" : 1497856529292,
+          "duration" : 4599
+        },
+        "severity" : "NORMAL",
+        "status" : "FAILED"
+      }, {
+        "uid" : "61cae02a34ab49d3",
+        "name" : "broken step",
+        "title" : "broken step",
+        "time" : {
+          "start" : 1497856529292,
+          "stop" : 1497856534209,
+          "duration" : 4917
+        },
+        "severity" : "NORMAL",
+        "status" : "BROKEN"
+      } ]
+    } ]
+  } ]
+}

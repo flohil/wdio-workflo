@@ -1,0 +1,36 @@
+{
+  "testCases" : [ {
+    "uid" : "3049e2b486110b3a",
+    "name" : "passing step",
+    "title" : "passing step",
+    "time" : {
+      "start" : 1497856519662,
+      "stop" : 1497856524693,
+      "duration" : 5031
+    },
+    "severity" : "BLOCKER",
+    "status" : "PASSED"
+  }, {
+    "uid" : "b8f71dfa5a4f9afb",
+    "name" : "failing step",
+    "title" : "failing step",
+    "time" : {
+      "start" : 1497856524693,
+      "stop" : 1497856529292,
+      "duration" : 4599
+    },
+    "severity" : "NORMAL",
+    "status" : "FAILED"
+  }, {
+    "uid" : "61cae02a34ab49d3",
+    "name" : "broken step",
+    "title" : "broken step",
+    "time" : {
+      "start" : 1497856529292,
+      "stop" : 1497856534209,
+      "duration" : 4917
+    },
+    "severity" : "NORMAL",
+    "status" : "BROKEN"
+  } ]
+}

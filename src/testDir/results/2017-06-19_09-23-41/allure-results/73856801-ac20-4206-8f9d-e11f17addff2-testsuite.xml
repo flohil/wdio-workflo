@@ -1,0 +1,58 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1497857025834' stop='1497857026884'>
+    <name>DuckDuckGo search</name>
+    <title>DuckDuckGo search</title>
+    <test-cases>
+        <test-case start='1497857025835' status='broken' stop='1497857026883'>
+            <name>passing step</name>
+            <title>passing step</title>
+            <labels>
+                <label name='severity' value='blocker'/>
+                <label name='feature' value='Flos Feature'/>
+                <label name='story' value='Flos Story'/>
+                <label name='issue' value='http://hq.documatrix.com/jira/browse/KBCPP-1673'/>
+                <label name='issue' value='http://hq.documatrix.com/jira/browse/KBCPP-1516'/>
+            </labels>
+            <parameters>
+                <parameter kind='environment-variable' name='capabilities' value='{"maxInstances":1,"browserName":"internet explorer","requireWindowFocus":true,"nativeEvents":true,"unexpectedAlertBehaviour":"accept","ignoreProtectedModeSettings":true,"disable-popup-blocking":true,"enablePersistentHover":true}'/>
+                <parameter kind='environment-variable' name='spec files' value='["/home/fh0045/peterpan/frontend/test/workflo/example.spec.js"]'/>
+                <parameter kind='environment-variable' name='flo' value='Flos Umgebung'/>
+                <parameter kind='argument' name='test' value='super test'/>
+                <parameter kind='argument' name='other' value='super other'/>
+            </parameters>
+            <steps>
+                <step start='1497857025849' status='broken' stop='1497857026883'>
+                    <name>navigate to url</name>
+                    <title>navigate to url</title>
+                    <attachments/>
+                    <steps>
+                        <step start='1497857025851' status='passed' stop='1497857026830'>
+                            <name>POST /wd/hub/session/32e1aa18-f68e-4541-9461-72f64a16358a/url</name>
+                            <title>POST /wd/hub/session/32e1aa18-f68e-4541-9461-72f64a16358a/url</title>
+                            <attachments>
+                                <attachment title='Request' source='6dc49391-e4eb-4f21-b294-aae0b034f58a-attachment.json' type='application/json' size='40'/>
+                                <attachment title='Response' source='20373c7a-95e7-4d89-b0a1-e264deca838a-attachment.json' type='application/json' size='194'/>
+                            </attachments>
+                            <steps/>
+                        </step>
+                        <step start='1497857026834' status='passed' stop='1497857026877'>
+                            <name>GET /wd/hub/session/32e1aa18-f68e-4541-9461-72f64a16358a/url</name>
+                            <title>GET /wd/hub/session/32e1aa18-f68e-4541-9461-72f64a16358a/url</title>
+                            <attachments>
+                                <attachment title='Response' source='68bf01ee-6d95-445c-b527-47165873583b-attachment.json' type='application/json' size='215'/>
+                            </attachments>
+                            <steps/>
+                        </step>
+                    </steps>
+                </step>
+            </steps>
+            <attachments/>
+            <failure>
+                <message>Failed: myTestFunc is not defined</message>
+                <stack-trace>ReferenceError: myTestFunc is not defined
+                    at Object.it (/home/fh0045/peterpan/frontend/test/workflo/example.spec.js:17:5)</stack-trace>
+            </failure>
+            <description type='text'>Flos super beschreibung</description>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

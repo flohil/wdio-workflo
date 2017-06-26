@@ -1,0 +1,6 @@
+config/workflo.conf.js
+node_modules
+testDir/logs
+testDir/results
+!templates/*
+allure.properties

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="duckduckgo_search" timestamp="2017-06-19T09:15:19" time="14.547" tests="3" failures="0" errors="2" skipped="0">
+    <properties>
+      <property name="specId" value="e469885feaca2a3e11b605765889fea0"/>
+      <property name="suiteName" value="DuckDuckGo search"/>
+      <property name="capabilities" value="internetexplorer"/>
+      <property name="file" value="./example.spec.js"/>
+    </properties>
+    <testcase classname="internetexplorer.duckduckgo_search" name="passing_step" time="5.031"/>
+    <testcase classname="internetexplorer.duckduckgo_search" name="failing_step" time="4.599">
+      <error message="Expected 'WebdriverIO at DuckDuckGo' to equal 'asdfasdf'."/>
+      <system-err>
+        <![CDATA[
+Error: Expected 'WebdriverIO at DuckDuckGo' to equal 'asdfasdf'.
+    at Object.it (/home/fh0045/peterpan/frontend/test/workflo/example.spec.js:39:26)
+]]>
+      </system-err>
+    </testcase>
+    <testcase classname="internetexplorer.duckduckgo_search" name="broken_step" time="4.917">
+      <error message="Failed: An element could not be located on the page using the given search parameters."/>
+      <system-err>
+        <![CDATA[
+Error: An element could not be located on the page using the given search parameters.
+    at element("#search_button_homepagesss") - click.js:12:17
+    at click("#search_button_homepagesss") - at Object.it (example.spec.js:51:13)
+]]>
+      </system-err>
+    </testcase>
+  </testsuite>
+</testsuites>

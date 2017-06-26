@@ -1,0 +1,14 @@
+allure commandline tool installieren
+
+write allure.properties file
+
+types installieren (jasmine, jasmine-expect, webdriverio)
+
+# all evaluations must take place in specs, because allure does not display errors with correct message?
+
+# screenshots are sent as part of json and are not displayed -> nur bei broken wird screenshot geschickt, manuell überarbeiten?
+json antwort bei broken -> screenshot rausziehen, failed: screenshot manuell machen
+
+# type defs for jasmine custom message 2
+
+# screenshot when expect fails -> take it already during verify, if all went good: attach, else: throw away

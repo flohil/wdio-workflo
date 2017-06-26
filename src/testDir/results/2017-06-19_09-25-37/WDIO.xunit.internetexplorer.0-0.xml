@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="duckduckgo_search" timestamp="2017-06-19T09:25:42" time="5.613" tests="1" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="e469885feaca2a3e11b605765889fea0"/>
+      <property name="suiteName" value="DuckDuckGo search"/>
+      <property name="capabilities" value="internetexplorer"/>
+      <property name="file" value="./example.spec.js"/>
+    </properties>
+    <testcase classname="internetexplorer.duckduckgo_search" name="passing_step" time="5.613"/>
+  </testsuite>
+</testsuites>

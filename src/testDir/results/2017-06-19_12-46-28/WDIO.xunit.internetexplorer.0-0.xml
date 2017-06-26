@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="logout" timestamp="2017-06-19T12:46:34" time="0.018" tests="1" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="ee1dae5e8ae742f1c1e2f6c9d3a5bb65"/>
+      <property name="suiteName" value="logout"/>
+      <property name="capabilities" value="internetexplorer"/>
+      <property name="file" value="./src/experimental/helloworld.ts"/>
+    </properties>
+    <testcase classname="internetexplorer.logout" name="logout" time="0.017"/>
+  </testsuite>
+</testsuites>

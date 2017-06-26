@@ -1,0 +1,47 @@
+{
+  "defectsList" : [ {
+    "title" : "Product defects",
+    "status" : "FAILED",
+    "defects" : [ {
+      "uid" : "b78675217923b735",
+      "failure" : {
+        "message" : "Expected 'WebdriverIO at DuckDuckGo' to equal 'asdfasdf'.",
+        "stackTrace" : "Error: Expected 'WebdriverIO at DuckDuckGo' to equal 'asdfasdf'.\n                    at Object.it (/home/fh0045/peterpan/frontend/test/workflo/example.spec.js:39:26)"
+      },
+      "testCases" : [ {
+        "uid" : "b8f71dfa5a4f9afb",
+        "name" : "failing step",
+        "title" : "failing step",
+        "time" : {
+          "start" : 1497856524693,
+          "stop" : 1497856529292,
+          "duration" : 4599
+        },
+        "severity" : "NORMAL",
+        "status" : "FAILED"
+      } ]
+    } ]
+  }, {
+    "title" : "Test defects",
+    "status" : "BROKEN",
+    "defects" : [ {
+      "uid" : "64060fce3debac29",
+      "failure" : {
+        "message" : "Failed: An element could not be located on the page using the given search parameters.",
+        "stackTrace" : "Error: An element could not be located on the page using the given search parameters.\n                    at element(\"#search_button_homepagesss\") - click.js:12:17\n                    at click(\"#search_button_homepagesss\") - at Object.it (example.spec.js:51:13)"
+      },
+      "testCases" : [ {
+        "uid" : "61cae02a34ab49d3",
+        "name" : "broken step",
+        "title" : "broken step",
+        "time" : {
+          "start" : 1497856529292,
+          "stop" : 1497856534209,
+          "duration" : 4917
+        },
+        "severity" : "NORMAL",
+        "status" : "BROKEN"
+      } ]
+    } ]
+  } ]
+}

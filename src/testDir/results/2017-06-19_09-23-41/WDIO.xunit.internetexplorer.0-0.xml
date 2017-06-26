@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="duckduckgo_search" timestamp="2017-06-19T09:23:45" time="1.05" tests="1" failures="0" errors="1" skipped="0">
+    <properties>
+      <property name="specId" value="e469885feaca2a3e11b605765889fea0"/>
+      <property name="suiteName" value="DuckDuckGo search"/>
+      <property name="capabilities" value="internetexplorer"/>
+      <property name="file" value="./example.spec.js"/>
+    </properties>
+    <testcase classname="internetexplorer.duckduckgo_search" name="passing_step" time="1.05">
+      <error message="Failed: myTestFunc is not defined"/>
+      <system-err>
+        <![CDATA[
+ReferenceError: myTestFunc is not defined
+    at Object.it (/home/fh0045/peterpan/frontend/test/workflo/example.spec.js:17:5)
+]]>
+      </system-err>
+    </testcase>
+  </testsuite>
+</testsuites>
