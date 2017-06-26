@@ -90,6 +90,10 @@ export const Then = (id: number, description: string) => {
     process.send({event: 'test:meta', story: `${story.storyName}`})
     process.send({event: 'test:meta', issue: story.metadata.issues})
 
+    process.send({event: 'test:meta', description: 'my description'})
+
+    expect(1).toBe(2)
+
     // create an allure step for each given and when
     allDescriptions.slice(0, allDescriptions.length - 1).forEach(description => stepFunc(description))
 

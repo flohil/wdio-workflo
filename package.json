@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "wdio ./config/wdio.conf.js --color",
-    "generate_report": "allure generate ./testDir/results/$(cat ./testDir/results/latestRun)/allure-results/ -o ./testDir/results/$(cat ./testDir/results/latestRun)/allure-report",
-    "latest_report": "npm run generate_report && allure report open -o ./testDir/results/$(cat ./testDir/results/latestRun)/allure-report",
+    "generate_report": "node ./scripts/generate_allure_report.js $TESTDIR",
+    "open_report": "node ./scripts/open_allure_report.js $TESTDIR",
+    "latest_report": "npm run generate_report && npm run open_report",
     "start": "npm run build:live",
     "build:live": "nodemon --exec ts-node -- ./src/testDir/src/testcases/helloworld.tc.ts"
   },
@@ -23,6 +24,7 @@
     "@types/jasmine": "^2.5.52",
     "@types/jasmine-expect": "^3.6.1",
     "@types/webdriverio": "^4.7.1",
+    "allure-commandline": "^2.1.1",
     "colors": "^1.1.2",
     "deep-diff": "^0.3.8",
     "deep-freeze": "0.0.1",
@@ -42,10 +44,9 @@
     "ts-node": "^3.0.6",
     "typescript": "^2.3.4",
     "wdio-selenium-standalone-service": "0.0.9",
-    "wdio-spec-reporter": "^0.1.0",
     "wdio-workflo-allure-reporter": "0.0.2",
     "wdio-workflo-jasmine-framework": "0.0.2",
-    "wdio-workflo-spec-reporter": "0.0.2",
+    "wdio-workflo-spec-reporter": "0.0.3",
     "webdriverio": "^4.8.0"
   },
   "dependencies": {}

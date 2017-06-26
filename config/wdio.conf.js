@@ -28,7 +28,7 @@ exports.config = {
    * specify test files
    */
   //specs: 'src/example.spec.ts',
-  specs: [ 'src/testDir/src/testcases/helloworld.tc.ts', /*'src/testDir/src/testcases/other.tc.ts',*/ 'src/testDir/src/specs/example.spec.ts' ],
+  specs: [ 'src/testDir/src/testcases/helloworld.tc.ts', /*'src/testDir/src/testcases/other.tc.ts', 'src/testDir/src/specs/example.spec.ts'*/ ],
   /**
    * capabilities
    */
@@ -47,7 +47,7 @@ exports.config = {
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: 10000,
   framework: 'workflo-jasmine',
-  reporters: [/*'spec',*/ 'workflo-allure' /*'allure-addons'*/],
+  reporters: ['workflo-spec', 'workflo-allure', 'allure-addons'],
   reporterOptions: {
     outputDir: `${workfloConf.testDir}/results/${dateTime}`,
     /*allure: {
@@ -58,10 +58,12 @@ exports.config = {
       debug: false,
       debugSeleniumCommand: true
     }*/
-    junit: {
-      outputDir: `${workfloConf.testDir}/results/${dateTime}/junit-results/`
-    },
     'workflo-allure': {
+      outputDir: `${workfloConf.testDir}/results/${dateTime}/allure-results/`,
+      debug: false,
+      debugSeleniumCommand: true
+    },
+    'allure-addons': {
       outputDir: `${workfloConf.testDir}/results/${dateTime}/allure-results/`,
       debug: false,
       debugSeleniumCommand: true
