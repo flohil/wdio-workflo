@@ -9,9 +9,7 @@ var allure = require('allure-commandline')
 
 var workfloConf = require(process.env.WORKFLO_CONFIG)
 var latestRunPath = path.join(workfloConf.testDir, 'results', 'latestRun')
-var latestRun = fs.readFileSync(workfloConf.latestRunPath, 'utf8');
-
-console.log(latestRun)
+var latestRun = fs.readFileSync(latestRunPath, 'utf8');
 
 // returns ChildProcess instance 
 var open = allure([
