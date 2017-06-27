@@ -3,19 +3,21 @@ if (typeof process.env.WORKFLO_CONFIG === 'undefined') {
   process.exit(1)
 }
 
+const path = require('path')
 const _ = require( 'lodash' )
 const fs = require( 'fs' )
 const workfloConf = require( process.env.WORKFLO_CONFIG )
 const dateTime = require('../utils/report.js').getDateTime()
 
 if ( typeof process.env.LATEST_RUN === 'undefined' ) {
-  const resultsPath = `${workfloConf.testDir}/results/`
+
+  const resultsPath = path.join(workfloConf.testDir, 'results')
 
   if (!fs.existsSync(resultsPath)){
     fs.mkdirSync(resultsPath);
   }
 
-  const filepath = `${resultsPath}/latestRun`
+  const filepath = path.join(resultsPath, 'latestRun')
 
   fs.writeFile(filepath, dateTime, err => {
     if (err) {
