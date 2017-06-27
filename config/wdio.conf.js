@@ -1,3 +1,8 @@
+if (typeof process.env.WORKFLO_CONFIG === 'undefined') {
+  console.error("Please provide an absolute path to workflo.conf.js location under WORKFLO_CONFIG environment variable!")
+  process.exit(1)
+}
+
 const _ = require( 'lodash' )
 const fs = require( 'fs' )
 const workfloConf = require( process.env.WORKFLO_CONFIG )
@@ -47,7 +52,7 @@ exports.config = {
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: 10000,
   framework: 'workflo-jasmine',
-  reporters: ['workflo-spec', 'workflo-allure', 'allure-addons'],
+  reporters: ['workflo-spec', 'workflo-allure'/*, 'allure-addons'*/],
   reporterOptions: {
     outputDir: `${workfloConf.testDir}/results/${dateTime}`,
     /*allure: {
