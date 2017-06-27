@@ -73,7 +73,7 @@ exports.Then = (id, description) => {
                 storyId: storyId
             } });
     };
-    it(`${words.Then} ${id}`, bodyFunc);
+    it(`${words.Then} ${id}: ${description}`, bodyFunc);
 };
 exports.suite = (description, metadata, bodyFunc) => {
     describe(description, bodyFunc);

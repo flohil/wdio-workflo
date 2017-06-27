@@ -103,7 +103,7 @@ export const Then = (id: number, description: string) => {
     }})
   }
   
-  it(`${words.Then} ${id}`, bodyFunc)
+  it(`${words.Then} ${id}: ${description}`, bodyFunc)
 }
 
 export const suite = (description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) => {
