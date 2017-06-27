@@ -1,9 +1,11 @@
 {
-  "name": "workflo",
+  "name": "wdio-workflo",
   "version": "0.0.1",
   "description": "Framework for automated functional system tests in gherkin style",
-  "main": "index.js",
+  "main": "index.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "test": "wdio-workflo config/wdio.conf.js --color",
     "generate_report": "node ./scripts/generate_allure_report.js $TESTDIR",
     "open_report": "node ./scripts/open_allure_report.js $TESTDIR",
@@ -15,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/flohil/workflo"
+    "url": "https://github.com/flohil/wdio-workflo"
   },
   "bugs": {
-    "url": "https://github.com/flohil/workflo/issues"
+    "url": "https://github.com/flohil/wdio-workflo/issues"
   },
   "devDependencies": {
     "@types/jasmine": "^2.5.52",
