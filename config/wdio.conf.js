@@ -47,22 +47,22 @@ exports.config = {
    */
   capabilities: [workfloConf.capabilities],
   services: ['selenium-standalone'],
-  seleniumLogs: `${workfloConf.testDir}/logs/selenium/${dateTime}`,
+  seleniumLogs: path.relative('./', path.join(workfloConf.testDir, 'logs', 'selenium', dateTime)),
   seleniumArgs: workfloConf.selenium.args,
   seleniumInstallArgs: workfloConf.selenium.installArgs,
   /**
    * test configurations
    */
   logLevel: workfloConf.logLevel,
-  logOutput: `${workfloConf.testDir}/logs/`,
+  logOutput: path.join(workfloConf.testDir, 'logs'),
   coloredLogs: true,
   screenshotPath: null,
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: 10000,
   framework: 'workflo-jasmine',
-  reporters: ['workflo-spec', 'workflo-allure'/*, 'allure-addons'*/],
+  reporters: ['workflo-spec', 'workflo-allure'],
   reporterOptions: {
-    outputDir: `${workfloConf.testDir}/results/${dateTime}`,
+    outputDir: path.join(workfloConf.testDir, 'results', dateTime),
     /*allure: {
       outputDir: `${workfloConf.testDir}/results/${dateTime}/allure-results/`
     },*/
@@ -72,12 +72,7 @@ exports.config = {
       debugSeleniumCommand: true
     }*/
     'workflo-allure': {
-      outputDir: `${workfloConf.testDir}/results/${dateTime}/allure-results/`,
-      debug: false,
-      debugSeleniumCommand: true
-    },
-    'allure-addons': {
-      outputDir: `${workfloConf.testDir}/results/${dateTime}/allure-results/`,
+      outputDir: path.join(workfloConf.testDir, 'results', dateTime, 'allure-results'),
       debug: false,
       debugSeleniumCommand: true
     }
