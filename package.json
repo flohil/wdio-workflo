@@ -1,12 +1,12 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "index.ts",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "wdio-workflo config/wdio.conf.js --color",
+    "test": "wdio-workflo $WORKFLO_CONFIG --color",
     "generate_report": "node ./scripts/generate_allure_report.js $TESTDIR",
     "open_report": "node ./scripts/open_allure_report.js $TESTDIR",
     "latest_report": "npm run generate_report && npm run open_report",
@@ -23,6 +23,8 @@
     "url": "https://github.com/flohil/wdio-workflo/issues"
   },
   "devDependencies": {
+  },
+  "dependencies": {
     "@types/jasmine": "^2.5.52",
     "@types/jasmine-expect": "^3.6.1",
     "@types/webdriverio": "^4.7.1",
@@ -50,6 +52,5 @@
     "wdio-workflo-jasmine-framework": "0.0.2",
     "wdio-workflo-spec-reporter": "0.0.3",
     "webdriverio-workflo": "0.0.9"
-  },
-  "dependencies": {}
+  }
 }

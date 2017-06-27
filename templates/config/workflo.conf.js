@@ -1,5 +1,7 @@
+const path = require('path')
+
 module.exports = {
-  testDir: './testDir',
+  testDir: path.resolve('./testDir'),
   logLevel: 'verbose',
   baseUrl: 'http://webdriver.io', // replace with anna base url
   windowSize: {
