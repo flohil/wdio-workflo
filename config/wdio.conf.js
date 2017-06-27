@@ -1,5 +1,5 @@
 if (typeof process.env.WORKFLO_CONFIG === 'undefined') {
-  console.error("Please provide an absolute path to workflo.conf.js location under WORKFLO_CONFIG environment variable!")
+  console.error("Please provide the absolute path to workflo.conf.js location as WORKFLO_CONFIG environment variable!")
   process.exit(1)
 }
 

@@ -1,23 +1,22 @@
-var fs = require('fs')
-var path = require('path')
-var allure = require('allure-commandline');
-var testDir = process.env.testDir
-
-if (typeof testDir === 'undefined') {
-    console.error('TESTDIR must be specified!')
-    process.exit(1)
+if (typeof process.env.WORKFLO_CONFIG === 'undefined') {
+  console.error("Please provide the absolute path to workflo.conf.js location as WORKFLO_CONFIG environment variable!")
+  process.exit(1)
 }
 
-var latestRunPath = path.join(testDir, 'results', 'latestRun')
+var fs = require('fs')
+var path = require('path')
+var allure = require('allure-commandline')
 
-var latestRun = fs.readFileSync(latestRunPath, 'utf8');
+var workfloConf = require(process.env.WORKFLO_CONFIG)
+var latestRunPath = path.join(workfloConf.testDir, 'results', 'latestRun')
+var latestRun = fs.readFileSync(workfloConf.latestRunPath, 'utf8');
 
 console.log(latestRun)
 
 // returns ChildProcess instance 
 var open = allure([
     'open',
-    path.join(testDir, 'results', latestRun, 'allure-report')]);
+    path.join(workfloConf.testDir, 'results', latestRun, 'allure-report')]);
  
 open.on('exit', function(exitCode) {
     console.log('Showing report for run:', latestRun);
