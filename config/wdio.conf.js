@@ -1,7 +1,7 @@
 const _ = require( 'lodash' )
 const fs = require( 'fs' )
-const workfloConf = require( './workflo.conf.js' )
-const dateTime = require('../src/utils/report.js').getDateTime()
+const workfloConf = require( process.env.WORKFLO_CONFIG )
+const dateTime = require('../utils/report.js').getDateTime()
 
 if ( typeof process.env.LATEST_RUN === 'undefined' ) {
   const filepath = `${workfloConf.testDir}/results/latestRun`

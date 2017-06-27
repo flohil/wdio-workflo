@@ -1,17 +1,18 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "index.ts",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "wdio-workflo $WORKFLO_CONFIG --color",
+    "test": "wdio-workflo ./config/wdio.conf.js --color",
     "generate_report": "node ./scripts/generate_allure_report.js $TESTDIR",
     "open_report": "node ./scripts/open_allure_report.js $TESTDIR",
     "latest_report": "npm run generate_report && npm run open_report",
     "start": "npm run build:live",
-    "build:live": "nodemon --exec ts-node -- ./src/testDir/src/testcases/helloworld.tc.ts"
+    "build:live": "nodemon --exec ts-node -- ./src/testDir/src/testcases/helloworld.tc.ts",
+    "prepublish": "npm run build"
   },
   "author": "Florian Hilbinger",
   "license": "MIT",
