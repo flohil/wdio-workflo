@@ -39,7 +39,7 @@ exports.config = {
    * specify test files
    */
   //specs: 'src/example.spec.ts',
-  specs: [ `${workfloConf.testDir}/src/testcases/helloworld.tc.ts`, /*'src/testDir/src/testcases/other.tc.ts', 'src/testDir/src/specs/example.spec.ts'*/ ],
+  specs: workfloConf.testcases.concat(workfloConf.specs),
   /**
    * capabilities
    */
@@ -133,8 +133,6 @@ exports.config = {
 
     // some gui tests require a sized window
     browser.windowHandleSize(workfloConf.windowSize)
-
-    global.myTestFunc = () => { console.log("hello") }
 
     // extend default object and string prototypes
     // with custom utitily functions

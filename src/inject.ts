@@ -1,6 +1,7 @@
 //import functions from './functions'
 //import registerSteps from './registerSteps'
 import * as Functions from './lib/functions'
+import * as wf from './index'
 
 function safeAdd( context, key, obj ) {
   if ( key in context ) {

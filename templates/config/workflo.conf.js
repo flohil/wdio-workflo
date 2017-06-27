@@ -1,7 +1,7 @@
-const path = require('path')
+const testDir = __dirname + '/testDir'
 
 module.exports = {
-  testDir: path.resolve('./testDir'),
+  testDir: testDir,
   logLevel: 'verbose',
   baseUrl: 'http://webdriver.io', // replace with anna base url
   windowSize: {
@@ -25,5 +25,7 @@ module.exports = {
     ignoreProtectedModeSettings: true,
     "disable-popup-blocking": true,
     enablePersistentHover: true,
-  }
+  },
+  specs: [ `${testDir}/src/specs/**/*.tc.ts` ],
+  testcases: [ `${testDir}/src/testcases/**/*.tc.ts` ]
 }
