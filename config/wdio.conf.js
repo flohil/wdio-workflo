@@ -9,7 +9,13 @@ const workfloConf = require( process.env.WORKFLO_CONFIG )
 const dateTime = require('../utils/report.js').getDateTime()
 
 if ( typeof process.env.LATEST_RUN === 'undefined' ) {
-  const filepath = `${workfloConf.testDir}/results/latestRun`
+  const resultsPath = `${workfloConf.testDir}/results/`
+
+  if (!fs.existsSync(resultsPath)){
+    fs.mkdirSync(resultsPath);
+  }
+
+  const filepath = `${resultsPath}/latestRun`
 
   fs.writeFile(filepath, dateTime, err => {
     if (err) {
@@ -33,7 +39,7 @@ exports.config = {
    * specify test files
    */
   //specs: 'src/example.spec.ts',
-  specs: [ 'src/testDir/src/testcases/helloworld.tc.ts', /*'src/testDir/src/testcases/other.tc.ts', 'src/testDir/src/specs/example.spec.ts'*/ ],
+  specs: [ `${workfloConf.testDir}/src/testcases/helloworld.tc.ts`, /*'src/testDir/src/testcases/other.tc.ts', 'src/testDir/src/specs/example.spec.ts'*/ ],
   /**
    * capabilities
    */
@@ -123,7 +129,7 @@ exports.config = {
 
     require('ts-node/register')
 
-    require('../src/inject.ts')
+    require('../dist/inject.js')
 
     // some gui tests require a sized window
     browser.windowHandleSize(workfloConf.windowSize)
