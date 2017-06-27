@@ -117,11 +117,11 @@ export const testcase = (description: string, metadata: Workflo.ITestcaseMetadat
 }
 
 const _when = function(step: IParameterizedStep, prefix: string) {
-  process.send({event: 'step:start', title: `${prefix} ${step.description}`})
+  //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
   
-  step.execute()
+  step.execute(prefix)
   
-  process.send({event: 'step:end'})
+  //process.send({event: 'step:end'})
 
   return {
     "and": step => _when(step, words.And.toLowerCase())
@@ -129,11 +129,11 @@ const _when = function(step: IParameterizedStep, prefix: string) {
 }
 
 const _given = function(step: IParameterizedStep, prefix: string) { 
-  process.send({event: 'step:start', title: `${prefix} ${step.description}`})
+  //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
   
-  step.execute()
+  step.execute(prefix)
   
-  process.send({event: 'step:end'})
+  //process.send({event: 'step:end'})
 
   return {
     "and": step => _given(step, words.And.toLowerCase()),
@@ -160,7 +160,11 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
 
   _process.workflo.specObj = specObj
 
+  process.send({event: 'step:start', title: `verify: ${JSON.stringify(specObj)}`})
+
   func()
+
+  process.send({event: 'step:end'})
 
   _process.workflo.specObj = undefined
 }

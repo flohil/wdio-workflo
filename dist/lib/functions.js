@@ -83,17 +83,17 @@ exports.testcase = (description, metadata, bodyFunc) => {
     it(description, bodyFunc);
 };
 const _when = function (step, prefix) {
-    process.send({ event: 'step:start', title: `${prefix} ${step.description}` });
-    step.execute();
-    process.send({ event: 'step:end' });
+    //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
+    step.execute(prefix);
+    //process.send({event: 'step:end'})
     return {
         "and": step => _when(step, words.And.toLowerCase())
     };
 };
 const _given = function (step, prefix) {
-    process.send({ event: 'step:start', title: `${prefix} ${step.description}` });
-    step.execute();
-    process.send({ event: 'step:end' });
+    //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
+    step.execute(prefix);
+    //process.send({event: 'step:end'})
     return {
         "and": step => _given(step, words.And.toLowerCase()),
         "when": step => _when(step, words.When)
@@ -112,7 +112,9 @@ exports.verify = function (specObj, func) {
         _process.workflo = {};
     }
     _process.workflo.specObj = specObj;
+    process.send({ event: 'step:start', title: `verify: ${JSON.stringify(specObj)}` });
     func();
+    process.send({ event: 'step:end' });
     _process.workflo.specObj = undefined;
 };
 //# sourceMappingURL=functions.js.map

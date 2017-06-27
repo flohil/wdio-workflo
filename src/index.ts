@@ -68,7 +68,7 @@ declare global {
 
   interface IParameterizedStep{
     description: string,
-    execute: () => void
+    execute: (prefix?: string) => void
   }
 
   function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void

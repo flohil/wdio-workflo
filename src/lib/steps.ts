@@ -25,16 +25,29 @@ export function stepsSetter(target, name, value) : boolean {
 
 export class ParameterizedStep<I, O> implements IParameterizedStep {
   public description: string
-  public execute: () => void
+  public execute: (prefix: string) => void
 
   constructor(params: IStepArgs<I, O>, stepFunc: (arg: I) => O) {
     if( typeof params.description !== "undefined" ) {
       this.description = Kiwi.compose(params.description, params.arg)
     }
     if ( typeof params.cb !== "undefined" ) {
-      this.execute = () => params.cb(stepFunc(params.arg))
+      this.execute = prefix => {
+        prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `
+        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: JSON.stringify(params.arg)})
+        const result: O = stepFunc(params.arg)
+        process.send({event: 'step:start', title: `Callback`, arg: JSON.stringify(result)})
+        params.cb(result)
+        process.send({event: 'step:end'})
+        process.send({event: 'step:end', arg: JSON.stringify(result)})
+      }
     } else {
-      this.execute = () => stepFunc(params.arg)
+      this.execute = prefix => {
+        prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `
+        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: JSON.stringify(params.arg)})
+        const result: O = stepFunc(params.arg)
+        process.send({event: 'step:end', arg: JSON.stringify(result)})
+      }
     }
   }
 }
