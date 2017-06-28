@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/jasmine": "^2.5.52",
     "@types/jasmine-expect": "^3.6.1",
+    "@types/node": "^8.0.4",
     "@types/webdriverio": "^4.7.1",
     "allure-commandline": "^2.1.1",
     "colors": "^1.1.2",

@@ -27,5 +27,9 @@ module.exports = {
     enablePersistentHover: true,
   },
   specs: [ `${testDir}/src/specs/**/*.tc.ts` ],
-  testcases: [ `${testDir}/src/testcases/**/*.tc.ts` ]
+  testcases: [ `${testDir}/src/testcases/**/*.tc.ts` ],
+  allure: {
+    issueTrackerPattern: "http://hq.documatrix.com/jira/browse/%s",
+    bugTrackerPattern: "https://bugtracker/issue-%s"
+  }
 }
