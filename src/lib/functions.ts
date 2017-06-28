@@ -89,6 +89,7 @@ export const Then = (id: number, description: string) => {
     process.send({event: 'test:meta', feature: `${story.featureName}`})
     process.send({event: 'test:meta', story: `${story.storyName}`})
     process.send({event: 'test:meta', issue: story.metadata.issues})
+    process.send({event: 'test:meta', severity: story.metadata.severity || 'normal'})
 
     process.send({event: 'test:meta', description: 'my description'})
 
@@ -164,7 +165,7 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
 
   func()
 
-  process.send({event: 'step:end'})
+  process.send({event: 'step:end', type: 'verifyEnd'})
 
   _process.workflo.specObj = undefined
 }

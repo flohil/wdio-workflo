@@ -4,6 +4,7 @@ declare global  {
         type StepImplMap = {
             [key: string]: StepImpl;
         };
+        type severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial';
         interface ISpecWhen {
             And: (description: string, bodyFunc: () => void) => ISpecWhen;
         }
@@ -19,7 +20,8 @@ declare global  {
             whens: string[];
         }
         interface IStoryMetaData {
-            issues: string[];
+            issues?: string[];
+            severity?: severity;
         }
         interface IFeatureMetadata {
         }

@@ -63,6 +63,7 @@ exports.Then = (id, description) => {
         process.send({ event: 'test:meta', feature: `${story.featureName}` });
         process.send({ event: 'test:meta', story: `${story.storyName}` });
         process.send({ event: 'test:meta', issue: story.metadata.issues });
+        process.send({ event: 'test:meta', severity: story.metadata.severity || 'normal' });
         process.send({ event: 'test:meta', description: 'my description' });
         // create an allure step for each given and when
         allDescriptions.slice(0, allDescriptions.length - 1).forEach(description => stepFunc(description));
@@ -114,7 +115,7 @@ exports.verify = function (specObj, func) {
     _process.workflo.specObj = specObj;
     process.send({ event: 'step:start', title: `verify: ${JSON.stringify(specObj)}` });
     func();
-    process.send({ event: 'step:end' });
+    process.send({ event: 'step:end', type: 'verifyEnd' });
     _process.workflo.specObj = undefined;
 };
 //# sourceMappingURL=functions.js.map

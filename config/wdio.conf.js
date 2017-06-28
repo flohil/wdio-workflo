@@ -84,7 +84,12 @@ exports.config = {
        * only take screenshot if assertion failed
        */
 
+      if ( process.workflo && process.workflo.specObj ) {
+        assertion.specObj = process.workflo.specObj
+      }
+
       if ( passed ) {
+        process.send({event: 'step:succeeded', cid: '0-0', assertion: assertion})
         return
       }
       if ( assertion.error ) {
@@ -94,18 +99,7 @@ exports.config = {
           // screenshot
       }
       else if ( assertion.matcherName ) {
-
-        if ( process.workflo && process.workflo.specObj ) {
-          assertion.specObj = process.workflo.specObj
-          //assertion.screenshot = browser.saveScreenshot()
-          //console.log("PROCESS: ", process.workflo.specObj)
-          //console.log("screenshot: ", assertion.screenshot)
-        }
-
         process.send({event: 'step:failed', cid: '0-0', assertion: assertion})
-
-        //console.log('\n\n\n\n', process.getuid())
-        //console.log(process.getgid())
       }
     },
   },
