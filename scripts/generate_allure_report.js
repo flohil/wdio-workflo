@@ -7,6 +7,7 @@ var fs = require('fs')
 var path = require('path')
 var allure = require('allure-commandline')
 var wrench = require('wrench')
+var getInstalledPath = require('get-installed-path')
 
 var workfloConf = require(process.env.WORKFLO_CONFIG)
 var latestRunPath = path.join(workfloConf.testDir, 'results', 'latestRun')
@@ -34,16 +35,17 @@ var rmdir = function(dir) {
     fs.rmdirSync(dir);
 }
 
-const allureBinPath = path.resolve(__dirname,'../node_modules/allure-commandline/dist/bin')
-const allurePathBinPath = path.resolve(__dirname, '../templates/node_modules/allure-commandline/dist/bin')
+const allureCliPath = require.resolve('allure-commandline')
 
-console.log("binPath: ", allureBinPath)
+const allureBinPath = path.resolve(allureCliPath, '../', 'dist/bin')
+const allureBinBakPath = `${allureBinPath}_bak`
+const allurePatchBinPath = path.resolve(__dirname, '../templates/node_modules/allure-commandline/dist/bin')
 
 if (fs.existsSync(allureBinPath)) {
-    rmdir(allureBinPath)
+    fs.renameSync(allureBinPath, allureBinBakPath)
 }
 
-wrench.copyDirSyncRecursive(allurePathBinPath, allureBinPath)
+wrench.copyDirSyncRecursive(allurePatchBinPath, allureBinPath)
 
 process.env.ALLURE_BUG_TRACKER_PATTERN = workfloConf.allure.bugTrackerPattern
 process.env.ALLURE_ISSUE_TRACKER_PATTERN = workfloConf.allure.issueTrackerPattern
@@ -56,5 +58,9 @@ var generation = allure([
     path.join(workfloConf.testDir, 'results', latestRun, 'allure-report')]);
  
 generation.on('exit', function(exitCode) {
+    if (fs.existsSync(allureBinBakPath)) {
+        rmdir(allureBinPath)
+        fs.renameSync(allureBinBakPath, allureBinPath)
+    }
     console.log('Generation is finished with code:', exitCode);
-});
+})

@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,6 +33,7 @@
     "colors": "^1.1.2",
     "deep-diff": "^0.3.8",
     "deep-freeze": "0.0.1",
+    "get-installed-path": "^2.0.3",
     "gulp": "^3.9.1",
     "gulp-shell": "^0.6.3",
     "gulp-typescript": "^3.1.7",
