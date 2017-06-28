@@ -120,6 +120,7 @@ exports.config = {
     require('jasmine-expect')
 
     require('ts-node/register')
+    require('tsconfig-paths/register')
 
     require('../dist/inject.js')
 
