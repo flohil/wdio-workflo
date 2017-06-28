@@ -55,7 +55,8 @@ var generation = allure([
     'generate', 
     path.join(workfloConf.testDir, 'results', latestRun, 'allure-results'),
     '-o',
-    path.join(workfloConf.testDir, 'results', latestRun, 'allure-report')]);
+    path.join(workfloConf.testDir, 'results', latestRun, 'allure-report'),
+	'--clean']);
  
 generation.on('exit', function(exitCode) {
     if (fs.existsSync(allureBinBakPath)) {
