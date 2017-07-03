@@ -1,10 +1,11 @@
 //import functions from './functions'
 //import registerSteps from './registerSteps'
-import * as Functions from './lib/functions'
+import * as Functions from './lib/api'
 import * as wf from './index'
+import * as objectExtensions from './lib/objectExtensions'
 
 function safeAdd( context, key, obj ) {
-  if ( key in context ) {
+  if ( context.hasOwnProperty( key ) ) {
     throw new Error( `${key} is already defined within context` )
   } else {
     context[ key ] = obj
@@ -28,6 +29,55 @@ function inject( config ) {
   //safeAdd( context, 'steps', {} )
   
   safeAddAll(context, [ Functions ])
+
+  // replace with typescript
+  context.Workflo = {
+    Object: (input: any) => {
+      for (const key in objectExtensions) {
+        if ( objectExtensions.hasOwnProperty( key ) ) {
+          Object.defineProperty(
+            input.prototype,
+            key,
+            {
+              value: function( ...args ) {
+                return objectExtensions[ key ]( this, ...args )
+              },
+              writable: false,
+              configurable: false,
+              enumerable: false
+            }
+          )
+        }
+      }
+    }
+  }
+
+  context.Workflo.objectExtensions = {}
+
+  for (const key in objectExtensions) {
+    if ( objectExtensions.hasOwnProperty( key ) ) {
+      safeAdd(context.Workflo.objectExtensions, key, function( ...args ) {
+        return objectExtensions[ key ]( this, ...args )
+      })
+    }
+  }
+
+  /*for (const key in objectExtensions) {
+    if ( objectExtensions.hasOwnProperty( key ) ) {
+      Object.defineProperty(
+        Object.prototype,
+        key,
+        {
+          value: function( ...args ) {
+            return objectExtensions[ key ]( this, ...args )
+          },
+          writable: false,
+          configurable: false,
+          enumerable: false
+        }
+      )
+    }
+  }*/
 
   /*console.log("REGISTERING STEPS")
 

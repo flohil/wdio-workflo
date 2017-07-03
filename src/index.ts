@@ -3,6 +3,13 @@ declare global {
 
   namespace Workflo {
 
+    // finish when needed
+    /*interface Object {
+      mapToObject: (input: Workflo.Object, mapFunc: Function) => Workflo.Object
+      convertToObject: (input: Workflo.Object, valueFunc: any, options: any) => Workflo.Object
+      mapProperties: (input: Object, )
+    }*/
+
     type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep
 
     type StepImplMap = { [key:string]: StepImpl }

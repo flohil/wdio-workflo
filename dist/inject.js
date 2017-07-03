@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 //import functions from './functions'
 //import registerSteps from './registerSteps'
-const Functions = require("./lib/functions");
+const Functions = require("./lib/api");
+const objectExtensions = require("./lib/objectExtensions");
 function safeAdd(context, key, obj) {
-    if (key in context) {
+    if (context.hasOwnProperty(key)) {
         throw new Error(`${key} is already defined within context`);
     }
     else {
@@ -25,6 +26,47 @@ function inject(config) {
     // setup variables
     //safeAdd( context, 'steps', {} )
     safeAddAll(context, [Functions]);
+    // replace with typescript
+    context.Workflo = {
+        Object: (input) => {
+            for (const key in objectExtensions) {
+                if (objectExtensions.hasOwnProperty(key)) {
+                    Object.defineProperty(input.prototype, key, {
+                        value: function (...args) {
+                            return objectExtensions[key](this, ...args);
+                        },
+                        writable: false,
+                        configurable: false,
+                        enumerable: false
+                    });
+                }
+            }
+        }
+    };
+    context.Workflo.objectExtensions = {};
+    for (const key in objectExtensions) {
+        if (objectExtensions.hasOwnProperty(key)) {
+            safeAdd(context.Workflo.objectExtensions, key, function (...args) {
+                return objectExtensions[key](this, ...args);
+            });
+        }
+    }
+    /*for (const key in objectExtensions) {
+      if ( objectExtensions.hasOwnProperty( key ) ) {
+        Object.defineProperty(
+          Object.prototype,
+          key,
+          {
+            value: function( ...args ) {
+              return objectExtensions[ key ]( this, ...args )
+            },
+            writable: false,
+            configurable: false,
+            enumerable: false
+          }
+        )
+      }
+    }*/
     /*console.log("REGISTERING STEPS")
   
     console.log("config: ", config)
