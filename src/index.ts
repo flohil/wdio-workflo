@@ -10,6 +10,41 @@ declare global {
       mapProperties: (input: Object, )
     }*/
 
+    namespace Object {
+      function mapProperties(input: Object, func: (value: any, key: string | number) => Object): {}
+      function forEachProperty(input: Object, func: (key: string | number, value: any) => void): void
+      function invert(obj: Object): Object
+      function filter(obj: Object, func: (value: any, key: string | number) => boolean): {}
+      function addToProps(obj: Object, key: string | number, value: any, overwrite?: boolean): void
+      function stripNegatives(obj: Object): Object
+      function stripNegativesRec(obj: any): any
+      function subset(obj: Object, matchingObject: Object): Object
+    }
+
+    namespace Array {
+      function mapToObject<T>(input: string[] | number[], mapFunc: (element: string | number) => T): {
+        [key: string]: T;
+      }
+      function convertToObject<T>(arr: any[], valueFunc?: any, options?: {
+          switchKeyValue: boolean;
+          overwriteValues: boolean;
+          stackValues: jasmine.AssymetricMatchers;
+      }): Object
+    }
+
+    namespace String {
+      function convertToObject(input: string, valueFunc?: any, options?: {
+        switchKeyValue: boolean;
+        overwriteValues: boolean;
+        stackValues: jasmine.AssymetricMatchers;
+      }): any
+      function splitToObj(str: string, delim: string | RegExp): Object
+    }
+
+    namespace Class {
+      function getAllMethods(obj: any): string[]
+    }
+
     type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep
 
     type StepImplMap = { [key:string]: StepImpl }

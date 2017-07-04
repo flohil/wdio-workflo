@@ -4,7 +4,6 @@ describe('DuckDuckGo search', () => {
 
     process.send({event: 'step:start', cid: '0-0', title: `steppy`})
 
-
     const title = 'hello'
 
     /*expect(true).toBe(true)
