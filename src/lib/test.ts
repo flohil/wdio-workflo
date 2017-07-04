@@ -115,9 +115,9 @@ class InputElement extends PageElement {
 class PageElementStore {
     private cache = {}
 
-    Element = <T extends PageElement>(selector: string, parent?: T) => this.get(selector, parent) as T & PageElementStore
+    Element = <T extends PageElement>(selector: string, parent?: T) => this.get(selector, parent) as T & this
 
-    private get = <T extends PageElement>(selector: string, parent?: T) => {
+    get = <T extends PageElement>(selector: string, parent?: T) => {
         const parentSelector = (parent) ? parent.selector : ''
         const combinedSelector = `(${parentSelector}${selector})`
 
@@ -145,7 +145,8 @@ class PageElementStore {
 }
 
 class InputElementStore extends PageElementStore {
-    
+
+    InputElement = <T extends InputElement>(selector: string, parent?: T) => super.get(selector, parent) as T & this
 }
 
 class TestPage {
@@ -165,6 +166,27 @@ class TestPage {
     }
 }
 
+class TestPageB {
+    private store: InputElementStore
+
+    constructor() {
+        this.store = new InputElementStore()
+    }
+
+    get myInput() {
+        return this.store.InputElement("//input")
+    }
+
+    get myElement() {
+        return this.store.Element("//div")
+    }
+}
+
 const page: TestPage = new TestPage()
+const pageB: TestPageB = new TestPageB()
+
+pageB.myInput.set("asdf")
+pageB.myInput.Element
+pageB.myElement.InputElement("//input").set("hello")
 
 console.log(page.myContainer.Element("//span").Element("//button").selector)
