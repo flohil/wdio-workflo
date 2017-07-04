@@ -46,9 +46,16 @@ class MyInputElement extends InputElement {
 class PageElementStore {
     private cache = {}
 
-    Element = <T extends PageElement>(selector: string, type?: { new(selector: string): T }) => this.get(selector, type || PageElement) as PageElement & this
+    Element = <T extends PageElement>(
+        selector: string, 
+        options: { 
+            type?: { new(selector: string): T }
+        } = {}
+    ) => this.get(selector, options.type || PageElement) as T & this
 
-    protected get = <T>(selector: string, type: { new(selector: string): T }) => {
+    protected get = <O, T>(selector: string, options: O, type: ElOptions<O, T>) => {
+
+        console.log(options)
 
         if(!(selector in this.cache)) {
 
@@ -71,9 +78,16 @@ class PageElementStore {
     }
 }
 
+type ElOptions<O, R> = {
+    type?: { new(selector: string, options: O): R }
+}
+
 class InputElementStore extends PageElementStore {
 
-    InputElement = <T extends InputElement>(selector: string, type?: { new(selector: string): T }) => this.get(selector, type || InputElement) as InputElement & this
+    InputElement = <T extends InputElement>(
+        selector: string, 
+        options: {waitTime: number} & ElOptions<{waitTime: number}, T> = {waitTime: 5}
+    ) => this.get(selector, options.type || InputElement) as T & this
 }
 
 class TestPage {
@@ -105,7 +119,7 @@ class TestPageB {
     }
 
     get otherInput() {
-        return this.store.InputElement("//otherInput", MyInputElement)
+        return this.store.InputElement("//otherInput", {type: MyInputElement, waitTime: 3})
     }
 
     get myElement() {
