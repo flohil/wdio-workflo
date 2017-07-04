@@ -106,3 +106,10 @@ declare global {
 }*/
 
 export * from './lib/steps'
+
+import * as objectFunctions from './lib/utilityFunctions/object'
+import * as arrayFunctions from './lib/utilityFunctions/array'
+import * as classFunctions from './lib/utilityFunctions/class'
+import * as stringFunctions from './lib/utilityFunctions/string'
+
+export { objectFunctions, arrayFunctions, classFunctions, stringFunctions }

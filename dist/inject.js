@@ -3,7 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //import functions from './functions'
 //import registerSteps from './registerSteps'
 const Functions = require("./lib/api");
-const objectExtensions = require("./lib/objectExtensions");
+const objectFunctions = require("./lib/utilityFunctions/object");
+const arrayFunctions = require("./lib/utilityFunctions/array");
+const classFunctions = require("./lib/utilityFunctions/class");
+const stringFunctions = require("./lib/utilityFunctions/string");
 function safeAdd(context, key, obj) {
     if (context.hasOwnProperty(key)) {
         throw new Error(`${key} is already defined within context`);
@@ -26,52 +29,16 @@ function inject(config) {
     // setup variables
     //safeAdd( context, 'steps', {} )
     safeAddAll(context, [Functions]);
-    // replace with typescript
     context.Workflo = {
-        Object: (input) => {
-            for (const key in objectExtensions) {
-                if (objectExtensions.hasOwnProperty(key)) {
-                    Object.defineProperty(input.prototype, key, {
-                        value: function (...args) {
-                            return objectExtensions[key](this, ...args);
-                        },
-                        writable: false,
-                        configurable: false,
-                        enumerable: false
-                    });
-                }
-            }
-        }
+        Object: {},
+        Array: {},
+        String: {},
+        Class: {}
     };
-    context.Workflo.objectExtensions = {};
-    for (const key in objectExtensions) {
-        if (objectExtensions.hasOwnProperty(key)) {
-            safeAdd(context.Workflo.objectExtensions, key, function (...args) {
-                return objectExtensions[key](this, ...args);
-            });
-        }
-    }
-    /*for (const key in objectExtensions) {
-      if ( objectExtensions.hasOwnProperty( key ) ) {
-        Object.defineProperty(
-          Object.prototype,
-          key,
-          {
-            value: function( ...args ) {
-              return objectExtensions[ key ]( this, ...args )
-            },
-            writable: false,
-            configurable: false,
-            enumerable: false
-          }
-        )
-      }
-    }*/
-    /*console.log("REGISTERING STEPS")
-  
-    console.log("config: ", config)
-  
-    registerSteps( config.testDir )*/
+    safeAddAll(context.Workflo.Object, [objectFunctions]);
+    safeAddAll(context.Workflo.Array, [arrayFunctions]);
+    safeAddAll(context.Workflo.String, [stringFunctions]);
+    safeAddAll(context.Workflo.Class, [classFunctions]);
 }
 exports.inject = inject;
 inject({});

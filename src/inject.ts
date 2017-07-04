@@ -2,7 +2,10 @@
 //import registerSteps from './registerSteps'
 import * as Functions from './lib/api'
 import * as wf from './index'
-import * as objectExtensions from './lib/objectExtensions'
+import * as objectFunctions from './lib/utilityFunctions/object'
+import * as arrayFunctions from './lib/utilityFunctions/array'
+import * as classFunctions from './lib/utilityFunctions/class'
+import * as stringFunctions from './lib/utilityFunctions/string'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {
@@ -28,62 +31,19 @@ function inject( config ) {
   // setup variables
   //safeAdd( context, 'steps', {} )
   
-  safeAddAll(context, [ Functions ])
+  safeAddAll(context, [Functions])
 
-  // replace with typescript
   context.Workflo = {
-    Object: (input: any) => {
-      for (const key in objectExtensions) {
-        if ( objectExtensions.hasOwnProperty( key ) ) {
-          Object.defineProperty(
-            input.prototype,
-            key,
-            {
-              value: function( ...args ) {
-                return objectExtensions[ key ]( this, ...args )
-              },
-              writable: false,
-              configurable: false,
-              enumerable: false
-            }
-          )
-        }
-      }
-    }
+    Object: {},
+    Array: {},
+    String: {},
+    Class: {}
   }
 
-  context.Workflo.objectExtensions = {}
-
-  for (const key in objectExtensions) {
-    if ( objectExtensions.hasOwnProperty( key ) ) {
-      safeAdd(context.Workflo.objectExtensions, key, function( ...args ) {
-        return objectExtensions[ key ]( this, ...args )
-      })
-    }
-  }
-
-  /*for (const key in objectExtensions) {
-    if ( objectExtensions.hasOwnProperty( key ) ) {
-      Object.defineProperty(
-        Object.prototype,
-        key,
-        {
-          value: function( ...args ) {
-            return objectExtensions[ key ]( this, ...args )
-          },
-          writable: false,
-          configurable: false,
-          enumerable: false
-        }
-      )
-    }
-  }*/
-
-  /*console.log("REGISTERING STEPS")
-
-  console.log("config: ", config)
-
-  registerSteps( config.testDir )*/
+  safeAddAll(context.Workflo.Object, [objectFunctions])
+  safeAddAll(context.Workflo.Array, [arrayFunctions])
+  safeAddAll(context.Workflo.String, [stringFunctions])
+  safeAddAll(context.Workflo.Class, [classFunctions])
 }
 
 inject({})
