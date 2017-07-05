@@ -100,6 +100,21 @@ function addToProps(obj, key, value, overwrite = false) {
 exports.addToProps = addToProps;
 /**
  * Creates a copy of original object in which all
+ * key-value pairs matching the passed props are removed.
+ *
+ * @param obj
+ * @param props
+ */
+function stripProps(obj, props) {
+    const resObj = _.cloneDeep(obj);
+    for (const prop of props) {
+        delete resObj[prop];
+    }
+    return resObj;
+}
+exports.stripProps = stripProps;
+/**
+ * Creates a copy of original object in which all
  * properties with negative values are removed recursively.
  *
  * @param obj

@@ -44,6 +44,14 @@ export declare function filter(obj: Object, func: (value: any, key: string | num
 export declare function addToProps(obj: Object, key: string | number, value: any, overwrite?: boolean): void;
 /**
  * Creates a copy of original object in which all
+ * key-value pairs matching the passed props are removed.
+ *
+ * @param obj
+ * @param props
+ */
+export declare function stripProps(obj: Object, props: string[] | number[]): Object;
+/**
+ * Creates a copy of original object in which all
  * properties with negative values are removed recursively.
  *
  * @param obj

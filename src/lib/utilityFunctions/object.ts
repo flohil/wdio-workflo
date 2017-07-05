@@ -104,6 +104,23 @@ export function addToProps(obj: Object, key: string | number, value: any, overwr
 
 /**
  * Creates a copy of original object in which all
+ * key-value pairs matching the passed props are removed.
+ * 
+ * @param obj 
+ * @param props 
+ */
+export function stripProps(obj: Object, props: string[]|number[]) {
+  const resObj: Object = _.cloneDeep(obj)
+
+  for (const prop of props) {
+    delete resObj[prop]
+  }
+
+  return resObj
+}
+
+/**
+ * Creates a copy of original object in which all
  * properties with negative values are removed recursively.
  * 
  * @param obj 
