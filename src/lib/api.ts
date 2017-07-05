@@ -7,13 +7,40 @@ const words = {
   'And': 'And',
 }
 
-export const Feature = (description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) => {
+export const Feature = (
+  description: string, 
+  metadata: Workflo.IFeatureMetadata, 
+  bodyFunc: () => void, 
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
+) => {
   this.__currentFeature = description
 
-  describe(`${description}:`, bodyFunc)
+  jasmineFunc(`${description}:`, bodyFunc)
 }
 
-export const Story = (id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) => {
+export const fFeature = (
+  description: string, 
+  metadata: Workflo.IFeatureMetadata, 
+  bodyFunc: () => void
+) => {
+  Feature(description, metadata, bodyFunc, fdescribe)
+}
+
+export const xFeature = (
+  description: string, 
+  metadata: Workflo.IFeatureMetadata, 
+  bodyFunc: () => void
+) => {
+  Feature(description, metadata, bodyFunc, xdescribe)
+}
+
+export const Story = (
+  id: string, 
+  description: string, 
+  metadata: Workflo.IStoryMetaData, 
+  bodyFunc: () => void,
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = describe  
+) => {
   const fullStoryName = `${id} - ${description}`
 
   this.__currentStoryId = id
@@ -25,7 +52,25 @@ export const Story = (id: string, description: string, metadata: Workflo.IStoryM
     storyName: fullStoryName
   })
   
-  describe(fullStoryName, bodyFunc)  
+  jasmineFunc(fullStoryName, bodyFunc)  
+}
+
+export const fStory = (
+  id: string, 
+  description: string, 
+  metadata: Workflo.IStoryMetaData, 
+  bodyFunc: () => void,
+) => {
+  Story(id, description, metadata, bodyFunc, fdescribe)
+}
+
+export const xStory = (
+  id: string, 
+  description: string, 
+  metadata: Workflo.IStoryMetaData, 
+  bodyFunc: () => void,
+) => {
+  Story(id, description, metadata, bodyFunc, xdescribe)
 }
 
 export const Given = (description: string, bodyFunc: () => void) => {  
@@ -54,7 +99,11 @@ export const When = (description: string, bodyFunc: () => void) => {
   }
 }
 
-export const Then = (id: number, description: string) => {
+export const Then = (
+  id: number, 
+  description: string,
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = it
+) => {
   const story = storyMap.get(this.__currentStoryId)
   const storyId = this.__currentStoryId
 
@@ -104,17 +153,73 @@ export const Then = (id: number, description: string) => {
     }})
   }
   
-  it(`${words.Then} ${id}: ${description}`, bodyFunc)
+  jasmineFunc(`${words.Then} ${id}: ${description}`, bodyFunc)
 }
 
-export const suite = (description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) => {
-  describe(description, bodyFunc)
+export const fThen = (
+  id: number, 
+  description: string
+) => {
+  Then(id, description, fit)
 }
 
-export const testcase = (description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) => {
+export const xThen = (
+  id: number, 
+  description: string
+) => {
+  Then(id, description, xit)
+}
+
+export const suite = (
+  description: string, 
+  metadata: Workflo.ISuiteMetadata, 
+  bodyFunc: () => void,
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
+) => {
+  jasmineFunc(description, bodyFunc)
+}
+
+export const fsuite = (
+  description: string, 
+  metadata: Workflo.ISuiteMetadata, 
+  bodyFunc: () => void
+) => {
+  suite(description, metadata, bodyFunc, fdescribe)
+}
+
+export const xsuite = (
+  description: string, 
+  metadata: Workflo.ISuiteMetadata, 
+  bodyFunc: () => void
+) => {
+  suite(description, metadata, bodyFunc, xdescribe)
+}
+
+export const testcase = (
+  description: string, 
+  metadata: Workflo.ITestcaseMetadata, 
+  bodyFunc: () => void,
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = it
+) => {
   this.__stepStack =[]
 
-  it(description, bodyFunc)
+  jasmineFunc(description, bodyFunc)
+}
+
+export const ftestcase = (
+  description: string, 
+  metadata: Workflo.ITestcaseMetadata, 
+  bodyFunc: () => void
+) => {
+  testcase(description, metadata, bodyFunc, fit)
+}
+
+export const xtestcase = (
+  description: string, 
+  metadata: Workflo.ITestcaseMetadata, 
+  bodyFunc: () => void
+) => {
+  testcase(description, metadata, bodyFunc, xit)
 }
 
 const _when = function(step: IParameterizedStep, prefix: string) {

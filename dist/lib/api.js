@@ -7,11 +7,17 @@ const words = {
     'Then': 'Then',
     'And': 'And',
 };
-exports.Feature = (description, metadata, bodyFunc) => {
+exports.Feature = (description, metadata, bodyFunc, jasmineFunc = describe) => {
     this.__currentFeature = description;
-    describe(`${description}:`, bodyFunc);
+    jasmineFunc(`${description}:`, bodyFunc);
 };
-exports.Story = (id, description, metadata, bodyFunc) => {
+exports.fFeature = (description, metadata, bodyFunc) => {
+    exports.Feature(description, metadata, bodyFunc, fdescribe);
+};
+exports.xFeature = (description, metadata, bodyFunc) => {
+    exports.Feature(description, metadata, bodyFunc, xdescribe);
+};
+exports.Story = (id, description, metadata, bodyFunc, jasmineFunc = describe) => {
     const fullStoryName = `${id} - ${description}`;
     this.__currentStoryId = id;
     storyMap.set(id, {
@@ -20,7 +26,13 @@ exports.Story = (id, description, metadata, bodyFunc) => {
         featureName: this.__currentFeature,
         storyName: fullStoryName
     });
-    describe(fullStoryName, bodyFunc);
+    jasmineFunc(fullStoryName, bodyFunc);
+};
+exports.fStory = (id, description, metadata, bodyFunc) => {
+    exports.Story(id, description, metadata, bodyFunc, fdescribe);
+};
+exports.xStory = (id, description, metadata, bodyFunc) => {
+    exports.Story(id, description, metadata, bodyFunc, xdescribe);
 };
 exports.Given = (description, bodyFunc) => {
     const story = storyMap.get(this.__currentStoryId);
@@ -39,7 +51,7 @@ exports.When = (description, bodyFunc) => {
         "And": (description, bodyFunc) => exports.When.call(this, description, bodyFunc)
     };
 };
-exports.Then = (id, description) => {
+exports.Then = (id, description, jasmineFunc = it) => {
     const story = storyMap.get(this.__currentStoryId);
     const storyId = this.__currentStoryId;
     const stepFunc = (title) => {
@@ -74,14 +86,32 @@ exports.Then = (id, description) => {
                 storyId: storyId
             } });
     };
-    it(`${words.Then} ${id}: ${description}`, bodyFunc);
+    jasmineFunc(`${words.Then} ${id}: ${description}`, bodyFunc);
 };
-exports.suite = (description, metadata, bodyFunc) => {
-    describe(description, bodyFunc);
+exports.fThen = (id, description) => {
+    exports.Then(id, description, fit);
 };
-exports.testcase = (description, metadata, bodyFunc) => {
+exports.xThen = (id, description) => {
+    exports.Then(id, description, xit);
+};
+exports.suite = (description, metadata, bodyFunc, jasmineFunc = describe) => {
+    jasmineFunc(description, bodyFunc);
+};
+exports.fsuite = (description, metadata, bodyFunc) => {
+    exports.suite(description, metadata, bodyFunc, fdescribe);
+};
+exports.xsuite = (description, metadata, bodyFunc) => {
+    exports.suite(description, metadata, bodyFunc, xdescribe);
+};
+exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     this.__stepStack = [];
-    it(description, bodyFunc);
+    jasmineFunc(description, bodyFunc);
+};
+exports.ftestcase = (description, metadata, bodyFunc) => {
+    exports.testcase(description, metadata, bodyFunc, fit);
+};
+exports.xtestcase = (description, metadata, bodyFunc) => {
+    exports.testcase(description, metadata, bodyFunc, xit);
 };
 const _when = function (step, prefix) {
     //process.send({event: 'step:start', title: `${prefix} ${step.description}`})

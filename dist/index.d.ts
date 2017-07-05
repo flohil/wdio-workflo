@@ -89,12 +89,22 @@ declare global  {
         execute: (prefix?: string) => void;
     }
     function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
+    function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
+    function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
     function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void): void;
+    function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void): void;
+    function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void): void;
     function Given(description: string, bodyFunc: () => void): void;
     function When(description: string, bodyFunc: () => void): Workflo.ISpecWhen;
     function Then(id: number, description: string): void;
+    function fThen(id: number, description: string): void;
+    function xThen(id: number, description: string): void;
     function suite(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
+    function fsuite(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
+    function xsuite(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
     function testcase(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
+    function ftestcase(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
+    function xtestcase(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
     function given(step: IParameterizedStep): Workflo.ITCGiven;
     function verify(verifyObject: Workflo.IVerifySpecObject, func: (...args: any[]) => void): void;
 }
