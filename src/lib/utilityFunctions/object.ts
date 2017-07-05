@@ -79,12 +79,6 @@ export function filter(obj: Object, func: (value: any, key: string | number) => 
   return resultObj
 }
 
-// If key already exists in obj, turns respective value
-// into array and pushes value onto the array.
-// Else, adds "normal" key-value pair as property.
-// If overwrite is true, always overwrites existing value
-// with new value without turning into array.
-
 /**
  * If key already exists in obj, turns respective value
  * into array and pushes value onto the array.
