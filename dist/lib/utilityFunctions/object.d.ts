@@ -8,13 +8,13 @@
  * @param input
  * @param func
  */
-export declare function mapProperties(input: Object, func: (value: any, key: string | number) => Object): {};
+export declare function mapProperties(input: Object, func: (value: any, key: string) => Object): {};
 /**
  * Iterates over all properties in an object and executes func on each.
  * @param input
  * @param func
  */
-export declare function forEachProperty(input: Object, func: (key: string | number, value: any) => void): void;
+export declare function forEachProperty(input: Object, func: (key: string, value: any) => void): void;
 /**
  * Returns a new object with the original object's keys and values inverted.
  *
@@ -28,7 +28,7 @@ export declare function invert(obj: Object): Object;
  * @param obj
  * @param func
  */
-export declare function filter(obj: Object, func: (value: any, key: string | number) => boolean): {};
+export declare function filter(obj: Object, func: (value: any, key: string) => boolean): {};
 /**
  * If key already exists in obj, turns respective value
  * into array and pushes value onto the array.
@@ -41,7 +41,7 @@ export declare function filter(obj: Object, func: (value: any, key: string | num
  * @param value
  * @param overwrite
  */
-export declare function addToProps(obj: Object, key: string | number, value: any, overwrite?: boolean): void;
+export declare function addToProps(obj: Object, key: string, value: any, overwrite?: boolean): void;
 /**
  * Creates a copy of original object in which all
  * key-value pairs matching the passed props are removed.
@@ -49,7 +49,7 @@ export declare function addToProps(obj: Object, key: string | number, value: any
  * @param obj
  * @param props
  */
-export declare function stripProps(obj: Object, props: string[] | number[]): Object;
+export declare function stripProps(obj: Object, props: string[]): Object;
 /**
  * Creates a copy of original object in which all
  * properties with negative values are removed recursively.

@@ -10,7 +10,7 @@ import * as _ from 'lodash'
  * @param input 
  * @param func 
  */
-export function mapProperties(input: Object, func: (value: any, key: string|number) => Object) {
+export function mapProperties(input: Object, func: (value: any, key: string) => Object) {
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
@@ -31,7 +31,7 @@ export function mapProperties(input: Object, func: (value: any, key: string|numb
  * @param input 
  * @param func 
  */
-export function forEachProperty(input: Object, func: (key: string|number, value: any) => void) {
+export function forEachProperty(input: Object, func: (key: string, value: any) => void) {
   for (const key in input) {
     if (input.hasOwnProperty(key)) {
       func(key, input[key])
@@ -65,7 +65,7 @@ export function invert(obj: Object) : Object {
  * @param obj 
  * @param func 
  */
-export function filter(obj: Object, func: (value: any, key: string | number) => boolean) {
+export function filter(obj: Object, func: (value: any, key: string) => boolean) {
   const resultObj = {}
 
   for (const key in obj) {
@@ -91,7 +91,7 @@ export function filter(obj: Object, func: (value: any, key: string | number) => 
  * @param value 
  * @param overwrite 
  */
-export function addToProps(obj: Object, key: string | number, value: any, overwrite: boolean = false): void {
+export function addToProps(obj: Object, key: string, value: any, overwrite: boolean = false): void {
   if (obj[key] && !overwrite) {
     if (!(_.isArray(obj[key]))) {
       obj[key] = [obj[key]]
@@ -109,7 +109,7 @@ export function addToProps(obj: Object, key: string | number, value: any, overwr
  * @param obj 
  * @param props 
  */
-export function stripProps(obj: Object, props: string[]|number[]) {
+export function stripProps(obj: Object, props: string[]) {
   const resObj: Object = _.cloneDeep(obj)
 
   for (const prop of props) {
