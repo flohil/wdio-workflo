@@ -8,3 +8,6 @@ json antwort bei broken -> screenshot rausziehen, failed: screenshot manuell mac
 # type defs for jasmine custom message 2
 
 # screenshot when expect fails -> take it already during verify, if all went good: attach, else: throw away
+
+# teile von core zeugs in framework auslagern -> element, elementlist, elementgroup, walker...
+# jasmineMatchers auslagern in framework
