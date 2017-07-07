@@ -22,14 +22,14 @@ declare global {
        * @param input 
        * @param func 
        */
-      function mapProperties(input: Object, func: (value: any, key: string | number) => Object): {}
+      function mapProperties(input: Object, func: (value: any, key: string) => Object): {}
       
       /**
        * Iterates over all properties in an object and executes func on each.
        * @param input 
        * @param func 
        */
-      function forEachProperty(input: Object, func: (key: string | number, value: any) => void): void
+      function forEachProperty(input: Object, func: (key: string, value: any) => void): void
       
       /**
        * Returns a new object with the original object's keys and values inverted.
@@ -45,7 +45,7 @@ declare global {
        * @param obj 
        * @param func 
        */
-      function filter(obj: Object, func: (value: any, key: string | number) => boolean): {}
+      function filter(obj: Object, func: (value: any, key: string) => boolean): {}
       
       /**
        * If key already exists in obj, turns respective value
@@ -59,7 +59,7 @@ declare global {
        * @param value 
        * @param overwrite 
        */
-      function addToProps(obj: Object, key: string | number, value: any, overwrite?: boolean): void
+      function addToProps(obj: Object, key: string, value: any, overwrite?: boolean): void
       
       /**
        * Creates a copy of original object in which all
@@ -68,7 +68,7 @@ declare global {
        * @param obj
        * @param props
        */
-      function stripProps(obj: Object, props: string[] | number[]): Object
+      function stripProps(obj: Object, props: string[]): Object
 
       /**
        * Creates a copy of original object in which all
@@ -97,7 +97,7 @@ declare global {
        * @param input 
        * @param mapFunc 
        */
-      function mapToObject<T>(input: string[] | number[], mapFunc: (element: string | number) => T): {
+      function mapToObject<T>(input: string[], mapFunc: (element: string) => T): {
         [key: string]: T;
       }
     }

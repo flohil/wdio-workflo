@@ -8,7 +8,7 @@ import * as _ from 'lodash'
  * @param input 
  * @param mapFunc 
  */
-export function mapToObject<T>(input: string[] | number[], mapFunc: (element: string | number) => T) : {[key: string] : T} {
+export function mapToObject<T>(input: string[], mapFunc: (element: string) => T) : {[key: string] : T} {
   const obj = {}
 
   for (const element of input) {

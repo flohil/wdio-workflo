@@ -6,6 +6,6 @@
  * @param input
  * @param mapFunc
  */
-export declare function mapToObject<T>(input: string[] | number[], mapFunc: (element: string | number) => T): {
+export declare function mapToObject<T>(input: string[], mapFunc: (element: string) => T): {
     [key: string]: T;
 };
