@@ -63,7 +63,7 @@ const groupFunctions = {
   // regardless of the keys' values inside the filter object.
   GetValue( filter ) {
     return {
-      values: (filter) ? Workflo.Util.convertToObject(filter) : undefined,
+      values: (filter) ? Workflo.Util.convertToObject(filter, () => true) : undefined,
       solve: ( node ) => node.getValue()
     }
   },
@@ -81,7 +81,7 @@ const groupFunctions = {
   // regardless of the keys' values inside the filter object.
   GetText( filter ) {
     return {
-      values: (filter) ? Workflo.Util.convertToObject(filter) : undefined,
+      values: (filter) ? Workflo.Util.convertToObject(filter, () => true) : undefined,
       solve: ( node ) => node.getText()
     }
   },

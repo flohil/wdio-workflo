@@ -10,11 +10,11 @@ import * as _ from 'lodash'
  * @param input 
  * @param func 
  */
-export function mapProperties(input: Object, func: (value: any, key: string) => Object) {
+export function mapProperties<T, O>(input: {[key: string] : T}, func: (value: T, key?: string) => O) : {[key: string] : O} {
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
-    const resultObj = {}
+    const resultObj: {[key: string] : O} = {}
 
     for (const key in input) {
       if (input.hasOwnProperty(key)) {
@@ -28,13 +28,14 @@ export function mapProperties(input: Object, func: (value: any, key: string) => 
 
 /**
  * Iterates over all properties in an object and executes func on each.
+ * 
  * @param input 
  * @param func 
  */
-export function forEachProperty(input: Object, func: (key: string, value: any) => void) {
+export function forEachProperty<T>(input: {[key: string] : T}, func: (value: T, key?: string) => void): void {
   for (const key in input) {
     if (input.hasOwnProperty(key)) {
-      func(key, input[key])
+      func(input[key], key)
     }
   }
 }
@@ -43,11 +44,12 @@ export function forEachProperty(input: Object, func: (key: string, value: any) =
 
 /**
  * Returns a new object with the original object's keys and values inverted.
+ * The original object's values must therefore be implicitly convertable to type string.
  * 
  * @param obj 
  */
-export function invert(obj: Object) : Object {
-  const new_obj = {}
+export function invert(obj: {[key: string] : string}) : {[key: string] : string} {
+  const new_obj: {[key: string] : string} = {}
 
   for (const prop in obj) {
     if (obj.hasOwnProperty(prop)) {
@@ -59,14 +61,16 @@ export function invert(obj: Object) : Object {
 }
 
 /**
- * Returns a filtered object that only contains those
+ * Returns a new filtered object that only contains those
  * properties of the initial object where func returned true.
+ * 
+ * Does not traverse nested objects!
  * 
  * @param obj 
  * @param func 
  */
-export function filter(obj: Object, func: (value: any, key: string) => boolean) {
-  const resultObj = {}
+export function filter<T>(obj: {[key: string] : T}, func: (value: T, key?: string) => boolean) : {[key: string] : T} {
+  const resultObj: {[key: string] : T} = {}
 
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
@@ -84,19 +88,20 @@ export function filter(obj: Object, func: (value: any, key: string) => boolean) 
  * into array and pushes value onto the array.
  * Else, adds "normal" key-value pair as property.
  * If overwrite is true, always overwrites existing value
- * with new value without turning into array.
+ * with new value without turning it into array.
  *
  * @param obj 
  * @param key 
  * @param value 
  * @param overwrite 
  */
-export function addToProps(obj: Object, key: string, value: any, overwrite: boolean = false): void {
+export function addToProp<T>(obj: {[key: string] : T | T[]}, key: string, value: T, overwrite: boolean = false): void {
   if (obj[key] && !overwrite) {
-    if (!(_.isArray(obj[key]))) {
-      obj[key] = [obj[key]]
-    }
-    obj[key].push(value)
+    let valueArr: T[] = []
+    valueArr = valueArr.concat(obj[key])
+    valueArr.push(value)
+
+    obj[key] = valueArr
   } else {
     obj[key] = value
   }
@@ -109,8 +114,8 @@ export function addToProps(obj: Object, key: string, value: any, overwrite: bool
  * @param obj 
  * @param props 
  */
-export function stripProps(obj: Object, props: string[]) {
-  const resObj: Object = _.cloneDeep(obj)
+export function stripProps<T>(obj: {[key: string] : T}, props: string[]): {[key: string] : T} {
+  const resObj: {[key: string] : T} = _.cloneDeep(obj)
 
   for (const prop of props) {
     delete resObj[prop]
@@ -120,46 +125,16 @@ export function stripProps(obj: Object, props: string[]) {
 }
 
 /**
- * Creates a copy of original object in which all
- * properties with negative values are removed recursively.
- * 
- * @param obj 
- */
-export function stripNegatives(obj: Object): Object {
-  const resObj: Object = _.cloneDeep(obj)
-  return stripNegativesRec(resObj)
-}
-
-export function stripNegativesRec(obj: any): any {
-  for (const prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      if (typeof obj[prop] === 'object') {
-        stripNegativesRec(obj[prop])
-      } else {
-        if (obj[prop] === false) {
-          delete obj[prop]
-        }
-      }
-    }
-  }
-  return obj
-}
-
-/**
  * Returns properties of obj whose keys are also present in 
  * subsetObj as a new object.
+ * 
+ * Does not traverse nested objects!
  * 
  * @param obj 
  * @param matchingObject 
  */
-export function subset(obj: Object, matchingObject: Object): Object {
-  const subset = {}
-
-  for (const key in matchingObject) {
-    if (key in obj) {
-      subset[key] = obj[key]
-    }
-  }
-
-  return subset
+export function subset<T, O>(obj: {[key: string] : T}, maskObject: {[key: string] : O}): {[key: string] : T} {
+  return filter(obj, (value, key) => {
+    return key in maskObject
+  })
 }

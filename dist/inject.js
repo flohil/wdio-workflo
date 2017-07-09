@@ -7,6 +7,7 @@ const objectFunctions = require("./lib/utilityFunctions/object");
 const arrayFunctions = require("./lib/utilityFunctions/array");
 const classFunctions = require("./lib/utilityFunctions/class");
 const stringFunctions = require("./lib/utilityFunctions/string");
+const utilFunctions = require("./lib/utilityFunctions/util");
 function safeAdd(context, key, obj) {
     if (context.hasOwnProperty(key)) {
         throw new Error(`${key} is already defined within context`);
@@ -33,12 +34,14 @@ function inject(config) {
         Object: {},
         Array: {},
         String: {},
-        Class: {}
+        Class: {},
+        Util: {}
     };
     safeAddAll(context.Workflo.Object, [objectFunctions]);
     safeAddAll(context.Workflo.Array, [arrayFunctions]);
     safeAddAll(context.Workflo.String, [stringFunctions]);
     safeAddAll(context.Workflo.Class, [classFunctions]);
+    safeAddAll(context.Workflo.Util, [utilFunctions]);
 }
 exports.inject = inject;
 inject({});

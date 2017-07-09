@@ -75,7 +75,7 @@ class PageElementStore {
     // merging default args
     ) => this.get(selector, options.type || PageElement, _.merge({name: 'alex'}, options)) as T & this
 
-    protected get = <O, T>(selector: string, type: { new(selector: string, options: O): T }, options: O) => {
+    protected get = <O, T>(selector: string, type: { new(selector: string, options: O): T }, options: O) => {        
         if(!(selector in this.cache)) {
 
             const result = new type(selector, options)
@@ -130,6 +130,8 @@ class TestPage {
         this.store = new PageElementStore()
     }
 
+
+
     get myContainer() {
         return this.store.Element("//div")
     }
@@ -165,8 +167,68 @@ const pageB: TestPageB = new TestPageB()
 pageB.myInput.set("asdf")
 pageB.otherInput.set("other")
 
+
 console.log(page.myContainer.name)
 console.log(page.myButton.name)
 console.log(pageB.myElement.name)
 console.log(pageB.myInput.name)
 console.log(pageB.myInput.waitTime)
+
+export function addToProp<T>(obj: {[key: string] : T | T[]}, key: string, value: T, overwrite: boolean = false): void {
+  if (obj[key] && !overwrite) {
+    let valueArr: T[] = []
+    valueArr = valueArr.concat(obj[key])
+    valueArr.push(value)
+
+    obj[key] = valueArr
+  } else {
+    obj[key] = value
+  }
+}
+
+const obj = {
+  names: 'hansi'
+}
+
+addToProp(obj, 'names', 'josef')
+addToProp(obj, 'names', 'simone')
+
+console.log(obj)
+
+class GetTextClass implements INodeGetText {
+    constructor(protected text: string) {}
+    getText() {
+        return this.text
+    }
+}
+
+interface INodeGetText {
+    getText() : string
+}
+
+interface IContext<I> {
+    [key: string] : I
+}
+
+const context = {
+    hansi: new GetTextClass("hansi text"),
+    donald: new GetTextClass("donald text")
+}
+
+const mask = {
+    anna: false
+}
+
+const myObj = {
+    anna: true,
+    peter: true
+}
+
+let bla: typeof myObj
+
+import { subset } from './utilityFunctions/object'
+
+
+const hello = subset(myObj, mask)
+
+console.log(hello)

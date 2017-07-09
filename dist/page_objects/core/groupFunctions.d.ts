@@ -1,10 +1,14 @@
 declare const groupFunctions: {
     GetValue(filter: any): {
-        values: Object;
+        values: {
+            [key: string]: boolean;
+        };
         solve: (node: any) => any;
     };
     GetText(filter: any): {
-        values: Object;
+        values: {
+            [key: string]: boolean;
+        };
         solve: (node: any) => any;
     };
     SetValue(values: any): {

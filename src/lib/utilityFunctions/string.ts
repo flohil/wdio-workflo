@@ -8,10 +8,10 @@ import { convertToObject } from './util'
  * @param str 
  * @param delim 
  */
-export function splitToObj( str: string, delim: string | RegExp ) : Object {
+export function splitToObj( str: string, delim: string | RegExp ) : {[part: string] : boolean} {
   if ( !( _.isString( str ) ) ) {
     throw new Error(`Input must be a string: ${str}`)
   } else {
-    return convertToObject(str.split( delim ), true) 
+    return convertToObject(str.split( delim ), () => true) 
   }
 }

@@ -5,4 +5,6 @@
  * @param str
  * @param delim
  */
-export declare function splitToObj(str: string, delim: string | RegExp): Object;
+export declare function splitToObj(str: string, delim: string | RegExp): {
+    [part: string]: boolean;
+};

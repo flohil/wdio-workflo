@@ -8,40 +8,60 @@
  * @param input
  * @param func
  */
-export declare function mapProperties(input: Object, func: (value: any, key: string) => Object): {};
+export declare function mapProperties<T, O>(input: {
+    [key: string]: T;
+}, func: (value: T, key?: string) => O): {
+    [key: string]: O;
+};
 /**
  * Iterates over all properties in an object and executes func on each.
+ *
  * @param input
  * @param func
  */
-export declare function forEachProperty(input: Object, func: (key: string, value: any) => void): void;
+export declare function forEachProperty<T>(input: {
+    [key: string]: T;
+}, func: (value: T, key?: string) => void): void;
 /**
  * Returns a new object with the original object's keys and values inverted.
+ * The original object's values must therefore be implicitly convertable to type string.
  *
  * @param obj
  */
-export declare function invert(obj: Object): Object;
+export declare function invert(obj: {
+    [key: string]: string;
+}): {
+    [key: string]: string;
+};
 /**
- * Returns a filtered object that only contains those
+ * Returns a new filtered object that only contains those
  * properties of the initial object where func returned true.
+ *
+ * Does not traverse nested objects!
  *
  * @param obj
  * @param func
  */
-export declare function filter(obj: Object, func: (value: any, key: string) => boolean): {};
+export declare function filter<T>(obj: {
+    [key: string]: T;
+}, func: (value: T, key?: string) => boolean): {
+    [key: string]: T;
+};
 /**
  * If key already exists in obj, turns respective value
  * into array and pushes value onto the array.
  * Else, adds "normal" key-value pair as property.
  * If overwrite is true, always overwrites existing value
- * with new value without turning into array.
+ * with new value without turning it into array.
  *
  * @param obj
  * @param key
  * @param value
  * @param overwrite
  */
-export declare function addToProps(obj: Object, key: string, value: any, overwrite?: boolean): void;
+export declare function addToProp<T>(obj: {
+    [key: string]: T | T[];
+}, key: string, value: T, overwrite?: boolean): void;
 /**
  * Creates a copy of original object in which all
  * key-value pairs matching the passed props are removed.
@@ -49,20 +69,24 @@ export declare function addToProps(obj: Object, key: string, value: any, overwri
  * @param obj
  * @param props
  */
-export declare function stripProps(obj: Object, props: string[]): Object;
-/**
- * Creates a copy of original object in which all
- * properties with negative values are removed recursively.
- *
- * @param obj
- */
-export declare function stripNegatives(obj: Object): Object;
-export declare function stripNegativesRec(obj: any): any;
+export declare function stripProps<T>(obj: {
+    [key: string]: T;
+}, props: string[]): {
+    [key: string]: T;
+};
 /**
  * Returns properties of obj whose keys are also present in
  * subsetObj as a new object.
  *
+ * Does not traverse nested objects!
+ *
  * @param obj
  * @param matchingObject
  */
-export declare function subset(obj: Object, matchingObject: Object): Object;
+export declare function subset<T, O>(obj: {
+    [key: string]: T;
+}, maskObject: {
+    [key: string]: O;
+}): {
+    [key: string]: T;
+};

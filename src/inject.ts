@@ -6,6 +6,7 @@ import * as objectFunctions from './lib/utilityFunctions/object'
 import * as arrayFunctions from './lib/utilityFunctions/array'
 import * as classFunctions from './lib/utilityFunctions/class'
 import * as stringFunctions from './lib/utilityFunctions/string'
+import * as utilFunctions from './lib/utilityFunctions/util'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {
@@ -37,13 +38,15 @@ function inject( config ) {
     Object: {},
     Array: {},
     String: {},
-    Class: {}
+    Class: {},
+    Util: {}
   }
 
   safeAddAll(context.Workflo.Object, [objectFunctions])
   safeAddAll(context.Workflo.Array, [arrayFunctions])
   safeAddAll(context.Workflo.String, [stringFunctions])
   safeAddAll(context.Workflo.Class, [classFunctions])
+  safeAddAll(context.Workflo.Util, [utilFunctions])
 }
 
 inject({})

@@ -3,32 +3,26 @@ import { invert } from './object'
 
 /**
  * Converts strings, arrays and objects into objects.
- * valueFunc will be used to determine the object's 
- * property values and can be either a func or a value.
- * valueFunc gets passed the array element or string as
- * value.
- * If switchKeyValue is true, the keys and values of the
- * resulting object will be switched.
- * If stackValues is true, a value for an exiting key
- * will not be replaced by a new value but added to an
- * array of values for the concerned key.
- *
- * If input is object, output remains the same object.
+ * 
  * If input is string, output is an object with one 
  * entry where the key is the string.
  * If input is array, output is an object where each key
  * represents one element in the array.
+ * If input is object, output is a clone of the input object.
+ *
+ * For strings and arrays, valueFunc is used to calculate the
+ * resulting object's property values.
+ * For objects, valueFunc has no effect -> original property values will be preserved!
  * 
  * @param unknownTypedInput 
  * @param valueFunc 
- * @param options 
  */
-export function convertToObject( 
-  unknownTypedInput: any, 
-  valueFunc: any = undefined, 
-  options = { switchKeyValue: false, overwriteValues: false, stackValues: false  } )  : Object
+export function convertToObject<T>( 
+  unknownTypedInput: {[key: string] : T} | string[] | string, 
+  valueFunc: (key: string) => T = undefined,
+) : {[key: string] : T}
 {
-  let obj: Object = undefined
+  let obj: {[key: string] : T} = {}
 
   if ( typeof unknownTypedInput !== 'undefined' ) {
     if ( typeof unknownTypedInput === 'string' ) {
@@ -36,44 +30,22 @@ export function convertToObject(
     }
 
     if ( _.isArray( unknownTypedInput ) ) {
-      obj = {}
       for ( const element of unknownTypedInput ) {
-        let value
+        let value: T
 
-        if ( typeof valueFunc === 'function' ) {
+        if (typeof valueFunc !== 'undefined') {
           value = valueFunc( element )
         } else {
-          value = valueFunc
+          value = undefined
         }
-
-        const propKey = ( options.switchKeyValue ) ? 
-          value : 
-          element
-        const propValue = ( options.switchKeyValue ) ? 
-          element : 
-          value
-
-         // if object already has a key, make value array
-         // instead of overwriting existing value
-        if ( propKey in obj && options.stackValues ) {
-          const valueArray = []
-
-          valueArray.push( obj[ propKey ] )
-          valueArray.push( propValue )
-
-          obj[ propKey ] = valueArray
-        } else {
-          obj[ propKey ] = propValue
-        }
+        
+        obj[ element ] = value
       }
     } else {
-      obj = unknownTypedInput
-
-      if ( options.switchKeyValue ) {
-        obj = invert( obj )
-      }
+      obj = _.cloneDeep(unknownTypedInput)
     }
   }
 
   return obj
 }
+

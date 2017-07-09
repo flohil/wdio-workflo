@@ -14,7 +14,7 @@ function splitToObj(str, delim) {
         throw new Error(`Input must be a string: ${str}`);
     }
     else {
-        return util_1.convertToObject(str.split(delim), true);
+        return util_1.convertToObject(str.split(delim), () => true);
     }
 }
 exports.splitToObj = splitToObj;

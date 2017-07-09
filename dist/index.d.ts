@@ -11,40 +11,60 @@ declare global  {
              * @param input
              * @param func
              */
-            function mapProperties(input: Object, func: (value: any, key: string) => Object): {};
+            function mapProperties<T, O>(input: {
+                [key: string]: T;
+            }, func: (value: T, key?: string) => O): {
+                [key: string]: O;
+            };
             /**
              * Iterates over all properties in an object and executes func on each.
+             *
              * @param input
              * @param func
              */
-            function forEachProperty(input: Object, func: (key: string, value: any) => void): void;
+            function forEachProperty<T>(input: {
+                [key: string]: T;
+            }, func: (value: T, key?: string) => void): void;
             /**
              * Returns a new object with the original object's keys and values inverted.
+             * The original object's values must therefore be implicitly convertable to type string.
              *
              * @param obj
              */
-            function invert(obj: Object): Object;
+            function invert(obj: {
+                [key: string]: string;
+            }): {
+                [key: string]: string;
+            };
             /**
-             * Returns a filtered object that only contains those
+             * Returns a new filtered object that only contains those
              * properties of the initial object where func returned true.
+             *
+             * Does not traverse nested objects!
              *
              * @param obj
              * @param func
              */
-            function filter(obj: Object, func: (value: any, key: string) => boolean): {};
+            function filter<T>(obj: {
+                [key: string]: T;
+            }, func: (value: T, key?: string) => boolean): {
+                [key: string]: T;
+            };
             /**
              * If key already exists in obj, turns respective value
              * into array and pushes value onto the array.
              * Else, adds "normal" key-value pair as property.
              * If overwrite is true, always overwrites existing value
-             * with new value without turning into array.
+             * with new value without turning it into array.
              *
              * @param obj
              * @param key
              * @param value
              * @param overwrite
              */
-            function addToProps(obj: Object, key: string, value: any, overwrite?: boolean): void;
+            function addToProp<T>(obj: {
+                [key: string]: T | T[];
+            }, key: string, value: T, overwrite?: boolean): void;
             /**
              * Creates a copy of original object in which all
              * key-value pairs matching the passed props are removed.
@@ -52,22 +72,27 @@ declare global  {
              * @param obj
              * @param props
              */
-            function stripProps(obj: Object, props: string[]): Object;
-            /**
-             * Creates a copy of original object in which all
-             * properties with negative values are removed recursively.
-             *
-             * @param obj
-             */
-            function stripNegatives(obj: Object): Object;
+            function stripProps<T>(obj: {
+                [key: string]: T;
+            }, props: string[]): {
+                [key: string]: T;
+            };
             /**
              * Returns properties of obj whose keys are also present in
              * subsetObj as a new object.
              *
+             * Does not traverse nested objects!
+             *
              * @param obj
              * @param matchingObject
              */
-            function subset(obj: Object, matchingObject: Object): Object;
+            function subset<T, O>(obj: {
+                [key: string]: T;
+            }, maskObject: {
+                [key: string]: O;
+            }): {
+                [key: string]: T;
+            };
         }
         namespace Array {
             /**
@@ -84,13 +109,15 @@ declare global  {
         }
         namespace String {
             /**
-             * Splits a string at delim and returns an object with the
-             * split string parts as keys and the values set to true.
-             *
-             * @param str
-             * @param delim
-             */
-            function splitToObj(str: string, delim: string | RegExp): Object;
+              * Splits a string at delim and returns an object with the
+              * split string parts as keys and the values set to true.
+              *
+              * @param str
+              * @param delim
+              */
+            function splitToObj(str: string, delim: string | RegExp): {
+                [part: string]: boolean;
+            };
         }
         namespace Class {
             /**
@@ -105,31 +132,25 @@ declare global  {
         namespace Util {
             /**
              * Converts strings, arrays and objects into objects.
-             * valueFunc will be used to determine the object's
-             * property values and can be either a func or a value.
-             * valueFunc gets passed the array element or string as
-             * value.
-             * If switchKeyValue is true, the keys and values of the
-             * resulting object will be switched.
-             * If stackValues is true, a value for an exiting key
-             * will not be replaced by a new value but added to an
-             * array of values for the concerned key.
              *
-             * If input is object, output remains the same object.
              * If input is string, output is an object with one
              * entry where the key is the string.
              * If input is array, output is an object where each key
              * represents one element in the array.
+             * If input is object, output is a clone of the input object.
+             *
+             * For strings and arrays, valueFunc is used to calculate the
+             * resulting object's property values.
+             * For objects, valueFunc has no effect -> original property values will be preserved!
              *
              * @param unknownTypedInput
              * @param valueFunc
-             * @param options
              */
-            function convertToObject(unknownTypedInput: any, valueFunc?: any, options?: {
-                switchKeyValue: boolean;
-                overwriteValues: boolean;
-                stackValues: boolean;
-            }): Object;
+            function convertToObject<T>(unknownTypedInput: {
+                [key: string]: T;
+            } | string[] | string, valueFunc?: (key: string) => T): {
+                [key: string]: T;
+            };
         }
         type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep;
         type StepImplMap = {

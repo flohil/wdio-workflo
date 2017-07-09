@@ -105,4 +105,22 @@ console.log(page.myButton.name);
 console.log(pageB.myElement.name);
 console.log(pageB.myInput.name);
 console.log(pageB.myInput.waitTime);
+function addToProp(obj, key, value, overwrite = false) {
+    if (obj[key] && !overwrite) {
+        let valueArr = [];
+        valueArr = valueArr.concat(obj[key]);
+        valueArr.push(value);
+        obj[key] = valueArr;
+    }
+    else {
+        obj[key] = value;
+    }
+}
+exports.addToProp = addToProp;
+const obj = {
+    names: 'hansi'
+};
+addToProp(obj, 'names', 'josef');
+addToProp(obj, 'names', 'simone');
+console.log(obj);
 //# sourceMappingURL=testElementsAndStores.js.map
