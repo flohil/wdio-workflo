@@ -123,4 +123,27 @@ const obj = {
 addToProp(obj, 'names', 'josef');
 addToProp(obj, 'names', 'simone');
 console.log(obj);
+class GetTextClass {
+    constructor(text) {
+        this.text = text;
+    }
+    getText() {
+        return this.text;
+    }
+}
+const context = {
+    hansi: new GetTextClass("hansi text"),
+    donald: new GetTextClass("donald text")
+};
+const mask = {
+    anna: false
+};
+const myObj = {
+    anna: true,
+    peter: true
+};
+let bla;
+const object_1 = require("./utilityFunctions/object");
+const hello = object_1.subset(myObj, mask);
+console.log(hello);
 //# sourceMappingURL=testElementsAndStores.js.map
