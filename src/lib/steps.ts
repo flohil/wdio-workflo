@@ -9,7 +9,7 @@ export function stepsGetter(target, name, receiver) {
       throw new Error(`Step ${stepName} is not implemented`)
     }
 
-    return <I, O>(stepCbArgs: IStepArgs<I, O>) : IParameterizedStep => {
+    return <I, O>(stepCbArgs: IStepArgs<I, O> = {}) : IParameterizedStep => {
       stepCbArgs.description = stepName
 
       return parameterizedStep(stepCbArgs)

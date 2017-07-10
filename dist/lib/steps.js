@@ -8,7 +8,7 @@ function stepsGetter(target, name, receiver) {
         if (typeof parameterizedStep === "undefined") {
             throw new Error(`Step ${stepName} is not implemented`);
         }
-        return (stepCbArgs) => {
+        return (stepCbArgs = {}) => {
             stepCbArgs.description = stepName;
             return parameterizedStep(stepCbArgs);
         };
