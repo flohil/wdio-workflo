@@ -289,3 +289,7 @@ import * as stringFunctions from './lib/utilityFunctions/string'
 import * as utilFunctions from './lib/utilityFunctions/util'
 
 export { objectFunctions, arrayFunctions, classFunctions, stringFunctions }
+
+import Kiwi from './lib/Kiwi'
+
+export { Kiwi }

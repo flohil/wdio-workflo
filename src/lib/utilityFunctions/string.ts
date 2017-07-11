@@ -15,3 +15,7 @@ export function splitToObj( str: string, delim: string | RegExp ) : {[part: stri
     return convertToObject(str.split( delim ), () => true) 
   }
 }
+
+export function stripWhitespaces( str: string ) : string {
+  return str.replace(/\s/g,'')
+}
