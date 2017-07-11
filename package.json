@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.47",
+  "version": "0.0.48",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -50,7 +50,7 @@
     "tcp-port-used": "^0.1.2",
     "ts-node": "^3.0.6",
     "tsconfig-paths": "^2.2.0",
-    "typescript": "^2.3.4",
+    "typescript": "^2.4.1",
     "wdio-selenium-standalone-service": "0.0.9",
     "wdio-workflo-allure-reporter": "0.0.9",
     "wdio-workflo-jasmine-framework": "0.0.3",
