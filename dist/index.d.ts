@@ -11,10 +11,10 @@ declare global  {
              * @param input
              * @param func
              */
-            function mapProperties<T, O>(input: {
+            function mapProperties<T, O, I extends {
                 [key: string]: T;
-            }, func: (value: T, key?: string) => O): {
-                [key: string]: O;
+            }>(input: I, func: (value: T, key?: string) => O): {
+                [key in keyof I]: O;
             };
             /**
              * Iterates over all properties in an object and executes func on each.
@@ -22,9 +22,9 @@ declare global  {
              * @param input
              * @param func
              */
-            function forEachProperty<T>(input: {
+            function forEachProperty<T, I extends {
                 [key: string]: T;
-            }, func: (value: T, key?: string) => void): void;
+            }>(input: I, func: (value: T, key?: string) => void): I;
             /**
              * Returns a new object with the original object's keys and values inverted.
              * The original object's values must therefore be implicitly convertable to type string.
@@ -62,9 +62,11 @@ declare global  {
              * @param value
              * @param overwrite
              */
-            function addToProp<T>(obj: {
+            function addToProp<T, I extends {
                 [key: string]: T | T[];
-            }, key: string, value: T, overwrite?: boolean): void;
+            }>(obj: I, key: string, value: T, overwrite?: boolean): {
+                [key in keyof I]: T | T[];
+            };
             /**
              * Creates a copy of original object in which all
              * key-value pairs matching the passed props are removed.

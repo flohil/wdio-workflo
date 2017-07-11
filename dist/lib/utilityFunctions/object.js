@@ -16,7 +16,7 @@ function mapProperties(input, func) {
         throw new Error(`Input must be an object: ${input}`);
     }
     else {
-        const resultObj = {};
+        let resultObj;
         for (const key in input) {
             if (input.hasOwnProperty(key)) {
                 resultObj[key] = func(input[key], key);
@@ -38,6 +38,7 @@ function forEachProperty(input, func) {
             func(input[key], key);
         }
     }
+    return this;
 }
 exports.forEachProperty = forEachProperty;
 // inverts an object's keys and values.
@@ -100,6 +101,7 @@ function addToProp(obj, key, value, overwrite = false) {
     else {
         obj[key] = value;
     }
+    return this;
 }
 exports.addToProp = addToProp;
 /**

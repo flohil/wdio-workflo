@@ -22,10 +22,10 @@ declare global {
        * @param input
        * @param func
        */
-      export function mapProperties<T, O>(input: {
+      export function mapProperties<T, O, I extends {
           [key: string]: T;
-      }, func: (value: T, key?: string) => O): {
-          [key: string]: O;
+      }>(input: I, func: (value: T, key?: string) => O): {
+          [key in keyof I]: O;
       }
 
       /**
@@ -34,9 +34,9 @@ declare global {
        * @param input
        * @param func
        */
-      export function forEachProperty<T>(input: {
+      export function forEachProperty<T, I extends {
           [key: string]: T;
-      }, func: (value: T, key?: string) => void): void
+      }>(input: I, func: (value: T, key?: string) => void): I
 
       /**
        * Returns a new object with the original object's keys and values inverted.
@@ -77,9 +77,11 @@ declare global {
        * @param value
        * @param overwrite
        */
-      export function addToProp<T>(obj: {
+      export function addToProp<T, I extends {
           [key: string]: T | T[];
-      }, key: string, value: T, overwrite?: boolean): void
+      }>(obj: I, key: string, value: T, overwrite?: boolean): {
+          [key in keyof I]: T | T[];
+      }
 
       /**
        * Creates a copy of original object in which all

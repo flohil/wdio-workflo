@@ -10,11 +10,11 @@ import * as _ from 'lodash'
  * @param input 
  * @param func 
  */
-export function mapProperties<T, O>(input: {[key: string] : T}, func: (value: T, key?: string) => O) : {[key: string] : O} {
+export function mapProperties<T, O, I extends {[key: string] : T}>(input: I, func: (value: T, key?: string) => O) : {[key in keyof I] : O} {
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
-    const resultObj: {[key: string] : O} = {}
+    let resultObj: {[key in keyof I] : O}
 
     for (const key in input) {
       if (input.hasOwnProperty(key)) {
@@ -32,12 +32,14 @@ export function mapProperties<T, O>(input: {[key: string] : T}, func: (value: T,
  * @param input 
  * @param func 
  */
-export function forEachProperty<T>(input: {[key: string] : T}, func: (value: T, key?: string) => void): void {
+export function forEachProperty<T, I extends {[key: string] : T}>(input: I, func: (value: T, key?: string) => void): I {
   for (const key in input) {
     if (input.hasOwnProperty(key)) {
       func(input[key], key)
     }
   }
+
+  return this
 }
 
 // inverts an object's keys and values.
@@ -95,7 +97,7 @@ export function filter<T>(obj: {[key: string] : T}, func: (value: T, key?: strin
  * @param value 
  * @param overwrite 
  */
-export function addToProp<T>(obj: {[key: string] : T | T[]}, key: string, value: T, overwrite: boolean = false): void {
+export function addToProp<T, I extends {[key: string] : T | T[]}>(obj: I, key: string, value: T, overwrite: boolean = false): {[key in keyof I] : T | T[]} {
   if (obj[key] && !overwrite) {
     let valueArr: T[] = []
     valueArr = valueArr.concat(obj[key])
@@ -105,6 +107,8 @@ export function addToProp<T>(obj: {[key: string] : T | T[]}, key: string, value:
   } else {
     obj[key] = value
   }
+
+  return this
 }
 
 /**
