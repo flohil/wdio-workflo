@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
     "latest_report": "npm run generate_report && npm run open_report",
     "start": "npm run build:live",
     "build:live": "nodemon --exec ts-node -- ./src/lib/testElementsAndStores.ts",
-    "prepare": "npm run build"
+    "prepublish": "npm run build"
   },
   "author": "Florian Hilbinger",
   "license": "MIT",

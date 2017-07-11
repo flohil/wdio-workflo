@@ -234,3 +234,5 @@ import * as arrayFunctions from './lib/utilityFunctions/array';
 import * as classFunctions from './lib/utilityFunctions/class';
 import * as stringFunctions from './lib/utilityFunctions/string';
 export { objectFunctions, arrayFunctions, classFunctions, stringFunctions };
+import Kiwi from './lib/Kiwi';
+export { Kiwi };

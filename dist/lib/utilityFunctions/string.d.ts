@@ -8,3 +8,4 @@
 export declare function splitToObj(str: string, delim: string | RegExp): {
     [part: string]: boolean;
 };
+export declare function stripWhitespaces(str: string): string;

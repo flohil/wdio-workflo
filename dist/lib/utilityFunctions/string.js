@@ -18,4 +18,8 @@ function splitToObj(str, delim) {
     }
 }
 exports.splitToObj = splitToObj;
+function stripWhitespaces(str) {
+    return str.replace(/\s/g, '');
+}
+exports.stripWhitespaces = stripWhitespaces;
 //# sourceMappingURL=string.js.map

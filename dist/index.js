@@ -15,4 +15,6 @@ const classFunctions = require("./lib/utilityFunctions/class");
 exports.classFunctions = classFunctions;
 const stringFunctions = require("./lib/utilityFunctions/string");
 exports.stringFunctions = stringFunctions;
+const Kiwi_1 = require("./lib/Kiwi");
+exports.Kiwi = Kiwi_1.default;
 //# sourceMappingURL=index.js.map
