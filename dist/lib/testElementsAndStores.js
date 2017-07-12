@@ -146,4 +146,13 @@ let bla;
 const object_1 = require("./utilityFunctions/object");
 const hello = object_1.subset(myObj, mask);
 console.log(hello);
+const optArgs = {
+    cb: () => { }
+};
+const args = {
+    arg: { var1: "string" }
+};
+const steps_1 = require("./steps");
+const test = new steps_1.ParameterizedStep(_.merge({ arg: {} }, optArgs), () => {
+});
 //# sourceMappingURL=testElementsAndStores.js.map

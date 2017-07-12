@@ -1,4 +1,14 @@
 import Kiwi from './Kiwi'
+import * as _ from 'lodash'
+
+export function mergeDefaults<D extends { [ key: string ]: any }, I, O>
+( defaults: D, params: IStepArgs<I, O> | IOptStepArgs<I, O>): IStepArgs<I, O> {
+  const _params = <any>params
+
+  const res: { arg?: { [ key: string ]: any }, cb?: any } = _params || {}
+  res.arg = _.merge( defaults, res.arg )
+  return _params
+}
 
 export function stepsGetter(target, name, receiver) {
   if (typeof name === "string") {
@@ -9,10 +19,11 @@ export function stepsGetter(target, name, receiver) {
       throw new Error(`Step ${stepName} is not implemented`)
     }
 
-    return <I, O>(stepCbArgs: IStepArgs<I, O> = {}) : IParameterizedStep => {
-      stepCbArgs.description = stepName
+    return <I, O>(stepCbArgs: IOptStepArgs<I, O> = {}) : IParameterizedStep => {
 
-      return parameterizedStep(stepCbArgs)
+      const stepArgs = mergeDefaults({description: stepName}, stepCbArgs)
+
+      return parameterizedStep(stepArgs)
     }
   } else {
     throw new Error("Property keys of Steps must be of type string: Step " + name.toString)

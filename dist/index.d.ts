@@ -201,10 +201,13 @@ declare global  {
             specObj: IVerifySpecObject;
         };
     }
-    interface IStepArgs<I, O> {
+    interface IOptStepArgs<I, O> {
         cb?: (out: O) => void;
         arg?: I;
         description?: string;
+    }
+    interface IStepArgs<I, O> extends IOptStepArgs<I, O> {
+        arg: I;
     }
     interface IParameterizedStep {
         description: string;

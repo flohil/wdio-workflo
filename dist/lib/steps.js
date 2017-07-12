@@ -1,6 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Kiwi_1 = require("./Kiwi");
+const _ = require("lodash");
+function mergeDefaults(defaults, params) {
+    const _params = params;
+    const res = _params || {};
+    res.arg = _.merge(defaults, res.arg);
+    return _params;
+}
+exports.mergeDefaults = mergeDefaults;
 function stepsGetter(target, name, receiver) {
     if (typeof name === "string") {
         const stepName = name;
@@ -9,8 +17,8 @@ function stepsGetter(target, name, receiver) {
             throw new Error(`Step ${stepName} is not implemented`);
         }
         return (stepCbArgs = {}) => {
-            stepCbArgs.description = stepName;
-            return parameterizedStep(stepCbArgs);
+            const stepArgs = mergeDefaults({ description: stepName }, stepCbArgs);
+            return parameterizedStep(stepArgs);
         };
     }
     else {
@@ -23,7 +31,7 @@ function stepsSetter(target, name, value) {
 }
 exports.stepsSetter = stepsSetter;
 class ParameterizedStep {
-    constructor(params = {}, stepFunc) {
+    constructor(params, stepFunc) {
         if (typeof params.description !== "undefined") {
             this.description = Kiwi_1.default.compose(params.description, params.arg);
         }
