@@ -1,7 +1,7 @@
 import Kiwi from './Kiwi'
 import * as _ from 'lodash'
 
-export function mergeDefaults<D extends { [ key: string ]: any }, I, O>
+export function mergeStepDefaults<D extends { [ key: string ]: any }, I, O>
 ( defaults: D, params: IStepArgs<I, O> | IOptStepArgs<I, O>): IStepArgs<I, O> {
   const _params = <any>params
 
@@ -20,8 +20,9 @@ export function stepsGetter(target, name, receiver) {
     }
 
     return <I, O>(stepCbArgs: IOptStepArgs<I, O> = {}) : IParameterizedStep => {
+      stepCbArgs.description = stepName
 
-      const stepArgs = mergeDefaults({description: stepName}, stepCbArgs)
+      const stepArgs = mergeStepDefaults({}, stepCbArgs)
 
       return parameterizedStep(stepArgs)
     }
@@ -38,7 +39,7 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
   public description: string
   public execute: (prefix: string) => void
 
-  constructor(params: IStepArgs<I, O>, stepFunc: (arg: I) => O) {
+  constructor(params: IOptStepArgs<I, O>, stepFunc: (arg: I) => O) {
     if( typeof params.description !== "undefined" ) {
       this.description = Kiwi.compose(params.description, params.arg)
     }

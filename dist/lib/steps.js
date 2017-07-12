@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Kiwi_1 = require("./Kiwi");
 const _ = require("lodash");
-function mergeDefaults(defaults, params) {
+function mergeStepDefaults(defaults, params) {
     const _params = params;
     const res = _params || {};
     res.arg = _.merge(defaults, res.arg);
     return _params;
 }
-exports.mergeDefaults = mergeDefaults;
+exports.mergeStepDefaults = mergeStepDefaults;
 function stepsGetter(target, name, receiver) {
     if (typeof name === "string") {
         const stepName = name;
@@ -17,7 +17,8 @@ function stepsGetter(target, name, receiver) {
             throw new Error(`Step ${stepName} is not implemented`);
         }
         return (stepCbArgs = {}) => {
-            const stepArgs = mergeDefaults({ description: stepName }, stepCbArgs);
+            stepCbArgs.description = stepName;
+            const stepArgs = mergeStepDefaults({}, stepCbArgs);
             return parameterizedStep(stepArgs);
         };
     }
