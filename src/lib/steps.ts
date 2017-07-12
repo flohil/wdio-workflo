@@ -27,7 +27,7 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
   public description: string
   public execute: (prefix: string) => void
 
-  constructor(params: IStepArgs<I, O> = {}, stepFunc: (arg: I) => O) {
+  constructor(params: IStepArgs<I, O>, stepFunc: (arg: I) => O) {
     if( typeof params.description !== "undefined" ) {
       this.description = Kiwi.compose(params.description, params.arg)
     }

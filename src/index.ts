@@ -237,11 +237,15 @@ declare global {
     }
   }
 
-  interface IStepArgs<I, O> {
-      cb?: (out: O) => void,
-      arg?: I,
-      description?: string
-    }
+  interface IOptStepArgs<I, O> {
+    cb?: (out: O) => void,
+    arg?: I,
+    description?: string
+  }
+
+  interface IStepArgs<I, O> extends IOptStepArgs<I, O> {
+    arg: I,
+  }
 
   interface IParameterizedStep{
     description: string,

@@ -232,3 +232,17 @@ import { subset } from './utilityFunctions/object'
 const hello = subset(myObj, mask)
 
 console.log(hello)
+
+const optArgs: IOptStepArgs<{}, void> = {
+    cb: () => {}
+}
+
+const args: IStepArgs<{}, void> = {
+    arg: {var1: "string"}
+}
+
+import { ParameterizedStep } from './steps'
+
+const test = new ParameterizedStep(_.merge({arg: {}},optArgs), () => {
+
+})
