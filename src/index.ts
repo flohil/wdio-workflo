@@ -23,7 +23,7 @@ declare global {
        * @param func
        */
       export function mapProperties<T, O, I extends {
-          [key: string]: T;
+          [key in keyof I]: T;
       }>(input: I, func: (value: T, key?: string) => O): {
           [key in keyof I]: O;
       }
@@ -35,7 +35,7 @@ declare global {
        * @param func
        */
       export function forEachProperty<T, I extends {
-          [key: string]: T;
+          [key in keyof I]: T;
       }>(input: I, func: (value: T, key?: string) => void): I
 
       /**
@@ -78,7 +78,7 @@ declare global {
        * @param overwrite
        */
       export function addToProp<T, I extends {
-          [key: string]: T | T[];
+          [key in keyof I]: T | T[];
       }>(obj: I, key: string, value: T, overwrite?: boolean): {
           [key in keyof I]: T | T[];
       }
@@ -149,7 +149,7 @@ declare global {
        * 
        * @param obj 
        */
-      function getAllMethods(obj: any): string[]
+      export function getAllMethods(obj: any): string[]
     }
 
     namespace Util {

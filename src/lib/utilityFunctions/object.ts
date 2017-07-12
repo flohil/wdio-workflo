@@ -10,7 +10,7 @@ import * as _ from 'lodash'
  * @param input 
  * @param func 
  */
-export function mapProperties<T, O, I extends {[key: string] : T}>(input: I, func: (value: T, key?: string) => O) : {[key in keyof I] : O} {
+export function mapProperties<T, O, I extends {[key in keyof I] : T}>(input: I, func: (value: T, key?: string) => O) : {[key in keyof I] : O} {
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
@@ -32,7 +32,7 @@ export function mapProperties<T, O, I extends {[key: string] : T}>(input: I, fun
  * @param input 
  * @param func 
  */
-export function forEachProperty<T, I extends {[key: string] : T}>(input: I, func: (value: T, key?: string) => void): I {
+export function forEachProperty<T, I extends {[key in keyof I] : T}>(input: I, func: (value: T, key?: string) => void): I {
   for (const key in input) {
     if (input.hasOwnProperty(key)) {
       func(input[key], key)
@@ -97,7 +97,7 @@ export function filter<T>(obj: {[key: string] : T}, func: (value: T, key?: strin
  * @param value 
  * @param overwrite 
  */
-export function addToProp<T, I extends {[key: string] : T | T[]}>(obj: I, key: string, value: T, overwrite: boolean = false): {[key in keyof I] : T | T[]} {
+export function addToProp<T, I extends {[key in keyof I] : T | T[]}>(obj: I, key: string, value: T, overwrite: boolean = false): {[key in keyof I] : T | T[]} {
   if (obj[key] && !overwrite) {
     let valueArr: T[] = []
     valueArr = valueArr.concat(obj[key])

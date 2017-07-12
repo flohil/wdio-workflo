@@ -12,7 +12,7 @@ declare global  {
              * @param func
              */
             function mapProperties<T, O, I extends {
-                [key: string]: T;
+                [key in keyof I]: T;
             }>(input: I, func: (value: T, key?: string) => O): {
                 [key in keyof I]: O;
             };
@@ -23,7 +23,7 @@ declare global  {
              * @param func
              */
             function forEachProperty<T, I extends {
-                [key: string]: T;
+                [key in keyof I]: T;
             }>(input: I, func: (value: T, key?: string) => void): I;
             /**
              * Returns a new object with the original object's keys and values inverted.
@@ -63,7 +63,7 @@ declare global  {
              * @param overwrite
              */
             function addToProp<T, I extends {
-                [key: string]: T | T[];
+                [key in keyof I]: T | T[];
             }>(obj: I, key: string, value: T, overwrite?: boolean): {
                 [key in keyof I]: T | T[];
             };
