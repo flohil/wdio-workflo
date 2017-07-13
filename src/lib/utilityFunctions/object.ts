@@ -14,10 +14,12 @@ export function mapProperties<T, O, I extends {[key in keyof I] : T}>(input: I, 
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
-    let resultObj: {[key in keyof I] : O}
+    let resultObj: {[key in keyof I] : O} = Object.create(null)
 
     for (const key in input) {
       if (input.hasOwnProperty(key)) {
+        const propRes: O = func(input[key], key)
+
         resultObj[key] = func(input[key], key)
       }
     }
