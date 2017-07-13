@@ -1,8 +1,12 @@
 import Kiwi from './Kiwi'
 import * as _ from 'lodash'
 
+export type Partial<T> = {
+  [P in keyof T]?: T[P]
+}
+
 export function mergeStepDefaults<I, O>
-(params: IStepArgs<I, O> | IOptStepArgs<I, O>, defaults: I): IStepArgs<I, O> {
+( defaults: Partial<I>, params: IStepArgs<I, O> | IOptStepArgs<I, O>): IStepArgs<I, O> {
   const _params = <any>params
 
   const res: { arg?: { [ key: string ]: any }, cb?: any } = _params || {}
