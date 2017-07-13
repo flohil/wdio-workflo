@@ -44,6 +44,11 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
   public execute: (prefix: string) => void
 
   constructor(params: IOptStepArgs<I, O>, stepFunc: (arg: I) => O) {
+
+    // REMOVE
+    console.log("params: ", params)
+
+
     if( typeof params.description !== "undefined" ) {
       this.description = Kiwi.compose(params.description, params.arg)
     }

@@ -33,6 +33,8 @@ function stepsSetter(target, name, value) {
 exports.stepsSetter = stepsSetter;
 class ParameterizedStep {
     constructor(params, stepFunc) {
+        // REMOVE
+        console.log("params: ", params);
         if (typeof params.description !== "undefined") {
             this.description = Kiwi_1.default.compose(params.description, params.arg);
         }

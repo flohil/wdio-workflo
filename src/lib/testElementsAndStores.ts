@@ -257,7 +257,7 @@ const Steps = {
     }),
 
   "fill data in container settings dialog in content administration": (params?: IStepArgs< { formValues: { [key: string]:any } }, void> ): IParameterizedStep =>
-    new ParameterizedStep(mergeStepDefaults( {}, params ), ({formValues}) : void => {
+    new ParameterizedStep(mergeStepDefaults({formValues: {var1: 1}}, params ), ({formValues}) : void => {
     }),
 
   "create new container in content administration": (params: IStepArgs< {}, void> ): IParameterizedStep =>
@@ -270,3 +270,4 @@ const steps = new Proxy(Steps, {
   set: (target, name, value) => stepsSetter(target, name, value)
 })
 
+steps["fill data in container settings dialog in content administration"]()
