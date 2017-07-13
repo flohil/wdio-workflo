@@ -249,6 +249,11 @@
 
 ////////////////////////////////////////////////////////////////////////
 
+interface IContainerSettingsForm { 
+  name: string
+  //kind: 'Standard' |    
+}
+
 import { mergeStepDefaults, ParameterizedStep, stepsGetter, stepsSetter } from './steps'
 
 const Steps = {
@@ -256,9 +261,19 @@ const Steps = {
     new ParameterizedStep(params, () : void => {
     }),
 
-  "fill data in container settings dialog in content administration": (params?: IStepArgs< { formValues: { [key: string]:any } }, void> ): IParameterizedStep =>
-    new ParameterizedStep(mergeStepDefaults({formValues: {var1: 1}}, params ), ({formValues}) : void => {
+  /*"fill data in container settings dialog in content administration": (params?: IStepArgs< { formValues: { [key: string]:any } }, void> ): IParameterizedStep =>
+    new ParameterizedStep(mergeStepDefaults({fo}, params ), (formValues) : void => {
+      console.log("formValues: ", formValues)
+    }),*/
+
+  "fill data in container settings dialog in content administration": (params?: IStepArgs< IContainerSettingsForm, void> ): IParameterizedStep =>
+    new ParameterizedStep(mergeStepDefaults({}, params ), (formValues) : void => {
+      console.log("formValues: ", formValues)
     }),
+
+  /*"fill data in container settings dialog in content administration": (params?: IStepArgs< { formValues: { [key: string]:any } }, void> ): IParameterizedStep =>
+    new ParameterizedStep(mergeStepDefaults({}, params ), (formValues) : void => {
+    }),*/
 
   "create new container in content administration": (params: IStepArgs< {}, void> ): IParameterizedStep =>
     new ParameterizedStep(params, () : void => {

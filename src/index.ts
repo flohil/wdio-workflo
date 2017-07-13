@@ -252,6 +252,10 @@ declare global {
     execute: (prefix?: string) => void
   }
 
+  type MyPartial<T> = {
+    [P in keyof T]?: T[P];
+  }
+
   function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
   function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
   function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
