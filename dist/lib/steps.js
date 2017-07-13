@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Kiwi_1 = require("./Kiwi");
 const _ = require("lodash");
-function mergeStepDefaults(defaults, params) {
+function mergeStepDefaults(params, defaults) {
     const _params = params;
     const res = _params || {};
     res.arg = _.merge(defaults, res.arg);

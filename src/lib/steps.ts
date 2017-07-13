@@ -2,7 +2,7 @@ import Kiwi from './Kiwi'
 import * as _ from 'lodash'
 
 export function mergeStepDefaults<I, O>
-( defaults: I, params: IStepArgs<I, O> | IOptStepArgs<I, O>): IStepArgs<I, O> {
+(params: IStepArgs<I, O> | IOptStepArgs<I, O>, defaults: I): IStepArgs<I, O> {
   const _params = <any>params
 
   const res: { arg?: { [ key: string ]: any }, cb?: any } = _params || {}
