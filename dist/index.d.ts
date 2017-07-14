@@ -120,6 +120,12 @@ declare global  {
             function splitToObj(str: string, delim: string | RegExp): {
                 [part: string]: boolean;
             };
+            /**
+             * Removes all whitespace characters from a string.
+             *
+             * @param str
+             */
+            function stripWhitespaces(str: string): string;
         }
         namespace Class {
             /**

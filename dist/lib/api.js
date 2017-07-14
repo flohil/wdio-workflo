@@ -37,16 +37,23 @@ exports.xStory = (id, description, metadata, bodyFunc) => {
 exports.Given = (description, bodyFunc) => {
     const story = storyMap.get(this.__currentStoryId);
     story.descriptionStack.givens.push(description);
-    bodyFunc();
+    if (bodyFunc) {
+        bodyFunc();
+    }
     // top element can either be string of given or array of strings from when
     const topElem = story.descriptionStack.givens.pop();
     // if array of strings from when -> remove both when string array and given string
     story.descriptionStack.whens = [];
+    return {
+        "And": (description, bodyFunc) => exports.Given.call(this, description, bodyFunc)
+    };
 };
 exports.When = (description, bodyFunc) => {
     const story = storyMap.get(this.__currentStoryId);
     story.descriptionStack.whens.push(description); // empty after when chain has ended
-    bodyFunc();
+    if (bodyFunc) {
+        bodyFunc();
+    }
     return {
         "And": (description, bodyFunc) => exports.When.call(this, description, bodyFunc)
     };

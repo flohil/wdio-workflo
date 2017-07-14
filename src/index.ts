@@ -139,6 +139,13 @@ declare global {
       export function splitToObj(str: string, delim: string | RegExp): {
           [part: string]: boolean;
       }
+
+      /**
+       * Removes all whitespace characters from a string.
+       * 
+       * @param str 
+       */
+      export function stripWhitespaces(str: string): string
     }
 
     namespace Class {

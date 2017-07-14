@@ -4,9 +4,11 @@ export declare const xFeature: (description: string, metadata: Workflo.IFeatureM
 export declare const Story: (id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void, jasmineFunc?: (description: string, bodyFunc: () => void) => void) => void;
 export declare const fStory: (id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) => void;
 export declare const xStory: (id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) => void;
-export declare const Given: (description: string, bodyFunc: () => void) => void;
-export declare const When: (description: string, bodyFunc: () => void) => {
-    "And": (description: string, bodyFunc: () => void) => any;
+export declare const Given: (description: string, bodyFunc?: () => void) => {
+    "And": (description: string, bodyFunc?: () => void) => any;
+};
+export declare const When: (description: string, bodyFunc?: () => void) => {
+    "And": (description: string, bodyFunc?: () => void) => any;
 };
 export declare const Then: (id: number, description: string, jasmineFunc?: (description: string, bodyFunc: () => void) => void) => void;
 export declare const fThen: (id: number, description: string) => void;
