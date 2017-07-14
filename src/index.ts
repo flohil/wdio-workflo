@@ -190,8 +190,12 @@ declare global {
 
     type severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
 
+    interface ISpecGiven {
+      And: (description: string, bodyFunc?: () => void) => ISpecGiven
+    }
+
     interface ISpecWhen {
-      And: (description: string, bodyFunc: () => void) => ISpecWhen
+      And: (description: string, bodyFunc?: () => void) => ISpecWhen
     }
 
     interface ITCWhen {
@@ -226,7 +230,11 @@ declare global {
       descriptionStack: IDescriptionStack
       metadata: IStoryMetaData
       featureName: string,
-      storyName: string
+      storyName: string,
+      insideWhenSequence: boolean,
+      insideGivenSequence: boolean,
+      givenSequenceLengths: number[],
+      givenRecLevel: number
     }
 
     interface IExpectationBlock {
@@ -271,9 +279,9 @@ declare global {
   function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
   function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
 
-  function Given(description: string, bodyFunc: () => void) : void
+  function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven
 
-  function When(description: string, bodyFunc: () => void) : Workflo.ISpecWhen
+  function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen
 
   function Then(id: number, description: string) : void
   function fThen(id: number, description: string) : void

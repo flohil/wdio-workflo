@@ -165,8 +165,11 @@ declare global  {
             [key: string]: StepImpl;
         };
         type severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial';
+        interface ISpecGiven {
+            And: (description: string, bodyFunc?: () => void) => ISpecGiven;
+        }
         interface ISpecWhen {
-            And: (description: string, bodyFunc: () => void) => ISpecWhen;
+            And: (description: string, bodyFunc?: () => void) => ISpecWhen;
         }
         interface ITCWhen {
             and: (step: IParameterizedStep) => ITCWhen;
@@ -194,6 +197,10 @@ declare global  {
             metadata: IStoryMetaData;
             featureName: string;
             storyName: string;
+            insideWhenSequence: boolean;
+            insideGivenSequence: boolean;
+            givenSequenceLengths: number[];
+            givenRecLevel: number;
         }
         interface IExpectationBlock {
             testcaseName: string;
@@ -228,8 +235,8 @@ declare global  {
     function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void): void;
     function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void): void;
     function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void): void;
-    function Given(description: string, bodyFunc: () => void): void;
-    function When(description: string, bodyFunc: () => void): Workflo.ISpecWhen;
+    function Given(description: string, bodyFunc?: () => void): Workflo.ISpecGiven;
+    function When(description: string, bodyFunc?: () => void): Workflo.ISpecWhen;
     function Then(id: number, description: string): void;
     function fThen(id: number, description: string): void;
     function xThen(id: number, description: string): void;

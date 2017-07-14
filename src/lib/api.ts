@@ -49,7 +49,11 @@ export const Story = (
     descriptionStack: {givens: [], whens: []},
     metadata: metadata,
     featureName: this.__currentFeature,
-    storyName: fullStoryName
+    storyName: fullStoryName,
+    insideWhenSequence: false,
+    insideGivenSequence: false,
+    givenSequenceLengths: [],
+    givenRecLevel: 0
   })
   
   jasmineFunc(fullStoryName, bodyFunc)  
@@ -76,25 +80,72 @@ export const xStory = (
 export const Given = (description: string, bodyFunc?: () => void) => {  
   const story = storyMap.get(this.__currentStoryId)
 
+  const prevRecDepth = story.givenSequenceLengths.length
+
+  // new given block
+  if (!story.insideGivenSequence) {
+    // remove descriptions from previous given blocks in same recursion level
+    const prevGivens = story.givenSequenceLengths[story.givenRecLevel]
+
+    for (let i = 0; i < prevGivens; ++i) {
+      story.descriptionStack.givens.pop()
+    }
+
+    story.givenSequenceLengths[story.givenRecLevel] = 0
+  } else {
+    story.insideGivenSequence = false
+  }
+
   story.descriptionStack.givens.push(description)
 
   if (bodyFunc) {
+
+    // for counting number of given sequence elements in nested block
+    story.givenSequenceLengths.push(0)
+    story.givenRecLevel++
+
     bodyFunc()
+
+    story.givenRecLevel--
+
+    const newRecDepth = story.givenSequenceLengths.length
+
+    // removes descriptions of nested givens
+    if (newRecDepth > prevRecDepth) {
+      const nestedDescriptionsCount = story.givenSequenceLengths[newRecDepth - 1]
+
+      for (let i = 0; i < nestedDescriptionsCount; ++i) {
+        story.descriptionStack.givens.pop()
+      }
+    }
+
+    story.givenSequenceLengths.pop()
   }
+
+  // if there is no count for current recursion level yet
+  if (story.givenSequenceLengths.length <= story.givenRecLevel) {
+    story.givenSequenceLengths.push(0)
+  }
+
+  // increase length of sequence in current recursion level
+  story.givenSequenceLengths[story.givenSequenceLengths.length - 1]++
   
-  // top element can either be string of given or array of strings from when
-  const topElem = story.descriptionStack.givens.pop()
-
-  // if array of strings from when -> remove both when string array and given string
-  story.descriptionStack.whens = []
-
   return {
-    "And": (description: string, bodyFunc?: () => void) => Given.call(this, description, bodyFunc)
+    "And": (description: string, bodyFunc?: () => void) => {
+      story.insideGivenSequence = true
+      return Given.call(this, description, bodyFunc)
+    }
   }
 }
 
 export const When = (description: string, bodyFunc?: () => void) => {
   const story = storyMap.get(this.__currentStoryId)
+
+  if (!story.insideWhenSequence) {
+    story.descriptionStack.whens = []
+  } else {
+    story.insideWhenSequence = false
+  }
 
   story.descriptionStack.whens.push(description) // empty after when chain has ended
 
@@ -103,7 +154,10 @@ export const When = (description: string, bodyFunc?: () => void) => {
   }
   
   return {
-    "And": (description: string, bodyFunc?: () => void) => When.call(this, description, bodyFunc)
+    "And": (description: string, bodyFunc?: () => void) => {
+      story.insideWhenSequence = true
+      return When.call(this, description, bodyFunc)
+    }
   }
 }
 
@@ -121,7 +175,7 @@ export const Then = (
     process.send({event: 'step:end'})
   }
 
-  const reduceFunc = (acc, cur) => acc + "\nAnd " + cur
+  const reduceFunc = (acc, cur) => acc + `\n${words.And} ` + cur
 
   const givenDescriptions = [ `${words.Given} ${story.descriptionStack.givens[0]}` ]
   .concat(

@@ -24,7 +24,11 @@ exports.Story = (id, description, metadata, bodyFunc, jasmineFunc = describe) =>
         descriptionStack: { givens: [], whens: [] },
         metadata: metadata,
         featureName: this.__currentFeature,
-        storyName: fullStoryName
+        storyName: fullStoryName,
+        insideWhenSequence: false,
+        insideGivenSequence: false,
+        givenSequenceLengths: [],
+        givenRecLevel: 0
     });
     jasmineFunc(fullStoryName, bodyFunc);
 };
@@ -36,26 +40,66 @@ exports.xStory = (id, description, metadata, bodyFunc) => {
 };
 exports.Given = (description, bodyFunc) => {
     const story = storyMap.get(this.__currentStoryId);
+    const prevRecDepth = story.givenSequenceLengths.length;
+    // new given block
+    if (!story.insideGivenSequence) {
+        // remove descriptions from previous given blocks in same recursion level
+        const prevGivens = story.givenSequenceLengths[story.givenRecLevel];
+        for (let i = 0; i < prevGivens; ++i) {
+            story.descriptionStack.givens.pop();
+        }
+        story.givenSequenceLengths[story.givenRecLevel] = 0;
+    }
+    else {
+        story.insideGivenSequence = false;
+    }
     story.descriptionStack.givens.push(description);
     if (bodyFunc) {
+        // for counting number of given sequence elements in nested block
+        story.givenSequenceLengths.push(0);
+        story.givenRecLevel++;
         bodyFunc();
+        story.givenRecLevel--;
+        const newRecDepth = story.givenSequenceLengths.length;
+        // removes descriptions of nested givens
+        if (newRecDepth > prevRecDepth) {
+            const nestedDescriptionsCount = story.givenSequenceLengths[newRecDepth - 1];
+            for (let i = 0; i < nestedDescriptionsCount; ++i) {
+                story.descriptionStack.givens.pop();
+            }
+        }
+        story.givenSequenceLengths.pop();
     }
-    // top element can either be string of given or array of strings from when
-    const topElem = story.descriptionStack.givens.pop();
-    // if array of strings from when -> remove both when string array and given string
-    story.descriptionStack.whens = [];
+    // if there is no count for current recursion level yet
+    if (story.givenSequenceLengths.length <= story.givenRecLevel) {
+        story.givenSequenceLengths.push(0);
+    }
+    // increase length of sequence in current recursion level
+    story.givenSequenceLengths[story.givenSequenceLengths.length - 1]++;
     return {
-        "And": (description, bodyFunc) => exports.Given.call(this, description, bodyFunc)
+        "And": (description, bodyFunc) => {
+            story.insideGivenSequence = true;
+            return exports.Given.call(this, description, bodyFunc);
+        }
     };
 };
 exports.When = (description, bodyFunc) => {
     const story = storyMap.get(this.__currentStoryId);
+    if (!story.insideWhenSequence) {
+        story.descriptionStack.whens = [];
+    }
+    else {
+        story.insideWhenSequence = false;
+    }
     story.descriptionStack.whens.push(description); // empty after when chain has ended
     if (bodyFunc) {
         bodyFunc();
     }
     return {
-        "And": (description, bodyFunc) => exports.When.call(this, description, bodyFunc)
+        "And": (description, bodyFunc) => {
+            story.insideWhenSequence = true;
+            return exports.When.call(this, description, bodyFunc);
+        }
     };
 };
 exports.Then = (id, description, jasmineFunc = it) => {
@@ -66,7 +110,7 @@ exports.Then = (id, description, jasmineFunc = it) => {
         process.send({ event: 'step:start', title: title });
         process.send({ event: 'step:end' });
     };
-    const reduceFunc = (acc, cur) => acc + "\nAnd " + cur;
+    const reduceFunc = (acc, cur) => acc + `\n${words.And} ` + cur;
     const givenDescriptions = [`${words.Given} ${story.descriptionStack.givens[0]}`]
         .concat(story.descriptionStack.givens
         .slice(1, story.descriptionStack.givens.length)
