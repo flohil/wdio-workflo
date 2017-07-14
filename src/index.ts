@@ -232,6 +232,8 @@ declare global {
       featureName: string,
       storyName: string,
       insideWhenSequence: boolean,
+      whenSequenceLengths: number[],
+      whenRecLevel: number,
       insideGivenSequence: boolean,
       givenSequenceLengths: number[],
       givenRecLevel: number

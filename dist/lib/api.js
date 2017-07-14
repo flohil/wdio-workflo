@@ -26,6 +26,8 @@ exports.Story = (id, description, metadata, bodyFunc, jasmineFunc = describe) =>
         featureName: this.__currentFeature,
         storyName: fullStoryName,
         insideWhenSequence: false,
+        whenSequenceLengths: [],
+        whenRecLevel: 0,
         insideGivenSequence: false,
         givenSequenceLengths: [],
         givenRecLevel: 0
@@ -85,16 +87,42 @@ exports.Given = (description, bodyFunc) => {
 };
 exports.When = (description, bodyFunc) => {
     const story = storyMap.get(this.__currentStoryId);
+    const prevRecDepth = story.whenSequenceLengths.length;
+    // new when block
     if (!story.insideWhenSequence) {
-        story.descriptionStack.whens = [];
+        // remove descriptions from previous when blocks in same recursion level
+        const prevWhens = story.whenSequenceLengths[story.whenRecLevel];
+        for (let i = 0; i < prevWhens; ++i) {
+            story.descriptionStack.whens.pop();
+        }
+        story.whenSequenceLengths[story.whenRecLevel] = 0;
     }
     else {
         story.insideWhenSequence = false;
     }
-    story.descriptionStack.whens.push(description); // empty after when chain has ended
+    story.descriptionStack.whens.push(description);
     if (bodyFunc) {
+        // for counting number of when sequence elements in nested block
+        story.whenSequenceLengths.push(0);
+        story.whenRecLevel++;
         bodyFunc();
+        story.whenRecLevel--;
+        const newRecDepth = story.whenSequenceLengths.length;
+        // removes descriptions of nested whens
+        if (newRecDepth > prevRecDepth) {
+            const nestedDescriptionsCount = story.whenSequenceLengths[newRecDepth - 1];
+            for (let i = 0; i < nestedDescriptionsCount; ++i) {
+                story.descriptionStack.whens.pop();
+            }
+        }
+        story.whenSequenceLengths.pop();
     }
+    // if there is no count for current recursion level yet
+    if (story.whenSequenceLengths.length <= story.whenRecLevel) {
+        story.whenSequenceLengths.push(0);
+    }
+    // increase length of sequence in current recursion level
+    story.whenSequenceLengths[story.whenSequenceLengths.length - 1]++;
     return {
         "And": (description, bodyFunc) => {
             story.insideWhenSequence = true;
@@ -102,6 +130,28 @@ exports.When = (description, bodyFunc) => {
         }
     };
 };
+/*export const When = (description: string, bodyFunc?: () => void) => {
+  const story = storyMap.get(this.__currentStoryId)
+
+  if (!story.insideWhenSequence) {
+    story.descriptionStack.whens = []
+  } else {
+    story.insideWhenSequence = false
+  }
+
+  story.descriptionStack.whens.push(description) // empty after when chain has ended
+
+  if (bodyFunc) {
+    bodyFunc()
+  }
+  
+  return {
+    "And": (description: string, bodyFunc?: () => void) => {
+      story.insideWhenSequence = true
+      return When.call(this, description, bodyFunc)
+    }
+  }
+}*/
 exports.Then = (id, description, jasmineFunc = it) => {
     const story = storyMap.get(this.__currentStoryId);
     const storyId = this.__currentStoryId;

@@ -51,6 +51,8 @@ export const Story = (
     featureName: this.__currentFeature,
     storyName: fullStoryName,
     insideWhenSequence: false,
+    whenSequenceLengths: [],
+    whenRecLevel: 0,
     insideGivenSequence: false,
     givenSequenceLengths: [],
     givenRecLevel: 0
@@ -138,7 +140,68 @@ export const Given = (description: string, bodyFunc?: () => void) => {
   }
 }
 
-export const When = (description: string, bodyFunc?: () => void) => {
+export const When = (description: string, bodyFunc?: () => void) => {  
+  const story = storyMap.get(this.__currentStoryId)
+
+  const prevRecDepth = story.whenSequenceLengths.length
+
+  // new when block
+  if (!story.insideWhenSequence) {
+    // remove descriptions from previous when blocks in same recursion level
+    const prevWhens = story.whenSequenceLengths[story.whenRecLevel]
+
+    for (let i = 0; i < prevWhens; ++i) {
+      story.descriptionStack.whens.pop()
+    }
+
+    story.whenSequenceLengths[story.whenRecLevel] = 0
+  } else {
+    story.insideWhenSequence = false
+  }
+
+  story.descriptionStack.whens.push(description)
+
+  if (bodyFunc) {
+
+    // for counting number of when sequence elements in nested block
+    story.whenSequenceLengths.push(0)
+    story.whenRecLevel++
+
+    bodyFunc()
+
+    story.whenRecLevel--
+
+    const newRecDepth = story.whenSequenceLengths.length
+
+    // removes descriptions of nested whens
+    if (newRecDepth > prevRecDepth) {
+      const nestedDescriptionsCount = story.whenSequenceLengths[newRecDepth - 1]
+
+      for (let i = 0; i < nestedDescriptionsCount; ++i) {
+        story.descriptionStack.whens.pop()
+      }
+    }
+
+    story.whenSequenceLengths.pop()
+  }
+
+  // if there is no count for current recursion level yet
+  if (story.whenSequenceLengths.length <= story.whenRecLevel) {
+    story.whenSequenceLengths.push(0)
+  }
+
+  // increase length of sequence in current recursion level
+  story.whenSequenceLengths[story.whenSequenceLengths.length - 1]++
+  
+  return {
+    "And": (description: string, bodyFunc?: () => void) => {
+      story.insideWhenSequence = true
+      return When.call(this, description, bodyFunc)
+    }
+  }
+}
+
+/*export const When = (description: string, bodyFunc?: () => void) => {
   const story = storyMap.get(this.__currentStoryId)
 
   if (!story.insideWhenSequence) {
@@ -159,7 +222,7 @@ export const When = (description: string, bodyFunc?: () => void) => {
       return When.call(this, description, bodyFunc)
     }
   }
-}
+}*/
 
 export const Then = (
   id: number, 
