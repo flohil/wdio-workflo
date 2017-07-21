@@ -92,3 +92,8 @@ export declare function subset<T, O>(obj: {
 }): {
     [key: string]: T;
 };
+/**
+ * Returns a new object where all properties with a boolean value of false are stripped recursively.
+ * @param obj
+ */
+export declare function stripMaskDeep(obj: Workflo.IRecObj<boolean>): Workflo.IRecObj<boolean>;

@@ -112,6 +112,12 @@ declare global {
       }): {
           [key: string]: T;
       }
+
+      /**
+       * Returns a new object where all properties with a boolean value of false are stripped recursively.
+       * @param obj
+       */
+      export function stripMaskDeep(obj: Workflo.IRecObj<boolean>): Workflo.IRecObj<boolean>;
     }
 
     namespace Array {
@@ -182,6 +188,10 @@ declare global {
       } | string[] | string, valueFunc?: (key: string) => T): {
           [key: string]: T;
       }
+    }
+
+    interface IRecObj<Type> {
+      [key: string] : Type | IRecObj<Type>
     }
 
     type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep

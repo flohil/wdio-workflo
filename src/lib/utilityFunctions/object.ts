@@ -144,3 +144,27 @@ export function subset<T, O>(obj: {[key: string] : T}, maskObject: {[key: string
     return key in maskObject
   })
 }
+
+/**
+ * Returns a new object where all properties with a boolean value of false are stripped recursively.
+ * @param obj
+ */
+export function stripMaskDeep(obj: Workflo.IRecObj<boolean>) {
+  const res = _.cloneDeep(obj)
+
+  function stripMaskRec(obj: Workflo.IRecObj<boolean>) {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (obj[key] === false) {
+          delete obj[key]
+        } else if (_.isObject(obj[key])) {
+          obj[key] = stripMaskRec(<Workflo.IRecObj<boolean>>obj[key])
+        }
+      }
+    }
+
+    return obj
+  }
+
+  return stripMaskRec(res)
+}

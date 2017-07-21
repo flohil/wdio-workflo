@@ -135,4 +135,26 @@ function subset(obj, maskObject) {
     });
 }
 exports.subset = subset;
+/**
+ * Returns a new object where all properties with a boolean value of false are stripped recursively.
+ * @param obj
+ */
+function stripMaskDeep(obj) {
+    const res = _.cloneDeep(obj);
+    function stripMaskRec(obj) {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (obj[key] === false) {
+                    delete obj[key];
+                }
+                else if (_.isObject(obj[key])) {
+                    obj[key] = stripMaskRec(obj[key]);
+                }
+            }
+        }
+        return obj;
+    }
+    return stripMaskRec(res);
+}
+exports.stripMaskDeep = stripMaskDeep;
 //# sourceMappingURL=object.js.map
