@@ -89,6 +89,9 @@ exports.config = {
       }
 
       if ( passed ) {
+        process.send({event: 'verify:success', assertion: assertion})
+
+        // rework
         process.send({event: 'step:succeeded', cid: '0-0', assertion: assertion})
         return
       }
@@ -99,7 +102,10 @@ exports.config = {
           // screenshot
       }
       else if ( assertion.matcherName ) {
+        // rework
         process.send({event: 'step:failed', cid: '0-0', assertion: assertion})
+
+        process.send({event: 'verify:failure', assertion: assertion})
       }
     },
   },

@@ -381,7 +381,10 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
     specObj: specObj
   }
 
+  // rework
   process.send({event: 'step:verifyStart', verifyContainer: verifyContainer})
+
+  process.send({event: 'verify:start', specObj: specObj})
 
   const _process:any = process
 
@@ -391,7 +394,10 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
 
   _process.workflo.specObj = specObj
 
+  // rework
   process.send({event: 'step:start', title: `verify: ${JSON.stringify(specObj)}`})
+
+  process.send({event: 'verify:end', specObj: specObj})
 
   func()
 
