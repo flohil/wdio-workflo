@@ -41,7 +41,8 @@ exports.config = {
    * specify test files
    */
   //specs: 'src/example.spec.ts',
-  specs: workfloConf.testcases.concat(workfloConf.specs),
+  specs: workfloConf.specs,
+  testcases: workfloConf.testcases,
   /**
    * capabilities
    */

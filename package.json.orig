@@ -1,6 +1,10 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.75",
+<<<<<<< HEAD
+  "version": "0.0.69",
+=======
+  "version": "0.0.61",
+>>>>>>> add verify steps
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

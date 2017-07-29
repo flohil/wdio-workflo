@@ -397,9 +397,9 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
   // rework
   process.send({event: 'step:start', title: `verify: ${JSON.stringify(specObj)}`})
 
-  process.send({event: 'verify:end', specObj: specObj})
-
   func()
+
+  process.send({event: 'verify:end', specObj: specObj})
 
   process.send({event: 'step:end', type: 'verifyEnd'})
 

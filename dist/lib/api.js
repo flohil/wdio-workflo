@@ -248,8 +248,8 @@ exports.verify = function (specObj, func) {
     _process.workflo.specObj = specObj;
     // rework
     process.send({ event: 'step:start', title: `verify: ${JSON.stringify(specObj)}` });
-    process.send({ event: 'verify:end', specObj: specObj });
     func();
+    process.send({ event: 'verify:end', specObj: specObj });
     process.send({ event: 'step:end', type: 'verifyEnd' });
     _process.workflo.specObj = undefined;
 };
