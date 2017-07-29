@@ -137,6 +137,12 @@ exports.config = {
     // extend default object and string prototypes
     // with custom utitily functions
   },
+  beforeVerifier: function ( capabilties, specs ) {
+    require('ts-node/register')
+    require('tsconfig-paths/register')
+
+    require('../dist/inject.js')
+  },
   beforeTest: function(test) {
   },
   beforeSuite: function(suite) {
