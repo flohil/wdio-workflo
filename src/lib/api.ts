@@ -265,8 +265,6 @@ export const Then = (
     process.send({event: 'test:meta', issue: story.metadata.issues})
     process.send({event: 'test:meta', severity: story.metadata.severity || 'normal'})
 
-    process.send({event: 'test:meta', description: 'my description'})
-
     // create an allure step for each given and when
     allDescriptions.slice(0, allDescriptions.length - 1).forEach(description => stepFunc(description))
 
