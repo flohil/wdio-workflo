@@ -201,29 +201,6 @@ export const When = (description: string, bodyFunc?: () => void) => {
   }
 }
 
-/*export const When = (description: string, bodyFunc?: () => void) => {
-  const story = storyMap.get(this.__currentStoryId)
-
-  if (!story.insideWhenSequence) {
-    story.descriptionStack.whens = []
-  } else {
-    story.insideWhenSequence = false
-  }
-
-  story.descriptionStack.whens.push(description) // empty after when chain has ended
-
-  if (bodyFunc) {
-    bodyFunc()
-  }
-  
-  return {
-    "And": (description: string, bodyFunc?: () => void) => {
-      story.insideWhenSequence = true
-      return When.call(this, description, bodyFunc)
-    }
-  }
-}*/
-
 export const Then = (
   id: number, 
   description: string,
@@ -233,7 +210,6 @@ export const Then = (
   const storyId = this.__currentStoryId
 
   const stepFunc = (title) => {
-    process.send({event: 'step:triggerSpecMode'}) // workaround until runner and reporter are properly customized
     process.send({event: 'step:start', title: title})
     process.send({event: 'step:end'})
   }
@@ -379,26 +355,20 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
     specObj: specObj
   }
 
-  // rework
-  process.send({event: 'step:verifyStart', verifyContainer: verifyContainer})
-
   process.send({event: 'verify:start', specObj: specObj})
 
   const _process:any = process
-
+  
   if (typeof _process.workflo === 'undefined') {
     _process.workflo = {}
   }
-
   _process.workflo.specObj = specObj
 
-  // rework
   process.send({event: 'step:start', title: `verify: ${JSON.stringify(specObj)}`})
 
   func()
 
   process.send({event: 'verify:end', specObj: specObj})
-
   process.send({event: 'step:end', type: 'verifyEnd'})
 
   _process.workflo.specObj = undefined

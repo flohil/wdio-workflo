@@ -130,33 +130,10 @@ exports.When = (description, bodyFunc) => {
         }
     };
 };
-/*export const When = (description: string, bodyFunc?: () => void) => {
-  const story = storyMap.get(this.__currentStoryId)
-
-  if (!story.insideWhenSequence) {
-    story.descriptionStack.whens = []
-  } else {
-    story.insideWhenSequence = false
-  }
-
-  story.descriptionStack.whens.push(description) // empty after when chain has ended
-
-  if (bodyFunc) {
-    bodyFunc()
-  }
-  
-  return {
-    "And": (description: string, bodyFunc?: () => void) => {
-      story.insideWhenSequence = true
-      return When.call(this, description, bodyFunc)
-    }
-  }
-}*/
 exports.Then = (id, description, jasmineFunc = it) => {
     const story = storyMap.get(this.__currentStoryId);
     const storyId = this.__currentStoryId;
     const stepFunc = (title) => {
-        process.send({ event: 'step:triggerSpecMode' }); // workaround until runner and reporter are properly customized
         process.send({ event: 'step:start', title: title });
         process.send({ event: 'step:end' });
     };
@@ -177,7 +154,6 @@ exports.Then = (id, description, jasmineFunc = it) => {
         process.send({ event: 'test:meta', story: `${story.storyName}` });
         process.send({ event: 'test:meta', issue: story.metadata.issues });
         process.send({ event: 'test:meta', severity: story.metadata.severity || 'normal' });
-        process.send({ event: 'test:meta', description: 'my description' });
         // create an allure step for each given and when
         allDescriptions.slice(0, allDescriptions.length - 1).forEach(description => stepFunc(description));
         // for last allure step (then), check if results where correct
@@ -238,15 +214,12 @@ exports.verify = function (specObj, func) {
     const verifyContainer = {
         specObj: specObj
     };
-    // rework
-    process.send({ event: 'step:verifyStart', verifyContainer: verifyContainer });
     process.send({ event: 'verify:start', specObj: specObj });
     const _process = process;
     if (typeof _process.workflo === 'undefined') {
         _process.workflo = {};
     }
     _process.workflo.specObj = specObj;
-    // rework
     process.send({ event: 'step:start', title: `verify: ${JSON.stringify(specObj)}` });
     func();
     process.send({ event: 'verify:end', specObj: specObj });
