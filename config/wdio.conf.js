@@ -43,6 +43,7 @@ exports.config = {
   //specs: 'src/example.spec.ts',
   specs: workfloConf.specs,
   testcases: workfloConf.testcases,
+  manualTestcases: workfloConf.manualTestcases,
   /**
    * capabilities
    */
