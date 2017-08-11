@@ -262,6 +262,10 @@ declare global {
     type IVerifyContainer = {
       specObj: IVerifySpecObject
     }
+
+    interface ManualTestcaseResults {
+      [key: string] : {[key: number] : boolean}
+    }
   }
 
   interface IOptStepArgs<I, O> {
