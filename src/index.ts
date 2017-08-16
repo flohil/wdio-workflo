@@ -190,6 +190,10 @@ declare global {
       }
     }
 
+    interface IManualTestcaseResults {
+      [key: string] : {[key: number] : boolean}
+    }
+
     interface IRecObj<Type> {
       [key: string] : Type | IRecObj<Type>
     }
@@ -261,10 +265,6 @@ declare global {
 
     type IVerifyContainer = {
       specObj: IVerifySpecObject
-    }
-
-    interface ManualTestcaseResults {
-      [key: string] : {[key: number] : boolean}
     }
   }
 

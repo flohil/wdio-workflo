@@ -165,6 +165,11 @@ declare global  {
                 [key: string]: T;
             };
         }
+        interface IManualTestcaseResults {
+            [key: string]: {
+                [key: number]: boolean;
+            };
+        }
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }
