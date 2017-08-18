@@ -191,7 +191,11 @@ declare global {
     }
 
     interface IManualTestcaseResults {
-      [key: string] : {[key: number] : boolean}
+      [key: string] : {[key: number] : {
+        result: boolean,
+        date: string,
+        comment?: string
+      }}
     }
 
     interface IRecObj<Type> {
