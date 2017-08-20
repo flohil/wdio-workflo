@@ -204,7 +204,8 @@ export const When = (description: string, bodyFunc?: () => void) => {
 export const Then = (
   id: number, 
   description: string,
-  jasmineFunc: (description: string, bodyFunc: () => void) => void = it
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = it,
+  skip: boolean = false
 ) => {
   const story = storyMap.get(this.__currentStoryId)
   const storyId = this.__currentStoryId
@@ -234,7 +235,10 @@ export const Then = (
 
   const allDescriptions: string[] = givenDescriptions.concat(whenDescriptions).concat([thenDescription])
 
+  const skipFunc = (skip) ? () => { pending() } : undefined
+
   const bodyFunc = () => {
+
     // allure report metadata
     process.send({event: 'test:meta', feature: `${story.featureName}`})
     process.send({event: 'test:meta', story: `${story.storyName}`})
@@ -251,8 +255,18 @@ export const Then = (
       storyId: storyId
     }})
   }
+
+  const testData = {
+    title: `${words.Then} ${id}: ${description}`,
+    metadata: {
+      feature: story.featureName,
+      story: story.storyName,
+      issue: story.metadata.issues,
+      severity: story.metadata.severity
+    }
+  }
   
-  jasmineFunc(`${words.Then} ${id}: ${description}`, bodyFunc)
+  jasmineFunc(JSON.stringify(testData), skipFunc || bodyFunc)
 }
 
 export const fThen = (
@@ -266,7 +280,7 @@ export const xThen = (
   id: number, 
   description: string
 ) => {
-  Then(id, description, xit)
+  Then(id, description, it, true)
 }
 
 export const suite = (
@@ -302,7 +316,11 @@ export const testcase = (
 ) => {
   this.__stepStack =[]
 
-  jasmineFunc(description, bodyFunc)
+  const testData = {
+    title: description
+  }
+
+  jasmineFunc(JSON.stringify(testData), bodyFunc)
 }
 
 export const ftestcase = (
@@ -318,7 +336,7 @@ export const xtestcase = (
   metadata: Workflo.ITestcaseMetadata, 
   bodyFunc: () => void
 ) => {
-  testcase(description, metadata, bodyFunc, xit)
+  testcase(description, metadata, () => { pending() })
 }
 
 const _when = function(step: IParameterizedStep, prefix: string) {

@@ -130,7 +130,7 @@ exports.When = (description, bodyFunc) => {
         }
     };
 };
-exports.Then = (id, description, jasmineFunc = it) => {
+exports.Then = (id, description, jasmineFunc = it, skip = false) => {
     const story = storyMap.get(this.__currentStoryId);
     const storyId = this.__currentStoryId;
     const stepFunc = (title) => {
@@ -148,6 +148,7 @@ exports.Then = (id, description, jasmineFunc = it) => {
         .map(description => `${words.And.toLocaleLowerCase()} ${description}`));
     const thenDescription = `${words.Then} ${description}`;
     const allDescriptions = givenDescriptions.concat(whenDescriptions).concat([thenDescription]);
+    const skipFunc = (skip) ? () => { pending(); } : undefined;
     const bodyFunc = () => {
         // allure report metadata
         process.send({ event: 'test:meta', feature: `${story.featureName}` });
@@ -163,13 +164,22 @@ exports.Then = (id, description, jasmineFunc = it) => {
                 storyId: storyId
             } });
     };
-    jasmineFunc(`${words.Then} ${id}: ${description}`, bodyFunc);
+    const testData = {
+        title: `${words.Then} ${id}: ${description}`,
+        metadata: {
+            feature: story.featureName,
+            story: story.storyName,
+            issue: story.metadata.issues,
+            severity: story.metadata.severity
+        }
+    };
+    jasmineFunc(JSON.stringify(testData), skipFunc || bodyFunc);
 };
 exports.fThen = (id, description) => {
     exports.Then(id, description, fit);
 };
 exports.xThen = (id, description) => {
-    exports.Then(id, description, xit);
+    exports.Then(id, description, it, true);
 };
 exports.suite = (description, metadata, bodyFunc, jasmineFunc = describe) => {
     jasmineFunc(description, bodyFunc);
@@ -182,13 +192,16 @@ exports.xsuite = (description, metadata, bodyFunc) => {
 };
 exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     this.__stepStack = [];
-    jasmineFunc(description, bodyFunc);
+    const testData = {
+        title: description
+    };
+    jasmineFunc(JSON.stringify(testData), bodyFunc);
 };
 exports.ftestcase = (description, metadata, bodyFunc) => {
     exports.testcase(description, metadata, bodyFunc, fit);
 };
 exports.xtestcase = (description, metadata, bodyFunc) => {
-    exports.testcase(description, metadata, bodyFunc, xit);
+    exports.testcase(description, metadata, () => { pending(); });
 };
 const _when = function (step, prefix) {
     //process.send({event: 'step:start', title: `${prefix} ${step.description}`})

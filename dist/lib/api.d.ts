@@ -10,7 +10,7 @@ export declare const Given: (description: string, bodyFunc?: () => void) => {
 export declare const When: (description: string, bodyFunc?: () => void) => {
     "And": (description: string, bodyFunc?: () => void) => any;
 };
-export declare const Then: (id: number, description: string, jasmineFunc?: (description: string, bodyFunc: () => void) => void) => void;
+export declare const Then: (id: number, description: string, jasmineFunc?: (description: string, bodyFunc: () => void) => void, skip?: boolean) => void;
 export declare const fThen: (id: number, description: string) => void;
 export declare const xThen: (id: number, description: string) => void;
 export declare const suite: (description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void, jasmineFunc?: (description: string, bodyFunc: () => void) => void) => void;
