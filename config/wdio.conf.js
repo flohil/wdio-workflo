@@ -111,7 +111,7 @@ exports.config = {
         
         const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
         const screenshotFilename = `${screenshotFolder}/assertionFailure_${assertionScreenshotCtr}.png`
-        
+
         assertionScreenshotCtr++
         assertion.screenshotFilename = screenshotFilename
 
@@ -121,9 +121,7 @@ exports.config = {
             console.log('Error writing screenshot:' + err.message)
         }
 
-        // rework
         process.send({event: 'step:failed', cid: '0-0', assertion: assertion})
-
         process.send({event: 'verify:failure', assertion: assertion})
       }
     },
