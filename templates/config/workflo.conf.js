@@ -1,24 +1,24 @@
-const testDir = __dirname + '/testDir'
+const testDir = __dirname + '/system_test'
 
 module.exports = {
   testDir: testDir,
   logLevel: 'verbose',
-  baseUrl: 'http://webdriver.io', // replace with anna base url
+  baseUrl: 'http://www.google.com/',
   windowSize: {
     width: 1280,
     height: 800
   },
   webdriver: {
-    host: '172.20.7.150',
+    host: '127.0.0.1',
     port: 4444
   },
   selenium: {
-    version: '2.53.1',
+    version: '3.4.0',
     baseURL: 'http://selenium-release.storage.googleapis.com'
   },
   capabilities: {
     maxInstances: 1,
-    browserName: 'internet explorer',
+    browserName: 'chrome',
     requireWindowFocus: true,
     nativeEvents: true,    
     unexpectedAlertBehaviour: "accept",
@@ -26,10 +26,11 @@ module.exports = {
     "disable-popup-blocking": true,
     enablePersistentHover: true,
   },
-  specs: [ `${testDir}/src/specs/**/*.tc.ts` ],
-  testcases: [ `${testDir}/src/testcases/**/*.tc.ts` ],
+  specFiles: [ `${testDir}/src/specs/**/*.spec.ts` ],
+  testcaseFiles: [ `${testDir}/src/testcases/**/*.tc.ts` ],
+  manualTestcaseFiles: [ `${testDir}/src/manualTestcases/**/*.man.ts` ],
   allure: {
-    issueTrackerPattern: "http://hq.documatrix.com/jira/browse/%s",
-    bugTrackerPattern: "https://bugtracker/issue-%s"
+    issueTrackerPattern: "http://issueTracker/issue-%s",
+    bugTrackerPattern: "https://bugtracker/bug-%s"
   }
 }
