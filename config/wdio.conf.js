@@ -9,6 +9,8 @@ const fs = require( 'fs' )
 const workfloConf = require( process.env.WORKFLO_CONFIG )
 const dateTime = require('../utils/report.js').getDateTime()
 
+let assertionScreenshotCtr = 0
+
 if ( typeof process.env.LATEST_RUN === 'undefined' ) {
 
   const resultsPath = path.join(workfloConf.testDir, 'results')
@@ -41,9 +43,9 @@ exports.config = {
    * specify test files
    */
   //specs: 'src/example.spec.ts',
-  specs: workfloConf.specs,
-  testcases: workfloConf.testcases,
-  manualTestcases: workfloConf.manualTestcases,
+  specs: workfloConf.specFiles,
+  testcases: workfloConf.testcaseFiles,
+  manualTestcases: workfloConf.manualTestcaseFiles,
   /**
    * capabilities
    */
@@ -104,6 +106,21 @@ exports.config = {
           // screenshot
       }
       else if ( assertion.matcherName ) {
+        // receive screenshot as Buffer
+        const screenshot = browser.saveScreenshot(); // returns base64 string buffer
+        
+        const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
+        const screenshotFilename = `${screenshotFolder}/assertionFailure_${assertionScreenshotCtr}.png`
+        
+        assertionScreenshotCtr++
+        assertion.screenshotFilename = screenshotFilename
+
+        try {
+            fs.writeFileSync(screenshotFilename, screenshot)
+        } catch (err) {
+            console.log('Error writing screenshot:' + err.message)
+        }
+
         // rework
         process.send({event: 'step:failed', cid: '0-0', assertion: assertion})
 
