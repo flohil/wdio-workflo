@@ -291,6 +291,8 @@ declare global {
     [P in keyof T]?: T[P];
   }
 
+  function getUid(id: string) : string
+
   function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
   function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
   function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
