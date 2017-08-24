@@ -32,5 +32,6 @@ module.exports = {
   allure: {
     issueTrackerPattern: "http://issueTracker/issue-%s",
     bugTrackerPattern: "https://bugtracker/bug-%s"
-  }
+  },
+  uidStorePath: ""
 }

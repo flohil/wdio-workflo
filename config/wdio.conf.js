@@ -8,6 +8,7 @@ const _ = require( 'lodash' )
 const fs = require( 'fs' )
 const workfloConf = require( process.env.WORKFLO_CONFIG )
 const dateTime = require('../utils/report.js').getDateTime()
+const jsonfile = require('jsonfile')
 
 let assertionScreenshotCtr = 0
 
@@ -46,6 +47,7 @@ exports.config = {
   specs: workfloConf.specFiles,
   testcases: workfloConf.testcaseFiles,
   manualTestcases: workfloConf.manualTestcaseFiles,
+  uidStorePath: workfloConf.uidStorePath,
   /**
    * capabilities
    */
@@ -129,7 +131,7 @@ exports.config = {
   /**
    * hooks
    */
-  onPrepare: function() {
+  onPrepare: function(config, capabilities) {
     console.log('let\'s go')
   },
   before: function ( capabilties, specs ) {
@@ -164,7 +166,7 @@ exports.config = {
   beforeSuite: function(suite) {
     browser.timeouts('implicit', 1001)
   },
-  onComplete: function() {
+  onComplete: function(exitCode, config, capabilities) {
     console.log('that\'s it')
   },
   // Runs after a WebdriverIO command gets executed
