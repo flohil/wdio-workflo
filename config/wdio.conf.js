@@ -149,6 +149,23 @@ exports.config = {
 
     require('../dist/inject.js')
 
+    // patch JSON.stringify to avoid circular structure errors
+    _orStringify = JSON.stringify
+    
+    function censor(censor) {
+        let i = 0;
+        return function (key, value) {
+            if (i !== 0 && typeof (censor) === 'object' && typeof (value) == 'object' && censor == value)
+                return '[Circular]';
+            if (i >= 29)
+                return '[Unknown]';
+            ++i; // so we know we aren't using the original object anymore
+            return value;
+        };
+    }
+
+    JSON.stringify = (obj) => _orStringify(obj, censor(obj))
+
     // some gui tests require a sized window
     browser.windowHandleSize(workfloConf.windowSize)
 
