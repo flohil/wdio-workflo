@@ -1,6 +1,6 @@
 import Kiwi from './Kiwi'
 import * as _ from 'lodash'
-import CircularJson from 'circular-json'
+import * as CircularJson from 'circular-json'
 
 export function mergeStepDefaults<I, O>
 ( defaults: Partial<I>, params: IStepArgs<I, O> | IOptStepArgs<I, O>): IStepArgs<I, O> {

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Kiwi_1 = require("./Kiwi");
 const _ = require("lodash");
-const circular_json_1 = require("circular-json");
+const CircularJson = require("circular-json");
 function mergeStepDefaults(defaults, params) {
     const _params = params;
     const res = _params || {};
@@ -40,20 +40,20 @@ class ParameterizedStep {
         if (typeof params.cb !== "undefined") {
             this.execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-                process.send({ event: 'step:start', title: `${prefix}${this.description}`, arg: circular_json_1.default.stringify(params.arg) });
+                process.send({ event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg) });
                 const result = stepFunc(params.arg);
-                process.send({ event: 'step:start', title: `Callback`, arg: circular_json_1.default.stringify(result) });
+                process.send({ event: 'step:start', title: `Callback`, arg: CircularJson.stringify(result) });
                 params.cb(result);
                 process.send({ event: 'step:end' });
-                process.send({ event: 'step:end', arg: circular_json_1.default.stringify(result) });
+                process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
             };
         }
         else {
             this.execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-                process.send({ event: 'step:start', title: `${prefix}${this.description}`, arg: circular_json_1.default.stringify(params.arg) });
+                process.send({ event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg) });
                 const result = stepFunc(params.arg);
-                process.send({ event: 'step:end', arg: circular_json_1.default.stringify(result) });
+                process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
             };
         }
     }
