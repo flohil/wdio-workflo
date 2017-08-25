@@ -1,21 +1,6 @@
 import Kiwi from './Kiwi'
 import * as _ from 'lodash'
-
-function censor(censor) {
-  let i = 0;
-
-  return function(key, value) {
-    if(i !== 0 && typeof(censor) === 'object' && typeof(value) == 'object' && censor == value) 
-      return '[Circular]'; 
-
-    if(i >= 29) // seems to be a harded maximum of 30 serialized objects?
-      return '[Unknown]';
-
-    ++i; // so we know we aren't using the original object anymore
-
-    return value;  
-  }
-}
+import CircularJson from 'circular-json'
 
 export function mergeStepDefaults<I, O>
 ( defaults: Partial<I>, params: IStepArgs<I, O> | IOptStepArgs<I, O>): IStepArgs<I, O> {
@@ -62,19 +47,19 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
     if ( typeof params.cb !== "undefined" ) {
       this.execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `
-        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: JSON.stringify(params.arg, censor(params.arg))})
+        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg)})
         const result: O = stepFunc(params.arg)
-        process.send({event: 'step:start', title: `Callback`, arg: JSON.stringify(result, censor(result))})
+        process.send({event: 'step:start', title: `Callback`, arg: CircularJson.stringify(result)})
         params.cb(result)
         process.send({event: 'step:end'})
-        process.send({event: 'step:end', arg: JSON.stringify(result, censor(result))})
+        process.send({event: 'step:end', arg: CircularJson.stringify(result)})
       }
     } else {
       this.execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `
-        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: JSON.stringify(params.arg, censor(params.arg))})
+        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg)})
         const result: O = stepFunc(params.arg)
-        process.send({event: 'step:end', arg: JSON.stringify(result, censor(result))})
+        process.send({event: 'step:end', arg: CircularJson.stringify(result)})
       }
     }
   }
