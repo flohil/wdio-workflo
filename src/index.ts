@@ -1,14 +1,129 @@
+import * as pageObjects from './lib/page_objects'
+
 // global should be replaced with declare ... at some point...
 declare global {
 
   namespace Workflo {
 
-    // finish when needed
-    /*interface Object {
-      mapToObject: (input: Workflo.Object, mapFunc: Function) => Workflo.Object
-      convertToObject: (input: Workflo.Object, valueFunc: any, options: any) => Workflo.Object
-      mapProperties: (input: Object, )
-    }*/
+    // CONFIG
+
+    interface Timeouts {
+      default: number,
+      pageOpen: number
+    }
+
+    interface IRecObj<Type> {
+      [key: string] : Type | IRecObj<Type>
+    }
+
+    type MyPartial<T> = {
+      [P in keyof T]?: T[P];
+    }
+
+  // PAGE OBJECTS
+
+    interface IPageElementStore 
+    extends pageObjects.stores.PageElementStore {} 
+
+    interface IPageElement<
+      Store extends Workflo.IPageElementStore
+    > extends pageObjects.elements.PageElement<
+      Store
+    > {}
+
+    interface IPageElementOpts<
+      Store extends Workflo.IPageElementStore
+    > extends pageObjects.elements.IPageElementOpts<
+      Store
+    > {}
+
+    interface IPageElementList<
+      Store extends Workflo.IPageElementStore, 
+      PageElementType extends Workflo.IPageElement<Store>, 
+      PageElementOptions
+    > extends pageObjects.elements.PageElementList<
+      Store, 
+      PageElementType, 
+      PageElementOptions
+    > {}
+
+    interface IPageElementGroup<
+      Store extends Workflo.IPageElementStore, 
+      Content extends {[key: string] : Workflo.PageNode.INode}, 
+      WalkerType extends Workflo.IPageElementGroupWalker<Store>, 
+      WalkerOptions extends Workflo.IPageElementGroupWalkerOpts
+    > extends pageObjects.elements.PageElementGroup<
+      Store, 
+      Content, 
+      WalkerType, 
+      WalkerOptions
+    > {}
+
+    interface IPageElementGroupWalker<
+      Store extends Workflo.IPageElementStore
+    > extends pageObjects.walkers.PageElementGroupWalker<
+      Store
+    > {}
+
+    interface IPageElementGroupWalkerOpts 
+    extends pageObjects.walkers.IPageElementGroupWalkerOpts {}
+
+    interface WDIOParams {
+      timeout?: number,
+      reverse?: boolean
+    }
+
+    namespace PageNode {
+      interface INode {
+        __getNodeId(): string
+      }
+
+      interface IGetText extends INode {
+        getText(): string
+      }
+
+      interface IGetValue extends INode {
+        getValue(): string
+      }
+
+      interface ISetValue<T> extends INode {
+        setValue(value: T): this
+      }
+    }
+
+    interface IProblem<ValueType, ResultType> {
+      values: IRecObj<ValueType>,
+      solve: <NodeType extends Workflo.PageNode.INode>( 
+        node: NodeType,
+        value?: ValueType
+      ) => ISolveResult<ResultType>
+    }
+
+    interface ISolveResult<ResultType>{
+      nodeSupported: boolean,
+      result?: ResultType
+    }
+
+    interface IWalkerOptions {
+      throwUnmatchedKey?: boolean, 
+      throwSolveError?: boolean 
+    }
+
+    const enum WaitType {
+      exist = 'exist',
+      visible = 'visible',
+      value = 'value',
+      text = 'text'
+    }
+
+    const enum IdentifyBy {
+      text = 'text',
+      value = 'value'
+    }
+
+    type XPath = pageObjects.builders.XPathBuilder | string
+
+   // UTILITY FUNCTIONS
 
     namespace Object {
 
@@ -190,16 +305,14 @@ declare global {
       }
     }
 
+  // SPECS AND TESTCASES
+
     interface IManualTestcaseResults {
       [key: string] : {[key: number] : {
         result: boolean,
         date: string,
         comment?: string
       }}
-    }
-
-    interface IRecObj<Type> {
-      [key: string] : Type | IRecObj<Type>
     }
 
     type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep
@@ -287,9 +400,7 @@ declare global {
     execute: (prefix?: string) => void
   }
 
-  type MyPartial<T> = {
-    [P in keyof T]?: T[P];
-  }
+  // API FUNCTIONS
 
   function getUid(id: string) : string
 
@@ -320,22 +431,21 @@ declare global {
   function given(step: IParameterizedStep) : Workflo.ITCGiven
 
   function verify(verifyObject: Workflo.IVerifySpecObject, func: (...args : any[]) => void) : void
+
+  function xpath(selector: string) : pageObjects.builders.XPathBuilder
 }
-
-
-/*declare module "workflo" {
-    export = Workflo;
-}*/
 
 export * from './lib/steps'
 
-import * as objectFunctions from './lib/utilityFunctions/object'
-import * as arrayFunctions from './lib/utilityFunctions/array'
-import * as classFunctions from './lib/utilityFunctions/class'
-import * as stringFunctions from './lib/utilityFunctions/string'
-import * as utilFunctions from './lib/utilityFunctions/util'
+import * as objectFunctions from './lib/utility_functions/object'
+import * as arrayFunctions from './lib/utility_functions/array'
+import * as classFunctions from './lib/utility_functions/class'
+import * as stringFunctions from './lib/utility_functions/string'
+import * as utilFunctions from './lib/utility_functions/util'
 
 export { objectFunctions, arrayFunctions, classFunctions, stringFunctions }
+
+export { pageObjects }
 
 import Kiwi from './lib/Kiwi'
 

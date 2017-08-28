@@ -3,17 +3,16 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-/*declare module "workflo" {
-    export = Workflo;
-}*/
+const pageObjects = require("./lib/page_objects");
+exports.pageObjects = pageObjects;
 __export(require("./lib/steps"));
-const objectFunctions = require("./lib/utilityFunctions/object");
+const objectFunctions = require("./lib/utility_functions/object");
 exports.objectFunctions = objectFunctions;
-const arrayFunctions = require("./lib/utilityFunctions/array");
+const arrayFunctions = require("./lib/utility_functions/array");
 exports.arrayFunctions = arrayFunctions;
-const classFunctions = require("./lib/utilityFunctions/class");
+const classFunctions = require("./lib/utility_functions/class");
 exports.classFunctions = classFunctions;
-const stringFunctions = require("./lib/utilityFunctions/string");
+const stringFunctions = require("./lib/utility_functions/string");
 exports.stringFunctions = stringFunctions;
 const Kiwi_1 = require("./lib/Kiwi");
 exports.Kiwi = Kiwi_1.default;

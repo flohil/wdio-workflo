@@ -1,3 +1,5 @@
+import { XPathBuilder } from './page_objects/builders'
+
 const storyMap: Map<string, Workflo.IStoryMapEntry> = new Map<string, Workflo.IStoryMapEntry>()
 
 const words = {
@@ -390,4 +392,8 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
   process.send({event: 'step:end', type: 'verifyEnd'})
 
   _process.workflo.specObj = undefined
+}
+
+export function xpath(selector: string) {
+  return XPathBuilder.getInstance().reset(selector)
 }

@@ -12,6 +12,15 @@ const jsonfile = require('jsonfile')
 
 let assertionScreenshotCtr = 0
 
+// set defaults for workflo config
+if (!workfloConf.timeouts) {
+  workfloConf.timeouts = {}
+}
+if (!workfloConf.timeouts.waitforTimeout) {
+  workfloConf.timeouts.waitforTimeout = workfloConf.timeouts.waitforTimeout || 5000
+}
+
+// write latest run file
 if ( typeof process.env.LATEST_RUN === 'undefined' ) {
 
   const resultsPath = path.join(workfloConf.testDir, 'results')
@@ -48,6 +57,7 @@ exports.config = {
   testcases: workfloConf.testcaseFiles,
   manualTestcases: workfloConf.manualTestcaseFiles,
   uidStorePath: workfloConf.uidStorePath,
+  waitforTimeout: workfloConf.waitforTimeout,
   /**
    * capabilities
    */

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const builders_1 = require("./page_objects/builders");
 const storyMap = new Map();
 const words = {
     'Given': 'Given',
@@ -239,4 +240,8 @@ exports.verify = function (specObj, func) {
     process.send({ event: 'step:end', type: 'verifyEnd' });
     _process.workflo.specObj = undefined;
 };
+function xpath(selector) {
+    return builders_1.XPathBuilder.getInstance().reset(selector);
+}
+exports.xpath = xpath;
 //# sourceMappingURL=api.js.map

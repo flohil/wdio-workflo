@@ -29,9 +29,12 @@ module.exports = {
   specFiles: [ `${testDir}/src/specs/**/*.spec.ts` ],
   testcaseFiles: [ `${testDir}/src/testcases/**/*.tc.ts` ],
   manualTestcaseFiles: [ `${testDir}/src/manualTestcases/**/*.man.ts` ],
+  uidStorePath: "",
   allure: {
     issueTrackerPattern: "http://issueTracker/issue-%s",
     bugTrackerPattern: "https://bugtracker/bug-%s"
   },
-  uidStorePath: ""
+  timeouts: {
+    default: 5000
+  }
 }

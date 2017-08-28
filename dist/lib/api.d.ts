@@ -1,3 +1,4 @@
+import { XPathBuilder } from './page_objects/builders';
 export declare const Feature: (description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void, jasmineFunc?: (description: string, bodyFunc: () => void) => void) => void;
 export declare const fFeature: (description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) => void;
 export declare const xFeature: (description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) => void;
@@ -26,3 +27,4 @@ export declare const given: (step: IParameterizedStep) => {
     };
 };
 export declare const verify: (specObj: Workflo.IVerifySpecObject, func: (...testargs: any[]) => void) => void;
+export declare function xpath(selector: string): XPathBuilder;

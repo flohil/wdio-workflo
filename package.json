@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.100",
+  "version": "0.0.101",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -41,6 +41,7 @@
     "gulp-typescript": "^3.1.7",
     "gulp-webserver": "^0.9.1",
     "gutil": "^1.6.4",
+    "htmlparser2": "^3.9.2",
     "jasmine-expect": "^3.7.0",
     "jasmine-object-matchers-jest": "^0.1.0",
     "jasmine-reporters": "^2.2.1",

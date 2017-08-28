@@ -2,11 +2,11 @@
 //import registerSteps from './registerSteps'
 import * as Functions from './lib/api'
 import * as wf from './index'
-import * as objectFunctions from './lib/utilityFunctions/object'
-import * as arrayFunctions from './lib/utilityFunctions/array'
-import * as classFunctions from './lib/utilityFunctions/class'
-import * as stringFunctions from './lib/utilityFunctions/string'
-import * as utilFunctions from './lib/utilityFunctions/util'
+import * as objectFunctions from './lib/utility_functions/object'
+import * as arrayFunctions from './lib/utility_functions/array'
+import * as classFunctions from './lib/utility_functions/class'
+import * as stringFunctions from './lib/utility_functions/string'
+import * as utilFunctions from './lib/utility_functions/util'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {
