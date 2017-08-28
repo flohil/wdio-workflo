@@ -36,6 +36,20 @@ class PageElementStore {
             content: content
         });
     }
+    TextGroup(content) {
+        return this.getGroup(page_elements_1.TextGroup, {
+            walkerType: walkers_1.PageElementGroupWalker,
+            walkerOptions: {},
+            content: content
+        });
+    }
+    ValueGroup(content) {
+        return this.getGroup(page_elements_1.ValueGroup, {
+            walkerType: walkers_1.PageElementGroupWalker,
+            walkerOptions: {},
+            content: content
+        });
+    }
     // DEFINE YOUR SINGLE ELEMENT TYPE ACCESSOR FUNCTIONS HERE
     /**
      *

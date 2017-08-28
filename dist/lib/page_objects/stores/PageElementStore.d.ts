@@ -1,4 +1,4 @@
-import { PageElementGroup, IPageElementGroupOpts, PageElement, IPageElementOpts, PageElementList, IPageElementListOpts } from '../page_elements';
+import { PageElement, IPageElementOpts, PageElementList, IPageElementListOpts, PageElementGroup, IPageElementGroupOpts, TextGroup, ValueGroup } from '../page_elements';
 import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers';
 import { XPathBuilder } from '../builders';
 export declare class PageElementStore {
@@ -10,6 +10,12 @@ export declare class PageElementStore {
     ElementGroup<Content extends {
         [key: string]: Workflo.PageNode.INode;
     }>(content: Content): Content & PageElementGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>;
+    TextGroup<Content extends {
+        [key: string]: Workflo.PageNode.INode;
+    }>(content: Content): Content & TextGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>;
+    ValueGroup<Content extends {
+        [key: string]: Workflo.PageNode.INode;
+    }>(content: Content): Content & ValueGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>;
     /**
      *
      * @param selector

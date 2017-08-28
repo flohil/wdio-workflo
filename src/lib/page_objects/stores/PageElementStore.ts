@@ -1,9 +1,11 @@
 import * as _ from 'lodash'
 
 import {
-  PageElementGroup, IPageElementGroupOpts,
   PageElement, IPageElementOpts,
   PageElementList, IPageElementListOpts,
+  PageElementGroup, IPageElementGroupOpts,
+  TextGroup, ITextGroupOpts,
+  ValueGroup, IValueGroupOpts
 } from '../page_elements'
 
 import {
@@ -61,6 +63,56 @@ export class PageElementStore {
       >, "content" | "walkerType" | "walkerOptions">
     > (
       PageElementGroup,
+      {
+        walkerType: PageElementGroupWalker,
+        walkerOptions: {},
+        content: content
+      }
+    )
+  }
+
+  TextGroup<Content extends {[key: string] : Workflo.PageNode.INode}>(
+    content: Content
+  ) {
+    return this.getGroup<
+      this,
+      Content,
+      PageElementGroupWalker<this>,
+      IPageElementGroupWalkerOpts,
+      TextGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
+      Pick<ITextGroupOpts<
+        this,
+        Content, 
+        PageElementGroupWalker<this>, 
+        IPageElementGroupWalkerOpts
+      >, "content" | "walkerType" | "walkerOptions">
+    > (
+      TextGroup,
+      {
+        walkerType: PageElementGroupWalker,
+        walkerOptions: {},
+        content: content
+      }
+    )
+  }
+
+  ValueGroup<Content extends {[key: string] : Workflo.PageNode.INode}>(
+    content: Content
+  ) {
+    return this.getGroup<
+      this,
+      Content,
+      PageElementGroupWalker<this>,
+      IPageElementGroupWalkerOpts,
+      ValueGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
+      Pick<IValueGroupOpts<
+        this,
+        Content, 
+        PageElementGroupWalker<this>, 
+        IPageElementGroupWalkerOpts
+      >, "content" | "walkerType" | "walkerOptions">
+    > (
+      ValueGroup,
       {
         walkerType: PageElementGroupWalker,
         walkerOptions: {},
