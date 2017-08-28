@@ -7,7 +7,7 @@ const builders_1 = require("../builders");
 // Stores singleton instances of page elements to avoid creating new
 // elements on each invocation of a page element.
 class PageElementStore {
-    constructor(timeouts) {
+    constructor() {
         this.instanceCache = Object.create(null);
         this.xPathBuilder = builders_1.XPathBuilder.getInstance();
     }

@@ -7,4 +7,6 @@ __export(require("./PageNode"));
 __export(require("./PageElement"));
 __export(require("./PageElementList"));
 __export(require("./PageElementGroup"));
+__export(require("./TextGroup"));
+__export(require("./ValueGroup"));
 //# sourceMappingURL=index.js.map

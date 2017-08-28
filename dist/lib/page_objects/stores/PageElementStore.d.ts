@@ -6,7 +6,7 @@ export declare class PageElementStore {
         [id: string]: any;
     };
     protected xPathBuilder: XPathBuilder;
-    constructor(timeouts: Workflo.Timeouts);
+    constructor();
     ElementGroup<Content extends {
         [key: string]: Workflo.PageNode.INode;
     }>(content: Content): Content & PageElementGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>;
