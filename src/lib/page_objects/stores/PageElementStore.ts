@@ -20,7 +20,7 @@ export class PageElementStore {
   protected instanceCache: {[id: string] : any}
   protected xPathBuilder: XPathBuilder
 
-  constructor(timeouts: Workflo.Timeouts) {
+  constructor() {
     this.instanceCache = Object.create(null)
     this.xPathBuilder = XPathBuilder.getInstance()
   }
