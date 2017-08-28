@@ -9,7 +9,7 @@ class PageElement extends _1.PageNode {
     constructor(selector, options) {
         super(selector, options);
         this.selector = selector;
-        this._$ = {};
+        this._$ = Object.create(null);
         for (const method of Workflo.Class.getAllMethods(this.store)) {
             if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
                 this._$[method] = (_selector, _options) => {

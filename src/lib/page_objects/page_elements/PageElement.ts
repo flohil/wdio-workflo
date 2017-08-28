@@ -9,7 +9,7 @@ export interface IPageElementOpts<Store extends Workflo.IPageElementStore> exten
 export class PageElement<Store extends Workflo.IPageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
   protected wait: Workflo.WaitType
   protected timeout: number
-  protected _$
+  protected _$: Store
 
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
@@ -19,7 +19,7 @@ export class PageElement<Store extends Workflo.IPageElementStore> extends PageNo
   ) {
     super(selector, options)
 
-    this._$ = {}
+    this._$ = Object.create(null)
 
     for ( const method of Workflo.Class.getAllMethods(this.store) ) {
       if ( method.indexOf('_') !== 0 && /^[A-Z]/.test( method ) ) {

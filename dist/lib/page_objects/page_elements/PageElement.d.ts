@@ -6,7 +6,7 @@ export declare class PageElement<Store extends Workflo.IPageElementStore> extend
     protected selector: string;
     protected wait: Workflo.WaitType;
     protected timeout: number;
-    protected _$: any;
+    protected _$: Store;
     constructor(selector: string, options: IPageElementOpts<Store>);
     readonly $: Store;
     /**
