@@ -125,15 +125,11 @@ declare global {
       equalTo = '==',
       lessThen = '<',
       greaterThen = '>',
-      lessThenOrEqualTo = '<=',
-      greaterThenOrEqualTo = '>=',
       notEqualTo = '!=',
       ne = '!=',
       eq = '==',
       lt = '<',
       gt = '>',
-      le = '<=',
-      ge = '>=',
     }
 
     type XPath = pageObjects.builders.XPathBuilder | string

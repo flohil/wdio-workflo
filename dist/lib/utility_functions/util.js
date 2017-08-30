@@ -52,10 +52,6 @@ function compare(var1, var2, operator) {
             return var1 > var2;
         case "<" /* lessThen */ || "<" /* lt */:
             return var1 < var2;
-        case ">=" /* greaterThenOrEqualTo */ || ">=" /* ge */:
-            return var1 >= var2;
-        case "<=" /* lessThenOrEqualTo */ || "<=" /* le */:
-            return var1 <= var2;
     }
 }
 exports.compare = compare;

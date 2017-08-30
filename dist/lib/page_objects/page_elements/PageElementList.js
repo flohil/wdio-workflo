@@ -64,30 +64,38 @@ class PageElementList extends _1.PageNode {
     // does not use cache
     get _listElements() {
         const elements = [];
-        const wdioElements = this._elements;
-        const wdioElementLength = wdioElements.value.length;
-        // create list elements
-        for (let i = 0; i < wdioElementLength; i++) {
-            // make each list element individually selectable via xpath
-            const selector = `(${this.selector})[${i + 1}]`;
-            const listElement = this.elementStoreFunc.apply(this.store, [selector, this.elementOptions]);
-            elements.push(listElement);
+        const value = this._elements.value;
+        if (value && value.length) {
+            // create list elements
+            for (let i = 0; i < value.length; i++) {
+                // make each list element individually selectable via xpath
+                const selector = `(${this.selector})[${i + 1}]`;
+                const listElement = this.elementStoreFunc.apply(this.store, [selector, this.elementOptions]);
+                elements.push(listElement);
+            }
         }
         return elements;
     }
     // wait until at least one element satisfies the initial wait condition
     get listElements() {
         const elements = [];
-        const wdioElements = this.elements;
-        const wdioElementLength = wdioElements.value.length;
-        // create list elements
-        for (let i = 0; i < wdioElementLength; i++) {
-            // make each list element individually selectable via xpath
-            const selector = `(${this.selector})[${i + 1}]`;
-            const listElement = this.elementStoreFunc.apply(this.store, [selector, this.elementOptions]);
-            elements.push(listElement);
+        try {
+            const value = this.elements.value;
+            if (value && value.length) {
+                // create list elements
+                for (let i = 0; i < value.length; i++) {
+                    // make each list element individually selectable via xpath
+                    const selector = `(${this.selector})[${i + 1}]`;
+                    const listElement = this.elementStoreFunc.apply(this.store, [selector, this.elementOptions]);
+                    elements.push(listElement);
+                }
+            }
+            return elements;
         }
-        return elements;
+        catch (error) {
+            // this.elements will throw error if no elements were found
+            return elements;
+        }
     }
     setIdentifier(identifier) {
         this.identifier = identifier;
@@ -131,10 +139,6 @@ class PageElementList extends _1.PageNode {
             this.identifiedObjCache[cacheKey] = mappedObj;
         }
         return this.identifiedObjCache[cacheKey];
-    }
-    // for group walker
-    getElementType() {
-        return 'ElementList';
     }
     // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
     get(index) {
@@ -221,8 +225,16 @@ class PageElementList extends _1.PageNode {
         return this;
     }
     // waits until list has given length
-    waitLength({ length, timeout = this.timeout, interval = 250, comparator = "==" /* equalTo */ }) {
-        browser.waitUntil(() => util_1.compare(this._elements.value.length, length, comparator), timeout, `${this.selector}: List length never became ${comparator.toString()} ${length}`, interval);
+    waitLength({ length, timeout = this.timeout, comparator = "==" /* equalTo */, interval = 500 }) {
+        browser.waitUntil(() => {
+            let value = this._elements.value;
+            if (!value || !value.length) {
+                return false;
+            }
+            else {
+                return util_1.compare(value.length, length, comparator);
+            }
+        }, timeout, `${this.selector}: List length never became ${comparator.toString()} ${length}`, interval);
         return this;
     }
     // returns true if list has length within timeout
@@ -250,10 +262,10 @@ class PageElementList extends _1.PageNode {
             return false;
         }
     }
-    waitEmpty({ timeout = this.timeout }) {
+    waitEmpty({ timeout = this.timeout, interval = 500 }) {
         browser.waitUntil(() => {
             return !browser.isExisting(this.selector);
-        }, timeout, `List never became empty: ${this.selector}`);
+        }, timeout, `List never became empty: ${this.selector}`, interval);
     }
 }
 exports.PageElementList = PageElementList;

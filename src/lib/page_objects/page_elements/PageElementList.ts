@@ -106,19 +106,20 @@ export class PageElementList<
   get _listElements() {
     const elements: PageElementType[] = []
 
-    const wdioElements = this._elements
-    const wdioElementLength = wdioElements.value.length
+    const value = this._elements.value
 
-    // create list elements
-    for ( let i = 0; i < wdioElementLength; i++ ) {
-      // make each list element individually selectable via xpath
-      const selector = `(${this.selector})[${i + 1}]`
+    if (value && value.length) {
+      // create list elements
+      for ( let i = 0; i < value.length; i++ ) {
+        // make each list element individually selectable via xpath
+        const selector = `(${this.selector})[${i + 1}]`
 
-      const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )      
-      
-      elements.push( listElement )
+        const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )      
+        
+        elements.push( listElement )
+      }
     }
-
+    
     return elements
   }
 
@@ -127,20 +128,26 @@ export class PageElementList<
   get listElements() {
     const elements: PageElementType[] = []
 
-    const wdioElements = this.elements
-    const wdioElementLength = wdioElements.value.length
-
-    // create list elements
-    for ( let i = 0; i < wdioElementLength; i++ ) {
-      // make each list element individually selectable via xpath
-      const selector = `(${this.selector})[${i + 1}]`
-
-      const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )      
-
-      elements.push( listElement )
+    try {
+      const value = this.elements.value
+      
+      if (value && value.length) {
+        // create list elements
+        for ( let i = 0; i < value.length; i++ ) {
+          // make each list element individually selectable via xpath
+          const selector = `(${this.selector})[${i + 1}]`
+  
+          const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )      
+          
+          elements.push( listElement )
+        }
+      }
+  
+      return elements
+    } catch(error) {
+      // this.elements will throw error if no elements were found
+      return elements
     }
-
-    return elements
   }
 
   setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>) {
@@ -199,11 +206,6 @@ export class PageElementList<
     }
       
     return this.identifiedObjCache[cacheKey]
-  }
-
-  // for group walker
-  getElementType() {
-    return 'ElementList'
   }
 
   // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
@@ -337,16 +339,24 @@ export class PageElementList<
   waitLength( {
     length, 
     timeout = this.timeout, 
-    interval = 250, 
-    comparator = Workflo.Comparator.equalTo
+    comparator = Workflo.Comparator.equalTo,
+    interval = 500
   }: {
     length: number, 
     timeout?: number, 
-    interval?: number, 
-    comparator?: Workflo.Comparator
+    comparator?: Workflo.Comparator,
+    interval?: number
   }) {
     browser.waitUntil(
-      () => compare(this._elements.value.length, length, comparator),
+      () => {
+        let value = this._elements.value
+
+        if (!value || !value.length) {
+          return false
+        } else {
+          return compare(value.length, length, comparator)
+        }
+      },
     timeout, `${this.selector}: List length never became ${comparator.toString()} ${length}`, interval )
 
     return this
@@ -379,9 +389,9 @@ export class PageElementList<
     }
   }
 
-  waitEmpty({timeout = this.timeout} : {timeout?: number}) {
+  waitEmpty({timeout = this.timeout, interval = 500} : {timeout?: number, interval?: number}) {
     browser.waitUntil(() => {
       return !browser.isExisting(this.selector)
-    }, timeout, `List never became empty: ${this.selector}`)
+    }, timeout, `List never became empty: ${this.selector}`, interval)
   }
 }

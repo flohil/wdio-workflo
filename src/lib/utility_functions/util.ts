@@ -59,10 +59,6 @@ export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparat
       return var1 > var2
     case Workflo.Comparator.lessThen || Workflo.Comparator.lt:
       return var1 < var2
-    case Workflo.Comparator.greaterThenOrEqualTo || Workflo.Comparator.ge:
-      return var1 >= var2
-    case Workflo.Comparator.lessThenOrEqualTo || Workflo.Comparator.le:
-      return var1 <= var2
   }
 }
 
