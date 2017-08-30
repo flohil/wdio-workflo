@@ -141,8 +141,12 @@ class PageElementList extends _1.PageNode {
         return this.identifiedObjCache[cacheKey];
     }
     // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
+    /**
+     *
+     * @param index Index starts with 0
+     */
     get(index) {
-        return this.firstBy().index(index).get();
+        return this.firstBy().index(index + 1).get();
     }
     getAll() {
         return this.listElements;

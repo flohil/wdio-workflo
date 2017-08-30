@@ -210,8 +210,12 @@ export class PageElementList<
 
   // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
 
+  /**
+   * 
+   * @param index Index starts with 0
+   */
   get( index: number ) {
-    return this.firstBy().index(index).get()
+    return this.firstBy().index(index + 1).get()
   }
 
   getAll() {

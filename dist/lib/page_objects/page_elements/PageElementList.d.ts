@@ -40,6 +40,10 @@ export declare class PageElementList<Store extends Workflo.IPageElementStore, Pa
     }): {
         [key: string]: PageElementType;
     };
+    /**
+     *
+     * @param index Index starts with 0
+     */
     get(index: number): PageElementType;
     getAll(): PageElementType[];
     getLength(): number;
