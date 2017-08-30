@@ -1,3 +1,4 @@
+import { compare } from '../../utility_functions/util'
 import { PageNode, IPageNodeOpts } from './'
 import { FirstByBuilder } from '../builders/FirstByBuilder'
 
@@ -333,11 +334,20 @@ export class PageElementList<
   }
 
   // waits until list has given length
-  waitLength( {length, timeout = this.timeout}: {length: number, timeout?: number} ) {
-    browser.waitUntil( () => this._elements.value.length === length,
-    timeout, 
-    `${this.selector}: List length never became ${length}`,
-    timeout )
+  waitLength( {
+    length, 
+    timeout = this.timeout, 
+    interval = 250, 
+    comparator = Workflo.Comparator.equalTo
+  }: {
+    length: number, 
+    timeout?: number, 
+    interval?: number, 
+    comparator?: Workflo.Comparator
+  }) {
+    browser.waitUntil(
+      () => compare(this._elements.value.length, length, comparator),
+    timeout, `${this.selector}: List length never became ${comparator.toString()} ${length}`, interval )
 
     return this
   }

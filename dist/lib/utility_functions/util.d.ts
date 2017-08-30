@@ -19,3 +19,4 @@ export declare function convertToObject<T>(unknownTypedInput: {
 } | string[] | string, valueFunc?: (key: string) => T): {
     [key: string]: T;
 };
+export declare function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;

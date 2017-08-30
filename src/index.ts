@@ -121,6 +121,21 @@ declare global {
       value = 'value'
     }
 
+    const enum Comparator {
+      equalTo = '==',
+      lessThen = '<',
+      greaterThen = '>',
+      lessThenOrEqualTo = '<=',
+      greaterThenOrEqualTo = '>=',
+      notEqualTo = '!=',
+      ne = '!=',
+      eq = '==',
+      lt = '<',
+      gt = '>',
+      le = '<=',
+      ge = '>=',
+    }
+
     type XPath = pageObjects.builders.XPathBuilder | string
 
    // UTILITY FUNCTIONS
@@ -303,6 +318,15 @@ declare global {
       } | string[] | string, valueFunc?: (key: string) => T): {
           [key: string]: T;
       }
+
+      /**
+       * Compares two variables of same type.
+       * 
+       * @param var1 
+       * @param var2 
+       * @param operator 
+       */
+      export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;
     }
 
   // SPECS AND TESTCASES

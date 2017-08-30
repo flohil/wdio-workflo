@@ -67,6 +67,20 @@ declare global  {
             text = "text",
             value = "value",
         }
+        const enum Comparator {
+            equalTo = "==",
+            lessThen = "<",
+            greaterThen = ">",
+            lessThenOrEqualTo = "<=",
+            greaterThenOrEqualTo = ">=",
+            notEqualTo = "!=",
+            ne = "!=",
+            eq = "==",
+            lt = "<",
+            gt = ">",
+            le = "<=",
+            ge = ">=",
+        }
         type XPath = pageObjects.builders.XPathBuilder | string;
         namespace Object {
             /**
@@ -232,6 +246,14 @@ declare global  {
             } | string[] | string, valueFunc?: (key: string) => T): {
                 [key: string]: T;
             };
+            /**
+             * Compares two variables of same type.
+             *
+             * @param var1
+             * @param var2
+             * @param operator
+             */
+            function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;
         }
         interface IManualTestcaseResults {
             [key: string]: {

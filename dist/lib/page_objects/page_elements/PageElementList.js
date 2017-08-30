@@ -9,6 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const util_1 = require("../../utility_functions/util");
 const _1 = require("./");
 const FirstByBuilder_1 = require("../builders/FirstByBuilder");
 // holds several PageElement instances of the same type
@@ -220,8 +221,8 @@ class PageElementList extends _1.PageNode {
         return this;
     }
     // waits until list has given length
-    waitLength({ length, timeout = this.timeout }) {
-        browser.waitUntil(() => this._elements.value.length === length, timeout, `${this.selector}: List length never became ${length}`, timeout);
+    waitLength({ length, timeout = this.timeout, interval = 250, comparator = "==" /* equalTo */ }) {
+        browser.waitUntil(() => util_1.compare(this._elements.value.length, length, comparator), timeout, `${this.selector}: List length never became ${comparator.toString()} ${length}`, interval);
         return this;
     }
     // returns true if list has length within timeout

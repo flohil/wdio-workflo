@@ -49,3 +49,20 @@ export function convertToObject<T>(
   return obj
 }
 
+export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator) {
+  switch(operator) {
+    case Workflo.Comparator.equalTo || Workflo.Comparator.eq:
+      return var1 === var2
+    case Workflo.Comparator.notEqualTo || Workflo.Comparator.ne:
+      return var1 !== var2
+    case Workflo.Comparator.greaterThen || Workflo.Comparator.gt:
+      return var1 > var2
+    case Workflo.Comparator.lessThen || Workflo.Comparator.lt:
+      return var1 < var2
+    case Workflo.Comparator.greaterThenOrEqualTo || Workflo.Comparator.ge:
+      return var1 >= var2
+    case Workflo.Comparator.lessThenOrEqualTo || Workflo.Comparator.le:
+      return var1 <= var2
+  }
+}
+

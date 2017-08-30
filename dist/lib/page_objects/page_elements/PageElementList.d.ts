@@ -52,9 +52,11 @@ export declare class PageElementList<Store extends Workflo.IPageElementStore, Pa
     waitAllVisible({timeout, reverse}?: Workflo.WDIOParams): this;
     waitAllText({timeout, reverse}?: Workflo.WDIOParams): this;
     waitAllValue({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitLength({length, timeout}: {
+    waitLength({length, timeout, interval, comparator}: {
         length: number;
         timeout?: number;
+        interval?: number;
+        comparator?: Workflo.Comparator;
     }): this;
     eventuallyHasLength({length, timeout}: {
         length: number;

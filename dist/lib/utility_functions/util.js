@@ -42,4 +42,21 @@ function convertToObject(unknownTypedInput, valueFunc = undefined) {
     return obj;
 }
 exports.convertToObject = convertToObject;
+function compare(var1, var2, operator) {
+    switch (operator) {
+        case "==" /* equalTo */ || "==" /* eq */:
+            return var1 === var2;
+        case "!=" /* notEqualTo */ || "!=" /* ne */:
+            return var1 !== var2;
+        case ">" /* greaterThen */ || ">" /* gt */:
+            return var1 > var2;
+        case "<" /* lessThen */ || "<" /* lt */:
+            return var1 < var2;
+        case ">=" /* greaterThenOrEqualTo */ || ">=" /* ge */:
+            return var1 >= var2;
+        case "<=" /* lessThenOrEqualTo */ || "<=" /* le */:
+            return var1 <= var2;
+    }
+}
+exports.compare = compare;
 //# sourceMappingURL=util.js.map
