@@ -142,7 +142,7 @@ class PageElementList extends _1.PageNode {
     }
     // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
     get(index) {
-        return this.listElements[index];
+        return this.firstBy().index(index).get();
     }
     getAll() {
         return this.listElements;

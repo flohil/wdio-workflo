@@ -20,5 +20,10 @@ export declare class FirstByBuilder<Store extends Workflo.IPageElementStore, Pag
     id(value: string): this;
     class(value: string): this;
     containedClass(value: string): this;
+    /**
+     * Starts with 1
+     * @param index
+     */
+    index(index: number): this;
     get(): PageElementType;
 }

@@ -211,7 +211,7 @@ export class PageElementList<
   // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
 
   get( index: number ) {
-    return this.listElements[ index ]
+    return this.firstBy().index(index).get()
   }
 
   getAll() {

@@ -85,6 +85,17 @@ export class FirstByBuilder<
     return this.containedAttr('class', value)
   }
 
+  /**
+   * Starts with 1
+   * @param index 
+   */
+  index(index: number) {
+    const selector = `(${this.xPathBuilder.build()})[${index}]`
+    this.xPathBuilder.reset(selector)
+
+    return this
+  }
+
   get(): PageElementType {
     return this.elementStoreFunc.apply(
       this.store, [ this.xPathBuilder.build(), this.elementOptions ]

@@ -52,6 +52,15 @@ class FirstByBuilder {
     containedClass(value) {
         return this.containedAttr('class', value);
     }
+    /**
+     * Starts with 1
+     * @param index
+     */
+    index(index) {
+        const selector = `(${this.xPathBuilder.build()})[${index}]`;
+        this.xPathBuilder.reset(selector);
+        return this;
+    }
     get() {
         return this.elementStoreFunc.apply(this.store, [this.xPathBuilder.build(), this.elementOptions]);
     }
