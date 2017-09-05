@@ -1,0 +1,41 @@
+"use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const _1 = require("./");
+// holds several PageElement instances of the same type
+class PageElementMap extends _1.PageNode {
+    constructor(selector, _a) {
+        var { disableCache = false, elementStoreFunc, elementOptions, identifier } = _a, superOpts = __rest(_a, ["disableCache", "elementStoreFunc", "elementOptions", "identifier"]);
+        super(selector, superOpts);
+        this.selector = selector;
+        this.selector = selector;
+        this.elementOptions = elementOptions;
+        this.elementStoreFunc = elementStoreFunc;
+        this.type = 'ElementMap'; // used by group walker to detect map
+        this.identifier = identifier;
+        this.identifiedObjCache = {};
+        this._$ = Object.create(Object.prototype);
+        if (Object.keys(this.identifier.mappingObject).length === 0) {
+            throw new Error(`Mapping Object must not be empty for PageElementMap with selector '${this.selector}'`);
+        }
+        for (const id in this.identifier.mappingObject) {
+            this._$ = this.elementStoreFunc.apply(this.store, [
+                this.identifier.func(this.selector, this.identifier.mappingObject[id]),
+                this.elementOptions
+            ]);
+        }
+    }
+    get $() {
+        return this._$;
+    }
+}
+exports.PageElementMap = PageElementMap;
+//# sourceMappingURL=PageElementMap.js.map

@@ -8,10 +8,10 @@
  * @param input
  * @param func
  */
-export declare function mapProperties<T, O, I extends {
-    [key in keyof I]: T;
-}>(input: I, func: (value: T, key?: string) => O): {
-    [key in keyof I]: O;
+export declare function mapProperties<T, O, K extends string>(input: {
+    [key in K]: T;
+}, func: (value: T, key?: string) => O): {
+    [key in K]: O;
 };
 /**
  * Iterates over all properties in an object and executes func on each.
@@ -19,9 +19,11 @@ export declare function mapProperties<T, O, I extends {
  * @param input
  * @param func
  */
-export declare function forEachProperty<T, I extends {
-    [key in keyof I]: T;
-}>(input: I, func: (value: T, key?: string) => void): I;
+export declare function forEachProperty<T, K extends string>(input: {
+    [key in K]: T;
+}, func: (value: T, key?: string) => void): {
+    [key in K]: T;
+};
 /**
  * Returns a new object with the original object's keys and values inverted.
  * The original object's values must therefore be implicitly convertable to type string.
@@ -59,10 +61,10 @@ export declare function filter<T>(obj: {
  * @param value
  * @param overwrite
  */
-export declare function addToProp<T, I extends {
-    [key in keyof I]: T | T[];
-}>(obj: I, key: string, value: T, overwrite?: boolean): {
-    [key in keyof I]: T | T[];
+export declare function addToProp<T, K extends string>(obj: {
+    [key in K]: T | T[];
+}, key: string, value: T, overwrite?: boolean): {
+    [key in K]: T | T[];
 };
 /**
  * Creates a copy of original object in which all

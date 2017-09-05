@@ -15,10 +15,9 @@ const FirstByBuilder_1 = require("../builders/FirstByBuilder");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(selector, _a) {
-        var { wait = "visible" /* visible */, disableCache = false, elementStoreFunc, elementOptions, identifier } = _a, superOpts = __rest(_a, ["wait", "disableCache", "elementStoreFunc", "elementOptions", "identifier"]);
+        var { disableCache = false, elementStoreFunc, elementOptions, identifier } = _a, superOpts = __rest(_a, ["disableCache", "elementStoreFunc", "elementOptions", "identifier"]);
         super(selector, superOpts);
         this.selector = selector;
-        this.wait = wait;
         this.selector = selector;
         this.elementOptions = elementOptions;
         this.elementStoreFunc = elementStoreFunc;
@@ -274,4 +273,4 @@ class PageElementList extends _1.PageNode {
     }
 }
 exports.PageElementList = PageElementList;
-//# sourceMappingURL=PageElementList.js.map
+//# sourceMappingURL=DynamicElementList.js.map

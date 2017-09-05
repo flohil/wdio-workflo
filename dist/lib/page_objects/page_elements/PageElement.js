@@ -1,4 +1,13 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require("./");
 const builders_1 = require("../builders");
@@ -6,8 +15,9 @@ const htmlParser = require("htmlparser2");
 class PageElement extends _1.PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
-    constructor(selector, options) {
-        super(selector, options);
+    constructor(selector, _a) {
+        var { wait = "visible" /* visible */ } = _a, superOpts = __rest(_a, ["wait"]);
+        super(selector, superOpts);
         this.selector = selector;
         this._$ = Object.create(null);
         for (const method of Workflo.Class.getAllMethods(this.store)) {
@@ -22,6 +32,7 @@ class PageElement extends _1.PageNode {
                 };
             }
         }
+        this.wait = wait;
     }
     get $() {
         return this._$;

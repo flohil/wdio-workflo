@@ -1,13 +1,13 @@
 /// <reference types="webdriverio" />
 import { PageNode, IPageNodeOpts } from './';
 export interface IPageElementOpts<Store extends Workflo.IPageElementStore> extends IPageNodeOpts<Store> {
+    wait?: Workflo.WaitType;
 }
 export declare class PageElement<Store extends Workflo.IPageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
     protected selector: string;
     protected wait: Workflo.WaitType;
-    protected timeout: number;
     protected _$: Store;
-    constructor(selector: string, options: IPageElementOpts<Store>);
+    constructor(selector: string, {wait, ...superOpts}: IPageElementOpts<Store>);
     readonly $: Store;
     /**
      *

@@ -6,7 +6,6 @@ export interface IPageNodeOpts<Store extends Workflo.IPageElementStore> {
 
 export class PageNode<Store extends Workflo.IPageElementStore> {
   protected store: Store
-  protected wait: Workflo.WaitType
   protected timeout: number
 
   // available options:
@@ -15,12 +14,10 @@ export class PageNode<Store extends Workflo.IPageElementStore> {
     protected selector: string,
     { 
       store,
-      wait = Workflo.WaitType.visible, 
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default
     } : IPageNodeOpts<Store>
   ) {
     this.store = store
-    this.wait = wait
     this.timeout = timeout
   }
 

@@ -10,11 +10,11 @@ import * as _ from 'lodash'
  * @param input 
  * @param func 
  */
-export function mapProperties<T, O, I extends {[key in keyof I] : T}>(input: I, func: (value: T, key?: string) => O) : {[key in keyof I] : O} {
+export function mapProperties<T, O, K extends string>(input: {[key in K] : T}, func: (value: T, key?: string) => O) : {[key in K] : O} {
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
-    let resultObj: {[key in keyof I] : O} = Object.create(Object.prototype)
+    let resultObj: {[key in K] : O} = Object.create(Object.prototype)
 
     for (const key in input) {
       if (input.hasOwnProperty(key)) {
@@ -34,7 +34,7 @@ export function mapProperties<T, O, I extends {[key in keyof I] : T}>(input: I, 
  * @param input 
  * @param func 
  */
-export function forEachProperty<T, I extends {[key in keyof I] : T}>(input: I, func: (value: T, key?: string) => void): I {
+export function forEachProperty<T, K extends string>(input: {[key in K] : T}, func: (value: T, key?: string) => void): {[key in K] : T} {
   for (const key in input) {
     if (input.hasOwnProperty(key)) {
       func(input[key], key)
@@ -43,6 +43,21 @@ export function forEachProperty<T, I extends {[key in keyof I] : T}>(input: I, f
 
   return this
 }
+
+interface IPageElementMapIdentifier {
+  mappingObject: {[key: string] : string}
+}
+
+const test = {
+  mappingObject: {
+    test: "asdf",
+    test1: "asdf2"
+  }
+}
+
+const bla = mapProperties(test.mappingObject, (value, key) => {
+  return "asdf" + value
+})
 
 // inverts an object's keys and values.
 
@@ -99,7 +114,7 @@ export function filter<T>(obj: {[key: string] : T}, func: (value: T, key?: strin
  * @param value 
  * @param overwrite 
  */
-export function addToProp<T, I extends {[key in keyof I] : T | T[]}>(obj: I, key: string, value: T, overwrite: boolean = false): {[key in keyof I] : T | T[]} {
+export function addToProp<T, K extends string>(obj: {[key in K] : T | T[]}, key: string, value: T, overwrite: boolean = false): {[key in K] : T | T[]} {
   if (obj[key] && !overwrite) {
     let valueArr: T[] = []
     valueArr = valueArr.concat(obj[key])

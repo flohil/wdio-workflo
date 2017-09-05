@@ -16,7 +16,6 @@ export interface IPageElementListOpts<Store extends Workflo.IPageElementStore, P
 }
 export declare class PageElementList<Store extends Workflo.IPageElementStore, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
     protected selector: string;
-    protected wait: Workflo.WaitType;
     protected disableCache: boolean;
     protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected elementOptions: PageElementOptions;
@@ -28,7 +27,7 @@ export declare class PageElementList<Store extends Workflo.IPageElementStore, Pa
         };
     };
     protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    constructor(selector: string, {wait, disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    constructor(selector: string, {disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     initialWait(): void;

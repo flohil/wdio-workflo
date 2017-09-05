@@ -30,6 +30,8 @@ export class PageElementList<
   PageElementType extends Workflo.IPageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> implements Workflo.PageNode.INode {
+  protected wait: Workflo.WaitType
+  
   protected disableCache: boolean
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected elementOptions: PageElementOptions
@@ -41,6 +43,7 @@ export class PageElementList<
   constructor( 
     protected selector: string,
     { 
+      wait = Workflo.WaitType.visible,
       disableCache = false,
       elementStoreFunc,
       elementOptions,
@@ -49,6 +52,8 @@ export class PageElementList<
     } : IPageElementListOpts<Store, PageElementType, PageElementOptions> 
   ) {
     super(selector, superOpts)
+
+    this.wait = wait
     
     this.selector = selector
     this.elementOptions = elementOptions
