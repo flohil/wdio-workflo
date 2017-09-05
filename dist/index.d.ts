@@ -89,20 +89,18 @@ declare global  {
              * @param input
              * @param func
              */
-            function mapProperties<T, O, I extends {
-                [key in keyof I]: T;
-            }>(input: I, func: (value: T, key?: string) => O): {
-                [key in keyof I]: O;
-            };
+            function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: string) => O): Record<K, O>;
             /**
-             * Iterates over all properties in an object and executes func on each.
-             *
-             * @param input
-             * @param func
-             */
-            function forEachProperty<T, I extends {
-                [key in keyof I]: T;
-            }>(input: I, func: (value: T, key?: string) => void): I;
+            * Iterates over all properties in an object and executes func on each.
+            *
+            * @param input
+            * @param func
+            */
+            function forEachProperty<T, K extends string>(input: {
+                [key in K]: T;
+            }, func: (value: T, key?: string) => void): {
+                [key in K]: T;
+            };
             /**
              * Returns a new object with the original object's keys and values inverted.
              * The original object's values must therefore be implicitly convertable to type string.
@@ -140,10 +138,10 @@ declare global  {
              * @param value
              * @param overwrite
              */
-            function addToProp<T, I extends {
-                [key in keyof I]: T | T[];
-            }>(obj: I, key: string, value: T, overwrite?: boolean): {
-                [key in keyof I]: T | T[];
+            function addToProp<T, K extends string>(obj: {
+                [key in K]: T | T[];
+            }, key: string, value: T, overwrite?: boolean): {
+                [key in K]: T | T[];
             };
             /**
              * Creates a copy of original object in which all

@@ -3,6 +3,7 @@ import * as _ from 'lodash'
 import {
   PageElement, IPageElementOpts,
   PageElementList, IPageElementListOpts,
+  PageElementMap, IPageElementMapOpts, IPageElementMapIdentifier,
   PageElementGroup, IPageElementGroupOpts,
   TextGroup, ITextGroupOpts,
   ValueGroup, IValueGroupOpts
@@ -200,6 +201,34 @@ export class PageElementStore {
     )
   }
 
+  // Element Maps
+
+  ElementMap<Content extends Record<string, string>>(
+    selector: Workflo.XPath,
+    content: Content,
+    func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string,
+    options: Pick<
+      IPageElementMapOpts<this, PageElement<this>, IPageElementOpts<this>>, 
+      "wait" | "timeout" | "elementOptions"
+    >
+  ) {
+    return this.getMap<
+      IPageElementMapOpts<this, PageElement<this>, IPageElementOpts<this>>, 
+      PageElementMap<this, Content, PageElement<this>, IPageElementOpts<this>>,
+      Content
+    > (
+      selector,
+      content,
+      func,
+      PageElementMap,
+      {
+        store: this,
+        elementStoreFunc: this.Element,
+        ...options
+      }
+    )
+  }
+
   // Functions to retrieve element instances
 
   /**
@@ -228,6 +257,30 @@ export class PageElementStore {
 
     if(!(id in this.instanceCache)) {
       const result = new type(_selector, options)
+      this.instanceCache[id] = result
+    }
+
+    return this.instanceCache[id]
+  }
+
+  protected getMap<O, T, Content extends Record<string, string>>(
+    selector: Workflo.XPath, 
+    mappingObject: Content,
+    func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string,
+    type: { new(selector: string, mappingObject: Content, func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string, options: O): T }, 
+    options: O = Object.create(Object.prototype)
+  ) : T {
+    const _selector = (selector instanceof XPathBuilder) ? this.xPathBuilder.build() : selector
+
+    // catch: selector must not contain |
+    if (_selector.indexOf('|||') > -1) {
+      throw new Error(`Selector must not contain character sequence '|||': ${_selector}`)
+    }
+
+    const id = `${_selector}|||${type}|||${options.toString()}`
+
+    if(!(id in this.instanceCache)) {
+      const result = new type(_selector, mappingObject, func, options)
       this.instanceCache[id] = result
     }
 
@@ -281,3 +334,11 @@ export class PageElementStore {
     return this.instanceCache[key]
   }
 }
+
+const store = new PageElementStore()
+
+const mappingObject = {
+  dashboard: "__dashboard__"
+}
+
+const map = store.ElementMap("//div", mappingObject, (mapSelector, mappingValue) => mapSelector + mappingValue, {}).$.dashboard

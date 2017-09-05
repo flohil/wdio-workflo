@@ -10,11 +10,11 @@ import * as _ from 'lodash'
  * @param input 
  * @param func 
  */
-export function mapProperties<T, O, K extends string>(input: {[key in K] : T}, func: (value: T, key?: string) => O) : {[key in K] : O} {
+export function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: string) => O) : Record<K, O> {
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
-    let resultObj: {[key in K] : O} = Object.create(Object.prototype)
+    let resultObj: Record<K, O> = Object.create(Object.prototype)
 
     for (const key in input) {
       if (input.hasOwnProperty(key)) {
@@ -34,7 +34,7 @@ export function mapProperties<T, O, K extends string>(input: {[key in K] : T}, f
  * @param input 
  * @param func 
  */
-export function forEachProperty<T, K extends string>(input: {[key in K] : T}, func: (value: T, key?: string) => void): {[key in K] : T} {
+export function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: string) => void): Record<K, T> {
   for (const key in input) {
     if (input.hasOwnProperty(key)) {
       func(input[key], key)
@@ -44,21 +44,6 @@ export function forEachProperty<T, K extends string>(input: {[key in K] : T}, fu
   return this
 }
 
-interface IPageElementMapIdentifier {
-  mappingObject: {[key: string] : string}
-}
-
-const test = {
-  mappingObject: {
-    test: "asdf",
-    test1: "asdf2"
-  }
-}
-
-const bla = mapProperties(test.mappingObject, (value, key) => {
-  return "asdf" + value
-})
-
 // inverts an object's keys and values.
 
 /**
@@ -67,8 +52,8 @@ const bla = mapProperties(test.mappingObject, (value, key) => {
  * 
  * @param obj 
  */
-export function invert(obj: {[key: string] : string}) : {[key: string] : string} {
-  const new_obj: {[key: string] : string} = {}
+export function invert(obj: Record<string, string>) : Record<string, string> {
+  const new_obj: Record<string, string> = {}
 
   for (const prop in obj) {
     if (obj.hasOwnProperty(prop)) {
@@ -88,7 +73,7 @@ export function invert(obj: {[key: string] : string}) : {[key: string] : string}
  * @param obj 
  * @param func 
  */
-export function filter<T>(obj: {[key: string] : T}, func: (value: T, key?: string) => boolean) : {[key: string] : T} {
+export function filter<T>(obj: Record<string, T>, func: (value: T, key?: string) => boolean) : Record<string, T> {
   const resultObj: {[key: string] : T} = {}
 
   for (const key in obj) {
@@ -114,7 +99,7 @@ export function filter<T>(obj: {[key: string] : T}, func: (value: T, key?: strin
  * @param value 
  * @param overwrite 
  */
-export function addToProp<T, K extends string>(obj: {[key in K] : T | T[]}, key: string, value: T, overwrite: boolean = false): {[key in K] : T | T[]} {
+export function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: string, value: T, overwrite: boolean = false): Record<K, T | T[]> {
   if (obj[key] && !overwrite) {
     let valueArr: T[] = []
     valueArr = valueArr.concat(obj[key])
@@ -135,7 +120,7 @@ export function addToProp<T, K extends string>(obj: {[key in K] : T | T[]}, key:
  * @param obj 
  * @param props 
  */
-export function stripProps<T>(obj: {[key: string] : T}, props: string[]): {[key: string] : T} {
+export function stripProps<T>(obj: Record<string, T>, props: string[]): Record<string, T> {
   const resObj: {[key: string] : T} = _.cloneDeep(obj)
 
   for (const prop of props) {
@@ -154,7 +139,7 @@ export function stripProps<T>(obj: {[key: string] : T}, props: string[]): {[key:
  * @param obj 
  * @param matchingObject 
  */
-export function subset<T, O>(obj: {[key: string] : T}, maskObject: {[key: string] : O}): {[key: string] : T} {
+export function subset<T, O>(obj: Record<string, T>, maskObject: Record<string, O>): Record<string, T> {
   return filter(obj, (value, key) => {
     return key in maskObject
   })

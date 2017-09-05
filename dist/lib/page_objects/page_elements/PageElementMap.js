@@ -22,16 +22,10 @@ class PageElementMap extends _1.PageNode {
         this.type = 'ElementMap'; // used by group walker to detect map
         this.identifier = identifier;
         this.identifiedObjCache = {};
-        this._$ = Object.create(Object.prototype);
-        if (Object.keys(this.identifier.mappingObject).length === 0) {
-            throw new Error(`Mapping Object must not be empty for PageElementMap with selector '${this.selector}'`);
-        }
-        for (const id in this.identifier.mappingObject) {
-            this._$ = this.elementStoreFunc.apply(this.store, [
-                this.identifier.func(this.selector, this.identifier.mappingObject[id]),
-                this.elementOptions
-            ]);
-        }
+        this._$ = Workflo.Object.mapProperties(this.identifier.mappingObject, (value, key) => this.elementStoreFunc.apply(this.store, [
+            this.identifier.func(this.selector, value),
+            this.elementOptions
+        ]));
     }
     get $() {
         return this._$;

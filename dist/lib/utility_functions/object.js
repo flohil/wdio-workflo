@@ -42,15 +42,6 @@ function forEachProperty(input, func) {
     return this;
 }
 exports.forEachProperty = forEachProperty;
-const test = {
-    asdf: 1,
-    jodel: 2
-};
-mapProperties(test, (value, key) => {
-    return value * 2;
-});
-forEachProperty(test, (value, key) => console.log(value));
-const bla = Workflo.Object.filter(test, (value) => value > 1);
 // inverts an object's keys and values.
 /**
  * Returns a new object with the original object's keys and values inverted.
