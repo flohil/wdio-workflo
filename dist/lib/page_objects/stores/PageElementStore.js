@@ -69,6 +69,10 @@ class PageElementStore {
     ExistElementList(selector, options) {
         return this.get(selector, page_elements_1.PageElementList, Object.assign({ store: this, elementStoreFunc: this.ExistElement, wait: "exist" /* exist */ }, options));
     }
+    // Element Maps
+    ElementMap(selector, options) {
+        return this.get(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: this.Element }, options));
+    }
     // Functions to retrieve element instances
     /**
      * Returns a page element with the given selector, type and options.
@@ -114,4 +118,13 @@ class PageElementStore {
     }
 }
 exports.PageElementStore = PageElementStore;
+const store = new PageElementStore();
+const mappingObject = {
+    dashboard: "__dashboard__"
+};
+const identifier = {
+    mappingObject: mappingObject,
+    func: (mapSelector, mappingValue) => mapSelector + mappingValue
+};
+const map = store.ElementMap("//div", { identifier: identifier }).$.dashboard;
 //# sourceMappingURL=PageElementStore.js.map

@@ -15,14 +15,14 @@ const FirstByBuilder_1 = require("../builders/FirstByBuilder");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(selector, _a) {
-        var { wait = "visible" /* visible */, disableCache = false, elementStoreFunc, elementOptions, identifier } = _a, superOpts = __rest(_a, ["wait", "disableCache", "elementStoreFunc", "elementOptions", "identifier"]);
+        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, disableCache = false, elementStoreFunc, elementOptions, identifier } = _a, superOpts = __rest(_a, ["wait", "timeout", "disableCache", "elementStoreFunc", "elementOptions", "identifier"]);
         super(selector, superOpts);
         this.selector = selector;
         this.wait = wait;
+        this.timeout = timeout;
         this.selector = selector;
         this.elementOptions = elementOptions;
         this.elementStoreFunc = elementStoreFunc;
-        this.type = 'ElementList'; // used by group walker to detect list
         this.identifier = identifier;
         this.identifiedObjCache = {};
         this.firstByBuilder = new FirstByBuilder_1.FirstByBuilder(this.selector, {
@@ -190,43 +190,6 @@ class PageElementList extends _1.PageNode {
     // that matches the this.selector has a value.
     waitValue({ timeout = this.timeout, reverse = false } = {}) {
         this._elements.waitForValue(timeout, reverse);
-        return this;
-    }
-    // Waits for all existing elements of list to be visible.
-    // 
-    // If reverse is set to true, function will wait until no element
-    // that matches the this.selector is visible.
-    waitAllVisible({ timeout = this.timeout, reverse = false } = {}) {
-        const curElements = this._listElements;
-        const numberCurElements = curElements.length;
-        browser.waitUntil(() => {
-            return curElements.filter((element) => element.isVisible()).length === numberCurElements;
-        }, timeout, `${this.selector}: Some list elements never became visible`);
-        return this;
-    }
-    // Waits for all existing elements of list to have a text.
-    // 
-    // If reverse is set to true, function will wait until no element
-    // that matches the this.selector has a text.
-    waitAllText({ timeout = this.timeout, reverse = false } = {}) {
-        const curElements = this._listElements;
-        const numberCurElements = curElements.length;
-        browser.waitUntil(() => {
-            return curElements.filter((element) => element.hasText()).length === numberCurElements;
-        }, timeout, `${this.selector}: Some list elements never had a text`);
-        return this;
-    }
-    // Waits for all existing elements of list to have a value.
-    // 
-    // If reverse is set to true, function will wait until no element
-    // that matches the this.selector has a value.
-    // for textarea, input and select
-    waitAllValue({ timeout = this.timeout, reverse = false } = {}) {
-        const curElements = this._listElements;
-        const numberCurElements = curElements.length;
-        browser.waitUntil(() => {
-            return curElements.filter((element) => element.hasValue()).length === numberCurElements;
-        }, timeout, `${this.selector}: Some list elements never had a text`);
         return this;
     }
     // waits until list has given length

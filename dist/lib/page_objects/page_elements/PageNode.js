@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
-    constructor(selector, { store, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default }) {
+    constructor(selector, { store }) {
         this.selector = selector;
         this.store = store;
-        this.timeout = timeout;
     }
     __getNodeId() {
         return this.selector;

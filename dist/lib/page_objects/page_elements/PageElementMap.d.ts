@@ -8,26 +8,18 @@ export interface IPageElementMapIdentifier<K extends string> {
     mappingObject: Record<K, string>;
     func: (mapSelector: string, mappingValue: string) => XPathBuilder | string;
 }
-export interface IPageElementMapOpts<Store extends Workflo.IPageElementStore, ContentKeys extends string, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
-    disableCache?: boolean;
+export interface IPageElementMapOpts<Store extends Workflo.IPageElementStore, K extends string, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
     store: Store;
+    identifier: IPageElementMapIdentifier<K>;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions?: PageElementOptions;
-    identifier?: IPageElementMapIdentifier<ContentKeys>;
 }
-export declare class PageElementMap<Store extends Workflo.IPageElementStore, Content extends string, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
+export declare class PageElementMap<Store extends Workflo.IPageElementStore, K extends string, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
     protected selector: string;
-    protected disableCache: boolean;
     protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected elementOptions: PageElementOptions;
-    protected type: string;
-    protected identifier: IPageElementMapIdentifier<Content>;
-    protected identifiedObjCache: {
-        [key: string]: {
-            [key: string]: PageElementType;
-        };
-    };
-    protected _$: Record<Content, PageElementType>;
-    constructor(selector: string, {disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts}: IPageElementMapOpts<Store, Content, PageElementType, PageElementOptions>);
-    readonly $: Record<Content, PageElementType>;
+    protected identifier: IPageElementMapIdentifier<K>;
+    protected _$: Record<K, PageElementType>;
+    constructor(selector: string, {identifier, elementStoreFunc, elementOptions, ...superOpts}: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
+    readonly $: Record<K, PageElementType>;
 }

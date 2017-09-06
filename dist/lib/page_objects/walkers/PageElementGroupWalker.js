@@ -47,6 +47,12 @@ class PageElementGroupWalker {
                             results[key] = solveResults.result;
                         }
                     }
+                    else if (node instanceof page_elements_1.PageElementMap) {
+                        const solveResults = this.solveMap(problem, node, values, options);
+                        if (Object.keys(solveResults).length > 0) {
+                            results[key] = solveResults;
+                        }
+                    }
                     else if (node instanceof page_elements_1.PageElementList) {
                         const solveResults = this.solveList(problem, node, values, options);
                         if (Object.keys(solveResults).length > 0) {
@@ -74,7 +80,7 @@ class PageElementGroupWalker {
     // passing value as a parameter to solve the problem.
     // Returns the problem's solution as a result.
     //
-    // If throwSolveError is true, function will throw an 
+    // If throwSolveError is true, function will throw 
     // any errors occuring during the problem solution.
     // If throwSolverError is false, any errors occuring
     // during the problem solution will be written into the
@@ -111,25 +117,55 @@ class PageElementGroupWalker {
         if (typeof list.identify() === 'undefined') {
             throw new Error(`Walker could not identify list ${list.__getNodeId()}: Please set a list identifier before calling a group function!`);
         }
-        for (const key in values) {
-            if (identifiedObject.hasOwnProperty(key)) {
-                let value = undefined;
-                if (values) {
-                    if (key in values && values.hasOwnProperty(key)) {
-                        value = values[key];
-                    }
-                    else if (options.throwUnmatchedKey) {
-                        throw new Error(`Key ${key} did not match any node name in context: ${values}`);
+        if (values) {
+            for (const key in values) {
+                if (!identifiedObject.hasOwnProperty(key)) {
+                    if (options.throwUnmatchedKey) {
+                        throw new Error(`Key ${key} did not match any element in list: ${identifiedObject}`);
                     }
                 }
-                const solveResults = this.solveElement(problem, identifiedObject[key], value, options);
-                if (solveResults.nodeSupported) {
-                    results[key] = solveResults.result;
+                else {
+                    writeNodeResult(results, key, problem, identifiedObject[key], values[key], options);
                 }
+            }
+        }
+        else {
+            for (const key in identifiedObject) {
+                writeNodeResult(results, key, problem, identifiedObject[key], undefined, options);
+            }
+        }
+        return results;
+    }
+    // Solves a problem for a map of page elements. 
+    // Returns an object with the keys taken form the element map 
+    // and values taken from the solved function.
+    solveMap(problem, map, values, options) {
+        const results = Object.create(Object.prototype);
+        if (values) {
+            for (const key in values) {
+                if (!map.$.hasOwnProperty(key)) {
+                    if (options.throwUnmatchedKey) {
+                        throw new Error(`Key ${key} did not match any element in map: ${map.$}`);
+                    }
+                }
+                else {
+                    writeNodeResult(results, key, problem, map.$[key], values[key], options);
+                }
+            }
+        }
+        else {
+            for (const key in map.$) {
+                writeNodeResult(results, key, problem, map.$[key], undefined, options);
             }
         }
         return results;
     }
 }
 exports.PageElementGroupWalker = PageElementGroupWalker;
+function writeNodeResult(results, key, problem, node, value, options) {
+    const solveResults = this.solveElement(problem, node, value, options);
+    if (solveResults.nodeSupported) {
+        results[key] = solveResults.result;
+    }
+}
 //# sourceMappingURL=PageElementGroupWalker.js.map

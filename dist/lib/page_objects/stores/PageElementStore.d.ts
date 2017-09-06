@@ -1,4 +1,4 @@
-import { PageElement, IPageElementOpts, PageElementList, IPageElementListOpts, PageElementGroup, IPageElementGroupOpts, TextGroup, ValueGroup } from '../page_elements';
+import { PageElement, IPageElementOpts, PageElementList, IPageElementListOpts, PageElementMap, IPageElementMapOpts, PageElementGroup, IPageElementGroupOpts, TextGroup, ValueGroup } from '../page_elements';
 import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers';
 import { XPathBuilder } from '../builders';
 export declare class PageElementStore {
@@ -25,6 +25,7 @@ export declare class PageElementStore {
     ExistElement(selector: Workflo.XPath, options?: Pick<IPageElementOpts<this>, "timeout">): PageElement<this>;
     ElementList(selector: Workflo.XPath, options?: Pick<IPageElementListOpts<this, PageElement<this>, IPageElementOpts<this>>, "wait" | "timeout" | "elementOptions" | "disableCache" | "identifier">): PageElementList<this, PageElement<this>, IPageElementOpts<this>>;
     ExistElementList(selector: Workflo.XPath, options?: Pick<IPageElementListOpts<this, PageElement<this>, IPageElementOpts<this>>, "timeout" | "elementOptions" | "disableCache" | "identifier">): PageElementList<this, PageElement<this>, IPageElementOpts<this>>;
+    ElementMap<K extends string>(selector: Workflo.XPath, options: Pick<IPageElementMapOpts<this, K, PageElement<this>, IPageElementOpts<this>>, "elementOptions" | "identifier">): PageElementMap<this, K, PageElement<this>, IPageElementOpts<this>>;
     /**
      * Returns a page element with the given selector, type and options.
      *

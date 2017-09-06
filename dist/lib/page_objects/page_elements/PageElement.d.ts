@@ -2,12 +2,14 @@
 import { PageNode, IPageNodeOpts } from './';
 export interface IPageElementOpts<Store extends Workflo.IPageElementStore> extends IPageNodeOpts<Store> {
     wait?: Workflo.WaitType;
+    timeout?: number;
 }
 export declare class PageElement<Store extends Workflo.IPageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
     protected selector: string;
     protected wait: Workflo.WaitType;
+    protected timeout: number;
     protected _$: Store;
-    constructor(selector: string, {wait, ...superOpts}: IPageElementOpts<Store>);
+    constructor(selector: string, {wait, timeout, ...superOpts}: IPageElementOpts<Store>);
     readonly $: Store;
     /**
      *

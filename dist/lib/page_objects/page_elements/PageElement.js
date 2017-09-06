@@ -16,7 +16,7 @@ class PageElement extends _1.PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
     constructor(selector, _a) {
-        var { wait = "visible" /* visible */ } = _a, superOpts = __rest(_a, ["wait"]);
+        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default } = _a, superOpts = __rest(_a, ["wait", "timeout"]);
         super(selector, superOpts);
         this.selector = selector;
         this._$ = Object.create(null);
@@ -33,6 +33,7 @@ class PageElement extends _1.PageNode {
             }
         }
         this.wait = wait;
+        this.timeout = timeout;
     }
     get $() {
         return this._$;

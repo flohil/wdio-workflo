@@ -8,6 +8,8 @@ export interface IPageElementListIdentifier<Store extends Workflo.IPageElementSt
     func: (element: ElementType) => string;
 }
 export interface IPageElementListOpts<Store extends Workflo.IPageElementStore, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
+    wait?: Workflo.WaitType;
+    timeout?: number;
     disableCache?: boolean;
     store: Store;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
@@ -17,10 +19,10 @@ export interface IPageElementListOpts<Store extends Workflo.IPageElementStore, P
 export declare class PageElementList<Store extends Workflo.IPageElementStore, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
     protected selector: string;
     protected wait: Workflo.WaitType;
+    protected timeout: number;
     protected disableCache: boolean;
     protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected elementOptions: PageElementOptions;
-    protected type: string;
     protected identifier: IPageElementListIdentifier<Store, PageElementType>;
     protected identifiedObjCache: {
         [key: string]: {
@@ -28,7 +30,7 @@ export declare class PageElementList<Store extends Workflo.IPageElementStore, Pa
         };
     };
     protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    constructor(selector: string, {wait, disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    constructor(selector: string, {wait, timeout, disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     initialWait(): void;
@@ -53,9 +55,6 @@ export declare class PageElementList<Store extends Workflo.IPageElementStore, Pa
     waitVisible({timeout, reverse}?: Workflo.WDIOParams): this;
     waitText({timeout, reverse}?: Workflo.WDIOParams): this;
     waitValue({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitAllVisible({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitAllText({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitAllValue({timeout, reverse}?: Workflo.WDIOParams): this;
     waitLength({length, timeout, comparator, interval}: {
         length: number;
         timeout?: number;

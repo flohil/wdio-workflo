@@ -13,15 +13,13 @@ const _1 = require("./");
 // holds several PageElement instances of the same type
 class PageElementMap extends _1.PageNode {
     constructor(selector, _a) {
-        var { disableCache = false, elementStoreFunc, elementOptions, identifier } = _a, superOpts = __rest(_a, ["disableCache", "elementStoreFunc", "elementOptions", "identifier"]);
+        var { identifier, elementStoreFunc, elementOptions } = _a, superOpts = __rest(_a, ["identifier", "elementStoreFunc", "elementOptions"]);
         super(selector, superOpts);
         this.selector = selector;
         this.selector = selector;
         this.elementOptions = elementOptions;
         this.elementStoreFunc = elementStoreFunc;
-        this.type = 'ElementMap'; // used by group walker to detect map
         this.identifier = identifier;
-        this.identifiedObjCache = {};
         this._$ = Workflo.Object.mapProperties(this.identifier.mappingObject, (value, key) => this.elementStoreFunc.apply(this.store, [
             this.identifier.func(this.selector, value),
             this.elementOptions
