@@ -6,7 +6,10 @@ import {
   PageElementMap, IPageElementMapOpts, IPageElementMapIdentifier,
   PageElementGroup, IPageElementGroupOpts,
   TextGroup, ITextGroupOpts,
-  ValueGroup, IValueGroupOpts
+  ValueGroup, IValueGroupOpts,
+
+
+  Input, IInputOpts
 } from '../page_elements'
 
 import {
@@ -156,7 +159,23 @@ export class PageElementStore {
     )
   }
 
+  Input(
+    selector: Workflo.XPath,
+    options?: Pick<IInputOpts<this>, "timeout" | "wait">
+  ) {
+    return this.get<IInputOpts<this>, Input<this>>(
+      selector,
+      Input,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
+
   // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
+
+ 
 
   ElementList(
     selector: Workflo.XPath, 
@@ -203,21 +222,41 @@ export class PageElementStore {
 
   // Element Maps
 
-  ElementMap<K extends string>(
+  Map<
+    K extends string, 
+    PageElementType extends PageElement<this>, 
+    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
+  >(
     selector: Workflo.XPath,
     options: Pick<
-      IPageElementMapOpts<this, K, PageElement<this>, IPageElementOpts<this>>, 
-      "elementOptions" | "identifier"
+      IPageElementMapOpts<this, K, PageElementType, PageElementOpts>,
+      "elementOptions" | "identifier" | "elementStoreFunc"
     >
   ) {
     return this.get<
-      IPageElementMapOpts<this, K, PageElement<this>, IPageElementOpts<this>>, 
-      PageElementMap<this, K, PageElement<this>, IPageElementOpts<this>>
+      IPageElementMapOpts<this, K, PageElementType, PageElementOpts>, 
+      PageElementMap<this, K, PageElementType, PageElementOpts>
     > (
       selector,
       PageElementMap,
       {
         store: this,
+        elementStoreFunc: options.elementStoreFunc,
+        ...options
+      }
+    )
+  }
+
+  ElementMap<K extends string>(
+    selector: Workflo.XPath,
+    options: Pick<
+      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>, 
+      "elementOptions" | "identifier"
+    >
+  ) {
+    return this.Map(
+      selector,
+      {
         elementStoreFunc: this.Element,
         ...options
       }
