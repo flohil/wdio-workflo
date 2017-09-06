@@ -17,6 +17,8 @@ export interface IPageElementListOpts<
   PageElementType extends Workflo.IPageElement<Store>,
   PageElementOptions
 > extends IPageNodeOpts<Store> {
+  wait?: Workflo.WaitType,
+  timeout?: number,
   disableCache?: boolean,
   store: Store,
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
@@ -31,6 +33,7 @@ export class PageElementList<
   PageElementOptions
 > extends PageNode<Store> implements Workflo.PageNode.INode {
   protected wait: Workflo.WaitType
+  protected timeout: number
   
   protected disableCache: boolean
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
@@ -44,6 +47,7 @@ export class PageElementList<
     protected selector: string,
     { 
       wait = Workflo.WaitType.visible,
+      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
       disableCache = false,
       elementStoreFunc,
       elementOptions,
@@ -54,6 +58,7 @@ export class PageElementList<
     super(selector, superOpts)
 
     this.wait = wait
+    this.timeout = timeout
     
     this.selector = selector
     this.elementOptions = elementOptions
@@ -282,64 +287,6 @@ export class PageElementList<
     { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
   ) {
     this._elements.waitForValue(timeout, reverse)
-
-    return this
-  }
-
-  // Waits for all existing elements of list to be visible.
-  // 
-  // If reverse is set to true, function will wait until no element
-  // that matches the this.selector is visible.
-  waitAllVisible(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
-  ) {
-    const curElements = this._listElements
-    const numberCurElements = curElements.length
-
-    browser.waitUntil(() => {
-      return curElements.filter(
-        (element) => element.isVisible()
-      ).length === numberCurElements
-    }, timeout, `${this.selector}: Some list elements never became visible`)
-    
-    return this
-  }
-
-  // Waits for all existing elements of list to have a text.
-  // 
-  // If reverse is set to true, function will wait until no element
-  // that matches the this.selector has a text.
-  waitAllText(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
-  ) {
-    const curElements = this._listElements
-    const numberCurElements = curElements.length
-
-    browser.waitUntil(() => {
-      return curElements.filter(
-        (element) => element.hasText()
-      ).length === numberCurElements
-    }, timeout, `${this.selector}: Some list elements never had a text`)
-
-    return this
-  }
-
-  // Waits for all existing elements of list to have a value.
-  // 
-  // If reverse is set to true, function will wait until no element
-  // that matches the this.selector has a value.
-  // for textarea, input and select
-  waitAllValue(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
-  ) {
-    const curElements = this._listElements
-    const numberCurElements = curElements.length
-
-    browser.waitUntil(() => {
-      return curElements.filter(
-        (element) => element.hasValue()
-      ).length === numberCurElements
-    }, timeout, `${this.selector}: Some list elements never had a text`)
 
     return this
   }

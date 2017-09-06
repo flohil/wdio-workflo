@@ -1,6 +1,4 @@
 export interface IPageNodeOpts<Store extends Workflo.IPageElementStore> {
-  wait?: Workflo.WaitType, 
-  timeout?: number
   store: Store
 }
 
@@ -13,12 +11,10 @@ export class PageNode<Store extends Workflo.IPageElementStore> {
   constructor(
     protected selector: string,
     { 
-      store,
-      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default
+      store
     } : IPageNodeOpts<Store>
   ) {
     this.store = store
-    this.timeout = timeout
   }
 
   __getNodeId() {

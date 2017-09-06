@@ -27,20 +27,19 @@ export interface IPageElementMapOpts<
 // holds several PageElement instances of the same type
 export class PageElementMap<
   Store extends Workflo.IPageElementStore,
-  Content extends Record<string, string>,
+  K extends string,
   PageElementType extends Workflo.IPageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> implements Workflo.PageNode.INode {
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected elementOptions: PageElementOptions
   protected type: string
-  protected identifier: IPageElementMapIdentifier<keyof Content>
-  protected _$: Record<keyof Content, PageElementType>
+  protected identifier: IPageElementMapIdentifier<K>
+  protected _$: Record<K, PageElementType>
 
   constructor( 
     protected selector: string,
-    mappingObject: Content,
-    func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string,
+    identifier: IPageElementMapIdentifier<K>,
     { 
       elementStoreFunc,
       elementOptions,
@@ -53,10 +52,7 @@ export class PageElementMap<
     this.elementOptions = elementOptions
     this.elementStoreFunc = elementStoreFunc
     this.type = 'ElementMap' // used by group walker to detect map
-    this.identifier = {
-      mappingObject: mappingObject,
-      func: func
-    }
+    this.identifier = identifier
 
     this._$ = Workflo.Object.mapProperties(
       this.identifier.mappingObject,

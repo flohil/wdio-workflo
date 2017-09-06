@@ -3,11 +3,13 @@ import { XPathBuilder } from '../builders'
 import * as htmlParser from 'htmlparser2'
 
 export interface IPageElementOpts<Store extends Workflo.IPageElementStore> extends IPageNodeOpts<Store> {
-  wait?: Workflo.WaitType  
+  wait?: Workflo.WaitType
+  timeout?: number
 }
 
 export class PageElement<Store extends Workflo.IPageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
   protected wait: Workflo.WaitType
+  protected timeout: number
   protected _$: Store
 
   // available options:
@@ -15,7 +17,8 @@ export class PageElement<Store extends Workflo.IPageElementStore> extends PageNo
   constructor(
     protected selector: string,
     {
-      wait = Workflo.WaitType.visible, 
+      wait = Workflo.WaitType.visible,
+      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
       ...superOpts
     }: IPageElementOpts<Store>
   ) {
@@ -40,6 +43,7 @@ export class PageElement<Store extends Workflo.IPageElementStore> extends PageNo
     }
 
     this.wait = wait
+    this.timeout = timeout
   }
 
   get $(): Store {

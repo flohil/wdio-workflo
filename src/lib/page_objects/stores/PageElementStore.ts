@@ -203,23 +203,21 @@ export class PageElementStore {
 
   // Element Maps
 
-  ElementMap<Content extends Record<string, string>>(
+  ElementMap<K extends string>(
     selector: Workflo.XPath,
-    content: Content,
-    func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string,
+    identifier: IPageElementMapIdentifier<K>,
     options: Pick<
       IPageElementMapOpts<this, PageElement<this>, IPageElementOpts<this>>, 
-      "wait" | "timeout" | "elementOptions"
+      "elementOptions"
     >
   ) {
     return this.getMap<
       IPageElementMapOpts<this, PageElement<this>, IPageElementOpts<this>>, 
-      PageElementMap<this, Content, PageElement<this>, IPageElementOpts<this>>,
-      Content
+      PageElementMap<this, K, PageElement<this>, IPageElementOpts<this>>,
+      K
     > (
       selector,
-      content,
-      func,
+      identifier,
       PageElementMap,
       {
         store: this,
@@ -263,11 +261,10 @@ export class PageElementStore {
     return this.instanceCache[id]
   }
 
-  protected getMap<O, T, Content extends Record<string, string>>(
-    selector: Workflo.XPath, 
-    mappingObject: Content,
-    func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string,
-    type: { new(selector: string, mappingObject: Content, func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string, options: O): T }, 
+  protected getMap<O, T, K extends string>(
+    selector: Workflo.XPath,
+    identifier: IPageElementMapIdentifier<K>,
+    type: { new(selector: string, identifier: IPageElementMapIdentifier<K>, options: O): T }, 
     options: O = Object.create(Object.prototype)
   ) : T {
     const _selector = (selector instanceof XPathBuilder) ? this.xPathBuilder.build() : selector
@@ -280,7 +277,7 @@ export class PageElementStore {
     const id = `${_selector}|||${type}|||${options.toString()}`
 
     if(!(id in this.instanceCache)) {
-      const result = new type(_selector, mappingObject, func, options)
+      const result = new type(_selector, identifier, options)
       this.instanceCache[id] = result
     }
 
@@ -341,4 +338,12 @@ const mappingObject = {
   dashboard: "__dashboard__"
 }
 
-const map = store.ElementMap("//div", mappingObject, (mapSelector, mappingValue) => mapSelector + mappingValue, {}).$.dashboard
+const identifier: {
+  mappingObject: typeof mappingObject,
+  func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string
+} = {
+  mappingObject: mappingObject,
+  func: (mapSelector, mappingValue) => mapSelector + mappingValue
+}
+
+const map = store.ElementMap("//div", identifier, {}).$.dashboard
