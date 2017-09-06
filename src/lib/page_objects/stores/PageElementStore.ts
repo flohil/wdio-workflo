@@ -305,19 +305,3 @@ export class PageElementStore {
     return this.instanceCache[key]
   }
 }
-
-const store = new PageElementStore()
-
-const mappingObject = {
-  dashboard: "__dashboard__"
-}
-
-const identifier: {
-  mappingObject: typeof mappingObject,
-  func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string
-} = {
-  mappingObject: mappingObject,
-  func: (mapSelector, mappingValue) => mapSelector + mappingValue
-}
-
-const map = store.ElementMap("//div", {identifier: identifier}).$.dashboard
