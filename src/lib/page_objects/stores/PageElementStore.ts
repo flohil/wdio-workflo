@@ -175,7 +175,29 @@ export class PageElementStore {
 
   // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
 
- 
+  List<
+    PageElementType extends PageElement<this>, 
+    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
+  > (
+    selector: Workflo.XPath, 
+    options: Pick<
+      IPageElementListOpts<this, PageElementType, PageElementOpts>, 
+      "wait" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier"
+    >
+  ) {
+    return this.get<
+      IPageElementListOpts<this, PageElementType, PageElementOpts>, 
+      PageElementList<this, PageElementType, PageElementOpts>
+    > (
+      selector,
+      PageElementList,
+      {
+        store: this,
+        elementStoreFunc: options.elementStoreFunc,
+        ...options
+      }
+    )
+  }
 
   ElementList(
     selector: Workflo.XPath, 
@@ -184,14 +206,9 @@ export class PageElementStore {
       "wait" | "timeout" | "elementOptions" | "disableCache" | "identifier"
     >
   ) {
-    return this.get<
-      IPageElementListOpts<this, PageElement<this>, IPageElementOpts<this>>, 
-      PageElementList<this, PageElement<this>, IPageElementOpts<this>>
-    > (
+    return this.List(
       selector,
-      PageElementList,
       {
-        store: this,
         elementStoreFunc: this.Element,
         ...options
       }
@@ -205,16 +222,10 @@ export class PageElementStore {
       "timeout" | "elementOptions" | "disableCache" | "identifier"
     >
   ) {
-    return this.get<
-      IPageElementListOpts<this, PageElement<this>, IPageElementOpts<this>>, 
-      PageElementList<this, PageElement<this>, IPageElementOpts<this>>
-    > (
+    return this.List(
       selector,
-      PageElementList,
       {
-        store: this,
         elementStoreFunc: this.ExistElement,
-        wait: Workflo.WaitType.exist,
         ...options
       }
     )
@@ -344,3 +355,14 @@ export class PageElementStore {
     return this.instanceCache[key]
   }
 }
+
+const store = new PageElementStore()
+
+const inputList = store.List(
+  '//input',
+  {
+    elementStoreFunc: store.Input
+  }
+)
+
+inputList.get(0).setValue('asdf')

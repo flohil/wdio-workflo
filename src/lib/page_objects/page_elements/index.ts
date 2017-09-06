@@ -5,3 +5,5 @@ export * from './PageElementList'
 export * from './PageElementGroup'
 export * from './TextGroup'
 export * from './ValueGroup'
+
+export * from './Input'
