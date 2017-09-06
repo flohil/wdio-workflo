@@ -118,13 +118,4 @@ class PageElementStore {
     }
 }
 exports.PageElementStore = PageElementStore;
-const store = new PageElementStore();
-const mappingObject = {
-    dashboard: "__dashboard__"
-};
-const identifier = {
-    mappingObject: mappingObject,
-    func: (mapSelector, mappingValue) => mapSelector + mappingValue
-};
-const map = store.ElementMap("//div", { identifier: identifier }).$.dashboard;
 //# sourceMappingURL=PageElementStore.js.map

@@ -177,12 +177,12 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
             throw new Error(`Key ${key} did not match any element in list: ${identifiedObject}`)
           }
         } else {
-          writeNodeResult(results, key, problem, identifiedObject[key], values[key], options)
+          this.writeNodeResult(results, key, problem, identifiedObject[key], values[key], options)
         }
       }
     } else { // e.g. for GetText -> values are undefined
       for ( const key in identifiedObject ) {
-        writeNodeResult(results, key, problem, identifiedObject[key], undefined, options)
+        this.writeNodeResult(results, key, problem, identifiedObject[key], undefined, options)
       }
     }
 
@@ -208,32 +208,32 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
             throw new Error(`Key ${key} did not match any element in map: ${map.$}`)
           }
         } else {
-          writeNodeResult(results, key, problem, map.$[key], values[key], options)
+          this.writeNodeResult(results, key, problem, map.$[key], values[key], options)
         }
       }
     } else { // e.gg for GetText -> values are undefined
       for ( const key in map.$ ) {
-        writeNodeResult(results, key, problem, map.$[key], undefined, options)
+        this.writeNodeResult(results, key, problem, map.$[key], undefined, options)
       }
     }
 
     return results
   }
-}
 
-function writeNodeResult<ValueType, ResultType, K extends string>(
-  results: Record<K, ResultType>,
-  key: K,
-  problem: Workflo.IProblem<ValueType, ResultType>,
-  node: Workflo.PageNode.INode, 
-  value: ValueType, 
-  options: Workflo.IWalkerOptions
- ) {
-  const solveResults = this.solveElement(
-    problem, node, value, options 
-  )
-
-  if (solveResults.nodeSupported) {
-    results[key] = solveResults.result
+  protected writeNodeResult<ValueType, ResultType, K extends string>(
+    results: Record<K, ResultType>,
+    key: K,
+    problem: Workflo.IProblem<ValueType, ResultType>,
+    node: Workflo.PageNode.INode, 
+    value: ValueType, 
+    options: Workflo.IWalkerOptions
+   ) {
+    const solveResults = this.solveElement(
+      problem, node, value, options 
+    )
+  
+    if (solveResults.nodeSupported) {
+      results[key] = solveResults.result
+    }
   }
 }

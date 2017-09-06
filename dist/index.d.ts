@@ -1,16 +1,9 @@
 import * as pageObjects from './lib/page_objects';
 declare global  {
     namespace Workflo {
-        interface Timeouts {
-            default: number;
-            pageOpen: number;
-        }
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }
-        type MyPartial<T> = {
-            [P in keyof T]?: T[P];
-        };
         interface IPageElementStore extends pageObjects.stores.PageElementStore {
         }
         interface IPageElement<Store extends Workflo.IPageElementStore> extends pageObjects.elements.PageElement<Store> {

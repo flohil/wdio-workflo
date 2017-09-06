@@ -125,13 +125,13 @@ class PageElementGroupWalker {
                     }
                 }
                 else {
-                    writeNodeResult(results, key, problem, identifiedObject[key], values[key], options);
+                    this.writeNodeResult(results, key, problem, identifiedObject[key], values[key], options);
                 }
             }
         }
         else {
             for (const key in identifiedObject) {
-                writeNodeResult(results, key, problem, identifiedObject[key], undefined, options);
+                this.writeNodeResult(results, key, problem, identifiedObject[key], undefined, options);
             }
         }
         return results;
@@ -149,23 +149,23 @@ class PageElementGroupWalker {
                     }
                 }
                 else {
-                    writeNodeResult(results, key, problem, map.$[key], values[key], options);
+                    this.writeNodeResult(results, key, problem, map.$[key], values[key], options);
                 }
             }
         }
         else {
             for (const key in map.$) {
-                writeNodeResult(results, key, problem, map.$[key], undefined, options);
+                this.writeNodeResult(results, key, problem, map.$[key], undefined, options);
             }
         }
         return results;
     }
-}
-exports.PageElementGroupWalker = PageElementGroupWalker;
-function writeNodeResult(results, key, problem, node, value, options) {
-    const solveResults = this.solveElement(problem, node, value, options);
-    if (solveResults.nodeSupported) {
-        results[key] = solveResults.result;
+    writeNodeResult(results, key, problem, node, value, options) {
+        const solveResults = this.solveElement(problem, node, value, options);
+        if (solveResults.nodeSupported) {
+            results[key] = solveResults.result;
+        }
     }
 }
+exports.PageElementGroupWalker = PageElementGroupWalker;
 //# sourceMappingURL=PageElementGroupWalker.js.map
