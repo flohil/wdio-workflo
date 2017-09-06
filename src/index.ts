@@ -5,22 +5,11 @@ declare global {
 
   namespace Workflo {
 
-    // CONFIG
-
-    interface Timeouts {
-      default: number,
-      pageOpen: number
-    }
-
     interface IRecObj<Type> {
       [key: string] : Type | IRecObj<Type>
     }
 
-    type MyPartial<T> = {
-      [P in keyof T]?: T[P];
-    }
-
-  // PAGE OBJECTS
+  // PAGE OBJECTS (to avoid undefined imports within core page elements)
 
     interface IPageElementStore 
     extends pageObjects.stores.PageElementStore {} 
