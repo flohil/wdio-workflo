@@ -1,7 +1,8 @@
-export interface IPageNodeOpts<Store extends Workflo.IPageElementStore> {
+import { PageElementStore } from '../stores';
+export interface IPageNodeOpts<Store extends PageElementStore> {
     store: Store;
 }
-export declare class PageNode<Store extends Workflo.IPageElementStore> {
+export declare class PageNode<Store extends PageElementStore> {
     protected selector: string;
     protected store: Store;
     protected timeout: number;

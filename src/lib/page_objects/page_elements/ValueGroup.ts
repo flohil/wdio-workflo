@@ -1,10 +1,12 @@
 import { TextGroup, ITextGroupOpts } from './'
+import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
+import { PageElementStore } from '../stores'
 
 export interface IValueGroupOpts<
-  Store extends Workflo.IPageElementStore,
+  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends Workflo.IPageElementGroupWalker<Store>,
-  WalkerOptions extends Workflo.IPageElementGroupWalkerOpts
+  WalkerType extends PageElementGroupWalker<Store>,
+  WalkerOptions extends IPageElementGroupWalkerOpts
 > extends ITextGroupOpts<
   Store,
   Content,
@@ -13,10 +15,10 @@ export interface IValueGroupOpts<
 > { }
 
 export class ValueGroup<
-  Store extends Workflo.IPageElementStore,
+  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends Workflo.IPageElementGroupWalker<Store>,
-  WalkerOptions extends Workflo.IPageElementGroupWalkerOpts
+  WalkerType extends PageElementGroupWalker<Store>,
+  WalkerOptions extends IPageElementGroupWalkerOpts
 > extends TextGroup<Store, Content, WalkerType, WalkerOptions> {
   constructor({
     ...superOpts

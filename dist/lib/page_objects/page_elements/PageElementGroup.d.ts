@@ -1,6 +1,8 @@
-export interface IPageElementGroupOpts<Store extends Workflo.IPageElementStore, Content extends {
+import { PageElementStore } from '../stores';
+import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers';
+export interface IPageElementGroupOpts<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
-}, WalkerType extends Workflo.IPageElementGroupWalker<Store>, WalkerOptions extends Workflo.IPageElementGroupWalkerOpts> {
+}, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts> {
     id: string;
     content: Content;
     walkerType: {
@@ -8,9 +10,9 @@ export interface IPageElementGroupOpts<Store extends Workflo.IPageElementStore, 
     };
     walkerOptions: WalkerOptions;
 }
-export declare class PageElementGroup<Store extends Workflo.IPageElementStore, Content extends {
+export declare class PageElementGroup<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
-}, WalkerType extends Workflo.IPageElementGroupWalker<Store>, WalkerOptions extends Workflo.IPageElementGroupWalkerOpts> implements Workflo.PageNode.INode {
+}, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts> implements Workflo.PageNode.INode {
     protected __id: string;
     protected __walker: WalkerType;
     protected __content: Content;

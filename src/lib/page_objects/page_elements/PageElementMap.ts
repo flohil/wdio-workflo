@@ -1,4 +1,5 @@
-import { PageNode, IPageNodeOpts } from './'
+import { PageNode, IPageNodeOpts, PageElement } from './'
+import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
 
 // https://github.com/Microsoft/TypeScript/issues/14930
@@ -15,9 +16,9 @@ export interface IPageElementMapIdentifier<K extends string> {
 // use disableCache for a "dynamic" list whose structure changes over time
 // alternatively, call refresh() when the times of structure changes are known
 export interface IPageElementMapOpts<
-  Store extends Workflo.IPageElementStore,
+  Store extends PageElementStore,
   K extends string,
-  PageElementType extends Workflo.IPageElement<Store>,
+  PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends IPageNodeOpts<Store> {
   store: Store,
@@ -28,9 +29,9 @@ export interface IPageElementMapOpts<
 
 // holds several PageElement instances of the same type
 export class PageElementMap<
-  Store extends Workflo.IPageElementStore,
+  Store extends PageElementStore,
   K extends string,
-  PageElementType extends Workflo.IPageElement<Store>,
+  PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> implements Workflo.PageNode.INode {
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType

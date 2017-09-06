@@ -1,13 +1,14 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts } from './';
-import { FirstByBuilder } from '../builders/FirstByBuilder';
-export interface IPageElementListIdentifier<Store extends Workflo.IPageElementStore, ElementType extends Workflo.IPageElement<Store>> {
+import { PageNode, IPageNodeOpts, PageElement } from './';
+import { PageElementStore } from '../stores';
+import { FirstByBuilder } from '../builders';
+export interface IPageElementListIdentifier<Store extends PageElementStore, ElementType extends PageElement<Store>> {
     mappingObject: {
         [key: string]: string;
     };
     func: (element: ElementType) => string;
 }
-export interface IPageElementListOpts<Store extends Workflo.IPageElementStore, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
+export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
     wait?: Workflo.WaitType;
     timeout?: number;
     disableCache?: boolean;
@@ -16,7 +17,7 @@ export interface IPageElementListOpts<Store extends Workflo.IPageElementStore, P
     elementOptions?: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
-export declare class PageElementList<Store extends Workflo.IPageElementStore, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
     protected selector: string;
     protected wait: Workflo.WaitType;
     protected timeout: number;

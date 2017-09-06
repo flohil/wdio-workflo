@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("../../utility_functions/util");
 const _1 = require("./");
-const FirstByBuilder_1 = require("../builders/FirstByBuilder");
+const builders_1 = require("../builders");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(selector, _a) {
@@ -25,7 +25,7 @@ class PageElementList extends _1.PageNode {
         this.elementStoreFunc = elementStoreFunc;
         this.identifier = identifier;
         this.identifiedObjCache = {};
-        this.firstByBuilder = new FirstByBuilder_1.FirstByBuilder(this.selector, {
+        this.firstByBuilder = new builders_1.FirstByBuilder(this.selector, {
             store: this.store,
             elementStoreFunc: this.elementStoreFunc,
             elementOptions: this.elementOptions

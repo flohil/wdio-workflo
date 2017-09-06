@@ -1,11 +1,13 @@
 import { PageElementGroup, IPageElementGroupOpts } from './';
-export interface ITextGroupOpts<Store extends Workflo.IPageElementStore, Content extends {
+import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers';
+import { PageElementStore } from '../stores';
+export interface ITextGroupOpts<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
-}, WalkerType extends Workflo.IPageElementGroupWalker<Store>, WalkerOptions extends Workflo.IPageElementGroupWalkerOpts> extends IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions> {
+}, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts> extends IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions> {
 }
-export declare class TextGroup<Store extends Workflo.IPageElementStore, Content extends {
+export declare class TextGroup<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
-}, WalkerType extends Workflo.IPageElementGroupWalker<Store>, WalkerOptions extends Workflo.IPageElementGroupWalkerOpts> extends PageElementGroup<Store, Content, WalkerType, WalkerOptions> {
+}, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts> extends PageElementGroup<Store, Content, WalkerType, WalkerOptions> {
     constructor({...superOpts}: ITextGroupOpts<Store, Content, WalkerType, WalkerOptions>);
     /**
      * If using filter, only those element text will be returned which are defined and truthy in filter.

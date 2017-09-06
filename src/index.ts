@@ -9,66 +9,6 @@ declare global {
       [key: string] : Type | IRecObj<Type>
     }
 
-  // PAGE OBJECTS (to avoid undefined imports within core page elements)
-
-    interface IPageElementStore 
-    extends pageObjects.stores.PageElementStore {} 
-
-    interface IPageElement<
-      Store extends Workflo.IPageElementStore
-    > extends pageObjects.elements.PageElement<
-      Store
-    > {}
-
-    interface IPageElementOpts<
-      Store extends Workflo.IPageElementStore
-    > extends pageObjects.elements.IPageElementOpts<
-      Store
-    > {}
-
-    interface IPageElementList<
-      Store extends Workflo.IPageElementStore, 
-      PageElementType extends Workflo.IPageElement<Store>, 
-      PageElementOptions
-    > extends pageObjects.elements.PageElementList<
-      Store, 
-      PageElementType, 
-      PageElementOptions
-    > {}
-
-    interface IPageElementMap<
-      Store extends Workflo.IPageElementStore,
-      K extends string,
-      PageElementType extends Workflo.IPageElement<Store>,
-      PageElementOptions
-    > extends pageObjects.elements.PageElementMap<
-      Store,
-      K,
-      PageElementType, 
-      PageElementOptions
-    > {}
-
-    interface IPageElementGroup<
-      Store extends Workflo.IPageElementStore, 
-      Content extends {[key: string] : Workflo.PageNode.INode}, 
-      WalkerType extends Workflo.IPageElementGroupWalker<Store>, 
-      WalkerOptions extends Workflo.IPageElementGroupWalkerOpts
-    > extends pageObjects.elements.PageElementGroup<
-      Store, 
-      Content, 
-      WalkerType, 
-      WalkerOptions
-    > {}
-
-    interface IPageElementGroupWalker<
-      Store extends Workflo.IPageElementStore
-    > extends pageObjects.walkers.PageElementGroupWalker<
-      Store
-    > {}
-
-    interface IPageElementGroupWalkerOpts 
-    extends pageObjects.walkers.IPageElementGroupWalkerOpts {}
-
     interface WDIOParams {
       timeout?: number,
       reverse?: boolean

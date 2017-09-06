@@ -1,10 +1,11 @@
 import { compare } from '../../utility_functions/util'
-import { PageNode, IPageNodeOpts } from './'
-import { FirstByBuilder } from '../builders/FirstByBuilder'
+import { PageNode, IPageNodeOpts, PageElement } from './'
+import { PageElementStore } from '../stores'
+import { FirstByBuilder } from '../builders'
 
 export interface IPageElementListIdentifier<
-  Store extends Workflo.IPageElementStore,
-  ElementType extends Workflo.IPageElement<Store>
+  Store extends PageElementStore,
+  ElementType extends PageElement<Store>
 > {
   mappingObject: {[key: string] : string},
   func: ( element: ElementType ) => string
@@ -13,8 +14,8 @@ export interface IPageElementListIdentifier<
 // use disableCache for a "dynamic" list whose structure changes over time
 // alternatively, call refresh() when the times of structure changes are known
 export interface IPageElementListOpts<
-  Store extends Workflo.IPageElementStore, 
-  PageElementType extends Workflo.IPageElement<Store>,
+  Store extends PageElementStore, 
+  PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends IPageNodeOpts<Store> {
   wait?: Workflo.WaitType,
@@ -28,8 +29,8 @@ export interface IPageElementListOpts<
 
 // holds several PageElement instances of the same type
 export class PageElementList<
-  Store extends Workflo.IPageElementStore,   
-  PageElementType extends Workflo.IPageElement<Store>,
+  Store extends PageElementStore,   
+  PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> implements Workflo.PageNode.INode {
   protected wait: Workflo.WaitType

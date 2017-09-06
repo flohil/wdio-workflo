@@ -259,11 +259,11 @@ export class PageElementStore {
   }
 
   protected getGroup<
-    Store extends Workflo.IPageElementStore,
+    Store extends PageElementStore,
     Content extends {[key: string] : Workflo.PageNode.INode},
-    WalkerType extends Workflo.IPageElementGroupWalker<Store>,
+    WalkerType extends PageElementGroupWalker<Store>,
     WalkerOptions extends IPageElementGroupWalkerOpts,
-    GroupType extends Workflo.IPageElementGroup<
+    GroupType extends PageElementGroup<
       Store,
       Content, 
       WalkerType,

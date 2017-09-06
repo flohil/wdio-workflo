@@ -1,12 +1,13 @@
 import * as _ from 'lodash'
-import { PageElement, PageElementMap, PageElementList, PageElementGroup } from '../page_elements'
+import { PageElement, IPageElementOpts, PageElementMap, PageElementList, PageElementGroup } from '../page_elements'
+import { PageElementStore } from '../stores'
 
 export interface IPageElementGroupWalkerOpts {
 
 }
 
 // Solves a problem on all nodes inside a context recursively.
-export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
+export class PageElementGroupWalker<Store extends PageElementStore> {
  
   constructor(options: IPageElementGroupWalkerOpts) {
     
@@ -146,7 +147,7 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
   // Solves a problem on a subgroup.
   protected solveGroup<ValueType, ResultType>( 
     problem: Workflo.IProblem<ValueType, ResultType>,
-    group: Workflo.IPageElementGroup<
+    group: PageElementGroup<
       Store,
       Record<string, Workflo.PageNode.INode>,
       this,
@@ -167,7 +168,7 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
   // and values taken form solved function.
   protected solveList<ValueType, ResultType>( 
     problem: Workflo.IProblem<ValueType, ResultType>,
-    list: Workflo.IPageElementList<Workflo.IPageElementStore, Workflo.IPageElement<Store>, Workflo.IPageElementOpts<Store>>, 
+    list: PageElementList<PageElementStore, PageElement<Store>, IPageElementOpts<Store>>, 
     values: Record<string, ValueType>, 
     options: Workflo.IWalkerOptions 
   ) : Record<string, ResultType> {
@@ -207,7 +208,7 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
   // and values taken from the solved function.
   protected solveMap<ValueType, ResultType, K extends string>( 
     problem: Workflo.IProblem<ValueType, ResultType>,
-    map: Workflo.IPageElementMap<Workflo.IPageElementStore, K, Workflo.IPageElement<Store>, Workflo.IPageElementOpts<Store>>, 
+    map: PageElementMap<PageElementStore, K, PageElement<Store>, IPageElementOpts<Store>>, 
     values: Record<K, ValueType>,
     options: Workflo.IWalkerOptions 
   ) : Record<K, ResultType> {

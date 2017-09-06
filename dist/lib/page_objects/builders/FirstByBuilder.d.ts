@@ -1,9 +1,11 @@
-export interface IFirstByBuilderOpts<Store extends Workflo.IPageElementStore, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> {
+import { PageElement } from '../page_elements';
+import { PageElementStore } from '../stores';
+export interface IFirstByBuilderOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> {
     store: Store;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
 }
-export declare class FirstByBuilder<Store extends Workflo.IPageElementStore, PageElementType extends Workflo.IPageElement<Store>, PageElementOptions> {
+export declare class FirstByBuilder<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> {
     private selector;
     private store;
     private elementStoreFunc;

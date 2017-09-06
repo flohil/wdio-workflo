@@ -1,8 +1,11 @@
+import { PageElementStore } from '../stores'
+import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
+
 export interface IPageElementGroupOpts<
-  Store extends Workflo.IPageElementStore,
+  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends Workflo.IPageElementGroupWalker<Store>,
-  WalkerOptions extends Workflo.IPageElementGroupWalkerOpts
+  WalkerType extends PageElementGroupWalker<Store>,
+  WalkerOptions extends IPageElementGroupWalkerOpts
 > {
   id: string,
   content: Content,
@@ -19,10 +22,10 @@ export interface IPageElementGroupOpts<
 // - all group functions must start with upper case letter
 // - all private members of group must start with _
 export class PageElementGroup<
-  Store extends Workflo.IPageElementStore,
+  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends Workflo.IPageElementGroupWalker<Store>,
-  WalkerOptions extends Workflo.IPageElementGroupWalkerOpts
+  WalkerType extends PageElementGroupWalker<Store>,
+  WalkerOptions extends IPageElementGroupWalkerOpts
 > implements Workflo.PageNode.INode {
   protected __id: string
   protected __walker: WalkerType

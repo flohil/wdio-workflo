@@ -1,8 +1,10 @@
 import { XPathBuilder } from './XPathBuilder'
+import { PageElement } from '../page_elements'
+import { PageElementStore } from '../stores'
 
 export interface IFirstByBuilderOpts<
-  Store extends Workflo.IPageElementStore,   
-  PageElementType extends Workflo.IPageElement<Store>,
+  Store extends PageElementStore,   
+  PageElementType extends PageElement<Store>,
   PageElementOptions
 > {
   store: Store
@@ -11,8 +13,8 @@ export interface IFirstByBuilderOpts<
 }
 
 export class FirstByBuilder<
-  Store extends Workflo.IPageElementStore,   
-  PageElementType extends Workflo.IPageElement<Store>,
+  Store extends PageElementStore,   
+  PageElementType extends PageElement<Store>,
   PageElementOptions
 > {
   private selector: string
