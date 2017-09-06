@@ -7,6 +7,11 @@ export declare class TextGroup<Store extends Workflo.IPageElementStore, Content 
     [key: string]: Workflo.PageNode.INode;
 }, WalkerType extends Workflo.IPageElementGroupWalker<Store>, WalkerOptions extends Workflo.IPageElementGroupWalkerOpts> extends PageElementGroup<Store, Content, WalkerType, WalkerOptions> {
     constructor({...superOpts}: ITextGroupOpts<Store, Content, WalkerType, WalkerOptions>);
+    /**
+     * If using filter, only those element text will be returned which are defined and truthy in filter.
+     *
+     * @param param0
+     */
     GetText({filter, options}?: {
         filter?: Workflo.IRecObj<boolean>;
         options?: Workflo.IWalkerOptions;

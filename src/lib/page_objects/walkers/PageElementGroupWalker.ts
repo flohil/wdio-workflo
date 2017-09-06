@@ -42,7 +42,25 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
 
     const results: Workflo.IRecObj<ResultType> = Object.create(Object.prototype)
 
-    const walkNodes = problem.values || content
+    let walkNodes = {}
+    
+    // if values are defined, strip all content that is not inside values
+    if (typeof problem.values !== 'undefined') {
+        for (const key in problem.values) {
+            if (problem.values.hasOwnProperty(key)) {
+                if (content.hasOwnProperty(key)) {
+                    walkNodes[key] = content[key]
+                } else if (options.throwUnmatchedKey) {
+                    throw new Error(`Key ${key} did not match any node name in group context: ${JSON.stringify(
+                        content,
+                        function(k, v) { if (v === undefined) { return null; } return v; }
+                    )}`);
+                }
+            }
+        }
+    } else {
+        walkNodes = content
+    }
 
     // solve problem only for nodes which support operation
     // in case of lists or groups -> dont add result if no child
@@ -50,55 +68,47 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
 
     // execute problem on each node in group
     for (const key in walkNodes) {
-      if (walkNodes.hasOwnProperty(key)) {
-        const node = content[key]
+      const node = content[key]
 
-        // group has a node matching key
-        if (node) { 
-          const values = (problem.values) ? 
-            problem.values[key] : 
-            undefined
+      const values = (problem.values) ? 
+        problem.values[key] : 
+        undefined
 
-          if (node instanceof PageElement) {
-            const solveResults = this.solveElement(
-              problem, node, values, options 
-            )
+      if (node instanceof PageElement) {
+        const solveResults = this.solveElement(
+          problem, node, values, options 
+        )
 
-            if (solveResults.nodeSupported) {
-              results[key] = solveResults.result
-            }
-          } else if (node instanceof PageElementMap) {
-            const solveResults = this.solveMap(
-              problem, node, <Record<string, ValueType>> values, options 
-            )
-
-            if (Object.keys(solveResults).length > 0) {
-              results[key] = solveResults
-            }
-          } else if (node instanceof PageElementList) {
-            const solveResults = this.solveList(
-              problem, node, <Record<string, ValueType>> values, options 
-            )
-
-            if (Object.keys(solveResults).length > 0) {
-              results[key] = solveResults
-            }
-          } else if (node instanceof PageElementGroup) {
-            const solveResults = this.solveGroup(
-              problem, node, <Record<string, ValueType>> values, options 
-            )
-
-            if (Object.keys(solveResults).length > 0) {
-              results[key] = solveResults
-            }
-          } else {
-            throw new Error( `Unknown Element Type: ${node.constructor.name}` )
-          }
-        } 
-        else if ( options.throwUnmatchedKey ) {
-          throw new Error(`Key ${key} did not match any node name in context: ${content}`)
+        if (solveResults.nodeSupported) {
+          results[key] = solveResults.result
         }
-      }
+      } else if (node instanceof PageElementMap) {
+        const solveResults = this.solveMap(
+          problem, node, <Record<string, ValueType>> values, options 
+        )
+
+        if (Object.keys(solveResults).length > 0) {
+          results[key] = solveResults
+        }
+      } else if (node instanceof PageElementList) {
+        const solveResults = this.solveList(
+          problem, node, <Record<string, ValueType>> values, options 
+        )
+
+        if (Object.keys(solveResults).length > 0) {
+          results[key] = solveResults
+        }
+      } else if (node instanceof PageElementGroup) {
+        const solveResults = this.solveGroup(
+          problem, node, <Record<string, ValueType>> values, options 
+        )
+
+        if (Object.keys(solveResults).length > 0) {
+          results[key] = solveResults
+        }
+      } else {
+        throw new Error( `Unknown Element Type: ${node.constructor.name}` )
+      }                     
     }
 
     return results
@@ -170,11 +180,14 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
       throw new Error(`Walker could not identify list ${list.__getNodeId()}: Please set a list identifier before calling a group function!`)
     }
 
-    if ( values ) { // if e.g. values for SetValue are defined
+    if ( values && typeof values === 'object' ) { // if e.g. values for SetValue are defined
       for ( const key in values ) {
-        if (!identifiedObject.hasOwnProperty(key)) {
+        if (!identifiedObject.hasOwnProperty(key) || typeof identifiedObject[key] === 'undefined') {
           if (options.throwUnmatchedKey) {
-            throw new Error(`Key ${key} did not match any element in list: ${identifiedObject}`)
+            throw new Error(`Key '${key}' did not match any element in list identifier: ${JSON.stringify(
+              identifiedObject,
+              function(k, v) { if (v === undefined) { return null; } return v; }
+            )}`)
           }
         } else {
           this.writeNodeResult(results, key, problem, identifiedObject[key], values[key], options)
@@ -201,11 +214,14 @@ export class PageElementGroupWalker<Store extends Workflo.IPageElementStore> {
 
     const results: Record<K, ResultType> = Object.create(Object.prototype)
 
-    if ( values ) { // if e.g. values for SetValue are defined
+    if ( values  && typeof values === 'object' ) { // if e.g. values for SetValue are defined
       for ( const key in values ) {
         if (!map.$.hasOwnProperty(key)) {
           if (options.throwUnmatchedKey) {
-            throw new Error(`Key ${key} did not match any element in map: ${map.$}`)
+            throw new Error(`Key ${key} did not match any element in map: ${JSON.stringify(
+              map.$,
+              function(k, v) { if (v === undefined) { return null; } return v; }
+            )}`)
           }
         } else {
           this.writeNodeResult(results, key, problem, map.$[key], values[key], options)

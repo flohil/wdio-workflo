@@ -15,6 +15,11 @@ class TextGroup extends _1.PageElementGroup {
         var superOpts = __rest(_a, []);
         super(superOpts);
     }
+    /**
+     * If using filter, only those element text will be returned which are defined and truthy in filter.
+     *
+     * @param param0
+     */
     GetText({ filter, options } = {}) {
         return this.Solve({
             values: Workflo.Object.stripMaskDeep(filter),
