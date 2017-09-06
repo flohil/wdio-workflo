@@ -38,7 +38,6 @@ export class PageElementList<
   protected disableCache: boolean
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected elementOptions: PageElementOptions
-  protected type: string
   protected identifier: IPageElementListIdentifier<Store, PageElementType>
   protected identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>
@@ -63,7 +62,6 @@ export class PageElementList<
     this.selector = selector
     this.elementOptions = elementOptions
     this.elementStoreFunc = elementStoreFunc
-    this.type = 'ElementList' // used by group walker to detect list
     this.identifier = identifier
     this.identifiedObjCache = {}
 

@@ -2,12 +2,16 @@ import { PageNode, IPageNodeOpts } from './'
 import { XPathBuilder } from '../builders'
 import * as htmlParser from 'htmlparser2'
 
-export interface IPageElementOpts<Store extends Workflo.IPageElementStore> extends IPageNodeOpts<Store> {
+export interface IPageElementOpts<
+  Store extends Workflo.IPageElementStore
+> extends IPageNodeOpts<Store> {
   wait?: Workflo.WaitType
   timeout?: number
 }
 
-export class PageElement<Store extends Workflo.IPageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
+export class PageElement<
+  Store extends Workflo.IPageElementStore
+> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
   protected wait: Workflo.WaitType
   protected timeout: number
   protected _$: Store

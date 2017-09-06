@@ -16,10 +16,12 @@ export interface IPageElementMapIdentifier<K extends string> {
 // alternatively, call refresh() when the times of structure changes are known
 export interface IPageElementMapOpts<
   Store extends Workflo.IPageElementStore,
+  K extends string,
   PageElementType extends Workflo.IPageElement<Store>,
   PageElementOptions
 > extends IPageNodeOpts<Store> {
   store: Store,
+  identifier: IPageElementMapIdentifier<K>,
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
   elementOptions?: PageElementOptions
 }
@@ -33,25 +35,23 @@ export class PageElementMap<
 > extends PageNode<Store> implements Workflo.PageNode.INode {
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected elementOptions: PageElementOptions
-  protected type: string
   protected identifier: IPageElementMapIdentifier<K>
   protected _$: Record<K, PageElementType>
 
   constructor( 
     protected selector: string,
-    identifier: IPageElementMapIdentifier<K>,
     { 
+      identifier,
       elementStoreFunc,
       elementOptions,
       ...superOpts
-    } : IPageElementMapOpts<Store, PageElementType, PageElementOptions> 
+    } : IPageElementMapOpts<Store, K, PageElementType, PageElementOptions> 
   ) {
     super(selector, superOpts)
     
     this.selector = selector
     this.elementOptions = elementOptions
     this.elementStoreFunc = elementStoreFunc
-    this.type = 'ElementMap' // used by group walker to detect map
     this.identifier = identifier
 
     this._$ = Workflo.Object.mapProperties(

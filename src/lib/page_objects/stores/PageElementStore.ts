@@ -205,19 +205,16 @@ export class PageElementStore {
 
   ElementMap<K extends string>(
     selector: Workflo.XPath,
-    identifier: IPageElementMapIdentifier<K>,
     options: Pick<
-      IPageElementMapOpts<this, PageElement<this>, IPageElementOpts<this>>, 
-      "elementOptions"
+      IPageElementMapOpts<this, K, PageElement<this>, IPageElementOpts<this>>, 
+      "elementOptions" | "identifier"
     >
   ) {
-    return this.getMap<
-      IPageElementMapOpts<this, PageElement<this>, IPageElementOpts<this>>, 
-      PageElementMap<this, K, PageElement<this>, IPageElementOpts<this>>,
-      K
+    return this.get<
+      IPageElementMapOpts<this, K, PageElement<this>, IPageElementOpts<this>>, 
+      PageElementMap<this, K, PageElement<this>, IPageElementOpts<this>>
     > (
       selector,
-      identifier,
       PageElementMap,
       {
         store: this,
@@ -255,29 +252,6 @@ export class PageElementStore {
 
     if(!(id in this.instanceCache)) {
       const result = new type(_selector, options)
-      this.instanceCache[id] = result
-    }
-
-    return this.instanceCache[id]
-  }
-
-  protected getMap<O, T, K extends string>(
-    selector: Workflo.XPath,
-    identifier: IPageElementMapIdentifier<K>,
-    type: { new(selector: string, identifier: IPageElementMapIdentifier<K>, options: O): T }, 
-    options: O = Object.create(Object.prototype)
-  ) : T {
-    const _selector = (selector instanceof XPathBuilder) ? this.xPathBuilder.build() : selector
-
-    // catch: selector must not contain |
-    if (_selector.indexOf('|||') > -1) {
-      throw new Error(`Selector must not contain character sequence '|||': ${_selector}`)
-    }
-
-    const id = `${_selector}|||${type}|||${options.toString()}`
-
-    if(!(id in this.instanceCache)) {
-      const result = new type(_selector, identifier, options)
       this.instanceCache[id] = result
     }
 
@@ -346,4 +320,4 @@ const identifier: {
   func: (mapSelector, mappingValue) => mapSelector + mappingValue
 }
 
-const map = store.ElementMap("//div", identifier, {}).$.dashboard
+const map = store.ElementMap("//div", {identifier: identifier}).$.dashboard

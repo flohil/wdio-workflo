@@ -47,6 +47,18 @@ declare global {
       PageElementOptions
     > {}
 
+    interface IPageElementMap<
+      Store extends Workflo.IPageElementStore,
+      K extends string,
+      PageElementType extends Workflo.IPageElement<Store>,
+      PageElementOptions
+    > extends pageObjects.elements.PageElementMap<
+      Store,
+      K,
+      PageElementType, 
+      PageElementOptions
+    > {}
+
     interface IPageElementGroup<
       Store extends Workflo.IPageElementStore, 
       Content extends {[key: string] : Workflo.PageNode.INode}, 
