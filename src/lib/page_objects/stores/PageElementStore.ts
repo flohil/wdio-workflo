@@ -50,7 +50,7 @@ export class PageElementStore {
   // id is a string to uniquely identify a group.
   // If id is not defined, the group instance will be identified
   // by a concatenated string of its node key names and types.
-  ElementGroup<Content extends {[key: string] : Workflo.PageNode.INode}>(
+  ElementGroup<Content extends Record<string, Workflo.PageNode.INode>> (
     content: Content
   ) {
     return this.getGroup<
@@ -75,7 +75,7 @@ export class PageElementStore {
     )
   }
 
-  TextGroup<Content extends {[key: string] : Workflo.PageNode.INode}>(
+  TextGroup<Content extends Record<string, Workflo.PageNode.INode>>(
     content: Content
   ) {
     return this.getGroup<
@@ -100,7 +100,7 @@ export class PageElementStore {
     )
   }
 
-  ValueGroup<Content extends {[key: string] : Workflo.PageNode.INode}>(
+  ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(
     content: Content
   ) {
     return this.getGroup<
@@ -161,7 +161,7 @@ export class PageElementStore {
 
   Input(
     selector: Workflo.XPath,
-    options?: Pick<IInputOpts<this>, "timeout" | "wait">
+    options: Pick<IInputOpts<this>, "timeout" | "wait" | "something">
   ) {
     return this.get<IInputOpts<this>, Input<this>>(
       selector,
@@ -175,7 +175,7 @@ export class PageElementStore {
 
   // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
 
-  List<
+  protected List<
     PageElementType extends PageElement<this>, 
     PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
   > (
@@ -202,7 +202,7 @@ export class PageElementStore {
   ElementList(
     selector: Workflo.XPath, 
     options?: Pick<
-      IPageElementListOpts<this, PageElement<this>, IPageElementOpts<this>>, 
+      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait">>, 
       "wait" | "timeout" | "elementOptions" | "disableCache" | "identifier"
     >
   ) {
@@ -218,7 +218,7 @@ export class PageElementStore {
   ExistElementList(
     selector: Workflo.XPath, 
     options?: Pick<
-      IPageElementListOpts<this, PageElement<this>, IPageElementOpts<this>>,
+      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
       "timeout" | "elementOptions" | "disableCache" | "identifier"
     >
   ) {
@@ -226,6 +226,23 @@ export class PageElementStore {
       selector,
       {
         elementStoreFunc: this.ExistElement,
+        wait: Workflo.WaitType.exist,
+        ...options
+      }
+    )
+  }
+
+  InputList(
+    selector: Workflo.XPath, 
+    options: Pick<
+      IPageElementListOpts<this, Input<this>, IInputOpts<this>>,
+      "timeout" | "elementOptions" | "disableCache" | "identifier"
+    >
+  ) {
+    return this.List(
+      selector,
+      {
+        elementStoreFunc: this.Input,
         ...options
       }
     )
@@ -233,7 +250,7 @@ export class PageElementStore {
 
   // Element Maps
 
-  Map<
+  protected Map<
     K extends string, 
     PageElementType extends PageElement<this>, 
     PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
@@ -260,8 +277,44 @@ export class PageElementStore {
 
   ElementMap<K extends string>(
     selector: Workflo.XPath,
-    options: Pick<
+    {
+      elementOptions = {},
+      ...options
+    }: Pick<
       IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>, 
+      "elementOptions" | "identifier"
+    >
+  ) {
+    return this.Map(
+      selector,
+      {
+        elementStoreFunc: this.Element,
+        elementOptions: elementOptions,
+        ...options
+      }
+    )
+  }
+
+  ExistElementMap<K extends string>(
+    selector: Workflo.XPath,
+    options: Pick<
+      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>, 
+      "elementOptions" | "identifier"
+    >
+  ) {
+    return this.Map(
+      selector,
+      {
+        elementStoreFunc: this.ExistElement,
+        ...options
+      }
+    )
+  }
+
+  InputMap<K extends string>(
+    selector: Workflo.XPath,
+    options: Pick<
+      IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, 'timeout' | 'wait' | 'something'>>, 
       "elementOptions" | "identifier"
     >
   ) {
@@ -358,11 +411,39 @@ export class PageElementStore {
 
 const store = new PageElementStore()
 
-const inputList = store.List(
+const inputList = store.InputList(
   '//input',
   {
-    elementStoreFunc: store.Input
+    
   }
 )
 
 inputList.get(0).setValue('asdf')
+
+const inputMap = store.InputMap (
+  '//input',
+  {
+    identifier: {
+      mappingObject: {
+        "search": "Suche"
+      },
+      func: (p, v) => p + v
+    },
+    elementOptions: {
+      something: "asdf"
+    }
+  }
+)
+
+const elementMap = store.ElementMap (
+  '//input',
+  {
+    identifier: {
+      mappingObject: {
+        "search": "Suche"
+      },
+      func: (p, v) => p + v
+    }
+  }
+)
+

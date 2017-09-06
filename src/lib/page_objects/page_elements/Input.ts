@@ -1,7 +1,9 @@
 import { PageElement, IPageElementOpts } from './'
 import { PageElementStore } from '../stores'
 
-export interface IInputOpts<Store extends PageElementStore> extends IPageElementOpts<Store> {}
+export interface IInputOpts<Store extends PageElementStore> extends IPageElementOpts<Store> {
+  something: string
+}
 
 export class Input<Store extends PageElementStore> extends PageElement<Store> implements Workflo.PageNode.ISetValue<string> {
   

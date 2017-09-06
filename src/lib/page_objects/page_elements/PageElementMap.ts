@@ -24,7 +24,7 @@ export interface IPageElementMapOpts<
   store: Store,
   identifier: IPageElementMapIdentifier<K>,
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
-  elementOptions?: PageElementOptions
+  elementOptions: PageElementOptions
 }
 
 // holds several PageElement instances of the same type
