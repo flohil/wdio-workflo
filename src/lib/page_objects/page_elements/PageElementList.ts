@@ -165,49 +165,57 @@ export class PageElementList<
     return this
   }
 
-  // Returns an object consisting of this._identifier.object's keys
-  // as keys and the elements mapped by this._identifier.func()
-  // as values.
-  // 
-  // If this.identifier is undefined, returns undefined.
-  // If cached option is set to true, returns cached identified elements object
-  // if it exists and otherwise fetches new identified elements object.
-  // Per default, returns a cached version of this identifier was already
-  // used unless resetCache is set to true.
-  // This means that the returned structure of the list may reflect an earlier state,
-  // while its contents are still guaranteed to be refreshed on each access!
-  //
-  // Attention: this may take a long time, try to avoid: if only single elements of list
-  // are needed, use firstByXXX instead
+  /** 
+   * Returns an object consisting of this._identifier.object's keys
+   * as keys and the elements mapped by this._identifier.func()
+   * as values.
+   * 
+   * If this.identifier is undefined, the mapped object's keys will be defined
+   * by the index of an element's occurence in the element list (first element -> 0, seconed element -> 1...)
+   *
+   * If cached option is set to true, returns cached identified elements object
+   * if it exists and otherwise fetches new identified elements object.
+   * Per default, returns a cached version of this identifier was already
+   * used unless resetCache is set to true.
+   * This means that the returned structure of the list may reflect an earlier state,
+   * while its contents are still guaranteed to be refreshed on each access!
+   *
+   * Attention: this may take a long time, try to avoid: if only single elements of list
+   * are needed, use firstBy() instead. 
+   **/
   identify(
     {identifier = this.identifier, resetCache = false}: 
     {identifier?: IPageElementListIdentifier<Store, PageElementType>, resetCache?: boolean} = {}
   ) {
-    if (!identifier) {
-      return undefined
-    } 
-
-    const cacheKey = `${identifier.mappingObject.toString()}|||${identifier.func.toString()}`
+    const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index'
 
     if (this.disableCache || resetCache || !(cacheKey in this.identifiedObjCache)) {
-      const queryResults: {[key:string]:PageElementType} = {}
-
-      // create hash where result of identifier func is key
-      // and list element is value
-      this.listElements.forEach( 
-        ( element ) => { 
-          const resultKey = identifier.func( element )
-          queryResults[ resultKey ] = element
-        }
-      )
+      const listElements = this.listElements
 
       const mappedObj: {[key: string] : PageElementType} = {}
 
-      // Assign each key in identifier's object a list element by
-      // mapping queryResult's keys to identifier mapObject's values
-      for ( const key in identifier.mappingObject ) {
-        if ( identifier.mappingObject.hasOwnProperty( key ) ) {
-          mappedObj[ key ] = queryResults[ identifier.mappingObject[ key ] ]
+      if (identifier) { // manually set identifier
+        const queryResults: {[key:string]:PageElementType} = {}
+        
+        // create hash where result of identifier func is key
+        // and list element is value
+        listElements.forEach( 
+          ( element ) => { 
+            const resultKey = identifier.func( element )
+            queryResults[ resultKey ] = element
+          }
+        )
+
+        // Assign each key in identifier's object a list element by
+        // mapping queryResult's keys to identifier mapObject's values
+        for ( const key in identifier.mappingObject ) {
+          if ( identifier.mappingObject.hasOwnProperty( key ) ) {
+            mappedObj[ key ] = queryResults[ identifier.mappingObject[ key ] ]
+          }
+        }
+      } else { // default identifier -> mapped by index of results
+        for(let i = 0; i < listElements.length; ++i) {
+          mappedObj[i] = listElements[i]
         }
       }
 

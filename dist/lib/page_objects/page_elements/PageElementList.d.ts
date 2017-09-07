@@ -38,6 +38,24 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     readonly _listElements: PageElementType[];
     readonly listElements: PageElementType[];
     setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>): this;
+    /**
+     * Returns an object consisting of this._identifier.object's keys
+     * as keys and the elements mapped by this._identifier.func()
+     * as values.
+     *
+     * If this.identifier is undefined, the mapped object's keys will be defined
+     * by the index of an element's occurence in the element list (first element -> 0, seconed element -> 1...)
+     *
+     * If cached option is set to true, returns cached identified elements object
+     * if it exists and otherwise fetches new identified elements object.
+     * Per default, returns a cached version of this identifier was already
+     * used unless resetCache is set to true.
+     * This means that the returned structure of the list may reflect an earlier state,
+     * while its contents are still guaranteed to be refreshed on each access!
+     *
+     * Attention: this may take a long time, try to avoid: if only single elements of list
+     * are needed, use firstBy() instead.
+     **/
     identify({identifier, resetCache}?: {
         identifier?: IPageElementListIdentifier<Store, PageElementType>;
         resetCache?: boolean;

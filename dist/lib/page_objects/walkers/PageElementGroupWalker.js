@@ -124,9 +124,6 @@ class PageElementGroupWalker {
     solveList(problem, list, values, options) {
         const results = Object.create(Object.prototype);
         const identifiedObject = list.identify();
-        if (typeof list.identify() === 'undefined') {
-            throw new Error(`Walker could not identify list ${list.__getNodeId()}: Please set a list identifier before calling a group function!`);
-        }
         if (values && typeof values === 'object') {
             for (const key in values) {
                 if (!identifiedObject.hasOwnProperty(key) || typeof identifiedObject[key] === 'undefined') {

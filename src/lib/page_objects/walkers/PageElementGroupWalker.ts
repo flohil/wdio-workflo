@@ -172,14 +172,8 @@ export class PageElementGroupWalker<Store extends PageElementStore> {
     values: Record<string, ValueType>, 
     options: Workflo.IWalkerOptions 
   ) : Record<string, ResultType> {
-
     const results: Record<string, ResultType> = Object.create(Object.prototype)
-
     const identifiedObject = list.identify()
-
-    if (typeof list.identify() === 'undefined') {
-      throw new Error(`Walker could not identify list ${list.__getNodeId()}: Please set a list identifier before calling a group function!`)
-    }
 
     if ( values && typeof values === 'object' ) { // if e.g. values for SetValue are defined
       for ( const key in values ) {
@@ -212,7 +206,6 @@ export class PageElementGroupWalker<Store extends PageElementStore> {
     values: Record<K, ValueType>,
     options: Workflo.IWalkerOptions 
   ) : Record<K, ResultType> {
-
     const results: Record<K, ResultType> = Object.create(Object.prototype)
 
     if ( values  && typeof values === 'object' ) { // if e.g. values for SetValue are defined
