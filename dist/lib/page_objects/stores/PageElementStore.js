@@ -63,24 +63,24 @@ class PageElementStore {
         return this.Element(selector, Object.assign({ wait: "exist" /* exist */ }, options));
     }
     // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
-    List(selector, type, options) {
-        return this.get(selector, type, options);
+    List(selector, options) {
+        return this.get(selector, page_elements_1.PageElementList, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
     }
     ElementList(selector, options) {
-        return this.List(selector, page_elements_1.PageElementList, Object.assign({ store: this, elementStoreFunc: this.Element, elementOptions: {} }, options));
+        return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.Element }, options));
     }
     ExistElementList(selector, options) {
-        return this.List(selector, page_elements_1.PageElementList, Object.assign({ store: this, elementOptions: {}, elementStoreFunc: this.ExistElement, wait: "exist" /* exist */ }, options));
+        return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.ExistElement, wait: "exist" /* exist */ }, options));
     }
     // Element Maps
-    Map(selector, type, options) {
-        return this.get(selector, type, options);
+    Map(selector, options) {
+        return this.get(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
     }
     ElementMap(selector, options) {
-        return this.Map(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: this.Element, elementOptions: {} }, options));
+        return this.Map(selector, Object.assign({ elementStoreFunc: this.Element, elementOptions: {} }, options));
     }
     ExistElementMap(selector, options) {
-        return this.Map(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: this.ExistElement, elementOptions: {} }, options));
+        return this.Map(selector, Object.assign({ elementStoreFunc: this.ExistElement, elementOptions: {} }, options));
     }
     // Functions to retrieve element instances
     /**
