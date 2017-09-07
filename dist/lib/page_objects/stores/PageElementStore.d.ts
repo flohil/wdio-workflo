@@ -17,12 +17,16 @@ export declare class PageElementStore {
      */
     Element(selector: Workflo.XPath, options?: Pick<IPageElementOpts<this>, "timeout" | "wait">): PageElement<this>;
     ExistElement(selector: Workflo.XPath, options?: Pick<IPageElementOpts<this>, "timeout">): PageElement<this>;
-    protected List<PageElementType extends PageElement<this>, PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>(selector: Workflo.XPath, options: Pick<IPageElementListOpts<this, PageElementType, PageElementOpts>, "wait" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier">): PageElementList<this, PageElementType, PageElementOpts>;
-    ElementList(selector: Workflo.XPath, options?: PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait">>, "wait" | "timeout" | "disableCache" | "identifier", "elementOptions">): PageElementList<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait"> | {}>;
-    ExistElementList(selector: Workflo.XPath, options?: PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>, "timeout" | "disableCache" | "identifier", "elementOptions">): PageElementList<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout"> | {}>;
-    protected Map<K extends string, PageElementType extends PageElement<this>, PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>(selector: Workflo.XPath, options: Pick<IPageElementMapOpts<this, K, PageElementType, PageElementOpts>, "elementOptions" | "identifier" | "elementStoreFunc">): PageElementMap<this, K, PageElementType, PageElementOpts>;
-    ElementMap<K extends string>(selector: Workflo.XPath, options: PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>, "identifier", "elementOptions">): PageElementMap<this, K, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait"> | {}>;
-    ExistElementMap<K extends string>(selector: Workflo.XPath, options: PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>, "identifier", "elementOptions">): PageElementMap<this, K, PageElement<this>, Pick<IPageElementOpts<this>, "timeout"> | {}>;
+    protected List<PageElementType extends PageElement<this>, PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>, ListType extends PageElementList<this, PageElementType, PageElementOpts>, ListOpts extends IPageElementListOpts<this, PageElementType, PageElementOpts>>(selector: Workflo.XPath, type: {
+        new (selector: string, options: ListOpts): ListType;
+    }, options: ListOpts): ListType;
+    ElementList(selector: Workflo.XPath, options?: PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait">>, "wait" | "timeout" | "disableCache" | "identifier", "elementOptions">): PageElementList<any, any, any>;
+    ExistElementList(selector: Workflo.XPath, options?: PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>, "timeout" | "disableCache" | "identifier", "elementOptions">): PageElementList<any, any, any>;
+    protected Map<K extends string, PageElementType extends PageElement<this>, PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>, MapType extends PageElementMap<this, K, PageElementType, PageElementOpts>, MapOpts extends IPageElementMapOpts<this, K, PageElementType, PageElementOpts>>(selector: Workflo.XPath, type: {
+        new (selector: string, options: MapOpts): MapType;
+    }, options: MapOpts): MapType;
+    ElementMap<K extends string>(selector: Workflo.XPath, options: PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>, "identifier", "elementOptions">): PageElementMap<any, any, any, any>;
+    ExistElementMap<K extends string>(selector: Workflo.XPath, options: PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>, "identifier", "elementOptions">): PageElementMap<any, any, any, any>;
     /**
      * Returns a page element with the given selector, type and options.
      *
