@@ -12,7 +12,6 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     wait?: Workflo.WaitType;
     timeout?: number;
     disableCache?: boolean;
-    store: Store;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
