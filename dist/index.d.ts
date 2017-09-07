@@ -1,5 +1,17 @@
 import * as pageObjects from './lib/page_objects';
 declare global  {
+    /**
+     * Makes all properties of Type optional, except for those whose keys are passed as K.
+     */
+    type PartialRequire<Type, K extends keyof Type> = Partial<Type> & Pick<Type, K>;
+    /**
+     * Type is the original object.
+     *
+     * K represents the original object's property keys to be picked from the original object unaltered.
+     *
+     * KPartial represents the original object's property keys to be picked from the original object and turned into optional properties.
+     */
+    type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>;
     namespace Workflo {
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;

@@ -14,7 +14,7 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     disableCache?: boolean;
     store: Store;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    elementOptions?: PageElementOptions;
+    elementOptions: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
 export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {

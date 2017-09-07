@@ -23,7 +23,7 @@ export interface IPageElementListOpts<
   disableCache?: boolean,
   store: Store,
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
-  elementOptions?: PageElementOptions
+  elementOptions: PageElementOptions
   identifier?: IPageElementListIdentifier<Store, PageElementType>
 }
 

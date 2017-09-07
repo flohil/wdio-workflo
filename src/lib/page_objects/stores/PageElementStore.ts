@@ -6,10 +6,7 @@ import {
   PageElementMap, IPageElementMapOpts, IPageElementMapIdentifier,
   PageElementGroup, IPageElementGroupOpts,
   TextGroup, ITextGroupOpts,
-  ValueGroup, IValueGroupOpts,
-
-
-  Input, IInputOpts
+  ValueGroup, IValueGroupOpts
 } from '../page_elements'
 
 import {
@@ -159,20 +156,6 @@ export class PageElementStore {
     )
   }
 
-  Input(
-    selector: Workflo.XPath,
-    options: Pick<IInputOpts<this>, "timeout" | "wait" | "something">
-  ) {
-    return this.get<IInputOpts<this>, Input<this>>(
-      selector,
-      Input,
-      {
-        store: this,
-        ...options
-      }
-    )
-  }
-
   // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
 
   protected List<
@@ -201,14 +184,16 @@ export class PageElementStore {
 
   ElementList(
     selector: Workflo.XPath, 
-    options?: Pick<
+    options?: PickPartial<
       IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait">>, 
-      "wait" | "timeout" | "elementOptions" | "disableCache" | "identifier"
+      "wait" | "timeout" | "disableCache" | "identifier",
+      "elementOptions"
     >
   ) {
     return this.List(
       selector,
       {
+        elementOptions: {},
         elementStoreFunc: this.Element,
         ...options
       }
@@ -217,32 +202,18 @@ export class PageElementStore {
 
   ExistElementList(
     selector: Workflo.XPath, 
-    options?: Pick<
+    options?: PickPartial<
       IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
-      "timeout" | "elementOptions" | "disableCache" | "identifier"
+      "timeout" | "disableCache" | "identifier",
+      "elementOptions"
     >
   ) {
     return this.List(
       selector,
       {
+        elementOptions: {},
         elementStoreFunc: this.ExistElement,
         wait: Workflo.WaitType.exist,
-        ...options
-      }
-    )
-  }
-
-  InputList(
-    selector: Workflo.XPath, 
-    options: Pick<
-      IPageElementListOpts<this, Input<this>, IInputOpts<this>>,
-      "timeout" | "elementOptions" | "disableCache" | "identifier"
-    >
-  ) {
-    return this.List(
-      selector,
-      {
-        elementStoreFunc: this.Input,
         ...options
       }
     )
@@ -277,19 +248,17 @@ export class PageElementStore {
 
   ElementMap<K extends string>(
     selector: Workflo.XPath,
-    {
-      elementOptions = {},
-      ...options
-    }: Pick<
+    options: PickPartial<
       IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>, 
-      "elementOptions" | "identifier"
+      "identifier",
+      "elementOptions"
     >
   ) {
     return this.Map(
       selector,
       {
         elementStoreFunc: this.Element,
-        elementOptions: elementOptions,
+        elementOptions: {},
         ...options
       }
     )
@@ -297,31 +266,17 @@ export class PageElementStore {
 
   ExistElementMap<K extends string>(
     selector: Workflo.XPath,
-    options: Pick<
+    options: PickPartial<
       IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>, 
-      "elementOptions" | "identifier"
+      "identifier",
+      "elementOptions"
     >
   ) {
     return this.Map(
       selector,
       {
         elementStoreFunc: this.ExistElement,
-        ...options
-      }
-    )
-  }
-
-  InputMap<K extends string>(
-    selector: Workflo.XPath,
-    options: Pick<
-      IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, 'timeout' | 'wait' | 'something'>>, 
-      "elementOptions" | "identifier"
-    >
-  ) {
-    return this.Map(
-      selector,
-      {
-        elementStoreFunc: this.Element,
+        elementOptions: {},
         ...options
       }
     )
@@ -408,42 +363,3 @@ export class PageElementStore {
     return this.instanceCache[key]
   }
 }
-
-const store = new PageElementStore()
-
-const inputList = store.InputList(
-  '//input',
-  {
-    
-  }
-)
-
-inputList.get(0).setValue('asdf')
-
-const inputMap = store.InputMap (
-  '//input',
-  {
-    identifier: {
-      mappingObject: {
-        "search": "Suche"
-      },
-      func: (p, v) => p + v
-    },
-    elementOptions: {
-      something: "asdf"
-    }
-  }
-)
-
-const elementMap = store.ElementMap (
-  '//input',
-  {
-    identifier: {
-      mappingObject: {
-        "search": "Suche"
-      },
-      func: (p, v) => p + v
-    }
-  }
-)
-

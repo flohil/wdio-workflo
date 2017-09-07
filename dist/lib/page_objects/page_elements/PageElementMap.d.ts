@@ -13,7 +13,7 @@ export interface IPageElementMapOpts<Store extends PageElementStore, K extends s
     store: Store;
     identifier: IPageElementMapIdentifier<K>;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    elementOptions?: PageElementOptions;
+    elementOptions: PageElementOptions;
 }
 export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
     protected selector: string;
