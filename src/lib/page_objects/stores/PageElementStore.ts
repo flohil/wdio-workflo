@@ -133,7 +133,7 @@ export class PageElementStore {
     selector: Workflo.XPath,
     options?: Pick<IPageElementOpts<this>, "timeout" | "wait">
   ) {
-    return this.get<IPageElementOpts<this>, PageElement<this>>(
+    return this.get<PageElement<this>, IPageElementOpts<this>>(
       selector,
       PageElement,
       {
@@ -169,8 +169,8 @@ export class PageElementStore {
     >
   ) {
     return this.get<
-      IPageElementListOpts<this, PageElementType, PageElementOpts>, 
-      PageElementList<this, PageElementType, PageElementOpts>
+      PageElementList<this, PageElementType, PageElementOpts>,
+      IPageElementListOpts<this, PageElementType, PageElementOpts>
     > (
       selector,
       PageElementList,
@@ -233,8 +233,8 @@ export class PageElementStore {
     >
   ) {
     return this.get<
-      IPageElementMapOpts<this, K, PageElementType, PageElementOpts>, 
-      PageElementMap<this, K, PageElementType, PageElementOpts>
+      PageElementMap<this, K, PageElementType, PageElementOpts>,
+      IPageElementMapOpts<this, K, PageElementType, PageElementOpts>
     > (
       selector,
       PageElementMap,
@@ -294,11 +294,11 @@ export class PageElementStore {
    * @param type 
    * @param options 
    */
-  protected get<O, T>(
+  protected get<Type, Options>(
     selector: Workflo.XPath, 
-    type: { new(selector: string, options: O): T }, 
-    options: O = Object.create(Object.prototype)
-  ) : T {
+    type: { new(selector: string, options: Options): Type }, 
+    options: Options = Object.create(Object.prototype)
+  ) : Type {
     const _selector = (selector instanceof XPathBuilder) ? this.xPathBuilder.build() : selector
 
     // catch: selector must not contain |

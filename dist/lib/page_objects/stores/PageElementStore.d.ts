@@ -33,9 +33,9 @@ export declare class PageElementStore {
      * @param type
      * @param options
      */
-    protected get<O, T>(selector: Workflo.XPath, type: {
-        new (selector: string, options: O): T;
-    }, options?: O): T;
+    protected get<Type, Options>(selector: Workflo.XPath, type: {
+        new (selector: string, options: Options): Type;
+    }, options?: Options): Type;
     protected getGroup<Store extends PageElementStore, Content extends {
         [key: string]: Workflo.PageNode.INode;
     }, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts, GroupType extends PageElementGroup<Store, Content, WalkerType, WalkerOptions>, GroupOptions extends Pick<IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>, "content" | "walkerType" | "walkerOptions">>(groupType: {
