@@ -160,25 +160,21 @@ export class PageElementStore {
 
   protected List<
     PageElementType extends PageElement<this>, 
-    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
+    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>,
+    ListType extends PageElementList<this, PageElementType, PageElementOpts>,
+    ListOpts extends IPageElementListOpts<this, PageElementType, PageElementOpts>
   > (
-    selector: Workflo.XPath, 
-    options: Pick<
-      IPageElementListOpts<this, PageElementType, PageElementOpts>, 
-      "wait" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier"
-    >
+    selector: Workflo.XPath,
+    type: { new(selector: string, options: ListOpts): ListType }, 
+    options: ListOpts
   ) {
     return this.get<
-      IPageElementListOpts<this, PageElementType, PageElementOpts>, 
-      PageElementList<this, PageElementType, PageElementOpts>
+      ListOpts, 
+      ListType
     > (
       selector,
-      PageElementList,
-      {
-        store: this,
-        elementStoreFunc: options.elementStoreFunc,
-        ...options
-      }
+      type,
+      options
     )
   }
 
@@ -192,9 +188,11 @@ export class PageElementStore {
   ) {
     return this.List(
       selector,
+      PageElementList,
       {
-        elementOptions: {},
+        store: this,
         elementStoreFunc: this.Element,
+        elementOptions: {},
         ...options
       }
     )
@@ -210,7 +208,9 @@ export class PageElementStore {
   ) {
     return this.List(
       selector,
+      PageElementList,
       {
+        store: this,
         elementOptions: {},
         elementStoreFunc: this.ExistElement,
         wait: Workflo.WaitType.exist,
