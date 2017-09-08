@@ -73,11 +73,6 @@ declare global {
       text = 'text'
     }
 
-    const enum IdentifyBy {
-      text = 'text',
-      value = 'value'
-    }
-
     const enum Comparator {
       equalTo = '==',
       lessThen = '<',
