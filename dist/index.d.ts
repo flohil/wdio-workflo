@@ -46,6 +46,7 @@ declare global  {
             throwUnmatchedKey?: boolean;
             throwSolveError?: boolean;
         }
+        type Value = string | boolean | number;
         const enum WaitType {
             exist = "exist",
             visible = "visible",

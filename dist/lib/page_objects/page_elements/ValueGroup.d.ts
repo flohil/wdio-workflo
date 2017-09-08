@@ -19,7 +19,7 @@ export declare class ValueGroup<Store extends PageElementStore, Content extends 
         options?: Workflo.IWalkerOptions;
     }): Workflo.IRecObj<string | number | boolean>;
     SetValue({values, options}: {
-        values: Workflo.IRecObj<string | boolean | number>;
+        values: Workflo.IRecObj<Workflo.Value>;
         options?: Workflo.IWalkerOptions;
     }): Workflo.IRecObj<void>;
 }
