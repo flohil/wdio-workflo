@@ -35,7 +35,7 @@ export class ValueGroup<
     filter?: Workflo.IRecObj<boolean>,
     options?: Workflo.IWalkerOptions
   } = {} ) {
-    return this.Solve<any, string>({
+    return this.Solve<any, string | boolean | number>({
       values: Workflo.Object.stripMaskDeep(filter),
       solve: ( node ) => {
         if (isGetValueNode(node)) {
@@ -53,10 +53,10 @@ export class ValueGroup<
   }
 
   SetValue( {values, options} : {
-    values: Workflo.IRecObj<string>
+    values: Workflo.IRecObj<string | boolean | number>
     options?: Workflo.IWalkerOptions
   } ) {
-    return this.Solve<string, void>({
+    return this.Solve<string | boolean | number, void>({
       values: values,
       solve: ( node, value ) => {
         if (isSetValueNode(node)) {
@@ -79,6 +79,6 @@ function isGetValueNode(node: any): node is Workflo.PageNode.IGetValue {
   return node.getValue !== undefined;
 }
 
-function isSetValueNode(node: any): node is Workflo.PageNode.ISetValue<string> {
+function isSetValueNode(node: any): node is Workflo.PageNode.ISetValue<string | boolean | number> {
   return node.setValue !== undefined;
 }
