@@ -441,7 +441,7 @@ export class PageElement<
     const interval = 250
     let remainingTimeout = this.timeout
 
-    if (options.moveToOffsets) {
+    if (options && options.moveToOffsets) {
       browser.moveToObject(this.getSelector(), options.moveToOffsets.x || 0, options.moveToOffsets.y || 0)
     }
 

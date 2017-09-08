@@ -341,7 +341,7 @@ class PageElement extends _1.PageNode {
         let errorMessage = '';
         const interval = 250;
         let remainingTimeout = this.timeout;
-        if (options.moveToOffsets) {
+        if (options && options.moveToOffsets) {
             browser.moveToObject(this.getSelector(), options.moveToOffsets.x || 0, options.moveToOffsets.y || 0);
         }
         // wait for other overlapping elements to disappear
