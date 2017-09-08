@@ -52,8 +52,8 @@ export function forEachProperty<T, K extends string>(input: Record<K, T>, func: 
  * 
  * @param obj 
  */
-export function invert(obj: Record<string, string>) : Record<string, string> {
-  const new_obj: Record<string, string> = {}
+export function invert<K extends string>(obj: Record<K, string>) : Record<string, K> {
+  const new_obj: Record<string, K> = {}
 
   for (const prop in obj) {
     if (obj.hasOwnProperty(prop)) {

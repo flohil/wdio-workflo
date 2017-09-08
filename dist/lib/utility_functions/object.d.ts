@@ -22,7 +22,7 @@ export declare function forEachProperty<T, K extends string>(input: Record<K, T>
  *
  * @param obj
  */
-export declare function invert(obj: Record<string, string>): Record<string, string>;
+export declare function invert<K extends string>(obj: Record<K, string>): Record<string, K>;
 /**
  * Returns a new filtered object that only contains those
  * properties of the initial object where func returned true.
