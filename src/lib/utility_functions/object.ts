@@ -10,7 +10,7 @@ import * as _ from 'lodash'
  * @param input 
  * @param func 
  */
-export function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: string) => O) : Record<K, O> {
+export function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => O) : Record<K, O> {
   if (_.isArray(input)) {
     throw new Error(`Input must be an object: ${input}`)
   } else {
@@ -34,7 +34,7 @@ export function mapProperties<T, O, K extends string>(input: Record<K, T>, func:
  * @param input 
  * @param func 
  */
-export function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: string) => void): Record<K, T> {
+export function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => void): Record<K, T> {
   for (const key in input) {
     if (input.hasOwnProperty(key)) {
       func(input[key], key)
@@ -99,7 +99,7 @@ export function filter<T>(obj: Record<string, T>, func: (value: T, key?: string)
  * @param value 
  * @param overwrite 
  */
-export function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: string, value: T, overwrite: boolean = false): Record<K, T | T[]> {
+export function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: K, value: T, overwrite: boolean = false): Record<K, T | T[]> {
   if (obj[key] && !overwrite) {
     let valueArr: T[] = []
     valueArr = valueArr.concat(obj[key])

@@ -8,14 +8,14 @@
  * @param input
  * @param func
  */
-export declare function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: string) => O): Record<K, O>;
+export declare function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => O): Record<K, O>;
 /**
  * Iterates over all properties in an object and executes func on each.
  *
  * @param input
  * @param func
  */
-export declare function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: string) => void): Record<K, T>;
+export declare function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => void): Record<K, T>;
 /**
  * Returns a new object with the original object's keys and values inverted.
  * The original object's values must therefore be implicitly convertable to type string.
@@ -45,7 +45,7 @@ export declare function filter<T>(obj: Record<string, T>, func: (value: T, key?:
  * @param value
  * @param overwrite
  */
-export declare function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: string, value: T, overwrite?: boolean): Record<K, T | T[]>;
+export declare function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: K, value: T, overwrite?: boolean): Record<K, T | T[]>;
 /**
  * Creates a copy of original object in which all
  * key-value pairs matching the passed props are removed.
