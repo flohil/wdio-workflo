@@ -116,7 +116,7 @@ declare global {
        *
        * @param obj
        */
-      export function invert(obj: Record<string, string>): Record<string, string>;
+      export function invert<K extends string>(obj: Record<K, string>): Record<string, K>;
       
       /**
        * Returns a new filtered object that only contains those

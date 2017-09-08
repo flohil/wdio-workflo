@@ -89,7 +89,7 @@ declare global  {
              *
              * @param obj
              */
-            function invert(obj: Record<string, string>): Record<string, string>;
+            function invert<K extends string>(obj: Record<K, string>): Record<string, K>;
             /**
              * Returns a new filtered object that only contains those
              * properties of the initial object where func returned true.
