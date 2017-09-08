@@ -336,11 +336,14 @@ class PageElement extends _1.PageNode {
      * is fulfilled. (eg. element is visible)
      * In this case, postCondition function will be
      */
-    click(postCondition) {
+    click(options) {
         this.initialWait();
         let errorMessage = '';
         const interval = 250;
         let remainingTimeout = this.timeout;
+        if (options.moveToOffsets) {
+            browser.moveToObject(this.getSelector(), options.moveToOffsets.x || 0, options.moveToOffsets.y || 0);
+        }
         // wait for other overlapping elements to disappear
         browser.waitUntil(() => {
             remainingTimeout -= interval;
@@ -358,11 +361,11 @@ class PageElement extends _1.PageNode {
                 }
             }
         }, this.timeout, `Element did not become clickable after timeout: ${this.selector}\n\n${errorMessage}`, interval);
-        if (postCondition && remainingTimeout > 0) {
-            postCondition.timeout = postCondition.timeout || this.timeout;
+        if (options && options.postCondition && remainingTimeout > 0) {
+            options.timeout = options.timeout || this.timeout;
             browser.waitUntil(() => {
                 try {
-                    if (postCondition.func()) {
+                    if (options.postCondition()) {
                         return true;
                     }
                     else {
@@ -374,7 +377,7 @@ class PageElement extends _1.PageNode {
                 catch (error) {
                     errorMessage = error.message;
                 }
-            }, remainingTimeout + postCondition.timeout, `Postcondition for click never became true: ${this.selector}\n\n${errorMessage}`, interval);
+            }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}\n\n${errorMessage}`, interval);
         }
         return this;
     }

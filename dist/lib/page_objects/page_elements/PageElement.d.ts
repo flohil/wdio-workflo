@@ -67,8 +67,12 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
      * is fulfilled. (eg. element is visible)
      * In this case, postCondition function will be
      */
-    click(postCondition?: {
-        func: () => boolean;
+    click(options?: {
+        postCondition: () => boolean;
         timeout?: number;
+        moveToOffsets?: {
+            x?: number;
+            y?: number;
+        };
     }): this;
 }

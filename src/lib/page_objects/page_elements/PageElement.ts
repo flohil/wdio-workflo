@@ -1,3 +1,5 @@
+import * as _ from 'lodash'
+
 import { PageNode, IPageNodeOpts } from './'
 import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
@@ -432,12 +434,16 @@ export class PageElement<
    * is fulfilled. (eg. element is visible)
    * In this case, postCondition function will be 
    */
-  click(postCondition?: {func: () => boolean, timeout?: number}) {
+  click(options?: {postCondition: () => boolean, timeout?: number, moveToOffsets?: {x?: number, y?: number}}) {
     this.initialWait()
 
     let errorMessage = ''
     const interval = 250
     let remainingTimeout = this.timeout
+
+    if (options.moveToOffsets) {
+      browser.moveToObject(this.getSelector(), options.moveToOffsets.x || 0, options.moveToOffsets.y || 0)
+    }
 
     // wait for other overlapping elements to disappear
     browser.waitUntil(() => {
@@ -456,12 +462,12 @@ export class PageElement<
       }
     }, this.timeout, `Element did not become clickable after timeout: ${this.selector}\n\n${errorMessage}`, interval)
 
-    if (postCondition && remainingTimeout > 0) {
-      postCondition.timeout = postCondition.timeout || this.timeout
+    if (options && options.postCondition && remainingTimeout > 0) {
+      options.timeout = options.timeout || this.timeout
 
       browser.waitUntil(() => {
         try {
-          if (postCondition.func()) {
+          if (options.postCondition()) {
             return true
           } else {
               if (this.isVisible() && this.isEnabled()) {
@@ -471,7 +477,7 @@ export class PageElement<
         } catch( error ) {
           errorMessage = error.message
         }
-      }, remainingTimeout + postCondition.timeout, `Postcondition for click never became true: ${this.selector}\n\n${errorMessage}`, interval)
+      }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}\n\n${errorMessage}`, interval)
     }
 
     return this
