@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const optimist = require("optimist");
+const webdriverio_workflo_1 = require("webdriverio-workflo");
 const pkg = require('../../package.json');
 const VERSION = pkg.version;
 const ALLOWED_ARGV = [
     'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
-    'connectionRetryTimeout', 'connectionRetryCount'
+    'connectionRetryTimeout', 'connectionRetryCount',
+    'testcaseFiles', 'specFiles', 'listFiles', 'testcases', 'specs'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ];
 // options (not yet) supported are commented out
@@ -78,15 +80,11 @@ for (let key of ALLOWED_ARGV) {
         args[key] = argv[key];
     }
 }
-// /**
-//  * run launch sequence if config command wasn't called
-//  */
-// } else if (!configMode) {
-//     let launcher = new Launcher(configFile, args)
-//     launcher.run().then(
-//         (code) => process.exit(code),
-//         (e) => process.nextTick(() => {
-//             throw e
-//         }))
-// }
+/**
+ * run launch sequence
+ */
+let launcher = new webdriverio_workflo_1.Launcher(configFile, args);
+launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
+    throw e;
+}));
 //# sourceMappingURL=cli.js.map

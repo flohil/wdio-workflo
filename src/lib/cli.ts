@@ -8,13 +8,16 @@ import * as inquirer from 'inquirer'
 import * as optimist from 'optimist'
 import * as merge from 'deepmerge'
 
+import { Launcher } from 'webdriverio-workflo'
+
 const pkg = require('../../package.json')
 
 const VERSION = pkg.version
 
 const ALLOWED_ARGV = [
     'host', 'port',  'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout', 
-    'connectionRetryTimeout', 'connectionRetryCount'
+    'connectionRetryTimeout', 'connectionRetryCount',
+    'testcaseFiles', 'specFiles', 'listFiles', 'testcases', 'specs'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ]
 
@@ -125,14 +128,15 @@ for (let key of ALLOWED_ARGV) {
     }
 }
 
-// /**
-//  * run launch sequence if config command wasn't called
-//  */
-// } else if (!configMode) {
-//     let launcher = new Launcher(configFile, args)
-//     launcher.run().then(
-//         (code) => process.exit(code),
-//         (e) => process.nextTick(() => {
-//             throw e
-//         }))
-// }
+// read from workflo.conf.js file
+// redirect configFile to ../config/wdio.conf.js
+
+/**
+ * run launch sequence
+ */
+let launcher = new Launcher(configFile, args)
+launcher.run().then(
+    (code) => process.exit(code),
+    (e) => process.nextTick(() => {
+        throw e
+    }))
