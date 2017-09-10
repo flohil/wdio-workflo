@@ -74,19 +74,11 @@ exports.config = {
   coloredLogs: true,
   screenshotPath: null,
   baseUrl: workfloConf.baseUrl,
-  waitforTimeout: 10000,
+  waitforTimeout: workfloConf.timeouts.waitforTimeout,
   framework: 'workflo-jasmine',
   reporters: ['workflo-spec', 'workflo-allure'],
   reporterOptions: {
     outputDir: path.join(workfloConf.testDir, 'results', dateTime),
-    /*allure: {
-      outputDir: `${workfloConf.testDir}/results/${dateTime}/allure-results/`
-    },*/
-    /*'allure-addons': {
-      outputDir: `${workfloConf.testDir}/results/${dateTime}/allure-results/`,
-      debug: false,
-      debugSeleniumCommand: true
-    }*/
     'workflo-allure': {
       outputDir: path.join(workfloConf.testDir, 'results', dateTime, 'allure-results'),
       debug: false,

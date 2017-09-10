@@ -128,13 +128,16 @@ for (let key of ALLOWED_ARGV) {
     }
 }
 
-// read from workflo.conf.js file
-// redirect configFile to ../config/wdio.conf.js
+// cli config file defined workflo config, wdio config is placed in config/wdio.conf.js
+const wdioConfigFile = path.join(__dirname, '..', '..', 'config', 'wdio.conf.js')
+const workfloConfigFile = path.join(process.cwd(), configFile)
+
+process.env.WORKFLO_CONFIG = workfloConfigFile
 
 /**
  * run launch sequence
  */
-let launcher = new Launcher(configFile, args)
+let launcher = new Launcher(wdioConfigFile, args)
 launcher.run().then(
     (code) => process.exit(code),
     (e) => process.nextTick(() => {

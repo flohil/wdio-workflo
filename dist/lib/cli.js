@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const path = require("path");
 const optimist = require("optimist");
 const webdriverio_workflo_1 = require("webdriverio-workflo");
 const pkg = require('../../package.json');
@@ -80,10 +81,14 @@ for (let key of ALLOWED_ARGV) {
         args[key] = argv[key];
     }
 }
+// cli config file defined workflo config, wdio config is placed in config/wdio.conf.js
+const wdioConfigFile = path.join(__dirname, '..', '..', 'config', 'wdio.conf.js');
+const workfloConfigFile = path.join(process.cwd(), configFile);
+process.env.WORKFLO_CONFIG = workfloConfigFile;
 /**
  * run launch sequence
  */
-let launcher = new webdriverio_workflo_1.Launcher(configFile, args);
+let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
 launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
     throw e;
 }));
