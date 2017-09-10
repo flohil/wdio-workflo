@@ -291,6 +291,10 @@ export const suite = (
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
 ) => {
+  if (description.indexOf('.') > -1) {
+    throw new Error(`Suite description must not contain '.' character: ${description}`)
+  }
+
   jasmineFunc(description, bodyFunc)
 }
 
@@ -316,7 +320,11 @@ export const testcase = (
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = it
 ) => {
-  this.__stepStack =[]
+  if (description.indexOf('.') > -1) {
+    throw new Error(`Testcase description must not contain '.' character: ${description}`)
+  }
+
+  this.__stepStack = []
 
   const testData = {
     title: description

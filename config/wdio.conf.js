@@ -58,6 +58,7 @@ exports.config = {
   manualTestcases: workfloConf.manualTestcaseFiles,
   uidStorePath: workfloConf.uidStorePath,
   waitforTimeout: workfloConf.waitforTimeout,
+  testDir: workfloConf.testDir,
   /**
    * capabilities
    */

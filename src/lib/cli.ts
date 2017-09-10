@@ -21,6 +21,9 @@ const ALLOWED_ARGV = [
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ]
 
+let configFile
+let optionsOffset = 2 // config file defined as first "parameter"
+
 // options (not yet) supported are commented out
 optimist
     .usage('wdio-workflo CLI runner\n\n' +
@@ -44,16 +47,16 @@ optimist
     .alias('waitforTimeout', 'w')
 
     .describe('testcases', 'restricts test execution to these testcases\n' +
-        '\t\t\t[Suite1, Suite2.Testcase1] => execute all testcases of Suite1 and Testcase1 of Suite2')
+        '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n')
     .describe('specs', 'restricts test execution to these specs\n' +
-        '\t\t\t[3.2] => execute all testcases which verify spec 3.2\n' + 
-        '\t\t\t[1.1*, -1.1.2.4] => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4')
+        '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' + 
+        '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n')
     .describe('testcaseFiles', 'restricts test execution to testcases defined within these files\n' + 
-        '\t\t\t[testcaseFile1, testcaseFile2] => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts')
+        '\t\t\t\'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
     .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' + 
-        '\t\t\t[specFile1, specFile2] => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts')
+        '\t\t\t\'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
-        '\t\t\t[listFile1] => execute all testcases include by the contents of listFile1.list.ts')
+        '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
 
     
     // wdio-workflo options
@@ -81,7 +84,8 @@ optimist
     // .describe('reporters', 'reporters to print out the results on stdout') // supports only workflo adaptions of spec and allure reporters
     // .alias('reporters', 'r')
     
-    .string(['host', 'path', 'logLevel', 'baseUrl' /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */])
+    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles'
+     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */])
     .boolean(['coloredLogs', 'watch'])
     .default({ coloredLogs: true })
 
@@ -91,7 +95,21 @@ optimist
         }
     })
 
-let argv = optimist.parse(process.argv.slice(2))
+
+if (process.argv.length > 2 && process.argv[2].substr(0,1) === '-') {
+    const defaultConfigFile = path.join(process.cwd(), 'workflo.conf.js')
+    optionsOffset = 1 // no config file specified
+    
+    if (!fs.existsSync(defaultConfigFile)) {
+        console.error(`Workflo config file was not specified and could not be found in its default location (<<current working directory>>/workflo.conf.js)`)
+        optimist.showHelp()
+        process.exit(1)
+    } else {
+        configFile = defaultConfigFile
+    }
+}
+
+let argv = optimist.parse(process.argv.slice(optionsOffset))
 
 if (argv.help) {
     optimist.showHelp()
@@ -107,11 +125,13 @@ if (argv.version) {
  * use wdio.conf.js default file name if no config was specified
  * otherwise run config sequenz
  */
-let configFile = argv._[0]
-if (!configFile) {
-    console.error(`No config file specified!`)
-    optimist.showHelp()
-    process.exit(1)
+if (typeof configFile === 'undefined') {
+    configFile = argv._[0]
+    if (!configFile) {
+        console.error(`Workflo config file was not specified and could not be found in its default location (<<current working directory>>/workflo.conf.js)`)
+        optimist.showHelp()
+        process.exit(1)
+    }
 }
 
 /**

@@ -183,6 +183,9 @@ exports.xThen = (id, description) => {
     exports.Then(id, description, it, true);
 };
 exports.suite = (description, metadata, bodyFunc, jasmineFunc = describe) => {
+    if (description.indexOf('.') > -1) {
+        throw new Error(`Suite description must not contain '.' character: ${description}`);
+    }
     jasmineFunc(description, bodyFunc);
 };
 exports.fsuite = (description, metadata, bodyFunc) => {
@@ -192,6 +195,9 @@ exports.xsuite = (description, metadata, bodyFunc) => {
     exports.suite(description, metadata, bodyFunc, xdescribe);
 };
 exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
+    if (description.indexOf('.') > -1) {
+        throw new Error(`Testcase description must not contain '.' character: ${description}`);
+    }
     this.__stepStack = [];
     const testData = {
         title: description
