@@ -17,7 +17,7 @@ let optionsOffset = 2; // config file defined as first "parameter"
 // options (not yet) supported are commented out
 optimist
     .usage('wdio-workflo CLI runner\n\n' +
-    'Usage: wdio-workflo configFile [options]\n' +
+    'Usage: wdio-workflo [configFile] [options]\n' +
     'The [options] object will override values from the config file.')
     .describe('help', 'prints wdio-workflo help menu')
     .alias('help', 'h')
@@ -55,17 +55,9 @@ optimist
         throw new Error('Error: more than one config file specified');
     }
 });
-if (process.argv.length > 2 && process.argv[2].substr(0, 1) === '-') {
-    const defaultConfigFile = path.join(process.cwd(), 'workflo.conf.js');
+if (process.argv.length === 2 || process.argv.length > 2 && process.argv[2].substr(0, 1) === '-') {
+    configFile = './workflo.conf.js';
     optionsOffset = 1; // no config file specified
-    if (!fs.existsSync(defaultConfigFile)) {
-        console.error(`Workflo config file was not specified and could not be found in its default location (<<current working directory>>/workflo.conf.js)`);
-        optimist.showHelp();
-        process.exit(1);
-    }
-    else {
-        configFile = defaultConfigFile;
-    }
 }
 let argv = optimist.parse(process.argv.slice(optionsOffset));
 if (argv.help) {
@@ -82,11 +74,6 @@ if (argv.version) {
  */
 if (typeof configFile === 'undefined') {
     configFile = argv._[0];
-    if (!configFile) {
-        console.error(`Workflo config file was not specified and could not be found in its default location (<<current working directory>>/workflo.conf.js)`);
-        optimist.showHelp();
-        process.exit(1);
-    }
 }
 /**
  * sanitize jasmineOpts
@@ -103,6 +90,11 @@ for (let key of ALLOWED_ARGV) {
 // cli config file defined workflo config, wdio config is placed in config/wdio.conf.js
 const wdioConfigFile = path.join(__dirname, '..', '..', 'config', 'wdio.conf.js');
 const workfloConfigFile = path.join(process.cwd(), configFile);
+if (!fs.existsSync(workfloConfigFile)) {
+    console.error(`Workflo config file was not specified or could not be found in its default location (<<current working directory>>/workflo.conf.js)\n`);
+    optimist.showHelp();
+    process.exit(1);
+}
 process.env.WORKFLO_CONFIG = workfloConfigFile;
 /**
  * run launch sequence
