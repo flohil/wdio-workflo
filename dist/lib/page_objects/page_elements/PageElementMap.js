@@ -28,6 +28,16 @@ class PageElementMap extends _1.PageNode {
     get $() {
         return this._$;
     }
+    /**
+     * In case of language changes, for example, change values of mappingObject while keys must stay the same.
+     * @param mappingObject
+     */
+    changeMappingObject(mappingObject) {
+        this._$ = Workflo.Object.mapProperties(mappingObject, (value, key) => this.elementStoreFunc.apply(this.store, [
+            this.identifier.func(this.selector, value),
+            this.elementOptions
+        ]));
+    }
 }
 exports.PageElementMap = PageElementMap;
 //# sourceMappingURL=PageElementMap.js.map

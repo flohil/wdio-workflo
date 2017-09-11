@@ -48,9 +48,9 @@ function compare(var1, var2, operator) {
             return var1 === var2;
         case "!=" /* notEqualTo */ || "!=" /* ne */:
             return var1 !== var2;
-        case ">" /* greaterThen */ || ">" /* gt */:
+        case ">" /* greaterThan */ || ">" /* gt */:
             return var1 > var2;
-        case "<" /* lessThen */ || "<" /* lt */:
+        case "<" /* lessThan */ || "<" /* lt */:
             return var1 < var2;
     }
 }

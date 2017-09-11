@@ -75,8 +75,8 @@ declare global {
 
     const enum Comparator {
       equalTo = '==',
-      lessThen = '<',
-      greaterThen = '>',
+      lessThan = '<',
+      greaterThan = '>',
       notEqualTo = '!=',
       ne = '!=',
       eq = '==',
