@@ -69,4 +69,20 @@ export class PageElementMap<
   get $() {
     return this._$
   }
+
+  /**
+   * In case of language changes, for example, change values of mappingObject while keys must stay the same.
+   * @param mappingObject 
+   */
+  changeMappingObject(mappingObject: Record<K, string>) {
+    this._$ = Workflo.Object.mapProperties(
+      mappingObject,
+      (value, key) => <PageElementType> this.elementStoreFunc.apply(
+        this.store, [
+          this.identifier.func(this.selector, value),
+          this.elementOptions
+        ]
+      )
+    )
+  }
 }
