@@ -9,6 +9,30 @@ const words = {
   'And': 'And',
 }
 
+function specsInclude(id) {
+  const executionFilters = (<any> jasmine.getEnv()).executionFilters
+
+  if (!executionFilters.specs) {
+      return true
+  } else {
+      if (executionFilters.specs[id]) {
+          return true
+      } else {
+          for (const spec in executionFilters.specs) {
+              if (executionFilters.specs[spec]) {
+                  if (spec.length > 0 && spec.substr(spec.length - 1, spec.length - 0) === '*') {
+                      const matchLength = spec.length - 1 // match everything that starts with the characters before *
+
+                      if (id.substr(0, matchLength) === spec.substr(0, matchLength)) {
+                          return true
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
 export const Feature = (
   description: string, 
   metadata: Workflo.IFeatureMetadata, 
@@ -60,7 +84,9 @@ export const Story = (
     givenRecLevel: 0
   })
   
-  jasmineFunc(fullStoryName, bodyFunc)  
+  if (specsInclude(id)) {
+    jasmineFunc(fullStoryName, bodyFunc)
+  }
 }
 
 export const fStory = (
