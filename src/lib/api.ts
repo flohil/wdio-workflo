@@ -13,23 +13,41 @@ function specsInclude(id) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
 
   if (!executionFilters.specs) {
-      return true
+    return true
   } else {
-      if (executionFilters.specs[id]) {
-          return true
-      } else {
-          for (const spec in executionFilters.specs) {
-              if (executionFilters.specs[spec]) {
-                  if (spec.length > 0 && spec.substr(spec.length - 1, spec.length - 0) === '*') {
-                      const matchLength = spec.length - 1 // match everything that starts with the characters before *
+    if (executionFilters.specs[id]) {
+      return true
+    } else {
+      let included = false
 
-                      if (id.substr(0, matchLength) === spec.substr(0, matchLength)) {
-                          return true
-                      }
-                  }
-              }
+      for (const spec in executionFilters.specs) {
+        if (executionFilters.specs[spec] && spec.length > 0) {
+          let matchString = spec
+          let includeSubSpecs = false
+          let exclude = false
+
+          if (spec.substr(spec.length - 1, 1) === '*') {
+            matchString = spec.substr(0, spec.length - 1) // match everything that starts with the characters before *
+            includeSubSpecs = true
           }
+
+          if (spec.substr(0,1) === '-') {
+            matchString = matchString.substr(1, matchString.length - 1)
+            exclude = true
+          }
+
+          if ((!includeSubSpecs && matchString === id) || (includeSubSpecs && id.substr(0, matchString.length) === matchString)) {
+            if (exclude) {
+              return false
+            } else {
+              included = true
+            }
+          }
+        }
       }
+
+      return included
+    }
   }
 }
 
