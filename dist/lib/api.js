@@ -14,31 +14,60 @@ function specsInclude(id) {
         return true;
     }
     else {
-        if (executionFilters.specs[id]) {
-            return true;
+        let included = false;
+        for (const spec in executionFilters.specs) {
+            if (executionFilters.specs[spec] && spec.length > 0) {
+                let matchString = spec;
+                let includeSubSpecs = false;
+                let exclude = false;
+                if (spec.substr(spec.length - 1, 1) === '*') {
+                    matchString = spec.substr(0, spec.length - 1); // match everything that starts with the characters before *
+                    includeSubSpecs = true;
+                }
+                if (spec.substr(0, 1) === '-') {
+                    matchString = matchString.substr(1, matchString.length - 1);
+                    exclude = true;
+                }
+                if ((!includeSubSpecs && matchString === id) || (includeSubSpecs && id.substr(0, matchString.length) === matchString)) {
+                    if (exclude) {
+                        return false;
+                    }
+                    else {
+                        included = true;
+                    }
+                }
+            }
+            return included;
         }
-        else {
-            let included = false;
-            for (const spec in executionFilters.specs) {
-                if (executionFilters.specs[spec] && spec.length > 0) {
-                    let matchString = spec;
-                    let includeSubSpecs = false;
-                    let exclude = false;
-                    if (spec.substr(spec.length - 1, 1) === '*') {
-                        matchString = spec.substr(0, spec.length - 1); // match everything that starts with the characters before *
-                        includeSubSpecs = true;
+    }
+}
+exports.specsInclude = specsInclude;
+function testcasesInclude(id, isTestcase = false) {
+    const executionFilters = jasmine.getEnv().executionFilters;
+    if (!executionFilters.testcases) {
+        return true;
+    }
+    else {
+        let included = false;
+        for (const testcase in executionFilters.testcases) {
+            if (executionFilters.testcases[testcase] && testcase.length > 0) {
+                let matchString = testcase;
+                let includeSubTestcases = false;
+                let exclude = false;
+                if (testcase.substr(testcase.length - 1, 1) === '*' && !isTestcase) {
+                    matchString = testcase.substr(0, testcase.length - 1); // match everything that starts with the characters before *
+                    includeSubTestcases = true;
+                }
+                if (testcase.substr(0, 1) === '-') {
+                    matchString = matchString.substr(1, matchString.length - 1);
+                    exclude = true;
+                }
+                if ((!includeSubTestcases && matchString === id) || (includeSubTestcases && id.substr(0, matchString.length) === matchString)) {
+                    if (exclude) {
+                        return false;
                     }
-                    if (spec.substr(0, 1) === '-') {
-                        matchString = matchString.substr(1, matchString.length - 1);
-                        exclude = true;
-                    }
-                    if ((!includeSubSpecs && matchString === id) || (includeSubSpecs && id.substr(0, matchString.length) === matchString)) {
-                        if (exclude) {
-                            return false;
-                        }
-                        else {
-                            included = true;
-                        }
+                    else {
+                        included = true;
                     }
                 }
             }
@@ -47,6 +76,9 @@ function specsInclude(id) {
     }
 }
 exports.Feature = (description, metadata, bodyFunc, jasmineFunc = describe) => {
+    if (description.length === 0) {
+        throw new Error(`Feature description must not be empty!`);
+    }
     this.__currentFeature = description;
     jasmineFunc(`${description}:`, bodyFunc);
 };
@@ -57,6 +89,9 @@ exports.xFeature = (description, metadata, bodyFunc) => {
     exports.Feature(description, metadata, bodyFunc, xdescribe);
 };
 exports.Story = (id, description, metadata, bodyFunc, jasmineFunc = describe) => {
+    if (id.length === 0) {
+        throw new Error(`Story id must not be empty!`);
+    }
     const fullStoryName = `${id} - ${description}`;
     this.__currentStoryId = id;
     storyMap.set(id, {
@@ -223,10 +258,32 @@ exports.xThen = (id, description) => {
     exports.Then(id, description, it, true);
 };
 exports.suite = (description, metadata, bodyFunc, jasmineFunc = describe) => {
+    if (description.length === 0) {
+        throw new Error(`Suite description must not be empty!`);
+    }
     if (description.indexOf('.') > -1) {
         throw new Error(`Suite description must not contain '.' character: ${description}`);
     }
+    else if (description.substr(0, 1) === '-') {
+        throw new Error(`Suite description must start with '-' character: ${description}`);
+    }
+    else if (description.substr(description.length - 1, 1) === '*') {
+        throw new Error(`Suite description must end with '*' character: ${description}`);
+    }
+    if (!this.currentSuiteId) {
+        this.currentSuiteId = `${description}.`;
+    }
+    else {
+        this.currentSuiteId += `${description}.`;
+    }
     jasmineFunc(description, bodyFunc);
+    const suiteParts = this.currentSuiteId.split('.');
+    if (suiteParts.length > 1) {
+        this.currentSuiteId = suiteParts.pop().join('.');
+    }
+    else {
+        this.currentSuiteId = undefined;
+    }
 };
 exports.fsuite = (description, metadata, bodyFunc) => {
     exports.suite(description, metadata, bodyFunc, fdescribe);
@@ -235,6 +292,9 @@ exports.xsuite = (description, metadata, bodyFunc) => {
     exports.suite(description, metadata, bodyFunc, xdescribe);
 };
 exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
+    if (description.length === 0) {
+        throw new Error(`Testcase description must not be empty!`);
+    }
     if (description.indexOf('.') > -1) {
         throw new Error(`Testcase description must not contain '.' character: ${description}`);
     }
@@ -242,7 +302,9 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     const testData = {
         title: description
     };
-    jasmineFunc(JSON.stringify(testData), bodyFunc);
+    if (testcasesInclude(description)) {
+        jasmineFunc(JSON.stringify(testData), bodyFunc);
+    }
 };
 exports.ftestcase = (description, metadata, bodyFunc) => {
     exports.testcase(description, metadata, bodyFunc, fit);
