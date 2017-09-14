@@ -47,10 +47,12 @@ optimist
     .alias('waitforTimeout', 'w')
 
     .describe('testcases', 'restricts test execution to these testcases\n' +
-        '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n')
+        '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
+        '\t\t\t\'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
     .describe('specs', 'restricts test execution to these specs\n' +
         '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' + 
-        '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n')
+        '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
+        '\t\t\t\'["1.*"]\' => 1.* excludes spec 1 itself but includes of of its sub-specs\n')
     .describe('testcaseFiles', 'restricts test execution to testcases defined within these files\n' + 
         '\t\t\t\'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
     .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' + 

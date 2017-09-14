@@ -55,33 +55,50 @@ function testcasesInclude(id: string, isTestcase: boolean = false) {
   } else {
     let included = false
 
+    const idParts = id.split('.')
+
+    if (idParts[idParts.length -1 ] === '') {
+      idParts.pop()
+    }
+
     for (const testcase in executionFilters.testcases) {
       if (executionFilters.testcases[testcase] && testcase.length > 0) {
-        let matchString = testcase
-        let includeSubTestcases = false
         let exclude = false
-
-        if (testcase.substr(testcase.length - 1, 1) === '*' && !isTestcase) {
-          matchString = testcase.substr(0, testcase.length - 1) // match everything that starts with the characters before *
-          includeSubTestcases = true
-        }
+        let matchString = testcase
 
         if (testcase.substr(0,1) === '-') {
-          matchString = matchString.substr(1, matchString.length - 1)
+          matchString = testcase.substr(1, testcase.length - 1)
           exclude = true
         }
 
-        if ((!includeSubTestcases && matchString === id) || (includeSubTestcases && id.substr(0, matchString.length) === matchString)) {
-          if (exclude) {
-            return false
-          } else {
-            included = true
+        const testcaseParts = matchString.split('.')
+
+        if (testcaseParts[testcaseParts.length -1 ] === '') {
+          testcaseParts.pop()
+        }
+
+        if (testcaseParts.length <= idParts.length) {
+          let match = true
+          for (let i = 0; i < testcaseParts.length; ++i) {
+            if (testcaseParts[i] !== idParts[i]) {
+              match = false
+            }
           }
+
+          if (match) {
+            if (exclude) {
+              return false
+            } else {
+              included = true
+            }
+          }  
+        } else {
+          return false
         }
       }
-
-      return included
     }
+
+    return included
   }
 }
 
@@ -384,8 +401,6 @@ export const suite = (
     throw new Error(`Suite description must not contain '.' character: ${description}`)
   } else if (description.substr(0, 1) === '-') {
     throw new Error(`Suite description must start with '-' character: ${description}`)
-  } else if (description.substr(description.length - 1, 1) === '*') {
-    throw new Error(`Suite description must end with '*' character: ${description}`)
   }
 
   if (!this.suiteIdStack) {
@@ -424,9 +439,6 @@ export const testcase = (
 ) => {
   if (description.length === 0) {
     throw new Error(`Testcase description must not be empty!`)
-  }
-  if (description.indexOf('.') > -1) {
-    throw new Error(`Testcase description must not contain '.' character: ${description}`)
   }
 
   this.__stepStack = []
