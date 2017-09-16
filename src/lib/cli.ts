@@ -2,7 +2,9 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as ejs from 'ejs' 
 
-//
+import {specFilesParse} from './parser'
+import {getAllFiles} from './io'
+
 import * as npmInstallPackage from 'npm-install-package'
 import * as inquirer from 'inquirer'
 import * as optimist from 'optimist'
@@ -150,6 +152,53 @@ if (!fs.existsSync(workfloConfigFile)) {
 }
 
 process.env.WORKFLO_CONFIG = workfloConfigFile
+
+const workfloConfig = require(workfloConfigFile)
+
+// check workflo config properties
+const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualTestcaseFiles', 'uidStorePath']
+
+for(const property of mandatoryProperties) {
+    if (!(property in workfloConfig)) {
+        throw new Error(`Property '${property}' must be defined in workflo config file!`)
+    }
+}
+
+const testDir = workfloConfig.testDir
+
+if (argv.specs) {
+    function determineSpecFiles(): string[] {
+        const specsDir = path.join(testDir, 'src', 'specs')
+
+        if (argv.specFiles) {
+            if (argv.specFiles.length > 0) {
+                const specFiles: string[] = JSON.parse(argv.specFiles)
+                return specFiles.map((spec) => path.join(specsDir, `${spec}.spec.ts`))
+            } else {
+                return []
+            }
+        } else {
+            return getAllFiles(specsDir, '.spec.ts')                
+        }
+    }
+
+    const specFiles = determineSpecFiles()
+    const specParseResults = specFilesParse(specFiles)
+    
+    const specs: string[] = JSON.parse(argv.specs)
+    const filteredSpecsObj: Record<string, string> = {}
+
+    for (const spec of specs) {
+        if (spec in specParseResults.table) {
+            filteredSpecsObj[spec] = specParseResults.table[spec].specFile
+        }
+    }
+
+    // only execute spec files that include filtered options
+    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj).map(
+        (key: string) => filteredSpecsObj[key]
+    ))
+}
 
 /**
  * run launch sequence

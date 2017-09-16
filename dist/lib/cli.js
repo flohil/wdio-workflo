@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const fs = require("fs");
+const parser_1 = require("./parser");
+const io_1 = require("./io");
 const optimist = require("optimist");
 const webdriverio_workflo_1 = require("webdriverio-workflo");
 const pkg = require('../../package.json');
@@ -100,6 +102,43 @@ if (!fs.existsSync(workfloConfigFile)) {
     process.exit(1);
 }
 process.env.WORKFLO_CONFIG = workfloConfigFile;
+const workfloConfig = require(workfloConfigFile);
+// check workflo config properties
+const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualTestcaseFiles', 'uidStorePath'];
+for (const property of mandatoryProperties) {
+    if (!(property in workfloConfig)) {
+        throw new Error(`Property '${property}' must be defined in workflo config file!`);
+    }
+}
+const testDir = workfloConfig.testDir;
+if (argv.specs) {
+    function determineSpecFiles() {
+        const specsDir = path.join(testDir, 'src', 'specs');
+        if (argv.specFiles) {
+            if (argv.specFiles.length > 0) {
+                const specFiles = JSON.parse(argv.specFiles);
+                return specFiles.map((spec) => path.join(specsDir, `${spec}.spec.ts`));
+            }
+            else {
+                return [];
+            }
+        }
+        else {
+            return io_1.getAllFiles(specsDir, '.spec.ts');
+        }
+    }
+    const specFiles = determineSpecFiles();
+    const specParseResults = parser_1.specFilesParse(specFiles);
+    const specs = JSON.parse(argv.specs);
+    const filteredSpecsObj = {};
+    for (const spec of specs) {
+        if (spec in specParseResults.table) {
+            filteredSpecsObj[spec] = specParseResults.table[spec].specFile;
+        }
+    }
+    // only execute spec files that include filtered options
+    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj).map((key) => filteredSpecsObj[key]));
+}
 /**
  * run launch sequence
  */
