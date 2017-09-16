@@ -263,6 +263,14 @@ declare global {
 
     type StepImplMap = { [key:string]: StepImpl }
 
+    const enum Severity {
+      blocker = 'blocker',
+      critical = 'critical',
+      normal = 'normal',
+      minor = 'minor',
+      trivial = 'trivial'
+    }
+
     type severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
 
     interface ISpecGiven {

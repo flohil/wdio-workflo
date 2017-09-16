@@ -9,7 +9,7 @@ const VERSION = pkg.version;
 const ALLOWED_ARGV = [
     'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
     'connectionRetryTimeout', 'connectionRetryCount',
-    'testcaseFiles', 'specFiles', 'listFiles', 'testcases', 'specs'
+    'testcaseFiles', 'specFiles', 'listFiles', 'testcases', 'specs', 'features'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ];
 let configFile;
@@ -37,6 +37,8 @@ optimist
     .describe('testcases', 'restricts test execution to these testcases\n' +
     '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
     '\t\t\t\'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
+    .describe('features', 'restricts test execution to these features\n' +
+    '\t\t\t\'["Login"]\' => execute all testcases which are verified by specs defined within these features\n')
     .describe('specs', 'restricts test execution to these specs\n' +
     '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' +
     '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
