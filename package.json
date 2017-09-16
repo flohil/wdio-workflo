@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.140",
+  "version": "0.0.141",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -46,6 +46,7 @@
     "jasmine-object-matchers-jest": "^0.1.0",
     "jasmine-reporters": "^2.2.1",
     "jasmine2-custom-message": "^0.8.2",
+    "json5": "^0.5.1",
     "jsonfile": "^3.0.1",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
