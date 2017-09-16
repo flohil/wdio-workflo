@@ -271,7 +271,7 @@ declare global {
       trivial = 'trivial'
     }
 
-    type severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
+    // type severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
 
     interface ISpecGiven {
       And: (description: string, bodyFunc?: () => void) => ISpecGiven
@@ -297,7 +297,7 @@ declare global {
 
     interface IStoryMetaData {
       issues?: string[],
-      severity?: severity
+      severity?: Workflo.Severity // Workflo.severity
     }
 
     interface IFeatureMetadata {
