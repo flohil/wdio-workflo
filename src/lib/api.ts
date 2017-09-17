@@ -41,9 +41,9 @@ export function specsInclude(id: string) {
           }
         }
       }
-
-      return included
     }
+
+    return included
   }
 }
 

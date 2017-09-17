@@ -37,8 +37,8 @@ function specsInclude(id) {
                     }
                 }
             }
-            return included;
         }
+        return included;
     }
 }
 exports.specsInclude = specsInclude;
