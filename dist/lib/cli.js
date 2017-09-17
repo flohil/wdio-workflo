@@ -87,12 +87,6 @@ if (typeof configFile === 'undefined') {
 if (argv.jasmineOpts && argv.jasmineOpts.defaultTimeoutInterval) {
     argv.jasmineOpts.defaultTimeoutInterval = parseInt(argv.jasmineOpts.defaultTimeoutInterval, 10);
 }
-let args = {};
-for (let key of ALLOWED_ARGV) {
-    if (argv[key] !== undefined) {
-        args[key] = argv[key];
-    }
-}
 // cli config file defined workflo config, wdio config is placed in config/wdio.conf.js
 const wdioConfigFile = path.join(__dirname, '..', '..', 'config', 'wdio.conf.js');
 const workfloConfigFile = path.join(process.cwd(), configFile);
@@ -111,9 +105,28 @@ for (const property of mandatoryProperties) {
     }
 }
 const testDir = workfloConfig.testDir;
+// handle cli specFiles
+if (argv.specFiles) {
+    const specsDir = path.join(testDir, 'src', 'specs');
+    const specFiles = JSON.parse(argv.specFiles);
+    argv.specFiles = JSON.stringify(specFiles.map(specFile => path.join(specsDir, `${specFile}.spec.ts`)));
+}
+// handle cli testcaseFiles
+if (argv.testcaseFiles) {
+    const testcasesDir = path.join(testDir, 'src', 'testcases');
+    const testcaseFiles = JSON.parse(argv.testcaseFiles);
+    argv.testcaseFiles = JSON.stringify(testcaseFiles.map(testcaseFile => path.join(testcasesDir, `${testcaseFile}.tc.ts`)));
+}
+// handle cli listFiles
+if (argv.listFiles) {
+    const listsDir = path.join(testDir, 'src', 'lists');
+    const listFiles = JSON.parse(argv.listFiles);
+    argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)));
+}
+// handle cli specs
 if (argv.specs) {
+    const specsDir = path.join(testDir, 'src', 'specs');
     function determineSpecFiles() {
-        const specsDir = path.join(testDir, 'src', 'specs');
         if (argv.specFiles) {
             if (argv.specFiles.length > 0) {
                 const specFiles = JSON.parse(argv.specFiles);
@@ -132,12 +145,16 @@ if (argv.specs) {
     const specs = JSON.parse(argv.specs);
     const filteredSpecsObj = {};
     for (const spec of specs) {
-        if (spec in specParseResults.table) {
-            filteredSpecsObj[spec] = specParseResults.table[spec].specFile;
-        }
+        getSpecMatchFiles(spec, specParseResults.table).forEach(file => filteredSpecsObj[file] = true);
     }
     // only execute spec files that include filtered options
-    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj).map((key) => filteredSpecsObj[key]));
+    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj));
+}
+let args = {};
+for (let key of ALLOWED_ARGV) {
+    if (argv[key] !== undefined) {
+        args[key] = argv[key];
+    }
 }
 /**
  * run launch sequence
@@ -146,4 +163,23 @@ let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
 launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
     throw e;
 }));
+function getSpecMatchFiles(spec, table) {
+    if (spec.substr(0, 1) === '-') {
+        return [];
+    }
+    else if (spec in table) {
+        return [table[spec].specFile];
+    }
+    else if (spec.substr(spec.length - 1, 1) === '*') {
+        const matchStr = spec.substr(0, spec.length - 1);
+        const matchFilesObj = {};
+        for (const specEntry in table) {
+            if (specEntry.length >= matchStr.length && specEntry.substr(0, matchStr.length) === matchStr) {
+                matchFilesObj[table[specEntry].specFile] = true;
+            }
+        }
+        return Object.keys(matchFilesObj);
+    }
+    return [];
+}
 //# sourceMappingURL=cli.js.map
