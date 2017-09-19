@@ -159,7 +159,7 @@ for(const property of mandatoryProperties) {
 
 const testDir = workfloConfig.testDir
 
-// handle cli specFiles
+// complete cli specFiles paths
 if (argv.specFiles) {
     const specsDir = path.join(testDir, 'src', 'specs')
     const specFiles: string[] = JSON.parse(argv.specFiles)
@@ -167,7 +167,7 @@ if (argv.specFiles) {
     argv.specFiles = JSON.stringify(specFiles.map(specFile => path.join(specsDir, `${specFile}.spec.ts`)))
 }
 
-// handle cli testcaseFiles
+// complete cli testcaseFiles paths
 if (argv.testcaseFiles) {
     const testcasesDir = path.join(testDir, 'src', 'testcases')
     const testcaseFiles: string[] = JSON.parse(argv.testcaseFiles)
@@ -175,7 +175,7 @@ if (argv.testcaseFiles) {
     argv.testcaseFiles = JSON.stringify(testcaseFiles.map(testcaseFile => path.join(testcasesDir, `${testcaseFile}.tc.ts`)))
 }
 
-// handle cli listFiles
+// complete cli listFiles paths
 if (argv.listFiles) {
     const listsDir = path.join(testDir, 'src', 'lists')
     const listFiles: string[] = JSON.parse(argv.listFiles)
@@ -183,75 +183,64 @@ if (argv.listFiles) {
     argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)))
 }
 
+const specsDir = path.join(testDir, 'src', 'specs')
+const testcasesDir = path.join(testDir, 'src', 'testcases')
+
 let specParseResults: SpecParseResults
 let testcaseParseResults: TestcaseParseResults
 
+const specFiles = determineSpecFiles()
+const testcaseFiles = determineTestcaseFiles()
+
+let specFilesObj: Record<string, true> = {}
+let testcaseFilesObj: Record<string, true> = {}
+
+let specs: string[]
+let testcases: string[]
+let features: string[]
+
 // parse specs and testcases
 if (argv.specs || argv.testcases || argv.specFiles || argv.testcaseFiles || argv.features) {
-    const specsDir = path.join(testDir, 'src', 'specs')
-    const testcasesDir = path.join(testDir, 'src', 'testcases')
-    
-    function determineSpecFiles(): string[] {
-        if (argv.specFiles) {
-            if (argv.specFiles.length > 0) {
-                const specFiles: string[] = JSON.parse(argv.specFiles)
-                return specFiles.map((spec) => path.join(specsDir, `${spec}.spec.ts`))
-            } else {
-                return []
-            }
-        } else {
-            return getAllFiles(specsDir, '.spec.ts')                
-        }
-    }
-
-    function determineTestcaseFiles(): string[] {
-        if (argv.testcaseFiles) {
-            if (argv.testcaseFiles.length > 0) {
-                const testcaseFiles: string[] = JSON.parse(argv.testcaseFiles)
-                return testcaseFiles.map((spec) => path.join(testcasesDir, `${spec}.tc.ts`))
-            } else {
-                return []
-            }
-        } else {
-            return getAllFiles(testcasesDir, '.tc.ts')                
-        }
-    }
-
-    const specFiles = determineSpecFiles()
-    const testcaseFiles = determineTestcaseFiles()
-
     specParseResults = specFilesParse(specFiles)
     testcaseParseResults = testcaseFilesParse(testcaseFiles)
+
+    specFiles.forEach(specFile => specFilesObj[specFile] = true)
+    testcaseFiles.forEach(testcaseFile => testcaseFilesObj[testcaseFile] = true)
 }
 
-// handle cli specs
 if (argv.specs) {
-    const specs: string[] = JSON.parse(argv.specs)
-    const filteredSpecsObj: Record<string, true> = {}
+    specs = JSON.parse(argv.specs)
+    const filteredSpecFilesObj: Record<string, true> = {}
 
     for (const spec of specs) {
-        getSpecMatchFiles(spec, specParseResults.specTable).forEach(file => filteredSpecsObj[file] = true)
+        getSpecMatchFiles(spec, specParseResults.specTable).forEach(file => filteredSpecFilesObj[file] = true)
     }
 
-    // only execute spec files that include filtered options
-    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj))
+    for (const specFile in specFilesObj) {
+        if (!(specFile in filteredSpecFilesObj)) {
+            delete specFilesObj[specFile]
+        }
+    }
 }
 
-// handle cli testcases
 if (argv.testcases) {
-    const testcases: string[] = JSON.parse(argv.testcases)
-    const filteredTestcasesObj: Record<string, true> = {}
+    testcases = JSON.parse(argv.testcases)
+    const filteredTestcaseFilesObj: Record<string, true> = {}
 
     for (const testcase of testcases) {
-        getTestcaseMatchFiles(testcase, testcaseParseResults.testcaseTable).forEach(file => filteredTestcasesObj[file] = true)
+        getTestcaseMatchFiles(testcase, testcaseParseResults.testcaseTable).forEach(file => filteredTestcaseFilesObj[file] = true)
     }
 
     // only execute spec files that include filtered options
-    argv.testcaseFiles = JSON.stringify(Object.keys(filteredTestcasesObj))
+    for (const testcaseFile in testcaseFilesObj) {
+        if (!(testcaseFile in filteredTestcaseFilesObj)) {
+            delete testcaseFilesObj[testcaseFile]
+        }
+    }
 }
 
 if (argv.features) {
-    const features: string[] = JSON.parse(argv.features)
+    let features = JSON.parse(argv.features)
     const filteredFeaturesObj: Record<string, true> = {}
 
     for (const feature of features) {
@@ -262,24 +251,66 @@ if (argv.features) {
         }
     }
 
-    if (argv.specFiles) {
-        const specFiles: string[] = JSON.parse(argv.specFiles)
-        const specFilesObj: Record<string, true> = {}
-        const mergedFeaturesObj: Record<string, true> = {}
-
-        specFiles.forEach(specFile => specFilesObj[specFile] = true)
-        
-        for (const specFile in specFilesObj) {
-            if (specFile in filteredFeaturesObj) {
-                mergedFeaturesObj[specFile] = true
-            }
+    for (const specFile in specFilesObj) {
+        if (!(specFile in filteredFeaturesObj)) {
+            delete specFilesObj[specFile]
         }
-
-        argv.specFiles = JSON.stringify(Object.keys(mergedFeaturesObj))
-    } else {
-        argv.specFiles = JSON.stringify(Object.keys(filteredFeaturesObj))
     }
 }
+
+// filter spec files based on those specs verified by testcases if no spec filters were supplied
+if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !argv.features) {
+    const verifiedSpecs: Record<string, true> = {}
+    const verifiedSpecFiles: Record<string, true> = {}
+
+    if (argv.testcases) {
+        // add all spec ids verified in given testcases
+        for (const testcase of testcases) {
+            if (testcase in testcaseParseResults.tree) {
+                for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
+                    for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+                        verifiedSpecs[verifiedSpec] = true
+                    }
+                }
+            }
+        }
+    } else {
+        // only testcaseFiles were given
+        // these have already been considered in testcaseParseResults
+        for (const testcase in testcaseParseResults.tree) {
+            for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
+                for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+                    verifiedSpecs[verifiedSpec] = true
+                }
+            }
+        }
+    }
+
+    // for all verified specs, add the corresponding specFiles...
+    for (const verifiedSpec in verifiedSpecs) {
+        verifiedSpecFiles[specParseResults.specTable[verifiedSpec].specFile] = true
+    }
+
+    for (const specFile in specFilesObj) {
+        if (!(specFile in verifiedSpecFiles)) {
+            delete specFilesObj[specFile]
+        }
+    }
+
+    // add specs as spec filter...
+    argv.specs = JSON.stringify(Object.keys(verifiedSpecs))
+}
+
+// filter spec files based on those specs verified by testcases if no spec filters were supplied
+if ((argv.specFiles || argv.features || argv.specs) && !argv.testcases && !argv.testcaseFiles) {
+    if (!argv.features && !argv.specs) {
+        // get all specs defined in 
+    }
+}
+
+// only execute spec files that include filtered options
+argv.specFiles = JSON.stringify(Object.keys(specFilesObj))
+argv.testcaseFiles = JSON.stringify(Object.keys(testcaseFilesObj))
 
 let args = {}
 for (let key of ALLOWED_ARGV) {
@@ -297,6 +328,33 @@ launcher.run().then(
     (e) => process.nextTick(() => {
         throw e
     }))
+
+
+function determineSpecFiles(): string[] {
+    if (argv.specFiles) {
+        if (argv.specFiles.length > 0) {
+            const specFiles: string[] = JSON.parse(argv.specFiles)
+            return specFiles
+        } else {
+            return []
+        }
+    } else {
+        return getAllFiles(specsDir, '.spec.ts')                
+    }
+}
+
+function determineTestcaseFiles(): string[] {
+    if (argv.testcaseFiles) {
+        if (argv.testcaseFiles.length > 0) {
+            const testcaseFiles: string[] = JSON.parse(argv.testcaseFiles)
+            return testcaseFiles
+        } else {
+            return []
+        }
+    } else {
+        return getAllFiles(testcasesDir, '.tc.ts')                
+    }
+}
 
 function getSpecMatchFiles(spec: string, table: Record<string, SpecTableEntry>): string[] {
     if (spec.substr(0,1) === '-') {

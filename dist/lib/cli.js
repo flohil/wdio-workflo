@@ -105,85 +105,69 @@ for (const property of mandatoryProperties) {
     }
 }
 const testDir = workfloConfig.testDir;
-// handle cli specFiles
+// complete cli specFiles paths
 if (argv.specFiles) {
     const specsDir = path.join(testDir, 'src', 'specs');
     const specFiles = JSON.parse(argv.specFiles);
     argv.specFiles = JSON.stringify(specFiles.map(specFile => path.join(specsDir, `${specFile}.spec.ts`)));
 }
-// handle cli testcaseFiles
+// complete cli testcaseFiles paths
 if (argv.testcaseFiles) {
     const testcasesDir = path.join(testDir, 'src', 'testcases');
     const testcaseFiles = JSON.parse(argv.testcaseFiles);
     argv.testcaseFiles = JSON.stringify(testcaseFiles.map(testcaseFile => path.join(testcasesDir, `${testcaseFile}.tc.ts`)));
 }
-// handle cli listFiles
+// complete cli listFiles paths
 if (argv.listFiles) {
     const listsDir = path.join(testDir, 'src', 'lists');
     const listFiles = JSON.parse(argv.listFiles);
     argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)));
 }
+const specsDir = path.join(testDir, 'src', 'specs');
+const testcasesDir = path.join(testDir, 'src', 'testcases');
 let specParseResults;
 let testcaseParseResults;
+const specFiles = determineSpecFiles();
+const testcaseFiles = determineTestcaseFiles();
+let specFilesObj = {};
+let testcaseFilesObj = {};
+let specs;
+let testcases;
+let features;
 // parse specs and testcases
 if (argv.specs || argv.testcases || argv.specFiles || argv.testcaseFiles || argv.features) {
-    const specsDir = path.join(testDir, 'src', 'specs');
-    const testcasesDir = path.join(testDir, 'src', 'testcases');
-    function determineSpecFiles() {
-        if (argv.specFiles) {
-            if (argv.specFiles.length > 0) {
-                const specFiles = JSON.parse(argv.specFiles);
-                return specFiles.map((spec) => path.join(specsDir, `${spec}.spec.ts`));
-            }
-            else {
-                return [];
-            }
-        }
-        else {
-            return io_1.getAllFiles(specsDir, '.spec.ts');
-        }
-    }
-    function determineTestcaseFiles() {
-        if (argv.testcaseFiles) {
-            if (argv.testcaseFiles.length > 0) {
-                const testcaseFiles = JSON.parse(argv.testcaseFiles);
-                return testcaseFiles.map((spec) => path.join(testcasesDir, `${spec}.tc.ts`));
-            }
-            else {
-                return [];
-            }
-        }
-        else {
-            return io_1.getAllFiles(testcasesDir, '.tc.ts');
-        }
-    }
-    const specFiles = determineSpecFiles();
-    const testcaseFiles = determineTestcaseFiles();
     specParseResults = parser_1.specFilesParse(specFiles);
     testcaseParseResults = parser_1.testcaseFilesParse(testcaseFiles);
+    specFiles.forEach(specFile => specFilesObj[specFile] = true);
+    testcaseFiles.forEach(testcaseFile => testcaseFilesObj[testcaseFile] = true);
 }
-// handle cli specs
 if (argv.specs) {
-    const specs = JSON.parse(argv.specs);
-    const filteredSpecsObj = {};
+    specs = JSON.parse(argv.specs);
+    const filteredSpecFilesObj = {};
     for (const spec of specs) {
-        getSpecMatchFiles(spec, specParseResults.specTable).forEach(file => filteredSpecsObj[file] = true);
+        getSpecMatchFiles(spec, specParseResults.specTable).forEach(file => filteredSpecFilesObj[file] = true);
     }
-    // only execute spec files that include filtered options
-    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj));
+    for (const specFile in specFilesObj) {
+        if (!(specFile in filteredSpecFilesObj)) {
+            delete specFilesObj[specFile];
+        }
+    }
 }
-// handle cli testcases
 if (argv.testcases) {
-    const testcases = JSON.parse(argv.testcases);
-    const filteredTestcasesObj = {};
+    testcases = JSON.parse(argv.testcases);
+    const filteredTestcaseFilesObj = {};
     for (const testcase of testcases) {
-        getTestcaseMatchFiles(testcase, testcaseParseResults.testcaseTable).forEach(file => filteredTestcasesObj[file] = true);
+        getTestcaseMatchFiles(testcase, testcaseParseResults.testcaseTable).forEach(file => filteredTestcaseFilesObj[file] = true);
     }
     // only execute spec files that include filtered options
-    argv.testcaseFiles = JSON.stringify(Object.keys(filteredTestcasesObj));
+    for (const testcaseFile in testcaseFilesObj) {
+        if (!(testcaseFile in filteredTestcaseFilesObj)) {
+            delete testcaseFilesObj[testcaseFile];
+        }
+    }
 }
 if (argv.features) {
-    const features = JSON.parse(argv.features);
+    let features = JSON.parse(argv.features);
     const filteredFeaturesObj = {};
     for (const feature of features) {
         if (feature in specParseResults.featureTable) {
@@ -192,22 +176,60 @@ if (argv.features) {
             }
         }
     }
-    if (argv.specFiles) {
-        const specFiles = JSON.parse(argv.specFiles);
-        const specFilesObj = {};
-        const mergedFeaturesObj = {};
-        specFiles.forEach(specFile => specFilesObj[specFile] = true);
-        for (const specFile in specFilesObj) {
-            if (specFile in filteredFeaturesObj) {
-                mergedFeaturesObj[specFile] = true;
-            }
+    for (const specFile in specFilesObj) {
+        if (!(specFile in filteredFeaturesObj)) {
+            delete specFilesObj[specFile];
         }
-        argv.specFiles = JSON.stringify(Object.keys(mergedFeaturesObj));
-    }
-    else {
-        argv.specFiles = JSON.stringify(Object.keys(filteredFeaturesObj));
     }
 }
+// filter spec files based on those specs verified by testcases if no spec filters were supplied
+if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !argv.features) {
+    const verifiedSpecs = {};
+    const verifiedSpecFiles = {};
+    if (argv.testcases) {
+        // add all spec ids verified in given testcases
+        for (const testcase of testcases) {
+            if (testcase in testcaseParseResults.tree) {
+                for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
+                    for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+                        verifiedSpecs[verifiedSpec] = true;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        // only testcaseFiles were given
+        // these have already been considered in testcaseParseResults
+        for (const testcase in testcaseParseResults.tree) {
+            for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
+                for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+                    verifiedSpecs[verifiedSpec] = true;
+                }
+            }
+        }
+    }
+    // for all verified specs, add the corresponding specFiles...
+    for (const verifiedSpec in verifiedSpecs) {
+        verifiedSpecFiles[specParseResults.specTable[verifiedSpec].specFile] = true;
+    }
+    for (const specFile in specFilesObj) {
+        if (!(specFile in verifiedSpecFiles)) {
+            delete specFilesObj[specFile];
+        }
+    }
+    // add specs as spec filter...
+    argv.specs = JSON.stringify(Object.keys(verifiedSpecs));
+}
+// filter spec files based on those specs verified by testcases if no spec filters were supplied
+if ((argv.specFiles || argv.features || argv.specs) && !argv.testcases && !argv.testcaseFiles) {
+    if (!argv.features && !argv.specs) {
+        // get all specs defined in 
+    }
+}
+// only execute spec files that include filtered options
+argv.specFiles = JSON.stringify(Object.keys(specFilesObj));
+argv.testcaseFiles = JSON.stringify(Object.keys(testcaseFilesObj));
 let args = {};
 for (let key of ALLOWED_ARGV) {
     if (argv[key] !== undefined) {
@@ -221,6 +243,34 @@ let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
 launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
     throw e;
 }));
+function determineSpecFiles() {
+    if (argv.specFiles) {
+        if (argv.specFiles.length > 0) {
+            const specFiles = JSON.parse(argv.specFiles);
+            return specFiles;
+        }
+        else {
+            return [];
+        }
+    }
+    else {
+        return io_1.getAllFiles(specsDir, '.spec.ts');
+    }
+}
+function determineTestcaseFiles() {
+    if (argv.testcaseFiles) {
+        if (argv.testcaseFiles.length > 0) {
+            const testcaseFiles = JSON.parse(argv.testcaseFiles);
+            return testcaseFiles;
+        }
+        else {
+            return [];
+        }
+    }
+    else {
+        return io_1.getAllFiles(testcasesDir, '.tc.ts');
+    }
+}
 function getSpecMatchFiles(spec, table) {
     if (spec.substr(0, 1) === '-') {
         return [];

@@ -343,12 +343,34 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   const str = sourceFile.text.substr(verifyMetadata.pos, verifyMetadata.end - verifyMetadata.pos)
                   const verifyObject = JSON5.parse(str)
                   
-                  testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash = verifyObject
-
+                  if (!testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash) {
+                      testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash = {}
+                  }
+                  
                   for (const spec in verifyObject) {
                     if (!(spec in verifyTable)) {
-                      verifyTable[spec] = {}
-                      verifyTable[spec][testcaseParserState.activeTestcaseId] = true
+                      verifyTable[spec] = {};
+                      verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
+                    }
+
+                    const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash
+
+                    if (!(spec in specVerifyHash)) {
+                      specVerifyHash[spec] = []
+                    }
+
+                    for (const criteria of verifyObject[spec]) {
+                      let found = false
+
+                      for (const _criteria of specVerifyHash[spec]) {
+                        if (criteria === _criteria) {
+                          found = true
+                        }
+                      }
+
+                      if (!found) {
+                        specVerifyHash[spec].push(criteria)
+                      }
                     }
                   }
                 }
