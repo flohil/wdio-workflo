@@ -42,6 +42,8 @@ function parseSpecFiles(sourceFile) {
                     const parentPos = specParserState.callExpressionPos;
                     specParserState.callExpressionPos = -1;
                     switch (identifier.text) {
+                        case 'fFeature':
+                        case 'xFeature':
                         case 'Feature':
                             specParserState.addArgFunc((node) => {
                                 const featureId = node.text;
@@ -65,6 +67,8 @@ function parseSpecFiles(sourceFile) {
                             });
                             afterFuncTable[parentPos] = () => { specParserState.activeFeature = undefined; };
                             break;
+                        case 'fStory':
+                        case 'xStory':
                         case 'Story':
                             specParserState.addArgFunc((node) => {
                                 const specId = node.text;
@@ -141,6 +145,8 @@ function parseTestcaseFiles(sourceFile) {
                     const parentPos = testcaseParserState.callExpressionPos;
                     testcaseParserState.callExpressionPos = -1;
                     switch (identifier.text) {
+                        case 'fsuite':
+                        case 'xsuite':
                         case 'suite':
                             testcaseParserState.addArgFunc((node) => {
                                 const suiteId = node.text;
@@ -175,6 +181,8 @@ function parseTestcaseFiles(sourceFile) {
                                 testcaseParserState.activeSuiteId = fullSuiteId;
                             };
                             break;
+                        case 'ftestcase':
+                        case 'xtestcase':
                         case 'testcase':
                             testcaseParserState.addArgFunc((node) => {
                                 const testcaseId = node.text;

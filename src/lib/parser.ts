@@ -95,6 +95,8 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
           specParserState.callExpressionPos = -1
           
           switch(identifier.text) {
+            case 'fFeature':
+            case 'xFeature':
             case 'Feature':
               specParserState.addArgFunc(
                 (node) => {
@@ -126,6 +128,8 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
               )
               afterFuncTable[parentPos] = () => { specParserState.activeFeature = undefined }
               break
+            case 'fStory':
+            case 'xStory':
             case 'Story':
               specParserState.addArgFunc(
                 (node) => {
@@ -261,6 +265,8 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
           testcaseParserState.callExpressionPos = -1
           
           switch(identifier.text) {
+            case 'fsuite':
+            case 'xsuite':
             case 'suite':
               testcaseParserState.addArgFunc(
                 (node) => {
@@ -306,6 +312,8 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                 testcaseParserState.activeSuiteId = fullSuiteId 
               }
               break
+            case 'ftestcase':
+            case 'xtestcase':
             case 'testcase':
               testcaseParserState.addArgFunc(
                 (node) => {
