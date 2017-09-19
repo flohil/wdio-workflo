@@ -25,11 +25,18 @@ export interface SpecTableEntry {
   feature: string
 }
 
+export interface FeatureTableEntry {
+  specFiles: string[]
+}
+
 export type SpecTable = Record<string, SpecTableEntry>
 
+export type FeatureTable = Record<string, FeatureTableEntry>
+
 export interface SpecParseResults {
-  table: SpecTable
-  tree: FeatureHash
+  specTable: SpecTable
+  specTree: FeatureHash
+  featureTable: FeatureTable
 }
 
 // used to determine, if a spec is to be executed for a feature or spec filter
@@ -37,6 +44,8 @@ const specTable: SpecTable = {}
 
 // used to lookup spec information
 const specTree: FeatureHash = {}
+
+const featureTable: FeatureTable = {}
 
 const specParserState: {
   callExpressionPos: number,
@@ -97,6 +106,14 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
                       specHash: {}
                     }
                   }
+
+                  if (!(featureId in featureTable)) {
+                    featureTable[featureId] = {
+                      specFiles: []
+                    }
+                  }
+
+                  featureTable[featureId].specFiles.push(specParserState.activeSpecFile)
                 }
               )
               specParserState.addArgFunc(
@@ -372,8 +389,9 @@ export function specFilesParse(fileNames: string[]): SpecParseResults {
   })
 
   return {
-    tree: specTree,
-    table: specTable
+    specTree: specTree,
+    specTable: specTable,
+    featureTable: featureTable
   }
 }
 

@@ -123,9 +123,12 @@ if (argv.listFiles) {
     const listFiles = JSON.parse(argv.listFiles);
     argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)));
 }
-// handle cli specs
-if (argv.specs) {
+let specParseResults;
+let testcaseParseResults;
+// parse specs and testcases
+if (argv.specs || argv.testcases || argv.specFiles || argv.testcaseFiles || argv.features) {
     const specsDir = path.join(testDir, 'src', 'specs');
+    const testcasesDir = path.join(testDir, 'src', 'testcases');
     function determineSpecFiles() {
         if (argv.specFiles) {
             if (argv.specFiles.length > 0) {
@@ -140,19 +143,6 @@ if (argv.specs) {
             return io_1.getAllFiles(specsDir, '.spec.ts');
         }
     }
-    const specFiles = determineSpecFiles();
-    const specParseResults = parser_1.specFilesParse(specFiles);
-    const specs = JSON.parse(argv.specs);
-    const filteredSpecsObj = {};
-    for (const spec of specs) {
-        getSpecMatchFiles(spec, specParseResults.table).forEach(file => filteredSpecsObj[file] = true);
-    }
-    // only execute spec files that include filtered options
-    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj));
-}
-// handle cli testcases
-if (argv.testcases) {
-    const testcasesDir = path.join(testDir, 'src', 'testcases');
     function determineTestcaseFiles() {
         if (argv.testcaseFiles) {
             if (argv.testcaseFiles.length > 0) {
@@ -167,8 +157,23 @@ if (argv.testcases) {
             return io_1.getAllFiles(testcasesDir, '.tc.ts');
         }
     }
+    const specFiles = determineSpecFiles();
     const testcaseFiles = determineTestcaseFiles();
-    const testcaseParseResults = parser_1.testcaseFilesParse(testcaseFiles);
+    specParseResults = parser_1.specFilesParse(specFiles);
+    testcaseParseResults = parser_1.testcaseFilesParse(testcaseFiles);
+}
+// handle cli specs
+if (argv.specs) {
+    const specs = JSON.parse(argv.specs);
+    const filteredSpecsObj = {};
+    for (const spec of specs) {
+        getSpecMatchFiles(spec, specParseResults.specTable).forEach(file => filteredSpecsObj[file] = true);
+    }
+    // only execute spec files that include filtered options
+    argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj));
+}
+// handle cli testcases
+if (argv.testcases) {
     const testcases = JSON.parse(argv.testcases);
     const filteredTestcasesObj = {};
     for (const testcase of testcases) {
@@ -176,6 +181,32 @@ if (argv.testcases) {
     }
     // only execute spec files that include filtered options
     argv.testcaseFiles = JSON.stringify(Object.keys(filteredTestcasesObj));
+}
+if (argv.features) {
+    const features = JSON.parse(argv.features);
+    const filteredFeaturesObj = {};
+    for (const feature of features) {
+        if (feature in specParseResults.featureTable) {
+            for (const specFile of specParseResults.featureTable[feature].specFiles) {
+                filteredFeaturesObj[specFile] = true;
+            }
+        }
+    }
+    if (argv.specFiles) {
+        const specFiles = JSON.parse(argv.specFiles);
+        const specFilesObj = {};
+        const mergedFeaturesObj = {};
+        specFiles.forEach(specFile => specFilesObj[specFile] = true);
+        for (const specFile in specFilesObj) {
+            if (specFile in filteredFeaturesObj) {
+                mergedFeaturesObj[specFile] = true;
+            }
+        }
+        argv.specFiles = JSON.stringify(Object.keys(mergedFeaturesObj));
+    }
+    else {
+        argv.specFiles = JSON.stringify(Object.keys(filteredFeaturesObj));
+    }
 }
 let args = {};
 for (let key of ALLOWED_ARGV) {

@@ -13,10 +13,15 @@ export interface SpecTableEntry {
     specFile: string;
     feature: string;
 }
+export interface FeatureTableEntry {
+    specFiles: string[];
+}
 export declare type SpecTable = Record<string, SpecTableEntry>;
+export declare type FeatureTable = Record<string, FeatureTableEntry>;
 export interface SpecParseResults {
-    table: SpecTable;
-    tree: FeatureHash;
+    specTable: SpecTable;
+    specTree: FeatureHash;
+    featureTable: FeatureTable;
 }
 export declare function parseSpecFiles(sourceFile: ts.SourceFile): void;
 export interface TestcaseInfo {

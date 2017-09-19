@@ -9,6 +9,16 @@ const words = {
   'And': 'And',
 }
 
+export function featuresInclude(id: string) {
+  const executionFilters = (<any> jasmine.getEnv()).executionFilters
+
+  if(!executionFilters.features) {
+    return true
+  } else {
+    return id in executionFilters.features
+  }
+}
+
 export function specsInclude(id: string) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
 
@@ -112,7 +122,9 @@ export const Feature = (
 
   this.__currentFeature = description
 
-  jasmineFunc(`${description}:`, bodyFunc)
+  if (featuresInclude(description)) {
+    jasmineFunc(`${description}:`, bodyFunc)
+  }
 }
 
 export const fFeature = (

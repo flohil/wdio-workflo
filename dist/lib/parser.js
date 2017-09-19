@@ -8,6 +8,7 @@ let afterFuncTable = {};
 const specTable = {};
 // used to lookup spec information
 const specTree = {};
+const featureTable = {};
 const specParserState = {
     callExpressionPos: -1,
     activeSpecFile: undefined,
@@ -50,6 +51,12 @@ function parseSpecFiles(sourceFile) {
                                         specHash: {}
                                     };
                                 }
+                                if (!(featureId in featureTable)) {
+                                    featureTable[featureId] = {
+                                        specFiles: []
+                                    };
+                                }
+                                featureTable[featureId].specFiles.push(specParserState.activeSpecFile);
                             });
                             specParserState.addArgFunc((node) => {
                                 const featureMetadata = node;
@@ -232,8 +239,9 @@ function specFilesParse(fileNames) {
         parseSpecFiles(sourceFile);
     });
     return {
-        tree: specTree,
-        table: specTable
+        specTree: specTree,
+        specTable: specTable,
+        featureTable: featureTable
     };
 }
 exports.specFilesParse = specFilesParse;

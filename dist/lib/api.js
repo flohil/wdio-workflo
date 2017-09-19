@@ -8,6 +8,16 @@ const words = {
     'Then': 'Then',
     'And': 'And',
 };
+function featuresInclude(id) {
+    const executionFilters = jasmine.getEnv().executionFilters;
+    if (!executionFilters.features) {
+        return true;
+    }
+    else {
+        return id in executionFilters.features;
+    }
+}
+exports.featuresInclude = featuresInclude;
 function specsInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;
     if (!executionFilters.specs) {
@@ -91,7 +101,9 @@ exports.Feature = (description, metadata, bodyFunc, jasmineFunc = describe) => {
         throw new Error(`Feature description must not be empty!`);
     }
     this.__currentFeature = description;
-    jasmineFunc(`${description}:`, bodyFunc);
+    if (featuresInclude(description)) {
+        jasmineFunc(`${description}:`, bodyFunc);
+    }
 };
 exports.fFeature = (description, metadata, bodyFunc) => {
     exports.Feature(description, metadata, bodyFunc, fdescribe);
