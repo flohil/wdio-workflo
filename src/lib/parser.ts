@@ -350,9 +350,10 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   for (const spec in verifyObject) {
                     if (!(spec in verifyTable)) {
                       verifyTable[spec] = {};
-                      verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
                     }
 
+                    verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
+                    
                     const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash
 
                     if (!(spec in specVerifyHash)) {

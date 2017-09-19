@@ -240,7 +240,7 @@ if (argv.testcases) {
 }
 
 if (argv.features) {
-    let features = JSON.parse(argv.features)
+    features = JSON.parse(argv.features)
     const filteredFeaturesObj: Record<string, true> = {}
 
     for (const feature of features) {
@@ -291,6 +291,7 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
         verifiedSpecFiles[specParseResults.specTable[verifiedSpec].specFile] = true
     }
 
+    // removed specFiles not verified by filtered testcases
     for (const specFile in specFilesObj) {
         if (!(specFile in verifiedSpecFiles)) {
             delete specFilesObj[specFile]
@@ -303,9 +304,69 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
 
 // filter spec files based on those specs verified by testcases if no spec filters were supplied
 if ((argv.specFiles || argv.features || argv.specs) && !argv.testcases && !argv.testcaseFiles) {
-    if (!argv.features && !argv.specs) {
-        // get all specs defined in 
+    const verifiedSpecSpecs: Record<string, true> = {}
+    const verifiedFeatureSpecs: Record<string, true> = {}
+    let verifiedSpecs: Record<string, true> = {}
+    const verifiedTestcases: Record<string, true> = {}
+    const verifiedTestcaseFiles: Record<string, true> = {}
+
+    if (argv.specFiles && !argv.specs && !argv.features) {
+        // only specFiles were given
+        // these have already been considered in specParseResults
+        for (const spec in specParseResults.specTable) {
+            verifiedSpecs[spec] = true
+        }
+    } else {
+        if (argv.specs) {
+            for (const spec of specs) {
+                verifiedSpecSpecs[spec] = true
+            }
+        }
+    
+        if (argv.features) {
+            for (const feature of features) {
+                if (feature in specParseResults.specTree) {
+                    for (const featureId in specParseResults.specTree[feature].specHash) {
+                        for (const verifiedSpec in specParseResults.specTree[feature].specHash) {
+                            verifiedFeatureSpecs[verifiedSpec] = true
+                        }
+                    }
+                }
+            }
+        }
+    
+        if (argv.specs && !argv.features) {
+            verifiedSpecs = verifiedSpecSpecs
+        } else if (argv.features && !argv.specs) {
+            verifiedSpecs = verifiedFeatureSpecs
+        } else if (argv.features && argv.specs) {
+            for (const featureSpec in verifiedFeatureSpecs) {
+                if (featureSpec in verifiedSpecSpecs) {
+                    verifiedSpecs[featureSpec] = true
+                }
+            }
+        }
     }
+
+    // get all testcase files that verify the extracted specs
+    for (const verifiedSpec in verifiedSpecs) {
+        if (verifiedSpec in testcaseParseResults.verifyTable) {
+            for (const testcaseId in testcaseParseResults.verifyTable[verifiedSpec]) {
+                verifiedTestcases[testcaseId] = true
+                verifiedTestcaseFiles[testcaseParseResults.testcaseTable[testcaseId].testcaseFile] = true
+            }
+        }
+    }
+
+    // removed testcase files not verified by filtered specs
+    for (const testcaseFile in testcaseFilesObj) {
+        if (!(testcaseFile in verifiedTestcaseFiles)) {
+            delete testcaseFilesObj[testcaseFile]
+        }
+    }
+
+    // add testcases as testcases filter...
+    argv.testcases = JSON.stringify(Object.keys(verifiedTestcases))
 }
 
 // only execute spec files that include filtered options
