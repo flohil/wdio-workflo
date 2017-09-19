@@ -19,7 +19,28 @@ export interface SpecParseResults {
     tree: FeatureHash;
 }
 export declare function parseSpecFiles(sourceFile: ts.SourceFile): void;
-export declare function specFilesParse(fileNames: string[]): {
-    tree: Record<string, FeatureInfo>;
-    table: Record<string, SpecTableEntry>;
-};
+export interface TestcaseInfo {
+    description?: string;
+    metadata?: Workflo.ITestcaseMetadata;
+    specVerifyHash?: Record<string, number[]>;
+}
+export interface SuiteInfo {
+    metadata?: Workflo.ISuiteMetadata;
+    testcaseHash?: TestcaseHash;
+}
+export declare type TestcaseHash = Record<string, TestcaseInfo>;
+export declare type SuiteHash = Record<string, SuiteInfo>;
+export interface TestcaseTableEntry {
+    testcaseFile: string;
+    suiteId: string;
+}
+export declare type TestcaseTable = Record<string, TestcaseTableEntry>;
+export declare type VerifyTable = Record<string, Record<string, true>>;
+export interface TestcaseParseResults {
+    testcaseTable: TestcaseTable;
+    tree: SuiteHash;
+    verifyTable: VerifyTable;
+}
+export declare function parseTestcaseFiles(sourceFile: ts.SourceFile): void;
+export declare function specFilesParse(fileNames: string[]): SpecParseResults;
+export declare function testcaseFilesParse(fileNames: string[]): TestcaseParseResults;

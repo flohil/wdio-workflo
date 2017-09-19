@@ -150,6 +150,33 @@ if (argv.specs) {
     // only execute spec files that include filtered options
     argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj));
 }
+// handle cli testcases
+if (argv.testcases) {
+    const testcasesDir = path.join(testDir, 'src', 'testcases');
+    function determineTestcaseFiles() {
+        if (argv.testcaseFiles) {
+            if (argv.testcaseFiles.length > 0) {
+                const testcaseFiles = JSON.parse(argv.testcaseFiles);
+                return testcaseFiles.map((spec) => path.join(testcasesDir, `${spec}.tc.ts`));
+            }
+            else {
+                return [];
+            }
+        }
+        else {
+            return io_1.getAllFiles(testcasesDir, '.tc.ts');
+        }
+    }
+    const testcaseFiles = determineTestcaseFiles();
+    const testcaseParseResults = parser_1.testcaseFilesParse(testcaseFiles);
+    const testcases = JSON.parse(argv.testcases);
+    const filteredTestcasesObj = {};
+    for (const testcase of testcases) {
+        getTestcaseMatchFiles(testcase, testcaseParseResults.testcaseTable).forEach(file => filteredTestcasesObj[file] = true);
+    }
+    // only execute spec files that include filtered options
+    argv.testcaseFiles = JSON.stringify(Object.keys(filteredTestcasesObj));
+}
 let args = {};
 for (let key of ALLOWED_ARGV) {
     if (argv[key] !== undefined) {
@@ -181,5 +208,19 @@ function getSpecMatchFiles(spec, table) {
         return Object.keys(matchFilesObj);
     }
     return [];
+}
+function getTestcaseMatchFiles(testcase, table) {
+    if (testcase.substr(0, 1) === '-') {
+        return [];
+    }
+    else {
+        const matchFilesObj = {};
+        for (const testcaseEntry in table) {
+            if (testcaseEntry.substr(0, testcase.length) === testcase) {
+                matchFilesObj[table[testcaseEntry].testcaseFile] = true;
+            }
+        }
+        return Object.keys(matchFilesObj);
+    }
 }
 //# sourceMappingURL=cli.js.map

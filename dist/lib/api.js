@@ -81,9 +81,6 @@ function testcasesInclude(id, isTestcase = false) {
                         }
                     }
                 }
-                else {
-                    return false;
-                }
             }
         }
         return included;

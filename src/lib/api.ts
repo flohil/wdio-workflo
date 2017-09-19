@@ -92,8 +92,6 @@ function testcasesInclude(id: string, isTestcase: boolean = false) {
               included = true
             }
           }  
-        } else {
-          return false
         }
       }
     }

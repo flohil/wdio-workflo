@@ -4,6 +4,9 @@ import * as JSON5 from 'json5'
 
 type NodeArgFunc = (node: ts.Node) => void
 
+// stores pos of callExpression and the function to be executed after this block
+let afterFuncTable: Record<string, () => void> = {}
+
 export interface SpecInfo {
   description?: string,
   metadata?: Workflo.IStoryMetaData
@@ -35,8 +38,8 @@ const specTable: SpecTable = {}
 // used to lookup spec information
 const specTree: FeatureHash = {}
 
-const parserState: {
-  beforeCallExpressionIdentifier: boolean,
+const specParserState: {
+  callExpressionPos: number,
   activeSpecFile: string,
   activeFeature: string,
   activeSpecId: string,
@@ -44,17 +47,17 @@ const parserState: {
   addArgFunc: (NodeArgFunc) => void,
   executeNextArgFunc: NodeArgFunc
 } = {
-  beforeCallExpressionIdentifier: false,
+  callExpressionPos: -1,
   activeSpecFile: undefined,
   activeFeature: undefined,
   activeSpecId: undefined,
   argFuncs: [],
   addArgFunc: (argFunc: NodeArgFunc) => {
-    parserState.argFuncs.push(argFunc)
+    specParserState.argFuncs.push(argFunc)
   },
   executeNextArgFunc: (node: ts.Node) => {
-    if (parserState.argFuncs.length > 0) {
-      const argFunc = parserState.argFuncs.shift()
+    if (specParserState.argFuncs.length > 0) {
+      const argFunc = specParserState.argFuncs.shift()
       
       argFunc(node)
     }
@@ -65,27 +68,29 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
   parseSpecNode(sourceFile);
 
   function parseSpecNode(node: ts.Node) {
-    let afterFunc: () => void = undefined
+    let nodePos = -1
 
-    parserState.executeNextArgFunc(node)
+    specParserState.executeNextArgFunc(node)
 
     switch (node.kind) {
       case ts.SyntaxKind.CallExpression:
-        parserState.beforeCallExpressionIdentifier = true
+        nodePos = node.pos
+        specParserState.callExpressionPos = nodePos
         break
       case ts.SyntaxKind.Identifier:
         // ensure only functions and not varibables etc. are considered
-        if (parserState.beforeCallExpressionIdentifier) {
-          parserState.beforeCallExpressionIdentifier = false
-
+        if (specParserState.callExpressionPos >= 0) {
           const identifier = <ts.Identifier> node
+          const parentPos = specParserState.callExpressionPos
+
+          specParserState.callExpressionPos = -1
           
           switch(identifier.text) {
             case 'Feature':
-              parserState.addArgFunc(
+              specParserState.addArgFunc(
                 (node) => {
                   const featureId = (<ts.StringLiteral> node).text
-                  parserState.activeFeature = featureId
+                  specParserState.activeFeature = featureId
 
                   if (!(featureId in specTree)) {
                     specTree[featureId] = {
@@ -94,49 +99,49 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
                   }
                 }
               )
-              parserState.addArgFunc(
+              specParserState.addArgFunc(
                 (node) => {
                   const featureMetadata = (<ts.ObjectLiteralExpression> node)
                   const str = sourceFile.text.substr(featureMetadata.pos, featureMetadata.end - featureMetadata.pos)
 
-                  specTree[parserState.activeFeature].metadata = JSON5.parse(str)
+                  specTree[specParserState.activeFeature].metadata = JSON5.parse(str)
                 }
               )
-              afterFunc = () => { parserState.activeFeature = undefined }
+              afterFuncTable[parentPos] = () => { specParserState.activeFeature = undefined }
               break
             case 'Story':
-              parserState.addArgFunc(
+              specParserState.addArgFunc(
                 (node) => {
                   const specId = (<ts.StringLiteral> node).text
-                  parserState.activeSpecId = specId
+                  specParserState.activeSpecId = specId
 
-                  if (!(specId in specTree[parserState.activeFeature])) {
-                    specTree[parserState.activeFeature].specHash[specId] = {}
+                  if (!(specId in specTree[specParserState.activeFeature])) {
+                    specTree[specParserState.activeFeature].specHash[specId] = {}
                   }
                   if (!(specId in specTable)) {
                     specTable[specId] = {
-                      feature: parserState.activeFeature,
-                      specFile: parserState.activeSpecFile
+                      feature: specParserState.activeFeature,
+                      specFile: specParserState.activeSpecFile
                     }
                   }
                 }
               )
-              parserState.addArgFunc(
+              specParserState.addArgFunc(
                 (node) => {
                   const specDescription = (<ts.StringLiteral> node).text
 
-                  specTree[parserState.activeFeature].specHash[parserState.activeSpecId].description = specDescription
+                  specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].description = specDescription
                 }
               ),
-              parserState.addArgFunc(
+              specParserState.addArgFunc(
                 (node) => {
                   const specMetadata = (<ts.ObjectLiteralExpression> node)
                   const str = sourceFile.text.substr(specMetadata.pos, specMetadata.end - specMetadata.pos)
                   
-                  specTree[parserState.activeFeature].specHash[parserState.activeSpecId].metadata = JSON5.parse(str)
+                  specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].metadata = JSON5.parse(str)
                 }
               )
-              afterFunc = () => { parserState.activeSpecId = undefined }
+              afterFuncTable[parentPos] = () => { specParserState.activeSpecId = undefined }
               break
             case 'Then':
               break
@@ -147,25 +152,221 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
 
     ts.forEachChild(node, parseSpecNode);
 
-    if (afterFunc) {
-      afterFunc()
+    if (nodePos >= 0 && afterFuncTable[nodePos]) {
+      afterFuncTable[nodePos]()
     }
   }
 }
 
-export function specFilesParse(fileNames: string[]) {
+export interface TestcaseInfo {
+  description?: string,
+  metadata?: Workflo.ITestcaseMetadata,
+  specVerifyHash?: Record<string, number[]>
+}
+
+export interface SuiteInfo {
+  metadata?: Workflo.ISuiteMetadata,
+  testcaseHash?: TestcaseHash
+}
+
+export type TestcaseHash = Record<string, TestcaseInfo>
+export type SuiteHash = Record<string, SuiteInfo>
+
+export interface TestcaseTableEntry {
+  testcaseFile: string,
+  suiteId: string
+}
+
+export type TestcaseTable = Record<string, TestcaseTableEntry>
+
+// each specId of verifyObj has a hash of all fullTestcaseIds that verify it
+export type VerifyTable = Record<string, Record<string, true>>
+
+export interface TestcaseParseResults {
+  testcaseTable: TestcaseTable
+  tree: SuiteHash
+  verifyTable: VerifyTable
+}
+
+// used to determine, if a spec is to be executed for a feature or spec filter
+const testcaseTable: TestcaseTable = {}
+
+// used to lookup spec information
+const testcaseTree: SuiteHash = {}
+
+const verifyTable: VerifyTable = {}
+
+const testcaseParserState: {
+  callExpressionPos: number,
+  activeTestcaseFile: string,
+  activeSuiteId: string,
+  activeTestcaseId: string,
+  argFuncs: NodeArgFunc[],
+  addArgFunc: (NodeArgFunc) => void,
+  executeNextArgFunc: NodeArgFunc
+} = {
+  callExpressionPos: -1,
+  activeTestcaseFile: undefined,
+  activeSuiteId: undefined,
+  activeTestcaseId: undefined,
+  argFuncs: [],
+  addArgFunc: (argFunc: NodeArgFunc) => {
+    testcaseParserState.argFuncs.push(argFunc)
+  },
+  executeNextArgFunc: (node: ts.Node) => {
+    if (testcaseParserState.argFuncs.length > 0) {
+      const argFunc = testcaseParserState.argFuncs.shift()
+      
+      argFunc(node)
+    }
+  }
+}
+
+export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
+  parseTestcaseNode(sourceFile);
+
+  function parseTestcaseNode(node: ts.Node) {
+    let nodePos = -1
+
+    testcaseParserState.executeNextArgFunc(node)
+
+    switch (node.kind) {
+      case ts.SyntaxKind.CallExpression:
+        nodePos = node.pos
+        testcaseParserState.callExpressionPos = nodePos
+        break
+      case ts.SyntaxKind.Identifier:
+        // ensure only functions and not varibables etc. are considered
+        if (testcaseParserState.callExpressionPos >= 0) {
+          const identifier = <ts.Identifier> node
+          const parentPos = testcaseParserState.callExpressionPos
+
+          testcaseParserState.callExpressionPos = -1
+          
+          switch(identifier.text) {
+            case 'suite':
+              testcaseParserState.addArgFunc(
+                (node) => {
+                  const suiteId = (<ts.StringLiteral> node).text
+
+                  if (typeof testcaseParserState.activeSuiteId === 'undefined') {
+                    testcaseParserState.activeSuiteId = suiteId
+                  } else {
+                    testcaseParserState.activeSuiteId += `.${suiteId}`
+                  }
+
+                  const fullSuiteId = testcaseParserState.activeSuiteId
+                  
+                  if (!(fullSuiteId in testcaseTree)) {
+                    testcaseTree[fullSuiteId] = {
+                      testcaseHash: {}
+                    }
+                  }
+                }
+              )
+              testcaseParserState.addArgFunc(
+                (node) => {
+                  const suiteMetadata = (<ts.ObjectLiteralExpression> node)
+                  const str = sourceFile.text.substr(suiteMetadata.pos, suiteMetadata.end - suiteMetadata.pos)
+
+                  testcaseTree[testcaseParserState.activeSuiteId].metadata = JSON5.parse(str)
+                }
+              )
+              afterFuncTable[parentPos] = () => {
+                const suiteIds = testcaseParserState.activeSuiteId.split('.')
+                suiteIds.pop()
+
+                let fullSuiteId = undefined
+
+                if (suiteIds.length > 0) {
+                  fullSuiteId = suiteIds.join('.')
+
+                  if (fullSuiteId === '') {
+                    fullSuiteId = undefined 
+                  }
+                }
+
+                testcaseParserState.activeSuiteId = fullSuiteId 
+              }
+              break
+            case 'testcase':
+              testcaseParserState.addArgFunc(
+                (node) => {
+                  const testcaseId = (<ts.StringLiteral> node).text
+                  const fullTestcaseId = `${testcaseParserState.activeSuiteId}.${testcaseId}`
+                  testcaseParserState.activeTestcaseId = fullTestcaseId
+
+                  if (!(fullTestcaseId in testcaseTree[testcaseParserState.activeSuiteId])) {
+                    testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[fullTestcaseId] = {
+                      description: testcaseId
+                    }
+                  }
+                  if (!(fullTestcaseId in testcaseTable)) {
+                    testcaseTable[fullTestcaseId] = {
+                      suiteId: testcaseParserState.activeSuiteId,
+                      testcaseFile: testcaseParserState.activeTestcaseFile
+                    }
+                  }
+                }
+              )
+              testcaseParserState.addArgFunc(
+                (node) => {
+                  const testcaseMetadata = (<ts.ObjectLiteralExpression> node)
+                  const str = sourceFile.text.substr(testcaseMetadata.pos, testcaseMetadata.end - testcaseMetadata.pos)
+                  
+                  testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].metadata = JSON5.parse(str)
+                }
+              )
+              afterFuncTable[parentPos] = () => { testcaseParserState.activeTestcaseId = undefined }
+              break
+            case 'verify':
+              testcaseParserState.addArgFunc(
+                (node) => {
+                  const verifyMetadata = (<ts.ObjectLiteralExpression> node)
+                  const str = sourceFile.text.substr(verifyMetadata.pos, verifyMetadata.end - verifyMetadata.pos)
+                  const verifyObject = JSON5.parse(str)
+                  
+                  testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash = verifyObject
+
+                  for (const spec in verifyObject) {
+                    if (!(spec in verifyTable)) {
+                      verifyTable[spec] = {}
+                      verifyTable[spec][testcaseParserState.activeTestcaseId] = true
+                    }
+                  }
+                }
+              )
+              break
+          }
+        }
+        break
+    }
+
+    ts.forEachChild(node, parseTestcaseNode);
+
+    if (nodePos >= 0 && afterFuncTable[nodePos]) {
+      afterFuncTable[nodePos]()
+    }
+  }
+}
+
+const compilerOptions = {
+  noEmitOnError: true, 
+  noImplicitAny: true,
+  target: ts.ScriptTarget.ES2017, 
+  module: ts.ModuleKind.CommonJS
+}
+
+export function specFilesParse(fileNames: string[]): SpecParseResults {
   
-  const program = ts.createProgram(fileNames, {
-    noEmitOnError: true, 
-    noImplicitAny: true,
-    target: ts.ScriptTarget.ES2017, 
-    module: ts.ModuleKind.CommonJS
-  });
+  const program = ts.createProgram(fileNames, compilerOptions);
   
   fileNames.forEach(fileName => {
-    parserState.activeSpecFile = fileName  
+    specParserState.activeSpecFile = fileName  
   
     let sourceFile = program.getSourceFile(fileName)
+
+    afterFuncTable = {}
   
     parseSpecFiles(sourceFile)
   })
@@ -173,5 +374,25 @@ export function specFilesParse(fileNames: string[]) {
   return {
     tree: specTree,
     table: specTable
+  }
+}
+
+export function testcaseFilesParse(fileNames: string[]): TestcaseParseResults {
+  const program = ts.createProgram(fileNames, compilerOptions);
+  
+  fileNames.forEach(fileName => {
+    testcaseParserState.activeTestcaseFile = fileName  
+  
+    let sourceFile = program.getSourceFile(fileName)
+
+    afterFuncTable = {}
+  
+    parseTestcaseFiles(sourceFile)
+  })
+
+  return {
+    testcaseTable: testcaseTable,
+    tree: testcaseTree,
+    verifyTable: verifyTable
   }
 }

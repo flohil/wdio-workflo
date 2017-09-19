@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as ejs from 'ejs' 
 
-import {specFilesParse, SpecTableEntry} from './parser'
+import {specFilesParse, SpecTableEntry, testcaseFilesParse, TestcaseTableEntry} from './parser'
 import {getAllFiles} from './io'
 
 import * as npmInstallPackage from 'npm-install-package'
@@ -215,6 +215,38 @@ if (argv.specs) {
     argv.specFiles = JSON.stringify(Object.keys(filteredSpecsObj))
 }
 
+// handle cli testcases
+if (argv.testcases) {
+    const testcasesDir = path.join(testDir, 'src', 'testcases')
+
+    function determineTestcaseFiles(): string[] {
+
+        if (argv.testcaseFiles) {
+            if (argv.testcaseFiles.length > 0) {
+                const testcaseFiles: string[] = JSON.parse(argv.testcaseFiles)
+                return testcaseFiles.map((spec) => path.join(testcasesDir, `${spec}.tc.ts`))
+            } else {
+                return []
+            }
+        } else {
+            return getAllFiles(testcasesDir, '.tc.ts')                
+        }
+    }
+
+    const testcaseFiles = determineTestcaseFiles()
+    const testcaseParseResults = testcaseFilesParse(testcaseFiles)
+    
+    const testcases: string[] = JSON.parse(argv.testcases)
+    const filteredTestcasesObj: Record<string, true> = {}
+
+    for (const testcase of testcases) {
+        getTestcaseMatchFiles(testcase, testcaseParseResults.testcaseTable).forEach(file => filteredTestcasesObj[file] = true)
+    }
+
+    // only execute spec files that include filtered options
+    argv.testcaseFiles = JSON.stringify(Object.keys(filteredTestcasesObj))
+}
+
 let args = {}
 for (let key of ALLOWED_ARGV) {
     if (argv[key] !== undefined) {
@@ -251,4 +283,20 @@ function getSpecMatchFiles(spec: string, table: Record<string, SpecTableEntry>):
     } 
 
     return []
+}
+
+function getTestcaseMatchFiles(testcase: string, table: Record<string, TestcaseTableEntry>): string[] {
+    if (testcase.substr(0,1) === '-') {
+        return []
+    } else {
+        const matchFilesObj = {}
+
+        for (const testcaseEntry in table) {
+            if (testcaseEntry.substr(0, testcase.length) === testcase) {
+                matchFilesObj[table[testcaseEntry].testcaseFile] = true
+            }
+        }
+
+        return Object.keys(matchFilesObj)
+    } 
 }
