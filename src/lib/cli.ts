@@ -274,10 +274,8 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
             }
             
             if (matchSuite in testcaseParseResults.tree) {
-                for (const testcaseId in testcaseParseResults.tree[matchSuite].testcaseHash) {
-                    for (const verifiedSpec in testcaseParseResults.tree[matchSuite].testcaseHash[testcaseId].specVerifyHash) {
-                        verifiedSpecs[verifiedSpec] = true
-                    }
+                for (const verifiedSpec in testcaseParseResults.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+                    verifiedSpecs[verifiedSpec] = true
                 }
             }
         }
