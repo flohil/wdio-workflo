@@ -209,6 +209,14 @@ declare global  {
              */
             function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;
         }
+        interface FilterList {
+            listFiles: string[];
+            specFiles: string[];
+            testcaseFiles: string[];
+            features: string[];
+            specs: string[];
+            testcases: string[];
+        }
         interface IManualTestcaseResults {
             [key: string]: {
                 [key: number]: {
