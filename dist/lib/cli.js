@@ -189,9 +189,14 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
     if (argv.testcases) {
         // add all spec ids verified in given testcases
         for (const testcase of testcases) {
-            if (testcase in testcaseParseResults.tree) {
-                for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
-                    for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+            let matchSuite = testcase;
+            const testcaseParts = testcase.split('.');
+            if (testcaseParts.length > 0) {
+                matchSuite = testcaseParts[0];
+            }
+            if (matchSuite in testcaseParseResults.tree) {
+                for (const testcaseId in testcaseParseResults.tree[matchSuite].testcaseHash) {
+                    for (const verifiedSpec in testcaseParseResults.tree[matchSuite].testcaseHash[testcaseId].specVerifyHash) {
                         verifiedSpecs[verifiedSpec] = true;
                     }
                 }

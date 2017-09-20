@@ -63,7 +63,15 @@ function parseSpecFiles(sourceFile) {
                             specParserState.addArgFunc((node) => {
                                 const featureMetadata = node;
                                 const str = sourceFile.text.substr(featureMetadata.pos, featureMetadata.end - featureMetadata.pos);
-                                specTree[specParserState.activeFeature].metadata = JSON5.parse(str);
+                                let parsedMetadata;
+                                try {
+                                    parsedMetadata = JSON5.parse(str);
+                                }
+                                catch (e) {
+                                    console.error(`Failed to parse feature metadata. Please do not use dynamic values inside feature metadata: ${parsedMetadata}\n`);
+                                    throw e;
+                                }
+                                specTree[specParserState.activeFeature].metadata = parsedMetadata;
                             });
                             afterFuncTable[parentPos] = () => { specParserState.activeFeature = undefined; };
                             break;
@@ -90,7 +98,15 @@ function parseSpecFiles(sourceFile) {
                                 specParserState.addArgFunc((node) => {
                                     const specMetadata = node;
                                     const str = sourceFile.text.substr(specMetadata.pos, specMetadata.end - specMetadata.pos);
-                                    specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].metadata = JSON5.parse(str);
+                                    let parsedMetadata;
+                                    try {
+                                        parsedMetadata = JSON5.parse(str);
+                                    }
+                                    catch (e) {
+                                        console.error(`Failed to parse spec metadata. Please do not use dynamic values inside spec metadata: ${parsedMetadata}\n`);
+                                        throw e;
+                                    }
+                                    specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].metadata = parsedMetadata;
                                 });
                             afterFuncTable[parentPos] = () => { specParserState.activeSpecId = undefined; };
                             break;
@@ -166,7 +182,15 @@ function parseTestcaseFiles(sourceFile) {
                             testcaseParserState.addArgFunc((node) => {
                                 const suiteMetadata = node;
                                 const str = sourceFile.text.substr(suiteMetadata.pos, suiteMetadata.end - suiteMetadata.pos);
-                                testcaseTree[testcaseParserState.activeSuiteId].metadata = JSON5.parse(str);
+                                let parsedMetadata;
+                                try {
+                                    parsedMetadata = JSON5.parse(str);
+                                }
+                                catch (e) {
+                                    console.error(`Failed to parse suite metadata. Please do not use dynamic values inside suite metadata: ${parsedMetadata}\n`);
+                                    throw e;
+                                }
+                                testcaseTree[testcaseParserState.activeSuiteId].metadata = parsedMetadata;
                             });
                             afterFuncTable[parentPos] = () => {
                                 const suiteIds = testcaseParserState.activeSuiteId.split('.');
@@ -186,12 +210,23 @@ function parseTestcaseFiles(sourceFile) {
                         case 'testcase':
                             testcaseParserState.addArgFunc((node) => {
                                 const testcaseId = node.text;
-                                const fullTestcaseId = `${testcaseParserState.activeSuiteId}.${testcaseId}`;
-                                testcaseParserState.activeTestcaseId = fullTestcaseId;
-                                if (!(fullTestcaseId in testcaseTree[testcaseParserState.activeSuiteId])) {
-                                    testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[fullTestcaseId] = {
-                                        description: testcaseId
-                                    };
+                                let fullTestcaseId;
+                                try {
+                                    fullTestcaseId = `${testcaseParserState.activeSuiteId}.${testcaseId}`;
+                                    testcaseParserState.activeTestcaseId = fullTestcaseId;
+                                    if (!(fullTestcaseId in testcaseTree[testcaseParserState.activeSuiteId])) {
+                                        testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[fullTestcaseId] = {
+                                            description: testcaseId
+                                        };
+                                    }
+                                }
+                                catch (e) {
+                                    if (!testcaseTree[testcaseParserState.activeSuiteId]) {
+                                        console.error(`Parsed testcase function outside of suite: ${testcaseId}\n
+                        Always define testcase functions inside suites and do not use them 
+                        inside "external" functions invoked from inside suites`);
+                                        throw e;
+                                    }
                                 }
                                 if (!(fullTestcaseId in testcaseTable)) {
                                     testcaseTable[fullTestcaseId] = {
@@ -203,7 +238,15 @@ function parseTestcaseFiles(sourceFile) {
                             testcaseParserState.addArgFunc((node) => {
                                 const testcaseMetadata = node;
                                 const str = sourceFile.text.substr(testcaseMetadata.pos, testcaseMetadata.end - testcaseMetadata.pos);
-                                testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].metadata = JSON5.parse(str);
+                                let parsedMetadata;
+                                try {
+                                    parsedMetadata = JSON5.parse(str);
+                                }
+                                catch (e) {
+                                    console.error(`Failed to parse testcase metadata. Please do not use dynamic values inside testcase metadata: ${parsedMetadata}\n`);
+                                    throw e;
+                                }
+                                testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].metadata = parsedMetadata;
                             });
                             afterFuncTable[parentPos] = () => { testcaseParserState.activeTestcaseId = undefined; };
                             break;
@@ -211,9 +254,27 @@ function parseTestcaseFiles(sourceFile) {
                             testcaseParserState.addArgFunc((node) => {
                                 const verifyMetadata = node;
                                 const str = sourceFile.text.substr(verifyMetadata.pos, verifyMetadata.end - verifyMetadata.pos);
-                                const verifyObject = JSON5.parse(str);
-                                if (!testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash) {
-                                    testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash = {};
+                                let verifyObject;
+                                try {
+                                    verifyObject = JSON5.parse(str);
+                                }
+                                catch (e) {
+                                    console.error(`Failed to parse verify object. Please do not use dynamic values inside verifyObject: ${str}\n`);
+                                    throw e;
+                                }
+                                try {
+                                    if (!testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash) {
+                                        testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash = {};
+                                    }
+                                }
+                                catch (e) {
+                                    if (!testcaseTree[testcaseParserState.activeSuiteId] ||
+                                        !testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId]) {
+                                        console.error(`Parsed verify function outside of suite or testcase: ${str}\n
+                        Always define verify functions inside suites and testcases and do not use them 
+                        inside "external" functions invoked from inside suites or testcases`);
+                                        throw e;
+                                    }
                                 }
                                 for (const spec in verifyObject) {
                                     if (!(spec in verifyTable)) {
