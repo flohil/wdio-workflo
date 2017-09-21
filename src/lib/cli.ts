@@ -266,18 +266,30 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
     if (argv.testcases) {
         // add all spec ids verified in given testcases
         for (const testcase of testcases) {
-            let matchSuite = testcase
-            const testcaseParts = testcase.split('.')
             
-            if (testcaseParts.length > 0) {
-                matchSuite = testcaseParts[0]
-            }
-            
-            if (matchSuite in testcaseParseResults.tree) {
-                for (const verifiedSpec in testcaseParseResults.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
-                    verifiedSpecs[verifiedSpec] = true
+            // testcase is a suite
+            if (testcase in testcaseParseResults.tree) {
+                for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
+                    for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+                        verifiedSpecs[verifiedSpec] = true
+                    }
                 }
-            }
+            } else {
+                let matchSuite = testcase;
+                const testcaseParts = testcase.split('.')
+
+                // at least one suite followed by a testcase
+                if (testcaseParts.length > 1) {
+                    testcaseParts.pop() // remove testcase
+                    matchSuite = testcaseParts.join('.')
+
+                    if (matchSuite in testcaseParseResults.tree) {
+                        for (const verifiedSpec in testcaseParseResults.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+                            verifiedSpecs[verifiedSpec] = true
+                        }
+                    }
+                }
+            }               
         }
     } else {
         // only testcaseFiles were given
