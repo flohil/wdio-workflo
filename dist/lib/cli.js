@@ -126,9 +126,9 @@ if (argv.testcaseFiles) {
 const specsDir = path.join(testDir, 'src', 'specs');
 const testcasesDir = path.join(testDir, 'src', 'testcases');
 function mergeIntoFilters(key, argv, filters) {
+    filters[key] = {};
     if (argv[key]) {
         const filterArray = JSON.parse(argv[key]);
-        filters[key] = {};
         filterArray.forEach(value => filters[key][value] = true);
     }
 }
@@ -137,19 +137,19 @@ const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles
 // merge non-file cli filters
 mergeKeys.forEach(key => mergeIntoFilters(key, argv, filters));
 // merge filters defined in cli lists and sublists
-if (!argv.listFiles) {
+if (argv.listFiles) {
     mergeLists({
         listFiles: JSON.parse(argv.listFiles)
     }, filters);
 }
 // if no cli params were defined, merge in all spec and testcase files...
-completeSpecFiles(argv, filters);
-completeTestcaseFiles(argv, filters);
+const completedSpecFiles = completeSpecFiles(argv, filters);
+const completedTestcaseFiles = completeTestcaseFiles(argv, filters);
 const parseResults = {
     specs: parser_1.specFilesParse(Object.keys(filters.specFiles)),
     testcases: parser_1.testcaseFilesParse(Object.keys(filters.testcaseFiles))
 };
-if (filters.specs) {
+if (Object.keys(filters.specs).length > 0) {
     const filteredSpecFiles = {};
     for (const spec in filters.specs) {
         getSpecMatchFiles(spec, parseResults.specs.specTable).forEach(file => filteredSpecFiles[file] = true);
@@ -160,7 +160,7 @@ if (filters.specs) {
         }
     }
 }
-if (filters.testcases) {
+if (Object.keys(filters.testcases).length > 0) {
     const filteredTestcaseFiles = {};
     for (const testcase in filters.testcases) {
         getTestcaseMatchFiles(testcase, parseResults.testcases.testcaseTable).forEach(file => filteredTestcaseFiles[file] = true);
@@ -172,7 +172,7 @@ if (filters.testcases) {
         }
     }
 }
-if (filters.features) {
+if (Object.keys(filters.features).length > 0) {
     const filteredFeatures = {};
     for (const feature in filters.features) {
         if (feature in parseResults.specs.featureTable) {
@@ -188,10 +188,11 @@ if (filters.features) {
     }
 }
 // filter spec files based on those specs verified by testcases if no spec filters were supplied
-if ((filters.testcaseFiles || filters.testcases) && !filters.specs && !filters.specFiles && !filters.features) {
+if ((!completedTestcaseFiles || Object.keys(filters.testcases).length > 0) &&
+    Object.keys(filters.specs).length === 0 && completedSpecFiles && Object.keys(filters.features).length === 0) {
     const verifiedSpecs = {};
     const verifiedSpecFiles = {};
-    if (filters.testcases) {
+    if (Object.keys(filters.testcases).length > 0) {
         // add all spec ids verified in given testcases
         for (const testcase in filters.testcases) {
             // testcase is a suite
@@ -243,13 +244,14 @@ if ((filters.testcaseFiles || filters.testcases) && !filters.specs && !filters.s
     filters.specs = verifiedSpecs;
 }
 // filter spec files based on those specs verified by testcases if no spec filters were supplied
-if ((filters.specFiles || filters.features || filters.specs) && !filters.testcases && !filters.testcaseFiles) {
+if ((!completedSpecFiles || Object.keys(filters.features).length > 0 || Object.keys(filters.specs).length > 0) &&
+    Object.keys(filters.testcases).length === 0 && completedTestcaseFiles) {
     const verifiedSpecSpecs = {};
     const verifiedFeatureSpecs = {};
     let verifiedSpecs = {};
     const verifiedTestcases = {};
     const verifiedTestcaseFiles = {};
-    if (filters.specFiles && !filters.specs && !filters.features) {
+    if (!completedSpecFiles && Object.keys(filters.specs).length === 0 && Object.keys(filters.features).length === 0) {
         // only specFiles were given
         // these have already been considered in parseResults.specs
         for (const spec in parseResults.specs.specTable) {
@@ -257,12 +259,12 @@ if ((filters.specFiles || filters.features || filters.specs) && !filters.testcas
         }
     }
     else {
-        if (filters.specs) {
+        if (Object.keys(filters.specs).length > 0) {
             for (const spec in filters.specs) {
                 verifiedSpecSpecs[spec] = true;
             }
         }
-        if (filters.features) {
+        if (Object.keys(filters.features).length > 0) {
             for (const feature in filters.features) {
                 if (feature in parseResults.specs.specTree) {
                     for (const featureId in parseResults.specs.specTree[feature].specHash) {
@@ -273,13 +275,13 @@ if ((filters.specFiles || filters.features || filters.specs) && !filters.testcas
                 }
             }
         }
-        if (filters.specs && !filters.features) {
+        if (Object.keys(filters.specs).length > 0 && Object.keys(filters.features).length === 0) {
             verifiedSpecs = verifiedSpecSpecs;
         }
-        else if (filters.features && !filters.specs) {
+        else if (Object.keys(filters.features).length > 0 && Object.keys(filters.specs).length === 0) {
             verifiedSpecs = verifiedFeatureSpecs;
         }
-        else if (filters.features && filters.specs) {
+        else if (Object.keys(filters.features).length > 0 && Object.keys(filters.specs).length > 0) {
             for (const featureSpec in verifiedFeatureSpecs) {
                 if (featureSpec in verifiedSpecSpecs) {
                     verifiedSpecs[featureSpec] = true;
@@ -325,14 +327,18 @@ function completeSpecFiles(argv, filters) {
     // if user manually defined an empty specFiles array, do not add specFiles from folder
     if (Object.keys(filters.specFiles).length === 0 && !argv.specFiles) {
         io_1.getAllFiles(specsDir, '.spec.ts').forEach(specFile => filters.specFiles[specFile] = true);
+        return true;
     }
+    return false;
 }
 // if no testcase files are present in filters, use all testcase files in testcase folder
 function completeTestcaseFiles(argv, filters) {
     // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
     if (Object.keys(filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
         io_1.getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => filters.testcaseFiles[testcaseFile] = true);
+        return true;
     }
+    return false;
 }
 function getSpecMatchFiles(spec, table) {
     if (spec.substr(0, 1) === '-') {
