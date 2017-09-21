@@ -159,6 +159,14 @@ for(const property of mandatoryProperties) {
 
 const testDir = workfloConfig.testDir
 
+// complete cli listFiles paths
+if (argv.listFiles) {
+    const listsDir = path.join(testDir, 'src', 'lists')
+    const listFiles: string[] = JSON.parse(argv.listFiles)
+    
+    argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)))
+}
+
 // complete cli specFiles paths
 if (argv.specFiles) {
     const specsDir = path.join(testDir, 'src', 'specs')
@@ -173,14 +181,6 @@ if (argv.testcaseFiles) {
     const testcaseFiles: string[] = JSON.parse(argv.testcaseFiles)
     
     argv.testcaseFiles = JSON.stringify(testcaseFiles.map(testcaseFile => path.join(testcasesDir, `${testcaseFile}.tc.ts`)))
-}
-
-// complete cli listFiles paths
-if (argv.listFiles) {
-    const listsDir = path.join(testDir, 'src', 'lists')
-    const listFiles: string[] = JSON.parse(argv.listFiles)
-    
-    argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)))
 }
 
 const specsDir = path.join(testDir, 'src', 'specs')
@@ -198,6 +198,33 @@ let testcaseFilesObj: Record<string, true> = {}
 let specs: string[]
 let testcases: string[]
 let features: string[]
+
+interface ExecutionFilters {
+    specFiles?: Record<string, true>
+    testcaseFiles?: Record<string, true>
+    specs?: Record<string, true>
+    features?: Record<string, true>
+    testcases?: Record<string, true>
+}
+
+function mergeIntoFilters(key: string, argv: any, filters: ExecutionFilters) {
+    if (argv[key]) {
+        const filterArray: string[] = JSON.parse(argv[key])
+
+        filters[key] = {}
+        filterArray.forEach(value => filters[key][value] = true)
+    }
+}
+
+const filters: ExecutionFilters = {}
+const mergeKeys = ['specFiles', 'testcaseFiles', 'features', 'specs', 'testcases']
+mergeKeys.forEach(key => mergeIntoFilters(key, argv, filters))
+
+if (!argv.listFiles) {
+    mergeLists({
+        listFiles: JSON.parse(argv.listFiles)
+    }, filters)    
+} 
 
 // parse specs and testcases
 if (argv.specs || argv.testcases || argv.specFiles || argv.testcaseFiles || argv.features) {
@@ -469,4 +496,38 @@ function getTestcaseMatchFiles(testcase: string, table: Record<string, TestcaseT
 
         return Object.keys(matchFilesObj)
     } 
+}
+
+/**
+ * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
+ * @param argv 
+ */
+function mergeLists(list: Workflo.FilterList, filters: ExecutionFilters) {
+    if (list.specFiles) {
+        list.specFiles.forEach(value => filters.specFiles[value] = true)
+    }
+    if (list.testcaseFiles) {
+        list.testcaseFiles.forEach(value => filters.testcaseFiles[value] = true)
+    }
+    if (list.features) {
+        list.features.forEach(value => filters.features[value] = true)
+    }
+    if (list.specs) {
+        list.specs.forEach(value => filters.specs[value] = true)
+    }
+    if (list.testcases) {
+        list.testcases.forEach(value => filters.testcases[value] = true)
+    } 
+    if (list.listFiles) {
+        for (const listFile of list.listFiles) {
+            if (!fs.existsSync(listFile)) {
+                throw new Error(`List file could not be found: ${listFile}`)
+            } else {
+                const sublist: Workflo.FilterList = require(listFile)
+    
+                // recursively traverse sub list files
+                mergeLists(sublist, filters)
+            }
+        }
+    }
 }

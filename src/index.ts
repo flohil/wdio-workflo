@@ -250,12 +250,12 @@ declare global {
     }
 
     interface FilterList {
-      listFiles: string[]
-      specFiles: string[]
-      testcaseFiles: string[]
-      features: string[]
-      specs: string[]
-      testcases: string[]
+      listFiles?: string[]
+      specFiles?: string[]
+      testcaseFiles?: string[]
+      features?: string[]
+      specs?: string[]
+      testcases?: string[]
     }
 
   // SPECS AND TESTCASES
