@@ -203,10 +203,10 @@ let features: string[]
 if (argv.specs || argv.testcases || argv.specFiles || argv.testcaseFiles || argv.features) {
     specParseResults = specFilesParse(specFiles)
     testcaseParseResults = testcaseFilesParse(testcaseFiles)
-
-    specFiles.forEach(specFile => specFilesObj[specFile] = true)
-    testcaseFiles.forEach(testcaseFile => testcaseFilesObj[testcaseFile] = true)
 }
+
+specFiles.forEach(specFile => specFilesObj[specFile] = true)
+testcaseFiles.forEach(testcaseFile => testcaseFilesObj[testcaseFile] = true)
 
 if (argv.specs) {
     specs = JSON.parse(argv.specs)

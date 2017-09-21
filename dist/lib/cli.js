@@ -138,9 +138,9 @@ let features;
 if (argv.specs || argv.testcases || argv.specFiles || argv.testcaseFiles || argv.features) {
     specParseResults = parser_1.specFilesParse(specFiles);
     testcaseParseResults = parser_1.testcaseFilesParse(testcaseFiles);
-    specFiles.forEach(specFile => specFilesObj[specFile] = true);
-    testcaseFiles.forEach(testcaseFile => testcaseFilesObj[testcaseFile] = true);
 }
+specFiles.forEach(specFile => specFilesObj[specFile] = true);
+testcaseFiles.forEach(testcaseFile => testcaseFilesObj[testcaseFile] = true);
 if (argv.specs) {
     specs = JSON.parse(argv.specs);
     const filteredSpecFilesObj = {};
