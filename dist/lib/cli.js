@@ -11,7 +11,7 @@ const VERSION = pkg.version;
 const ALLOWED_ARGV = [
     'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
     'connectionRetryTimeout', 'connectionRetryCount',
-    'testcaseFiles', 'specFiles', 'listFiles', 'testcases', 'specs', 'features'
+    'executionFilters', 'parseResults'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ];
 let configFile;
@@ -105,6 +105,12 @@ for (const property of mandatoryProperties) {
     }
 }
 const testDir = workfloConfig.testDir;
+// complete cli listFiles paths
+if (argv.listFiles) {
+    const listsDir = path.join(testDir, 'src', 'lists');
+    const listFiles = JSON.parse(argv.listFiles);
+    argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)));
+}
 // complete cli specFiles paths
 if (argv.specFiles) {
     const specsDir = path.join(testDir, 'src', 'specs');
@@ -117,82 +123,83 @@ if (argv.testcaseFiles) {
     const testcaseFiles = JSON.parse(argv.testcaseFiles);
     argv.testcaseFiles = JSON.stringify(testcaseFiles.map(testcaseFile => path.join(testcasesDir, `${testcaseFile}.tc.ts`)));
 }
-// complete cli listFiles paths
-if (argv.listFiles) {
-    const listsDir = path.join(testDir, 'src', 'lists');
-    const listFiles = JSON.parse(argv.listFiles);
-    argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)));
-}
 const specsDir = path.join(testDir, 'src', 'specs');
 const testcasesDir = path.join(testDir, 'src', 'testcases');
-let specParseResults;
-let testcaseParseResults;
-const specFiles = determineSpecFiles();
-const testcaseFiles = determineTestcaseFiles();
-let specFilesObj = {};
-let testcaseFilesObj = {};
-let specs;
-let testcases;
-let features;
-// parse specs and testcases
-if (argv.specs || argv.testcases || argv.specFiles || argv.testcaseFiles || argv.features) {
-    specParseResults = parser_1.specFilesParse(specFiles);
-    testcaseParseResults = parser_1.testcaseFilesParse(testcaseFiles);
-}
-specFiles.forEach(specFile => specFilesObj[specFile] = true);
-testcaseFiles.forEach(testcaseFile => testcaseFilesObj[testcaseFile] = true);
-if (argv.specs) {
-    specs = JSON.parse(argv.specs);
-    const filteredSpecFilesObj = {};
-    for (const spec of specs) {
-        getSpecMatchFiles(spec, specParseResults.specTable).forEach(file => filteredSpecFilesObj[file] = true);
+const specFiles = determineSpecFiles(argv);
+const testcaseFiles = determineTestcaseFiles(argv);
+function mergeIntoFilters(key, argv, filters) {
+    if (argv[key]) {
+        const filterArray = JSON.parse(argv[key]);
+        filters[key] = {};
+        filterArray.forEach(value => filters[key][value] = true);
     }
-    for (const specFile in specFilesObj) {
-        if (!(specFile in filteredSpecFilesObj)) {
-            delete specFilesObj[specFile];
+}
+const filters = {};
+const mergeKeys = ['features', 'specs', 'testcases'];
+// merge non-file cli filters
+mergeKeys.forEach(key => mergeIntoFilters(key, argv, filters));
+// merge file cli filters
+specFiles.forEach(specFile => filters.specFiles[specFile] = true);
+testcaseFiles.forEach(testcaseFile => filters.testcaseFiles[testcaseFile] = true);
+// merge filters defined in cli lists and sublists
+if (!argv.listFiles) {
+    mergeLists({
+        listFiles: JSON.parse(argv.listFiles)
+    }, filters);
+}
+const parseResults = {
+    specs: parser_1.specFilesParse(specFiles),
+    testcases: parser_1.testcaseFilesParse(testcaseFiles)
+};
+if (filters.specs) {
+    const filteredSpecFiles = {};
+    for (const spec in filters.specs) {
+        getSpecMatchFiles(spec, parseResults.specs.specTable).forEach(file => filteredSpecFiles[file] = true);
+    }
+    for (const specFile in filters.specFiles) {
+        if (!(specFile in filteredSpecFiles)) {
+            delete filters.specFiles[specFile];
         }
     }
 }
-if (argv.testcases) {
-    testcases = JSON.parse(argv.testcases);
-    const filteredTestcaseFilesObj = {};
-    for (const testcase of testcases) {
-        getTestcaseMatchFiles(testcase, testcaseParseResults.testcaseTable).forEach(file => filteredTestcaseFilesObj[file] = true);
+if (filters.testcases) {
+    const filteredTestcaseFiles = {};
+    for (const testcase in filters.testcases) {
+        getTestcaseMatchFiles(testcase, parseResults.testcases.testcaseTable).forEach(file => filteredTestcaseFiles[file] = true);
     }
     // only execute spec files that include filtered options
-    for (const testcaseFile in testcaseFilesObj) {
-        if (!(testcaseFile in filteredTestcaseFilesObj)) {
-            delete testcaseFilesObj[testcaseFile];
+    for (const testcaseFile in filters.testcaseFiles) {
+        if (!(testcaseFile in filteredTestcaseFiles)) {
+            delete testcaseFiles[testcaseFile];
         }
     }
 }
-if (argv.features) {
-    features = JSON.parse(argv.features);
-    const filteredFeaturesObj = {};
-    for (const feature of features) {
-        if (feature in specParseResults.featureTable) {
-            for (const specFile of specParseResults.featureTable[feature].specFiles) {
-                filteredFeaturesObj[specFile] = true;
+if (filters.features) {
+    const filteredFeatures = {};
+    for (const feature in filters.features) {
+        if (feature in parseResults.specs.featureTable) {
+            for (const specFile of parseResults.specs.featureTable[feature].specFiles) {
+                filteredFeatures[specFile] = true;
             }
         }
     }
-    for (const specFile in specFilesObj) {
-        if (!(specFile in filteredFeaturesObj)) {
-            delete specFilesObj[specFile];
+    for (const specFile in filters.specFiles) {
+        if (!(specFile in filteredFeatures)) {
+            delete filters.specFiles[specFile];
         }
     }
 }
 // filter spec files based on those specs verified by testcases if no spec filters were supplied
-if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !argv.features) {
+if ((filters.testcaseFiles || filters.testcases) && !filters.specs && !filters.specFiles && !filters.features) {
     const verifiedSpecs = {};
     const verifiedSpecFiles = {};
-    if (argv.testcases) {
+    if (filters.testcases) {
         // add all spec ids verified in given testcases
-        for (const testcase of testcases) {
+        for (const testcase in filters.testcases) {
             // testcase is a suite
-            if (testcase in testcaseParseResults.tree) {
-                for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
-                    for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+            if (testcase in parseResults.testcases.tree) {
+                for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
+                    for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
                         verifiedSpecs[verifiedSpec] = true;
                     }
                 }
@@ -204,8 +211,8 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
                 if (testcaseParts.length > 1) {
                     testcaseParts.pop(); // remove testcase
                     matchSuite = testcaseParts.join('.');
-                    if (matchSuite in testcaseParseResults.tree) {
-                        for (const verifiedSpec in testcaseParseResults.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+                    if (matchSuite in parseResults.testcases.tree) {
+                        for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
                             verifiedSpecs[verifiedSpec] = true;
                         }
                     }
@@ -215,10 +222,10 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
     }
     else {
         // only testcaseFiles were given
-        // these have already been considered in testcaseParseResults
-        for (const testcase in testcaseParseResults.tree) {
-            for (const testcaseId in testcaseParseResults.tree[testcase].testcaseHash) {
-                for (const verifiedSpec in testcaseParseResults.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+        // these have already been considered in parseResults.testcases
+        for (const testcase in parseResults.testcases.tree) {
+            for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
+                for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
                     verifiedSpecs[verifiedSpec] = true;
                 }
             }
@@ -226,55 +233,55 @@ if ((argv.testcaseFiles || argv.testcases) && !argv.spec && !argv.specFiles && !
     }
     // for all verified specs, add the corresponding specFiles...
     for (const verifiedSpec in verifiedSpecs) {
-        verifiedSpecFiles[specParseResults.specTable[verifiedSpec].specFile] = true;
+        verifiedSpecFiles[parseResults.specs.specTable[verifiedSpec].specFile] = true;
     }
     // removed specFiles not verified by filtered testcases
-    for (const specFile in specFilesObj) {
+    for (const specFile in filters.specFiles) {
         if (!(specFile in verifiedSpecFiles)) {
-            delete specFilesObj[specFile];
+            delete filters.specFiles[specFile];
         }
     }
     // add specs as spec filter...
-    argv.specs = JSON.stringify(Object.keys(verifiedSpecs));
+    filters.specs = verifiedSpecs;
 }
 // filter spec files based on those specs verified by testcases if no spec filters were supplied
-if ((argv.specFiles || argv.features || argv.specs) && !argv.testcases && !argv.testcaseFiles) {
+if ((filters.specFiles || filters.features || filters.specs) && !filters.testcases && !filters.testcaseFiles) {
     const verifiedSpecSpecs = {};
     const verifiedFeatureSpecs = {};
     let verifiedSpecs = {};
     const verifiedTestcases = {};
     const verifiedTestcaseFiles = {};
-    if (argv.specFiles && !argv.specs && !argv.features) {
+    if (filters.specFiles && !filters.specs && !filters.features) {
         // only specFiles were given
-        // these have already been considered in specParseResults
-        for (const spec in specParseResults.specTable) {
+        // these have already been considered in parseResults.specs
+        for (const spec in parseResults.specs.specTable) {
             verifiedSpecs[spec] = true;
         }
     }
     else {
-        if (argv.specs) {
-            for (const spec of specs) {
+        if (filters.specs) {
+            for (const spec in filters.specs) {
                 verifiedSpecSpecs[spec] = true;
             }
         }
-        if (argv.features) {
-            for (const feature of features) {
-                if (feature in specParseResults.specTree) {
-                    for (const featureId in specParseResults.specTree[feature].specHash) {
-                        for (const verifiedSpec in specParseResults.specTree[feature].specHash) {
+        if (filters.features) {
+            for (const feature in filters.features) {
+                if (feature in parseResults.specs.specTree) {
+                    for (const featureId in parseResults.specs.specTree[feature].specHash) {
+                        for (const verifiedSpec in parseResults.specs.specTree[feature].specHash) {
                             verifiedFeatureSpecs[verifiedSpec] = true;
                         }
                     }
                 }
             }
         }
-        if (argv.specs && !argv.features) {
+        if (filters.specs && !filters.features) {
             verifiedSpecs = verifiedSpecSpecs;
         }
-        else if (argv.features && !argv.specs) {
+        else if (filters.features && !filters.specs) {
             verifiedSpecs = verifiedFeatureSpecs;
         }
-        else if (argv.features && argv.specs) {
+        else if (filters.features && filters.specs) {
             for (const featureSpec in verifiedFeatureSpecs) {
                 if (featureSpec in verifiedSpecSpecs) {
                     verifiedSpecs[featureSpec] = true;
@@ -284,25 +291,24 @@ if ((argv.specFiles || argv.features || argv.specs) && !argv.testcases && !argv.
     }
     // get all testcase files that verify the extracted specs
     for (const verifiedSpec in verifiedSpecs) {
-        if (verifiedSpec in testcaseParseResults.verifyTable) {
-            for (const testcaseId in testcaseParseResults.verifyTable[verifiedSpec]) {
+        if (verifiedSpec in parseResults.testcases.verifyTable) {
+            for (const testcaseId in parseResults.testcases.verifyTable[verifiedSpec]) {
                 verifiedTestcases[testcaseId] = true;
-                verifiedTestcaseFiles[testcaseParseResults.testcaseTable[testcaseId].testcaseFile] = true;
+                verifiedTestcaseFiles[parseResults.testcases.testcaseTable[testcaseId].testcaseFile] = true;
             }
         }
     }
     // removed testcase files not verified by filtered specs
-    for (const testcaseFile in testcaseFilesObj) {
+    for (const testcaseFile in filters.testcaseFiles) {
         if (!(testcaseFile in verifiedTestcaseFiles)) {
-            delete testcaseFilesObj[testcaseFile];
+            delete filters.testcaseFiles[testcaseFile];
         }
     }
     // add testcases as testcases filter...
-    argv.testcases = JSON.stringify(Object.keys(verifiedTestcases));
+    filters.testcases = verifiedTestcases;
 }
-// only execute spec files that include filtered options
-argv.specFiles = JSON.stringify(Object.keys(specFilesObj));
-argv.testcaseFiles = JSON.stringify(Object.keys(testcaseFilesObj));
+argv.executionFilters = JSON.stringify(filters);
+argv.parseResults = JSON.stringify(parseResults);
 let args = {};
 for (let key of ALLOWED_ARGV) {
     if (argv[key] !== undefined) {
@@ -316,7 +322,7 @@ let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
 launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
     throw e;
 }));
-function determineSpecFiles() {
+function determineSpecFiles(argv) {
     if (argv.specFiles) {
         if (argv.specFiles.length > 0) {
             const specFiles = JSON.parse(argv.specFiles);
@@ -330,7 +336,7 @@ function determineSpecFiles() {
         return io_1.getAllFiles(specsDir, '.spec.ts');
     }
 }
-function determineTestcaseFiles() {
+function determineTestcaseFiles(argv) {
     if (argv.testcaseFiles) {
         if (argv.testcaseFiles.length > 0) {
             const testcaseFiles = JSON.parse(argv.testcaseFiles);
@@ -375,6 +381,39 @@ function getTestcaseMatchFiles(testcase, table) {
             }
         }
         return Object.keys(matchFilesObj);
+    }
+}
+/**
+ * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
+ * @param argv
+ */
+function mergeLists(list, filters) {
+    if (list.specFiles) {
+        list.specFiles.forEach(value => filters.specFiles[value] = true);
+    }
+    if (list.testcaseFiles) {
+        list.testcaseFiles.forEach(value => filters.testcaseFiles[value] = true);
+    }
+    if (list.features) {
+        list.features.forEach(value => filters.features[value] = true);
+    }
+    if (list.specs) {
+        list.specs.forEach(value => filters.specs[value] = true);
+    }
+    if (list.testcases) {
+        list.testcases.forEach(value => filters.testcases[value] = true);
+    }
+    if (list.listFiles) {
+        for (const listFile of list.listFiles) {
+            if (!fs.existsSync(listFile)) {
+                throw new Error(`List file could not be found: ${listFile}`);
+            }
+            else {
+                const sublist = require(listFile);
+                // recursively traverse sub list files
+                mergeLists(sublist, filters);
+            }
+        }
     }
 }
 //# sourceMappingURL=cli.js.map
