@@ -125,8 +125,6 @@ if (argv.testcaseFiles) {
 }
 const specsDir = path.join(testDir, 'src', 'specs');
 const testcasesDir = path.join(testDir, 'src', 'testcases');
-const specFiles = determineSpecFiles(argv);
-const testcaseFiles = determineTestcaseFiles(argv);
 function mergeIntoFilters(key, argv, filters) {
     if (argv[key]) {
         const filterArray = JSON.parse(argv[key]);
@@ -135,21 +133,21 @@ function mergeIntoFilters(key, argv, filters) {
     }
 }
 const filters = {};
-const mergeKeys = ['features', 'specs', 'testcases'];
+const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
 // merge non-file cli filters
 mergeKeys.forEach(key => mergeIntoFilters(key, argv, filters));
-// merge file cli filters
-specFiles.forEach(specFile => filters.specFiles[specFile] = true);
-testcaseFiles.forEach(testcaseFile => filters.testcaseFiles[testcaseFile] = true);
 // merge filters defined in cli lists and sublists
 if (!argv.listFiles) {
     mergeLists({
         listFiles: JSON.parse(argv.listFiles)
     }, filters);
 }
+// if no cli params were defined, merge in all spec and testcase files...
+completeSpecFiles(argv, filters);
+completeTestcaseFiles(argv, filters);
 const parseResults = {
-    specs: parser_1.specFilesParse(specFiles),
-    testcases: parser_1.testcaseFilesParse(testcaseFiles)
+    specs: parser_1.specFilesParse(Object.keys(filters.specFiles)),
+    testcases: parser_1.testcaseFilesParse(Object.keys(filters.testcaseFiles))
 };
 if (filters.specs) {
     const filteredSpecFiles = {};
@@ -170,7 +168,7 @@ if (filters.testcases) {
     // only execute spec files that include filtered options
     for (const testcaseFile in filters.testcaseFiles) {
         if (!(testcaseFile in filteredTestcaseFiles)) {
-            delete testcaseFiles[testcaseFile];
+            delete filters.testcaseFiles[testcaseFile];
         }
     }
 }
@@ -322,32 +320,18 @@ let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
 launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
     throw e;
 }));
-function determineSpecFiles(argv) {
-    if (argv.specFiles) {
-        if (argv.specFiles.length > 0) {
-            const specFiles = JSON.parse(argv.specFiles);
-            return specFiles;
-        }
-        else {
-            return [];
-        }
-    }
-    else {
-        return io_1.getAllFiles(specsDir, '.spec.ts');
+// if no spec files are present in filters, use all spec files in specs folder
+function completeSpecFiles(argv, filters) {
+    // if user manually defined an empty specFiles array, do not add specFiles from folder
+    if (Object.keys(filters.specFiles).length === 0 && !argv.specFiles) {
+        io_1.getAllFiles(specsDir, '.spec.ts').forEach(specFile => filters.specFiles[specFile] = true);
     }
 }
-function determineTestcaseFiles(argv) {
-    if (argv.testcaseFiles) {
-        if (argv.testcaseFiles.length > 0) {
-            const testcaseFiles = JSON.parse(argv.testcaseFiles);
-            return testcaseFiles;
-        }
-        else {
-            return [];
-        }
-    }
-    else {
-        return io_1.getAllFiles(testcasesDir, '.tc.ts');
+// if no testcase files are present in filters, use all testcase files in testcase folder
+function completeTestcaseFiles(argv, filters) {
+    // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
+    if (Object.keys(filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
+        io_1.getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => filters.testcaseFiles[testcaseFile] = true);
     }
 }
 function getSpecMatchFiles(spec, table) {

@@ -186,9 +186,6 @@ if (argv.testcaseFiles) {
 const specsDir = path.join(testDir, 'src', 'specs')
 const testcasesDir = path.join(testDir, 'src', 'testcases')
 
-const specFiles = determineSpecFiles(argv)
-const testcaseFiles = determineTestcaseFiles(argv)
-
 interface ExecutionFilters {
     specFiles?: Record<string, true>
     testcaseFiles?: Record<string, true>
@@ -206,14 +203,10 @@ function mergeIntoFilters(key: string, argv: any, filters: ExecutionFilters) {
     }
 }
 const filters: ExecutionFilters = {}
-const mergeKeys = ['features', 'specs', 'testcases']
+const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles']
 
 // merge non-file cli filters
 mergeKeys.forEach(key => mergeIntoFilters(key, argv, filters))
-
-// merge file cli filters
-specFiles.forEach(specFile => filters.specFiles[specFile] = true)
-testcaseFiles.forEach(testcaseFile => filters.testcaseFiles[testcaseFile] = true)
 
 // merge filters defined in cli lists and sublists
 if (!argv.listFiles) {
@@ -222,12 +215,16 @@ if (!argv.listFiles) {
     }, filters)    
 }
 
+// if no cli params were defined, merge in all spec and testcase files...
+completeSpecFiles(argv, filters)
+completeTestcaseFiles(argv, filters)
+
 const parseResults: {
     specs: SpecParseResults
     testcases: TestcaseParseResults
 } = {
-    specs: specFilesParse(specFiles),
-    testcases: testcaseFilesParse(testcaseFiles)
+    specs: specFilesParse(Object.keys(filters.specFiles)),
+    testcases: testcaseFilesParse(Object.keys(filters.testcaseFiles))
 }
 
 if (filters.specs) {
@@ -254,7 +251,7 @@ if (filters.testcases) {
     // only execute spec files that include filtered options
     for (const testcaseFile in filters.testcaseFiles) {
         if (!(testcaseFile in filteredTestcaseFiles)) {
-            delete testcaseFiles[testcaseFile]
+            delete filters.testcaseFiles[testcaseFile]
         }
     }
 }
@@ -425,30 +422,19 @@ launcher.run().then(
         throw e
     }))
 
-
-function determineSpecFiles(argv: any): string[] {
-    if (argv.specFiles) {
-        if (argv.specFiles.length > 0) {
-            const specFiles: string[] = JSON.parse(argv.specFiles)
-            return specFiles
-        } else {
-            return []
-        }
-    } else {
-        return getAllFiles(specsDir, '.spec.ts')                
+// if no spec files are present in filters, use all spec files in specs folder
+function completeSpecFiles(argv: any, filters: ExecutionFilters): void {
+    // if user manually defined an empty specFiles array, do not add specFiles from folder
+    if (Object.keys(filters.specFiles).length === 0 && !argv.specFiles) {
+        getAllFiles(specsDir, '.spec.ts').forEach(specFile => filters.specFiles[specFile] = true)
     }
 }
 
-function determineTestcaseFiles(argv: any): string[] {
-    if (argv.testcaseFiles) {
-        if (argv.testcaseFiles.length > 0) {
-            const testcaseFiles: string[] = JSON.parse(argv.testcaseFiles)
-            return testcaseFiles
-        } else {
-            return []
-        }
-    } else {
-        return getAllFiles(testcasesDir, '.tc.ts')                
+// if no testcase files are present in filters, use all testcase files in testcase folder
+function completeTestcaseFiles(argv: any, filters: ExecutionFilters): void {
+    // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
+    if (Object.keys(filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
+        getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => filters.testcaseFiles[testcaseFile] = true)
     }
 }
 
