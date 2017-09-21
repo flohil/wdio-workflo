@@ -12,7 +12,7 @@ const words = {
 export function featuresInclude(id: string) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
 
-  if(!executionFilters.features) {
+  if(Object.keys(executionFilters.features).length === 0) {
     return true
   } else {
     return id in executionFilters.features
@@ -22,7 +22,7 @@ export function featuresInclude(id: string) {
 export function specsInclude(id: string) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
 
-  if (!executionFilters.specs) {
+  if (Object.keys(executionFilters.specs).length === 0) {
     return true
   } else {
     let included = false
@@ -60,7 +60,7 @@ export function specsInclude(id: string) {
 function testcasesInclude(id: string, isTestcase: boolean = false) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
   
-  if (!executionFilters.testcases) {
+  if (Object.keys(executionFilters.testcases).length === 0) {
     return true
   } else {
     let included = false

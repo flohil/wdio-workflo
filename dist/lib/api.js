@@ -10,7 +10,7 @@ const words = {
 };
 function featuresInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;
-    if (!executionFilters.features) {
+    if (Object.keys(executionFilters.features).length === 0) {
         return true;
     }
     else {
@@ -20,7 +20,7 @@ function featuresInclude(id) {
 exports.featuresInclude = featuresInclude;
 function specsInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;
-    if (!executionFilters.specs) {
+    if (Object.keys(executionFilters.specs).length === 0) {
         return true;
     }
     else {
@@ -54,7 +54,7 @@ function specsInclude(id) {
 exports.specsInclude = specsInclude;
 function testcasesInclude(id, isTestcase = false) {
     const executionFilters = jasmine.getEnv().executionFilters;
-    if (!executionFilters.testcases) {
+    if (Object.keys(executionFilters.testcases).length === 0) {
         return true;
     }
     else {
