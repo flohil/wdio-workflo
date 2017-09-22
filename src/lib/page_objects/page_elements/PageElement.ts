@@ -18,6 +18,7 @@ export class PageElement<
   protected wait: Workflo.WaitType
   protected timeout: number
   protected _$: Store
+  protected centerClicks: boolean
 
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
@@ -51,6 +52,12 @@ export class PageElement<
 
     this.wait = wait
     this.timeout = timeout
+
+    if(JSON.parse(process.env.WORKFLO_CONFIG).centerClicks) {
+      this.centerClicks = JSON.parse(process.env.WORKFLO_CONFIG).centerClicks
+    } else {
+      this.centerClicks = false
+    }
   }
 
   get $(): Store {
@@ -434,15 +441,21 @@ export class PageElement<
    * is fulfilled. (eg. element is visible)
    * In this case, postCondition function will be 
    */
-  click(options?: {postCondition: () => boolean, timeout?: number, moveToOffsets?: {x?: number, y?: number}}) {
+  click(options?: {postCondition: () => boolean, timeout?: number, offsets?: {x?: number, y?: number}}) {
     this.initialWait()
 
     let errorMessage = ''
     const interval = 250
-    let remainingTimeout = this.timeout
+    const viewPortSize = browser.getViewportSize()
+    let y = viewPortSize.height / 2
+    let x = viewPortSize.width / 2
+    let remainingTimeout = this.timeout;
 
-    if (options && options.moveToOffsets) {
-      browser.moveToObject(this.getSelector(), options.moveToOffsets.x || 0, options.moveToOffsets.y || 0)
+    if (options && options.offsets) {
+        browser.scroll(this.getSelector(), -options.offsets.x || -x, -options.offsets.y || -y);
+    } else if (this.centerClicks) {
+        // per default, move element in middle of screen
+        browser.scroll(this.getSelector(), -x, -y)
     }
 
     // wait for other overlapping elements to disappear

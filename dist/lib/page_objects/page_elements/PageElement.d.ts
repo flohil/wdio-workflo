@@ -10,6 +10,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     protected wait: Workflo.WaitType;
     protected timeout: number;
     protected _$: Store;
+    protected centerClicks: boolean;
     constructor(selector: string, {wait, timeout, ...superOpts}: IPageElementOpts<Store>);
     readonly $: Store;
     /**
@@ -70,7 +71,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     click(options?: {
         postCondition: () => boolean;
         timeout?: number;
-        moveToOffsets?: {
+        offsets?: {
             x?: number;
             y?: number;
         };

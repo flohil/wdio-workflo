@@ -105,26 +105,9 @@ for (const property of mandatoryProperties) {
     }
 }
 const testDir = workfloConfig.testDir;
-// complete cli listFiles paths
-if (argv.listFiles) {
-    const listsDir = path.join(testDir, 'src', 'lists');
-    const listFiles = JSON.parse(argv.listFiles);
-    argv.listFiles = JSON.stringify(listFiles.map(listFile => path.join(listsDir, `${listFile}.list.ts`)));
-}
-// complete cli specFiles paths
-if (argv.specFiles) {
-    const specsDir = path.join(testDir, 'src', 'specs');
-    const specFiles = JSON.parse(argv.specFiles);
-    argv.specFiles = JSON.stringify(specFiles.map(specFile => path.join(specsDir, `${specFile}.spec.ts`)));
-}
-// complete cli testcaseFiles paths
-if (argv.testcaseFiles) {
-    const testcasesDir = path.join(testDir, 'src', 'testcases');
-    const testcaseFiles = JSON.parse(argv.testcaseFiles);
-    argv.testcaseFiles = JSON.stringify(testcaseFiles.map(testcaseFile => path.join(testcasesDir, `${testcaseFile}.tc.ts`)));
-}
 const specsDir = path.join(testDir, 'src', 'specs');
 const testcasesDir = path.join(testDir, 'src', 'testcases');
+const listsDir = path.join(testDir, 'src', 'lists');
 function mergeIntoFilters(key, argv, filters) {
     filters[key] = {};
     if (argv[key]) {
@@ -142,6 +125,8 @@ if (argv.listFiles) {
         listFiles: JSON.parse(argv.listFiles)
     }, filters);
 }
+// complete cli specFiles and testcaseFiles paths
+completeFilePaths(filters);
 // if no cli params were defined, merge in all spec and testcase files...
 const completedSpecFiles = completeSpecFiles(argv, filters);
 const completedTestcaseFiles = completeTestcaseFiles(argv, filters);
@@ -149,6 +134,9 @@ const parseResults = {
     specs: parser_1.specFilesParse(Object.keys(filters.specFiles)),
     testcases: parser_1.testcaseFilesParse(Object.keys(filters.testcaseFiles))
 };
+// count features, specs and testcases based on "parent" filters like specFiles and testcaseFiles and themselves
+// only if count matches number of defined filters, the feature/spec/testcase will be executed
+// adding more filters adds additional constraints!
 if (Object.keys(filters.specs).length > 0) {
     const filteredSpecFiles = {};
     for (const spec in filters.specs) {
@@ -373,6 +361,20 @@ function getTestcaseMatchFiles(testcase, table) {
         return Object.keys(matchFilesObj);
     }
 }
+function completeFilePaths(filters) {
+    const specFilePaths = {};
+    const testcaseFilePaths = {};
+    for (const specFile in filters.specFiles) {
+        const specFilePath = path.join(specsDir, `${specFile}.spec.ts`);
+        specFilePaths[specFilePath] = true;
+    }
+    for (const testcaseFile in filters.testcaseFiles) {
+        const testcaseFilePath = path.join(testcasesDir, `${testcaseFile}.tc.ts`);
+        testcaseFilePaths[testcaseFilePath] = true;
+    }
+    filters.specFiles = specFilePaths;
+    filters.testcaseFiles = testcaseFilePaths;
+}
 /**
  * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
  * @param argv
@@ -395,11 +397,13 @@ function mergeLists(list, filters) {
     }
     if (list.listFiles) {
         for (const listFile of list.listFiles) {
-            if (!fs.existsSync(listFile)) {
-                throw new Error(`List file could not be found: ${listFile}`);
+            // complete cli listFiles paths
+            const listFilePath = path.join(listsDir, `${listFile}.list.ts`);
+            if (!fs.existsSync(listFilePath)) {
+                throw new Error(`List file could not be found: ${listFilePath}`);
             }
             else {
-                const sublist = require(listFile);
+                const sublist = require(listFilePath);
                 // recursively traverse sub list files
                 mergeLists(sublist, filters);
             }

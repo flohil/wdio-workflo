@@ -34,6 +34,12 @@ class PageElement extends _1.PageNode {
         }
         this.wait = wait;
         this.timeout = timeout;
+        if (JSON.parse(process.env.WORKFLO_CONFIG).centerClicks) {
+            this.centerClicks = JSON.parse(process.env.WORKFLO_CONFIG).centerClicks;
+        }
+        else {
+            this.centerClicks = false;
+        }
     }
     get $() {
         return this._$;
@@ -340,9 +346,16 @@ class PageElement extends _1.PageNode {
         this.initialWait();
         let errorMessage = '';
         const interval = 250;
+        const viewPortSize = browser.getViewportSize();
+        let y = viewPortSize.height / 2;
+        let x = viewPortSize.width / 2;
         let remainingTimeout = this.timeout;
-        if (options && options.moveToOffsets) {
-            browser.moveToObject(this.getSelector(), options.moveToOffsets.x || 0, options.moveToOffsets.y || 0);
+        if (options && options.offsets) {
+            browser.scroll(this.getSelector(), -options.offsets.x || -x, -options.offsets.y || -y);
+        }
+        else if (this.centerClicks) {
+            // per default, move element in middle of screen
+            browser.scroll(this.getSelector(), -x, -y);
         }
         // wait for other overlapping elements to disappear
         browser.waitUntil(() => {
