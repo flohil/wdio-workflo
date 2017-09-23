@@ -57,6 +57,12 @@ export function specsInclude(id: string) {
   }
 }
 
+function suitesInclude(id: string) {
+  const executionFilters = (<any> jasmine.getEnv()).executionFilters
+
+  return id in executionFilters.suites
+}
+
 function testcasesInclude(id: string, isTestcase: boolean = false) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
   
@@ -420,7 +426,9 @@ export const suite = (
     this.suiteIdStack.push(description)
   }
 
-  jasmineFunc(description, bodyFunc)
+  if (suitesInclude(this.suiteIdStack.join('.'))) {
+    jasmineFunc(description, bodyFunc)    
+  }
 
   this.suiteIdStack.pop()
 }

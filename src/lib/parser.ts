@@ -22,30 +22,39 @@ export type FeatureHash = Record<string, FeatureInfo>
 
 export interface SpecTableEntry {
   specFile: string,
-  feature: string
+  feature: string,
+  testcases: Record<string, true>
 }
 
 export interface FeatureTableEntry {
-  specFiles: string[]
+  specFiles: Record<string, true>
+  specs: Record<string, true>
+}
+
+export interface SpecFileEntry {
+  features: Record<string, true>
+  specs: Record<string, true>
 }
 
 export type SpecTable = Record<string, SpecTableEntry>
 
 export type FeatureTable = Record<string, FeatureTableEntry>
 
+export type SpecFileTable = Record<string, SpecFileEntry>
+
 export interface SpecParseResults {
   specTable: SpecTable
   specTree: FeatureHash
   featureTable: FeatureTable
+  specFileTable: SpecFileTable
 }
 
 // used to determine, if a spec is to be executed for a feature or spec filter
 const specTable: SpecTable = {}
-
 // used to lookup spec information
 const specTree: FeatureHash = {}
-
 const featureTable: FeatureTable = {}
+const specFileTable: SpecFileTable = {}
 
 const specParserState: {
   callExpressionPos: number,
@@ -111,11 +120,13 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
 
                   if (!(featureId in featureTable)) {
                     featureTable[featureId] = {
-                      specFiles: []
+                      specFiles: {},
+                      specs: {}
                     }
                   }
 
-                  featureTable[featureId].specFiles.push(specParserState.activeSpecFile)
+                  featureTable[featureId].specFiles[specParserState.activeSpecFile] = true
+                  specFileTable[specParserState.activeSpecFile].features[featureId] = true
                 }
               )
               specParserState.addArgFunc(
@@ -150,9 +161,13 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
                   if (!(specId in specTable)) {
                     specTable[specId] = {
                       feature: specParserState.activeFeature,
-                      specFile: specParserState.activeSpecFile
+                      specFile: specParserState.activeSpecFile,
+                      testcases: {}
                     }
                   }
+
+                  featureTable[specParserState.activeFeature].specs[specId] = true
+                  specFileTable[specParserState.activeSpecFile].specs[specId] = true
                 }
               )
               specParserState.addArgFunc(
@@ -214,24 +229,30 @@ export interface TestcaseTableEntry {
   suiteId: string
 }
 
+export interface TestcaseFileTableEntry {
+  testcases: Record<string, true>
+}
+
 export type TestcaseTable = Record<string, TestcaseTableEntry>
 
 // each specId of verifyObj has a hash of all fullTestcaseIds that verify it
 export type VerifyTable = Record<string, Record<string, true>>
 
+export type TestcaseFileTable = Record<string, TestcaseFileTableEntry>
+
 export interface TestcaseParseResults {
   testcaseTable: TestcaseTable
   tree: SuiteHash
   verifyTable: VerifyTable
+  testcaseFileTable: TestcaseFileTable
 }
 
 // used to determine, if a spec is to be executed for a feature or spec filter
 const testcaseTable: TestcaseTable = {}
-
 // used to lookup spec information
 const testcaseTree: SuiteHash = {}
-
 const verifyTable: VerifyTable = {}
+const testcaseFileTable: TestcaseFileTable = {}
 
 const testcaseParserState: {
   callExpressionPos: number,
@@ -301,6 +322,8 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                       testcaseHash: {}
                     }
                   }
+
+                  testcaseFileTable[testcaseParserState.activeTestcaseFile].testcases[fullSuiteId] = true
                 }
               )
               testcaseParserState.addArgFunc(
@@ -370,6 +393,8 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                       testcaseFile: testcaseParserState.activeTestcaseFile
                     }
                   }
+
+                  testcaseFileTable[testcaseParserState.activeTestcaseFile].testcases[fullTestcaseId] = true
                 }
               )
               testcaseParserState.addArgFunc(
@@ -421,29 +446,33 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   }
                   
                   for (const spec in verifyObject) {
-                    if (!(spec in verifyTable)) {
-                      verifyTable[spec] = {};
-                    }
+                    if (verifyObject[spec].length > 0) {
+                      specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true
 
-                    verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
-                    
-                    const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash
-
-                    if (!(spec in specVerifyHash)) {
-                      specVerifyHash[spec] = []
-                    }
-
-                    for (const criteria of verifyObject[spec]) {
-                      let found = false
-
-                      for (const _criteria of specVerifyHash[spec]) {
-                        if (criteria === _criteria) {
-                          found = true
-                        }
+                      if (!(spec in verifyTable)) {
+                        verifyTable[spec] = {};
                       }
-
-                      if (!found) {
-                        specVerifyHash[spec].push(criteria)
+  
+                      verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
+                      
+                      const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash
+  
+                      if (!(spec in specVerifyHash)) {
+                        specVerifyHash[spec] = []
+                      }
+  
+                      for (const criteria of verifyObject[spec]) {
+                        let found = false
+  
+                        for (const _criteria of specVerifyHash[spec]) {
+                          if (criteria === _criteria) {
+                            found = true
+                          }
+                        }
+  
+                        if (!found) {
+                          specVerifyHash[spec].push(criteria)
+                        }
                       }
                     }
                   }
@@ -480,6 +509,10 @@ export function specFilesParse(fileNames: string[]): SpecParseResults {
     let sourceFile = program.getSourceFile(fileName)
 
     afterFuncTable = {}
+    specFileTable[fileName] = {
+      features: {},
+      specs: {}
+    }
   
     parseSpecFiles(sourceFile)
   })
@@ -487,7 +520,8 @@ export function specFilesParse(fileNames: string[]): SpecParseResults {
   return {
     specTree: specTree,
     specTable: specTable,
-    featureTable: featureTable
+    featureTable: featureTable,
+    specFileTable: specFileTable
   }
 }
 
@@ -500,13 +534,17 @@ export function testcaseFilesParse(fileNames: string[]): TestcaseParseResults {
     let sourceFile = program.getSourceFile(fileName)
 
     afterFuncTable = {}
-  
+    testcaseFileTable[fileName] = {
+      testcases: {},
+    }
+
     parseTestcaseFiles(sourceFile)
   })
 
   return {
     testcaseTable: testcaseTable,
     tree: testcaseTree,
-    verifyTable: verifyTable
+    verifyTable: verifyTable,
+    testcaseFileTable: testcaseFileTable
   }
 }
