@@ -207,13 +207,13 @@ filters.testcaseFiles = mergedFilters.testcaseFiles
 
 // get all features and specs in specFiles
 for (const specFile in filters.specFiles) {
-    filters.features = parseResults.specs.specFileTable[specFile].features
-    filters.specs = parseResults.specs.specFileTable[specFile].specs
+    filters.features = merge(parseResults.specs.specFileTable[specFile].features, filters.features || {})
+    filters.specs = merge(parseResults.specs.specFileTable[specFile].specs, filters.specs || {})
 }
 
 // get all testcases in testcaseFiles
 for (const testcaseFile in filters.testcaseFiles) {
-    filters.testcases = parseResults.testcases.testcaseFileTable[testcaseFile].testcases
+    filters.testcases = merge(parseResults.testcases.testcaseFileTable[testcaseFile].testcases, filters.testcases || {})
 }
 
 // remove specs not matched by specs filter
@@ -352,92 +352,98 @@ function mergeLists(list: Workflo.FilterList, _filters: ExecutionFilters) {
     }
 }
 
-function filterSpecsByFeatures() {
-    const filteredSpecs: Record<string, true> = {}
-
-    for (const feature in mergedFilters.features) {
-        if (feature in parseResults.specs.featureTable) {
-            for (const spec in parseResults.specs.featureTable[feature].specs) {
-                filteredSpecs[spec] = true
-            }            
+function filterSpecsBySpecs() {
+    if (Object.keys(mergedFilters.specs).length > 0) {
+        const filteredSpecs: Record<string, true> = {}
+        const filteredFeatures: Record<string, true> = {}
+        
+        for (const spec in mergedFilters.specs) {
+            let remove = false
+            let matchStr = spec
+    
+            if (spec.substr(0,1) === '-') {
+                remove = true
+                matchStr = spec.substr(1, spec.length - 1)
+            } 
+            if (matchStr.substr(matchStr.length - 1, 1) === '*') {
+                matchStr = matchStr.substr(0, matchStr.length - 1)
+        
+                for (const specEntry in parseResults.specs.specTable) {
+                    if (specEntry.length >= matchStr.length && specEntry.substr(0, matchStr.length) === matchStr) {
+                        if (remove) {
+                            delete filters[specEntry]
+                        } else {
+                            filteredSpecs[specEntry] = true
+                        }
+                    }
+                }        
+            } else {
+                if (remove) {
+                    delete filters[matchStr]
+                } else {
+                    filteredSpecs[matchStr] = true
+                }
+            }           
         }
-    }
-
-    // delete specs not matched by features
-    for (const spec in filters.specs) {
-        if (!(spec in filteredSpecs)) {
-            delete filters.specs[spec]
+    
+        for (const spec in filteredSpecs) {
+            if (!(spec in filters.specs)) {
+                delete filters.specs[spec]
+            }
         }
     }
 }
 
-function filterSpecsBySpecs() {
-    const filteredSpecs: Record<string, true> = {}
-    const filteredFeatures: Record<string, true> = {}
+function filterSpecsByFeatures() {
+    if (Object.keys(mergedFilters.features).length > 0) {
+        const filteredSpecs: Record<string, true> = {}
 
-    for (const spec in mergedFilters.specs) {
-        let remove = false
-        let matchStr = spec
-
-        if (spec.substr(0,1) === '-') {
-            remove = true
-            matchStr = spec.substr(1, spec.length - 1)
-        } 
-        if (matchStr.substr(matchStr.length - 1, 1) === '*') {
-            matchStr = matchStr.substr(0, matchStr.length - 1)
-    
-            for (const specEntry in parseResults.specs.specTable) {
-                if (specEntry.length >= matchStr.length && specEntry.substr(0, matchStr.length) === matchStr) {
-                    if (remove) {
-                        delete filters[specEntry]
-                    } else {
-                        filteredSpecs[specEntry] = true
-                    }
-                }
-            }        
-        } else {
-            if (remove) {
-                delete filters[matchStr]
-            } else {
-                filteredSpecs[matchStr] = true
+        for (const feature in mergedFilters.features) {
+            if (feature in parseResults.specs.featureTable) {
+                for (const spec in parseResults.specs.featureTable[feature].specs) {
+                    filteredSpecs[spec] = true
+                }            
             }
-        }           
-    }
+        }
 
-    for (const spec in filteredSpecs) {
-        if (!(spec in filters.specs)) {
-            delete filters.specs[spec]
+        // delete specs not matched by features
+        for (const spec in filters.specs) {
+            if (!(spec in filteredSpecs)) {
+                delete filters.specs[spec]
+            }
         }
     }
 }
 
 function filterTestcasesByTestcases() {
-    const filteredTestcaseFiles: Record<string, true> = {}
+    if (Object.keys(mergedFilters.testcases).length > 0) {    
+        const filteredTestcaseFiles: Record<string, true> = {}
 
-    for (const testcase in mergedFilters.testcases) {
-        let remove = false
-        let matchStr = testcase
+        for (const testcase in mergedFilters.testcases) {
+            let remove = false
+            let matchStr = testcase
 
-        if (testcase.substr(0,1) === '-') {
-            remove = true
-            matchStr = testcase.substr(1, testcase.length - 1)
-        } else {       
-            for (const testcaseEntry in parseResults.testcases.testcaseTable) {
-                if (testcaseEntry.substr(0, matchStr.length) === matchStr) {
-                    if (remove) {
-                        delete filters.testcases[testcaseEntry]
-                    } else {
-                        filteredTestcaseFiles[testcaseEntry] = true
+            if (testcase.substr(0,1) === '-') {
+                remove = true
+                matchStr = testcase.substr(1, testcase.length - 1)
+            } else {       
+                for (const testcaseEntry in parseResults.testcases.testcaseTable) {
+                    if (testcaseEntry.substr(0, matchStr.length) === matchStr) {
+                        if (remove) {
+                            delete filters.testcases[testcaseEntry]
+                        } else {
+                            filteredTestcaseFiles[testcaseEntry] = true
+                        }
                     }
-                }
-            }        
-        } 
-    }
+                }        
+            } 
+        }
 
-    // only execute spec files that include filtered options
-    for (const testcaseFile in filters.testcaseFiles) {
-        if (!(testcaseFile in filteredTestcaseFiles)) {
-            delete filters.testcaseFiles[testcaseFile]
+        // only execute spec files that include filtered options
+        for (const testcaseFile in filters.testcaseFiles) {
+            if (!(testcaseFile in filteredTestcaseFiles)) {
+                delete filters.testcaseFiles[testcaseFile]
+            }
         }
     }
 }
