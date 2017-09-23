@@ -1,6 +1,4 @@
 import { XPathBuilder } from './page_objects/builders';
-export declare function featuresInclude(id: string): boolean;
-export declare function specsInclude(id: string): boolean;
 export declare const Feature: (description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void, jasmineFunc?: (description: string, bodyFunc: () => void) => void) => void;
 export declare const fFeature: (description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) => void;
 export declare const xFeature: (description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) => void;

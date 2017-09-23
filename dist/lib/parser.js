@@ -9,6 +9,7 @@ const specTable = {};
 // used to lookup spec information
 const specTree = {};
 const featureTable = {};
+const specFileTable = {};
 const specParserState = {
     callExpressionPos: -1,
     activeSpecFile: undefined,
@@ -55,10 +56,12 @@ function parseSpecFiles(sourceFile) {
                                 }
                                 if (!(featureId in featureTable)) {
                                     featureTable[featureId] = {
-                                        specFiles: []
+                                        specFiles: {},
+                                        specs: {}
                                     };
                                 }
-                                featureTable[featureId].specFiles.push(specParserState.activeSpecFile);
+                                featureTable[featureId].specFiles[specParserState.activeSpecFile] = true;
+                                specFileTable[specParserState.activeSpecFile].features[featureId] = true;
                             });
                             specParserState.addArgFunc((node) => {
                                 const featureMetadata = node;
@@ -87,9 +90,12 @@ function parseSpecFiles(sourceFile) {
                                 if (!(specId in specTable)) {
                                     specTable[specId] = {
                                         feature: specParserState.activeFeature,
-                                        specFile: specParserState.activeSpecFile
+                                        specFile: specParserState.activeSpecFile,
+                                        testcases: {}
                                     };
                                 }
+                                featureTable[specParserState.activeFeature].specs[specId] = true;
+                                specFileTable[specParserState.activeSpecFile].specs[specId] = true;
                             });
                             specParserState.addArgFunc((node) => {
                                 const specDescription = node.text;
@@ -128,6 +134,7 @@ const testcaseTable = {};
 // used to lookup spec information
 const testcaseTree = {};
 const verifyTable = {};
+const testcaseFileTable = {};
 const testcaseParserState = {
     callExpressionPos: -1,
     activeTestcaseFile: undefined,
@@ -178,6 +185,7 @@ function parseTestcaseFiles(sourceFile) {
                                         testcaseHash: {}
                                     };
                                 }
+                                testcaseFileTable[testcaseParserState.activeTestcaseFile].testcases[fullSuiteId] = true;
                             });
                             testcaseParserState.addArgFunc((node) => {
                                 const suiteMetadata = node;
@@ -234,6 +242,7 @@ function parseTestcaseFiles(sourceFile) {
                                         testcaseFile: testcaseParserState.activeTestcaseFile
                                     };
                                 }
+                                testcaseFileTable[testcaseParserState.activeTestcaseFile].testcases[fullTestcaseId] = true;
                             });
                             testcaseParserState.addArgFunc((node) => {
                                 const testcaseMetadata = node;
@@ -277,23 +286,26 @@ function parseTestcaseFiles(sourceFile) {
                                     }
                                 }
                                 for (const spec in verifyObject) {
-                                    if (!(spec in verifyTable)) {
-                                        verifyTable[spec] = {};
-                                    }
-                                    verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
-                                    const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash;
-                                    if (!(spec in specVerifyHash)) {
-                                        specVerifyHash[spec] = [];
-                                    }
-                                    for (const criteria of verifyObject[spec]) {
-                                        let found = false;
-                                        for (const _criteria of specVerifyHash[spec]) {
-                                            if (criteria === _criteria) {
-                                                found = true;
-                                            }
+                                    if (verifyObject[spec].length > 0) {
+                                        specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true;
+                                        if (!(spec in verifyTable)) {
+                                            verifyTable[spec] = {};
                                         }
-                                        if (!found) {
-                                            specVerifyHash[spec].push(criteria);
+                                        verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
+                                        const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash;
+                                        if (!(spec in specVerifyHash)) {
+                                            specVerifyHash[spec] = [];
+                                        }
+                                        for (const criteria of verifyObject[spec]) {
+                                            let found = false;
+                                            for (const _criteria of specVerifyHash[spec]) {
+                                                if (criteria === _criteria) {
+                                                    found = true;
+                                                }
+                                            }
+                                            if (!found) {
+                                                specVerifyHash[spec].push(criteria);
+                                            }
                                         }
                                     }
                                 }
@@ -322,12 +334,17 @@ function specFilesParse(fileNames) {
         specParserState.activeSpecFile = fileName;
         let sourceFile = program.getSourceFile(fileName);
         afterFuncTable = {};
+        specFileTable[fileName] = {
+            features: {},
+            specs: {}
+        };
         parseSpecFiles(sourceFile);
     });
     return {
         specTree: specTree,
         specTable: specTable,
-        featureTable: featureTable
+        featureTable: featureTable,
+        specFileTable: specFileTable
     };
 }
 exports.specFilesParse = specFilesParse;
@@ -337,12 +354,16 @@ function testcaseFilesParse(fileNames) {
         testcaseParserState.activeTestcaseFile = fileName;
         let sourceFile = program.getSourceFile(fileName);
         afterFuncTable = {};
+        testcaseFileTable[fileName] = {
+            testcases: {},
+        };
         parseTestcaseFiles(sourceFile);
     });
     return {
         testcaseTable: testcaseTable,
         tree: testcaseTree,
-        verifyTable: verifyTable
+        verifyTable: verifyTable,
+        testcaseFileTable: testcaseFileTable
     };
 }
 exports.testcaseFilesParse = testcaseFilesParse;

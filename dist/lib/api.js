@@ -10,91 +10,19 @@ const words = {
 };
 function featuresInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;
-    if (Object.keys(executionFilters.features).length === 0) {
-        return true;
-    }
-    else {
-        return id in executionFilters.features;
-    }
+    return id in executionFilters.features();
 }
-exports.featuresInclude = featuresInclude;
 function specsInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;
-    if (Object.keys(executionFilters.specs).length === 0) {
-        return true;
-    }
-    else {
-        let included = false;
-        for (const spec in executionFilters.specs) {
-            if (executionFilters.specs[spec] && spec.length > 0) {
-                let matchString = spec;
-                let includeSubSpecs = false;
-                let exclude = false;
-                if (spec.substr(spec.length - 1, 1) === '*') {
-                    matchString = spec.substr(0, spec.length - 1); // match everything that starts with the characters before *
-                    includeSubSpecs = true;
-                }
-                if (spec.substr(0, 1) === '-') {
-                    matchString = matchString.substr(1, matchString.length - 1);
-                    exclude = true;
-                }
-                if ((!includeSubSpecs && matchString === id) || (includeSubSpecs && id.substr(0, matchString.length) === matchString)) {
-                    if (exclude) {
-                        return false;
-                    }
-                    else {
-                        included = true;
-                    }
-                }
-            }
-        }
-        return included;
-    }
+    return id in executionFilters.specs;
 }
-exports.specsInclude = specsInclude;
-function testcasesInclude(id, isTestcase = false) {
+function suitesInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;
-    if (Object.keys(executionFilters.testcases).length === 0) {
-        return true;
-    }
-    else {
-        let included = false;
-        const idParts = id.split('.');
-        if (idParts[idParts.length - 1] === '') {
-            idParts.pop();
-        }
-        for (const testcase in executionFilters.testcases) {
-            if (executionFilters.testcases[testcase] && testcase.length > 0) {
-                let exclude = false;
-                let matchString = testcase;
-                if (testcase.substr(0, 1) === '-') {
-                    matchString = testcase.substr(1, testcase.length - 1);
-                    exclude = true;
-                }
-                const testcaseParts = matchString.split('.');
-                if (testcaseParts[testcaseParts.length - 1] === '') {
-                    testcaseParts.pop();
-                }
-                if (testcaseParts.length <= idParts.length) {
-                    let match = true;
-                    for (let i = 0; i < testcaseParts.length; ++i) {
-                        if (testcaseParts[i] !== idParts[i]) {
-                            match = false;
-                        }
-                    }
-                    if (match) {
-                        if (exclude) {
-                            return false;
-                        }
-                        else {
-                            included = true;
-                        }
-                    }
-                }
-            }
-        }
-        return included;
-    }
+    return id in executionFilters.suites;
+}
+function testcasesInclude(id) {
+    const executionFilters = jasmine.getEnv().executionFilters;
+    return id in executionFilters.testcases;
 }
 exports.Feature = (description, metadata, bodyFunc, jasmineFunc = describe) => {
     if (description.length === 0) {
@@ -296,7 +224,9 @@ exports.suite = (description, metadata, bodyFunc, jasmineFunc = describe) => {
     else {
         this.suiteIdStack.push(description);
     }
-    jasmineFunc(description, bodyFunc);
+    if (suitesInclude(this.suiteIdStack.join('.'))) {
+        jasmineFunc(description, bodyFunc);
+    }
     this.suiteIdStack.pop();
 };
 exports.fsuite = (description, metadata, bodyFunc) => {

@@ -9,52 +9,16 @@ const words = {
   'And': 'And',
 }
 
-export function featuresInclude(id: string) {
+function featuresInclude(id: string) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
 
-  if(Object.keys(executionFilters.features).length === 0) {
-    return true
-  } else {
-    return id in executionFilters.features
-  }
+  return id in executionFilters.features()
 }
 
-export function specsInclude(id: string) {
+function specsInclude(id: string) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
 
-  if (Object.keys(executionFilters.specs).length === 0) {
-    return true
-  } else {
-    let included = false
-
-    for (const spec in executionFilters.specs) {
-      if (executionFilters.specs[spec] && spec.length > 0) {
-        let matchString = spec
-        let includeSubSpecs = false
-        let exclude = false
-
-        if (spec.substr(spec.length - 1, 1) === '*') {
-          matchString = spec.substr(0, spec.length - 1) // match everything that starts with the characters before *
-          includeSubSpecs = true
-        }
-
-        if (spec.substr(0,1) === '-') {
-          matchString = matchString.substr(1, matchString.length - 1)
-          exclude = true
-        }
-
-        if ((!includeSubSpecs && matchString === id) || (includeSubSpecs && id.substr(0, matchString.length) === matchString)) {
-          if (exclude) {
-            return false
-          } else {
-            included = true
-          }
-        }
-      }
-    }
-
-    return included
-  }
+  return id in executionFilters.specs
 }
 
 function suitesInclude(id: string) {
@@ -63,57 +27,10 @@ function suitesInclude(id: string) {
   return id in executionFilters.suites
 }
 
-function testcasesInclude(id: string, isTestcase: boolean = false) {
+function testcasesInclude(id: string) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
   
-  if (Object.keys(executionFilters.testcases).length === 0) {
-    return true
-  } else {
-    let included = false
-
-    const idParts = id.split('.')
-
-    if (idParts[idParts.length -1 ] === '') {
-      idParts.pop()
-    }
-
-    for (const testcase in executionFilters.testcases) {
-      if (executionFilters.testcases[testcase] && testcase.length > 0) {
-        let exclude = false
-        let matchString = testcase
-
-        if (testcase.substr(0,1) === '-') {
-          matchString = testcase.substr(1, testcase.length - 1)
-          exclude = true
-        }
-
-        const testcaseParts = matchString.split('.')
-
-        if (testcaseParts[testcaseParts.length -1 ] === '') {
-          testcaseParts.pop()
-        }
-
-        if (testcaseParts.length <= idParts.length) {
-          let match = true
-          for (let i = 0; i < testcaseParts.length; ++i) {
-            if (testcaseParts[i] !== idParts[i]) {
-              match = false
-            }
-          }
-
-          if (match) {
-            if (exclude) {
-              return false
-            } else {
-              included = true
-            }
-          }  
-        }
-      }
-    }
-
-    return included
-  }
+  return id in executionFilters.testcases
 }
 
 export const Feature = (
