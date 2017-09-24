@@ -116,6 +116,8 @@ const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles
 mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters));
 // merge filters defined in cli lists and sublists
 if (argv.listFiles) {
+    require('ts-node/register');
+    require('tsconfig-paths/register');
     mergeLists({
         listFiles: JSON.parse(argv.listFiles)
     }, mergedFilters);
@@ -298,7 +300,7 @@ function mergeLists(list, _filters) {
                 throw new Error(`List file could not be found: ${listFilePath}`);
             }
             else {
-                const sublist = require(listFilePath);
+                const sublist = require(listFilePath).default;
                 // recursively traverse sub list files
                 mergeLists(sublist, _filters);
             }

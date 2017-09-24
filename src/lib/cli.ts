@@ -180,6 +180,9 @@ mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters))
 
 // merge filters defined in cli lists and sublists
 if (argv.listFiles) {
+    require('ts-node/register')
+    require('tsconfig-paths/register')
+
     mergeLists({
         listFiles: JSON.parse(argv.listFiles)
     }, mergedFilters)    
@@ -403,7 +406,7 @@ function mergeLists(list: Workflo.FilterList, _filters: ExecutionFilters) {
             if (!fs.existsSync(listFilePath)) {
                 throw new Error(`List file could not be found: ${listFilePath}`)
             } else {
-                const sublist: Workflo.FilterList = require(listFilePath)
+                const sublist: Workflo.FilterList = require(listFilePath).default
     
                 // recursively traverse sub list files
                 mergeLists(sublist, _filters)
