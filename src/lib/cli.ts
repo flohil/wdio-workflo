@@ -1,3 +1,6 @@
+require('ts-node/register')
+require('tsconfig-paths/register')
+
 import * as path from 'path'
 import * as fs from 'fs'
 import * as ejs from 'ejs' 
@@ -180,9 +183,6 @@ mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters))
 
 // merge filters defined in cli lists and sublists
 if (argv.listFiles) {
-    require('ts-node/register')
-    require('tsconfig-paths/register')
-
     mergeLists({
         listFiles: JSON.parse(argv.listFiles)
     }, mergedFilters)    

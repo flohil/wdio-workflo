@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require('ts-node/register');
+require('tsconfig-paths/register');
 const path = require("path");
 const fs = require("fs");
 const parser_1 = require("./parser");
@@ -116,8 +118,6 @@ const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles
 mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters));
 // merge filters defined in cli lists and sublists
 if (argv.listFiles) {
-    require('ts-node/register');
-    require('tsconfig-paths/register');
     mergeLists({
         listFiles: JSON.parse(argv.listFiles)
     }, mergedFilters);
