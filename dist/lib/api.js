@@ -10,7 +10,7 @@ const words = {
 };
 function featuresInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;
-    return id in executionFilters.features();
+    return id in executionFilters.features;
 }
 function specsInclude(id) {
     const executionFilters = jasmine.getEnv().executionFilters;

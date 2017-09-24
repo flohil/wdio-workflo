@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = require("fs");
 const ts = require("typescript");
 const JSON5 = require("json5");
 // stores pos of callExpression and the function to be executed after this block
@@ -287,7 +288,9 @@ function parseTestcaseFiles(sourceFile) {
                                 }
                                 for (const spec in verifyObject) {
                                     if (verifyObject[spec].length > 0) {
-                                        specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true;
+                                        if (spec in specTable) {
+                                            specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true;
+                                        }
                                         if (!(spec in verifyTable)) {
                                             verifyTable[spec] = {};
                                         }
@@ -332,6 +335,9 @@ function specFilesParse(fileNames) {
     const program = ts.createProgram(fileNames, compilerOptions);
     fileNames.forEach(fileName => {
         specParserState.activeSpecFile = fileName;
+        if (!fs_1.existsSync(fileName)) {
+            throw new Error(`Spec file could not be found: ${fileName}`);
+        }
         let sourceFile = program.getSourceFile(fileName);
         afterFuncTable = {};
         specFileTable[fileName] = {
@@ -352,6 +358,9 @@ function testcaseFilesParse(fileNames) {
     const program = ts.createProgram(fileNames, compilerOptions);
     fileNames.forEach(fileName => {
         testcaseParserState.activeTestcaseFile = fileName;
+        if (!fs_1.existsSync(fileName)) {
+            throw new Error(`Testcase file could not be found: ${fileName}`);
+        }
         let sourceFile = program.getSourceFile(fileName);
         afterFuncTable = {};
         testcaseFileTable[fileName] = {

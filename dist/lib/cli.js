@@ -123,8 +123,8 @@ if (argv.listFiles) {
 // complete cli specFiles and testcaseFiles paths
 completeFilePaths(mergedFilters);
 // if no cli params were defined, merge in all spec and testcase files...
-const completedSpecFiles = completeSpecFiles(argv, mergedFilters);
-const completedTestcaseFiles = completeTestcaseFiles(argv, mergedFilters);
+completeSpecFiles(argv, mergedFilters);
+completeTestcaseFiles(argv, mergedFilters);
 const parseResults = {
     specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
     testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
@@ -187,28 +187,84 @@ function completeSpecFiles(argv, _filters) {
     // if user manually defined an empty specFiles array, do not add specFiles from folder
     if (Object.keys(_filters.specFiles).length === 0 && !argv.specFiles) {
         io_1.getAllFiles(specsDir, '.spec.ts').forEach(specFile => _filters.specFiles[specFile] = true);
-        return true;
     }
-    return false;
+    else {
+        let removeOnly = true;
+        const removeSpecFiles = {};
+        for (const specFile in _filters.specFiles) {
+            let remove = false;
+            let matchStr = specFile;
+            if (specFile.substr(0, 1) === '-') {
+                remove = true;
+                matchStr = specFile.substr(1, specFile.length - 1);
+            }
+            else {
+                removeOnly = false;
+            }
+            if (remove) {
+                delete _filters.specFiles[specFile];
+                removeSpecFiles[matchStr] = true;
+            }
+        }
+        if (removeOnly) {
+            io_1.getAllFiles(specsDir, '.spec.ts')
+                .filter(specFile => !(specFile in removeSpecFiles))
+                .forEach(specFile => _filters.specFiles[specFile] = true);
+        }
+    }
 }
 // if no testcase files are present in filters, use all testcase files in testcase folder
 function completeTestcaseFiles(argv, _filters) {
     // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
     if (Object.keys(_filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
         io_1.getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
-        return true;
     }
-    return false;
+    else {
+        let removeOnly = true;
+        const removeTestcaseFiles = {};
+        for (const testcaseFile in _filters.testcaseFiles) {
+            let remove = false;
+            let matchStr = testcaseFile;
+            if (testcaseFile.substr(0, 1) === '-') {
+                remove = true;
+                matchStr = testcaseFile.substr(1, testcaseFile.length - 1);
+            }
+            else {
+                removeOnly = false;
+            }
+            if (remove) {
+                delete _filters.testcaseFiles[testcaseFile];
+                removeTestcaseFiles[matchStr] = true;
+            }
+        }
+        if (removeOnly) {
+            io_1.getAllFiles(testcasesDir, '.tc.ts')
+                .filter(testcaseFile => !(testcaseFile in removeTestcaseFiles))
+                .forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
+        }
+    }
 }
 function completeFilePaths(_filters) {
     const specFilePaths = {};
     const testcaseFilePaths = {};
     for (const specFile in _filters.specFiles) {
-        const specFilePath = path.join(specsDir, `${specFile}.spec.ts`);
+        let matchStr = specFile;
+        let prefix = '';
+        if (specFile.substr(0, 1) === '-') {
+            matchStr = specFile.substr(1, specFile.length - 1);
+            prefix = '-';
+        }
+        const specFilePath = path.join(`${prefix}${specsDir}`, `${matchStr}.spec.ts`);
         specFilePaths[specFilePath] = true;
     }
     for (const testcaseFile in _filters.testcaseFiles) {
-        const testcaseFilePath = path.join(testcasesDir, `${testcaseFile}.tc.ts`);
+        let matchStr = testcaseFile;
+        let prefix = '';
+        if (testcaseFile.substr(0, 1) === '-') {
+            matchStr = testcaseFile.substr(1, testcaseFile.length - 1);
+            prefix = '-';
+        }
+        const testcaseFilePath = path.join(`${prefix}${testcasesDir}`, `${matchStr}.tc.ts`);
         testcaseFilePaths[testcaseFilePath] = true;
     }
     _filters.specFiles = specFilePaths;
@@ -253,6 +309,7 @@ function filterSpecsBySpecs() {
     if (Object.keys(mergedFilters.specs).length > 0) {
         const filteredSpecs = {};
         const filteredFeatures = {};
+        let removeOnly = true;
         for (const spec in mergedFilters.specs) {
             let remove = false;
             let matchStr = spec;
@@ -260,12 +317,15 @@ function filterSpecsBySpecs() {
                 remove = true;
                 matchStr = spec.substr(1, spec.length - 1);
             }
+            else {
+                removeOnly = false;
+            }
             if (matchStr.substr(matchStr.length - 1, 1) === '*') {
                 matchStr = matchStr.substr(0, matchStr.length - 1);
                 for (const specEntry in parseResults.specs.specTable) {
                     if (specEntry.length >= matchStr.length && specEntry.substr(0, matchStr.length) === matchStr) {
                         if (remove) {
-                            delete filters[specEntry];
+                            delete filters.specs[specEntry];
                         }
                         else {
                             filteredSpecs[specEntry] = true;
@@ -275,16 +335,18 @@ function filterSpecsBySpecs() {
             }
             else {
                 if (remove) {
-                    delete filters[matchStr];
+                    delete filters.specs[matchStr];
                 }
                 else {
                     filteredSpecs[matchStr] = true;
                 }
             }
         }
-        for (const spec in filteredSpecs) {
-            if (!(spec in filters.specs)) {
-                delete filters.specs[spec];
+        if (!removeOnly) {
+            for (const spec in filters.specs) {
+                if (!(spec in filteredSpecs)) {
+                    delete filters.specs[spec];
+                }
             }
         }
     }
@@ -292,24 +354,42 @@ function filterSpecsBySpecs() {
 function filterSpecsByFeatures() {
     if (Object.keys(mergedFilters.features).length > 0) {
         const filteredSpecs = {};
+        let removeOnly = true;
         for (const feature in mergedFilters.features) {
-            if (feature in parseResults.specs.featureTable) {
-                for (const spec in parseResults.specs.featureTable[feature].specs) {
-                    filteredSpecs[spec] = true;
+            let remove = false;
+            let matchStr = feature;
+            if (feature.substr(0, 1) === '-') {
+                remove = true;
+                matchStr = feature.substr(1, feature.length - 1);
+            }
+            else {
+                removeOnly = false;
+            }
+            if (matchStr in parseResults.specs.featureTable) {
+                for (const spec in parseResults.specs.featureTable[matchStr].specs) {
+                    if (remove) {
+                        delete filters.specs[spec];
+                    }
+                    else {
+                        filteredSpecs[spec] = true;
+                    }
                 }
             }
         }
         // delete specs not matched by features
-        for (const spec in filters.specs) {
-            if (!(spec in filteredSpecs)) {
-                delete filters.specs[spec];
+        if (!removeOnly) {
+            for (const spec in filters.specs) {
+                if (!(spec in filteredSpecs)) {
+                    delete filters.specs[spec];
+                }
             }
         }
     }
 }
 function filterTestcasesByTestcases() {
     if (Object.keys(mergedFilters.testcases).length > 0) {
-        const filteredTestcaseFiles = {};
+        const filteredTestcases = {};
+        let removeOnly = true;
         for (const testcase in mergedFilters.testcases) {
             let remove = false;
             let matchStr = testcase;
@@ -318,22 +398,39 @@ function filterTestcasesByTestcases() {
                 matchStr = testcase.substr(1, testcase.length - 1);
             }
             else {
-                for (const testcaseEntry in parseResults.testcases.testcaseTable) {
-                    if (testcaseEntry.substr(0, matchStr.length) === matchStr) {
-                        if (remove) {
-                            delete filters.testcases[testcaseEntry];
-                        }
-                        else {
-                            filteredTestcaseFiles[testcaseEntry] = true;
-                        }
+                removeOnly = false;
+            }
+            const testcaseParts = matchStr.split('.');
+            let insideTable = false;
+            for (const testcaseEntry in parseResults.testcases.testcaseTable) {
+                const entryParts = testcaseEntry.split('.');
+                let match = true;
+                for (let i = 0; i < testcaseParts.length; ++i) {
+                    if (testcaseParts[i] !== entryParts[i]) {
+                        match = false;
+                    }
+                }
+                if (match) {
+                    insideTable = true;
+                    if (remove) {
+                        delete filters.testcases[testcaseEntry];
+                    }
+                    else {
+                        filteredTestcases[testcaseEntry] = true;
                     }
                 }
             }
+            if (!insideTable) {
+                delete mergedFilters.testcases[testcase];
+                delete filters.testcases[testcase];
+            }
         }
         // only execute spec files that include filtered options
-        for (const testcaseFile in filters.testcaseFiles) {
-            if (!(testcaseFile in filteredTestcaseFiles)) {
-                delete filters.testcaseFiles[testcaseFile];
+        if (!removeOnly) {
+            for (const testcase in filters.testcases) {
+                if (!(testcase in filteredTestcases)) {
+                    delete filters.testcases[testcase];
+                }
             }
         }
     }

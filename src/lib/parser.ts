@@ -1,4 +1,4 @@
-import { readFileSync } from "fs"
+import { readFileSync, existsSync } from "fs"
 import * as ts from "typescript"
 import * as JSON5 from 'json5'
 
@@ -447,8 +447,10 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   
                   for (const spec in verifyObject) {
                     if (verifyObject[spec].length > 0) {
-                      specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true
-
+                      if (spec in specTable) {
+                        specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true                        
+                      }
+                      
                       if (!(spec in verifyTable)) {
                         verifyTable[spec] = {};
                       }
@@ -504,7 +506,11 @@ export function specFilesParse(fileNames: string[]): SpecParseResults {
   const program = ts.createProgram(fileNames, compilerOptions);
   
   fileNames.forEach(fileName => {
-    specParserState.activeSpecFile = fileName  
+    specParserState.activeSpecFile = fileName
+
+    if(!existsSync(fileName)) {
+      throw new Error(`Spec file could not be found: ${fileName}`)
+    }
   
     let sourceFile = program.getSourceFile(fileName)
 
@@ -529,7 +535,11 @@ export function testcaseFilesParse(fileNames: string[]): TestcaseParseResults {
   const program = ts.createProgram(fileNames, compilerOptions);
   
   fileNames.forEach(fileName => {
-    testcaseParserState.activeTestcaseFile = fileName  
+    testcaseParserState.activeTestcaseFile = fileName
+
+    if(!existsSync(fileName)) {
+      throw new Error(`Testcase file could not be found: ${fileName}`)
+    }
   
     let sourceFile = program.getSourceFile(fileName)
 
