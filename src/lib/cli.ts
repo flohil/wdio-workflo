@@ -68,8 +68,6 @@ optimist
         '\t\t\t\'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
     .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' + 
         '\t\t\t\'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
-    .describe('manualResultFiles', 'in contrary to other filters, only restricts which manual test results should be considered\n' + 
-        '\t\t\t\'["manResultFile1", "manResultFile2"]\' => consider only manual test results from these two files\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
         '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
 
@@ -185,7 +183,7 @@ interface ExecutionFilters {
 
 const filters: ExecutionFilters = {}
 const mergedFilters: ExecutionFilters = {}
-const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'manualResultFiles']
+const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles']
 
 // merge non-file cli filters
 mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters))
@@ -237,12 +235,6 @@ filterSpecsBySpecs()
 // remove specs not matched by features filter
 filterSpecsByFeatures()
 
-// remove manual result files not matched by filtered specs
-filterManualResultFilesBySpecs()
-
-// add manual specs based on manual result files
-addManualSpecs()
-
 // remove testcases not matched by testcases filter
 filterTestcasesByTestcases()
 
@@ -264,7 +256,40 @@ filterSpecFilesBySpecs()
 // remove testcaseFiles not matched by filtered testcases
 filterTestcaseFilesByTestcases()
 
+// add manual specs based on manual result files
+addManualResultFilesAndSpecs()
+
 const criteriaAnalysis = analyseCriteria()
+
+const automatedCriteriaRate = criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount
+const manualCriteriaRate = criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount
+const uncoveredCriteriaRate = criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount
+
+const infoObject: {
+    specFiles: number
+    testcaseFiles: number
+    manualResultFiles: number
+    features: number
+    specs: number
+    testcases: number
+    manualResults: number
+    allCriteriaCount: number
+    automatedCriteria: string
+    manualCriteria: string
+    uncoveredCriteria: string
+} = {
+    specFiles: Object.keys(filters.specFiles).length,
+    testcaseFiles: Object.keys(filters.testcaseFiles).length,
+    manualResultFiles: Object.keys(filters.manualResultFiles).length,
+    features: Object.keys(filters.features).length,
+    specs: Object.keys(filters.specs).length,
+    testcases: Object.keys(filters.testcases).length,
+    manualResults: Object.keys(filters.manualSpecs).length,
+    allCriteriaCount: criteriaAnalysis.allCriteriaCount,
+    automatedCriteria: `${criteriaAnalysis.automatedCriteriaCount} (${automatedCriteriaRate.toLocaleString("en", {style: "percent"})})`,
+    manualCriteria: `${criteriaAnalysis.automatedCriteriaCount} (${manualCriteriaRate.toLocaleString("en", {style: "percent"})})`,
+    uncoveredCriteria: `${criteriaAnalysis.automatedCriteriaCount} (${uncoveredCriteriaRate.toLocaleString("en", {style: "percent"})})`,
+}
 
 if (argv.info) {
 
@@ -276,39 +301,10 @@ if (argv.info) {
         specs: 'Specs',
         testcases: 'Testcases',
         manualTestcases: 'Manual Testcases',
-        testcaseCoverage: 'Automated Testcase Coverage',
+        allCriteriaCount: 'Count of all defined Spec Criteria',
         automatedCriteria: 'Automated Criteria',
         manualCriteria: 'Manual Criteria',
-        criteriaCoverage: 'Automated Critera Coverage'
-    }
-
-    const nbrAllCriteria = 0
-    const nbrAutomatedCriteria = 0
-    const nbrManualCriteria = 0
-
-    const infoObject: {
-        specFiles: number
-        testcaseFiles: number
-        manualResultFiles: number
-        features: number
-        specs: number
-        testcases: number
-        manualTestcases: number
-        testcaseCoverage: number
-        automatedCriteria: number
-        manualCriteria: number
-        criteriaCoverage: number
-    } = {
-        specFiles: Object.keys(filters.specFiles).length,
-        testcaseFiles: Object.keys(filters.testcaseFiles).length,
-        manualResultFiles: Object.keys(filters.manualResultFiles).length,
-        features: Object.keys(filters.features).length,
-        specs: Object.keys(filters.specs).length,
-        testcases: Object.keys(filters.testcases).length,
-        manualTestcases: Object.keys(filters.manualSpecs).length,
-        automatedCriteria:,
-        manualCriteria: ,
-        criteriaCoverage: Math.round(nbrAutomatedCriteria/nbrAllCriteria*10000) / 100
+        uncoveredCriteria: 'Uncovered Critera'
     }
 
     const invertedTranslations = Workflo.Object.invert(translations)
@@ -319,6 +315,10 @@ if (argv.info) {
     })
 
     console.log(columns)
+
+    console.warn('\nUncovered criteria:')
+
+    console.warn('\Undefined specs:')
 }
 
 argv.executionFilters = JSON.stringify(filters)
@@ -792,44 +792,102 @@ function importManualTestcaseResults() {
     }
 }
 
-function filterManualResultFilesBySpecs() {
-    const filteredManResFiles: Record<string, true>
-
-    for (const spec in filters.specs) {
-        if (spec in manualTestResults.specTable) {
-            filteredManResFiles[manualTestResults.specTable[spec].file] = true
-        }
-    }
-
-    for (const manResFile in filters.manualResultFiles) {
-        if (!(manResFile in filteredManResFiles)) {
-            delete filters.manualResultFiles[manResFile]
-        }
-    }
+interface IAnalysedSpec {
+    automated: Record<string, true>
+    manual: Record<string, true>
+    uncovered: Record<string, true>
+    undefined: boolean
 }
 
 function analyseCriteria() {
     const analysedCriteria: {
-        automated: Record<string, Record<string, true>>
-        manual: Record<string, Record<string, true>>
-        uncovered: Record<string, Record<string, true>>
+        specs: Record<string, IAnalysedSpec>
+        allCriteriaCount: number,
+        automatedCriteriaCount: number,
+        manualCriteriaCount: number,
+        uncoveredCriteriaCount: number,
+        undefinedSpecs: string[]
+    } = {
+        specs: {},
+        allCriteriaCount: 0,
+        automatedCriteriaCount: 0,
+        manualCriteriaCount: 0,
+        uncoveredCriteriaCount: 0,
+        undefinedSpecs: []
     }
 
     for (const spec in filters.specs) {
-        const isAutomated = spec in 
-    }
-}
 
-function addManualSpecs() {
-    const manSpecs: Record<string, true>
+        analysedCriteria.specs[spec] = {
+            automated: {},
+            manual: {},
+            uncovered: {},
+            undefined: false
+        }
 
-    for (const manualResultFile in filters.manualResultFiles) {
-        for (const spec in manualTestResults.fileTable[manualResultFile]) {
-            if (spec in filters.specs) {
-                manSpecs[spec] = true
+        // spec was not defined in a spec file
+        if (!(spec in parseResults.specs.specTable)) {
+            analysedCriteria.undefinedSpecs.push(spec)
+            analysedCriteria.specs[spec].undefined = true
+        } else {
+            for (const criteria in parseResults.specs.specTable[spec].criteria) {
+                let covered = false
+    
+                if (spec in manualTestResults.specTable && criteria in manualTestResults.specTable[spec].criteria[criteria]) {
+                    covered = true
+    
+                    analysedCriteria.specs[spec].manual[criteria] = true
+                    analysedCriteria.manualCriteriaCount++
+                }
+                if (spec in parseResults.testcases.verifyTable) {
+                    let _autoCovered = false
+
+                    for (const testcaseId in parseResults.testcases.verifyTable[spec]) {
+                        const suite = parseResults.testcases.testcaseTable[testcaseId].suiteId
+
+                        if (criteria in parseResults.testcases.tree[suite].testcaseHash[testcaseId].specVerifyHash[spec]) {
+                            if (!_autoCovered) {
+                                analysedCriteria.automatedCriteriaCount++
+                            }
+
+                            _autoCovered = true
+
+                            analysedCriteria.specs[spec].automated[criteria] = true
+                        }
+                    }
+
+                    if (_autoCovered) {
+                        if (covered) {
+                            throw new Error(`Criteria ${criteria} of spec ${spec} must not be both verified automatically and tested manually!`)  
+                        } else {
+                            covered = true
+                        }
+                    }
+                }
+                if (!covered) {
+                    analysedCriteria.specs[spec].uncovered[criteria] = true
+                    analysedCriteria.uncoveredCriteriaCount++
+                }
             }
         }
     }
 
-    filters.manualSpecs = manSpecs
+    analysedCriteria.allCriteriaCount = 
+        analysedCriteria.automatedCriteriaCount + 
+        analysedCriteria.manualCriteriaCount + 
+        analysedCriteria.uncoveredCriteriaCount
+
+    return analysedCriteria
+}
+
+function addManualResultFilesAndSpecs() {
+    filters.manualResultFiles = {}
+    filters.manualSpecs = {}
+
+    for (const spec in filters.specs) {
+        if (spec in manualTestResults.specTable) {
+            filters.manualResultFiles[manualTestResults.specTable[spec].file] = true
+            filters.manualSpecs[spec] = true
+        }
+    }
 }

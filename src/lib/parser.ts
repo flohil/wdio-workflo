@@ -24,6 +24,7 @@ export interface SpecTableEntry {
   specFile: string,
   feature: string,
   testcases: Record<string, true>
+  criteria: Record<string, true>
 }
 
 export interface FeatureTableEntry {
@@ -162,7 +163,8 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
                     specTable[specId] = {
                       feature: specParserState.activeFeature,
                       specFile: specParserState.activeSpecFile,
-                      testcases: {}
+                      testcases: {},
+                      criteria: {}
                     }
                   }
 
@@ -196,6 +198,17 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
               afterFuncTable[parentPos] = () => { specParserState.activeSpecId = undefined }
               break
             case 'Then':
+              if (!specParserState.activeSpecId) {
+                throw new Error(`Then defined outside of story in ${specParserState.activeSpecFile}`)
+              }
+
+              specParserState.addArgFunc(
+                (node) => {
+                  const criteriaId = (<ts.StringLiteral> node).text
+
+                  specTable[specParserState.activeSpecId].criteria[criteriaId] = true
+                }
+              )
               break
           }
         }
@@ -213,7 +226,7 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
 export interface TestcaseInfo {
   description?: string,
   metadata?: Workflo.ITestcaseMetadata,
-  specVerifyHash?: Record<string, number[]>
+  specVerifyHash?: Record<string, Record<string, true>>
 }
 
 export interface SuiteInfo {
@@ -460,21 +473,11 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                       const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash
   
                       if (!(spec in specVerifyHash)) {
-                        specVerifyHash[spec] = []
+                        specVerifyHash[spec] = {}
                       }
   
                       for (const criteria of verifyObject[spec]) {
-                        let found = false
-  
-                        for (const _criteria of specVerifyHash[spec]) {
-                          if (criteria === _criteria) {
-                            found = true
-                          }
-                        }
-  
-                        if (!found) {
-                          specVerifyHash[spec].push(criteria)
-                        }
+                        specVerifyHash[spec][criteria] = true
                       }
                     }
                   }
