@@ -34,6 +34,7 @@
     "allure-commandline": "2.1.1",
     "circular-json": "^0.3.3",
     "colors": "^1.1.2",
+    "columnify": "^1.5.4",
     "deep-diff": "^0.3.8",
     "deep-freeze": "0.0.1",
     "get-installed-path": "^2.0.3",

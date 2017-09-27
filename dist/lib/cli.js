@@ -39,6 +39,7 @@ optimist
     .alias('baseUrl', 'b')
     .describe('waitforTimeout', 'timeout for all waitForXXX commands (default: 5000ms)')
     .alias('waitforTimeout', 'w')
+    .describe('info', 'shows static information about testcases and specs')
     .describe('testcases', 'restricts test execution to these testcases\n' +
     '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
     '\t\t\t\'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
@@ -111,6 +112,8 @@ const testDir = workfloConfig.testDir;
 const specsDir = path.join(testDir, 'src', 'specs');
 const testcasesDir = path.join(testDir, 'src', 'testcases');
 const listsDir = path.join(testDir, 'src', 'lists');
+const manDir = path.join(testDir, 'src', 'manualTestcases');
+console.log("start");
 const filters = {};
 const mergedFilters = {};
 const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
@@ -162,6 +165,9 @@ addSuites();
 filterSpecFilesBySpecs();
 // remove testcaseFiles not matched by filtered testcases
 filterTestcaseFilesByTestcases();
+// add manual test cases to test information
+const manualTestcases = importManualTestcaseResults();
+console.dir(manualTestcases, { depth: null });
 argv.executionFilters = JSON.stringify(filters);
 argv.parseResults = JSON.stringify(parseResults);
 let args = {};
@@ -539,5 +545,14 @@ function addSuites() {
             }
         }
     }
+}
+function importManualTestcaseResults() {
+    let manualTestcases = {};
+    let manualTestcaseFiles = io_1.getAllFiles(manDir, '.man.ts');
+    for (const manualTestcaseFile of manualTestcaseFiles) {
+        const manualTestcase = require(manualTestcaseFile).default;
+        manualTestcases = merge(manualTestcases, manualTestcase);
+    }
+    return manualTestcases;
 }
 //# sourceMappingURL=cli.js.map

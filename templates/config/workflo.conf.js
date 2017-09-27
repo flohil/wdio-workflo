@@ -28,7 +28,7 @@ module.exports = {
   },
   specFiles: [ `${testDir}/src/specs/**/*.spec.ts` ],
   testcaseFiles: [ `${testDir}/src/testcases/**/*.tc.ts` ],
-  manualTestcaseFiles: [ `${testDir}/src/manualTestcases/**/*.man.ts` ],
+  manualResultFiles: [ `${testDir}/src/manualResults/**/*.man.ts` ],
   uidStorePath: "",
   allure: {
     issueTrackerPattern: "http://issueTracker/issue-%s",

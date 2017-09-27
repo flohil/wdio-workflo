@@ -15,6 +15,8 @@ import * as merge from 'deepmerge'
 
 import { Launcher } from 'webdriverio-workflo'
 
+const columnify = require('columnify')
+
 const pkg = require('../../package.json')
 
 const VERSION = pkg.version
@@ -51,6 +53,8 @@ optimist
     .describe('waitforTimeout', 'timeout for all waitForXXX commands (default: 5000ms)')
     .alias('waitforTimeout', 'w')
 
+    .describe('info', 'shows static information about testcases and specs')
+
     .describe('testcases', 'restricts test execution to these testcases\n' +
         '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
         '\t\t\t\'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
@@ -64,6 +68,8 @@ optimist
         '\t\t\t\'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
     .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' + 
         '\t\t\t\'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
+    .describe('manualResultFiles', 'in contrary to other filters, only restricts which manual test results should be considered\n' + 
+        '\t\t\t\'["manResultFile1", "manResultFile2"]\' => consider only manual test results from these two files\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
         '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
 
@@ -152,7 +158,7 @@ process.env.WORKFLO_CONFIG = workfloConfigFile
 const workfloConfig = require(workfloConfigFile)
 
 // check workflo config properties
-const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualTestcaseFiles', 'uidStorePath']
+const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath']
 
 for(const property of mandatoryProperties) {
     if (!(property in workfloConfig)) {
@@ -164,19 +170,22 @@ const testDir = workfloConfig.testDir
 const specsDir = path.join(testDir, 'src', 'specs')
 const testcasesDir = path.join(testDir, 'src', 'testcases')
 const listsDir = path.join(testDir, 'src', 'lists')
+const manDir = path.join(testDir, 'src', 'manualResults')
 
 interface ExecutionFilters {
     specFiles?: Record<string, true>
     testcaseFiles?: Record<string, true>
+    manualResultFiles?: Record<string, true>
     specs?: Record<string, true>
     features?: Record<string, true>
     testcases?: Record<string, true>
     suites?: Record<string, true>
+    manualSpecs?: Record<string, true>
 }
 
 const filters: ExecutionFilters = {}
 const mergedFilters: ExecutionFilters = {}
-const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles']
+const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'manualResultFiles']
 
 // merge non-file cli filters
 mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters))
@@ -203,6 +212,9 @@ const parseResults: {
     testcases: testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
 }
 
+// add manual test cases to test information
+const manualTestResults = importManualTestcaseResults()
+
 // filters contains all filter criteria that is actually executed
 // and will be filtered further
 filters.specFiles = mergedFilters.specFiles
@@ -225,10 +237,16 @@ filterSpecsBySpecs()
 // remove specs not matched by features filter
 filterSpecsByFeatures()
 
+// remove manual result files not matched by filtered specs
+filterManualResultFilesBySpecs()
+
+// add manual specs based on manual result files
+addManualSpecs()
+
 // remove testcases not matched by testcases filter
 filterTestcasesByTestcases()
 
-// remove specs not matched by verifies in testcases
+// remove specs not matched by verifies in testcases or manual results
 filterSpecsByTestcases()
 
 // remove testcases that do not verify filtered specs
@@ -245,6 +263,63 @@ filterSpecFilesBySpecs()
 
 // remove testcaseFiles not matched by filtered testcases
 filterTestcaseFilesByTestcases()
+
+const criteriaAnalysis = analyseCriteria()
+
+if (argv.info) {
+
+    const translations = {
+        specFiles: 'Spec Files',
+        testcaseFiles: 'Testcase Files',
+        manualResultFiles: 'Manual Result Files',
+        features: 'Features',
+        specs: 'Specs',
+        testcases: 'Testcases',
+        manualTestcases: 'Manual Testcases',
+        testcaseCoverage: 'Automated Testcase Coverage',
+        automatedCriteria: 'Automated Criteria',
+        manualCriteria: 'Manual Criteria',
+        criteriaCoverage: 'Automated Critera Coverage'
+    }
+
+    const nbrAllCriteria = 0
+    const nbrAutomatedCriteria = 0
+    const nbrManualCriteria = 0
+
+    const infoObject: {
+        specFiles: number
+        testcaseFiles: number
+        manualResultFiles: number
+        features: number
+        specs: number
+        testcases: number
+        manualTestcases: number
+        testcaseCoverage: number
+        automatedCriteria: number
+        manualCriteria: number
+        criteriaCoverage: number
+    } = {
+        specFiles: Object.keys(filters.specFiles).length,
+        testcaseFiles: Object.keys(filters.testcaseFiles).length,
+        manualResultFiles: Object.keys(filters.manualResultFiles).length,
+        features: Object.keys(filters.features).length,
+        specs: Object.keys(filters.specs).length,
+        testcases: Object.keys(filters.testcases).length,
+        manualTestcases: Object.keys(filters.manualSpecs).length,
+        automatedCriteria:,
+        manualCriteria: ,
+        criteriaCoverage: Math.round(nbrAutomatedCriteria/nbrAllCriteria*10000) / 100
+    }
+
+    const invertedTranslations = Workflo.Object.invert(translations)
+    const printObject = Workflo.Object.mapProperties(invertedTranslations, value => infoObject[value])
+
+    const columns = columnify(printObject, {
+        showHeaders: false
+    })
+
+    console.log(columns)
+}
 
 argv.executionFilters = JSON.stringify(filters)
 argv.parseResults = JSON.stringify(parseResults)
@@ -556,41 +631,43 @@ function filterTestcasesByTestcases() {
     }
 }
 
-function filterSpecsByTestcases() {
-    const verifiedSpecs: Record<string, true> = {}
-    
-    // add all spec ids verified in given testcases
-    for (const testcase in filters.testcases) {
-        
-        // testcase is a suite
-        if (testcase in parseResults.testcases.tree) {
-            for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
-                for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
-                    verifiedSpecs[verifiedSpec] = true
-                }
-            }
-        } else { // testcase is a testcase
-            let matchSuite = testcase;
-            const testcaseParts = testcase.split('.')
+function filterSpecsByTestcases() {   
+    if (Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) {
+        const verifiedSpecs: Record<string, true> = {}
 
-            // at least one suite followed by a testcase
-            if (testcaseParts.length > 1) {
-                testcaseParts.pop() // remove testcase
-                matchSuite = testcaseParts.join('.')
-
-                if (matchSuite in parseResults.testcases.tree) {
-                    for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+        // add all spec ids verified in given testcases
+        for (const testcase in filters.testcases) {
+            
+            // testcase is a suite
+            if (testcase in parseResults.testcases.tree) {
+                for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
+                    for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
                         verifiedSpecs[verifiedSpec] = true
                     }
                 }
-            }
-        }               
-    }
+            } else { // testcase is a testcase
+                let matchSuite = testcase;
+                const testcaseParts = testcase.split('.')
 
-    // removed specs not verified by filtered testcases
-    for (const spec in filters.specs) {
-        if (!(spec in verifiedSpecs)) {
-            delete filters.specs[spec]
+                // at least one suite followed by a testcase
+                if (testcaseParts.length > 1) {
+                    testcaseParts.pop() // remove testcase
+                    matchSuite = testcaseParts.join('.')
+
+                    if (matchSuite in parseResults.testcases.tree) {
+                        for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+                            verifiedSpecs[verifiedSpec] = true
+                        }
+                    }
+                }
+            }               
+        }
+
+        // remove specs not verified by filtered testcases or manual results
+        for (const spec in filters.specs) {
+            if (!(spec in verifiedSpecs)) {
+                delete filters.specs[spec]
+            }
         }
     }
 }
@@ -679,4 +756,80 @@ function addSuites() {
             }
         }
     }
+}
+
+interface IManualResultEntry {
+    file: string
+    criteria: Workflo.IManualCriteria
+}
+
+function importManualTestcaseResults() {
+    let mergedManualTestcases: Record<string, IManualResultEntry> = {}
+    let fileTable: Record<string, Workflo.IManualTestcaseResults>
+
+    const manualTestcaseFiles = getAllFiles(manDir, '.man.ts')
+
+    for (const manualTestcaseFile of manualTestcaseFiles) {
+        const manualTestcase: Workflo.IManualTestcaseResults = require(manualTestcaseFile).default
+
+        fileTable[manualTestcaseFile] = manualTestcase
+
+        for (const spec in manualTestcase) {
+            if (spec in mergedManualTestcases) {
+                throw new Error(`Manual testcase results for spec '${spec}' were declared in both '${manualTestcaseFile}' and '${mergedManualTestcases[spec].file}'`)
+            } else {
+                mergedManualTestcases[spec] = {
+                    file: manualTestcaseFile,
+                    criteria: manualTestcase[spec]
+                }
+            }
+        }
+    }
+ 
+    return {
+        fileTable: fileTable,
+        specTable: mergedManualTestcases
+    }
+}
+
+function filterManualResultFilesBySpecs() {
+    const filteredManResFiles: Record<string, true>
+
+    for (const spec in filters.specs) {
+        if (spec in manualTestResults.specTable) {
+            filteredManResFiles[manualTestResults.specTable[spec].file] = true
+        }
+    }
+
+    for (const manResFile in filters.manualResultFiles) {
+        if (!(manResFile in filteredManResFiles)) {
+            delete filters.manualResultFiles[manResFile]
+        }
+    }
+}
+
+function analyseCriteria() {
+    const analysedCriteria: {
+        automated: Record<string, Record<string, true>>
+        manual: Record<string, Record<string, true>>
+        uncovered: Record<string, Record<string, true>>
+    }
+
+    for (const spec in filters.specs) {
+        const isAutomated = spec in 
+    }
+}
+
+function addManualSpecs() {
+    const manSpecs: Record<string, true>
+
+    for (const manualResultFile in filters.manualResultFiles) {
+        for (const spec in manualTestResults.fileTable[manualResultFile]) {
+            if (spec in filters.specs) {
+                manSpecs[spec] = true
+            }
+        }
+    }
+
+    filters.manualSpecs = manSpecs
 }
