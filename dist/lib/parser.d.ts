@@ -13,6 +13,7 @@ export interface SpecTableEntry {
     specFile: string;
     feature: string;
     testcases: Record<string, true>;
+    criteria: Record<string, true>;
 }
 export interface FeatureTableEntry {
     specFiles: Record<string, true>;
@@ -35,7 +36,7 @@ export declare function parseSpecFiles(sourceFile: ts.SourceFile): void;
 export interface TestcaseInfo {
     description?: string;
     metadata?: Workflo.ITestcaseMetadata;
-    specVerifyHash?: Record<string, number[]>;
+    specVerifyHash?: Record<string, Record<string, true>>;
 }
 export interface SuiteInfo {
     metadata?: Workflo.ISuiteMetadata;

@@ -13,10 +13,11 @@ import * as inquirer from 'inquirer'
 import * as optimist from 'optimist'
 import * as merge from 'deepmerge'
 
+import { objectFunctions } from '../'
+
 import { Launcher } from 'webdriverio-workflo'
 
-const columnify = require('columnify')
-
+const table = require('text-table')
 const pkg = require('../../package.json')
 
 const VERSION = pkg.version
@@ -211,7 +212,7 @@ const parseResults: {
 }
 
 // add manual test cases to test information
-const manualTestResults = importManualTestcaseResults()
+const manualResults = importManualResults()
 
 // filters contains all filter criteria that is actually executed
 // and will be filtered further
@@ -261,9 +262,11 @@ addManualResultFilesAndSpecs()
 
 const criteriaAnalysis = analyseCriteria()
 
-const automatedCriteriaRate = criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount
-const manualCriteriaRate = criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount
-const uncoveredCriteriaRate = criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount
+const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
+const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
+const uncoveredCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
+
+type CountInfo = {count: number, percentage: string}
 
 const infoObject: {
     specFiles: number
@@ -273,10 +276,10 @@ const infoObject: {
     specs: number
     testcases: number
     manualResults: number
-    allCriteriaCount: number
-    automatedCriteria: string
-    manualCriteria: string
-    uncoveredCriteria: string
+    allCriteriaCount: CountInfo
+    automatedCriteria: CountInfo
+    manualCriteria: CountInfo
+    uncoveredCriteria: CountInfo
 } = {
     specFiles: Object.keys(filters.specFiles).length,
     testcaseFiles: Object.keys(filters.testcaseFiles).length,
@@ -285,10 +288,22 @@ const infoObject: {
     specs: Object.keys(filters.specs).length,
     testcases: Object.keys(filters.testcases).length,
     manualResults: Object.keys(filters.manualSpecs).length,
-    allCriteriaCount: criteriaAnalysis.allCriteriaCount,
-    automatedCriteria: `${criteriaAnalysis.automatedCriteriaCount} (${automatedCriteriaRate.toLocaleString("en", {style: "percent"})})`,
-    manualCriteria: `${criteriaAnalysis.automatedCriteriaCount} (${manualCriteriaRate.toLocaleString("en", {style: "percent"})})`,
-    uncoveredCriteria: `${criteriaAnalysis.automatedCriteriaCount} (${uncoveredCriteriaRate.toLocaleString("en", {style: "percent"})})`,
+    allCriteriaCount: {
+        count: criteriaAnalysis.allCriteriaCount,
+        percentage: `(${(criteriaAnalysis.allCriteriaCount > 0) ? 100 : 0}%)`
+    },
+    automatedCriteria: {
+        count: criteriaAnalysis.automatedCriteriaCount,
+        percentage: `(~${automatedCriteriaRate.toLocaleString("en", {style: "percent"})})`
+    },
+    manualCriteria: {
+        count: criteriaAnalysis.manualCriteriaCount,
+        percentage: `(~${manualCriteriaRate.toLocaleString("en", {style: "percent"})})`
+    },
+    uncoveredCriteria: {
+        count: criteriaAnalysis.uncoveredCriteriaCount,
+        percentage: `(~${uncoveredCriteriaRate.toLocaleString("en", {style: "percent"})})`
+    }
 }
 
 if (argv.info) {
@@ -300,25 +315,73 @@ if (argv.info) {
         features: 'Features',
         specs: 'Specs',
         testcases: 'Testcases',
-        manualTestcases: 'Manual Testcases',
-        allCriteriaCount: 'Count of all defined Spec Criteria',
+        manualResults: 'Manual Results (Specs)',
+        allCriteriaCount: 'Defined Spec Criteria',
         automatedCriteria: 'Automated Criteria',
         manualCriteria: 'Manual Criteria',
         uncoveredCriteria: 'Uncovered Critera'
     }
 
-    const invertedTranslations = Workflo.Object.invert(translations)
-    const printObject = Workflo.Object.mapProperties(invertedTranslations, value => infoObject[value])
+    const invertedTranslations = objectFunctions.invert(translations)
+    const printObject = objectFunctions.mapProperties(invertedTranslations, value => infoObject[value])
 
-    const columns = columnify(printObject, {
-        showHeaders: false
-    })
+    console.log()
 
-    console.log(columns)
+    function toTable(key) {
+        return [key, printObject[key]]
+    }
 
-    console.warn('\nUncovered criteria:')
+    function toPercentTable(key) {
+        return [key, (<CountInfo> printObject[key]).count, (<CountInfo> printObject[key]).percentage]
+    }
 
-    console.warn('\Undefined specs:')
+    const fileTable = table([
+        toTable(translations.testcaseFiles),
+        toTable(translations.specFiles), 
+        toTable(translations.manualResultFiles)
+    ], { align: [ 'l', 'r' ] })
+
+    console.log("FILTER FILES:")
+    console.log(fileTable + '\n')
+
+    const filterTable = table([
+        toTable(translations.testcases),
+        toTable(translations.features),
+        toTable(translations.specs),
+        toTable(translations.manualResults)
+    ], { align: [ 'l', 'r' ] })
+
+    console.log("FILTERS:")
+    console.log(filterTable + '\n')
+
+    const countTable = table([
+        toPercentTable(translations.automatedCriteria),
+        toPercentTable(translations.manualCriteria),
+        toPercentTable(translations.uncoveredCriteria),
+        toPercentTable(translations.allCriteriaCount)        
+    ], { align: [ 'l', 'r', 'r' ] })
+
+    console.log("CRITERIA COUNT:")
+    console.log(countTable + '\n')
+
+    if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
+        console.log('UNCOVERED CRITERIA:')
+
+        let uncoveredTableRows = []
+
+        for (const spec in criteriaAnalysis.specs) {
+            const uncoveredCriteria = Object.keys(criteriaAnalysis.specs[spec].uncovered)
+            if (uncoveredCriteria.length > 0) {
+                uncoveredTableRows.push([`${spec}:`, `[${uncoveredCriteria.join(', ')}]`])
+            }
+        }
+
+        const uncoveredTable = table(uncoveredTableRows, { align: [ 'l', 'l' ] })
+
+        console.log(uncoveredTable + '\n')
+    }
+
+    process.exit(0)
 }
 
 argv.executionFilters = JSON.stringify(filters)
@@ -763,20 +826,20 @@ interface IManualResultEntry {
     criteria: Workflo.IManualCriteria
 }
 
-function importManualTestcaseResults() {
+function importManualResults() {
     let mergedManualTestcases: Record<string, IManualResultEntry> = {}
-    let fileTable: Record<string, Workflo.IManualTestcaseResults>
+    let fileTable: Record<string, Workflo.IManualTestcaseResults> = {}
 
-    const manualTestcaseFiles = getAllFiles(manDir, '.man.ts')
+    const manualTestcaseResults = getAllFiles(manDir, '.man.ts')
 
-    for (const manualTestcaseFile of manualTestcaseFiles) {
+    for (const manualTestcaseFile of manualTestcaseResults) {
         const manualTestcase: Workflo.IManualTestcaseResults = require(manualTestcaseFile).default
 
         fileTable[manualTestcaseFile] = manualTestcase
 
         for (const spec in manualTestcase) {
             if (spec in mergedManualTestcases) {
-                throw new Error(`Manual testcase results for spec '${spec}' were declared in both '${manualTestcaseFile}' and '${mergedManualTestcases[spec].file}'`)
+                throw new Error(`Manual results for spec '${spec}' were declared in both '${manualTestcaseFile}' and '${mergedManualTestcases[spec].file}'`)
             } else {
                 mergedManualTestcases[spec] = {
                     file: manualTestcaseFile,
@@ -806,18 +869,15 @@ function analyseCriteria() {
         automatedCriteriaCount: number,
         manualCriteriaCount: number,
         uncoveredCriteriaCount: number,
-        undefinedSpecs: string[]
     } = {
         specs: {},
         allCriteriaCount: 0,
         automatedCriteriaCount: 0,
         manualCriteriaCount: 0,
         uncoveredCriteriaCount: 0,
-        undefinedSpecs: []
     }
 
     for (const spec in filters.specs) {
-
         analysedCriteria.specs[spec] = {
             automated: {},
             manual: {},
@@ -827,13 +887,12 @@ function analyseCriteria() {
 
         // spec was not defined in a spec file
         if (!(spec in parseResults.specs.specTable)) {
-            analysedCriteria.undefinedSpecs.push(spec)
             analysedCriteria.specs[spec].undefined = true
         } else {
             for (const criteria in parseResults.specs.specTable[spec].criteria) {
                 let covered = false
     
-                if (spec in manualTestResults.specTable && criteria in manualTestResults.specTable[spec].criteria[criteria]) {
+                if (spec in manualResults.specTable && criteria in manualResults.specTable[spec].criteria) {
                     covered = true
     
                     analysedCriteria.specs[spec].manual[criteria] = true
@@ -885,8 +944,8 @@ function addManualResultFilesAndSpecs() {
     filters.manualSpecs = {}
 
     for (const spec in filters.specs) {
-        if (spec in manualTestResults.specTable) {
-            filters.manualResultFiles[manualTestResults.specTable[spec].file] = true
+        if (spec in manualResults.specTable) {
+            filters.manualResultFiles[manualResults.specTable[spec].file] = true
             filters.manualSpecs[spec] = true
         }
     }

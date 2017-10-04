@@ -92,7 +92,8 @@ function parseSpecFiles(sourceFile) {
                                     specTable[specId] = {
                                         feature: specParserState.activeFeature,
                                         specFile: specParserState.activeSpecFile,
-                                        testcases: {}
+                                        testcases: {},
+                                        criteria: {}
                                     };
                                 }
                                 featureTable[specParserState.activeFeature].specs[specId] = true;
@@ -118,6 +119,13 @@ function parseSpecFiles(sourceFile) {
                             afterFuncTable[parentPos] = () => { specParserState.activeSpecId = undefined; };
                             break;
                         case 'Then':
+                            if (!specParserState.activeSpecId) {
+                                throw new Error(`Then defined outside of story in ${specParserState.activeSpecFile}`);
+                            }
+                            specParserState.addArgFunc((node) => {
+                                const criteriaId = node.text;
+                                specTable[specParserState.activeSpecId].criteria[criteriaId] = true;
+                            });
                             break;
                     }
                 }
@@ -297,18 +305,10 @@ function parseTestcaseFiles(sourceFile) {
                                         verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
                                         const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash;
                                         if (!(spec in specVerifyHash)) {
-                                            specVerifyHash[spec] = [];
+                                            specVerifyHash[spec] = {};
                                         }
                                         for (const criteria of verifyObject[spec]) {
-                                            let found = false;
-                                            for (const _criteria of specVerifyHash[spec]) {
-                                                if (criteria === _criteria) {
-                                                    found = true;
-                                                }
-                                            }
-                                            if (!found) {
-                                                specVerifyHash[spec].push(criteria);
-                                            }
+                                            specVerifyHash[spec][criteria] = true;
                                         }
                                     }
                                 }

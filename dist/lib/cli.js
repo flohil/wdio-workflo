@@ -8,7 +8,9 @@ const parser_1 = require("./parser");
 const io_1 = require("./io");
 const optimist = require("optimist");
 const merge = require("deepmerge");
+const _1 = require("../");
 const webdriverio_workflo_1 = require("webdriverio-workflo");
+const table = require('text-table');
 const pkg = require('../../package.json');
 const VERSION = pkg.version;
 const ALLOWED_ARGV = [
@@ -102,7 +104,7 @@ if (!fs.existsSync(workfloConfigFile)) {
 process.env.WORKFLO_CONFIG = workfloConfigFile;
 const workfloConfig = require(workfloConfigFile);
 // check workflo config properties
-const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualTestcaseFiles', 'uidStorePath'];
+const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath'];
 for (const property of mandatoryProperties) {
     if (!(property in workfloConfig)) {
         throw new Error(`Property '${property}' must be defined in workflo config file!`);
@@ -112,8 +114,7 @@ const testDir = workfloConfig.testDir;
 const specsDir = path.join(testDir, 'src', 'specs');
 const testcasesDir = path.join(testDir, 'src', 'testcases');
 const listsDir = path.join(testDir, 'src', 'lists');
-const manDir = path.join(testDir, 'src', 'manualTestcases');
-console.log("start");
+const manDir = path.join(testDir, 'src', 'manualResults');
 const filters = {};
 const mergedFilters = {};
 const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
@@ -134,6 +135,8 @@ const parseResults = {
     specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
     testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
 };
+// add manual test cases to test information
+const manualResults = importManualResults();
 // filters contains all filter criteria that is actually executed
 // and will be filtered further
 filters.specFiles = mergedFilters.specFiles;
@@ -153,7 +156,7 @@ filterSpecsBySpecs();
 filterSpecsByFeatures();
 // remove testcases not matched by testcases filter
 filterTestcasesByTestcases();
-// remove specs not matched by verifies in testcases
+// remove specs not matched by verifies in testcases or manual results
 filterSpecsByTestcases();
 // remove testcases that do not verify filtered specs
 filterTestcasesBySpecs();
@@ -165,9 +168,97 @@ addSuites();
 filterSpecFilesBySpecs();
 // remove testcaseFiles not matched by filtered testcases
 filterTestcaseFilesByTestcases();
-// add manual test cases to test information
-const manualTestcases = importManualTestcaseResults();
-console.dir(manualTestcases, { depth: null });
+// add manual specs based on manual result files
+addManualResultFilesAndSpecs();
+const criteriaAnalysis = analyseCriteria();
+const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+const uncoveredCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+const infoObject = {
+    specFiles: Object.keys(filters.specFiles).length,
+    testcaseFiles: Object.keys(filters.testcaseFiles).length,
+    manualResultFiles: Object.keys(filters.manualResultFiles).length,
+    features: Object.keys(filters.features).length,
+    specs: Object.keys(filters.specs).length,
+    testcases: Object.keys(filters.testcases).length,
+    manualResults: Object.keys(filters.manualSpecs).length,
+    allCriteriaCount: {
+        count: criteriaAnalysis.allCriteriaCount,
+        percentage: `(${(criteriaAnalysis.allCriteriaCount > 0) ? 100 : 0}%)`
+    },
+    automatedCriteria: {
+        count: criteriaAnalysis.automatedCriteriaCount,
+        percentage: `(~${automatedCriteriaRate.toLocaleString("en", { style: "percent" })})`
+    },
+    manualCriteria: {
+        count: criteriaAnalysis.manualCriteriaCount,
+        percentage: `(~${manualCriteriaRate.toLocaleString("en", { style: "percent" })})`
+    },
+    uncoveredCriteria: {
+        count: criteriaAnalysis.uncoveredCriteriaCount,
+        percentage: `(~${uncoveredCriteriaRate.toLocaleString("en", { style: "percent" })})`
+    }
+};
+if (argv.info) {
+    const translations = {
+        specFiles: 'Spec Files',
+        testcaseFiles: 'Testcase Files',
+        manualResultFiles: 'Manual Result Files',
+        features: 'Features',
+        specs: 'Specs',
+        testcases: 'Testcases',
+        manualResults: 'Manual Results (Specs)',
+        allCriteriaCount: 'Defined Spec Criteria',
+        automatedCriteria: 'Automated Criteria',
+        manualCriteria: 'Manual Criteria',
+        uncoveredCriteria: 'Uncovered Critera'
+    };
+    const invertedTranslations = _1.objectFunctions.invert(translations);
+    const printObject = _1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
+    console.log();
+    function toTable(key) {
+        return [key, printObject[key]];
+    }
+    function toPercentTable(key) {
+        return [key, printObject[key].count, printObject[key].percentage];
+    }
+    const fileTable = table([
+        toTable(translations.testcaseFiles),
+        toTable(translations.specFiles),
+        toTable(translations.manualResultFiles)
+    ], { align: ['l', 'r'] });
+    console.log("FILTER FILES:");
+    console.log(fileTable + '\n');
+    const filterTable = table([
+        toTable(translations.testcases),
+        toTable(translations.features),
+        toTable(translations.specs),
+        toTable(translations.manualResults)
+    ], { align: ['l', 'r'] });
+    console.log("FILTERS:");
+    console.log(filterTable + '\n');
+    const countTable = table([
+        toPercentTable(translations.automatedCriteria),
+        toPercentTable(translations.manualCriteria),
+        toPercentTable(translations.uncoveredCriteria),
+        toPercentTable(translations.allCriteriaCount)
+    ], { align: ['l', 'r', 'r'] });
+    console.log("CRITERIA COUNT:");
+    console.log(countTable + '\n');
+    if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
+        console.log('UNCOVERED CRITERIA:');
+        let uncoveredTableRows = [];
+        for (const spec in criteriaAnalysis.specs) {
+            const uncoveredCriteria = Object.keys(criteriaAnalysis.specs[spec].uncovered);
+            if (uncoveredCriteria.length > 0) {
+                uncoveredTableRows.push([`${spec}:`, `[${uncoveredCriteria.join(', ')}]`]);
+            }
+        }
+        const uncoveredTable = table(uncoveredTableRows, { align: ['l', 'l'] });
+        console.log(uncoveredTable + '\n');
+    }
+    process.exit(0);
+}
 argv.executionFilters = JSON.stringify(filters);
 argv.parseResults = JSON.stringify(parseResults);
 let args = {};
@@ -444,36 +535,38 @@ function filterTestcasesByTestcases() {
     }
 }
 function filterSpecsByTestcases() {
-    const verifiedSpecs = {};
-    // add all spec ids verified in given testcases
-    for (const testcase in filters.testcases) {
-        // testcase is a suite
-        if (testcase in parseResults.testcases.tree) {
-            for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
-                for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
-                    verifiedSpecs[verifiedSpec] = true;
-                }
-            }
-        }
-        else {
-            let matchSuite = testcase;
-            const testcaseParts = testcase.split('.');
-            // at least one suite followed by a testcase
-            if (testcaseParts.length > 1) {
-                testcaseParts.pop(); // remove testcase
-                matchSuite = testcaseParts.join('.');
-                if (matchSuite in parseResults.testcases.tree) {
-                    for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+    if (Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) {
+        const verifiedSpecs = {};
+        // add all spec ids verified in given testcases
+        for (const testcase in filters.testcases) {
+            // testcase is a suite
+            if (testcase in parseResults.testcases.tree) {
+                for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
+                    for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
                         verifiedSpecs[verifiedSpec] = true;
                     }
                 }
             }
+            else {
+                let matchSuite = testcase;
+                const testcaseParts = testcase.split('.');
+                // at least one suite followed by a testcase
+                if (testcaseParts.length > 1) {
+                    testcaseParts.pop(); // remove testcase
+                    matchSuite = testcaseParts.join('.');
+                    if (matchSuite in parseResults.testcases.tree) {
+                        for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+                            verifiedSpecs[verifiedSpec] = true;
+                        }
+                    }
+                }
+            }
         }
-    }
-    // removed specs not verified by filtered testcases
-    for (const spec in filters.specs) {
-        if (!(spec in verifiedSpecs)) {
-            delete filters.specs[spec];
+        // remove specs not verified by filtered testcases or manual results
+        for (const spec in filters.specs) {
+            if (!(spec in verifiedSpecs)) {
+                delete filters.specs[spec];
+            }
         }
     }
 }
@@ -546,13 +639,99 @@ function addSuites() {
         }
     }
 }
-function importManualTestcaseResults() {
-    let manualTestcases = {};
-    let manualTestcaseFiles = io_1.getAllFiles(manDir, '.man.ts');
-    for (const manualTestcaseFile of manualTestcaseFiles) {
+function importManualResults() {
+    let mergedManualTestcases = {};
+    let fileTable = {};
+    const manualTestcaseResults = io_1.getAllFiles(manDir, '.man.ts');
+    for (const manualTestcaseFile of manualTestcaseResults) {
         const manualTestcase = require(manualTestcaseFile).default;
-        manualTestcases = merge(manualTestcases, manualTestcase);
+        fileTable[manualTestcaseFile] = manualTestcase;
+        for (const spec in manualTestcase) {
+            if (spec in mergedManualTestcases) {
+                throw new Error(`Manual results for spec '${spec}' were declared in both '${manualTestcaseFile}' and '${mergedManualTestcases[spec].file}'`);
+            }
+            else {
+                mergedManualTestcases[spec] = {
+                    file: manualTestcaseFile,
+                    criteria: manualTestcase[spec]
+                };
+            }
+        }
     }
-    return manualTestcases;
+    return {
+        fileTable: fileTable,
+        specTable: mergedManualTestcases
+    };
+}
+function analyseCriteria() {
+    const analysedCriteria = {
+        specs: {},
+        allCriteriaCount: 0,
+        automatedCriteriaCount: 0,
+        manualCriteriaCount: 0,
+        uncoveredCriteriaCount: 0,
+    };
+    for (const spec in filters.specs) {
+        analysedCriteria.specs[spec] = {
+            automated: {},
+            manual: {},
+            uncovered: {},
+            undefined: false
+        };
+        // spec was not defined in a spec file
+        if (!(spec in parseResults.specs.specTable)) {
+            analysedCriteria.specs[spec].undefined = true;
+        }
+        else {
+            for (const criteria in parseResults.specs.specTable[spec].criteria) {
+                let covered = false;
+                if (spec in manualResults.specTable && criteria in manualResults.specTable[spec].criteria) {
+                    covered = true;
+                    analysedCriteria.specs[spec].manual[criteria] = true;
+                    analysedCriteria.manualCriteriaCount++;
+                }
+                if (spec in parseResults.testcases.verifyTable) {
+                    let _autoCovered = false;
+                    for (const testcaseId in parseResults.testcases.verifyTable[spec]) {
+                        const suite = parseResults.testcases.testcaseTable[testcaseId].suiteId;
+                        if (criteria in parseResults.testcases.tree[suite].testcaseHash[testcaseId].specVerifyHash[spec]) {
+                            if (!_autoCovered) {
+                                analysedCriteria.automatedCriteriaCount++;
+                            }
+                            _autoCovered = true;
+                            analysedCriteria.specs[spec].automated[criteria] = true;
+                        }
+                    }
+                    if (_autoCovered) {
+                        if (covered) {
+                            throw new Error(`Criteria ${criteria} of spec ${spec} must not be both verified automatically and tested manually!`);
+                        }
+                        else {
+                            covered = true;
+                        }
+                    }
+                }
+                if (!covered) {
+                    analysedCriteria.specs[spec].uncovered[criteria] = true;
+                    analysedCriteria.uncoveredCriteriaCount++;
+                }
+            }
+        }
+    }
+    analysedCriteria.allCriteriaCount =
+        analysedCriteria.automatedCriteriaCount +
+            analysedCriteria.manualCriteriaCount +
+            analysedCriteria.uncoveredCriteriaCount;
+    return analysedCriteria;
+}
+function addManualResultFilesAndSpecs() {
+    filters.manualResultFiles = {};
+    filters.manualSpecs = {};
+    for (const spec in filters.specs) {
+        if (spec in manualResults.specTable) {
+            filters.manualResultFiles[manualResults.specTable[spec].file] = true;
+            filters.manualSpecs[spec] = true;
+        }
+    }
 }
 //# sourceMappingURL=cli.js.map

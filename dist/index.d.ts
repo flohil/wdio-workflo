@@ -217,14 +217,15 @@ declare global  {
             specs?: string[];
             testcases?: string[];
         }
-        interface IManualTestcaseResults {
-            [key: string]: {
-                [key: number]: {
-                    result: boolean;
-                    date: string;
-                    comment?: string;
-                };
+        interface IManualCriteria {
+            [key: number]: {
+                result: boolean;
+                date: string;
+                comment?: string;
             };
+        }
+        interface IManualTestcaseResults {
+            [key: string]: IManualCriteria;
         }
         type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep;
         type StepImplMap = {
