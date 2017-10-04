@@ -328,41 +328,35 @@ if (argv.info) {
     console.log()
 
     function toTable(key) {
-        return [key, printObject[key]]
+        return [key, printObject[key], '']
     }
 
     function toPercentTable(key) {
         return [key, (<CountInfo> printObject[key]).count, (<CountInfo> printObject[key]).percentage]
     }
 
-    const fileTable = table([
+    const infoTable = table([
+        ['FILTER FILES:', '', ''],
         toTable(translations.testcaseFiles),
         toTable(translations.specFiles), 
-        toTable(translations.manualResultFiles)
-    ], { align: [ 'l', 'r' ] })
-
-    console.log("FILTER FILES:")
-    console.log(fileTable + '\n')
-
-    const filterTable = table([
+        toTable(translations.manualResultFiles),
+        ['', '', ''],
+        ['FILTERS:', '', ''],
         toTable(translations.testcases),
         toTable(translations.features),
         toTable(translations.specs),
-        toTable(translations.manualResults)
-    ], { align: [ 'l', 'r' ] })
-
-    console.log("FILTERS:")
-    console.log(filterTable + '\n')
-
-    const countTable = table([
+        toTable(translations.manualResults),
+        ['', '', ''],
+        ['CRITERIA COUNT:', '', ''],
         toPercentTable(translations.automatedCriteria),
         toPercentTable(translations.manualCriteria),
         toPercentTable(translations.uncoveredCriteria),
-        toPercentTable(translations.allCriteriaCount)        
+        toPercentTable(translations.allCriteriaCount)
     ], { align: [ 'l', 'r', 'r' ] })
 
-    console.log("CRITERIA COUNT:")
-    console.log(countTable + '\n')
+    console.log("\n")
+    console.log(infoTable)
+    console.log("\n")
 
     if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
         console.log('UNCOVERED CRITERIA:')
