@@ -732,15 +732,17 @@ function filterSpecsByTestcases() {
 function filterTestcasesBySpecs() {
     const filteredTestcases: Record<string, true> = {}
 
-    for (const spec in filters.specs) {
-        for (const testcase in parseResults.specs.specTable[spec].testcases) {
-            filteredTestcases[testcase] = true
+    if (Object.keys(filters.specs).length > 0) {
+        for (const spec in filters.specs) {
+            for (const testcase in parseResults.specs.specTable[spec].testcases) {
+                filteredTestcases[testcase] = true
+            }
         }
-    }
-
-    for (const testcase in filters.testcases) {
-        if (!(testcase in filteredTestcases)) {
-            delete filters.testcases[testcase]
+        
+        for (const testcase in filters.testcases) {
+            if (!(testcase in filteredTestcases)) {
+                delete filters.testcases[testcase]
+            }
         }
     }
 }

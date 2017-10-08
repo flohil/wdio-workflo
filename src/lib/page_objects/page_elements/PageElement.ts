@@ -73,16 +73,24 @@ export class PageElement<
   initialWait() {
     switch(this.wait) {
       case Workflo.WaitType.exist:
-      this.waitExist()
+      if (!this.exists()) {
+        this.waitExist()
+      }
       break
       case Workflo.WaitType.visible:
-      this.waitVisible()
+      if (!this.isVisible()) {
+        this.waitVisible()
+      }
       break
       case Workflo.WaitType.value:
-      this.waitValue()
+      if (!this.hasValue()) {
+        this.waitValue()
+      }
       break
       case Workflo.WaitType.text:
-      this.waitText()
+      if (!this.hasText()) {
+        this.waitText()
+      }
       break
     }
   }
@@ -452,38 +460,47 @@ export class PageElement<
     }
 
     // wait for other overlapping elements to disappear
-    browser.waitUntil(() => {
-      remainingTimeout -= interval
-      try {
-        this._element.click()
-        return true
-      } catch( error ) {
-        
-        if (error.message.indexOf("is not clickable at point") > -1) {
-          errorMessage = error.message
-          return false
-        } else {
-          throw error
-        }
-      }
-    }, this.timeout, `Element did not become clickable after timeout: ${this.selector}\n\n${errorMessage}`, interval)
+    try {
+      browser.waitUntil(() => {
+          remainingTimeout -= interval;
+          try {
+              this._element.click();
+              errorMessage = undefined;                
+              return true;
+          }
+          catch (error) {
+            if (error.message.indexOf("is not clickable at point") > -1) {
+              errorMessage = error.message;
+              return false;
+            }
+          }
+      }, this.timeout, `Element did not become clickable after timeout: ${this.selector}`, interval);
+    } catch (waitE) {
+        waitE.message = errorMessage.replace('unknown error: ', '')
+        throw waitE
+    }
 
     if (options && options.postCondition && remainingTimeout > 0) {
       options.timeout = options.timeout || this.timeout
 
-      browser.waitUntil(() => {
-        try {
-          if (options.postCondition()) {
-            return true
-          } else {
-              if (this.isVisible() && this.isEnabled()) {
-                this._element.click()
-              }
+      try {
+        browser.waitUntil(() => {
+          try {
+            if (options.postCondition()) {
+              return true
+            } else {
+                if (this.isVisible() && this.isEnabled()) {
+                  this._element.click()
+                }
+            }
+          } catch( error ) {
+            errorMessage = error.message
           }
-        } catch( error ) {
-          errorMessage = error.message
-        }
-      }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}\n\n${errorMessage}`, interval)
+        }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}`, interval)
+      } catch (waitE) {
+        waitE.message = errorMessage.replace('unknown error: ', '')
+        throw waitE
+      }
     }
 
     return this
