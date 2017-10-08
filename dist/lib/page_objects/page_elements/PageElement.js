@@ -51,16 +51,24 @@ class PageElement extends _1.PageNode {
     initialWait() {
         switch (this.wait) {
             case "exist" /* exist */:
-                this.waitExist();
+                if (!this.exists()) {
+                    this.waitExist();
+                }
                 break;
             case "visible" /* visible */:
-                this.waitVisible();
+                if (!this.isVisible()) {
+                    this.waitVisible();
+                }
                 break;
             case "value" /* value */:
-                this.waitValue();
+                if (!this.hasValue()) {
+                    this.waitValue();
+                }
                 break;
             case "text" /* text */:
-                this.waitText();
+                if (!this.hasText()) {
+                    this.waitText();
+                }
                 break;
         }
     }
@@ -352,39 +360,49 @@ class PageElement extends _1.PageNode {
             browser.moveToObject(this.getSelector(), -x, -y);
         }
         // wait for other overlapping elements to disappear
-        browser.waitUntil(() => {
-            remainingTimeout -= interval;
-            try {
-                this._element.click();
-                return true;
-            }
-            catch (error) {
-                if (error.message.indexOf("is not clickable at point") > -1) {
-                    errorMessage = error.message;
-                    return false;
-                }
-                else {
-                    throw error;
-                }
-            }
-        }, this.timeout, `Element did not become clickable after timeout: ${this.selector}\n\n${errorMessage}`, interval);
-        if (options && options.postCondition && remainingTimeout > 0) {
-            options.timeout = options.timeout || this.timeout;
+        try {
             browser.waitUntil(() => {
+                remainingTimeout -= interval;
                 try {
-                    if (options.postCondition()) {
-                        return true;
-                    }
-                    else {
-                        if (this.isVisible() && this.isEnabled()) {
-                            this._element.click();
-                        }
-                    }
+                    this._element.click();
+                    errorMessage = undefined;
+                    return true;
                 }
                 catch (error) {
-                    errorMessage = error.message;
+                    if (error.message.indexOf("is not clickable at point") > -1) {
+                        errorMessage = error.message;
+                        return false;
+                    }
                 }
-            }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}\n\n${errorMessage}`, interval);
+            }, this.timeout, `Element did not become clickable after timeout: ${this.selector}`, interval);
+        }
+        catch (waitE) {
+            waitE.message = errorMessage.replace('unknown error: ', '');
+            throw waitE;
+        }
+        if (options && options.postCondition && remainingTimeout > 0) {
+            options.timeout = options.timeout || this.timeout;
+            try {
+                browser.waitUntil(() => {
+                    try {
+                        if (options.postCondition()) {
+                            return true;
+                        }
+                        else {
+                            if (this.isVisible() && this.isEnabled()) {
+                                this._element.click();
+                            }
+                        }
+                    }
+                    catch (error) {
+                        errorMessage = error.message;
+                    }
+                }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}`, interval);
+            }
+            catch (waitE) {
+                waitE.message = errorMessage.replace('unknown error: ', '');
+                throw waitE;
+            }
         }
         return this;
     }
