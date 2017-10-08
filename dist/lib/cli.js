@@ -4,6 +4,7 @@ require('ts-node/register');
 require('tsconfig-paths/register');
 const path = require("path");
 const fs = require("fs");
+const jsonfile = require("jsonfile");
 const parser_1 = require("./parser");
 const io_1 = require("./io");
 const optimist = require("optimist");
@@ -15,8 +16,7 @@ const pkg = require('../../package.json');
 const VERSION = pkg.version;
 const ALLOWED_ARGV = [
     'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
-    'connectionRetryTimeout', 'connectionRetryCount',
-    'executionFilters', 'parseResults'
+    'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ];
 let configFile;
@@ -110,11 +110,15 @@ for (const property of mandatoryProperties) {
         throw new Error(`Property '${property}' must be defined in workflo config file!`);
     }
 }
+if (typeof workfloConfig.testDir === 'undefined') {
+    throw new Error(`Please specify option 'testDir' in workflo.conf.js file!`);
+}
 const testDir = workfloConfig.testDir;
 const specsDir = path.join(testDir, 'src', 'specs');
 const testcasesDir = path.join(testDir, 'src', 'testcases');
 const listsDir = path.join(testDir, 'src', 'lists');
 const manDir = path.join(testDir, 'src', 'manualResults');
+const testInfoFilePath = path.join(testDir, 'testinfo.json');
 const filters = {};
 const mergedFilters = {};
 const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
@@ -180,6 +184,7 @@ const infoObject = {
     manualResultFiles: Object.keys(filters.manualResultFiles).length,
     features: Object.keys(filters.features).length,
     specs: Object.keys(filters.specs).length,
+    suites: Object.keys(getSuites()).length,
     testcases: Object.keys(filters.testcases).length,
     manualResults: Object.keys(filters.manualSpecs).length,
     allCriteriaCount: {
@@ -197,24 +202,35 @@ const infoObject = {
     uncoveredCriteria: {
         count: criteriaAnalysis.uncoveredCriteriaCount,
         percentage: `(~${uncoveredCriteriaRate.toLocaleString("en", { style: "percent" })})`
-    }
+    },
+    uncoveredCriteriaObject: {}
 };
+if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
+    for (const spec in criteriaAnalysis.specs) {
+        const uncoveredCriteria = Object.keys(criteriaAnalysis.specs[spec].uncovered);
+        if (uncoveredCriteria.length > 0) {
+            infoObject.uncoveredCriteriaObject[spec] = uncoveredCriteria;
+        }
+    }
+}
+const translations = {
+    specFiles: 'Spec Files',
+    testcaseFiles: 'Testcase Files',
+    manualResultFiles: 'Manual Result Files',
+    features: 'Features',
+    specs: 'Specs',
+    suites: 'Suites',
+    testcases: 'Testcases',
+    manualResults: 'Manual Results (Specs)',
+    allCriteriaCount: 'Defined Spec Criteria',
+    automatedCriteria: 'Automated Criteria',
+    manualCriteria: 'Manual Criteria',
+    uncoveredCriteria: 'Uncovered Criteria',
+    uncoveredCriteriaObject: 'Uncovered Criteria Object'
+};
+const invertedTranslations = _1.objectFunctions.invert(translations);
+const printObject = _1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
 if (argv.info) {
-    const translations = {
-        specFiles: 'Spec Files',
-        testcaseFiles: 'Testcase Files',
-        manualResultFiles: 'Manual Result Files',
-        features: 'Features',
-        specs: 'Specs',
-        testcases: 'Testcases',
-        manualResults: 'Manual Results (Specs)',
-        allCriteriaCount: 'Defined Spec Criteria',
-        automatedCriteria: 'Automated Criteria',
-        manualCriteria: 'Manual Criteria',
-        uncoveredCriteria: 'Uncovered Critera'
-    };
-    const invertedTranslations = _1.objectFunctions.invert(translations);
-    const printObject = _1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
     console.log();
     function toTable(key) {
         return [key, printObject[key], ''];
@@ -229,6 +245,7 @@ if (argv.info) {
         toTable(translations.manualResultFiles),
         ['', '', ''],
         ['FILTERS:', '', ''],
+        toTable(translations.suites),
         toTable(translations.testcases),
         toTable(translations.features),
         toTable(translations.specs),
@@ -243,22 +260,28 @@ if (argv.info) {
     console.log("\n");
     console.log(infoTable);
     console.log("\n");
-    if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
+    if (Object.keys(infoObject.uncoveredCriteriaObject).length > 0) {
         console.log('UNCOVERED CRITERIA:');
         let uncoveredTableRows = [];
-        for (const spec in criteriaAnalysis.specs) {
-            const uncoveredCriteria = Object.keys(criteriaAnalysis.specs[spec].uncovered);
-            if (uncoveredCriteria.length > 0) {
-                uncoveredTableRows.push([`${spec}:`, `[${uncoveredCriteria.join(', ')}]`]);
-            }
+        for (const spec in infoObject.uncoveredCriteriaObject) {
+            uncoveredTableRows.push([`${spec}:`, `[${infoObject.uncoveredCriteriaObject[spec].join(', ')}]`]);
         }
         const uncoveredTable = table(uncoveredTableRows, { align: ['l', 'l'] });
         console.log(uncoveredTable + '\n');
     }
     process.exit(0);
 }
-argv.executionFilters = JSON.stringify(filters);
-argv.parseResults = JSON.stringify(parseResults);
+if (fs.existsSync(testInfoFilePath)) {
+    fs.unlinkSync(testInfoFilePath);
+}
+const testinfo = {
+    executionFilters: filters,
+    parseResults: parseResults,
+    printObject: printObject,
+    uidStorePath: workfloConfig.uidStorePath
+};
+jsonfile.writeFileSync(testInfoFilePath, testinfo);
+argv.testInfoFilePath = testInfoFilePath;
 let args = {};
 for (let key of ALLOWED_ARGV) {
     if (argv[key] !== undefined) {
@@ -733,5 +756,12 @@ function addManualResultFilesAndSpecs() {
             filters.manualSpecs[spec] = true;
         }
     }
+}
+function getSuites() {
+    const suites = {};
+    for (const testcase in filters.testcases) {
+        suites[parseResults.testcases.testcaseTable[testcase].suiteId] = true;
+    }
+    return suites;
 }
 //# sourceMappingURL=cli.js.map
