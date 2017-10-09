@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 require('ts-node/register');
 require('tsconfig-paths/register');
@@ -7,6 +15,7 @@ const fs = require("fs");
 const jsonfile = require("jsonfile");
 const parser_1 = require("./parser");
 const io_1 = require("./io");
+const allureReport_1 = require("./allureReport");
 const optimist = require("optimist");
 const merge = require("deepmerge");
 const _1 = require("../");
@@ -57,6 +66,9 @@ optimist
     '\t\t\t\'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
     '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
+    .describe('generateReport', 'generates report for latest results')
+    .describe('openReport', 'opens report generated latest results')
+    .describe('report', 'generates and opens report for latest results')
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles'
     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
@@ -82,7 +94,7 @@ if (argv.version) {
 }
 /**
  * use wdio.conf.js default file name if no config was specified
- * otherwise run config sequenz
+ * otherwise run config sequence
  */
 if (typeof configFile === 'undefined') {
     configFile = argv._[0];
@@ -103,450 +115,503 @@ if (!fs.existsSync(workfloConfigFile)) {
 }
 process.env.WORKFLO_CONFIG = workfloConfigFile;
 const workfloConfig = require(workfloConfigFile);
-// check workflo config properties
-const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath'];
-for (const property of mandatoryProperties) {
-    if (!(property in workfloConfig)) {
-        throw new Error(`Property '${property}' must be defined in workflo config file!`);
-    }
-}
-if (typeof workfloConfig.testDir === 'undefined') {
-    throw new Error(`Please specify option 'testDir' in workflo.conf.js file!`);
-}
-const testDir = workfloConfig.testDir;
-const specsDir = path.join(testDir, 'src', 'specs');
-const testcasesDir = path.join(testDir, 'src', 'testcases');
-const listsDir = path.join(testDir, 'src', 'lists');
-const manDir = path.join(testDir, 'src', 'manualResults');
-const testInfoFilePath = path.join(testDir, 'testinfo.json');
-const filters = {};
-const mergedFilters = {};
-const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
-// merge non-file cli filters
-mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters));
-// merge filters defined in cli lists and sublists
-if (argv.listFiles) {
-    mergeLists({
-        listFiles: JSON.parse(argv.listFiles)
-    }, mergedFilters);
-}
-// complete cli specFiles and testcaseFiles paths
-completeFilePaths(mergedFilters);
-// if no cli params were defined, merge in all spec and testcase files...
-completeSpecFiles(argv, mergedFilters);
-completeTestcaseFiles(argv, mergedFilters);
-const parseResults = {
-    specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
-    testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
-};
-// add manual test cases to test information
-const manualResults = importManualResults();
-// filters contains all filter criteria that is actually executed
-// and will be filtered further
-filters.specFiles = mergedFilters.specFiles;
-filters.testcaseFiles = mergedFilters.testcaseFiles;
-// get all features and specs in specFiles
-for (const specFile in filters.specFiles) {
-    filters.features = merge(parseResults.specs.specFileTable[specFile].features, filters.features || {});
-    filters.specs = merge(parseResults.specs.specFileTable[specFile].specs, filters.specs || {});
-}
-// get all testcases in testcaseFiles
-for (const testcaseFile in filters.testcaseFiles) {
-    filters.testcases = merge(parseResults.testcases.testcaseFileTable[testcaseFile].testcases, filters.testcases || {});
-}
-// remove specs not matched by specs filter
-filterSpecsBySpecs();
-// remove specs not matched by features filter
-filterSpecsByFeatures();
-// remove testcases not matched by testcases filter
-filterTestcasesByTestcases();
-// remove specs not matched by verifies in testcases or manual results
-filterSpecsByTestcases();
-// remove testcases that do not verify filtered specs
-filterTestcasesBySpecs();
-// remove features not matched by specs
-filterFeaturesBySpecs();
-// build suites based on testcases
-addSuites();
-// remove specFiles not matched by filtered specs
-filterSpecFilesBySpecs();
-// remove testcaseFiles not matched by filtered testcases
-filterTestcaseFilesByTestcases();
-// add manual specs based on manual result files
-addManualResultFilesAndSpecs();
-const criteriaAnalysis = analyseCriteria();
-const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
-const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
-const uncoveredCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
-const infoObject = {
-    specFiles: Object.keys(filters.specFiles).length,
-    testcaseFiles: Object.keys(filters.testcaseFiles).length,
-    manualResultFiles: Object.keys(filters.manualResultFiles).length,
-    features: Object.keys(filters.features).length,
-    specs: Object.keys(filters.specs).length,
-    suites: Object.keys(getSuites()).length,
-    testcases: Object.keys(filters.testcases).length,
-    manualResults: Object.keys(filters.manualSpecs).length,
-    allCriteriaCount: {
-        count: criteriaAnalysis.allCriteriaCount,
-        percentage: `(${(criteriaAnalysis.allCriteriaCount > 0) ? 100 : 0}%)`
-    },
-    automatedCriteria: {
-        count: criteriaAnalysis.automatedCriteriaCount,
-        percentage: `(~${automatedCriteriaRate.toLocaleString("en", { style: "percent" })})`
-    },
-    manualCriteria: {
-        count: criteriaAnalysis.manualCriteriaCount,
-        percentage: `(~${manualCriteriaRate.toLocaleString("en", { style: "percent" })})`
-    },
-    uncoveredCriteria: {
-        count: criteriaAnalysis.uncoveredCriteriaCount,
-        percentage: `(~${uncoveredCriteriaRate.toLocaleString("en", { style: "percent" })})`
-    },
-    uncoveredCriteriaObject: {}
-};
-if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
-    for (const spec in criteriaAnalysis.specs) {
-        const uncoveredCriteria = Object.keys(criteriaAnalysis.specs[spec].uncovered);
-        if (uncoveredCriteria.length > 0) {
-            infoObject.uncoveredCriteriaObject[spec] = uncoveredCriteria;
+checkGenerateReport().then(() => {
+    // check workflo config properties
+    const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath'];
+    for (const property of mandatoryProperties) {
+        if (!(property in workfloConfig)) {
+            throw new Error(`Property '${property}' must be defined in workflo config file!`);
         }
     }
-}
-const translations = {
-    specFiles: 'Spec Files',
-    testcaseFiles: 'Testcase Files',
-    manualResultFiles: 'Manual Result Files',
-    features: 'Features',
-    specs: 'Specs',
-    suites: 'Suites',
-    testcases: 'Testcases',
-    manualResults: 'Manual Results (Specs)',
-    allCriteriaCount: 'Defined Spec Criteria',
-    automatedCriteria: 'Automated Criteria',
-    manualCriteria: 'Manual Criteria',
-    uncoveredCriteria: 'Uncovered Criteria',
-    uncoveredCriteriaObject: 'Uncovered Criteria Object'
-};
-const invertedTranslations = _1.objectFunctions.invert(translations);
-const printObject = _1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
-if (argv.info) {
-    console.log();
-    function toTable(key) {
-        return [key, printObject[key], ''];
+    if (typeof workfloConfig.testDir === 'undefined') {
+        throw new Error(`Please specify option 'testDir' in workflo.conf.js file!`);
     }
-    function toPercentTable(key) {
-        return [key, printObject[key].count, printObject[key].percentage];
+    const testDir = workfloConfig.testDir;
+    const specsDir = path.join(testDir, 'src', 'specs');
+    const testcasesDir = path.join(testDir, 'src', 'testcases');
+    const listsDir = path.join(testDir, 'src', 'lists');
+    const manDir = path.join(testDir, 'src', 'manualResults');
+    const testInfoFilePath = path.join(testDir, 'testinfo.json');
+    const filters = {};
+    const mergedFilters = {};
+    const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
+    // merge non-file cli filters
+    mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters));
+    // merge filters defined in cli lists and sublists
+    if (argv.listFiles) {
+        mergeLists({
+            listFiles: JSON.parse(argv.listFiles)
+        }, mergedFilters);
     }
-    const infoTable = table([
-        ['FILTER FILES:', '', ''],
-        toTable(translations.testcaseFiles),
-        toTable(translations.specFiles),
-        toTable(translations.manualResultFiles),
-        ['', '', ''],
-        ['FILTERS:', '', ''],
-        toTable(translations.suites),
-        toTable(translations.testcases),
-        toTable(translations.features),
-        toTable(translations.specs),
-        toTable(translations.manualResults),
-        ['', '', ''],
-        ['CRITERIA COUNT:', '', ''],
-        toPercentTable(translations.automatedCriteria),
-        toPercentTable(translations.manualCriteria),
-        toPercentTable(translations.uncoveredCriteria),
-        toPercentTable(translations.allCriteriaCount)
-    ], { align: ['l', 'r', 'r'] });
-    console.log("\n");
-    console.log(infoTable);
-    console.log("\n");
-    if (Object.keys(infoObject.uncoveredCriteriaObject).length > 0) {
-        console.log('UNCOVERED CRITERIA:');
-        let uncoveredTableRows = [];
-        for (const spec in infoObject.uncoveredCriteriaObject) {
-            uncoveredTableRows.push([`${spec}:`, `[${infoObject.uncoveredCriteriaObject[spec].join(', ')}]`]);
-        }
-        const uncoveredTable = table(uncoveredTableRows, { align: ['l', 'l'] });
-        console.log(uncoveredTable + '\n');
+    // complete cli specFiles and testcaseFiles paths
+    completeFilePaths(mergedFilters);
+    // if no cli params were defined, merge in all spec and testcase files...
+    completeSpecFiles(argv, mergedFilters);
+    completeTestcaseFiles(argv, mergedFilters);
+    const parseResults = {
+        specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
+        testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
+    };
+    // add manual test cases to test information
+    const manualResults = importManualResults();
+    // filters contains all filter criteria that is actually executed
+    // and will be filtered further
+    filters.specFiles = mergedFilters.specFiles;
+    filters.testcaseFiles = mergedFilters.testcaseFiles;
+    // get all features and specs in specFiles
+    for (const specFile in filters.specFiles) {
+        filters.features = merge(parseResults.specs.specFileTable[specFile].features, filters.features || {});
+        filters.specs = merge(parseResults.specs.specFileTable[specFile].specs, filters.specs || {});
     }
-    process.exit(0);
-}
-if (fs.existsSync(testInfoFilePath)) {
-    fs.unlinkSync(testInfoFilePath);
-}
-const testinfo = {
-    executionFilters: filters,
-    parseResults: parseResults,
-    printObject: printObject,
-    uidStorePath: workfloConfig.uidStorePath
-};
-jsonfile.writeFileSync(testInfoFilePath, testinfo);
-argv.testInfoFilePath = testInfoFilePath;
-let args = {};
-for (let key of ALLOWED_ARGV) {
-    if (argv[key] !== undefined) {
-        args[key] = argv[key];
+    // get all testcases in testcaseFiles
+    for (const testcaseFile in filters.testcaseFiles) {
+        filters.testcases = merge(parseResults.testcases.testcaseFileTable[testcaseFile].testcases, filters.testcases || {});
     }
-}
-/**
- * run launch sequence
- */
-let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
-launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
-    throw e;
-}));
-function mergeIntoFilters(key, argv, _filters) {
-    _filters[key] = {};
-    if (argv[key]) {
-        const filterArray = JSON.parse(argv[key]);
-        filterArray.forEach(value => _filters[key][value] = true);
-    }
-}
-// if no spec files are present in filters, use all spec files in specs folder
-function completeSpecFiles(argv, _filters) {
-    // if user manually defined an empty specFiles array, do not add specFiles from folder
-    if (Object.keys(_filters.specFiles).length === 0 && !argv.specFiles) {
-        io_1.getAllFiles(specsDir, '.spec.ts').forEach(specFile => _filters.specFiles[specFile] = true);
-    }
-    else {
-        let removeOnly = true;
-        const removeSpecFiles = {};
-        for (const specFile in _filters.specFiles) {
-            let remove = false;
-            let matchStr = specFile;
-            if (specFile.substr(0, 1) === '-') {
-                remove = true;
-                matchStr = specFile.substr(1, specFile.length - 1);
-            }
-            else {
-                removeOnly = false;
-            }
-            if (remove) {
-                delete _filters.specFiles[specFile];
-                removeSpecFiles[matchStr] = true;
-            }
-        }
-        if (removeOnly) {
-            io_1.getAllFiles(specsDir, '.spec.ts')
-                .filter(specFile => !(specFile in removeSpecFiles))
-                .forEach(specFile => _filters.specFiles[specFile] = true);
-        }
-    }
-}
-// if no testcase files are present in filters, use all testcase files in testcase folder
-function completeTestcaseFiles(argv, _filters) {
-    // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
-    if (Object.keys(_filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
-        io_1.getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
-    }
-    else {
-        let removeOnly = true;
-        const removeTestcaseFiles = {};
-        for (const testcaseFile in _filters.testcaseFiles) {
-            let remove = false;
-            let matchStr = testcaseFile;
-            if (testcaseFile.substr(0, 1) === '-') {
-                remove = true;
-                matchStr = testcaseFile.substr(1, testcaseFile.length - 1);
-            }
-            else {
-                removeOnly = false;
-            }
-            if (remove) {
-                delete _filters.testcaseFiles[testcaseFile];
-                removeTestcaseFiles[matchStr] = true;
-            }
-        }
-        if (removeOnly) {
-            io_1.getAllFiles(testcasesDir, '.tc.ts')
-                .filter(testcaseFile => !(testcaseFile in removeTestcaseFiles))
-                .forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
-        }
-    }
-}
-function completeFilePaths(_filters) {
-    const specFilePaths = {};
-    const testcaseFilePaths = {};
-    for (const specFile in _filters.specFiles) {
-        let matchStr = specFile;
-        let prefix = '';
-        if (specFile.substr(0, 1) === '-') {
-            matchStr = specFile.substr(1, specFile.length - 1);
-            prefix = '-';
-        }
-        const specFilePath = path.join(`${prefix}${specsDir}`, `${matchStr}.spec.ts`);
-        specFilePaths[specFilePath] = true;
-    }
-    for (const testcaseFile in _filters.testcaseFiles) {
-        let matchStr = testcaseFile;
-        let prefix = '';
-        if (testcaseFile.substr(0, 1) === '-') {
-            matchStr = testcaseFile.substr(1, testcaseFile.length - 1);
-            prefix = '-';
-        }
-        const testcaseFilePath = path.join(`${prefix}${testcasesDir}`, `${matchStr}.tc.ts`);
-        testcaseFilePaths[testcaseFilePath] = true;
-    }
-    _filters.specFiles = specFilePaths;
-    _filters.testcaseFiles = testcaseFilePaths;
-}
-/**
- * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
- * @param argv
- */
-function mergeLists(list, _filters) {
-    if (list.specFiles) {
-        list.specFiles.forEach(value => _filters.specFiles[value] = true);
-    }
-    if (list.testcaseFiles) {
-        list.testcaseFiles.forEach(value => _filters.testcaseFiles[value] = true);
-    }
-    if (list.features) {
-        list.features.forEach(value => _filters.features[value] = true);
-    }
-    if (list.specs) {
-        list.specs.forEach(value => _filters.specs[value] = true);
-    }
-    if (list.testcases) {
-        list.testcases.forEach(value => _filters.testcases[value] = true);
-    }
-    if (list.listFiles) {
-        for (const listFile of list.listFiles) {
-            // complete cli listFiles paths
-            const listFilePath = path.join(listsDir, `${listFile}.list.ts`);
-            if (!fs.existsSync(listFilePath)) {
-                throw new Error(`List file could not be found: ${listFilePath}`);
-            }
-            else {
-                const sublist = require(listFilePath).default;
-                // recursively traverse sub list files
-                mergeLists(sublist, _filters);
+    // remove specs not matched by specs filter
+    filterSpecsBySpecs();
+    // remove specs not matched by features filter
+    filterSpecsByFeatures();
+    // remove testcases not matched by testcases filter
+    filterTestcasesByTestcases();
+    // remove specs not matched by verifies in testcases or manual results
+    filterSpecsByTestcases();
+    // remove testcases that do not verify filtered specs
+    filterTestcasesBySpecs();
+    // remove features not matched by specs
+    filterFeaturesBySpecs();
+    // build suites based on testcases
+    addSuites();
+    // remove specFiles not matched by filtered specs
+    filterSpecFilesBySpecs();
+    // remove testcaseFiles not matched by filtered testcases
+    filterTestcaseFilesByTestcases();
+    // add manual specs based on manual result files
+    addManualResultFilesAndSpecs();
+    const criteriaAnalysis = analyseCriteria();
+    const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+    const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+    const uncoveredCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+    const infoObject = {
+        specFiles: Object.keys(filters.specFiles).length,
+        testcaseFiles: Object.keys(filters.testcaseFiles).length,
+        manualResultFiles: Object.keys(filters.manualResultFiles).length,
+        features: Object.keys(filters.features).length,
+        specs: Object.keys(filters.specs).length,
+        suites: Object.keys(getSuites()).length,
+        testcases: Object.keys(filters.testcases).length,
+        manualResults: Object.keys(filters.manualSpecs).length,
+        allCriteriaCount: {
+            count: criteriaAnalysis.allCriteriaCount,
+            percentage: `(${(criteriaAnalysis.allCriteriaCount > 0) ? 100 : 0}%)`
+        },
+        automatedCriteria: {
+            count: criteriaAnalysis.automatedCriteriaCount,
+            percentage: `(~${automatedCriteriaRate.toLocaleString("en", { style: "percent" })})`
+        },
+        manualCriteria: {
+            count: criteriaAnalysis.manualCriteriaCount,
+            percentage: `(~${manualCriteriaRate.toLocaleString("en", { style: "percent" })})`
+        },
+        uncoveredCriteria: {
+            count: criteriaAnalysis.uncoveredCriteriaCount,
+            percentage: `(~${uncoveredCriteriaRate.toLocaleString("en", { style: "percent" })})`
+        },
+        uncoveredCriteriaObject: {}
+    };
+    if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
+        for (const spec in criteriaAnalysis.specs) {
+            const uncoveredCriteria = Object.keys(criteriaAnalysis.specs[spec].uncovered);
+            if (uncoveredCriteria.length > 0) {
+                infoObject.uncoveredCriteriaObject[spec] = uncoveredCriteria;
             }
         }
     }
-}
-function filterSpecsBySpecs() {
-    if (Object.keys(mergedFilters.specs).length > 0) {
-        const filteredSpecs = {};
-        const filteredFeatures = {};
-        let removeOnly = true;
-        for (const spec in mergedFilters.specs) {
-            let remove = false;
-            let matchStr = spec;
-            if (spec.substr(0, 1) === '-') {
-                remove = true;
-                matchStr = spec.substr(1, spec.length - 1);
+    const translations = {
+        specFiles: 'Spec Files',
+        testcaseFiles: 'Testcase Files',
+        manualResultFiles: 'Manual Result Files',
+        features: 'Features',
+        specs: 'Specs',
+        suites: 'Suites',
+        testcases: 'Testcases',
+        manualResults: 'Manual Results (Specs)',
+        allCriteriaCount: 'Defined Spec Criteria',
+        automatedCriteria: 'Automated Criteria',
+        manualCriteria: 'Manual Criteria',
+        uncoveredCriteria: 'Uncovered Criteria',
+        uncoveredCriteriaObject: 'Uncovered Criteria Object'
+    };
+    const invertedTranslations = _1.objectFunctions.invert(translations);
+    const printObject = _1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
+    if (argv.info) {
+        console.log();
+        function toTable(key) {
+            return [key, printObject[key], ''];
+        }
+        function toPercentTable(key) {
+            return [key, printObject[key].count, printObject[key].percentage];
+        }
+        const infoTable = table([
+            ['FILTER FILES:', '', ''],
+            toTable(translations.testcaseFiles),
+            toTable(translations.specFiles),
+            toTable(translations.manualResultFiles),
+            ['', '', ''],
+            ['FILTERS:', '', ''],
+            toTable(translations.suites),
+            toTable(translations.testcases),
+            toTable(translations.features),
+            toTable(translations.specs),
+            toTable(translations.manualResults),
+            ['', '', ''],
+            ['CRITERIA COUNT:', '', ''],
+            toPercentTable(translations.automatedCriteria),
+            toPercentTable(translations.manualCriteria),
+            toPercentTable(translations.uncoveredCriteria),
+            toPercentTable(translations.allCriteriaCount)
+        ], { align: ['l', 'r', 'r'] });
+        console.log("\n");
+        console.log(infoTable);
+        console.log("\n");
+        if (Object.keys(infoObject.uncoveredCriteriaObject).length > 0) {
+            console.log('UNCOVERED CRITERIA:');
+            let uncoveredTableRows = [];
+            for (const spec in infoObject.uncoveredCriteriaObject) {
+                uncoveredTableRows.push([`${spec}:`, `[${infoObject.uncoveredCriteriaObject[spec].join(', ')}]`]);
             }
-            else {
-                removeOnly = false;
-            }
-            if (matchStr.substr(matchStr.length - 1, 1) === '*') {
-                matchStr = matchStr.substr(0, matchStr.length - 1);
-                for (const specEntry in parseResults.specs.specTable) {
-                    if (specEntry.length >= matchStr.length && specEntry.substr(0, matchStr.length) === matchStr) {
-                        if (remove) {
-                            delete filters.specs[specEntry];
-                        }
-                        else {
-                            filteredSpecs[specEntry] = true;
-                        }
-                    }
-                }
-            }
-            else {
-                if (remove) {
-                    delete filters.specs[matchStr];
+            const uncoveredTable = table(uncoveredTableRows, { align: ['l', 'l'] });
+            console.log(uncoveredTable + '\n');
+        }
+        process.exit(0);
+    }
+    if (fs.existsSync(testInfoFilePath)) {
+        fs.unlinkSync(testInfoFilePath);
+    }
+    const testinfo = {
+        executionFilters: filters,
+        parseResults: parseResults,
+        printObject: printObject,
+        uidStorePath: workfloConfig.uidStorePath
+    };
+    jsonfile.writeFileSync(testInfoFilePath, testinfo);
+    argv.testInfoFilePath = testInfoFilePath;
+    let args = {};
+    for (let key of ALLOWED_ARGV) {
+        if (argv[key] !== undefined) {
+            args[key] = argv[key];
+        }
+    }
+    /**
+     * run launch sequence
+     */
+    let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
+    launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
+        throw e;
+    }));
+    function mergeIntoFilters(key, argv, _filters) {
+        _filters[key] = {};
+        if (argv[key]) {
+            const filterArray = JSON.parse(argv[key]);
+            filterArray.forEach(value => _filters[key][value] = true);
+        }
+    }
+    // if no spec files are present in filters, use all spec files in specs folder
+    function completeSpecFiles(argv, _filters) {
+        // if user manually defined an empty specFiles array, do not add specFiles from folder
+        if (Object.keys(_filters.specFiles).length === 0 && !argv.specFiles) {
+            io_1.getAllFiles(specsDir, '.spec.ts').forEach(specFile => _filters.specFiles[specFile] = true);
+        }
+        else {
+            let removeOnly = true;
+            const removeSpecFiles = {};
+            for (const specFile in _filters.specFiles) {
+                let remove = false;
+                let matchStr = specFile;
+                if (specFile.substr(0, 1) === '-') {
+                    remove = true;
+                    matchStr = specFile.substr(1, specFile.length - 1);
                 }
                 else {
-                    filteredSpecs[matchStr] = true;
+                    removeOnly = false;
+                }
+                if (remove) {
+                    delete _filters.specFiles[specFile];
+                    removeSpecFiles[matchStr] = true;
                 }
             }
+            if (removeOnly) {
+                io_1.getAllFiles(specsDir, '.spec.ts')
+                    .filter(specFile => !(specFile in removeSpecFiles))
+                    .forEach(specFile => _filters.specFiles[specFile] = true);
+            }
         }
-        if (!removeOnly) {
-            for (const spec in filters.specs) {
-                if (!(spec in filteredSpecs)) {
-                    delete filters.specs[spec];
+    }
+    // if no testcase files are present in filters, use all testcase files in testcase folder
+    function completeTestcaseFiles(argv, _filters) {
+        // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
+        if (Object.keys(_filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
+            io_1.getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
+        }
+        else {
+            let removeOnly = true;
+            const removeTestcaseFiles = {};
+            for (const testcaseFile in _filters.testcaseFiles) {
+                let remove = false;
+                let matchStr = testcaseFile;
+                if (testcaseFile.substr(0, 1) === '-') {
+                    remove = true;
+                    matchStr = testcaseFile.substr(1, testcaseFile.length - 1);
+                }
+                else {
+                    removeOnly = false;
+                }
+                if (remove) {
+                    delete _filters.testcaseFiles[testcaseFile];
+                    removeTestcaseFiles[matchStr] = true;
+                }
+            }
+            if (removeOnly) {
+                io_1.getAllFiles(testcasesDir, '.tc.ts')
+                    .filter(testcaseFile => !(testcaseFile in removeTestcaseFiles))
+                    .forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
+            }
+        }
+    }
+    function completeFilePaths(_filters) {
+        const specFilePaths = {};
+        const testcaseFilePaths = {};
+        for (const specFile in _filters.specFiles) {
+            let matchStr = specFile;
+            let prefix = '';
+            if (specFile.substr(0, 1) === '-') {
+                matchStr = specFile.substr(1, specFile.length - 1);
+                prefix = '-';
+            }
+            const specFilePath = path.join(`${prefix}${specsDir}`, `${matchStr}.spec.ts`);
+            specFilePaths[specFilePath] = true;
+        }
+        for (const testcaseFile in _filters.testcaseFiles) {
+            let matchStr = testcaseFile;
+            let prefix = '';
+            if (testcaseFile.substr(0, 1) === '-') {
+                matchStr = testcaseFile.substr(1, testcaseFile.length - 1);
+                prefix = '-';
+            }
+            const testcaseFilePath = path.join(`${prefix}${testcasesDir}`, `${matchStr}.tc.ts`);
+            testcaseFilePaths[testcaseFilePath] = true;
+        }
+        _filters.specFiles = specFilePaths;
+        _filters.testcaseFiles = testcaseFilePaths;
+    }
+    /**
+     * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
+     * @param argv
+     */
+    function mergeLists(list, _filters) {
+        if (list.specFiles) {
+            list.specFiles.forEach(value => _filters.specFiles[value] = true);
+        }
+        if (list.testcaseFiles) {
+            list.testcaseFiles.forEach(value => _filters.testcaseFiles[value] = true);
+        }
+        if (list.features) {
+            list.features.forEach(value => _filters.features[value] = true);
+        }
+        if (list.specs) {
+            list.specs.forEach(value => _filters.specs[value] = true);
+        }
+        if (list.testcases) {
+            list.testcases.forEach(value => _filters.testcases[value] = true);
+        }
+        if (list.listFiles) {
+            for (const listFile of list.listFiles) {
+                // complete cli listFiles paths
+                const listFilePath = path.join(listsDir, `${listFile}.list.ts`);
+                if (!fs.existsSync(listFilePath)) {
+                    throw new Error(`List file could not be found: ${listFilePath}`);
+                }
+                else {
+                    const sublist = require(listFilePath).default;
+                    // recursively traverse sub list files
+                    mergeLists(sublist, _filters);
                 }
             }
         }
     }
-}
-function filterSpecsByFeatures() {
-    if (Object.keys(mergedFilters.features).length > 0) {
-        const filteredSpecs = {};
-        let removeOnly = true;
-        for (const feature in mergedFilters.features) {
-            let remove = false;
-            let matchStr = feature;
-            if (feature.substr(0, 1) === '-') {
-                remove = true;
-                matchStr = feature.substr(1, feature.length - 1);
-            }
-            else {
-                removeOnly = false;
-            }
-            if (matchStr in parseResults.specs.featureTable) {
-                for (const spec in parseResults.specs.featureTable[matchStr].specs) {
+    function filterSpecsBySpecs() {
+        if (Object.keys(mergedFilters.specs).length > 0) {
+            const filteredSpecs = {};
+            const filteredFeatures = {};
+            let removeOnly = true;
+            for (const spec in mergedFilters.specs) {
+                let remove = false;
+                let matchStr = spec;
+                if (spec.substr(0, 1) === '-') {
+                    remove = true;
+                    matchStr = spec.substr(1, spec.length - 1);
+                }
+                else {
+                    removeOnly = false;
+                }
+                if (matchStr.substr(matchStr.length - 1, 1) === '*') {
+                    matchStr = matchStr.substr(0, matchStr.length - 1);
+                    for (const specEntry in parseResults.specs.specTable) {
+                        if (specEntry.length >= matchStr.length && specEntry.substr(0, matchStr.length) === matchStr) {
+                            if (remove) {
+                                delete filters.specs[specEntry];
+                            }
+                            else {
+                                filteredSpecs[specEntry] = true;
+                            }
+                        }
+                    }
+                }
+                else {
                     if (remove) {
+                        delete filters.specs[matchStr];
+                    }
+                    else {
+                        filteredSpecs[matchStr] = true;
+                    }
+                }
+            }
+            if (!removeOnly) {
+                for (const spec in filters.specs) {
+                    if (!(spec in filteredSpecs)) {
                         delete filters.specs[spec];
                     }
-                    else {
-                        filteredSpecs[spec] = true;
+                }
+            }
+        }
+    }
+    function filterSpecsByFeatures() {
+        if (Object.keys(mergedFilters.features).length > 0) {
+            const filteredSpecs = {};
+            let removeOnly = true;
+            for (const feature in mergedFilters.features) {
+                let remove = false;
+                let matchStr = feature;
+                if (feature.substr(0, 1) === '-') {
+                    remove = true;
+                    matchStr = feature.substr(1, feature.length - 1);
+                }
+                else {
+                    removeOnly = false;
+                }
+                if (matchStr in parseResults.specs.featureTable) {
+                    for (const spec in parseResults.specs.featureTable[matchStr].specs) {
+                        if (remove) {
+                            delete filters.specs[spec];
+                        }
+                        else {
+                            filteredSpecs[spec] = true;
+                        }
+                    }
+                }
+            }
+            // delete specs not matched by features
+            if (!removeOnly) {
+                for (const spec in filters.specs) {
+                    if (!(spec in filteredSpecs)) {
+                        delete filters.specs[spec];
                     }
                 }
             }
         }
-        // delete specs not matched by features
-        if (!removeOnly) {
+    }
+    function filterTestcasesByTestcases() {
+        if (Object.keys(mergedFilters.testcases).length > 0) {
+            const filteredTestcases = {};
+            let removeOnly = true;
+            for (const testcase in mergedFilters.testcases) {
+                let remove = false;
+                let matchStr = testcase;
+                if (testcase.substr(0, 1) === '-') {
+                    remove = true;
+                    matchStr = testcase.substr(1, testcase.length - 1);
+                }
+                else {
+                    removeOnly = false;
+                }
+                const testcaseParts = matchStr.split('.');
+                let insideTable = false;
+                for (const testcaseEntry in parseResults.testcases.testcaseTable) {
+                    const entryParts = testcaseEntry.split('.');
+                    let match = true;
+                    for (let i = 0; i < testcaseParts.length; ++i) {
+                        if (testcaseParts[i] !== entryParts[i]) {
+                            match = false;
+                        }
+                    }
+                    if (match) {
+                        insideTable = true;
+                        if (remove) {
+                            delete filters.testcases[testcaseEntry];
+                        }
+                        else {
+                            filteredTestcases[testcaseEntry] = true;
+                        }
+                    }
+                }
+                if (!insideTable) {
+                    delete mergedFilters.testcases[testcase];
+                    delete filters.testcases[testcase];
+                }
+            }
+            // only execute spec files that include filtered options
+            if (!removeOnly) {
+                for (const testcase in filters.testcases) {
+                    if (!(testcase in filteredTestcases)) {
+                        delete filters.testcases[testcase];
+                    }
+                }
+            }
+        }
+    }
+    function filterSpecsByTestcases() {
+        if (Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) {
+            const verifiedSpecs = {};
+            // add all spec ids verified in given testcases
+            for (const testcase in filters.testcases) {
+                // testcase is a suite
+                if (testcase in parseResults.testcases.tree) {
+                    for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
+                        for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
+                            verifiedSpecs[verifiedSpec] = true;
+                        }
+                    }
+                }
+                else {
+                    let matchSuite = testcase;
+                    const testcaseParts = testcase.split('.');
+                    // at least one suite followed by a testcase
+                    if (testcaseParts.length > 1) {
+                        testcaseParts.pop(); // remove testcase
+                        matchSuite = testcaseParts.join('.');
+                        if (matchSuite in parseResults.testcases.tree) {
+                            for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
+                                verifiedSpecs[verifiedSpec] = true;
+                            }
+                        }
+                    }
+                }
+            }
+            // remove specs not verified by filtered testcases or manual results
             for (const spec in filters.specs) {
-                if (!(spec in filteredSpecs)) {
+                if (!(spec in verifiedSpecs)) {
                     delete filters.specs[spec];
                 }
             }
         }
     }
-}
-function filterTestcasesByTestcases() {
-    if (Object.keys(mergedFilters.testcases).length > 0) {
+    function filterTestcasesBySpecs() {
         const filteredTestcases = {};
-        let removeOnly = true;
-        for (const testcase in mergedFilters.testcases) {
-            let remove = false;
-            let matchStr = testcase;
-            if (testcase.substr(0, 1) === '-') {
-                remove = true;
-                matchStr = testcase.substr(1, testcase.length - 1);
-            }
-            else {
-                removeOnly = false;
-            }
-            const testcaseParts = matchStr.split('.');
-            let insideTable = false;
-            for (const testcaseEntry in parseResults.testcases.testcaseTable) {
-                const entryParts = testcaseEntry.split('.');
-                let match = true;
-                for (let i = 0; i < testcaseParts.length; ++i) {
-                    if (testcaseParts[i] !== entryParts[i]) {
-                        match = false;
-                    }
-                }
-                if (match) {
-                    insideTable = true;
-                    if (remove) {
-                        delete filters.testcases[testcaseEntry];
-                    }
-                    else {
-                        filteredTestcases[testcaseEntry] = true;
-                    }
+        if (Object.keys(filters.specs).length > 0) {
+            for (const spec in filters.specs) {
+                for (const testcase in parseResults.specs.specTable[spec].testcases) {
+                    filteredTestcases[testcase] = true;
                 }
             }
-            if (!insideTable) {
-                delete mergedFilters.testcases[testcase];
-                delete filters.testcases[testcase];
-            }
-        }
-        // only execute spec files that include filtered options
-        if (!removeOnly) {
             for (const testcase in filters.testcases) {
                 if (!(testcase in filteredTestcases)) {
                     delete filters.testcases[testcase];
@@ -554,214 +619,193 @@ function filterTestcasesByTestcases() {
             }
         }
     }
-}
-function filterSpecsByTestcases() {
-    if (Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) {
-        const verifiedSpecs = {};
-        // add all spec ids verified in given testcases
-        for (const testcase in filters.testcases) {
-            // testcase is a suite
-            if (testcase in parseResults.testcases.tree) {
-                for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
-                    for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
-                        verifiedSpecs[verifiedSpec] = true;
-                    }
-                }
-            }
-            else {
-                let matchSuite = testcase;
-                const testcaseParts = testcase.split('.');
-                // at least one suite followed by a testcase
-                if (testcaseParts.length > 1) {
-                    testcaseParts.pop(); // remove testcase
-                    matchSuite = testcaseParts.join('.');
-                    if (matchSuite in parseResults.testcases.tree) {
-                        for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
-                            verifiedSpecs[verifiedSpec] = true;
-                        }
-                    }
-                }
-            }
-        }
-        // remove specs not verified by filtered testcases or manual results
+    function filterFeaturesBySpecs() {
+        const filteredFeatures = {};
         for (const spec in filters.specs) {
-            if (!(spec in verifiedSpecs)) {
-                delete filters.specs[spec];
+            filteredFeatures[parseResults.specs.specTable[spec].feature] = true;
+        }
+        for (const feature in filters.features) {
+            if (!(feature in filteredFeatures)) {
+                delete filters.features[feature];
             }
         }
     }
-}
-function filterTestcasesBySpecs() {
-    const filteredTestcases = {};
-    if (Object.keys(filters.specs).length > 0) {
+    function filterSpecFilesBySpecs() {
+        const filteredSpecFiles = {};
         for (const spec in filters.specs) {
-            for (const testcase in parseResults.specs.specTable[spec].testcases) {
-                filteredTestcases[testcase] = true;
+            filteredSpecFiles[parseResults.specs.specTable[spec].specFile] = true;
+        }
+        for (const specFile in filters.specFiles) {
+            if (!(specFile in filteredSpecFiles)) {
+                delete filters.specFiles[specFile];
             }
         }
+    }
+    function filterTestcaseFilesByTestcases() {
+        const filteredTestcaseFiles = {};
         for (const testcase in filters.testcases) {
-            if (!(testcase in filteredTestcases)) {
-                delete filters.testcases[testcase];
+            filteredTestcaseFiles[parseResults.testcases.testcaseTable[testcase].testcaseFile] = true;
+        }
+        for (const testcaseFile in filters.testcaseFiles) {
+            if (!(testcaseFile in filteredTestcaseFiles)) {
+                delete filters.testcaseFiles[testcaseFile];
             }
         }
     }
-}
-function filterFeaturesBySpecs() {
-    const filteredFeatures = {};
-    for (const spec in filters.specs) {
-        filteredFeatures[parseResults.specs.specTable[spec].feature] = true;
-    }
-    for (const feature in filters.features) {
-        if (!(feature in filteredFeatures)) {
-            delete filters.features[feature];
+    function addSuites() {
+        filters.suites = {};
+        // add suites from testcases
+        for (const testcase in filters.testcases) {
+            filters.suites[parseResults.testcases.testcaseTable[testcase].suiteId] = true;
         }
-    }
-}
-function filterSpecFilesBySpecs() {
-    const filteredSpecFiles = {};
-    for (const spec in filters.specs) {
-        filteredSpecFiles[parseResults.specs.specTable[spec].specFile] = true;
-    }
-    for (const specFile in filters.specFiles) {
-        if (!(specFile in filteredSpecFiles)) {
-            delete filters.specFiles[specFile];
-        }
-    }
-}
-function filterTestcaseFilesByTestcases() {
-    const filteredTestcaseFiles = {};
-    for (const testcase in filters.testcases) {
-        filteredTestcaseFiles[parseResults.testcases.testcaseTable[testcase].testcaseFile] = true;
-    }
-    for (const testcaseFile in filters.testcaseFiles) {
-        if (!(testcaseFile in filteredTestcaseFiles)) {
-            delete filters.testcaseFiles[testcaseFile];
-        }
-    }
-}
-function addSuites() {
-    filters.suites = {};
-    // add suites from testcases
-    for (const testcase in filters.testcases) {
-        filters.suites[parseResults.testcases.testcaseTable[testcase].suiteId] = true;
-    }
-    // add parent suites
-    for (const suite in filters.suites) {
-        const suiteParts = suite.split('.');
-        let str = '';
-        // child suite is already included
-        for (let i = 0; i < (suiteParts.length - 1); ++i) {
-            if (suiteParts[i] !== '') {
-                let delim = '.';
-                if (str.length === 0) {
-                    delim = '';
+        // add parent suites
+        for (const suite in filters.suites) {
+            const suiteParts = suite.split('.');
+            let str = '';
+            // child suite is already included
+            for (let i = 0; i < (suiteParts.length - 1); ++i) {
+                if (suiteParts[i] !== '') {
+                    let delim = '.';
+                    if (str.length === 0) {
+                        delim = '';
+                    }
+                    str += `${delim}${suiteParts[i]}`;
+                    filters.suites[str] = true;
                 }
-                str += `${delim}${suiteParts[i]}`;
-                filters.suites[str] = true;
             }
         }
     }
-}
-function importManualResults() {
-    let mergedManualTestcases = {};
-    let fileTable = {};
-    const manualTestcaseResults = io_1.getAllFiles(manDir, '.man.ts');
-    for (const manualTestcaseFile of manualTestcaseResults) {
-        const manualTestcase = require(manualTestcaseFile).default;
-        fileTable[manualTestcaseFile] = manualTestcase;
-        for (const spec in manualTestcase) {
-            if (spec in mergedManualTestcases) {
-                throw new Error(`Manual results for spec '${spec}' were declared in both '${manualTestcaseFile}' and '${mergedManualTestcases[spec].file}'`);
-            }
-            else {
-                mergedManualTestcases[spec] = {
-                    file: manualTestcaseFile,
-                    criteria: manualTestcase[spec]
-                };
+    function importManualResults() {
+        let mergedManualTestcases = {};
+        let fileTable = {};
+        const manualTestcaseResults = io_1.getAllFiles(manDir, '.man.ts');
+        for (const manualTestcaseFile of manualTestcaseResults) {
+            const manualTestcase = require(manualTestcaseFile).default;
+            fileTable[manualTestcaseFile] = manualTestcase;
+            for (const spec in manualTestcase) {
+                if (spec in mergedManualTestcases) {
+                    throw new Error(`Manual results for spec '${spec}' were declared in both '${manualTestcaseFile}' and '${mergedManualTestcases[spec].file}'`);
+                }
+                else {
+                    mergedManualTestcases[spec] = {
+                        file: manualTestcaseFile,
+                        criteria: manualTestcase[spec]
+                    };
+                }
             }
         }
-    }
-    return {
-        fileTable: fileTable,
-        specTable: mergedManualTestcases
-    };
-}
-function analyseCriteria() {
-    const analysedCriteria = {
-        specs: {},
-        allCriteriaCount: 0,
-        automatedCriteriaCount: 0,
-        manualCriteriaCount: 0,
-        uncoveredCriteriaCount: 0,
-    };
-    for (const spec in filters.specs) {
-        analysedCriteria.specs[spec] = {
-            automated: {},
-            manual: {},
-            uncovered: {},
-            undefined: false
+        return {
+            fileTable: fileTable,
+            specTable: mergedManualTestcases
         };
-        // spec was not defined in a spec file
-        if (!(spec in parseResults.specs.specTable)) {
-            analysedCriteria.specs[spec].undefined = true;
-        }
-        else {
-            for (const criteria in parseResults.specs.specTable[spec].criteria) {
-                let covered = false;
-                if (spec in manualResults.specTable && criteria in manualResults.specTable[spec].criteria) {
-                    covered = true;
-                    analysedCriteria.specs[spec].manual[criteria] = true;
-                    analysedCriteria.manualCriteriaCount++;
-                }
-                if (spec in parseResults.testcases.verifyTable) {
-                    let _autoCovered = false;
-                    for (const testcaseId in parseResults.testcases.verifyTable[spec]) {
-                        const suite = parseResults.testcases.testcaseTable[testcaseId].suiteId;
-                        if (criteria in parseResults.testcases.tree[suite].testcaseHash[testcaseId].specVerifyHash[spec]) {
-                            if (!_autoCovered) {
-                                analysedCriteria.automatedCriteriaCount++;
+    }
+    function analyseCriteria() {
+        const analysedCriteria = {
+            specs: {},
+            allCriteriaCount: 0,
+            automatedCriteriaCount: 0,
+            manualCriteriaCount: 0,
+            uncoveredCriteriaCount: 0,
+        };
+        for (const spec in filters.specs) {
+            analysedCriteria.specs[spec] = {
+                automated: {},
+                manual: {},
+                uncovered: {},
+                undefined: false
+            };
+            // spec was not defined in a spec file
+            if (!(spec in parseResults.specs.specTable)) {
+                analysedCriteria.specs[spec].undefined = true;
+            }
+            else {
+                for (const criteria in parseResults.specs.specTable[spec].criteria) {
+                    let covered = false;
+                    if (spec in manualResults.specTable && criteria in manualResults.specTable[spec].criteria) {
+                        covered = true;
+                        analysedCriteria.specs[spec].manual[criteria] = true;
+                        analysedCriteria.manualCriteriaCount++;
+                    }
+                    if (spec in parseResults.testcases.verifyTable) {
+                        let _autoCovered = false;
+                        for (const testcaseId in parseResults.testcases.verifyTable[spec]) {
+                            const suite = parseResults.testcases.testcaseTable[testcaseId].suiteId;
+                            if (criteria in parseResults.testcases.tree[suite].testcaseHash[testcaseId].specVerifyHash[spec]) {
+                                if (!_autoCovered) {
+                                    analysedCriteria.automatedCriteriaCount++;
+                                }
+                                _autoCovered = true;
+                                analysedCriteria.specs[spec].automated[criteria] = true;
                             }
-                            _autoCovered = true;
-                            analysedCriteria.specs[spec].automated[criteria] = true;
+                        }
+                        if (_autoCovered) {
+                            if (covered) {
+                                throw new Error(`Criteria ${criteria} of spec ${spec} must not be both verified automatically and tested manually!`);
+                            }
+                            else {
+                                covered = true;
+                            }
                         }
                     }
-                    if (_autoCovered) {
-                        if (covered) {
-                            throw new Error(`Criteria ${criteria} of spec ${spec} must not be both verified automatically and tested manually!`);
-                        }
-                        else {
-                            covered = true;
-                        }
+                    if (!covered) {
+                        analysedCriteria.specs[spec].uncovered[criteria] = true;
+                        analysedCriteria.uncoveredCriteriaCount++;
                     }
-                }
-                if (!covered) {
-                    analysedCriteria.specs[spec].uncovered[criteria] = true;
-                    analysedCriteria.uncoveredCriteriaCount++;
                 }
             }
         }
+        analysedCriteria.allCriteriaCount =
+            analysedCriteria.automatedCriteriaCount +
+                analysedCriteria.manualCriteriaCount +
+                analysedCriteria.uncoveredCriteriaCount;
+        return analysedCriteria;
     }
-    analysedCriteria.allCriteriaCount =
-        analysedCriteria.automatedCriteriaCount +
-            analysedCriteria.manualCriteriaCount +
-            analysedCriteria.uncoveredCriteriaCount;
-    return analysedCriteria;
-}
-function addManualResultFilesAndSpecs() {
-    filters.manualResultFiles = {};
-    filters.manualSpecs = {};
-    for (const spec in filters.specs) {
-        if (spec in manualResults.specTable) {
-            filters.manualResultFiles[manualResults.specTable[spec].file] = true;
-            filters.manualSpecs[spec] = true;
+    function addManualResultFilesAndSpecs() {
+        filters.manualResultFiles = {};
+        filters.manualSpecs = {};
+        for (const spec in filters.specs) {
+            if (spec in manualResults.specTable) {
+                filters.manualResultFiles[manualResults.specTable[spec].file] = true;
+                filters.manualSpecs[spec] = true;
+            }
         }
     }
-}
-function getSuites() {
-    const suites = {};
-    for (const testcase in filters.testcases) {
-        suites[parseResults.testcases.testcaseTable[testcase].suiteId] = true;
+    function getSuites() {
+        const suites = {};
+        for (const testcase in filters.testcases) {
+            suites[parseResults.testcases.testcaseTable[testcase].suiteId] = true;
+        }
+        return suites;
     }
-    return suites;
+});
+function checkGenerateReport() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // generate and display reports
+        if (argv.generateReport) {
+            if (typeof argv.generateReport === 'boolean') {
+                argv.generateReport = undefined;
+            }
+            const exitCode = yield allureReport_1.generateReport(workfloConfig, argv.generateReport);
+            process.exit(exitCode);
+        }
+        if (argv.openReport) {
+            if (typeof argv.openReport === 'boolean') {
+                argv.openReport = undefined;
+            }
+            const exitCode = yield allureReport_1.openReport(workfloConfig, argv.openReport);
+            process.exit(exitCode);
+        }
+        if (argv.report) {
+            if (typeof argv.report === 'boolean') {
+                argv.report = undefined;
+            }
+            let exitCode = yield allureReport_1.generateReport(workfloConfig, argv.report);
+            if (exitCode !== 0) {
+                process.exit(exitCode);
+            }
+            exitCode = yield allureReport_1.openReport(workfloConfig, argv.report);
+            process.exit(exitCode);
+        }
+    });
 }
 //# sourceMappingURL=cli.js.map

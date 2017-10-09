@@ -1,17 +1,11 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.172",
+  "version": "0.0.173",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "webdriverio-workflo ./config/wdio.conf.js --color",
-    "generate_report": "node ./scripts/generate_allure_report.js",
-    "open_report": "node ./scripts/open_allure_report.js",
-    "latest_report": "npm run generate_report && npm run open_report",
-    "start": "npm run build:live",
-    "build:live": "nodemon --exec ts-node -- ./src/lib/testElementsAndStores.ts",
     "prepublish": "npm run build"
   },
   "author": "Florian Hilbinger",
