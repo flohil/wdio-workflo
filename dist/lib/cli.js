@@ -25,7 +25,8 @@ const pkg = require('../../package.json');
 const VERSION = pkg.version;
 const ALLOWED_ARGV = [
     'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
-    'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath'
+    'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath',
+    'workfloOpts'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ];
 let configFile;
@@ -244,7 +245,6 @@ checkGenerateReport().then(() => {
     const invertedTranslations = _1.objectFunctions.invert(translations);
     const printObject = _1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
     if (argv.info) {
-        console.log();
         function toTable(key) {
             return [key, printObject[key], ''];
         }
@@ -270,9 +270,7 @@ checkGenerateReport().then(() => {
             toPercentTable(translations.uncoveredCriteria),
             toPercentTable(translations.allCriteriaCount)
         ], { align: ['l', 'r', 'r'] });
-        console.log("\n");
-        console.log(infoTable);
-        console.log("\n");
+        console.log('\n' + infoTable + '\n');
         if (Object.keys(infoObject.uncoveredCriteriaObject).length > 0) {
             console.log('UNCOVERED CRITERIA:');
             let uncoveredTableRows = [];
@@ -280,7 +278,7 @@ checkGenerateReport().then(() => {
                 uncoveredTableRows.push([`${spec}:`, `[${infoObject.uncoveredCriteriaObject[spec].join(', ')}]`]);
             }
             const uncoveredTable = table(uncoveredTableRows, { align: ['l', 'l'] });
-            console.log(uncoveredTable + '\n');
+            console.log(uncoveredTable);
         }
         process.exit(0);
     }
@@ -291,7 +289,8 @@ checkGenerateReport().then(() => {
         executionFilters: filters,
         parseResults: parseResults,
         printObject: printObject,
-        uidStorePath: workfloConfig.uidStorePath
+        uidStorePath: workfloConfig.uidStorePath,
+        allure: workfloConfig.allure
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;
@@ -777,7 +776,7 @@ checkGenerateReport().then(() => {
         }
         return suites;
     }
-});
+}).catch((error) => console.error(error));
 function checkGenerateReport() {
     return __awaiter(this, void 0, void 0, function* () {
         // generate and display reports

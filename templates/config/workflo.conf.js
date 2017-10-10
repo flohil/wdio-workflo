@@ -32,7 +32,8 @@ module.exports = {
   uidStorePath: "",
   allure: {
     issueTrackerPattern: "http://issueTracker/issue-%s",
-    bugTrackerPattern: "https://bugtracker/bug-%s"
+    bugAppendix: "#bug", // will be appended to issue url to identify it as bug in report
+    bugPrefix: "" // will be appended to issue url to identify it as bug in report
   },
   timeouts: {
     default: 5000

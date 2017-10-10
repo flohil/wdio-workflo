@@ -181,6 +181,7 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
         process.send({ event: 'test:meta', feature: `${story.featureName}` });
         process.send({ event: 'test:meta', story: `${story.storyName}` });
         process.send({ event: 'test:meta', issue: story.metadata.issues });
+        process.send({ event: 'test:meta', bug: story.metadata.bugs });
         process.send({ event: 'test:meta', severity: story.metadata.severity || 'normal' });
         // create an allure step for each given and when
         allDescriptions.slice(0, allDescriptions.length - 1).forEach(description => stepFunc(description));
@@ -243,8 +244,16 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     const testData = {
         title: description
     };
+    const _bodyFunc = () => {
+        // allure report metadata
+        if (metadata.bugs) {
+            process.send({ event: 'test:meta', bug: metadata.bugs });
+        }
+        process.send({ event: 'test:meta', severity: metadata.severity || 'normal' });
+        bodyFunc();
+    };
     if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
-        jasmineFunc(JSON.stringify(testData), bodyFunc);
+        jasmineFunc(JSON.stringify(testData), _bodyFunc);
     }
 };
 exports.ftestcase = (description, metadata, bodyFunc) => {

@@ -26,7 +26,8 @@ const VERSION = pkg.version
 
 const ALLOWED_ARGV = [
     'host', 'port',  'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout', 
-    'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath'
+    'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath',
+    'workfloOpts'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ]
 
@@ -349,8 +350,6 @@ checkGenerateReport().then(() => {
     const printObject = objectFunctions.mapProperties(invertedTranslations, value => infoObject[value])
 
     if (argv.info) {
-        console.log()
-
         function toTable(key) {
             return [key, printObject[key], '']
         }
@@ -379,9 +378,7 @@ checkGenerateReport().then(() => {
             toPercentTable(translations.allCriteriaCount)
         ], { align: [ 'l', 'r', 'r' ] })
 
-        console.log("\n")
-        console.log(infoTable)
-        console.log("\n")
+        console.log('\n' + infoTable + '\n')
 
         if (Object.keys(infoObject.uncoveredCriteriaObject).length > 0) {
             console.log('UNCOVERED CRITERIA:')
@@ -394,7 +391,7 @@ checkGenerateReport().then(() => {
 
             const uncoveredTable = table(uncoveredTableRows, { align: [ 'l', 'l' ] })
 
-            console.log(uncoveredTable + '\n')
+            console.log(uncoveredTable)
         }
 
         process.exit(0)
@@ -408,7 +405,8 @@ checkGenerateReport().then(() => {
         executionFilters: filters,
         parseResults: parseResults,
         printObject: printObject,
-        uidStorePath: workfloConfig.uidStorePath
+        uidStorePath: workfloConfig.uidStorePath,
+        allure: workfloConfig.allure
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)
@@ -990,7 +988,7 @@ checkGenerateReport().then(() => {
 
         return suites
     }
-})
+}).catch((error) => console.error(error))
 
 async function checkGenerateReport() {
     // generate and display reports

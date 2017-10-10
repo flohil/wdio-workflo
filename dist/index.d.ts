@@ -260,6 +260,7 @@ declare global  {
         }
         interface ITestcaseMetadata {
             bugs?: string[];
+            severity?: Workflo.Severity;
         }
         interface IStoryMapEntry {
             descriptionStack: IDescriptionStack;
@@ -309,12 +310,12 @@ declare global  {
     function Then(id: number, description: string): void;
     function fThen(id: number, description: string): void;
     function xThen(id: number, description: string): void;
-    function suite(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
-    function fsuite(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
-    function xsuite(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
-    function testcase(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
-    function ftestcase(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
-    function xtestcase(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
+    function suite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void): void;
+    function fsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void): void;
+    function xsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void): void;
+    function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void): void;
+    function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void): void;
+    function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void): void;
     function given(step: IParameterizedStep): Workflo.ITCGiven;
     function verify(verifyObject: Workflo.IVerifySpecObject, func: (...args: any[]) => void): void;
     function xpath(selector: string): pageObjects.builders.XPathBuilder;

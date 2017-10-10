@@ -383,8 +383,19 @@ export const testcase = (
     title: description
   }
 
+  const _bodyFunc = () => {
+    
+    // allure report metadata
+    if (metadata.bugs) {
+      process.send({event: 'test:meta', bug: metadata.bugs})      
+    }
+    process.send({event: 'test:meta', severity: metadata.severity || 'normal'})          
+
+    bodyFunc()
+  }
+
   if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
-    jasmineFunc(JSON.stringify(testData), bodyFunc)
+    jasmineFunc(JSON.stringify(testData), _bodyFunc)
   }
 }
 
