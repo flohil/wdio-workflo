@@ -251,6 +251,7 @@ declare global  {
         }
         interface IStoryMetaData {
             issues?: string[];
+            bugs?: string[];
             severity?: Workflo.Severity;
         }
         interface IFeatureMetadata {
@@ -258,6 +259,7 @@ declare global  {
         interface ISuiteMetadata {
         }
         interface ITestcaseMetadata {
+            bugs?: string[];
         }
         interface IStoryMapEntry {
             descriptionStack: IDescriptionStack;

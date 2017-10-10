@@ -281,6 +281,7 @@ export const Then = (
     process.send({event: 'test:meta', feature: `${story.featureName}`})
     process.send({event: 'test:meta', story: `${story.storyName}`})
     process.send({event: 'test:meta', issue: story.metadata.issues})
+    process.send({event: 'test:meta', bug: story.metadata.bugs})
     process.send({event: 'test:meta', severity: story.metadata.severity || 'normal'})
 
     // create an allure step for each given and when

@@ -304,6 +304,7 @@ declare global {
 
     interface IStoryMetaData {
       issues?: string[],
+      bugs?: string[],
       severity?: Workflo.Severity // Workflo.severity
     }
 
@@ -314,6 +315,7 @@ declare global {
     }
 
     interface ITestcaseMetadata {
+      bugs?: string[]
     }
 
     interface IStoryMapEntry {
