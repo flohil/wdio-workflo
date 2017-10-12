@@ -62,7 +62,8 @@ optimist
         '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
         '\t\t\t\'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
     .describe('features', 'restricts test execution to these features\n' +
-        '\t\t\t\'["Login"]\' => execute all testcases which are verified by specs defined within these features\n')
+        '\t\t\t\'["Login", "Logout"]\' => execute all testcases which verify specs defined within these features\n' +
+        '\t\t\t\'["-Login"]\' => execute all testcases except those which verify specs defined within these features\n')
     .describe('specs', 'restricts test execution to these specs\n' +
         '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' + 
         '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
@@ -231,6 +232,9 @@ checkGenerateReport().then(() => {
         specs: specFilesParse(Object.keys(mergedFilters.specFiles)),
         testcases: testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
     }
+
+    // check if all defined filters exist
+    checkFiltersExist()
 
     // add manual test cases to test information
     const manualResults = importManualResults()
@@ -452,6 +456,58 @@ checkGenerateReport().then(() => {
             const filterArray: string[] = JSON.parse(argv[key])
 
             filterArray.forEach(value => _filters[key][value] = true)
+        }
+    }
+
+    function checkFiltersExist() {
+        for (const testcase in mergedFilters.testcases) {
+            let matchStr = testcase
+            
+            if (matchStr.substr(0,1) === '-') {
+                matchStr = matchStr.substr(1, matchStr.length - 1)
+            }
+
+            if (!(matchStr in parseResults.testcases.testcaseTable) && !(matchStr in parseResults.testcases.tree)) {
+                throw new Error(`Testcase '${testcase}' did not match any defined testcase or suite!`)
+            }
+        }
+
+        for (const spec in mergedFilters.specs) {
+            let matchStr = spec
+            
+            if (matchStr.substr(0,1) === '-') {
+                matchStr = matchStr.substr(1, matchStr.length - 1)
+            }
+
+            if (!(matchStr in parseResults.specs.specTable)) {
+                if (matchStr.substr(matchStr.length - 1, 1) === '*') {
+                    matchStr = matchStr.substr(0, matchStr.length - 1)
+                }
+    
+                let found = false
+    
+                for (const _spec in parseResults.specs.specTable) {
+                    if (_spec.length >= matchStr.length && _spec.substr(0, matchStr.length) === matchStr) {
+                        found = true
+                    }
+                }
+    
+                if (!found) {
+                    throw new Error(`Spec '${spec}' did not match any defined spec!`)
+                }   
+            }
+        }
+
+        for (const feature in mergedFilters.features) {
+            let matchStr = feature
+            
+            if (matchStr.substr(0,1) === '-') {
+                matchStr = matchStr.substr(1, matchStr.length - 1)
+            }
+
+            if (!(matchStr in parseResults.specs.featureTable)) {
+                throw new Error(`Feature '${feature}' did not match any defined feature!`)
+            }
         }
     }
 
@@ -833,13 +889,6 @@ checkGenerateReport().then(() => {
             if (!(testcaseFile in filteredTestcaseFiles)) {
                 delete filters.testcaseFiles[testcaseFile]
             }
-        }
-
-        // do not execute all specs if a testcase was passed that is not defined
-        if (Object.keys(filters.testcaseFiles).length === 0) {
-            filters.specFiles = {}
-            filters.specs = {}
-            filters.features = {}
         }
     }
 

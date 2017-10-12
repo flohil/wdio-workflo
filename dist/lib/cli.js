@@ -56,7 +56,8 @@ optimist
     '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
     '\t\t\t\'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
     .describe('features', 'restricts test execution to these features\n' +
-    '\t\t\t\'["Login"]\' => execute all testcases which are verified by specs defined within these features\n')
+    '\t\t\t\'["Login", "Logout"]\' => execute all testcases which verify specs defined within these features\n' +
+    '\t\t\t\'["-Login"]\' => execute all testcases except those which verify specs defined within these features\n')
     .describe('specs', 'restricts test execution to these specs\n' +
     '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' +
     '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
@@ -162,6 +163,8 @@ checkGenerateReport().then(() => {
         specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
         testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
     };
+    // check if all defined filters exist
+    checkFiltersExist();
     // add manual test cases to test information
     const manualResults = importManualResults();
     // trace argv handling
@@ -325,6 +328,46 @@ checkGenerateReport().then(() => {
         if (argv[key]) {
             const filterArray = JSON.parse(argv[key]);
             filterArray.forEach(value => _filters[key][value] = true);
+        }
+    }
+    function checkFiltersExist() {
+        for (const testcase in mergedFilters.testcases) {
+            let matchStr = testcase;
+            if (matchStr.substr(0, 1) === '-') {
+                matchStr = matchStr.substr(1, matchStr.length - 1);
+            }
+            if (!(matchStr in parseResults.testcases.testcaseTable) && !(matchStr in parseResults.testcases.tree)) {
+                throw new Error(`Testcase '${testcase}' did not match any defined testcase or suite!`);
+            }
+        }
+        for (const spec in mergedFilters.specs) {
+            let matchStr = spec;
+            if (matchStr.substr(0, 1) === '-') {
+                matchStr = matchStr.substr(1, matchStr.length - 1);
+            }
+            if (!(matchStr in parseResults.specs.specTable)) {
+                if (matchStr.substr(matchStr.length - 1, 1) === '*') {
+                    matchStr = matchStr.substr(0, matchStr.length - 1);
+                }
+                let found = false;
+                for (const _spec in parseResults.specs.specTable) {
+                    if (_spec.length >= matchStr.length && _spec.substr(0, matchStr.length) === matchStr) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    throw new Error(`Spec '${spec}' did not match any defined spec!`);
+                }
+            }
+        }
+        for (const feature in mergedFilters.features) {
+            let matchStr = feature;
+            if (matchStr.substr(0, 1) === '-') {
+                matchStr = matchStr.substr(1, matchStr.length - 1);
+            }
+            if (!(matchStr in parseResults.specs.featureTable)) {
+                throw new Error(`Feature '${feature}' did not match any defined feature!`);
+            }
         }
     }
     // if no spec files are present in filters, use all spec files in specs folder
@@ -805,9 +848,9 @@ checkGenerateReport().then(() => {
             const specs = Object.keys(specHash).map(spec => `${spec}: [${Object.keys(specHash[spec]).join(', ')}]`);
             const content = [];
             content.push(['Testcase File:', testcaseTableEntry.testcaseFile]);
-            content.push(['Verifies Spec Files:', specFiles.shift()]);
+            content.push(['Verifies Spec Files:', (specFiles.length > 0) ? specFiles.shift() : '']);
             specFiles.forEach(specFile => content.push(['', specFile]));
-            content.push(['Verifies Specs:', specs.shift()]);
+            content.push(['Verifies Specs:', (specs.length > 0) ? specs.shift() : '']);
             specs.forEach(spec => content.push(['', spec]));
             const traceTable = table(content, { align: ['l', 'l'] });
             console.log(`\nTrace information for testcase '${argv.traceTestcase}':`);
@@ -816,17 +859,20 @@ checkGenerateReport().then(() => {
         }
         if (argv.traceSpec) {
             console.dir(manualResults, { depth: null });
+            // check if all found
             const specFile = parseResults.specs.specTable[argv.traceSpec].specFile;
             const testcaseHash = parseResults.testcases.verifyTable[argv.traceSpec];
             const testcases = Object.keys(testcaseHash);
             const testcaseFileHash = _1.arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true);
             const testcaseFiles = Object.keys(testcaseFileHash);
+            const manualFile = (argv.traceSpec in manualResults) ? manualResults[argv.traceSpec].file : '';
             const content = [];
             content.push(['Spec File:', specFile]);
-            content.push(['Verified by Testcase Files:', testcaseFiles.shift()]);
+            content.push(['Verified by Testcase Files:', (testcaseFiles.length > 0) ? testcaseFiles.shift() : '']);
             testcaseFiles.forEach(testcaseFile => content.push(['', testcaseFile]));
-            content.push(['Verified by Testcases:', testcases.shift()]);
+            content.push(['Verified by Testcases:', (testcases.length > 0) ? testcases.shift() : '']);
             testcases.forEach(testcase => content.push(['', testcase]));
+            content.push(['Verified in Manual Result File:', manualFile]);
             const traceTable = table(content, { align: ['l', 'l'] });
             console.log(`\nTrace information for spec '${argv.traceSpec}':`);
             console.log('\n' + traceTable);
