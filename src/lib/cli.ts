@@ -15,7 +15,7 @@ import * as inquirer from 'inquirer'
 import * as optimist from 'optimist'
 import * as merge from 'deepmerge'
 
-import { objectFunctions } from '../'
+import { objectFunctions, arrayFunctions } from '../'
 
 import { Launcher } from 'webdriverio-workflo'
 
@@ -74,9 +74,19 @@ optimist
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
         '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
 
-    .describe('generateReport', 'generates report for latest results')
-    .describe('openReport', 'opens report generated latest results')
-    .describe('report', 'generates and opens report for latest results')
+    .describe('generateReport', 'generates report for latest results or\n' +
+    '\t\t\t\'2017-10-10_20-38-13\' => generate report for given result folder\n')
+    .describe('openReport', 'opens report generated latest results or\n' +
+    '\t\t\t\'2017-10-10_20-38-13\' => open report for given result folder\n')
+    .describe('report', 'generates and opens report for latest results or\n' +
+    '\t\t\t\'2017-10-10_20-38-13\' => generate and open report for given result folder\n')
+
+    .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
+    '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
+    .describe('traceCriteria', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec criteria\n' +
+    '\t\t\t\'4.1[1, 2]\' => show traceability information for criteria 1 and 2 of spec 4.1\n')
+    .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
+    '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
 
     // wdio-workflo options
    
@@ -224,6 +234,11 @@ checkGenerateReport().then(() => {
 
     // add manual test cases to test information
     const manualResults = importManualResults()
+
+    // trace argv handling
+    if (handleTracing()) {
+        process.exit(0)
+    }
 
     // filters contains all filter criteria that is actually executed
     // and will be filtered further
@@ -720,7 +735,7 @@ checkGenerateReport().then(() => {
         }
     }
 
-    function filterSpecsByTestcases() {   
+    function filterSpecsByTestcases() {
         if (Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) {
             const verifiedSpecs: Record<string, true> = {}
 
@@ -818,6 +833,13 @@ checkGenerateReport().then(() => {
             if (!(testcaseFile in filteredTestcaseFiles)) {
                 delete filters.testcaseFiles[testcaseFile]
             }
+        }
+
+        // do not execute all specs if a testcase was passed that is not defined
+        if (Object.keys(filters.testcaseFiles).length === 0) {
+            filters.specFiles = {}
+            filters.specs = {}
+            filters.features = {}
         }
     }
 
@@ -987,6 +1009,79 @@ checkGenerateReport().then(() => {
         }
 
         return suites
+    }
+
+    function handleTracing() {
+        // .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
+        // '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
+        // .describe('traceCriteria', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec criteria\n' +
+        // '\t\t\t\'4.1[1, 2]\' => show traceability information for criteria 1 and 2 of spec 4.1\n')
+        // .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
+        // '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
+
+        let traced = false
+
+        if (argv.traceTestcase) {
+            const testcaseTableEntry = parseResults.testcases.testcaseTable[argv.traceTestcase]
+            const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[argv.traceTestcase].specVerifyHash
+            const specFilesHash = arrayFunctions.mapToObject(Object.keys(specHash).map(spec => parseResults.specs.specTable[spec].specFile), (spec) => true)
+            const specFiles = Object.keys(specFilesHash)
+            const specs = Object.keys(specHash).map(spec => `${spec}: [${Object.keys(specHash[spec]).join(', ')}]`)
+
+            const content: string[][] = []
+
+            content.push(['Testcase File:', testcaseTableEntry.testcaseFile])
+
+            content.push(['Verifies Spec Files:', (specFiles.length > 0) ? specFiles.shift() : ''])
+            specFiles.forEach(specFile => content.push(['', specFile]))
+
+            content.push(['Verifies Specs:', (specs.length > 0) ? specs.shift() : ''])
+            specs.forEach(spec => content.push(['', spec]))
+
+            const traceTable = table(content, { align: [ 'l', 'l' ] })
+
+            console.log(`\nTrace information for testcase '${argv.traceTestcase}':`)
+            console.log('\n' + traceTable)
+
+            traced = true
+        }
+        if (argv.traceSpec) {
+
+            console.dir(manualResults, {depth: null})
+
+            // check if all found
+
+            const specFile = parseResults.specs.specTable[argv.traceSpec].specFile
+            const testcaseHash = parseResults.testcases.verifyTable[argv.traceSpec]
+            const testcases = Object.keys(testcaseHash)
+            const testcaseFileHash = arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true)
+            const testcaseFiles = Object.keys(testcaseFileHash)
+            const manualFile = (argv.traceSpec in manualResults) ? manualResults[argv.traceSpec].file : ''         
+
+            const content: string[][] = []
+
+            content.push(['Spec File:', specFile])
+
+            content.push(['Verified by Testcase Files:', (testcaseFiles.length > 0) ? testcaseFiles.shift() : ''])
+            testcaseFiles.forEach(testcaseFile => content.push(['', testcaseFile]))
+
+            content.push(['Verified by Testcases:', (testcases.length > 0) ? testcases.shift() : ''])
+            testcases.forEach(testcase => content.push(['', testcase]))
+
+            content.push(['Verified in Manual Result File:', manualFile])
+
+            const traceTable = table(content, { align: [ 'l', 'l' ] })
+
+            console.log(`\nTrace information for spec '${argv.traceSpec}':`)
+            console.log('\n' + traceTable)
+
+            traced = true
+        }
+        if (argv.traceCriteria) {
+
+        }
+
+        return traced
     }
 }).catch((error) => console.error(error))
 

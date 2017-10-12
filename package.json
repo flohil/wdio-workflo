@@ -55,7 +55,7 @@
     "wdio-workflo-allure-reporter": "0.0.18",
     "wdio-workflo-jasmine-framework": "0.0.4",
     "wdio-workflo-spec-reporter": "0.0.9",
-    "webdriverio-workflo": "0.0.34",
+    "webdriverio-workflo": "0.0.35",
     "wrench": "^1.5.9"
   }
 }

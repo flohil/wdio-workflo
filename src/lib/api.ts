@@ -277,6 +277,8 @@ export const Then = (
 
   const bodyFunc = () => {
 
+    process.send({event: 'test:setCurrentId', id: `${storyId}|${id}`}) // split at last | occurence
+
     // allure report metadata
     process.send({event: 'test:meta', feature: `${story.featureName}`})
     process.send({event: 'test:meta', story: `${story.storyName}`})
@@ -376,6 +378,7 @@ export const testcase = (
   if (description.length === 0) {
     throw new Error(`Testcase description must not be empty!`)
   }
+  const fullId = `${this.suiteIdStack.join('.')}.${description}`
 
   this.__stepStack = []
 
@@ -384,6 +387,7 @@ export const testcase = (
   }
 
   const _bodyFunc = () => {
+    process.send({event: 'test:setCurrentId', id: fullId})    
     
     // allure report metadata
     if (metadata.bugs) {

@@ -177,6 +177,7 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
     const allDescriptions = givenDescriptions.concat(whenDescriptions).concat([thenDescription]);
     const skipFunc = (skip) ? () => { pending(); } : undefined;
     const bodyFunc = () => {
+        process.send({ event: 'test:setCurrentId', id: `${storyId}|${id}` }); // split at last | occurence
         // allure report metadata
         process.send({ event: 'test:meta', feature: `${story.featureName}` });
         process.send({ event: 'test:meta', story: `${story.storyName}` });
@@ -240,11 +241,13 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     if (description.length === 0) {
         throw new Error(`Testcase description must not be empty!`);
     }
+    const fullId = `${this.suiteIdStack.join('.')}.${description}`;
     this.__stepStack = [];
     const testData = {
         title: description
     };
     const _bodyFunc = () => {
+        process.send({ event: 'test:setCurrentId', id: fullId });
         // allure report metadata
         if (metadata.bugs) {
             process.send({ event: 'test:meta', bug: metadata.bugs });

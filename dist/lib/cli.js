@@ -67,9 +67,18 @@ optimist
     '\t\t\t\'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
     '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
-    .describe('generateReport', 'generates report for latest results')
-    .describe('openReport', 'opens report generated latest results')
-    .describe('report', 'generates and opens report for latest results')
+    .describe('generateReport', 'generates report for latest results or\n' +
+    '\t\t\t\'2017-10-10_20-38-13\' => generate report for given result folder\n')
+    .describe('openReport', 'opens report generated latest results or\n' +
+    '\t\t\t\'2017-10-10_20-38-13\' => open report for given result folder\n')
+    .describe('report', 'generates and opens report for latest results or\n' +
+    '\t\t\t\'2017-10-10_20-38-13\' => generate and open report for given result folder\n')
+    .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
+    '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
+    .describe('traceCriteria', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec criteria\n' +
+    '\t\t\t\'4.1[1, 2]\' => show traceability information for criteria 1 and 2 of spec 4.1\n')
+    .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
+    '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles'
     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
@@ -155,6 +164,10 @@ checkGenerateReport().then(() => {
     };
     // add manual test cases to test information
     const manualResults = importManualResults();
+    // trace argv handling
+    if (handleTracing()) {
+        process.exit(0);
+    }
     // filters contains all filter criteria that is actually executed
     // and will be filtered further
     filters.specFiles = mergedFilters.specFiles;
@@ -775,6 +788,53 @@ checkGenerateReport().then(() => {
             suites[parseResults.testcases.testcaseTable[testcase].suiteId] = true;
         }
         return suites;
+    }
+    function handleTracing() {
+        // .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
+        // '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
+        // .describe('traceCriteria', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec criteria\n' +
+        // '\t\t\t\'4.1[1, 2]\' => show traceability information for criteria 1 and 2 of spec 4.1\n')
+        // .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
+        // '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
+        let traced = false;
+        if (argv.traceTestcase) {
+            const testcaseTableEntry = parseResults.testcases.testcaseTable[argv.traceTestcase];
+            const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[argv.traceTestcase].specVerifyHash;
+            const specFilesHash = _1.arrayFunctions.mapToObject(Object.keys(specHash).map(spec => parseResults.specs.specTable[spec].specFile), (spec) => true);
+            const specFiles = Object.keys(specFilesHash);
+            const specs = Object.keys(specHash).map(spec => `${spec}: [${Object.keys(specHash[spec]).join(', ')}]`);
+            const content = [];
+            content.push(['Testcase File:', testcaseTableEntry.testcaseFile]);
+            content.push(['Verifies Spec Files:', specFiles.shift()]);
+            specFiles.forEach(specFile => content.push(['', specFile]));
+            content.push(['Verifies Specs:', specs.shift()]);
+            specs.forEach(spec => content.push(['', spec]));
+            const traceTable = table(content, { align: ['l', 'l'] });
+            console.log(`\nTrace information for testcase '${argv.traceTestcase}':`);
+            console.log('\n' + traceTable);
+            traced = true;
+        }
+        if (argv.traceSpec) {
+            console.dir(manualResults, { depth: null });
+            const specFile = parseResults.specs.specTable[argv.traceSpec].specFile;
+            const testcaseHash = parseResults.testcases.verifyTable[argv.traceSpec];
+            const testcases = Object.keys(testcaseHash);
+            const testcaseFileHash = _1.arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true);
+            const testcaseFiles = Object.keys(testcaseFileHash);
+            const content = [];
+            content.push(['Spec File:', specFile]);
+            content.push(['Verified by Testcase Files:', testcaseFiles.shift()]);
+            testcaseFiles.forEach(testcaseFile => content.push(['', testcaseFile]));
+            content.push(['Verified by Testcases:', testcases.shift()]);
+            testcases.forEach(testcase => content.push(['', testcase]));
+            const traceTable = table(content, { align: ['l', 'l'] });
+            console.log(`\nTrace information for spec '${argv.traceSpec}':`);
+            console.log('\n' + traceTable);
+            traced = true;
+        }
+        if (argv.traceCriteria) {
+        }
+        return traced;
     }
 }).catch((error) => console.error(error));
 function checkGenerateReport() {
