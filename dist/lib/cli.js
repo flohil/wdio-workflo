@@ -875,7 +875,8 @@ checkGenerateReport().then(() => {
         };
     }
     function buildSpecTraceInfo(spec) {
-        const specFile = parseResults.specs.specTable[spec].specFile;
+        let specFile = parseResults.specs.specTable[spec].specFile.replace(specsDir, '');
+        specFile = specFile.substring(1, specFile.length);
         const testcaseHash = parseResults.testcases.verifyTable[spec];
         const testcases = (testcaseHash) ? Object.keys(testcaseHash) : [];
         const testcaseFileHash = (testcaseHash) ? _1.arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true) : {};
