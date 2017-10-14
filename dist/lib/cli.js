@@ -136,10 +136,11 @@ checkGenerateReport().then(() => {
         throw new Error(`Please specify option 'testDir' in workflo.conf.js file!`);
     }
     const testDir = workfloConfig.testDir;
-    const specsDir = path.join(testDir, 'src', 'specs');
-    const testcasesDir = path.join(testDir, 'src', 'testcases');
-    const listsDir = path.join(testDir, 'src', 'lists');
-    const manDir = path.join(testDir, 'src', 'manualResults');
+    const srcDir = path.join(testDir, 'src');
+    const specsDir = path.join(srcDir, 'specs');
+    const testcasesDir = path.join(srcDir, 'testcases');
+    const listsDir = path.join(srcDir, 'lists');
+    const manDir = path.join(srcDir, 'manualResults');
     const testInfoFilePath = path.join(testDir, 'testinfo.json');
     const filters = {};
     const mergedFilters = {};
@@ -857,46 +858,46 @@ checkGenerateReport().then(() => {
     }
     function buildTestcaseTraceInfo(testcase) {
         const testcaseTableEntry = parseResults.testcases.testcaseTable[testcase];
-        let testcaseFile = testcaseTableEntry.testcaseFile.replace(testcasesDir, '');
-        testcaseFile = testcaseFile.substring(1, testcaseFile.length);
+        let testcaseFile = testcaseTableEntry.testcaseFile.replace(srcDir, '');
+        testcaseFile = testcaseFile.substring(1, testcaseFile.length).replace('\\', '\/');
         const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[testcase].specVerifyHash;
         const specFilesHash = (specHash) ? _1.arrayFunctions.mapToObject(Object.keys(specHash).map(spec => parseResults.specs.specTable[spec].specFile), (spec) => true) : {};
         const specFiles = Object.keys(specFilesHash);
         const specs = (specHash) ? Object.keys(specHash).map(spec => {
             `${spec}: [${Object.keys(specHash[spec]).join(', ')}] ('${parseResults.specs.specTable[spec].specFile}')`;
-            let file = parseResults.specs.specTable[spec].specFile.replace(specsDir, '');
-            file = file.substring(1, file.length);
+            let file = parseResults.specs.specTable[spec].specFile.replace(srcDir, '');
+            file = `"${file.substring(1, file.length).replace('\\', '\/')}"`;
             return `${spec}: [${Object.keys(specHash[spec]).join(', ')}] (${file})`;
         }) : [];
         return {
             testcase,
-            testcaseFile,
+            testcaseFile: `"${testcaseFile}"`,
             specs
         };
     }
     function buildSpecTraceInfo(spec) {
-        let specFile = parseResults.specs.specTable[spec].specFile.replace(specsDir, '');
-        specFile = specFile.substring(1, specFile.length);
+        let specFile = parseResults.specs.specTable[spec].specFile.replace(srcDir, '');
+        specFile = specFile.substring(1, specFile.length).replace('\\', '\/');
         const testcaseHash = parseResults.testcases.verifyTable[spec];
         const testcases = (testcaseHash) ? Object.keys(testcaseHash) : [];
         const testcaseFileHash = (testcaseHash) ? _1.arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true) : {};
         const testcaseFiles = Object.keys(testcaseFileHash);
-        let manualFile = (spec in manualResults.specTable) ? manualResults.specTable[spec].file.replace(manDir, '') : '';
+        let manualFile = (spec in manualResults.specTable) ? manualResults.specTable[spec].file.replace(srcDir, '') : '';
         if (manualFile.length > 0) {
-            manualFile = manualFile.substring(1, manualFile.length);
+            manualFile = `"${manualFile.substring(1, manualFile.length).replace('\\', '\/')}"`;
         }
         let testcaseCriteria = {};
         testcases.forEach(testcase => testcaseCriteria[testcase] = Object.keys(parseResults.testcases.tree[parseResults.testcases.testcaseTable[testcase].suiteId].testcaseHash[testcase].specVerifyHash[spec]));
         const testcaseCriteriaStrs = Object.keys(testcaseCriteria).map(testcase => {
-            let file = parseResults.testcases.testcaseTable[testcase].testcaseFile.replace(testcasesDir, '');
-            file = file.substring(1, file.length);
+            let file = parseResults.testcases.testcaseTable[testcase].testcaseFile.replace(srcDir, '');
+            file = `"${file.substring(1, file.length).replace('\\', '\/')}"`;
             return `${testcase}: [${testcaseCriteria[testcase].join(', ')}] (${file})`;
         });
         const manualCriteria = (spec in manualResults.specTable) ? Object.keys(manualResults.specTable[spec].criteria) : [];
         const manualCriteriaStr = (manualCriteria.length > 0) ? `[${manualCriteria.join(', ')}] (${manualFile})` : '';
         return {
             spec,
-            specFile,
+            specFile: `"${specFile}"`,
             testcaseCriteriaStrs,
             manualCriteria,
             manualCriteriaStr
