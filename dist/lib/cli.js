@@ -857,14 +857,20 @@ checkGenerateReport().then(() => {
     }
     function buildTestcaseTraceInfo(testcase) {
         const testcaseTableEntry = parseResults.testcases.testcaseTable[testcase];
+        let testcaseFile = testcaseTableEntry.testcaseFile.replace(testcasesDir, '');
+        testcaseFile = testcaseFile.substring(1, testcaseFile.length);
         const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[testcase].specVerifyHash;
         const specFilesHash = (specHash) ? _1.arrayFunctions.mapToObject(Object.keys(specHash).map(spec => parseResults.specs.specTable[spec].specFile), (spec) => true) : {};
         const specFiles = Object.keys(specFilesHash);
-        const specs = (specHash) ? Object.keys(specHash).map(spec => `${spec}: [${Object.keys(specHash[spec]).join(', ')}]`) : [];
+        const specs = (specHash) ? Object.keys(specHash).map(spec => {
+            `${spec}: [${Object.keys(specHash[spec]).join(', ')}] ('${parseResults.specs.specTable[spec].specFile}')`;
+            let file = parseResults.specs.specTable[spec].specFile.replace(specsDir, '');
+            file = file.substring(1, file.length);
+            return `${spec}: [${Object.keys(specHash[spec]).join(', ')}] (${file})`;
+        }) : [];
         return {
             testcase,
-            testcaseFile: testcaseTableEntry.testcaseFile,
-            specFiles,
+            testcaseFile,
             specs
         };
     }
@@ -874,17 +880,22 @@ checkGenerateReport().then(() => {
         const testcases = (testcaseHash) ? Object.keys(testcaseHash) : [];
         const testcaseFileHash = (testcaseHash) ? _1.arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true) : {};
         const testcaseFiles = Object.keys(testcaseFileHash);
-        const manualFile = (spec in manualResults.specTable) ? manualResults.specTable[spec].file : '';
+        let manualFile = (spec in manualResults.specTable) ? manualResults.specTable[spec].file.replace(manDir, '') : '';
+        if (manualFile.length > 0) {
+            manualFile = manualFile.substring(1, manualFile.length);
+        }
         let testcaseCriteria = {};
         testcases.forEach(testcase => testcaseCriteria[testcase] = Object.keys(parseResults.testcases.tree[parseResults.testcases.testcaseTable[testcase].suiteId].testcaseHash[testcase].specVerifyHash[spec]));
-        const testcaseCriteriaStrs = Object.keys(testcaseCriteria).map(testcase => `${testcase}: [${testcaseCriteria[testcase].join(', ')}]`);
+        const testcaseCriteriaStrs = Object.keys(testcaseCriteria).map(testcase => {
+            let file = parseResults.testcases.testcaseTable[testcase].testcaseFile.replace(testcasesDir, '');
+            file = file.substring(1, file.length);
+            return `${testcase}: [${testcaseCriteria[testcase].join(', ')}] (${file})`;
+        });
         const manualCriteria = (spec in manualResults.specTable) ? Object.keys(manualResults.specTable[spec].criteria) : [];
-        const manualCriteriaStr = `[${manualCriteria.join(', ')}]`;
+        const manualCriteriaStr = (manualCriteria.length > 0) ? `[${manualCriteria.join(', ')}] (${manualFile})` : '';
         return {
             spec,
             specFile,
-            testcaseFiles,
-            manualFile,
             testcaseCriteriaStrs,
             manualCriteria,
             manualCriteriaStr
@@ -906,8 +917,6 @@ checkGenerateReport().then(() => {
     function printTestcaseTraceInfo(testcaseTraceInfo) {
         const content = [];
         content.push(['Testcase File:', testcaseTraceInfo.testcaseFile]);
-        content.push(['Verifies Spec Files:', (testcaseTraceInfo.specFiles.length > 0) ? testcaseTraceInfo.specFiles.shift() : '-']);
-        testcaseTraceInfo.specFiles.forEach(specFile => content.push(['', specFile]));
         content.push(['Verifies Specs:', (testcaseTraceInfo.specs.length > 0) ? testcaseTraceInfo.specs.shift() : '[]']);
         testcaseTraceInfo.specs.forEach(spec => content.push(['', spec]));
         const traceTable = table(content, { align: ['l', 'l'] });
@@ -917,9 +926,6 @@ checkGenerateReport().then(() => {
     function printSpecTraceInfo(specTraceInfo) {
         const content = [];
         content.push(['Spec File:', specTraceInfo.specFile]);
-        content.push(['Verified by Testcase Files:', (specTraceInfo.testcaseFiles.length > 0) ? specTraceInfo.testcaseFiles.shift() : '-']);
-        specTraceInfo.testcaseFiles.forEach(testcaseFile => content.push(['', testcaseFile]));
-        content.push(['Verified in Manual Result File:', specTraceInfo.manualFile || '-']);
         content.push(['Verified by Testcases:', (specTraceInfo.testcaseCriteriaStrs.length > 0) ? specTraceInfo.testcaseCriteriaStrs.shift() : '[]']);
         specTraceInfo.testcaseCriteriaStrs.forEach(testcaseCriteriaStr => content.push(['', testcaseCriteriaStr]));
         content.push(['Verified in Manual Results:', (specTraceInfo.manualCriteria.length > 0) ? specTraceInfo.manualCriteriaStr : '[]']);
