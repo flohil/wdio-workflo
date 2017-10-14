@@ -84,8 +84,6 @@ optimist
 
     .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
     '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
-    .describe('traceCriteria', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec criteria\n' +
-    '\t\t\t\'4.1[1, 2]\' => show traceability information for criteria 1 and 2 of spec 4.1\n')
     .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
     '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
 
@@ -208,6 +206,28 @@ checkGenerateReport().then(() => {
     const mergedFilters: ExecutionFilters = {}
     const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles']
 
+    interface TestcaseTraceInfo {
+        testcase: string,
+        testcaseFile: string
+        specFiles: string[]
+        specs: string[]
+    }
+
+    interface SpecTraceInfo {
+        spec: string,
+        specFile: string,
+        testcaseFiles: string[],
+        manualFile: string,
+        testcaseCriteriaStrs: string[],
+        manualCriteria: string[],
+        manualCriteriaStr: string
+    }
+
+    interface TraceInfo {
+        testcases: Record<string, TestcaseTraceInfo>
+        specs: Record<string, SpecTraceInfo>
+    }
+
     // merge non-file cli filters
     mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters))
 
@@ -238,10 +258,10 @@ checkGenerateReport().then(() => {
 
     // add manual test cases to test information
     const manualResults = importManualResults()
-
+    
     // trace argv handling
-    if (handleTracing()) {
-        process.exit(0)
+    if (handleTracingArgs()) {
+        process.exit(0)       
     }
 
     // filters contains all filter criteria that is actually executed
@@ -423,6 +443,7 @@ checkGenerateReport().then(() => {
     const testinfo = {
         executionFilters: filters,
         parseResults: parseResults,
+        traceInfo: buildTraceInfo(),
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure
@@ -1060,77 +1081,132 @@ checkGenerateReport().then(() => {
         return suites
     }
 
-    function handleTracing() {
-        // .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
-        // '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
-        // .describe('traceCriteria', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec criteria\n' +
-        // '\t\t\t\'4.1[1, 2]\' => show traceability information for criteria 1 and 2 of spec 4.1\n')
-        // .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
-        // '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
-
+    function handleTracingArgs(): boolean {
         let traced = false
-
+        
         if (argv.traceTestcase) {
-            const testcaseTableEntry = parseResults.testcases.testcaseTable[argv.traceTestcase]
-            const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[argv.traceTestcase].specVerifyHash
-            const specFilesHash = arrayFunctions.mapToObject(Object.keys(specHash).map(spec => parseResults.specs.specTable[spec].specFile), (spec) => true)
-            const specFiles = Object.keys(specFilesHash)
-            const specs = Object.keys(specHash).map(spec => `${spec}: [${Object.keys(specHash[spec]).join(', ')}]`)
-
-            const content: string[][] = []
-
-            content.push(['Testcase File:', testcaseTableEntry.testcaseFile])
-
-            content.push(['Verifies Spec Files:', (specFiles.length > 0) ? specFiles.shift() : ''])
-            specFiles.forEach(specFile => content.push(['', specFile]))
-
-            content.push(['Verifies Specs:', (specs.length > 0) ? specs.shift() : ''])
-            specs.forEach(spec => content.push(['', spec]))
-
-            const traceTable = table(content, { align: [ 'l', 'l' ] })
-
-            console.log(`\nTrace information for testcase '${argv.traceTestcase}':`)
-            console.log('\n' + traceTable)
+            if (argv.traceTestcase in parseResults.testcases.testcaseTable) {
+                const testcaseTraceInfo = buildTestcaseTraceInfo(argv.traceTestcase)
+                printTestcaseTraceInfo(testcaseTraceInfo)
+            }
+            else 
+            {
+                console.warn(`\nTestcase '${argv.traceTestcase}' could not be found and traced!`)
+            }
 
             traced = true
         }
+
         if (argv.traceSpec) {
-
-            console.dir(manualResults, {depth: null})
-
-            // check if all found
-
-            const specFile = parseResults.specs.specTable[argv.traceSpec].specFile
-            const testcaseHash = parseResults.testcases.verifyTable[argv.traceSpec]
-            const testcases = Object.keys(testcaseHash)
-            const testcaseFileHash = arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true)
-            const testcaseFiles = Object.keys(testcaseFileHash)
-            const manualFile = (argv.traceSpec in manualResults) ? manualResults[argv.traceSpec].file : ''         
-
-            const content: string[][] = []
-
-            content.push(['Spec File:', specFile])
-
-            content.push(['Verified by Testcase Files:', (testcaseFiles.length > 0) ? testcaseFiles.shift() : ''])
-            testcaseFiles.forEach(testcaseFile => content.push(['', testcaseFile]))
-
-            content.push(['Verified by Testcases:', (testcases.length > 0) ? testcases.shift() : ''])
-            testcases.forEach(testcase => content.push(['', testcase]))
-
-            content.push(['Verified in Manual Result File:', manualFile])
-
-            const traceTable = table(content, { align: [ 'l', 'l' ] })
-
-            console.log(`\nTrace information for spec '${argv.traceSpec}':`)
-            console.log('\n' + traceTable)
+            if (argv.traceSpec in parseResults.specs.specTable) {
+                const specTraceInfo = buildSpecTraceInfo(argv.traceSpec)
+                printSpecTraceInfo(specTraceInfo)
+            }
+            else 
+            {
+                console.warn(`\nSpec '${argv.traceSpec}' could not be found and traced!`)
+            }
 
             traced = true
-        }
-        if (argv.traceCriteria) {
-
         }
 
         return traced
+    }
+
+    function buildTestcaseTraceInfo(testcase: string): TestcaseTraceInfo {
+        const testcaseTableEntry = parseResults.testcases.testcaseTable[testcase]
+        const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[testcase].specVerifyHash
+        const specFilesHash = (specHash) ? arrayFunctions.mapToObject(Object.keys(specHash).map(spec => parseResults.specs.specTable[spec].specFile), (spec) => true) : {}
+        const specFiles = Object.keys(specFilesHash)
+        const specs = (specHash) ? Object.keys(specHash).map(spec => `${spec}: [${Object.keys(specHash[spec]).join(', ')}]`) : []
+
+        return {
+            testcase,
+            testcaseFile: testcaseTableEntry.testcaseFile,
+            specFiles,
+            specs
+        }
+    }
+
+    function buildSpecTraceInfo(spec: string): SpecTraceInfo {
+        const specFile = parseResults.specs.specTable[spec].specFile
+        const testcaseHash = parseResults.testcases.verifyTable[spec]
+        const testcases = (testcaseHash) ? Object.keys(testcaseHash) : []
+        const testcaseFileHash = (testcaseHash) ? arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true) : {}
+        const testcaseFiles = Object.keys(testcaseFileHash)
+        const manualFile = (spec in manualResults.specTable) ? manualResults.specTable[spec].file : ''
+
+        let testcaseCriteria: Record<string, string[]> = {}
+        testcases.forEach(testcase => testcaseCriteria[testcase] = Object.keys(parseResults.testcases.tree[parseResults.testcases.testcaseTable[testcase].suiteId].testcaseHash[testcase].specVerifyHash[spec]))
+        const testcaseCriteriaStrs: string[] = Object.keys(testcaseCriteria).map(testcase => `${testcase}: [${testcaseCriteria[testcase].join(', ')}]`)
+        
+        const manualCriteria = (spec in manualResults.specTable) ? Object.keys(manualResults.specTable[spec].criteria) : []
+        const manualCriteriaStr = `[${manualCriteria.join(', ')}]`
+
+        return {
+            spec,
+            specFile, 
+            testcaseFiles, 
+            manualFile, 
+            testcaseCriteriaStrs,
+            manualCriteria,
+            manualCriteriaStr
+        }
+    }
+
+    function buildTraceInfo(): TraceInfo {
+        let traceInfo: TraceInfo = {
+            specs: {},
+            testcases: {}
+        }
+
+        for (const testcase in filters.testcases) {
+            traceInfo.testcases[testcase] = buildTestcaseTraceInfo(testcase)
+        }
+
+        for (const spec in filters.specs) {
+            traceInfo.specs[spec] = buildSpecTraceInfo(spec)
+        }
+
+        return traceInfo
+    }
+
+    function printTestcaseTraceInfo(testcaseTraceInfo: TestcaseTraceInfo) {
+        const content: string[][] = []
+        
+        content.push(['Testcase File:', testcaseTraceInfo.testcaseFile])
+
+        content.push(['Verifies Spec Files:', (testcaseTraceInfo.specFiles.length > 0) ? testcaseTraceInfo.specFiles.shift() : '-'])
+        testcaseTraceInfo.specFiles.forEach(specFile => content.push(['', specFile]))
+
+        content.push(['Verifies Specs:', (testcaseTraceInfo.specs.length > 0) ? testcaseTraceInfo.specs.shift() : '[]'])
+        testcaseTraceInfo.specs.forEach(spec => content.push(['', spec]))
+
+        const traceTable = table(content, { align: [ 'l', 'l' ] })
+
+        console.log(`\nTrace information for testcase '${testcaseTraceInfo.testcase}':`)
+        console.log('\n' + traceTable)
+    }
+
+    function printSpecTraceInfo(specTraceInfo: SpecTraceInfo) {
+        const content: string[][] = []
+        
+        content.push(['Spec File:', specTraceInfo.specFile])
+        
+        content.push(['Verified by Testcase Files:', (specTraceInfo.testcaseFiles.length > 0) ? specTraceInfo.testcaseFiles.shift() : '-'])
+        specTraceInfo.testcaseFiles.forEach(testcaseFile => content.push(['', testcaseFile]))
+
+        content.push(['Verified in Manual Result File:', specTraceInfo.manualFile || '-'])
+
+        content.push(['Verified by Testcases:', (specTraceInfo.testcaseCriteriaStrs.length > 0) ? specTraceInfo.testcaseCriteriaStrs.shift() : '[]'])
+        specTraceInfo.testcaseCriteriaStrs.forEach(testcaseCriteriaStr => content.push(['', testcaseCriteriaStr]))
+
+        content.push(['Verified in Manual Results:', (specTraceInfo.manualCriteria.length > 0) ? specTraceInfo.manualCriteriaStr : '[]'])
+
+        const traceTable = table(content, { align: [ 'l', 'l' ] })
+
+        console.log(`\nTrace information for spec '${specTraceInfo.spec}':`)
+        console.log('\n' + traceTable)
     }
 }).catch((error) => console.error(error))
 
