@@ -213,10 +213,16 @@ checkGenerateReport().then(() => {
         specs: string[]
     }
 
+    interface VerificationFileEntry {
+        manualFile?: string,
+        testcases?: string[]
+    }
+
     interface SpecTraceInfo {
         spec: string,
         specFile: string,
         testcaseCriteriaStrs: string[],
+        criteriaVerificationFiles: Record<string, VerificationFileEntry>,
         manualCriteria: string[],
         manualCriteriaStr: string
     }
@@ -1122,14 +1128,14 @@ checkGenerateReport().then(() => {
             `${spec}: [${Object.keys(specHash[spec]).join(', ')}] ('${parseResults.specs.specTable[spec].specFile}')`
 
             let file = parseResults.specs.specTable[spec].specFile.replace(srcDir, '')
-            file = `"${file.substring(1, file.length).replace('\\', '\/')}"`
+            file = `${file.substring(1, file.length).replace('\\', '\/')}`
 
             return `${spec}: [${Object.keys(specHash[spec]).join(', ')}] (${file})`
         }) : []
 
         return {
             testcase,
-            testcaseFile: `"${testcaseFile}"`,
+            testcaseFile: `${testcaseFile}`,
             specs
         }
     }
@@ -1144,7 +1150,7 @@ checkGenerateReport().then(() => {
         let manualFile = (spec in manualResults.specTable) ? manualResults.specTable[spec].file.replace(srcDir, '') : ''
 
         if (manualFile.length > 0) {
-            manualFile = `"${manualFile.substring(1, manualFile.length).replace('\\', '\/')}"`
+            manualFile = `${manualFile.substring(1, manualFile.length).replace('\\', '\/')}`
         }
 
         let testcaseCriteria: Record<string, string[]> = {}
@@ -1152,18 +1158,52 @@ checkGenerateReport().then(() => {
         
         const testcaseCriteriaStrs: string[] = Object.keys(testcaseCriteria).map(testcase => {
             let file = parseResults.testcases.testcaseTable[testcase].testcaseFile.replace(srcDir, '')
-            file = `"${file.substring(1, file.length).replace('\\', '\/')}"`
+            file = `${file.substring(1, file.length).replace('\\', '\/')}`
 
             return `${testcase}: [${testcaseCriteria[testcase].join(', ')}] (${file})`
         })
         
+        const criteriaVerificationFiles: Record<string, VerificationFileEntry> = {}
         const manualCriteria = (spec in manualResults.specTable) ? Object.keys(manualResults.specTable[spec].criteria) : []
         const manualCriteriaStr = (manualCriteria.length > 0) ? `[${manualCriteria.join(', ')}] (${manualFile})` : ''
 
+        for (const criteria in parseResults.specs.specTable[spec].criteria) {
+            if (manualCriteria.length > 0 && criteria in manualResults.specTable[spec].criteria) {
+                criteriaVerificationFiles[criteria] = {
+                    manualFile
+                }
+            } else {
+                const tcHash: Record<string, string[]> = {}
+                let _testcases: string[] = []
+
+                for (const tc in testcaseCriteria) {
+                    if (criteria in parseResults.testcases.tree[parseResults.testcases.testcaseTable[tc].suiteId].testcaseHash[tc].specVerifyHash[spec]) {
+                        let _testcaseFile = parseResults.testcases.testcaseTable[tc].testcaseFile.replace(srcDir, '')
+                        _testcaseFile = `${_testcaseFile.substring(1, _testcaseFile.length).replace('\\', '\/')}`
+
+                        if (!tcHash[_testcaseFile]) {
+                            tcHash[_testcaseFile] = [tc]
+                        } else {
+                            tcHash[_testcaseFile].push(tc)
+                        }
+                    }
+                }
+
+                for (const tcFile in tcHash) {
+                    _testcases.push(`${tcHash[tcFile].join(', ')} (${tcFile})`)
+                }
+
+                criteriaVerificationFiles[criteria] = {
+                    testcases: _testcases
+                }
+            }
+        }
+
         return {
             spec,
-            specFile: `"${specFile}"`,
+            specFile: `${specFile}`,
             testcaseCriteriaStrs,
+            criteriaVerificationFiles,
             manualCriteria,
             manualCriteriaStr
         }
