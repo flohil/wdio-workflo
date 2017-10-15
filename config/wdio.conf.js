@@ -135,10 +135,8 @@ exports.config = {
    * hooks
    */
   onPrepare: function(config, capabilities) {
-    console.log('let\'s go')
   },
   before: function ( capabilties, specs ) {
-
     process.env.WORKFLO_CONFIG = JSON.stringify(workfloConf)
    
     // allow custom failure messages in jasmine
@@ -170,7 +168,6 @@ exports.config = {
     browser.timeouts('implicit', 1001)
   },
   onComplete: function(exitCode, config, capabilities) {
-    console.log('that\'s it')
   },
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {

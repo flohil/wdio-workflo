@@ -450,7 +450,8 @@ checkGenerateReport().then(() => {
         traceInfo: buildTraceInfo(),
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
-        allure: workfloConfig.allure
+        allure: workfloConfig.allure,
+        instantReport: (typeof workfloConfig.instantReport !== 'undefined') ? workfloConfig.instantReport : true
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)

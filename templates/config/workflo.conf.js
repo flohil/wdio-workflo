@@ -37,5 +37,6 @@ module.exports = {
   },
   timeouts: {
     default: 5000
-  }
+  },
+  instantReport: true // logs report messages immediatly - does not work with parallel runners  
 }
