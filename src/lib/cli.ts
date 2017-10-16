@@ -3,7 +3,7 @@ require('tsconfig-paths/register')
 
 import * as path from 'path'
 import * as fs from 'fs'
-import * as ejs from 'ejs' 
+import * as ejs from 'ejs'
 import * as jsonfile from 'jsonfile'
 
 import {specFilesParse, SpecTableEntry, testcaseFilesParse, TestcaseTableEntry, SpecParseResults, TestcaseParseResults} from './parser'
@@ -25,7 +25,7 @@ const pkg = require('../../package.json')
 const VERSION = pkg.version
 
 const ALLOWED_ARGV = [
-    'host', 'port',  'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout', 
+    'host', 'port',  'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
     'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath',
     'workfloOpts'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
@@ -65,12 +65,12 @@ optimist
         '\t\t\t\'["Login", "Logout"]\' => execute all testcases which verify specs defined within these features\n' +
         '\t\t\t\'["-Login"]\' => execute all testcases except those which verify specs defined within these features\n')
     .describe('specs', 'restricts test execution to these specs\n' +
-        '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' + 
+        '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' +
         '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
         '\t\t\t\'["1.*"]\' => 1.* excludes spec 1 itself but includes of of its sub-specs\n')
-    .describe('testcaseFiles', 'restricts test execution to testcases defined within these files\n' + 
+    .describe('testcaseFiles', 'restricts test execution to testcases defined within these files\n' +
         '\t\t\t\'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
-    .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' + 
+    .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' +
         '\t\t\t\'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
         '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
@@ -87,8 +87,11 @@ optimist
     .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
     '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
 
+    .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
+    .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
+
     // wdio-workflo options
-   
+
     // support priority: low
 
     // .describe('path', 'Selenium server path (default: /wd/hub)')
@@ -100,7 +103,7 @@ optimist
     // .describe('jasmineOpts.*', 'Jasmine options, see the full list options at https://github.com/webdriverio/wdio-jasmine-framework#jasminenodeopts-options')
 
     // not supported
-    
+
     // .describe('suite', 'overwrites the specs attribute and runs the defined suite') // replaced by 'testcases'
     // .describe('spec', 'run only a certain spec file') // replaced by 'testcaseFiles' and 'specFiles'
     // .describe('cucumberOpts.*', 'Cucumber options, see the full list options at https://github.com/webdriverio/wdio-cucumber-framework#cucumberopts-options') // only jasmine is supported
@@ -111,7 +114,7 @@ optimist
     // .alias('framework', 'f')
     // .describe('reporters', 'reporters to print out the results on stdout') // supports only workflo adaptions of spec and allure reporters
     // .alias('reporters', 'r')
-    
+
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles'
      /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */])
     .boolean(['coloredLogs', 'watch'])
@@ -239,7 +242,7 @@ checkGenerateReport().then(() => {
     if (argv.listFiles) {
         mergeLists({
             listFiles: JSON.parse(argv.listFiles)
-        }, mergedFilters)    
+        }, mergedFilters)
     }
 
     // complete cli specFiles and testcaseFiles paths
@@ -262,10 +265,10 @@ checkGenerateReport().then(() => {
 
     // add manual test cases to test information
     const manualResults = importManualResults()
-    
+
     // trace argv handling
     if (handleTracingArgs()) {
-        process.exit(0)       
+        process.exit(0)
     }
 
     // filters contains all filter criteria that is actually executed
@@ -404,7 +407,7 @@ checkGenerateReport().then(() => {
         const infoTable = table([
             ['FILTER FILES:', '', ''],
             toTable(translations.testcaseFiles),
-            toTable(translations.specFiles), 
+            toTable(translations.specFiles),
             toTable(translations.manualResultFiles),
             ['', '', ''],
             ['FILTERS:', '', ''],
@@ -451,7 +454,7 @@ checkGenerateReport().then(() => {
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
-        instantReport: (typeof workfloConfig.instantReport !== 'undefined') ? workfloConfig.instantReport : true
+        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)
@@ -477,7 +480,7 @@ checkGenerateReport().then(() => {
 
     function mergeIntoFilters(key: string, argv: any, _filters: ExecutionFilters) {
         _filters[key] = {}
-        
+
         if (argv[key]) {
             const filterArray: string[] = JSON.parse(argv[key])
 
@@ -488,7 +491,7 @@ checkGenerateReport().then(() => {
     function checkFiltersExist() {
         for (const testcase in mergedFilters.testcases) {
             let matchStr = testcase
-            
+
             if (matchStr.substr(0,1) === '-') {
                 matchStr = matchStr.substr(1, matchStr.length - 1)
             }
@@ -500,7 +503,7 @@ checkGenerateReport().then(() => {
 
         for (const spec in mergedFilters.specs) {
             let matchStr = spec
-            
+
             if (matchStr.substr(0,1) === '-') {
                 matchStr = matchStr.substr(1, matchStr.length - 1)
             }
@@ -509,24 +512,24 @@ checkGenerateReport().then(() => {
                 if (matchStr.substr(matchStr.length - 1, 1) === '*') {
                     matchStr = matchStr.substr(0, matchStr.length - 1)
                 }
-    
+
                 let found = false
-    
+
                 for (const _spec in parseResults.specs.specTable) {
                     if (_spec.length >= matchStr.length && _spec.substr(0, matchStr.length) === matchStr) {
                         found = true
                     }
                 }
-    
+
                 if (!found) {
                     throw new Error(`Spec '${spec}' did not match any defined spec!`)
-                }   
+                }
             }
         }
 
         for (const feature in mergedFilters.features) {
             let matchStr = feature
-            
+
             if (matchStr.substr(0,1) === '-') {
                 matchStr = matchStr.substr(1, matchStr.length - 1)
             }
@@ -549,7 +552,7 @@ checkGenerateReport().then(() => {
             for (const specFile in _filters.specFiles) {
                 let remove = false
                 let matchStr = specFile
-                
+
                 if (specFile.substr(0,1) === '-') {
                     remove = true
                     matchStr = specFile.substr(1, specFile.length - 1)
@@ -583,7 +586,7 @@ checkGenerateReport().then(() => {
             for (const testcaseFile in _filters.testcaseFiles) {
                 let remove = false
                 let matchStr = testcaseFile
-                
+
                 if (testcaseFile.substr(0,1) === '-') {
                     remove = true
                     matchStr = testcaseFile.substr(1, testcaseFile.length - 1)
@@ -608,11 +611,11 @@ checkGenerateReport().then(() => {
     function completeFilePaths(_filters: ExecutionFilters) {
         const specFilePaths: Record<string, true> = {}
         const testcaseFilePaths: Record<string, true> = {}
-        
+
         for (const specFile in _filters.specFiles) {
             let matchStr = specFile
             let prefix = ''
-            
+
             if (specFile.substr(0,1) === '-') {
                 matchStr = specFile.substr(1, specFile.length - 1)
                 prefix = '-'
@@ -621,11 +624,11 @@ checkGenerateReport().then(() => {
             const specFilePath = path.join(`${prefix}${specsDir}`, `${matchStr}.spec.ts`)
             specFilePaths[specFilePath] = true
         }
-        
+
         for (const testcaseFile in _filters.testcaseFiles) {
             let matchStr = testcaseFile
             let prefix = ''
-            
+
             if (testcaseFile.substr(0,1) === '-') {
                 matchStr = testcaseFile.substr(1, testcaseFile.length - 1)
                 prefix = '-'
@@ -634,14 +637,14 @@ checkGenerateReport().then(() => {
             const testcaseFilePath = path.join(`${prefix}${testcasesDir}`, `${matchStr}.tc.ts`)
             testcaseFilePaths[testcaseFilePath] = true
         }
-        
+
         _filters.specFiles = specFilePaths
         _filters.testcaseFiles = testcaseFilePaths
     }
 
     /**
      * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
-     * @param argv 
+     * @param argv
      */
     function mergeLists(list: Workflo.FilterList, _filters: ExecutionFilters) {
         if (list.specFiles) {
@@ -658,7 +661,7 @@ checkGenerateReport().then(() => {
         }
         if (list.testcases) {
             list.testcases.forEach(value => _filters.testcases[value] = true)
-        } 
+        }
         if (list.listFiles) {
             for (const listFile of list.listFiles) {
                 // complete cli listFiles paths
@@ -668,7 +671,7 @@ checkGenerateReport().then(() => {
                     throw new Error(`List file could not be found: ${listFilePath}`)
                 } else {
                     const sublist: Workflo.FilterList = require(listFilePath).default
-        
+
                     // recursively traverse sub list files
                     mergeLists(sublist, _filters)
                 }
@@ -681,11 +684,11 @@ checkGenerateReport().then(() => {
             const filteredSpecs: Record<string, true> = {}
             const filteredFeatures: Record<string, true> = {}
             let removeOnly = true
-            
+
             for (const spec in mergedFilters.specs) {
                 let remove = false
                 let matchStr = spec
-        
+
                 if (spec.substr(0,1) === '-') {
                     remove = true
                     matchStr = spec.substr(1, spec.length - 1)
@@ -694,7 +697,7 @@ checkGenerateReport().then(() => {
                 }
                 if (matchStr.substr(matchStr.length - 1, 1) === '*') {
                     matchStr = matchStr.substr(0, matchStr.length - 1)
-            
+
                     for (const specEntry in parseResults.specs.specTable) {
                         if (specEntry.length >= matchStr.length && specEntry.substr(0, matchStr.length) === matchStr) {
                             if (remove) {
@@ -703,16 +706,16 @@ checkGenerateReport().then(() => {
                                 filteredSpecs[specEntry] = true
                             }
                         }
-                    }        
+                    }
                 } else {
                     if (remove) {
                         delete filters.specs[matchStr]
                     } else {
                         filteredSpecs[matchStr] = true
                     }
-                }           
+                }
             }
-        
+
             if (!removeOnly) {
                 for (const spec in filters.specs) {
                     if (!(spec in filteredSpecs)) {
@@ -731,7 +734,7 @@ checkGenerateReport().then(() => {
             for (const feature in mergedFilters.features) {
                 let remove = false
                 let matchStr = feature
-        
+
                 if (feature.substr(0,1) === '-') {
                     remove = true
                     matchStr = feature.substr(1, feature.length - 1)
@@ -746,7 +749,7 @@ checkGenerateReport().then(() => {
                         } else {
                             filteredSpecs[spec] = true
                         }
-                    }            
+                    }
                 }
             }
 
@@ -762,7 +765,7 @@ checkGenerateReport().then(() => {
     }
 
     function filterTestcasesByTestcases() {
-        if (Object.keys(mergedFilters.testcases).length > 0) {    
+        if (Object.keys(mergedFilters.testcases).length > 0) {
             const filteredTestcases: Record<string, true> = {}
             let removeOnly = true
 
@@ -803,7 +806,7 @@ checkGenerateReport().then(() => {
                 if (!insideTable) {
                     delete mergedFilters.testcases[testcase]
                     delete filters.testcases[testcase]
-                }        
+                }
             }
 
             // only execute spec files that include filtered options
@@ -823,7 +826,7 @@ checkGenerateReport().then(() => {
 
             // add all spec ids verified in given testcases
             for (const testcase in filters.testcases) {
-                
+
                 // testcase is a suite
                 if (testcase in parseResults.testcases.tree) {
                     for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
@@ -846,7 +849,7 @@ checkGenerateReport().then(() => {
                             }
                         }
                     }
-                }               
+                }
             }
 
             // remove specs not verified by filtered testcases or manual results
@@ -973,7 +976,7 @@ checkGenerateReport().then(() => {
                 }
             }
         }
-        
+
         return {
             fileTable: fileTable,
             specTable: mergedManualTestcases
@@ -1016,10 +1019,10 @@ checkGenerateReport().then(() => {
             } else {
                 for (const criteria in parseResults.specs.specTable[spec].criteria) {
                     let covered = false
-        
+
                     if (spec in manualResults.specTable && criteria in manualResults.specTable[spec].criteria) {
                         covered = true
-        
+
                         analysedCriteria.specs[spec].manual[criteria] = true
                         analysedCriteria.manualCriteriaCount++
                     }
@@ -1042,7 +1045,7 @@ checkGenerateReport().then(() => {
 
                         if (_autoCovered) {
                             if (covered) {
-                                throw new Error(`Criteria ${criteria} of spec ${spec} must not be both verified automatically and tested manually!`)  
+                                throw new Error(`Criteria ${criteria} of spec ${spec} must not be both verified automatically and tested manually!`)
                             } else {
                                 covered = true
                             }
@@ -1056,9 +1059,9 @@ checkGenerateReport().then(() => {
             }
         }
 
-        analysedCriteria.allCriteriaCount = 
-            analysedCriteria.automatedCriteriaCount + 
-            analysedCriteria.manualCriteriaCount + 
+        analysedCriteria.allCriteriaCount =
+            analysedCriteria.automatedCriteriaCount +
+            analysedCriteria.manualCriteriaCount +
             analysedCriteria.uncoveredCriteriaCount
 
         return analysedCriteria
@@ -1088,13 +1091,13 @@ checkGenerateReport().then(() => {
 
     function handleTracingArgs(): boolean {
         let traced = false
-        
+
         if (argv.traceTestcase) {
             if (argv.traceTestcase in parseResults.testcases.testcaseTable) {
                 const testcaseTraceInfo = buildTestcaseTraceInfo(argv.traceTestcase)
                 printTestcaseTraceInfo(testcaseTraceInfo)
             }
-            else 
+            else
             {
                 console.warn(`\nTestcase '${argv.traceTestcase}' could not be found and traced!`)
             }
@@ -1107,7 +1110,7 @@ checkGenerateReport().then(() => {
                 const specTraceInfo = buildSpecTraceInfo(argv.traceSpec)
                 printSpecTraceInfo(specTraceInfo)
             }
-            else 
+            else
             {
                 console.warn(`\nSpec '${argv.traceSpec}' could not be found and traced!`)
             }
@@ -1156,14 +1159,14 @@ checkGenerateReport().then(() => {
 
         let testcaseCriteria: Record<string, string[]> = {}
         testcases.forEach(testcase => testcaseCriteria[testcase] = Object.keys(parseResults.testcases.tree[parseResults.testcases.testcaseTable[testcase].suiteId].testcaseHash[testcase].specVerifyHash[spec]))
-        
+
         const testcaseCriteriaStrs: string[] = Object.keys(testcaseCriteria).map(testcase => {
             let file = parseResults.testcases.testcaseTable[testcase].testcaseFile.replace(srcDir, '')
             file = `${file.substring(1, file.length).replace('\\', '\/')}`
 
             return `${testcase}: [${testcaseCriteria[testcase].join(', ')}] (${file})`
         })
-        
+
         const criteriaVerificationFiles: Record<string, VerificationFileEntry> = {}
         const manualCriteria = (spec in manualResults.specTable) ? Object.keys(manualResults.specTable[spec].criteria) : []
         const manualCriteriaStr = (manualCriteria.length > 0) ? `[${manualCriteria.join(', ')}] (${manualFile})` : ''
@@ -1229,7 +1232,7 @@ checkGenerateReport().then(() => {
 
     function printTestcaseTraceInfo(testcaseTraceInfo: TestcaseTraceInfo) {
         const content: string[][] = []
-        
+
         content.push(['Testcase File:', testcaseTraceInfo.testcaseFile])
 
         content.push(['Verifies Specs:', (testcaseTraceInfo.specs.length > 0) ? testcaseTraceInfo.specs.shift() : '[]'])
@@ -1243,7 +1246,7 @@ checkGenerateReport().then(() => {
 
     function printSpecTraceInfo(specTraceInfo: SpecTraceInfo) {
         const content: string[][] = []
-        
+
         content.push(['Spec File:', specTraceInfo.specFile])
 
         content.push(['Verified by Testcases:', (specTraceInfo.testcaseCriteriaStrs.length > 0) ? specTraceInfo.testcaseCriteriaStrs.shift() : '[]'])

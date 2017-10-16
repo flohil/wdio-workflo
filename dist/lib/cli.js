@@ -78,6 +78,8 @@ optimist
     '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
     .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
     '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
+    .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
+    .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles'
     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
@@ -307,7 +309,7 @@ checkGenerateReport().then(() => {
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
-        instantReport: (typeof workfloConfig.instantReport !== 'undefined') ? workfloConfig.instantReport : true
+        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : true
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;

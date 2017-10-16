@@ -20,7 +20,7 @@ module.exports = {
     maxInstances: 1,
     browserName: 'chrome',
     requireWindowFocus: true,
-    nativeEvents: true,    
+    nativeEvents: true,
     unexpectedAlertBehaviour: "accept",
     ignoreProtectedModeSettings: true,
     "disable-popup-blocking": true,
@@ -38,5 +38,5 @@ module.exports = {
   timeouts: {
     default: 5000
   },
-  instantReport: true // logs report messages immediatly - does not work with parallel runners  
+  reportResultsInstantly: false // logs report messages immediatly - does not work with parallel runners
 }
