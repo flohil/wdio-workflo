@@ -80,10 +80,11 @@ optimist
     '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
     .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
     .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
+    .describe('reportErrorsInstantly', 'report broken testcase errors and errors from verification failures immediatly')
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles'
     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
-    .boolean(['coloredLogs', 'watch'])
+    .boolean(['coloredLogs', 'watch', 'reportErrorsInstantly'])
     .default({ coloredLogs: true })
     .check((arg) => {
     if (arg._.length > 1 && arg._[0] !== 'repl') {
@@ -309,7 +310,8 @@ checkGenerateReport().then(() => {
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
-        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false
+        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false,
+        reportErrorsInstantly: argv.reportErrorsInstantly || (typeof workfloConfig.reportErrorsInstantly !== 'undefined') ? workfloConfig.reportErrorsInstantly : false
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;
