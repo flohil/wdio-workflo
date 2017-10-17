@@ -321,6 +321,7 @@ declare global {
 
     interface IStoryMapEntry {
       descriptionStack: IDescriptionStack
+      description: string
       metadata: IStoryMetaData
       featureName: string,
       storyName: string,

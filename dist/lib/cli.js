@@ -309,7 +309,7 @@ checkGenerateReport().then(() => {
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
-        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : true
+        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;

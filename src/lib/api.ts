@@ -29,14 +29,14 @@ function suitesInclude(id: string) {
 
 function testcasesInclude(id: string) {
   const executionFilters = (<any> jasmine.getEnv()).executionFilters
-  
+
   return id in executionFilters.testcases
 }
 
 export const Feature = (
-  description: string, 
-  metadata: Workflo.IFeatureMetadata, 
-  bodyFunc: () => void, 
+  description: string,
+  metadata: Workflo.IFeatureMetadata,
+  bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
 ) => {
   if (description.length === 0) {
@@ -51,27 +51,27 @@ export const Feature = (
 }
 
 export const fFeature = (
-  description: string, 
-  metadata: Workflo.IFeatureMetadata, 
+  description: string,
+  metadata: Workflo.IFeatureMetadata,
   bodyFunc: () => void
 ) => {
   Feature(description, metadata, bodyFunc, fdescribe)
 }
 
 export const xFeature = (
-  description: string, 
-  metadata: Workflo.IFeatureMetadata, 
+  description: string,
+  metadata: Workflo.IFeatureMetadata,
   bodyFunc: () => void
 ) => {
   Feature(description, metadata, bodyFunc, xdescribe)
 }
 
 export const Story = (
-  id: string, 
-  description: string, 
-  metadata: Workflo.IStoryMetaData, 
+  id: string,
+  description: string,
+  metadata: Workflo.IStoryMetaData,
   bodyFunc: () => void,
-  jasmineFunc: (description: string, bodyFunc: () => void) => void = describe  
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
 ) => {
   if (id.length === 0) {
     throw new Error(`Story id must not be empty!`)
@@ -86,6 +86,7 @@ export const Story = (
     metadata: metadata,
     featureName: this.__currentFeature,
     storyName: fullStoryName,
+    description: description,
     insideWhenSequence: false,
     whenSequenceLengths: [],
     whenRecLevel: 0,
@@ -93,31 +94,31 @@ export const Story = (
     givenSequenceLengths: [],
     givenRecLevel: 0
   })
-  
+
   if (specsInclude(id)) {
     jasmineFunc(fullStoryName, bodyFunc)
   }
 }
 
 export const fStory = (
-  id: string, 
-  description: string, 
-  metadata: Workflo.IStoryMetaData, 
+  id: string,
+  description: string,
+  metadata: Workflo.IStoryMetaData,
   bodyFunc: () => void,
 ) => {
   Story(id, description, metadata, bodyFunc, fdescribe)
 }
 
 export const xStory = (
-  id: string, 
-  description: string, 
-  metadata: Workflo.IStoryMetaData, 
+  id: string,
+  description: string,
+  metadata: Workflo.IStoryMetaData,
   bodyFunc: () => void,
 ) => {
   Story(id, description, metadata, bodyFunc, xdescribe)
 }
 
-export const Given = (description: string, bodyFunc?: () => void) => {  
+export const Given = (description: string, bodyFunc?: () => void) => {
   const story = storyMap.get(this.__currentStoryId)
 
   const prevRecDepth = story.givenSequenceLengths.length
@@ -169,7 +170,7 @@ export const Given = (description: string, bodyFunc?: () => void) => {
 
   // increase length of sequence in current recursion level
   story.givenSequenceLengths[story.givenSequenceLengths.length - 1]++
-  
+
   return {
     "And": (description: string, bodyFunc?: () => void) => {
       story.insideGivenSequence = true
@@ -178,7 +179,7 @@ export const Given = (description: string, bodyFunc?: () => void) => {
   }
 }
 
-export const When = (description: string, bodyFunc?: () => void) => {  
+export const When = (description: string, bodyFunc?: () => void) => {
   const story = storyMap.get(this.__currentStoryId)
 
   const prevRecDepth = story.whenSequenceLengths.length
@@ -230,7 +231,7 @@ export const When = (description: string, bodyFunc?: () => void) => {
 
   // increase length of sequence in current recursion level
   story.whenSequenceLengths[story.whenSequenceLengths.length - 1]++
-  
+
   return {
     "And": (description: string, bodyFunc?: () => void) => {
       story.insideWhenSequence = true
@@ -240,7 +241,7 @@ export const When = (description: string, bodyFunc?: () => void) => {
 }
 
 export const Then = (
-  id: number, 
+  id: number,
   description: string,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = it,
   skip: boolean = false
@@ -277,7 +278,10 @@ export const Then = (
 
   const bodyFunc = () => {
 
-    process.send({event: 'test:setCurrentId', id: `${storyId}|${id}`, spec: true}) // split at last | occurence
+    process.send({event: 'test:setCurrentId', id: `${storyId}|${id}`, spec: true, descriptions: {
+      spec: story.description,
+      criteria: description
+    }}) // split at last | occurence
 
     // allure report metadata
     process.send({event: 'test:meta', feature: `${story.featureName}`})
@@ -306,27 +310,27 @@ export const Then = (
       severity: story.metadata.severity
     }
   }
-  
+
   jasmineFunc(JSON.stringify(testData), skipFunc || bodyFunc)
 }
 
 export const fThen = (
-  id: number, 
+  id: number,
   description: string
 ) => {
   Then(id, description, fit)
 }
 
 export const xThen = (
-  id: number, 
+  id: number,
   description: string
 ) => {
   Then(id, description, it, true)
 }
 
 export const suite = (
-  description: string, 
-  metadata: Workflo.ISuiteMetadata, 
+  description: string,
+  metadata: Workflo.ISuiteMetadata,
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
 ) => {
@@ -347,31 +351,31 @@ export const suite = (
   }
 
   if (suitesInclude(this.suiteIdStack.join('.'))) {
-    jasmineFunc(description, bodyFunc)    
+    jasmineFunc(description, bodyFunc)
   }
 
   this.suiteIdStack.pop()
 }
 
 export const fsuite = (
-  description: string, 
-  metadata: Workflo.ISuiteMetadata, 
+  description: string,
+  metadata: Workflo.ISuiteMetadata,
   bodyFunc: () => void
 ) => {
   suite(description, metadata, bodyFunc, fdescribe)
 }
 
 export const xsuite = (
-  description: string, 
-  metadata: Workflo.ISuiteMetadata, 
+  description: string,
+  metadata: Workflo.ISuiteMetadata,
   bodyFunc: () => void
 ) => {
   suite(description, metadata, bodyFunc, xdescribe)
 }
 
 export const testcase = (
-  description: string, 
-  metadata: Workflo.ITestcaseMetadata, 
+  description: string,
+  metadata: Workflo.ITestcaseMetadata,
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = it
 ) => {
@@ -387,13 +391,13 @@ export const testcase = (
   }
 
   const _bodyFunc = () => {
-    process.send({event: 'test:setCurrentId', id: fullId, testcase: true})    
-    
+    process.send({event: 'test:setCurrentId', id: fullId, testcase: true})
+
     // allure report metadata
     if (metadata.bugs) {
-      process.send({event: 'test:meta', bug: metadata.bugs})      
+      process.send({event: 'test:meta', bug: metadata.bugs})
     }
-    process.send({event: 'test:meta', severity: metadata.severity || 'normal'})          
+    process.send({event: 'test:meta', severity: metadata.severity || 'normal'})
 
     bodyFunc()
   }
@@ -404,16 +408,16 @@ export const testcase = (
 }
 
 export const ftestcase = (
-  description: string, 
-  metadata: Workflo.ITestcaseMetadata, 
+  description: string,
+  metadata: Workflo.ITestcaseMetadata,
   bodyFunc: () => void
 ) => {
   testcase(description, metadata, bodyFunc, fit)
 }
 
 export const xtestcase = (
-  description: string, 
-  metadata: Workflo.ITestcaseMetadata, 
+  description: string,
+  metadata: Workflo.ITestcaseMetadata,
   bodyFunc: () => void
 ) => {
   testcase(description, metadata, () => { pending() })
@@ -421,9 +425,9 @@ export const xtestcase = (
 
 const _when = function(step: IParameterizedStep, prefix: string) {
   //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
-  
+
   step.execute(prefix)
-  
+
   //process.send({event: 'step:end'})
 
   return {
@@ -431,11 +435,11 @@ const _when = function(step: IParameterizedStep, prefix: string) {
   }
 }
 
-const _given = function(step: IParameterizedStep, prefix: string) { 
+const _given = function(step: IParameterizedStep, prefix: string) {
   //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
-  
+
   step.execute(prefix)
-  
+
   //process.send({event: 'step:end'})
 
   return {
@@ -456,7 +460,7 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
   process.send({event: 'verify:start', specObj: specObj})
 
   const _process:any = process
-  
+
   if (typeof _process.workflo === 'undefined') {
     _process.workflo = {}
   }

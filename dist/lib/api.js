@@ -50,6 +50,7 @@ exports.Story = (id, description, metadata, bodyFunc, jasmineFunc = describe) =>
         metadata: metadata,
         featureName: this.__currentFeature,
         storyName: fullStoryName,
+        description: description,
         insideWhenSequence: false,
         whenSequenceLengths: [],
         whenRecLevel: 0,
@@ -177,7 +178,10 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
     const allDescriptions = givenDescriptions.concat(whenDescriptions).concat([thenDescription]);
     const skipFunc = (skip) ? () => { pending(); } : undefined;
     const bodyFunc = () => {
-        process.send({ event: 'test:setCurrentId', id: `${storyId}|${id}`, spec: true }); // split at last | occurence
+        process.send({ event: 'test:setCurrentId', id: `${storyId}|${id}`, spec: true, descriptions: {
+                spec: story.description,
+                criteria: description
+            } }); // split at last | occurence
         // allure report metadata
         process.send({ event: 'test:meta', feature: `${story.featureName}` });
         process.send({ event: 'test:meta', story: `${story.storyName}` });
