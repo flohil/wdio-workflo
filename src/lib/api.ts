@@ -41,11 +41,6 @@ function shouldRunThen(story: string, criteria: number) {
 
   let inSomeTestcase = false
 
-  console.log("story: ", story)
-  console.log("criteria: ", criteria)
-
-  console.log("testcases: ", testcases)
-
   if (!manualOnly) {
     for (const testcase in testcases) {
       if (testcase in executionFilters.testcases) {
@@ -54,13 +49,9 @@ function shouldRunThen(story: string, criteria: number) {
     }
   }
 
-  console.log("uncovered: ", criteriaAnalysis.specs[story].uncovered)
-
   if (criteria in criteriaAnalysis.specs[story].uncovered) {
     return true
   }
-
-  console.log("manual: ", criteriaAnalysis.specs[story].manual)
 
   if (!automaticOnly) {
     if (criteria in criteriaAnalysis.specs[story].manual) {

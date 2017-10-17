@@ -51,7 +51,7 @@ function generateReport(workfloConf, runPath) {
         wrench.copyDirSyncRecursive(allurePatchBinPath, allureBinPath);
         process.env.ALLURE_BUG_TRACKER_PATTERN = workfloConf.allure.bugTrackerPattern;
         process.env.ALLURE_ISSUE_TRACKER_PATTERN = workfloConf.allure.issueTrackerPattern;
-        // returns ChildProcess instance 
+        // returns ChildProcess instance
         const generation = allure([
             'generate',
             path.join(workfloConf.testDir, 'results', runPath, 'allure-results'),
@@ -74,7 +74,7 @@ function openReport(workfloConf, runPath) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const latestRunPath = path.join(workfloConf.testDir, 'results', 'latestRun');
         runPath = runPath || fs.readFileSync(latestRunPath, 'utf8');
-        // returns ChildProcess instance 
+        // returns ChildProcess instance
         const open = allure([
             'open',
             path.join(workfloConf.testDir, 'results', runPath, 'allure-report')

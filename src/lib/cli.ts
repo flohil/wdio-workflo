@@ -338,6 +338,16 @@ checkGenerateReport().then(() => {
 
     const criteriaAnalysis = analyseCriteria()
 
+    if (argv.manualOnly) {
+        handleManualOnly()
+
+        if (argv.automaticOnly) {
+            throw new Error('The flags --automaticOnly and --manualOnly may not be used simultaneously')
+        }
+    } else if (argv.automaticOnly) {
+        handleAutomaticOnly()
+    }
+
     const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
     const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
     const uncoveredCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
@@ -466,6 +476,9 @@ checkGenerateReport().then(() => {
         fs.unlinkSync(testInfoFilePath)
     }
 
+    const resultsPath = path.join(workfloConfig.testDir, 'results')
+    const latestRunPath = path.join(resultsPath, 'latestRun')
+
     const testinfo = {
         criteriaAnalysis,
         executionFilters: filters,
@@ -477,7 +490,9 @@ checkGenerateReport().then(() => {
         reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false,
         reportErrorsInstantly: argv.reportErrorsInstantly || (typeof workfloConfig.reportErrorsInstantly !== 'undefined') ? workfloConfig.reportErrorsInstantly : false,
         automaticOnly: argv.automaticOnly,
-        manualOnly: argv.manualOnly
+        manualOnly: argv.manualOnly,
+        resultsPath,
+        latestRunPath
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)
@@ -493,28 +508,17 @@ checkGenerateReport().then(() => {
 
     // write latest run file
     if ( typeof process.env.LATEST_RUN === 'undefined' ) {
-        const resultsPath = path.join(workfloConfig.testDir, 'results')
-
         if (!fs.existsSync(resultsPath)){
-        fs.mkdirSync(resultsPath);
+            fs.mkdirSync(resultsPath);
         }
 
-        const filepath = path.join(resultsPath, 'latestRun')
+        fs.writeFile(latestRunPath, dateTime, err => {
+            if (err) {
+                return console.error(err)
+            }
 
-        fs.writeFile(filepath, dateTime, err => {
-        if (err) {
-            return console.error(err)
-        }
-
-        console.log(`Set latest run: ${dateTime}`)
+            console.log(`Set latest run: ${dateTime}`)
         })
-
-        if (argv.manualOnly) {
-            dateTime += `_manualOnly`
-        }
-        if (argv.automaticOnly) {
-            dateTime += `_automaticOnly`
-        }
 
         process.env.LATEST_RUN = dateTime
     }
@@ -1300,6 +1304,32 @@ checkGenerateReport().then(() => {
 
         console.log(`\nTrace information for spec '${specTraceInfo.spec}':`)
         console.log('\n' + traceTable)
+    }
+
+    function handleManualOnly() {
+        filters.testcaseFiles = {}
+        filters.testcases = {}
+        filters.suites = {}
+
+        for (const spec in filters.specs) {
+            if (Object.keys(criteriaAnalysis.specs[spec].manual).length === 0 && Object.keys(criteriaAnalysis.specs[spec].uncovered).length === 0) {
+                delete filters.specs[spec]
+            }
+        }
+
+        filterFeaturesBySpecs()
+        filterSpecFilesBySpecs()
+    }
+
+    function handleAutomaticOnly() {
+        for (const spec in filters.specs) {
+            if (Object.keys(criteriaAnalysis.specs[spec].automated).length === 0 && Object.keys(criteriaAnalysis.specs[spec].uncovered).length === 0) {
+                delete filters.specs[spec]
+            }
+        }
+
+        filterFeaturesBySpecs()
+        filterSpecFilesBySpecs()
     }
 }).catch((error) => console.error(error))
 

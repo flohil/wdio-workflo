@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.181",
+  "version": "0.0.182",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -52,10 +52,10 @@
     "tsconfig-paths": "^2.2.0",
     "typescript": "^2.4.2",
     "wdio-selenium-standalone-service": "0.0.9",
-    "wdio-workflo-allure-reporter": "0.0.23",
+    "wdio-workflo-allure-reporter": "0.0.24",
     "wdio-workflo-jasmine-framework": "0.0.5",
     "wdio-workflo-spec-reporter": "0.0.11",
-    "webdriverio-workflo": "0.0.38",
+    "webdriverio-workflo": "0.0.39",
     "wrench": "^1.5.9"
   }
 }

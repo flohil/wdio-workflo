@@ -5,6 +5,8 @@ const testinfo = require(jasmine.getEnv().testInfoFilePath);
 const executionFilters = testinfo.executionFilters;
 const traceInfo = testinfo.traceInfo;
 const criteriaAnalysis = testinfo.criteriaAnalysis;
+const automaticOnly = testinfo.automaticOnly;
+const manualOnly = testinfo.manualOnly;
 const storyMap = new Map();
 const words = {
     'Given': 'Given',
@@ -29,21 +31,20 @@ function shouldRunThen(story, criteria) {
     // do not execute spec if it is not in testcase filters but in verified in other testcases
     const testcases = traceInfo.specs[story].criteriaVerificationFiles[criteria.toString()].testcaseIds;
     let inSomeTestcase = false;
-    console.log("story: ", story);
-    console.log("criteria: ", criteria);
-    console.log("testcases: ", testcases);
-    for (const testcase in testcases) {
-        if (testcase in executionFilters.testcases) {
-            return true;
+    if (!manualOnly) {
+        for (const testcase in testcases) {
+            if (testcase in executionFilters.testcases) {
+                return true;
+            }
         }
     }
-    console.log("uncovered: ", criteriaAnalysis.specs[story].uncovered);
     if (criteria in criteriaAnalysis.specs[story].uncovered) {
         return true;
     }
-    console.log("manual: ", criteriaAnalysis.specs[story].manual);
-    if (criteria in criteriaAnalysis.specs[story].manual) {
-        return true;
+    if (!automaticOnly) {
+        if (criteria in criteriaAnalysis.specs[story].manual) {
+            return true;
+        }
     }
     return false;
 }
