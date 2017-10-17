@@ -22,6 +22,7 @@ const _1 = require("../");
 const webdriverio_workflo_1 = require("webdriverio-workflo");
 const table = require('text-table');
 const pkg = require('../../package.json');
+const dateTime = require('../../utils/report.js').getDateTime();
 const VERSION = pkg.version;
 const ALLOWED_ARGV = [
     'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
@@ -304,6 +305,7 @@ checkGenerateReport().then(() => {
         fs.unlinkSync(testInfoFilePath);
     }
     const testinfo = {
+        criteriaAnalysis,
         executionFilters: filters,
         parseResults: parseResults,
         traceInfo: buildTraceInfo(),
@@ -320,6 +322,21 @@ checkGenerateReport().then(() => {
         if (argv[key] !== undefined) {
             args[key] = argv[key];
         }
+    }
+    // write latest run file
+    if (typeof process.env.LATEST_RUN === 'undefined') {
+        const resultsPath = path.join(workfloConfig.testDir, 'results');
+        if (!fs.existsSync(resultsPath)) {
+            fs.mkdirSync(resultsPath);
+        }
+        const filepath = path.join(resultsPath, 'latestRun');
+        fs.writeFile(filepath, dateTime, err => {
+            if (err) {
+                return console.error(err);
+            }
+            console.log(`Set latest run: ${dateTime}`);
+        });
+        process.env.LATEST_RUN = dateTime;
     }
     /**
      * run launch sequence
@@ -910,10 +927,12 @@ checkGenerateReport().then(() => {
             else {
                 const tcHash = {};
                 let _testcases = [];
+                let _testcaseIds = {};
                 for (const tc in testcaseCriteria) {
                     if (criteria in parseResults.testcases.tree[parseResults.testcases.testcaseTable[tc].suiteId].testcaseHash[tc].specVerifyHash[spec]) {
                         let _testcaseFile = parseResults.testcases.testcaseTable[tc].testcaseFile.replace(srcDir, '');
                         _testcaseFile = `${_testcaseFile.substring(1, _testcaseFile.length).replace('\\', '\/')}`;
+                        _testcaseIds[tc] = true;
                         if (!tcHash[_testcaseFile]) {
                             tcHash[_testcaseFile] = [tc];
                         }
@@ -926,7 +945,8 @@ checkGenerateReport().then(() => {
                     _testcases.push(`${tcHash[tcFile].join(', ')} (${tcFile})`);
                 }
                 criteriaVerificationFiles[criteria] = {
-                    testcases: _testcases
+                    testcases: _testcases,
+                    testcaseIds: _testcaseIds
                 };
             }
         }

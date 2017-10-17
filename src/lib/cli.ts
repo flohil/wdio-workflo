@@ -21,6 +21,7 @@ import { Launcher } from 'webdriverio-workflo'
 
 const table = require('text-table')
 const pkg = require('../../package.json')
+let dateTime = require('../../utils/report.js').getDateTime()
 
 const VERSION = pkg.version
 
@@ -33,6 +34,58 @@ const ALLOWED_ARGV = [
 
 let configFile
 let optionsOffset = 2 // config file defined as first "parameter"
+
+export interface IExecutionFilters {
+    specFiles?: Record<string, true>
+    testcaseFiles?: Record<string, true>
+    manualResultFiles?: Record<string, true>
+    specs?: Record<string, true>
+    features?: Record<string, true>
+    testcases?: Record<string, true>
+    suites?: Record<string, true>
+    manualSpecs?: Record<string, true>
+}
+
+export interface ITestcaseTraceInfo {
+    testcase: string,
+    testcaseFile: string
+    specs: string[]
+}
+
+export interface IVerificationFileEntry {
+    manualFile?: string,
+    testcases?: string[],
+    testcaseIds?: Record<string, true>
+}
+
+export interface ISpecTraceInfo {
+    spec: string,
+    specFile: string,
+    testcaseCriteriaStrs: string[],
+    criteriaVerificationFiles: Record<string, IVerificationFileEntry>,
+    manualCriteria: string[],
+    manualCriteriaStr: string
+}
+
+export interface ITraceInfo {
+    testcases: Record<string, ITestcaseTraceInfo>
+    specs: Record<string, ISpecTraceInfo>
+}
+
+export interface IAnalysedSpec {
+    automated: Record<string, true>
+    manual: Record<string, true>
+    uncovered: Record<string, true>
+    undefined: boolean
+}
+
+export interface IAnalysedCriteria {
+    specs: Record<string, IAnalysedSpec>
+    allCriteriaCount: number,
+    automatedCriteriaCount: number,
+    manualCriteriaCount: number,
+    uncoveredCriteriaCount: number,
+}
 
 // options (not yet) supported are commented out
 optimist
@@ -197,45 +250,9 @@ checkGenerateReport().then(() => {
     const manDir = path.join(srcDir, 'manualResults')
     const testInfoFilePath = path.join(testDir, 'testinfo.json')
 
-    interface ExecutionFilters {
-        specFiles?: Record<string, true>
-        testcaseFiles?: Record<string, true>
-        manualResultFiles?: Record<string, true>
-        specs?: Record<string, true>
-        features?: Record<string, true>
-        testcases?: Record<string, true>
-        suites?: Record<string, true>
-        manualSpecs?: Record<string, true>
-    }
-
-    const filters: ExecutionFilters = {}
-    const mergedFilters: ExecutionFilters = {}
+    const filters: IExecutionFilters = {}
+    const mergedFilters: IExecutionFilters = {}
     const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles']
-
-    interface TestcaseTraceInfo {
-        testcase: string,
-        testcaseFile: string
-        specs: string[]
-    }
-
-    interface VerificationFileEntry {
-        manualFile?: string,
-        testcases?: string[]
-    }
-
-    interface SpecTraceInfo {
-        spec: string,
-        specFile: string,
-        testcaseCriteriaStrs: string[],
-        criteriaVerificationFiles: Record<string, VerificationFileEntry>,
-        manualCriteria: string[],
-        manualCriteriaStr: string
-    }
-
-    interface TraceInfo {
-        testcases: Record<string, TestcaseTraceInfo>
-        specs: Record<string, SpecTraceInfo>
-    }
 
     // merge non-file cli filters
     mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters))
@@ -450,6 +467,7 @@ checkGenerateReport().then(() => {
     }
 
     const testinfo = {
+        criteriaAnalysis,
         executionFilters: filters,
         parseResults: parseResults,
         traceInfo: buildTraceInfo(),
@@ -457,7 +475,9 @@ checkGenerateReport().then(() => {
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
         reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false,
-        reportErrorsInstantly: argv.reportErrorsInstantly || (typeof workfloConfig.reportErrorsInstantly !== 'undefined') ? workfloConfig.reportErrorsInstantly : false
+        reportErrorsInstantly: argv.reportErrorsInstantly || (typeof workfloConfig.reportErrorsInstantly !== 'undefined') ? workfloConfig.reportErrorsInstantly : false,
+        automaticOnly: argv.automaticOnly,
+        manualOnly: argv.manualOnly
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)
@@ -471,6 +491,34 @@ checkGenerateReport().then(() => {
         }
     }
 
+    // write latest run file
+    if ( typeof process.env.LATEST_RUN === 'undefined' ) {
+        const resultsPath = path.join(workfloConfig.testDir, 'results')
+
+        if (!fs.existsSync(resultsPath)){
+        fs.mkdirSync(resultsPath);
+        }
+
+        const filepath = path.join(resultsPath, 'latestRun')
+
+        fs.writeFile(filepath, dateTime, err => {
+        if (err) {
+            return console.error(err)
+        }
+
+        console.log(`Set latest run: ${dateTime}`)
+        })
+
+        if (argv.manualOnly) {
+            dateTime += `_manualOnly`
+        }
+        if (argv.automaticOnly) {
+            dateTime += `_automaticOnly`
+        }
+
+        process.env.LATEST_RUN = dateTime
+    }
+
     /**
      * run launch sequence
      */
@@ -481,7 +529,7 @@ checkGenerateReport().then(() => {
             throw e
         }))
 
-    function mergeIntoFilters(key: string, argv: any, _filters: ExecutionFilters) {
+    function mergeIntoFilters(key: string, argv: any, _filters: IExecutionFilters) {
         _filters[key] = {}
 
         if (argv[key]) {
@@ -544,7 +592,7 @@ checkGenerateReport().then(() => {
     }
 
     // if no spec files are present in filters, use all spec files in specs folder
-    function completeSpecFiles(argv: any, _filters: ExecutionFilters): void {
+    function completeSpecFiles(argv: any, _filters: IExecutionFilters): void {
         // if user manually defined an empty specFiles array, do not add specFiles from folder
         if (Object.keys(_filters.specFiles).length === 0 && !argv.specFiles) {
             getAllFiles(specsDir, '.spec.ts').forEach(specFile => _filters.specFiles[specFile] = true)
@@ -578,7 +626,7 @@ checkGenerateReport().then(() => {
     }
 
     // if no testcase files are present in filters, use all testcase files in testcase folder
-    function completeTestcaseFiles(argv: any, _filters: ExecutionFilters): void {
+    function completeTestcaseFiles(argv: any, _filters: IExecutionFilters): void {
         // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
         if (Object.keys(_filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
             getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true)
@@ -611,7 +659,7 @@ checkGenerateReport().then(() => {
         }
     }
 
-    function completeFilePaths(_filters: ExecutionFilters) {
+    function completeFilePaths(_filters: IExecutionFilters) {
         const specFilePaths: Record<string, true> = {}
         const testcaseFilePaths: Record<string, true> = {}
 
@@ -649,7 +697,7 @@ checkGenerateReport().then(() => {
      * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
      * @param argv
      */
-    function mergeLists(list: Workflo.FilterList, _filters: ExecutionFilters) {
+    function mergeLists(list: Workflo.FilterList, _filters: IExecutionFilters) {
         if (list.specFiles) {
             list.specFiles.forEach(value => _filters.specFiles[value] = true)
         }
@@ -986,21 +1034,8 @@ checkGenerateReport().then(() => {
         }
     }
 
-    interface IAnalysedSpec {
-        automated: Record<string, true>
-        manual: Record<string, true>
-        uncovered: Record<string, true>
-        undefined: boolean
-    }
-
     function analyseCriteria() {
-        const analysedCriteria: {
-            specs: Record<string, IAnalysedSpec>
-            allCriteriaCount: number,
-            automatedCriteriaCount: number,
-            manualCriteriaCount: number,
-            uncoveredCriteriaCount: number,
-        } = {
+        const analysedCriteria: IAnalysedCriteria = {
             specs: {},
             allCriteriaCount: 0,
             automatedCriteriaCount: 0,
@@ -1124,7 +1159,7 @@ checkGenerateReport().then(() => {
         return traced
     }
 
-    function buildTestcaseTraceInfo(testcase: string): TestcaseTraceInfo {
+    function buildTestcaseTraceInfo(testcase: string): ITestcaseTraceInfo {
         const testcaseTableEntry = parseResults.testcases.testcaseTable[testcase]
         let testcaseFile = testcaseTableEntry.testcaseFile.replace(srcDir, '')
         testcaseFile = testcaseFile.substring(1, testcaseFile.length).replace('\\', '\/')
@@ -1147,7 +1182,7 @@ checkGenerateReport().then(() => {
         }
     }
 
-    function buildSpecTraceInfo(spec: string): SpecTraceInfo {
+    function buildSpecTraceInfo(spec: string): ISpecTraceInfo {
         let specFile = parseResults.specs.specTable[spec].specFile.replace(srcDir, '')
         specFile = specFile.substring(1, specFile.length).replace('\\', '\/')
         const testcaseHash = parseResults.testcases.verifyTable[spec]
@@ -1170,7 +1205,7 @@ checkGenerateReport().then(() => {
             return `${testcase}: [${testcaseCriteria[testcase].join(', ')}] (${file})`
         })
 
-        const criteriaVerificationFiles: Record<string, VerificationFileEntry> = {}
+        const criteriaVerificationFiles: Record<string, IVerificationFileEntry> = {}
         const manualCriteria = (spec in manualResults.specTable) ? Object.keys(manualResults.specTable[spec].criteria) : []
         const manualCriteriaStr = (manualCriteria.length > 0) ? `[${manualCriteria.join(', ')}] (${manualFile})` : ''
 
@@ -1182,11 +1217,14 @@ checkGenerateReport().then(() => {
             } else {
                 const tcHash: Record<string, string[]> = {}
                 let _testcases: string[] = []
+                let _testcaseIds: Record<string, true> = {}
 
                 for (const tc in testcaseCriteria) {
                     if (criteria in parseResults.testcases.tree[parseResults.testcases.testcaseTable[tc].suiteId].testcaseHash[tc].specVerifyHash[spec]) {
                         let _testcaseFile = parseResults.testcases.testcaseTable[tc].testcaseFile.replace(srcDir, '')
                         _testcaseFile = `${_testcaseFile.substring(1, _testcaseFile.length).replace('\\', '\/')}`
+
+                        _testcaseIds[tc] = true
 
                         if (!tcHash[_testcaseFile]) {
                             tcHash[_testcaseFile] = [tc]
@@ -1201,7 +1239,8 @@ checkGenerateReport().then(() => {
                 }
 
                 criteriaVerificationFiles[criteria] = {
-                    testcases: _testcases
+                    testcases: _testcases,
+                    testcaseIds: _testcaseIds
                 }
             }
         }
@@ -1216,8 +1255,8 @@ checkGenerateReport().then(() => {
         }
     }
 
-    function buildTraceInfo(): TraceInfo {
-        let traceInfo: TraceInfo = {
+    function buildTraceInfo(): ITraceInfo {
+        let traceInfo: ITraceInfo = {
             specs: {},
             testcases: {}
         }
@@ -1233,7 +1272,7 @@ checkGenerateReport().then(() => {
         return traceInfo
     }
 
-    function printTestcaseTraceInfo(testcaseTraceInfo: TestcaseTraceInfo) {
+    function printTestcaseTraceInfo(testcaseTraceInfo: ITestcaseTraceInfo) {
         const content: string[][] = []
 
         content.push(['Testcase File:', testcaseTraceInfo.testcaseFile])
@@ -1247,7 +1286,7 @@ checkGenerateReport().then(() => {
         console.log('\n' + traceTable)
     }
 
-    function printSpecTraceInfo(specTraceInfo: SpecTraceInfo) {
+    function printSpecTraceInfo(specTraceInfo: ISpecTraceInfo) {
         const content: string[][] = []
 
         content.push(['Spec File:', specTraceInfo.specFile])

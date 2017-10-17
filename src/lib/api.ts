@@ -1,4 +1,12 @@
 import { XPathBuilder } from './page_objects/builders'
+import { IExecutionFilters, ITraceInfo, IAnalysedCriteria } from './cli'
+
+const testinfo = require((<any> jasmine.getEnv()).testInfoFilePath)
+const executionFilters = <IExecutionFilters> testinfo.executionFilters
+const traceInfo = <ITraceInfo> testinfo.traceInfo
+const criteriaAnalysis = <IAnalysedCriteria> testinfo.criteriaAnalysis
+const automaticOnly = <boolean> testinfo.automaticOnly
+const manualOnly = <boolean> testinfo.manualOnly
 
 const storyMap: Map<string, Workflo.IStoryMapEntry> = new Map<string, Workflo.IStoryMapEntry>()
 
@@ -10,27 +18,57 @@ const words = {
 }
 
 function featuresInclude(id: string) {
-  const executionFilters = (<any> jasmine.getEnv()).executionFilters
-
   return id in executionFilters.features
 }
 
 function specsInclude(id: string) {
-  const executionFilters = (<any> jasmine.getEnv()).executionFilters
-
   return id in executionFilters.specs
 }
 
 function suitesInclude(id: string) {
-  const executionFilters = (<any> jasmine.getEnv()).executionFilters
-
   return id in executionFilters.suites
 }
 
 function testcasesInclude(id: string) {
-  const executionFilters = (<any> jasmine.getEnv()).executionFilters
-
   return id in executionFilters.testcases
+}
+
+function shouldRunThen(story: string, criteria: number) {
+  // check if spec is included in filters
+  // do not execute spec if it is not in testcase filters but in verified in other testcases
+
+  const testcases = traceInfo.specs[story].criteriaVerificationFiles[criteria.toString()].testcaseIds
+
+  let inSomeTestcase = false
+
+  console.log("story: ", story)
+  console.log("criteria: ", criteria)
+
+  console.log("testcases: ", testcases)
+
+  if (!manualOnly) {
+    for (const testcase in testcases) {
+      if (testcase in executionFilters.testcases) {
+        return true
+      }
+    }
+  }
+
+  console.log("uncovered: ", criteriaAnalysis.specs[story].uncovered)
+
+  if (criteria in criteriaAnalysis.specs[story].uncovered) {
+    return true
+  }
+
+  console.log("manual: ", criteriaAnalysis.specs[story].manual)
+
+  if (!automaticOnly) {
+    if (criteria in criteriaAnalysis.specs[story].manual) {
+      return true
+    }
+  }
+
+  return false
 }
 
 export const Feature = (
@@ -248,6 +286,10 @@ export const Then = (
 ) => {
   const story = storyMap.get(this.__currentStoryId)
   const storyId = this.__currentStoryId
+
+  if (!shouldRunThen(storyId, id)) {
+    return
+  }
 
   const stepFunc = (title) => {
     process.send({event: 'step:start', title: title})

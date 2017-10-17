@@ -7,7 +7,6 @@ const path = require('path')
 const _ = require( 'lodash' )
 const fs = require( 'fs' )
 const workfloConf = require( process.env.WORKFLO_CONFIG )
-const dateTime = require('../utils/report.js').getDateTime()
 const jsonfile = require('jsonfile')
 
 let assertionScreenshotCtr = 0
@@ -18,28 +17,6 @@ if (!workfloConf.timeouts) {
 }
 if (!workfloConf.timeouts.waitforTimeout) {
   workfloConf.timeouts.waitforTimeout = workfloConf.timeouts.waitforTimeout || 5000
-}
-
-// write latest run file
-if ( typeof process.env.LATEST_RUN === 'undefined' ) {
-
-  const resultsPath = path.join(workfloConf.testDir, 'results')
-
-  if (!fs.existsSync(resultsPath)){
-    fs.mkdirSync(resultsPath);
-  }
-
-  const filepath = path.join(resultsPath, 'latestRun')
-
-  fs.writeFile(filepath, dateTime, err => {
-    if (err) {
-      return console.error(err)
-    }
-
-    console.log(`Set latest run: ${dateTime}`)
-  })
-
-  process.env.LATEST_RUN = dateTime
 }
 
 //buildSpecs()
@@ -64,7 +41,7 @@ exports.config = {
    */
   capabilities: [workfloConf.capabilities],
   services: ['selenium-standalone'],
-  seleniumLogs: path.relative('./', path.join(workfloConf.testDir, 'logs', 'selenium', dateTime)),
+  seleniumLogs: path.relative('./', path.join(workfloConf.testDir, 'logs', 'selenium', process.env.LATEST_RUN)),
   seleniumArgs: workfloConf.selenium.args,
   seleniumInstallArgs: workfloConf.selenium.installArgs,
   /**
@@ -79,9 +56,9 @@ exports.config = {
   framework: 'workflo-jasmine',
   reporters: ['workflo-spec', 'workflo-allure'],
   reporterOptions: {
-    outputDir: path.join(workfloConf.testDir, 'results', dateTime),
+    outputDir: path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN),
     'workflo-allure': {
-      outputDir: path.join(workfloConf.testDir, 'results', dateTime, 'allure-results'),
+      outputDir: path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results'),
       debug: false,
       debugSeleniumCommand: true
     }

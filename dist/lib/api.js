@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const builders_1 = require("./page_objects/builders");
+const testinfo = require(jasmine.getEnv().testInfoFilePath);
+const executionFilters = testinfo.executionFilters;
+const traceInfo = testinfo.traceInfo;
+const criteriaAnalysis = testinfo.criteriaAnalysis;
 const storyMap = new Map();
 const words = {
     'Given': 'Given',
@@ -9,20 +13,39 @@ const words = {
     'And': 'And',
 };
 function featuresInclude(id) {
-    const executionFilters = jasmine.getEnv().executionFilters;
     return id in executionFilters.features;
 }
 function specsInclude(id) {
-    const executionFilters = jasmine.getEnv().executionFilters;
     return id in executionFilters.specs;
 }
 function suitesInclude(id) {
-    const executionFilters = jasmine.getEnv().executionFilters;
     return id in executionFilters.suites;
 }
 function testcasesInclude(id) {
-    const executionFilters = jasmine.getEnv().executionFilters;
     return id in executionFilters.testcases;
+}
+function shouldRunThen(story, criteria) {
+    // check if spec is included in filters
+    // do not execute spec if it is not in testcase filters but in verified in other testcases
+    const testcases = traceInfo.specs[story].criteriaVerificationFiles[criteria.toString()].testcaseIds;
+    let inSomeTestcase = false;
+    console.log("story: ", story);
+    console.log("criteria: ", criteria);
+    console.log("testcases: ", testcases);
+    for (const testcase in testcases) {
+        if (testcase in executionFilters.testcases) {
+            return true;
+        }
+    }
+    console.log("uncovered: ", criteriaAnalysis.specs[story].uncovered);
+    if (criteria in criteriaAnalysis.specs[story].uncovered) {
+        return true;
+    }
+    console.log("manual: ", criteriaAnalysis.specs[story].manual);
+    if (criteria in criteriaAnalysis.specs[story].manual) {
+        return true;
+    }
+    return false;
 }
 exports.Feature = (description, metadata, bodyFunc, jasmineFunc = describe) => {
     if (description.length === 0) {
@@ -161,6 +184,9 @@ exports.When = (description, bodyFunc) => {
 exports.Then = (id, description, jasmineFunc = it, skip = false) => {
     const story = storyMap.get(this.__currentStoryId);
     const storyId = this.__currentStoryId;
+    if (!shouldRunThen(storyId, id)) {
+        return;
+    }
     const stepFunc = (title) => {
         process.send({ event: 'step:start', title: title });
         process.send({ event: 'step:end' });
