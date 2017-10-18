@@ -82,7 +82,8 @@ optimist
     .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
     .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
     .describe('reportErrorsInstantly', 'report broken testcase errors and errors from verification failures immediatly')
-    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles'
+    .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution')
+    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty'
     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
     .boolean(['coloredLogs', 'watch', 'reportErrorsInstantly'])
@@ -146,6 +147,8 @@ checkGenerateReport().then(() => {
     const listsDir = path.join(srcDir, 'lists');
     const manDir = path.join(srcDir, 'manualResults');
     const testInfoFilePath = path.join(testDir, 'testinfo.json');
+    const resultsPath = path.join(workfloConfig.testDir, 'results');
+    const latestRunPath = path.join(resultsPath, 'latestRun');
     const filters = {};
     const mergedFilters = {};
     const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
@@ -187,24 +190,29 @@ checkGenerateReport().then(() => {
     for (const testcaseFile in filters.testcaseFiles) {
         filters.testcases = merge(parseResults.testcases.testcaseFileTable[testcaseFile].testcases, filters.testcases || {});
     }
-    // remove specs not matched by specs filter
-    filterSpecsBySpecs();
-    // remove specs not matched by features filter
-    filterSpecsByFeatures();
-    // remove testcases not matched by testcases filter
-    filterTestcasesByTestcases();
-    // remove specs not matched by verifies in testcases or manual results
-    filterSpecsByTestcases();
-    // remove testcases that do not verify filtered specs
-    filterTestcasesBySpecs();
-    // remove features not matched by specs
-    filterFeaturesBySpecs();
-    // build suites based on testcases
-    addSuites();
-    // remove specFiles not matched by filtered specs
-    filterSpecFilesBySpecs();
-    // remove testcaseFiles not matched by filtered testcases
-    filterTestcaseFilesByTestcases();
+    if ('rerunFaulty' in argv) {
+        handleRerunFaulty();
+    }
+    else {
+        // remove specs not matched by specs filter
+        filterSpecsBySpecs();
+        // remove specs not matched by features filter
+        filterSpecsByFeatures();
+        // remove testcases not matched by testcases filter
+        filterTestcasesByTestcases();
+        // remove specs not matched by verifies in testcases or manual results
+        filterSpecsByTestcases();
+        // remove testcases that do not verify filtered specs
+        filterTestcasesBySpecs();
+        // remove features not matched by specs
+        filterFeaturesBySpecs();
+        // build suites based on testcases
+        addSuites();
+        // remove specFiles not matched by filtered specs
+        filterSpecFilesBySpecs();
+        // remove testcaseFiles not matched by filtered testcases
+        filterTestcaseFilesByTestcases();
+    }
     // add manual specs based on manual result files
     addManualResultFilesAndSpecs();
     const criteriaAnalysis = analyseCriteria();
@@ -313,8 +321,6 @@ checkGenerateReport().then(() => {
     if (fs.existsSync(testInfoFilePath)) {
         fs.unlinkSync(testInfoFilePath);
     }
-    const resultsPath = path.join(workfloConfig.testDir, 'results');
-    const latestRunPath = path.join(resultsPath, 'latestRun');
     const testinfo = {
         criteriaAnalysis,
         executionFilters: filters,
@@ -328,7 +334,8 @@ checkGenerateReport().then(() => {
         automaticOnly: argv.automaticOnly,
         manualOnly: argv.manualOnly,
         resultsPath,
-        latestRunPath
+        latestRunPath,
+        browser: workfloConfig.capabilities.browserName
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;
@@ -1024,6 +1031,70 @@ checkGenerateReport().then(() => {
         }
         filterFeaturesBySpecs();
         filterSpecFilesBySpecs();
+    }
+    function handleRerunFaulty() {
+        if (!fs.existsSync(latestRunPath)) {
+            throw new Error('No latestRun file found for --rerunFaulty');
+        }
+        const resultsFolder = argv.rerunFaulty || fs.readFileSync(latestRunPath, 'utf8');
+        const resultsFolderPath = path.join(resultsPath, resultsFolder);
+        if (!fs.existsSync(resultsFolderPath)) {
+            throw new Error(`Results folder not found for --rerunFaulty: ${resultsFolderPath}`);
+        }
+        const resultsJsonPath = path.join(resultsFolderPath, 'results.json');
+        if (!fs.existsSync(resultsJsonPath)) {
+            throw new Error(`No results.json file found inside results folder: ${resultsFolderPath}`);
+        }
+        const runResults = JSON.parse(fs.readFileSync(resultsJsonPath, 'utf8'));
+        const faultySpecs = {};
+        const faultyTestcases = {};
+        for (const testcase in runResults.testcases) {
+            if (runResults.testcases[testcase] === 'fail' || runResults.testcases[testcase] === 'broken') {
+                faultyTestcases[testcase] = true;
+            }
+        }
+        for (const spec in runResults.specs) {
+            for (const criteria in runResults.specs[spec]) {
+                const status = runResults.specs[spec][criteria].status;
+                if (status === 'fail' || status === 'broken' || status === 'unverified') {
+                    faultySpecs[spec] = true;
+                }
+            }
+        }
+        filters.testcases = faultyTestcases;
+        filters.specs = faultySpecs;
+        if (Object.keys(filters.specs).length === 0) {
+            console.log(`\nNo faulty testcases or specs found for execution results ${resultsFolder}`);
+            process.exit(0);
+        }
+        addSuites();
+        addFeatures();
+        addTestcaseFiles();
+        addSpecFiles();
+    }
+    // adds features to filters based on current content of filters.specs
+    function addFeatures() {
+        const features = {};
+        for (const spec in filters.specs) {
+            features[parseResults.specs.specTable[spec].feature] = true;
+        }
+        filters.features = features;
+    }
+    // adds spec files to filters based on current content of filters.specFiles
+    function addSpecFiles() {
+        const specFiles = {};
+        for (const spec in filters.specs) {
+            specFiles[parseResults.specs.specTable[spec].specFile] = true;
+        }
+        filters.specFiles = specFiles;
+    }
+    // adds testcase files to filters based on current content of filters.testcases
+    function addTestcaseFiles() {
+        const testcaseFiles = {};
+        for (const testcase in filters.testcases) {
+            testcaseFiles[parseResults.testcases.testcaseTable[testcase].testcaseFile] = true;
+        }
+        filters.testcaseFiles = testcaseFiles;
     }
 }).catch((error) => console.error(error));
 function checkGenerateReport() {
