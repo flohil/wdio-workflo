@@ -1,3 +1,8 @@
+declare global  {
+    interface Date {
+        addDays: Function;
+    }
+}
 export interface IExecutionFilters {
     specFiles?: Record<string, true>;
     testcaseFiles?: Record<string, true>;
@@ -43,3 +48,4 @@ export interface IAnalysedCriteria {
     manualCriteriaCount: number;
     uncoveredCriteriaCount: number;
 }
+export {};

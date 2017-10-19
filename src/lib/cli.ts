@@ -22,6 +22,7 @@ import { Launcher } from 'webdriverio-workflo'
 const table = require('text-table')
 const pkg = require('../../package.json')
 let dateTime = require('../../utils/report.js').getDateTime()
+const date = dateTime.split('_')[0]
 
 const VERSION = pkg.version
 
@@ -34,6 +35,18 @@ const ALLOWED_ARGV = [
 
 let configFile
 let optionsOffset = 2 // config file defined as first "parameter"
+
+declare global {
+    interface Date {
+        addDays: Function
+    }
+}
+
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
 
 export interface IExecutionFilters {
     specFiles?: Record<string, true>
@@ -87,6 +100,25 @@ export interface IAnalysedCriteria {
     uncoveredCriteriaCount: number,
 }
 
+const testcaseStatus = {
+    passed: 'passed',
+    failed: 'failed',
+    broken: 'broken',
+    unknown: 'unknown',
+    pending: 'pending'
+}
+
+const specStatus = {
+    passed: 'passed',
+    failed: 'failed',
+    broken: 'broken',
+    unverified: 'unverified',
+    unknown: 'unknown'
+}
+
+type TestCaseStatuses = keyof typeof testcaseStatus
+type SpecStatuses = keyof typeof specStatus
+
 // options (not yet) supported are commented out
 optimist
     .usage('wdio-workflo CLI runner\n\n' +
@@ -112,40 +144,50 @@ optimist
     .describe('info', 'shows static information about testcases and specs')
 
     .describe('testcases', 'restricts test execution to these testcases\n' +
-        '\t\t\t\'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
-        '\t\t\t\'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
+        '\t\t\t   \'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
+        '\t\t\t   \'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
     .describe('features', 'restricts test execution to these features\n' +
-        '\t\t\t\'["Login", "Logout"]\' => execute all testcases which verify specs defined within these features\n' +
-        '\t\t\t\'["-Login"]\' => execute all testcases except those which verify specs defined within these features\n')
+        '\t\t\t   \'["Login", "Logout"]\' => execute all testcases which verify specs defined within these features\n' +
+        '\t\t\t   \'["-Login"]\' => execute all testcases except those which verify specs defined within these features\n')
     .describe('specs', 'restricts test execution to these specs\n' +
-        '\t\t\t\'["3.2"]\' => execute all testcases which verify spec 3.2\n' +
-        '\t\t\t\'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
-        '\t\t\t\'["1.*"]\' => 1.* excludes spec 1 itself but includes of of its sub-specs\n')
+        '\t\t\t   \'["3.2"]\' => execute all testcases which verify spec 3.2\n' +
+        '\t\t\t   \'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
+        '\t\t\t   \'["1.*"]\' => 1.* excludes spec 1 itself but includes of of its sub-specs\n')
     .describe('testcaseFiles', 'restricts test execution to testcases defined within these files\n' +
-        '\t\t\t\'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
+        '\t\t\t   \'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
     .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' +
-        '\t\t\t\'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
+        '\t\t\t   \'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
-        '\t\t\t\'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
+        '\t\t\t   \'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
+    .describe('specStatus', 'restricts specs by status of their criteria set during their last execution\n' +
+        '\t\t\t   \'["passed", "failed", "broken", "unverified", "unknown"]\' => these are all available status - combine as you see fit\n' +
+        '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken, unverified and unknown\n')
+    .describe('testcaseStatus', 'restricts testcases by given status\n' +
+        '\t\t\t   \'["passed", "failed", "broken", "pending", "unknown"]\' => these are all available status - combine as you see fit\n' +
+        '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken and unknown\n')
+    .describe('dates', 'restricts testcases and specs (oldest spec criteria) by given date\n' +
+        '\t\t\t   \'["(2017-03-10,2017-10-28)"]\' => restricts by status set between 2017-03-10 and 2017-10-28\n' +
+        '\t\t\t   \'["2017-07-21", "2017-07-22"]\' => restricts by last status set on 2017-07-21 or 2017-07-22\n')
 
     .describe('generateReport', 'generates report for latest results or\n' +
-    '\t\t\t\'2017-10-10_20-38-13\' => generate report for given result folder\n')
+    '\t\t\t   \'2017-10-10_20-38-13\' => generate report for given result folder\n')
     .describe('openReport', 'opens report generated latest results or\n' +
-    '\t\t\t\'2017-10-10_20-38-13\' => open report for given result folder\n')
+    '\t\t\t   \'2017-10-10_20-38-13\' => open report for given result folder\n')
     .describe('report', 'generates and opens report for latest results or\n' +
-    '\t\t\t\'2017-10-10_20-38-13\' => generate and open report for given result folder\n')
+    '\t\t\t   \'2017-10-10_20-38-13\' => generate and open report for given result folder\n')
 
     .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
-    '\t\t\t\'4.1\' => show traceability information for spec 4.1\n')
+    '\t\t\t   \'4.1\' => show traceability information for spec 4.1\n')
     .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
-    '\t\t\t\'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
+    '\t\t\t   \'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
 
     .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
     .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
 
     .describe('reportErrorsInstantly', 'report broken testcase errors and errors from verification failures immediatly')
 
-    .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution')
+    .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution\n' +
+    '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'\n')
 
     // wdio-workflo options
 
@@ -174,7 +216,7 @@ optimist
 
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty'
      /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */])
-    .boolean(['coloredLogs', 'watch', 'reportErrorsInstantly'])
+    .boolean(['coloredLogs', 'watch', 'reportErrorsInstantly', 'cleanResultsStatus'])
     .default({ coloredLogs: true })
 
     .check((arg) => {
@@ -254,10 +296,30 @@ checkGenerateReport().then(() => {
 
     const resultsPath = path.join(workfloConfig.testDir, 'results')
     const latestRunPath = path.join(resultsPath, 'latestRun')
+    const mergedResultsPath = path.join(resultsPath, 'mergedResults.json')
 
     const filters: IExecutionFilters = {}
     const mergedFilters: IExecutionFilters = {}
     const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles']
+
+    let mergedResults: {
+        specs: Record<string, Record<string, {
+            status: 'passed' | 'failed' | 'unverified' | 'unknown' | 'pending',
+            date: string,
+            manual?: boolean
+        }>>
+        testcases: Record<string, {
+            status: 'passed' | 'failed' | 'broken' | 'unknown' | 'pending',
+            date: string
+        }>
+    } = {
+        specs: {},
+        testcases: {}
+    }
+
+    if (fs.existsSync(mergedResultsPath)) {
+        mergedResults = JSON.parse(fs.readFileSync(mergedResultsPath, 'utf8'))
+    }
 
     // merge non-file cli filters
     mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters))
@@ -283,6 +345,8 @@ checkGenerateReport().then(() => {
         specs: specFilesParse(Object.keys(mergedFilters.specFiles)),
         testcases: testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
     }
+
+    cleanResultsStatus()
 
     // check if all defined filters exist
     checkFiltersExist()
@@ -311,9 +375,24 @@ checkGenerateReport().then(() => {
         filters.testcases = merge(parseResults.testcases.testcaseFileTable[testcaseFile].testcases, filters.testcases || {})
     }
 
+    // remove suite names from filters.testcases
+    for (const testcase in filters.testcases) {
+        if (!(testcase in mergedResults.testcases)) {
+            delete filters.testcases[testcase]
+        }
+    }
+
     if ('rerunFaulty' in argv) {
         handleRerunFaulty()
     } else {
+        filterSpecsByDate()
+
+        filterSpecsByStatus()
+
+        filterTestcasesByDate()
+
+        filterTestcasesByStatus()
+
         // remove specs not matched by specs filter
         filterSpecsBySpecs()
 
@@ -499,7 +578,9 @@ checkGenerateReport().then(() => {
         manualOnly: argv.manualOnly,
         resultsPath,
         latestRunPath,
-        browser: workfloConfig.capabilities.browserName
+        browser: workfloConfig.capabilities.browserName,
+        date: date,
+        mergedResultsPath
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)
@@ -1428,6 +1509,206 @@ checkGenerateReport().then(() => {
         }
 
         filters.testcaseFiles = testcaseFiles
+    }
+
+    /**
+     * Removes specs and testcases from mergedResults that are no longer defined.
+     * Adds defined specs and testcases that have no status yet to mergedResults.
+     */
+    function cleanResultsStatus() {
+        // remove criterias and spec if no criteria in spec
+        for (const spec in mergedResults.specs) {
+            if (!(spec in parseResults.specs.specTable) || Object.keys(parseResults.specs.specTable[spec].criteria).length === 0) {
+                delete mergedResults.specs[spec]
+            } else {
+                const parsedCriteria = parseResults.specs.specTable[spec].criteria
+                const resultsCriteria = mergedResults.specs[spec]
+
+                for (const criteria in resultsCriteria) {
+                    if (!(criteria in parsedCriteria)) {
+                        delete mergedResults.specs[spec][criteria]
+                    }
+                }
+            }
+        }
+
+        for (const testcase in mergedResults.testcases) {
+            if (!(testcase in parseResults.testcases.testcaseTable)) {
+                delete mergedResults.testcases[testcase]
+            }
+        }
+
+        // add criteria
+        for (const spec in parseResults.specs.specTable) {
+            if (!(spec in mergedResults.specs)) {
+                mergedResults.specs[spec] = {}
+            }
+
+            const parsedCriteria = parseResults.specs.specTable[spec].criteria
+            const resultsCriteria = mergedResults.specs[spec]
+
+            for (const criteria in parsedCriteria) {
+                if (!(criteria in resultsCriteria)) {
+                    mergedResults.specs[spec][criteria] = {
+                        date: date,
+                        status: 'unknown'
+                    }
+                }
+            }
+        }
+
+        for (const testcase in parseResults.testcases.testcaseTable) {
+            if (!(testcase in mergedResults.testcases)) {
+                mergedResults.testcases[testcase] = {
+                    status: 'unknown',
+                    date: date
+                }
+            }
+        }
+
+        fs.writeFileSync(mergedResultsPath, JSON.stringify(mergedResults), 'utf8')
+    }
+
+    function filterSpecsByDate() {
+        const dates: Record<string, true> = buildFilterDates()
+
+        for (const spec in filters.specs) {
+            let matched = false
+
+            for (const criteria in parseResults.specs.specTable[spec].criteria) {
+                if (!(mergedResults.specs[spec][criteria].date in dates)) {
+                    delete filters.specs[spec]
+                }
+            }
+        }
+    }
+
+    function filterSpecsByStatus() {
+        if (argv.specStatus) {
+            const parsedStatus = JSON.parse(argv.specStatus)
+            const statuses: Record<SpecStatuses, boolean> = {
+                passed: false,
+                unverified: false,
+                unknown: false,
+                failed: false,
+                broken: false
+            }
+
+            for (const status of parsedStatus) {
+                if (status === 'faulty') {
+                    statuses.broken = true
+                    statuses.failed = true
+                    statuses.unverified = true
+                    statuses.unknown = true
+                }
+                else if (!(status in specStatus)) {
+                    throw new Error(`Unknown value for filter --specStatus: ${argv.specStatus}`)
+                } else {
+                    statuses[status] = true
+                }
+            }
+
+            for (const spec in filters.specs) {
+                let matched = false
+
+                // only include spec if one of its criteria has one of the given status
+                criteriaLoop:
+                for (const criteria in mergedResults.specs[spec]) {
+                    if (statuses[mergedResults.specs[spec][criteria].status]) {
+                        matched = true
+                        break criteriaLoop
+                    }
+                }
+
+                if (!matched) {
+                    delete filters.specs[spec]
+                }
+            }
+        }
+    }
+
+    function filterTestcasesByDate() {
+        if (argv.dates) {
+            const dates: Record<string, true> = buildFilterDates()
+
+            for (const testcase in filters.testcases) {
+                if (!(mergedResults.testcases[testcase].date in dates)) {
+                    delete filters.testcases[testcase]
+                }
+            }
+        }
+    }
+
+    function filterTestcasesByStatus() {
+        if (argv.testcaseStatus) {
+            const parsedStatus = JSON.parse(argv.testcaseStatus)
+            const statuses: Record<TestCaseStatuses, boolean> = {
+                passed: false,
+                pending: false,
+                unknown: false,
+                failed: false,
+                broken: false
+            }
+
+            for (const status of parsedStatus) {
+                if (status === 'faulty') {
+                    statuses.broken = true
+                    statuses.failed = true
+                    statuses.unknown = true
+                }
+                else if (!(status in testcaseStatus)) {
+                    throw new Error(`Unknown value for filter --testcaseStatus: ${argv.testcaseStatus}`)
+                } else {
+                    statuses[status] = true
+                }
+            }
+
+            for (const testcase in filters.testcases) {
+                if (!statuses[mergedResults.testcases[testcase].status]) {
+                    delete filters.testcases[testcase]
+                }
+            }
+        }
+    }
+
+    function getDates(startDate, stopDate) {
+        var dateArray = new Array();
+        var currentDate = startDate;
+        while (currentDate <= stopDate) {
+            dateArray.push(new Date (currentDate));
+            currentDate = currentDate.addDays(1);
+        }
+        return dateArray;
+    }
+
+    function buildFilterDates() {
+        const dates: Record<string, true> = {}
+
+        if (argv.dates) {
+            const dateExprs: string[] = JSON.parse(argv.dates)
+
+            for (let dateExpr of dateExprs) {
+                dateExpr = dateExpr.replace(/\s/g,'')
+                if (dateExpr.substring(0, 1) === '(' && dateExpr.substring(dateExpr.length - 1, dateExpr.length) === ')') {
+                    dateExpr = dateExpr.substring(1, dateExpr.length - 1)
+
+                    let parts = dateExpr.split(',')
+
+                    const from = new Date(parts[0])
+                    const to = new Date(parts[1])
+
+                    const datesArray = getDates(from, to)
+
+                    datesArray.forEach(date => dates[date.toISOString().substring(0, 10)] = true)
+                } else {
+                    const date = new Date(dateExpr)
+
+                    dates[dateExpr] = true
+                }
+            }
+        }
+
+        return dates
     }
 }).catch((error) => console.error(error))
 
