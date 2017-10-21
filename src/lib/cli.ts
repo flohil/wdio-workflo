@@ -105,6 +105,11 @@ interface DateEntry {
     to?: Date
 }
 
+interface ConsoleReportEntry {
+    type: 'log' | 'warn' | 'error',
+    arguments: any
+}
+
 const testcaseStatus = {
     passed: 'passed',
     failed: 'failed',
@@ -180,6 +185,8 @@ optimist
     '\t\t\t   \'2017-10-10_20-38-13\' => open report for given result folder\n')
     .describe('report', 'generates and opens report for latest results or\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => generate and open report for given result folder\n')
+    .describe('showConsoleReport', 'displays report messages written to console during latest test execution\n' +
+    '\t\t\t   \'2017-10-10_20-38-13\' => display report messages written to console for given result folder\n')
 
     .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
     '\t\t\t   \'4.1\' => show traceability information for spec 4.1\n')
@@ -277,6 +284,11 @@ process.env.WORKFLO_CONFIG = workfloConfigFile
 
 const workfloConfig = require(workfloConfigFile)
 
+const resultsPath = path.join(workfloConfig.testDir, 'results')
+const latestRunPath = path.join(resultsPath, 'latestRun')
+const mergedResultsPath = path.join(resultsPath, 'mergedResults.json')
+const consoleReportPath = path.join(resultsPath, dateTime, 'consoleReport.json')
+
 checkGenerateReport().then(() => {
     // check workflo config properties
     const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath']
@@ -298,10 +310,6 @@ checkGenerateReport().then(() => {
     const listsDir = path.join(srcDir, 'lists')
     const manDir = path.join(srcDir, 'manualResults')
     const testInfoFilePath = path.join(testDir, 'testinfo.json')
-
-    const resultsPath = path.join(workfloConfig.testDir, 'results')
-    const latestRunPath = path.join(resultsPath, 'latestRun')
-    const mergedResultsPath = path.join(resultsPath, 'mergedResults.json')
 
     const filters: IExecutionFilters = {}
     const mergedFilters: IExecutionFilters = {}
@@ -589,7 +597,8 @@ checkGenerateReport().then(() => {
         latestRunPath,
         browser: workfloConfig.capabilities.browserName,
         dateTime: dateTime,
-        mergedResultsPath
+        mergedResultsPath,
+        consoleReportPath
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)
@@ -1790,5 +1799,36 @@ async function checkGenerateReport() {
 
         exitCode = await openReport(workfloConfig, argv.report)
         process.exit(exitCode)
+    }
+    if (argv.showConsoleReport) {
+        let run
+
+        if (typeof argv.showConsoleReport === 'string' && argv.showConsoleReport.length > 0) {
+            run = argv.showConsoleReport
+        } else {
+            if (!fs.existsSync(latestRunPath)) {
+                throw new Error('No latestRun file found for --showConsoleReport')
+            }
+            run = fs.readFileSync(latestRunPath, 'utf8')
+        }
+
+        const reportPath = path.join(resultsPath, run, 'consoleReport.json')
+        const consoleReport: ConsoleReportEntry[] = JSON.parse(fs.readFileSync(reportPath, 'utf8'))
+
+        consoleReport.forEach(entry => {
+            switch(entry.type) {
+                case 'log':
+                    console.log(...entry.arguments)
+                    break
+                case 'warn':
+                    console.warn(...entry.arguments)
+                    break
+                case 'error':
+                    console.error(...entry.arguments)
+                    break
+            }
+        })
+
+        process.exit(0)
     }
 }
