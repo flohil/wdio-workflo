@@ -103,8 +103,9 @@ optimist
     '\t\t\t   \'2017-10-10_20-38-13\' => open report for given result folder\n')
     .describe('report', 'generates and opens report for latest results or\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => generate and open report for given result folder\n')
-    .describe('showConsoleReport', 'displays report messages written to console during latest test execution\n' +
+    .describe('consoleReport', 'displays report messages written to console during latest test execution\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => display report messages written to console for given result folder\n')
+    .describe('printStatus', 'show current status of all testcases and specs')
     .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
     '\t\t\t   \'4.1\' => show traceability information for spec 4.1\n')
     .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
@@ -164,7 +165,7 @@ const resultsPath = path.join(workfloConfig.testDir, 'results');
 const latestRunPath = path.join(resultsPath, 'latestRun');
 const mergedResultsPath = path.join(resultsPath, 'mergedResults.json');
 const consoleReportPath = path.join(resultsPath, dateTime, 'consoleReport.json');
-checkGenerateReport().then(() => {
+checkReport().then(() => {
     // check workflo config properties
     const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath'];
     for (const property of mandatoryProperties) {
@@ -370,6 +371,7 @@ checkGenerateReport().then(() => {
         }
         process.exit(0);
     }
+    handlePrintStatus();
     if (fs.existsSync(testInfoFilePath)) {
         fs.unlinkSync(testInfoFilePath);
     }
@@ -1365,8 +1367,128 @@ checkGenerateReport().then(() => {
         }
         return matched;
     }
+    function handlePrintStatus() {
+        if (argv.printStatus) {
+            console.log();
+            if (!fs.existsSync(mergedResultsPath)) {
+                console.log("No mergedResults.json file found - did you run any tests yet?");
+            }
+            else {
+                const mergedResults = JSON.parse(fs.readFileSync(mergedResultsPath, 'utf8'));
+                const counts = {
+                    testcases: {
+                        broken: 0,
+                        failed: 0,
+                        passed: 0,
+                        pending: 0,
+                        unknown: 0
+                    },
+                    specs: {
+                        broken: 0,
+                        failed: 0,
+                        passed: 0,
+                        unverified: 0,
+                        unknown: 0
+                    }
+                };
+                const suitesHash = buildPrintSuitesHash();
+                const featuresHash = buildPrintTestcasesHash();
+                printTestcaseStatus(suitesHash, counts.testcases);
+                printSpecStatus(featuresHash, counts.specs);
+            }
+            process.exit(0);
+        }
+    }
+    function printTestcaseStatus(suitesHash, counts) {
+        let output = '==================================================================\n';
+        let indents = ' ';
+        let phase = '[TESTCASE]';
+        let first = true;
+        function printSuiteContext(context, _indents) {
+            if ('status' in context) {
+                const testcase = context;
+                counts[testcase.status]++;
+            }
+            else {
+                for (const suite in context) {
+                    if (!first) {
+                        output += `${phase}\n`;
+                    }
+                    else {
+                        first = false;
+                    }
+                    output += `${phase}${_indents}${suite}\n`;
+                    printSuiteContext(context[suite], `${_indents}    `);
+                }
+            }
+        }
+        printSuiteContext(suitesHash, indents);
+        output += `${phase}\n`;
+        output += '==================================================================';
+        console.log(output);
+    }
+    function printSpecStatus(featuresHash, counts) {
+        let output = '==================================================================\n';
+        let indents = ' ';
+        let phase = '[SPEC]';
+        let first = true;
+        for (const feature in featuresHash) {
+            if (!first) {
+                output += `${phase}\n`;
+            }
+            else {
+                first = false;
+            }
+            output += `${phase}${indents}${feature}\n`;
+        }
+        output += `${phase}\n`;
+        output += '==================================================================';
+        console.log(output);
+    }
+    function buildPrintSuitesHash() {
+        const suitesHash = {};
+        for (const testcase in mergedResults.testcases) {
+            const suite = parseResults.testcases.testcaseTable[testcase].suiteId;
+            const suiteParts = suite.split('.');
+            let suiteContext = suitesHash;
+            for (const suitePart of suiteParts) {
+                if (!(suitePart in suiteContext)) {
+                    suiteContext[suitePart] = {};
+                }
+                suiteContext = suiteContext[suitePart];
+            }
+            suiteContext[testcase] = mergedResults.testcases[testcase];
+        }
+        return suitesHash;
+    }
+    function buildPrintTestcasesHash() {
+        const featuresHash = {};
+        for (const spec in mergedResults.specs) {
+            const feature = parseResults.specs.specTable[spec].feature;
+            if (!(feature in featuresHash)) {
+                featuresHash[feature] = {};
+            }
+            featuresHash[feature][spec] = mergedResults.specs[spec];
+        }
+        return featuresHash;
+    }
+    function testcaseSuitesSummary() {
+        let output = '';
+        output += 'Number of Testcase Files: ' + Object.keys(filters.testcaseFiles).length + '\n';
+        output += 'Number of Suites: ' + Object.keys(filters.suites).length + '\n';
+        output += 'Number of Testcases: ' + Object.keys(filters.testcases).length + '\n';
+        output += '==================================================================\n';
+        return output;
+    }
+    function specSuitesSummary() {
+        let output = '';
+        output += 'Number of Spec Files: ' + Object.keys(filters.specFiles).length + '\n';
+        output += 'Number of Features: ' + Object.keys(filters.features).length + '\n';
+        output += 'Number of Specs: ' + Object.keys(filters.specs).length + '\n';
+        this.log('==================================================================');
+    }
 }).catch((error) => console.error(error));
-function checkGenerateReport() {
+function checkReport() {
     return __awaiter(this, void 0, void 0, function* () {
         // generate and display reports
         if (argv.generateReport) {
@@ -1394,10 +1516,10 @@ function checkGenerateReport() {
             exitCode = yield allureReport_1.openReport(workfloConfig, argv.report);
             process.exit(exitCode);
         }
-        if (argv.showConsoleReport) {
+        if (argv.consoleReport) {
             let run;
-            if (typeof argv.showConsoleReport === 'string' && argv.showConsoleReport.length > 0) {
-                run = argv.showConsoleReport;
+            if (typeof argv.consoleReport === 'string' && argv.consoleReport.length > 0) {
+                run = argv.consoleReport;
             }
             else {
                 if (!fs.existsSync(latestRunPath)) {
