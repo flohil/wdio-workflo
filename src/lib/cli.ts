@@ -22,7 +22,6 @@ import { Launcher } from 'webdriverio-workflo'
 const table = require('text-table')
 const pkg = require('../../package.json')
 let dateTime = require('../../utils/report.js').getDateTime()
-const date = dateTime.split('_')[0]
 
 const VERSION = pkg.version
 
@@ -100,6 +99,12 @@ export interface IAnalysedCriteria {
     uncoveredCriteriaCount: number,
 }
 
+interface DateEntry {
+    at?: Date
+    from?: Date
+    to?: Date
+}
+
 const testcaseStatus = {
     passed: 'passed',
     failed: 'failed',
@@ -165,9 +170,9 @@ optimist
     .describe('testcaseStatus', 'restricts testcases by given status\n' +
         '\t\t\t   \'["passed", "failed", "broken", "pending", "unknown"]\' => these are all available status - combine as you see fit\n' +
         '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken and unknown\n')
-    .describe('dates', 'restricts testcases and specs (oldest spec criteria) by given date\n' +
-        '\t\t\t   \'["(2017-03-10,2017-10-28)"]\' => restricts by status set between 2017-03-10 and 2017-10-28\n' +
-        '\t\t\t   \'["2017-07-21", "2017-07-22"]\' => restricts by last status set on 2017-07-21 or 2017-07-22\n')
+    .describe('dateTimes', 'restricts testcases and specs (oldest spec criteria) by given date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)\n' +
+        '\t\t\t   \'["(2017-03-10,2017-10-28)"]\' => restricts by status set between 2017-03-10 and 2017-10-28 (both at 0 pm, 0 min, 0 sec)\n' +
+        '\t\t\t   \'["2017-07-21", "2017-07-22T14:51:13"]\' => restricts by last status set on 2017-07-21 or 2017-07-22 at 2 pm, 51 min, 13 sec\n')
 
     .describe('generateReport', 'generates report for latest results or\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => generate report for given result folder\n')
@@ -305,12 +310,14 @@ checkGenerateReport().then(() => {
     let mergedResults: {
         specs: Record<string, Record<string, {
             status: 'passed' | 'failed' | 'unverified' | 'unknown' | 'pending',
-            date: string,
+            dateTime: string,
+            resultsFolder: string,
             manual?: boolean
         }>>
         testcases: Record<string, {
             status: 'passed' | 'failed' | 'broken' | 'unknown' | 'pending',
-            date: string
+            dateTime: string,
+            resultsFolder: string
         }>
     } = {
         specs: {},
@@ -358,6 +365,8 @@ checkGenerateReport().then(() => {
     if (handleTracingArgs()) {
         process.exit(0)
     }
+
+    const filterDates: DateEntry[] = buildFilterDates()
 
     // filters contains all filter criteria that is actually executed
     // and will be filtered further
@@ -579,7 +588,7 @@ checkGenerateReport().then(() => {
         resultsPath,
         latestRunPath,
         browser: workfloConfig.capabilities.browserName,
-        date: date,
+        dateTime: dateTime,
         mergedResultsPath
     }
 
@@ -595,7 +604,7 @@ checkGenerateReport().then(() => {
     }
 
     // write latest run file
-    if ( typeof process.env.LATEST_RUN === 'undefined' ) {
+    if ( typeof process.env.LATEST_RUN === 'undefined' && (Object.keys(filters.specs).length > 0 || Object.keys(filters.testcases).length > 0)) {
         if (!fs.existsSync(resultsPath)){
             fs.mkdirSync(resultsPath);
         }
@@ -609,6 +618,9 @@ checkGenerateReport().then(() => {
         })
 
         process.env.LATEST_RUN = dateTime
+    } else {
+        console.log("No specs or testcases match execution filters. Quitting...")
+        process.exit(0)
     }
 
     /**
@@ -1550,8 +1562,9 @@ checkGenerateReport().then(() => {
             for (const criteria in parsedCriteria) {
                 if (!(criteria in resultsCriteria)) {
                     mergedResults.specs[spec][criteria] = {
-                        date: date,
-                        status: 'unknown'
+                        dateTime,
+                        status: 'unknown',
+                        resultsFolder: undefined
                     }
                 }
             }
@@ -1561,7 +1574,8 @@ checkGenerateReport().then(() => {
             if (!(testcase in mergedResults.testcases)) {
                 mergedResults.testcases[testcase] = {
                     status: 'unknown',
-                    date: date
+                    dateTime,
+                    resultsFolder: undefined
                 }
             }
         }
@@ -1570,14 +1584,14 @@ checkGenerateReport().then(() => {
     }
 
     function filterSpecsByDate() {
-        const dates: Record<string, true> = buildFilterDates()
+        if (argv.dateTimes) {
+            for (const spec in filters.specs) {
+                let matched = false
 
-        for (const spec in filters.specs) {
-            let matched = false
-
-            for (const criteria in parseResults.specs.specTable[spec].criteria) {
-                if (!(mergedResults.specs[spec][criteria].date in dates)) {
-                    delete filters.specs[spec]
+                for (const criteria in parseResults.specs.specTable[spec].criteria) {
+                    if (!inDateFilters(mergedResults.specs[spec][criteria].dateTime)) {
+                        delete filters.specs[spec]
+                    }
                 }
             }
         }
@@ -1628,11 +1642,9 @@ checkGenerateReport().then(() => {
     }
 
     function filterTestcasesByDate() {
-        if (argv.dates) {
-            const dates: Record<string, true> = buildFilterDates()
-
+        if (argv.dateTimes) {
             for (const testcase in filters.testcases) {
-                if (!(mergedResults.testcases[testcase].date in dates)) {
+                if (!inDateFilters(mergedResults.testcases[testcase].dateTime)) {
                     delete filters.testcases[testcase]
                 }
             }
@@ -1681,11 +1693,23 @@ checkGenerateReport().then(() => {
         return dateArray;
     }
 
-    function buildFilterDates() {
-        const dates: Record<string, true> = {}
+    function completeDate(dateExpr: string, endOfDay?: boolean) {
+        const time = (endOfDay) ? 'T23:59:59' : 'T00:00:00'
 
-        if (argv.dates) {
-            const dateExprs: string[] = JSON.parse(argv.dates)
+        if (dateExpr.length === 19) {
+            return dateExpr
+        } else if (dateExpr.length === 10) {
+            return `${dateExpr}${time}`
+        } else {
+            throw new Error(`Time ${dateExpr} does not match format YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss`)
+        }
+    }
+
+    function buildFilterDates() {
+        const dateTimes: DateEntry[] = []
+
+        if (argv.dateTimes) {
+            const dateExprs: string[] = JSON.parse(argv.dateTimes)
 
             for (let dateExpr of dateExprs) {
                 dateExpr = dateExpr.replace(/\s/g,'')
@@ -1694,21 +1718,47 @@ checkGenerateReport().then(() => {
 
                     let parts = dateExpr.split(',')
 
-                    const from = new Date(parts[0])
-                    const to = new Date(parts[1])
-
-                    const datesArray = getDates(from, to)
-
-                    datesArray.forEach(date => dates[date.toISOString().substring(0, 10)] = true)
+                    dateTimes.push({
+                        from: new Date(completeDate(parts[0])),
+                        to: new Date(completeDate(parts[1], true))
+                    })
                 } else {
-                    const date = new Date(dateExpr)
-
-                    dates[dateExpr] = true
+                    dateTimes.push({
+                        at: new Date(completeDate(dateExpr))
+                    })
                 }
             }
         }
 
-        return dates
+        return dateTimes
+    }
+
+    function inDateFilters(dateExpr: string): boolean {
+        const dateParts = dateExpr.split('_')
+
+        if (dateParts.length === 2) {
+            dateParts[1] = dateParts[1].replace(/-/g, ':')
+        }
+
+        const date = new Date(`${dateParts[0]}T${dateParts[1]}`)
+        let matched = false
+
+        innerLoop:
+        for (const dateEntry of filterDates) {
+            if (dateEntry.at) {
+                if (date.getTime() === dateEntry.at.getTime()) {
+                    matched = true
+                    break innerLoop
+                }
+            } else {
+                if (date.getTime() >= dateEntry.from.getTime() && date.getTime() <= dateEntry.to.getTime()) {
+                    matched = true
+                    break innerLoop
+                }
+            }
+        }
+
+        return matched
     }
 }).catch((error) => console.error(error))
 
