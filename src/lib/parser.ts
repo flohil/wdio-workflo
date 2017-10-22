@@ -77,7 +77,7 @@ const specParserState: {
   executeNextArgFunc: (node: ts.Node) => {
     if (specParserState.argFuncs.length > 0) {
       const argFunc = specParserState.argFuncs.shift()
-      
+
       argFunc(node)
     }
   }
@@ -103,7 +103,7 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
           const parentPos = specParserState.callExpressionPos
 
           specParserState.callExpressionPos = -1
-          
+
           switch(identifier.text) {
             case 'fFeature':
             case 'xFeature':
@@ -184,14 +184,14 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
                   const specMetadata = (<ts.ObjectLiteralExpression> node)
                   const str = sourceFile.text.substr(specMetadata.pos, specMetadata.end - specMetadata.pos)
                   let parsedMetadata
-                  
+
                   try {
                     parsedMetadata = JSON5.parse(str)
                   } catch (e) {
                     console.error(`Failed to parse spec metadata. Please do not use dynamic values inside spec metadata: ${parsedMetadata}\n`)
                     throw e
                   }
-                  
+
                   specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].metadata = parsedMetadata
                 }
               )
@@ -287,7 +287,7 @@ const testcaseParserState: {
   executeNextArgFunc: (node: ts.Node) => {
     if (testcaseParserState.argFuncs.length > 0) {
       const argFunc = testcaseParserState.argFuncs.shift()
-      
+
       argFunc(node)
     }
   }
@@ -313,7 +313,7 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
           const parentPos = testcaseParserState.callExpressionPos
 
           testcaseParserState.callExpressionPos = -1
-          
+
           switch(identifier.text) {
             case 'fsuite':
             case 'xsuite':
@@ -329,7 +329,7 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   }
 
                   const fullSuiteId = testcaseParserState.activeSuiteId
-                  
+
                   if (!(fullSuiteId in testcaseTree)) {
                     testcaseTree[fullSuiteId] = {
                       testcaseHash: {}
@@ -344,7 +344,7 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   const suiteMetadata = (<ts.ObjectLiteralExpression> node)
                   const str = sourceFile.text.substr(suiteMetadata.pos, suiteMetadata.end - suiteMetadata.pos)
                   let parsedMetadata
-                  
+
                   try {
                     parsedMetadata = JSON5.parse(str)
                   } catch (e) {
@@ -365,11 +365,11 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   fullSuiteId = suiteIds.join('.')
 
                   if (fullSuiteId === '') {
-                    fullSuiteId = undefined 
+                    fullSuiteId = undefined
                   }
                 }
 
-                testcaseParserState.activeSuiteId = fullSuiteId 
+                testcaseParserState.activeSuiteId = fullSuiteId
               }
               break
             case 'ftestcase':
@@ -391,9 +391,9 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                     }
                   } catch (e) {
                     if (!testcaseTree[testcaseParserState.activeSuiteId]) {
-                        
+
                         console.error(`Parsed testcase function outside of suite: ${testcaseId}\n
-                        Always define testcase functions inside suites and do not use them 
+                        Always define testcase functions inside suites and do not use them
                         inside "external" functions invoked from inside suites`)
 
                         throw e
@@ -415,14 +415,14 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   const testcaseMetadata = (<ts.ObjectLiteralExpression> node)
                   const str = sourceFile.text.substr(testcaseMetadata.pos, testcaseMetadata.end - testcaseMetadata.pos)
                   let parsedMetadata
-                  
+
                   try {
                     parsedMetadata = JSON5.parse(str)
                   } catch (e) {
                     console.error(`Failed to parse testcase metadata. Please do not use dynamic values inside testcase metadata: ${parsedMetadata}\n`)
                     throw e
                   }
-                  
+
                   testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].metadata = parsedMetadata
                 }
               )
@@ -447,35 +447,35 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                       testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash = {}
                     }
                   } catch (e) {
-                    if (!testcaseTree[testcaseParserState.activeSuiteId] || 
+                    if (!testcaseTree[testcaseParserState.activeSuiteId] ||
                       !testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId]) {
-                        
+
                         console.error(`Parsed verify function outside of suite or testcase: ${str}\n
-                        Always define verify functions inside suites and testcases and do not use them 
+                        Always define verify functions inside suites and testcases and do not use them
                         inside "external" functions invoked from inside suites or testcases`)
 
                         throw e
                     }
                   }
-                  
+
                   for (const spec in verifyObject) {
                     if (verifyObject[spec].length > 0) {
                       if (spec in specTable) {
-                        specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true                        
+                        specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true
                       }
-                      
+
                       if (!(spec in verifyTable)) {
                         verifyTable[spec] = {};
                       }
-  
+
                       verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
-                      
+
                       const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash
-  
+
                       if (!(spec in specVerifyHash)) {
                         specVerifyHash[spec] = {}
                       }
-  
+
                       for (const criteria of verifyObject[spec]) {
                         specVerifyHash[spec][criteria] = true
                       }
@@ -498,23 +498,23 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
 }
 
 const compilerOptions = {
-  noEmitOnError: true, 
+  noEmitOnError: true,
   noImplicitAny: true,
-  target: ts.ScriptTarget.ES2017, 
+  target: ts.ScriptTarget.ES2017,
   module: ts.ModuleKind.CommonJS
 }
 
 export function specFilesParse(fileNames: string[]): SpecParseResults {
-  
+
   const program = ts.createProgram(fileNames, compilerOptions);
-  
+
   fileNames.forEach(fileName => {
     specParserState.activeSpecFile = fileName
 
     if(!existsSync(fileName)) {
       throw new Error(`Spec file could not be found: ${fileName}`)
     }
-  
+
     let sourceFile = program.getSourceFile(fileName)
 
     afterFuncTable = {}
@@ -522,7 +522,7 @@ export function specFilesParse(fileNames: string[]): SpecParseResults {
       features: {},
       specs: {}
     }
-  
+
     parseSpecFiles(sourceFile)
   })
 
@@ -536,14 +536,14 @@ export function specFilesParse(fileNames: string[]): SpecParseResults {
 
 export function testcaseFilesParse(fileNames: string[]): TestcaseParseResults {
   const program = ts.createProgram(fileNames, compilerOptions);
-  
+
   fileNames.forEach(fileName => {
     testcaseParserState.activeTestcaseFile = fileName
 
     if(!existsSync(fileName)) {
       throw new Error(`Testcase file could not be found: ${fileName}`)
     }
-  
+
     let sourceFile = program.getSourceFile(fileName)
 
     afterFuncTable = {}

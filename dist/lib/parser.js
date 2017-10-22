@@ -240,7 +240,7 @@ function parseTestcaseFiles(sourceFile) {
                                 catch (e) {
                                     if (!testcaseTree[testcaseParserState.activeSuiteId]) {
                                         console.error(`Parsed testcase function outside of suite: ${testcaseId}\n
-                        Always define testcase functions inside suites and do not use them 
+                        Always define testcase functions inside suites and do not use them
                         inside "external" functions invoked from inside suites`);
                                         throw e;
                                     }
@@ -289,7 +289,7 @@ function parseTestcaseFiles(sourceFile) {
                                     if (!testcaseTree[testcaseParserState.activeSuiteId] ||
                                         !testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId]) {
                                         console.error(`Parsed verify function outside of suite or testcase: ${str}\n
-                        Always define verify functions inside suites and testcases and do not use them 
+                        Always define verify functions inside suites and testcases and do not use them
                         inside "external" functions invoked from inside suites or testcases`);
                                         throw e;
                                     }

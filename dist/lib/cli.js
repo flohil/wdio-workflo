@@ -13,6 +13,7 @@ require('tsconfig-paths/register');
 const path = require("path");
 const fs = require("fs");
 const jsonfile = require("jsonfile");
+const supportsColor = require("supports-color");
 const parser_1 = require("./parser");
 const io_1 = require("./io");
 const allureReport_1 = require("./allureReport");
@@ -49,7 +50,8 @@ const specStatus = {
     failed: 'failed',
     broken: 'broken',
     unverified: 'unverified',
-    unknown: 'unknown'
+    unknown: 'unknown',
+    pending: 'pending'
 };
 // options (not yet) supported are commented out
 optimist
@@ -94,7 +96,7 @@ optimist
     .describe('testcaseStatus', 'restricts testcases by given status\n' +
     '\t\t\t   \'["passed", "failed", "broken", "pending", "unknown"]\' => these are all available status - combine as you see fit\n' +
     '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken and unknown\n')
-    .describe('dateTimes', 'restricts testcases and specs (oldest spec criteria) by given date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)\n' +
+    .describe('dates', 'restricts testcases and specs (oldest spec criteria) by given date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)\n' +
     '\t\t\t   \'["(2017-03-10,2017-10-28)"]\' => restricts by status set between 2017-03-10 and 2017-10-28 (both at 0 pm, 0 min, 0 sec)\n' +
     '\t\t\t   \'["2017-07-21", "2017-07-22T14:51:13"]\' => restricts by last status set on 2017-07-21 or 2017-07-22 at 2 pm, 51 min, 13 sec\n')
     .describe('generateReport', 'generates report for latest results or\n' +
@@ -1211,7 +1213,7 @@ checkReport().then(() => {
         fs.writeFileSync(mergedResultsPath, JSON.stringify(mergedResults), 'utf8');
     }
     function filterSpecsByDate() {
-        if (argv.dateTimes) {
+        if (argv.dates) {
             for (const spec in filters.specs) {
                 let matched = false;
                 for (const criteria in parseResults.specs.specTable[spec].criteria) {
@@ -1230,7 +1232,8 @@ checkReport().then(() => {
                 unverified: false,
                 unknown: false,
                 failed: false,
-                broken: false
+                broken: false,
+                pending: false
             };
             for (const status of parsedStatus) {
                 if (status === 'faulty') {
@@ -1262,7 +1265,7 @@ checkReport().then(() => {
         }
     }
     function filterTestcasesByDate() {
-        if (argv.dateTimes) {
+        if (argv.dates) {
             for (const testcase in filters.testcases) {
                 if (!inDateFilters(mergedResults.testcases[testcase].dateTime)) {
                     delete filters.testcases[testcase];
@@ -1322,27 +1325,27 @@ checkReport().then(() => {
         }
     }
     function buildFilterDates() {
-        const dateTimes = [];
-        if (argv.dateTimes) {
-            const dateExprs = JSON.parse(argv.dateTimes);
+        const dates = [];
+        if (argv.dates) {
+            const dateExprs = JSON.parse(argv.dates);
             for (let dateExpr of dateExprs) {
                 dateExpr = dateExpr.replace(/\s/g, '');
                 if (dateExpr.substring(0, 1) === '(' && dateExpr.substring(dateExpr.length - 1, dateExpr.length) === ')') {
                     dateExpr = dateExpr.substring(1, dateExpr.length - 1);
                     let parts = dateExpr.split(',');
-                    dateTimes.push({
+                    dates.push({
                         from: new Date(completeDate(parts[0])),
                         to: new Date(completeDate(parts[1], true))
                     });
                 }
                 else {
-                    dateTimes.push({
+                    dates.push({
                         at: new Date(completeDate(dateExpr))
                     });
                 }
             }
         }
-        return dateTimes;
+        return dates;
     }
     function inDateFilters(dateExpr) {
         const dateParts = dateExpr.split('_');
@@ -1388,62 +1391,103 @@ checkReport().then(() => {
                         failed: 0,
                         passed: 0,
                         unverified: 0,
-                        unknown: 0
+                        unknown: 0,
+                        pending: 0
                     }
                 };
                 const suitesHash = buildPrintSuitesHash();
-                const featuresHash = buildPrintTestcasesHash();
+                const featuresHash = buildPrintFeaturesHash();
+                console.log('==================================================================');
                 printTestcaseStatus(suitesHash, counts.testcases);
                 printSpecStatus(featuresHash, counts.specs);
+                printTestcaseSummary();
+                printSpecSummary();
+                printTestcaseCounts(counts.testcases);
+                printSpecCounts(counts.specs);
             }
             process.exit(0);
         }
     }
     function printTestcaseStatus(suitesHash, counts) {
-        let output = '==================================================================\n';
         let indents = ' ';
+        let testcaseIndents = `  `;
         let phase = '[TESTCASE]';
         let first = true;
         function printSuiteContext(context, _indents) {
-            if ('status' in context) {
-                const testcase = context;
-                counts[testcase.status]++;
-            }
-            else {
-                for (const suite in context) {
-                    if (!first) {
-                        output += `${phase}\n`;
-                    }
-                    else {
-                        first = false;
-                    }
-                    output += `${phase}${_indents}${suite}\n`;
-                    printSuiteContext(context[suite], `${_indents}    `);
+            const suites = [];
+            for (const key in context) {
+                if ('status' in context[key]) {
+                    const testcase = context[key];
+                    const testcaseParts = key.split('.');
+                    const resultsFolder = (testcase.resultsFolder) ? `(${testcase.resultsFolder})` : '';
+                    const coloredSymbol = color(testcase.status, symbol(testcase.status));
+                    console.log(`${phase}${_indents.substring(0, _indents.length - 2)}${coloredSymbol} ${testcaseParts[testcaseParts.length - 1]} ${color('light', resultsFolder)}`);
+                    counts[testcase.status]++;
                 }
+                else {
+                    suites.push(key);
+                }
+            }
+            for (const suite of suites) {
+                if (!first) {
+                    console.log(phase);
+                }
+                else {
+                    first = false;
+                }
+                console.log(`${phase}${_indents}${suite}`);
+                printSuiteContext(context[suite], `${_indents}    `);
             }
         }
         printSuiteContext(suitesHash, indents);
-        output += `${phase}\n`;
-        output += '==================================================================';
-        console.log(output);
+        console.log('==================================================================');
     }
     function printSpecStatus(featuresHash, counts) {
-        let output = '==================================================================\n';
         let indents = ' ';
+        let specIndents = indents + '    ';
+        let criteriaIndents = specIndents + '  ';
         let phase = '[SPEC]';
         let first = true;
         for (const feature in featuresHash) {
             if (!first) {
-                output += `${phase}\n`;
+                console.log(phase);
             }
             else {
                 first = false;
             }
-            output += `${phase}${indents}${feature}\n`;
+            console.log(`${phase}${indents}${feature}`);
+            for (const spec in featuresHash[feature]) {
+                const description = parseResults.specs.specTree[parseResults.specs.specTable[spec].feature].specHash[spec].description;
+                console.log(phase);
+                console.log(`${phase}${specIndents}${spec} - ${description}`);
+                const criteriaHash = {
+                    passed: {},
+                    pending: {},
+                    unverified: {},
+                    failed: {},
+                    broken: {},
+                    unknown: {}
+                };
+                for (const criteria in featuresHash[feature][spec]) {
+                    const criteriaInfo = featuresHash[feature][spec][criteria];
+                    if (!(criteriaInfo.status in criteriaHash)) {
+                        criteriaHash[criteriaInfo.status] = {};
+                    }
+                    if (!(criteriaInfo.resultsFolder in criteriaHash[criteriaInfo.status])) {
+                        criteriaHash[criteriaInfo.status][criteriaInfo.resultsFolder] = [];
+                    }
+                    criteriaHash[criteriaInfo.status][criteriaInfo.resultsFolder].push((criteriaInfo.manual) ? `${criteria}m` : criteria);
+                    counts[featuresHash[feature][spec][criteria].status]++;
+                }
+                for (const status in criteriaHash) {
+                    for (const resultsFolder in criteriaHash[status]) {
+                        const _resultsFolder = `(${resultsFolder})`;
+                        console.log(`${phase}${criteriaIndents}${color(status, symbol(status))} [${criteriaHash[status][resultsFolder].join(', ')}] ${color('light', _resultsFolder)}`);
+                    }
+                }
+            }
         }
-        output += `${phase}\n`;
-        output += '==================================================================';
-        console.log(output);
+        console.log('==================================================================');
     }
     function buildPrintSuitesHash() {
         const suitesHash = {};
@@ -1451,41 +1495,122 @@ checkReport().then(() => {
             const suite = parseResults.testcases.testcaseTable[testcase].suiteId;
             const suiteParts = suite.split('.');
             let suiteContext = suitesHash;
-            for (const suitePart of suiteParts) {
-                if (!(suitePart in suiteContext)) {
-                    suiteContext[suitePart] = {};
+            if (testcase in filters.testcases) {
+                for (const suitePart of suiteParts) {
+                    if (!(suitePart in suiteContext)) {
+                        suiteContext[suitePart] = {};
+                    }
+                    suiteContext = suiteContext[suitePart];
                 }
-                suiteContext = suiteContext[suitePart];
+                suiteContext[testcase] = mergedResults.testcases[testcase];
             }
-            suiteContext[testcase] = mergedResults.testcases[testcase];
         }
+        // clean suiteshash from empty suites
         return suitesHash;
     }
-    function buildPrintTestcasesHash() {
+    function buildPrintFeaturesHash() {
         const featuresHash = {};
         for (const spec in mergedResults.specs) {
             const feature = parseResults.specs.specTable[spec].feature;
-            if (!(feature in featuresHash)) {
-                featuresHash[feature] = {};
+            if (spec in filters.specs) {
+                if (!(feature in featuresHash)) {
+                    featuresHash[feature] = {};
+                }
+                featuresHash[feature][spec] = mergedResults.specs[spec];
             }
-            featuresHash[feature][spec] = mergedResults.specs[spec];
         }
         return featuresHash;
     }
-    function testcaseSuitesSummary() {
+    function printTestcaseSummary() {
         let output = '';
         output += 'Number of Testcase Files: ' + Object.keys(filters.testcaseFiles).length + '\n';
         output += 'Number of Suites: ' + Object.keys(filters.suites).length + '\n';
         output += 'Number of Testcases: ' + Object.keys(filters.testcases).length + '\n';
-        output += '==================================================================\n';
-        return output;
+        output += '==================================================================';
+        console.log(output);
     }
-    function specSuitesSummary() {
+    function printSpecSummary() {
         let output = '';
         output += 'Number of Spec Files: ' + Object.keys(filters.specFiles).length + '\n';
         output += 'Number of Features: ' + Object.keys(filters.features).length + '\n';
         output += 'Number of Specs: ' + Object.keys(filters.specs).length + '\n';
-        this.log('==================================================================');
+        output += '==================================================================';
+        console.log(output);
+    }
+    function color(type, str) {
+        if (!supportsColor)
+            return String(str);
+        return `\u001b[${webdriverio_workflo_1.baseReporter.COLORS[type]}m${str}\u001b[0m`;
+    }
+    function symbol(status) {
+        let symbols = webdriverio_workflo_1.baseReporter.SYMBOLS;
+        /**
+         * With node.js on Windows: use symbols available in terminal default fonts
+         */
+        if (process.platform === 'win32') {
+            symbols = webdriverio_workflo_1.baseReporter.SYMBOLS_WIN;
+        }
+        switch (status) {
+            case 'passed':
+                return symbols.ok;
+            case 'failed':
+                return symbols.error;
+            case 'broken':
+                return symbols.err;
+            case 'pending':
+                return '-';
+            case 'unverified':
+                return 'U';
+            case 'unknown':
+                return '?';
+        }
+    }
+    function printTestcaseCounts(counts) {
+        console.log("Testcase Results:\n");
+        printCounts(counts);
+    }
+    function printSpecCounts(counts) {
+        console.log("Spec Results:\n");
+        printCounts(counts);
+    }
+    function printCounts(counts) {
+        let fmt;
+        let totalCount = 0;
+        Object.keys(counts).forEach(key => totalCount += counts[key]);
+        function percent(count) {
+            return (!totalCount) ? 0 : (count / totalCount * 100).toFixed(1);
+        }
+        fmt = color('green', '%d passing') + color('light', ` (${percent(counts.passed)}%)`);
+        console.log(fmt, counts.passed);
+        // pending
+        if (counts.pending > 0) {
+            fmt = color('pending', '%d skipped') + color('light', ` (${percent(counts.pending)}%)`);
+            console.log(fmt, counts.pending);
+        }
+        // unverifieds
+        if ('unverified' in counts) {
+            const _counts = counts;
+            if (_counts.unverified > 0) {
+                fmt = color('unverified', '%d unverified') + color('light', ` (${percent(_counts.unverified)}%)`);
+                console.log(fmt, _counts.unverified);
+            }
+        }
+        // failures
+        if (counts.failed > 0) {
+            fmt = color('fail', '%d failing') + color('light', ` (${percent(counts.failed)}%)`);
+            console.log(fmt, counts.failed);
+        }
+        // broken
+        if (counts.broken > 0) {
+            fmt = color('broken', '%d broken') + color('light', ` (${percent(counts.broken)}%)`);
+            console.log(fmt, counts.broken);
+        }
+        // unknown
+        if (counts.unknown > 0) {
+            fmt = color('light', '%d unknown') + color('light', ` (${percent(counts.unknown)}%)`);
+            console.log(fmt, counts.unknown);
+        }
+        console.log('==================================================================');
     }
 }).catch((error) => console.error(error));
 function checkReport() {
