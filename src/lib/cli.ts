@@ -1605,7 +1605,7 @@ checkReport().then(() => {
             }
         }
 
-        fs.writeFileSync(mergedResultsPath, JSON.stringify(mergedResults), 'utf8')
+        fs.writeFileSync(mergedResultsPath, JSON.stringify(mergedResults), {encoding: 'utf8'})
     }
 
     function filterSpecsByDate() {

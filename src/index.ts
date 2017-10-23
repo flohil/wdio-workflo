@@ -3,6 +3,15 @@ import * as pageObjects from './lib/page_objects'
 // global should be replaced with declare ... at some point...
 declare global {
 
+  namespace WebdriverIO {
+    interface Client<T> {
+      /**
+       * Allow any type of promise to be resolved in order to continue synchronous code execution.
+       */
+      resolvePromise <Type> (promise: Promise<Type>): Type
+    }
+  }
+
   /**
    * Makes all properties of Type optional, except for those whose keys are passed as K.
    */
@@ -10,13 +19,13 @@ declare global {
 
   /**
    * Type is the original object.
-   * 
+   *
    * K represents the original object's property keys to be picked from the original object unaltered.
-   * 
+   *
    * KPartial represents the original object's property keys to be picked from the original object and turned into optional properties.
    */
   type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>
-  
+
   namespace Workflo {
 
     interface IRecObj<Type> {
@@ -48,7 +57,7 @@ declare global {
 
     interface IProblem<ValueType, ResultType> {
       values: IRecObj<ValueType>,
-      solve: <NodeType extends Workflo.PageNode.INode>( 
+      solve: <NodeType extends Workflo.PageNode.INode>(
         node: NodeType,
         value?: ValueType
       ) => ISolveResult<ResultType>
@@ -60,8 +69,8 @@ declare global {
     }
 
     interface IWalkerOptions {
-      throwUnmatchedKey?: boolean, 
-      throwSolveError?: boolean 
+      throwUnmatchedKey?: boolean,
+      throwSolveError?: boolean
     }
 
     type Value = string | boolean | number
@@ -101,7 +110,7 @@ declare global {
        * @param func
        */
       export function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => O): Record<K, O>;
-      
+
       /**
        * Iterates over all properties in an object and executes func on each.
        *
@@ -109,7 +118,7 @@ declare global {
        * @param func
        */
       export function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => void): Record<K, T>;
-      
+
       /**
        * Returns a new object with the original object's keys and values inverted.
        * The original object's values must therefore be implicitly convertable to type string.
@@ -117,7 +126,7 @@ declare global {
        * @param obj
        */
       export function invert<K extends string>(obj: Record<K, string>): Record<string, K>;
-      
+
       /**
        * Returns a new filtered object that only contains those
        * properties of the initial object where func returned true.
@@ -128,7 +137,7 @@ declare global {
        * @param func
        */
       export function filter<T>(obj: Record<string, T>, func: (value: T, key?: string) => boolean): Record<string, T>;
-      
+
       /**
        * If key already exists in obj, turns respective value
        * into array and pushes value onto the array.
@@ -142,7 +151,7 @@ declare global {
        * @param overwrite
        */
       export function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: K, value: T, overwrite?: boolean): Record<K, T | T[]>;
-      
+
       /**
        * Creates a copy of original object in which all
        * key-value pairs matching the passed props are removed.
@@ -151,7 +160,7 @@ declare global {
        * @param props
        */
       export function stripProps<T>(obj: Record<string, T>, props: string[]): Record<string, T>;
-      
+
       /**
        * Returns properties of obj whose keys are also present in
        * subsetObj as a new object.
@@ -162,7 +171,7 @@ declare global {
        * @param matchingObject
        */
       export function subset<T, O>(obj: Record<string, T>, maskObject: Record<string, O>): Record<string, T>;
-      
+
       /**
        * Returns a new object where all properties with a boolean value of false are stripped recursively.
        * @param obj
@@ -198,8 +207,8 @@ declare global {
 
       /**
        * Removes all whitespace characters from a string.
-       * 
-       * @param str 
+       *
+       * @param str
        */
       export function stripWhitespaces(str: string): string
     }
@@ -207,10 +216,10 @@ declare global {
     namespace Class {
       /**
        * Returns names of all methods of a ES6 class (except for constructor).
-       * 
+       *
        * see http://stackoverflow.com/questions/31054910/get-functions-methods-of-a-class
-       * 
-       * @param obj 
+       *
+       * @param obj
        */
       export function getAllMethods(obj: any): string[]
     }
@@ -241,10 +250,10 @@ declare global {
 
       /**
        * Compares two variables of same type.
-       * 
-       * @param var1 
-       * @param var2 
-       * @param operator 
+       *
+       * @param var1
+       * @param var2
+       * @param operator
        */
       export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;
     }
@@ -299,7 +308,7 @@ declare global {
 
     interface IDescriptionStack {
       givens: string[]
-      whens: string[] 
+      whens: string[]
     }
 
     interface IStoryMetaData {

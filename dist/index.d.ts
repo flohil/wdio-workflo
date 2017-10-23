@@ -1,5 +1,13 @@
 import * as pageObjects from './lib/page_objects';
 declare global  {
+    namespace WebdriverIO {
+        interface Client<T> {
+            /**
+             * Allow any type of promise to be resolved in order to continue synchronous code execution.
+             */
+            resolvePromise<Type>(promise: Promise<Type>): Type;
+        }
+    }
     /**
      * Makes all properties of Type optional, except for those whose keys are passed as K.
      */

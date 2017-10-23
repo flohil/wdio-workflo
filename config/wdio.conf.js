@@ -131,6 +131,11 @@ exports.config = {
 
     require('../dist/inject.js')
 
+    // extend webdriverio client instance with capability to resolve any type of promise in order to continue code synchronously
+    browser.addCommand("resolvePromise", function async (promise) {
+      return promise;
+    });
+
     // some gui tests require a sized window
     browser.windowHandleSize(workfloConf.windowSize)
 
