@@ -212,7 +212,6 @@ checkReport().then(() => {
         specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
         testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
     };
-    cleanResultsStatus();
     // check if all defined filters exist
     checkFiltersExist();
     // add manual test cases to test information
@@ -237,7 +236,7 @@ checkReport().then(() => {
     }
     // remove suite names from filters.testcases
     for (const testcase in filters.testcases) {
-        if (!(testcase in mergedResults.testcases)) {
+        if (!(testcase in parseResults.testcases.testcaseTable)) {
             delete filters.testcases[testcase];
         }
     }
@@ -373,6 +372,7 @@ checkReport().then(() => {
         }
         process.exit(0);
     }
+    cleanResultsStatus();
     handlePrintStatus();
     if (fs.existsSync(testInfoFilePath)) {
         fs.unlinkSync(testInfoFilePath);
@@ -1198,6 +1198,9 @@ checkReport().then(() => {
                         status: 'unknown',
                         resultsFolder: undefined
                     };
+                    if (criteria in criteriaAnalysis.specs[spec].manual) {
+                        mergedResults.specs[spec][criteria].manual = true;
+                    }
                 }
             }
         }
@@ -1481,7 +1484,7 @@ checkReport().then(() => {
                 }
                 for (const status in criteriaHash) {
                     for (const resultsFolder in criteriaHash[status]) {
-                        const _resultsFolder = `(${resultsFolder})`;
+                        const _resultsFolder = (resultsFolder && resultsFolder !== 'undefined') ? `(${resultsFolder})` : '';
                         console.log(`${phase}${criteriaIndents}${color(status, symbol(status))} [${criteriaHash[status][resultsFolder].join(', ')}] ${color('light', _resultsFolder)}`);
                     }
                 }
@@ -1570,7 +1573,7 @@ checkReport().then(() => {
         printCounts(counts);
     }
     function printSpecCounts(counts) {
-        console.log("Spec Results:\n");
+        console.log("Spec Criteria Results:\n");
         printCounts(counts);
     }
     function printCounts(counts) {
