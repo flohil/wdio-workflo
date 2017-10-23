@@ -19,6 +19,15 @@ if (!workfloConf.timeouts.waitforTimeout) {
   workfloConf.timeouts.waitforTimeout = workfloConf.timeouts.waitforTimeout || 5000
 }
 
+const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g
+
+function cleanStack (error) {
+  let stack = error.split('\n')
+  stack = stack.filter((line) => !line.match(STACKTRACE_FILTER))
+  error = stack.join('\n')
+  return error
+}
+
 //buildSpecs()
 exports.config = {
   /**
@@ -80,35 +89,39 @@ exports.config = {
         // rework
         process.send({event: 'step:succeeded', cid: '0-0', assertion: assertion})
         return
-      }
-      if ( assertion.error ) {
-          // either a webdriver command which is
-          // already captured by screenshots in afterCommand()
-          // if another error occured, don't take
-          // screenshot
-      }
-      else if ( assertion.matcherName ) {
-        // receive screenshot as Buffer
-        const screenshot = browser.saveScreenshot(); // returns base64 string buffer
+      } else {
+        if ( assertion.matcherName ) {
+          // receive screenshot as Buffer
+          const screenshot = browser.saveScreenshot(); // returns base64 string buffer
 
-        const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
-        const screenshotFilename = `${screenshotFolder}/assertionFailure_${assertionScreenshotCtr}.png`
+          const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
+          const screenshotFilename = `${screenshotFolder}/assertionFailure_${assertionScreenshotCtr}.png`
 
-        assertionScreenshotCtr++
-        assertion.screenshotFilename = screenshotFilename
+          assertionScreenshotCtr++
+          assertion.screenshotFilename = screenshotFilename
 
-        try {
-            fs.writeFileSync(screenshotFilename, screenshot)
-        } catch (err) {
-            console.log('Error writing screenshot:' + err.message)
+          try {
+              fs.writeFileSync(screenshotFilename, screenshot)
+          } catch (err) {
+              console.log('Error writing screenshot:' + err.message)
+          }
+
+          var stack = new Error().stack
+          assertion.stack = stack
+
+          process.send({event: 'step:failed', cid: '0-0', assertion: assertion})
+          process.send({event: 'verify:failure', assertion: assertion})
+        } else {
+          assertion.stack = cleanStack(assertion.error.stack)
+
+          delete assertion.matcherName
+          delete assertion.passed
+          delete assertion.expected
+          delete assertion.actual
+          delete assertion.error
+
+          process.send({event: 'step:broken', cid: '0-0', assertion: assertion})
         }
-
-        var stack = new Error().stack
-
-        assertion.stack = stack
-
-        process.send({event: 'step:failed', cid: '0-0', assertion: assertion})
-        process.send({event: 'verify:failure', assertion: assertion})
       }
     },
   },
