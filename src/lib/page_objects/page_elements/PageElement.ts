@@ -44,7 +44,7 @@ export class PageElement<
           // chain selectors
           _selector = `${selector}${_selector}`
 
-          return this.store[ method ].apply( this.store, [ _selector, _options ] ) 
+          return this.store[ method ].apply( this.store, [ _selector, _options ] )
         }
       }
     }
@@ -58,7 +58,7 @@ export class PageElement<
   }
 
   /**
-   * 
+   *
    */
   get _element() {
     return browser.element(this.selector)
@@ -120,6 +120,11 @@ export class PageElement<
     return (value) ? this._element.getValue() === value : this._element.getValue().length > 0
   }
 
+  // Returns true if element matching this selector currently contains value.
+  containsValue(value: string = undefined) : boolean {
+    return (value) ? this._element.getValue().indexOf(value) > -1 : this._element.getValue().length > 0
+  }
+
   // Returns true if element matching this selector is enabled.
   isEnabled() : boolean {
     return this._element.isEnabled()
@@ -167,7 +172,7 @@ export class PageElement<
   }
 
   eventuallyHasText(
-    { reverse = false, timeout = this.timeout, text = undefined }: Workflo.WDIOParams & { text?: string } = {}  
+    { reverse = false, timeout = this.timeout, text = undefined }: Workflo.WDIOParams & { text?: string } = {}
   )  {
     try {
       this.waitText({reverse, timeout, text})
@@ -179,7 +184,7 @@ export class PageElement<
   }
 
   eventuallyContainsText(
-    { reverse = false, timeout = this.timeout, text = undefined }: Workflo.WDIOParams & { text?: string } = {}  
+    { reverse = false, timeout = this.timeout, text = undefined }: Workflo.WDIOParams & { text?: string } = {}
   )  {
     try {
       this.waitContainsText({reverse, timeout, text})
@@ -229,7 +234,7 @@ export class PageElement<
   // WAIT FUNCTIONS
 
   // Waits until at least one matching element exists.
-  // 
+  //
   // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
   // If reverse is set to true, function will wait until no element
   // exists that matches the this.selector.
@@ -242,7 +247,7 @@ export class PageElement<
   }
 
   // Waits until at least one matching element is visible.
-  // 
+  //
   // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
   // If reverse is set to true, function will wait until no element
   // is visible that matches the this.selector.
@@ -263,7 +268,7 @@ export class PageElement<
   }
 
   // Waits until at least one matching element has a text.
-  // 
+  //
   // text -> defines the text that element should have
   // If text is undefined, waits until element's text is not empty.
   // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
@@ -285,7 +290,7 @@ export class PageElement<
   }
 
   // Waits until at least one matching element contains a text.
-  // 
+  //
   // text -> defines the text that element should have
   // If text is undefined, waits until element's text is not empty.
   // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
@@ -307,7 +312,7 @@ export class PageElement<
   }
 
   // Waits until at least one matching element has a value.
-  // 
+  //
   // value -> defines the value that element should have
   // If value is undefined, waits until element's value is not empty.
   // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
@@ -328,8 +333,30 @@ export class PageElement<
     return this
   }
 
+  // Waits until at least one matching element contains a value.
+  //
+  // value -> defines the value that element should have
+  // If value is undefined, waits until element's value is not empty.
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // has a text that matches the this.selector.
+  waitContainsValue(
+    { reverse = false, timeout = this.timeout, value = undefined }: Workflo.WDIOParams & { value?: string } = {}
+  ) {
+    this._element.waitForValue(timeout, reverse)
+
+    if (typeof value !== 'undefined' &&
+      typeof this._element.getValue !== 'undefined') {
+      browser.waitUntil(() => {
+        return this.containsValue(value)
+      }, timeout, `${this.selector}: Value never contained ${value}`)
+    }
+
+    return this
+  }
+
   // Waits until at least one matching element is enabled.
-  // 
+  //
   // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
   // If reverse is set to true, function will wait until no element
   // is enabled that matches the this.selector.
@@ -342,7 +369,7 @@ export class PageElement<
   }
 
   // Waits until at least one matching element is selected.
-  // 
+  //
   // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
   // If reverse is set to true, function will wait until no element
   // is selected that matches the this.selector.
@@ -358,7 +385,7 @@ export class PageElement<
 
   // returns html af all matches for a given selector,
   // even if only ONE WebDriverElement is returned!!!!!
-  // eg. for browser.element('div') -> 
+  // eg. for browser.element('div') ->
   // HTML returns all divs
   // but only the first div is returned as WebDriverElement
   getAllHTML() {
@@ -436,11 +463,11 @@ export class PageElement<
   // INTERACTION FUNCTIONS
 
   /**
-   * 
-   * @param postCondition Sometimes javascript that is to be executed after a click 
-   * is not loaded right at the moment that the element wait condition 
+   *
+   * @param postCondition Sometimes javascript that is to be executed after a click
+   * is not loaded right at the moment that the element wait condition
    * is fulfilled. (eg. element is visible)
-   * In this case, postCondition function will be 
+   * In this case, postCondition function will be
    */
   click(options?: {postCondition: () => boolean, timeout?: number, offsets?: {x?: number, y?: number}}) {
     this.initialWait()
@@ -465,7 +492,7 @@ export class PageElement<
           remainingTimeout -= interval;
           try {
               this._element.click();
-              errorMessage = undefined;                
+              errorMessage = undefined;
               return true;
           }
           catch (error) {

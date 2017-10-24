@@ -23,6 +23,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     hasText(text?: string): boolean;
     containsText(text?: string): boolean;
     hasValue(value?: string): boolean;
+    containsValue(value?: string): boolean;
     isEnabled(): boolean;
     isSelected(): boolean;
     eventuallyExists({reverse, timeout}?: Workflo.WDIOParams): boolean;
@@ -49,6 +50,9 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
         text?: string;
     }): this;
     waitValue({reverse, timeout, value}?: Workflo.WDIOParams & {
+        value?: string;
+    }): this;
+    waitContainsValue({reverse, timeout, value}?: Workflo.WDIOParams & {
         value?: string;
     }): this;
     waitEnabled({reverse, timeout}?: Workflo.WDIOParams): this;

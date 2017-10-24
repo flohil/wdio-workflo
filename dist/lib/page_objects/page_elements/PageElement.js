@@ -92,6 +92,10 @@ class PageElement extends _1.PageNode {
     hasValue(value = undefined) {
         return (value) ? this._element.getValue() === value : this._element.getValue().length > 0;
     }
+    // Returns true if element matching this selector currently contains value.
+    containsValue(value = undefined) {
+        return (value) ? this._element.getValue().indexOf(value) > -1 : this._element.getValue().length > 0;
+    }
     // Returns true if element matching this selector is enabled.
     isEnabled() {
         return this._element.isEnabled();
@@ -180,7 +184,7 @@ class PageElement extends _1.PageNode {
     }
     // WAIT FUNCTIONS
     // Waits until at least one matching element exists.
-    // 
+    //
     // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
     // If reverse is set to true, function will wait until no element
     // exists that matches the this.selector.
@@ -189,7 +193,7 @@ class PageElement extends _1.PageNode {
         return this;
     }
     // Waits until at least one matching element is visible.
-    // 
+    //
     // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
     // If reverse is set to true, function will wait until no element
     // is visible that matches the this.selector.
@@ -202,7 +206,7 @@ class PageElement extends _1.PageNode {
         return this;
     }
     // Waits until at least one matching element has a text.
-    // 
+    //
     // text -> defines the text that element should have
     // If text is undefined, waits until element's text is not empty.
     // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
@@ -219,7 +223,7 @@ class PageElement extends _1.PageNode {
         return this;
     }
     // Waits until at least one matching element contains a text.
-    // 
+    //
     // text -> defines the text that element should have
     // If text is undefined, waits until element's text is not empty.
     // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
@@ -236,7 +240,7 @@ class PageElement extends _1.PageNode {
         return this;
     }
     // Waits until at least one matching element has a value.
-    // 
+    //
     // value -> defines the value that element should have
     // If value is undefined, waits until element's value is not empty.
     // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
@@ -252,8 +256,25 @@ class PageElement extends _1.PageNode {
         }
         return this;
     }
+    // Waits until at least one matching element contains a value.
+    //
+    // value -> defines the value that element should have
+    // If value is undefined, waits until element's value is not empty.
+    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+    // If reverse is set to true, function will wait until no element
+    // has a text that matches the this.selector.
+    waitContainsValue({ reverse = false, timeout = this.timeout, value = undefined } = {}) {
+        this._element.waitForValue(timeout, reverse);
+        if (typeof value !== 'undefined' &&
+            typeof this._element.getValue !== 'undefined') {
+            browser.waitUntil(() => {
+                return this.containsValue(value);
+            }, timeout, `${this.selector}: Value never contained ${value}`);
+        }
+        return this;
+    }
     // Waits until at least one matching element is enabled.
-    // 
+    //
     // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
     // If reverse is set to true, function will wait until no element
     // is enabled that matches the this.selector.
@@ -262,7 +283,7 @@ class PageElement extends _1.PageNode {
         return this;
     }
     // Waits until at least one matching element is selected.
-    // 
+    //
     // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
     // If reverse is set to true, function will wait until no element
     // is selected that matches the this.selector.
@@ -273,7 +294,7 @@ class PageElement extends _1.PageNode {
     // AWAITED GETTER FUNCTIONS
     // returns html af all matches for a given selector,
     // even if only ONE WebDriverElement is returned!!!!!
-    // eg. for browser.element('div') -> 
+    // eg. for browser.element('div') ->
     // HTML returns all divs
     // but only the first div is returned as WebDriverElement
     getAllHTML() {
