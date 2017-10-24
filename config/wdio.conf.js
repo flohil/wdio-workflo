@@ -10,6 +10,8 @@ const workfloConf = require( process.env.WORKFLO_CONFIG )
 const jsonfile = require('jsonfile')
 
 let assertionScreenshotCtr = 0
+let errorScreenshotCtr = 0
+let errorScreenshotFilename
 
 // set defaults for workflo config
 if (!workfloConf.timeouts) {
@@ -109,7 +111,7 @@ exports.config = {
           var stack = new Error().stack
           assertion.stack = stack
 
-          process.send({event: 'step:failed', cid: '0-0', assertion: assertion})
+          process.send({event: 'step:failed', assertion: assertion})
           process.send({event: 'verify:failure', assertion: assertion})
         } else {
           assertion.stack = cleanStack(assertion.error.stack)
@@ -120,10 +122,16 @@ exports.config = {
           delete assertion.actual
           delete assertion.error
 
-          process.send({event: 'step:broken', cid: '0-0', assertion: assertion})
+          if (errorScreenshotFilename) {
+            assertion.screenshotFilename = errorScreenshotFilename
+          }
+
+          errorScreenshotFilename = undefined
+
+          process.send({event: 'step:broken', assertion: assertion})
         }
       }
-    },
+    }
   },
   /**
    * hooks
@@ -170,6 +178,22 @@ exports.config = {
   },
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {
+    if (error) {
+      browser.saveScreenshot()
 
+      const screenshot = browser.saveScreenshot(); // returns base64 string buffer
+
+      const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
+      const screenshotFilename = `${screenshotFolder}/error_${errorScreenshotCtr}.png`
+
+      errorScreenshotCtr++
+      errorScreenshotFilename = screenshotFilename
+
+      try {
+          fs.writeFileSync(screenshotFilename, screenshot)
+      } catch (err) {
+          console.log('Error writing screenshot:' + err.message)
+      }
+    }
   }
 }
