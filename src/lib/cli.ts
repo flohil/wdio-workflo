@@ -411,6 +411,8 @@ checkReport().then(() => {
         }
     }
 
+    const criteriaAnalysis = analyseCriteria()
+
     if ('rerunFaulty' in argv) {
         handleRerunFaulty()
     } else {
@@ -452,8 +454,6 @@ checkReport().then(() => {
 
         // add manual specs based on manual result files
     addManualResultFilesAndSpecs()
-
-    const criteriaAnalysis = analyseCriteria()
 
     if (argv.manualOnly) {
         handleManualOnly()

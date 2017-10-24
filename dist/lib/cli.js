@@ -240,6 +240,7 @@ checkReport().then(() => {
             delete filters.testcases[testcase];
         }
     }
+    const criteriaAnalysis = analyseCriteria();
     if ('rerunFaulty' in argv) {
         handleRerunFaulty();
     }
@@ -269,7 +270,6 @@ checkReport().then(() => {
     }
     // add manual specs based on manual result files
     addManualResultFilesAndSpecs();
-    const criteriaAnalysis = analyseCriteria();
     if (argv.manualOnly) {
         handleManualOnly();
         if (argv.automaticOnly) {
