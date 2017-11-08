@@ -26,5 +26,5 @@ export declare const given: (step: IParameterizedStep) => {
         "and": (step: any) => any;
     };
 };
-export declare const verify: (specObj: Workflo.IVerifySpecObject, func: (...testargs: any[]) => void) => void;
+export declare const validate: (specObj: Workflo.IValidateSpecObject, func: (...testargs: any[]) => void) => void;
 export declare function xpath(selector: string): XPathBuilder;

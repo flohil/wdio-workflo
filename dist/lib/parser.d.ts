@@ -36,7 +36,7 @@ export declare function parseSpecFiles(sourceFile: ts.SourceFile): void;
 export interface TestcaseInfo {
     description?: string;
     metadata?: Workflo.ITestcaseMetadata;
-    specVerifyHash?: Record<string, Record<string, true>>;
+    specValidateHash?: Record<string, Record<string, true>>;
 }
 export interface SuiteInfo {
     metadata?: Workflo.ISuiteMetadata;
@@ -52,12 +52,12 @@ export interface TestcaseFileTableEntry {
     testcases: Record<string, true>;
 }
 export declare type TestcaseTable = Record<string, TestcaseTableEntry>;
-export declare type VerifyTable = Record<string, Record<string, true>>;
+export declare type ValidateTable = Record<string, Record<string, true>>;
 export declare type TestcaseFileTable = Record<string, TestcaseFileTableEntry>;
 export interface TestcaseParseResults {
     testcaseTable: TestcaseTable;
     tree: SuiteHash;
-    verifyTable: VerifyTable;
+    validateTable: ValidateTable;
     testcaseFileTable: TestcaseFileTable;
 }
 export declare function parseTestcaseFiles(sourceFile: ts.SourceFile): void;

@@ -348,12 +348,12 @@ declare global {
       screenshot: any
     }
 
-    type IVerifySpecObject = {
+    type IValidateSpecObject = {
       [specId: string]: number | number[]
     }
 
-    type IVerifyContainer = {
-      specObj: IVerifySpecObject
+    type IValidateContainer = {
+      specObj: IValidateSpecObject
     }
   }
 
@@ -402,7 +402,7 @@ declare global {
 
   function given(step: IParameterizedStep) : Workflo.ITCGiven
 
-  function verify(verifyObject: Workflo.IVerifySpecObject, func: (...args : any[]) => void) : void
+  function validate(validateObject: Workflo.IValidateSpecObject, func: (...args : any[]) => void) : void
 
   function xpath(selector: string) : pageObjects.builders.XPathBuilder
 }

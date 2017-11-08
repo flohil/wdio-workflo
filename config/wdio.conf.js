@@ -86,7 +86,7 @@ exports.config = {
       }
 
       if ( passed ) {
-        process.send({event: 'verify:success', assertion: assertion})
+        process.send({event: 'validate:success', assertion: assertion})
 
         // rework
         process.send({event: 'step:succeeded', cid: '0-0', assertion: assertion})
@@ -112,7 +112,7 @@ exports.config = {
           assertion.stack = stack
 
           process.send({event: 'step:failed', assertion: assertion})
-          process.send({event: 'verify:failure', assertion: assertion})
+          process.send({event: 'validate:failure', assertion: assertion})
         } else {
           assertion.stack = cleanStack(assertion.error.stack)
 
@@ -163,7 +163,7 @@ exports.config = {
     // extend default object and string prototypes
     // with custom utitily functions
   },
-  beforeVerifier: function ( capabilties, specs ) {
+  beforeValidator: function ( capabilties, specs ) {
     require('ts-node/register')
     require('tsconfig-paths/register')
 

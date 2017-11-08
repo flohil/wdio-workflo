@@ -35,9 +35,9 @@ function testcasesInclude(id: string) {
 
 function shouldRunThen(story: string, criteria: number) {
   // check if spec is included in filters
-  // do not execute spec if it is not in testcase filters but in verified in other testcases
+  // do not execute spec if it is not in testcase filters but in validated in other testcases
 
-  const testcases = traceInfo.specs[story].criteriaVerificationFiles[criteria.toString()].testcaseIds
+  const testcases = traceInfo.specs[story].criteriaValidationFiles[criteria.toString()].testcaseIds
 
   let inSomeTestcase = false
 
@@ -328,7 +328,7 @@ export const Then = (
 
     // for last allure step (then), check if results where correct
     process.send({event: 'step:start', title: allDescriptions[allDescriptions.length - 1]})
-    process.send({event: 'step:end', verify: {
+    process.send({event: 'step:end', validate: {
       criteriaId: id,
       storyId: storyId
     }})
@@ -485,12 +485,12 @@ export const given = function(step: IParameterizedStep) {
   return _given(step, words.Given)
 }
 
-export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...testargs : any[]) => void) {
-  const verifyContainer: Workflo.IVerifyContainer = {
+export const validate = function(specObj: Workflo.IValidateSpecObject, func: (...testargs : any[]) => void) {
+  const validateContainer: Workflo.IValidateContainer = {
     specObj: specObj
   }
 
-  process.send({event: 'verify:start', specObj: specObj})
+  process.send({event: 'validate:start', specObj: specObj})
 
   const _process:any = process
 
@@ -499,12 +499,12 @@ export const verify = function(specObj: Workflo.IVerifySpecObject, func: (...tes
   }
   _process.workflo.specObj = specObj
 
-  process.send({event: 'step:start', title: `verify: ${JSON.stringify(specObj)}`})
+  process.send({event: 'step:start', title: `validate: ${JSON.stringify(specObj)}`})
 
   func()
 
-  process.send({event: 'verify:end', specObj: specObj})
-  process.send({event: 'step:end', type: 'verifyEnd'})
+  process.send({event: 'validate:end', specObj: specObj})
+  process.send({event: 'step:end', type: 'validateEnd'})
 
   _process.workflo.specObj = undefined
 }

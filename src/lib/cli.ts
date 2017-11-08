@@ -65,7 +65,7 @@ export interface ITestcaseTraceInfo {
     specs: string[]
 }
 
-export interface IVerificationFileEntry {
+export interface IValidationFileEntry {
     manualFile?: string,
     testcases?: string[],
     testcaseIds?: Record<string, true>
@@ -75,7 +75,7 @@ export interface ISpecTraceInfo {
     spec: string,
     specFile: string,
     testcaseCriteriaStrs: string[],
-    criteriaVerificationFiles: Record<string, IVerificationFileEntry>,
+    criteriaValidationFiles: Record<string, IValidationFileEntry>,
     manualCriteria: string[],
     manualCriteriaStr: string
 }
@@ -112,7 +112,7 @@ interface ConsoleReportEntry {
 }
 
 interface MergedResultsSpec {
-    status: 'passed' | 'failed' | 'unverified' | 'unknown' | 'pending',
+    status: 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending',
     dateTime: string,
     resultsFolder: string,
     manual?: boolean
@@ -145,7 +145,7 @@ const specStatus = {
     passed: 'passed',
     failed: 'failed',
     broken: 'broken',
-    unverified: 'unverified',
+    unvalidated: 'unvalidated',
     unknown: 'unknown',
     pending: 'pending'
 }
@@ -181,21 +181,21 @@ optimist
         '\t\t\t   \'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
         '\t\t\t   \'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
     .describe('features', 'restricts test execution to these features\n' +
-        '\t\t\t   \'["Login", "Logout"]\' => execute all testcases which verify specs defined within these features\n' +
-        '\t\t\t   \'["-Login"]\' => execute all testcases except those which verify specs defined within these features\n')
+        '\t\t\t   \'["Login", "Logout"]\' => execute all testcases which validate specs defined within these features\n' +
+        '\t\t\t   \'["-Login"]\' => execute all testcases except those which validate specs defined within these features\n')
     .describe('specs', 'restricts test execution to these specs\n' +
-        '\t\t\t   \'["3.2"]\' => execute all testcases which verify spec 3.2\n' +
+        '\t\t\t   \'["3.2"]\' => execute all testcases which validate spec 3.2\n' +
         '\t\t\t   \'["1.1*", "-1.1.2.4"]\' => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4\n' +
         '\t\t\t   \'["1.*"]\' => 1.* excludes spec 1 itself but includes of of its sub-specs\n')
     .describe('testcaseFiles', 'restricts test execution to testcases defined within these files\n' +
         '\t\t\t   \'["testcaseFile1", "testcaseFile2"]\' => execute all testcases defined within testcaseFile1.tc.ts and testcaseFile2.tc.ts\n')
-    .describe('specFiles', 'restricts test execution to testcases verified by specs defined within these files\n' +
-        '\t\t\t   \'["specFile1", "specFile2"]\' => execute all testcases verified by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
+    .describe('specFiles', 'restricts test execution to testcases validated by specs defined within these files\n' +
+        '\t\t\t   \'["specFile1", "specFile2"]\' => execute all testcases validated by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
         '\t\t\t   \'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
     .describe('specStatus', 'restricts specs by status of their criteria set during their last execution\n' +
-        '\t\t\t   \'["passed", "failed", "broken", "unverified", "unknown"]\' => these are all available status - combine as you see fit\n' +
-        '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken, unverified and unknown\n')
+        '\t\t\t   \'["passed", "failed", "broken", "unvalidated", "unknown"]\' => these are all available status - combine as you see fit\n' +
+        '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken, unvalidated and unknown\n')
     .describe('testcaseStatus', 'restricts testcases by given status\n' +
         '\t\t\t   \'["passed", "failed", "broken", "pending", "unknown"]\' => these are all available status - combine as you see fit\n' +
         '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken and unknown\n')
@@ -214,15 +214,15 @@ optimist
 
     .describe('printStatus', 'show current status of all testcases and specs')
 
-    .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files verifying this spec\n' +
+    .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files validating this spec\n' +
     '\t\t\t   \'4.1\' => show traceability information for spec 4.1\n')
-    .describe('traceTestcase', 'show testcase file defining and all specs and spec files verified by this testcase\n' +
+    .describe('traceTestcase', 'show testcase file defining and all specs and spec files validated by this testcase\n' +
     '\t\t\t   \'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
 
     .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
     .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
 
-    .describe('reportErrorsInstantly', 'report broken testcase errors and errors from verification failures immediatly')
+    .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly')
 
     .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'\n')
@@ -433,10 +433,10 @@ checkReport().then(() => {
         // remove testcases not matched by testcases filter
         filterTestcasesByTestcases()
 
-        // remove specs not matched by verifies in testcases or manual results
+        // remove specs not matched by validates in testcases or manual results
         filterSpecsByTestcases()
 
-        // remove testcases that do not verify filtered specs
+        // remove testcases that do not validate filtered specs
         filterTestcasesBySpecs()
 
         // remove features not matched by specs
@@ -1002,16 +1002,16 @@ checkReport().then(() => {
 
     function filterSpecsByTestcases() {
         if (Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) {
-            const verifiedSpecs: Record<string, true> = {}
+            const validatedSpecs: Record<string, true> = {}
 
-            // add all spec ids verified in given testcases
+            // add all spec ids validated in given testcases
             for (const testcase in filters.testcases) {
 
                 // testcase is a suite
                 if (testcase in parseResults.testcases.tree) {
                     for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
-                        for (const verifiedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specVerifyHash) {
-                            verifiedSpecs[verifiedSpec] = true
+                        for (const validatedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specValidateHash) {
+                            validatedSpecs[validatedSpec] = true
                         }
                     }
                 } else { // testcase is a testcase
@@ -1024,17 +1024,17 @@ checkReport().then(() => {
                         matchSuite = testcaseParts.join('.')
 
                         if (matchSuite in parseResults.testcases.tree) {
-                            for (const verifiedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specVerifyHash) {
-                                verifiedSpecs[verifiedSpec] = true
+                            for (const validatedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specValidateHash) {
+                                validatedSpecs[validatedSpec] = true
                             }
                         }
                     }
                 }
             }
 
-            // remove specs not verified by filtered testcases or manual results
+            // remove specs not validated by filtered testcases or manual results
             for (const spec in filters.specs) {
-                if (!(spec in verifiedSpecs)) {
+                if (!(spec in validatedSpecs)) {
                     delete filters.specs[spec]
                 }
             }
@@ -1193,13 +1193,13 @@ checkReport().then(() => {
                         analysedCriteria.specs[spec].manual[criteria] = true
                         analysedCriteria.manualCriteriaCount++
                     }
-                    if (spec in parseResults.testcases.verifyTable) {
+                    if (spec in parseResults.testcases.validateTable) {
                         let _autoCovered = false
 
-                        for (const testcaseId in parseResults.testcases.verifyTable[spec]) {
+                        for (const testcaseId in parseResults.testcases.validateTable[spec]) {
                             const suite = parseResults.testcases.testcaseTable[testcaseId].suiteId
 
-                            if (criteria in parseResults.testcases.tree[suite].testcaseHash[testcaseId].specVerifyHash[spec]) {
+                            if (criteria in parseResults.testcases.tree[suite].testcaseHash[testcaseId].specValidateHash[spec]) {
                                 if (!_autoCovered) {
                                     analysedCriteria.automatedCriteriaCount++
                                 }
@@ -1212,7 +1212,7 @@ checkReport().then(() => {
 
                         if (_autoCovered) {
                             if (covered) {
-                                throw new Error(`Criteria ${criteria} of spec ${spec} must not be both verified automatically and tested manually!`)
+                                throw new Error(`Criteria ${criteria} of spec ${spec} must not be both validated automatically and tested manually!`)
                             } else {
                                 covered = true
                             }
@@ -1292,8 +1292,19 @@ checkReport().then(() => {
         const testcaseTableEntry = parseResults.testcases.testcaseTable[testcase]
         let testcaseFile = testcaseTableEntry.testcaseFile.replace(srcDir, '')
         testcaseFile = testcaseFile.substring(1, testcaseFile.length).replace('\\', '\/')
-        const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[testcase].specVerifyHash
-        const specFilesHash = (specHash) ? arrayFunctions.mapToObject(Object.keys(specHash).map(spec => parseResults.specs.specTable[spec].specFile), (spec) => true) : {}
+        const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[testcase].specValidateHash
+        const specFilesHash = (specHash) ? arrayFunctions.mapToObject(Object.keys(specHash).map(spec =>
+            {
+                if (parseResults.specs.specTable[spec])
+                {
+                    return parseResults.specs.specTable[spec].specFile
+                }
+                else
+                {
+                    throw new Error(`Spec '${spec}' validated in testcase '${testcase}' could not be found!`)
+                }
+            }
+        ), (spec) => true) : {}
         const specFiles = Object.keys(specFilesHash)
         const specs = (specHash) ? Object.keys(specHash).map(spec => {
             `${spec}: [${Object.keys(specHash[spec]).join(', ')}] ('${parseResults.specs.specTable[spec].specFile}')`
@@ -1314,7 +1325,7 @@ checkReport().then(() => {
     function buildSpecTraceInfo(spec: string): ISpecTraceInfo {
         let specFile = parseResults.specs.specTable[spec].specFile.replace(srcDir, '')
         specFile = specFile.substring(1, specFile.length).replace('\\', '\/')
-        const testcaseHash = parseResults.testcases.verifyTable[spec]
+        const testcaseHash = parseResults.testcases.validateTable[spec]
         const testcases = (testcaseHash) ? Object.keys(testcaseHash) : []
         const testcaseFileHash = (testcaseHash) ? arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true) : {}
         const testcaseFiles = Object.keys(testcaseFileHash)
@@ -1325,7 +1336,7 @@ checkReport().then(() => {
         }
 
         let testcaseCriteria: Record<string, string[]> = {}
-        testcases.forEach(testcase => testcaseCriteria[testcase] = Object.keys(parseResults.testcases.tree[parseResults.testcases.testcaseTable[testcase].suiteId].testcaseHash[testcase].specVerifyHash[spec]))
+        testcases.forEach(testcase => testcaseCriteria[testcase] = Object.keys(parseResults.testcases.tree[parseResults.testcases.testcaseTable[testcase].suiteId].testcaseHash[testcase].specValidateHash[spec]))
 
         const testcaseCriteriaStrs: string[] = Object.keys(testcaseCriteria).map(testcase => {
             let file = parseResults.testcases.testcaseTable[testcase].testcaseFile.replace(srcDir, '')
@@ -1334,13 +1345,13 @@ checkReport().then(() => {
             return `${testcase}: [${testcaseCriteria[testcase].join(', ')}] (${file})`
         })
 
-        const criteriaVerificationFiles: Record<string, IVerificationFileEntry> = {}
+        const criteriaValidationFiles: Record<string, IValidationFileEntry> = {}
         const manualCriteria = (spec in manualResults.specTable) ? Object.keys(manualResults.specTable[spec].criteria) : []
         const manualCriteriaStr = (manualCriteria.length > 0) ? `[${manualCriteria.join(', ')}] (${manualFile})` : ''
 
         for (const criteria in parseResults.specs.specTable[spec].criteria) {
             if (manualCriteria.length > 0 && criteria in manualResults.specTable[spec].criteria) {
-                criteriaVerificationFiles[criteria] = {
+                criteriaValidationFiles[criteria] = {
                     manualFile
                 }
             } else {
@@ -1349,7 +1360,7 @@ checkReport().then(() => {
                 let _testcaseIds: Record<string, true> = {}
 
                 for (const tc in testcaseCriteria) {
-                    if (criteria in parseResults.testcases.tree[parseResults.testcases.testcaseTable[tc].suiteId].testcaseHash[tc].specVerifyHash[spec]) {
+                    if (criteria in parseResults.testcases.tree[parseResults.testcases.testcaseTable[tc].suiteId].testcaseHash[tc].specValidateHash[spec]) {
                         let _testcaseFile = parseResults.testcases.testcaseTable[tc].testcaseFile.replace(srcDir, '')
                         _testcaseFile = `${_testcaseFile.substring(1, _testcaseFile.length).replace('\\', '\/')}`
 
@@ -1367,7 +1378,7 @@ checkReport().then(() => {
                     _testcases.push(`${tcHash[tcFile].join(', ')} (${tcFile})`)
                 }
 
-                criteriaVerificationFiles[criteria] = {
+                criteriaValidationFiles[criteria] = {
                     testcases: _testcases,
                     testcaseIds: _testcaseIds
                 }
@@ -1378,7 +1389,7 @@ checkReport().then(() => {
             spec,
             specFile: `${specFile}`,
             testcaseCriteriaStrs,
-            criteriaVerificationFiles,
+            criteriaValidationFiles,
             manualCriteria,
             manualCriteriaStr
         }
@@ -1406,7 +1417,7 @@ checkReport().then(() => {
 
         content.push(['Testcase File:', testcaseTraceInfo.testcaseFile])
 
-        content.push(['Verifies Specs:', (testcaseTraceInfo.specs.length > 0) ? testcaseTraceInfo.specs.shift() : '[]'])
+        content.push(['validates Specs:', (testcaseTraceInfo.specs.length > 0) ? testcaseTraceInfo.specs.shift() : '[]'])
         testcaseTraceInfo.specs.forEach(spec => content.push(['', spec]))
 
         const traceTable = table(content, { align: [ 'l', 'l' ] })
@@ -1420,10 +1431,10 @@ checkReport().then(() => {
 
         content.push(['Spec File:', specTraceInfo.specFile])
 
-        content.push(['Verified by Testcases:', (specTraceInfo.testcaseCriteriaStrs.length > 0) ? specTraceInfo.testcaseCriteriaStrs.shift() : '[]'])
+        content.push(['validated by Testcases:', (specTraceInfo.testcaseCriteriaStrs.length > 0) ? specTraceInfo.testcaseCriteriaStrs.shift() : '[]'])
         specTraceInfo.testcaseCriteriaStrs.forEach(testcaseCriteriaStr => content.push(['', testcaseCriteriaStr]))
 
-        content.push(['Verified in Manual Results:', (specTraceInfo.manualCriteria.length > 0) ? specTraceInfo.manualCriteriaStr : '[]'])
+        content.push(['validated in Manual Results:', (specTraceInfo.manualCriteria.length > 0) ? specTraceInfo.manualCriteriaStr : '[]'])
 
         const traceTable = table(content, { align: [ 'l', 'l' ] })
 
@@ -1495,7 +1506,7 @@ checkReport().then(() => {
             for (const criteria in runResults.specs[spec]) {
                 const status = runResults.specs[spec][criteria].status
 
-                if (status === 'fail' || status === 'broken' || status === 'unverified') {
+                if (status === 'fail' || status === 'broken' || status === 'unvalidated') {
                     faultySpecs[spec] = true
                 }
             }
@@ -1631,7 +1642,7 @@ checkReport().then(() => {
             const parsedStatus = JSON.parse(argv.specStatus)
             const statuses: Record<SpecStatuses, boolean> = {
                 passed: false,
-                unverified: false,
+                unvalidated: false,
                 unknown: false,
                 failed: false,
                 broken: false,
@@ -1642,7 +1653,7 @@ checkReport().then(() => {
                 if (status === 'faulty') {
                     statuses.broken = true
                     statuses.failed = true
-                    statuses.unverified = true
+                    statuses.unvalidated = true
                     statuses.unknown = true
                 }
                 else if (!(status in specStatus)) {
@@ -1815,7 +1826,7 @@ checkReport().then(() => {
                         broken: 0,
                         failed: 0,
                         passed: 0,
-                        unverified: 0,
+                        unvalidated: 0,
                         unknown: 0,
                         pending: 0
                     }
@@ -1909,7 +1920,7 @@ checkReport().then(() => {
                 const criteriaHash: Record<SpecStatuses, Record<string, string[]>> = {
                     passed: {},
                     pending: {},
-                    unverified: {},
+                    unvalidated: {},
                     failed: {},
                     broken: {},
                     unknown: {}
@@ -2037,7 +2048,7 @@ checkReport().then(() => {
                 return symbols.err
             case 'pending':
                 return '-'
-            case 'unverified':
+            case 'unvalidated':
                 return 'U'
             case 'unknown':
                 return '?'
@@ -2075,13 +2086,13 @@ checkReport().then(() => {
             console.log(fmt, counts.pending)
         }
 
-        // unverifieds
-        if ('unverified' in counts) {
+        // unvalidateds
+        if ('unvalidated' in counts) {
             const _counts = <Record<SpecStatuses, number>> counts
 
-            if (_counts.unverified > 0) {
-                fmt = color('unverified', '%d unverified') + color('light', ` (${percent(_counts.unverified)}%)`)
-                console.log(fmt, _counts.unverified)
+            if (_counts.unvalidated > 0) {
+                fmt = color('unvalidated', '%d unvalidated') + color('light', ` (${percent(_counts.unvalidated)}%)`)
+                console.log(fmt, _counts.unvalidated)
             }
         }
 

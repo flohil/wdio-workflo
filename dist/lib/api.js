@@ -28,8 +28,8 @@ function testcasesInclude(id) {
 }
 function shouldRunThen(story, criteria) {
     // check if spec is included in filters
-    // do not execute spec if it is not in testcase filters but in verified in other testcases
-    const testcases = traceInfo.specs[story].criteriaVerificationFiles[criteria.toString()].testcaseIds;
+    // do not execute spec if it is not in testcase filters but in validated in other testcases
+    const testcases = traceInfo.specs[story].criteriaValidationFiles[criteria.toString()].testcaseIds;
     let inSomeTestcase = false;
     if (!manualOnly) {
         for (const testcase in testcases) {
@@ -219,7 +219,7 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
         allDescriptions.slice(0, allDescriptions.length - 1).forEach(description => stepFunc(description));
         // for last allure step (then), check if results where correct
         process.send({ event: 'step:start', title: allDescriptions[allDescriptions.length - 1] });
-        process.send({ event: 'step:end', verify: {
+        process.send({ event: 'step:end', validate: {
                 criteriaId: id,
                 storyId: storyId
             } });
@@ -316,20 +316,20 @@ const _given = function (step, prefix) {
 exports.given = function (step) {
     return _given(step, words.Given);
 };
-exports.verify = function (specObj, func) {
-    const verifyContainer = {
+exports.validate = function (specObj, func) {
+    const validateContainer = {
         specObj: specObj
     };
-    process.send({ event: 'verify:start', specObj: specObj });
+    process.send({ event: 'validate:start', specObj: specObj });
     const _process = process;
     if (typeof _process.workflo === 'undefined') {
         _process.workflo = {};
     }
     _process.workflo.specObj = specObj;
-    process.send({ event: 'step:start', title: `verify: ${JSON.stringify(specObj)}` });
+    process.send({ event: 'step:start', title: `validate: ${JSON.stringify(specObj)}` });
     func();
-    process.send({ event: 'verify:end', specObj: specObj });
-    process.send({ event: 'step:end', type: 'verifyEnd' });
+    process.send({ event: 'validate:end', specObj: specObj });
+    process.send({ event: 'step:end', type: 'validateEnd' });
     _process.workflo.specObj = undefined;
 };
 function xpath(selector) {

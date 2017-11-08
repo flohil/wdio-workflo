@@ -18,7 +18,7 @@ export interface ITestcaseTraceInfo {
     testcaseFile: string;
     specs: string[];
 }
-export interface IVerificationFileEntry {
+export interface IValidationFileEntry {
     manualFile?: string;
     testcases?: string[];
     testcaseIds?: Record<string, true>;
@@ -27,7 +27,7 @@ export interface ISpecTraceInfo {
     spec: string;
     specFile: string;
     testcaseCriteriaStrs: string[];
-    criteriaVerificationFiles: Record<string, IVerificationFileEntry>;
+    criteriaValidationFiles: Record<string, IValidationFileEntry>;
     manualCriteria: string[];
     manualCriteriaStr: string;
 }

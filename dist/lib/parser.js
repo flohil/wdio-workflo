@@ -142,7 +142,7 @@ exports.parseSpecFiles = parseSpecFiles;
 const testcaseTable = {};
 // used to lookup spec information
 const testcaseTree = {};
-const verifyTable = {};
+const validateTable = {};
 const testcaseFileTable = {};
 const testcaseParserState = {
     callExpressionPos: -1,
@@ -268,47 +268,47 @@ function parseTestcaseFiles(sourceFile) {
                             });
                             afterFuncTable[parentPos] = () => { testcaseParserState.activeTestcaseId = undefined; };
                             break;
-                        case 'verify':
+                        case 'validate':
                             testcaseParserState.addArgFunc((node) => {
-                                const verifyMetadata = node;
-                                const str = sourceFile.text.substr(verifyMetadata.pos, verifyMetadata.end - verifyMetadata.pos);
-                                let verifyObject;
+                                const validateMetadata = node;
+                                const str = sourceFile.text.substr(validateMetadata.pos, validateMetadata.end - validateMetadata.pos);
+                                let validateObject;
                                 try {
-                                    verifyObject = JSON5.parse(str);
+                                    validateObject = JSON5.parse(str);
                                 }
                                 catch (e) {
-                                    console.error(`Failed to parse verify object. Please do not use dynamic values inside verifyObject: ${str}\n`);
+                                    console.error(`Failed to parse validate object. Please do not use dynamic values inside validateObject: ${str}\n`);
                                     throw e;
                                 }
                                 try {
-                                    if (!testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash) {
-                                        testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash = {};
+                                    if (!testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash) {
+                                        testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash = {};
                                     }
                                 }
                                 catch (e) {
                                     if (!testcaseTree[testcaseParserState.activeSuiteId] ||
                                         !testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId]) {
-                                        console.error(`Parsed verify function outside of suite or testcase: ${str}\n
-                        Always define verify functions inside suites and testcases and do not use them
+                                        console.error(`Parsed validate function outside of suite or testcase: ${str}\n
+                        Always define validate functions inside suites and testcases and do not use them
                         inside "external" functions invoked from inside suites or testcases`);
                                         throw e;
                                     }
                                 }
-                                for (const spec in verifyObject) {
-                                    if (verifyObject[spec].length > 0) {
+                                for (const spec in validateObject) {
+                                    if (validateObject[spec].length > 0) {
                                         if (spec in specTable) {
                                             specTable[spec].testcases[testcaseParserState.activeTestcaseId] = true;
                                         }
-                                        if (!(spec in verifyTable)) {
-                                            verifyTable[spec] = {};
+                                        if (!(spec in validateTable)) {
+                                            validateTable[spec] = {};
                                         }
-                                        verifyTable[spec][testcaseParserState.activeTestcaseId] = true;
-                                        const specVerifyHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specVerifyHash;
-                                        if (!(spec in specVerifyHash)) {
-                                            specVerifyHash[spec] = {};
+                                        validateTable[spec][testcaseParserState.activeTestcaseId] = true;
+                                        const specValidateHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash;
+                                        if (!(spec in specValidateHash)) {
+                                            specValidateHash[spec] = {};
                                         }
-                                        for (const criteria of verifyObject[spec]) {
-                                            specVerifyHash[spec][criteria] = true;
+                                        for (const criteria of validateObject[spec]) {
+                                            specValidateHash[spec][criteria] = true;
                                         }
                                     }
                                 }
@@ -371,7 +371,7 @@ function testcaseFilesParse(fileNames) {
     return {
         testcaseTable: testcaseTable,
         tree: testcaseTree,
-        verifyTable: verifyTable,
+        validateTable: validateTable,
         testcaseFileTable: testcaseFileTable
     };
 }
