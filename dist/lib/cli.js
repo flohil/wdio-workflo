@@ -206,8 +206,8 @@ checkReport().then(() => {
     // complete cli specFiles and testcaseFiles paths
     completeFilePaths(mergedFilters);
     // if no cli params were defined, merge in all spec and testcase files...
-    completeSpecFiles(argv, mergedFilters);
-    completeTestcaseFiles(argv, mergedFilters);
+    const completedSpecFiles = completeSpecFiles(argv, mergedFilters);
+    const completedTestcaseFiles = completeTestcaseFiles(argv, mergedFilters);
     const parseResults = {
         specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
         testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
@@ -259,10 +259,11 @@ checkReport().then(() => {
         filterSpecsByTestcases();
         // remove testcases that do not validate filtered specs
         filterTestcasesBySpecs();
-        // remove features not matched by specs
-        filterFeaturesBySpecs();
         // build suites based on testcases
         addSuites();
+        filterWildSpecsAndTestcases();
+        // remove features not matched by specs
+        filterFeaturesBySpecs();
         // remove specFiles not matched by filtered specs
         filterSpecFilesBySpecs();
         // remove testcaseFiles not matched by filtered testcases
@@ -480,6 +481,7 @@ checkReport().then(() => {
         // if user manually defined an empty specFiles array, do not add specFiles from folder
         if (Object.keys(_filters.specFiles).length === 0 && !argv.specFiles) {
             io_1.getAllFiles(specsDir, '.spec.ts').forEach(specFile => _filters.specFiles[specFile] = true);
+            return true;
         }
         else {
             let removeOnly = true;
@@ -505,12 +507,14 @@ checkReport().then(() => {
                     .forEach(specFile => _filters.specFiles[specFile] = true);
             }
         }
+        return false;
     }
     // if no testcase files are present in filters, use all testcase files in testcase folder
     function completeTestcaseFiles(argv, _filters) {
         // if user manually defined an empty testcaseFiles array, do not add testcaseFiles from folder
         if (Object.keys(_filters.testcaseFiles).length === 0 && !argv.testcaseFiles) {
             io_1.getAllFiles(testcasesDir, '.tc.ts').forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
+            return true;
         }
         else {
             let removeOnly = true;
@@ -536,6 +540,7 @@ checkReport().then(() => {
                     .forEach(testcaseFile => _filters.testcaseFiles[testcaseFile] = true);
             }
         }
+        return false;
     }
     function completeFilePaths(_filters) {
         const specFilePaths = {};
@@ -833,6 +838,49 @@ checkReport().then(() => {
                     filters.suites[str] = true;
                 }
             }
+        }
+    }
+    function filterWildSpecsAndTestcases() {
+        // remove leftover specs caused by testcases that have no validate function
+        if (Object.keys(mergedFilters.testcaseFiles).length > 0 || Object.keys(mergedFilters.testcases).length > 0
+            && Object.keys(mergedFilters.features).length === 0 && Object.keys(mergedFilters.specs).length === 0 && Object.keys(mergedFilters.specFiles).length === 0) {
+            const validatedSpecs = {};
+            // add all spec ids validated in given testcases
+            for (const testcase in filters.testcases) {
+                // testcase is a suite
+                if (testcase in parseResults.testcases.tree) {
+                    for (const testcaseId in parseResults.testcases.tree[testcase].testcaseHash) {
+                        for (const validatedSpec in parseResults.testcases.tree[testcase].testcaseHash[testcaseId].specValidateHash) {
+                            validatedSpecs[validatedSpec] = true;
+                        }
+                    }
+                }
+                else {
+                    let matchSuite = testcase;
+                    const testcaseParts = testcase.split('.');
+                    // at least one suite followed by a testcase
+                    if (testcaseParts.length > 1) {
+                        testcaseParts.pop(); // remove testcase
+                        matchSuite = testcaseParts.join('.');
+                        if (matchSuite in parseResults.testcases.tree) {
+                            for (const validatedSpec in parseResults.testcases.tree[matchSuite].testcaseHash[testcase].specValidateHash) {
+                                validatedSpecs[validatedSpec] = true;
+                            }
+                        }
+                    }
+                }
+            }
+            // remove specs not validated by filtered testcases or manual results
+            for (const spec in filters.specs) {
+                if (!(spec in validatedSpecs)) {
+                    delete filters.specs[spec];
+                }
+            }
+        }
+        if ((Object.keys(mergedFilters.testcaseFiles).length > 0 || Object.keys(mergedFilters.testcases).length > 0) &&
+            (Object.keys(mergedFilters.features).length > 0 || Object.keys(mergedFilters.specs).length > 0 || (Object.keys(mergedFilters.specFiles).length > 0 && !completedSpecFiles)) &&
+            Object.keys(filters.specs).length === 0) {
+            filters.testcases = {};
         }
     }
     function importManualResults() {
