@@ -52,6 +52,8 @@ const ALLOWED_OPTS = [
     'specStatus',
     'testcaseStatus',
     'dates',
+    'specSeverity',
+    'testcaseSeverity',
     'generateReport',
     'openReport',
     'report',
@@ -132,6 +134,10 @@ optimist
     .describe('testcaseStatus', 'restricts testcases by given status\n' +
     '\t\t\t   \'["passed", "failed", "broken", "pending", "unknown"]\' => these are all available status - combine as you see fit\n' +
     '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken and unknown\n')
+    .describe('specSeverity', 'restricts specs by severity set during their last execution\n' +
+    '\t\t\t   \'["blocker", "critical", "normal", "minor", "trivial"]\' => these are all available severities - combine as you see fit\n')
+    .describe('testcaseSeverity', 'restricts testcases by severity set during their last execution\n' +
+    '\t\t\t   \'["blocker", "critical", "normal", "minor", "trivial"]\' => these are all available severities - combine as you see fit\n')
     .describe('dates', 'restricts testcases and specs (oldest spec criteria) by given date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)\n' +
     '\t\t\t   \'["(2017-03-10,2017-10-28)"]\' => restricts by status set between 2017-03-10 and 2017-10-28 (both at 0 pm, 0 min, 0 sec)\n' +
     '\t\t\t   \'["2017-07-21", "2017-07-22T14:51:13"]\' => restricts by last status set on 2017-07-21 or 2017-07-22 at 2 pm, 51 min, 13 sec\n')
@@ -295,8 +301,10 @@ checkReport().then(() => {
     else {
         filterSpecsByDate();
         filterSpecsByStatus();
+        filterSpecsBySeverity();
         filterTestcasesByDate();
         filterTestcasesByStatus();
+        filterTestcasesBySeverity();
         // remove specs not matched by specs filter
         filterSpecsBySpecs();
         // remove specs not matched by features filter
@@ -783,7 +791,7 @@ checkReport().then(() => {
         }
     }
     function filterSpecsByTestcases() {
-        if (Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) {
+        if ((Object.keys(mergedFilters.testcaseFiles).length > 0 && Object.keys(mergedFilters.testcases).length > 0) || argv.testcaseSeverity || argv.testcaseStatus) {
             const validatedSpecs = {};
             // add all spec ids validated in given testcases
             for (const testcase in filters.testcases) {
@@ -1350,7 +1358,7 @@ checkReport().then(() => {
                     statuses.unknown = true;
                 }
                 else if (!(status in specStatus)) {
-                    throw new Error(`Unknown value for filter --specStatus: ${argv.specStatus}`);
+                    throw new Error(`Unknown value for filter --specStatus: ${status}`);
                 }
                 else {
                     statuses[status] = true;
@@ -1366,6 +1374,33 @@ checkReport().then(() => {
                     }
                 }
                 if (!matched) {
+                    delete filters.specs[spec];
+                }
+            }
+        }
+    }
+    function filterSpecsBySeverity() {
+        if (argv.specSeverity) {
+            const parsedSeverity = JSON.parse(argv.specSeverity);
+            const severities = {
+                trivial: false,
+                minor: false,
+                normal: false,
+                critical: false,
+                blocker: false
+            };
+            for (const severity of parsedSeverity) {
+                if (!(severity in severities)) {
+                    throw new Error(`Unknown value for filter --specSeverity: ${severity}`);
+                }
+                else {
+                    severities[severity] = true;
+                }
+            }
+            for (const spec in filters.specs) {
+                const feature = parseResults.specs.specTable[spec].feature;
+                const severity = parseResults.specs.specTree[feature].specHash[spec].metadata.severity || 'normal';
+                if (!severities[severity]) {
                     delete filters.specs[spec];
                 }
             }
@@ -1397,7 +1432,7 @@ checkReport().then(() => {
                     statuses.unknown = true;
                 }
                 else if (!(status in testcaseStatus)) {
-                    throw new Error(`Unknown value for filter --testcaseStatus: ${argv.testcaseStatus}`);
+                    throw new Error(`Unknown value for filter --testcaseStatus: ${status}`);
                 }
                 else {
                     statuses[status] = true;
@@ -1405,6 +1440,33 @@ checkReport().then(() => {
             }
             for (const testcase in filters.testcases) {
                 if (!statuses[mergedResults.testcases[testcase].status]) {
+                    delete filters.testcases[testcase];
+                }
+            }
+        }
+    }
+    function filterTestcasesBySeverity() {
+        if (argv.testcaseSeverity) {
+            const parsedSeverity = JSON.parse(argv.testcaseSeverity);
+            const severities = {
+                trivial: false,
+                minor: false,
+                normal: false,
+                critical: false,
+                blocker: false
+            };
+            for (const severity of parsedSeverity) {
+                if (!(severity in severities)) {
+                    throw new Error(`Unknown value for filter --testcaseSeverity: ${severity}`);
+                }
+                else {
+                    severities[severity] = true;
+                }
+            }
+            for (const testcase in filters.testcases) {
+                const suite = parseResults.testcases.testcaseTable[testcase].suiteId;
+                const severity = parseResults.testcases.tree[suite].testcaseHash[testcase].metadata.severity || 'normal';
+                if (!severities[severity]) {
                     delete filters.testcases[testcase];
                 }
             }
