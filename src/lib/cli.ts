@@ -33,6 +33,43 @@ const ALLOWED_ARGV = [
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ]
 
+const ALLOWED_OPTS = [
+    'help', 'h',
+    'version', 'v',
+    'host',
+    'port',
+    'logLevel', 'l',
+    'coloredLogs', 'c',
+    'bail',
+    'baseUrl', 'b',
+    'waitforTimeout', 'w',
+    'watch',
+    'info',
+    'testcases',
+    'features',
+    'specs',
+    'testcaseFiles',
+    'specFiles',
+    'listFiles',
+    'specStatus',
+    'testcaseStatus',
+    'dates',
+    'generateReport',
+    'openReport',
+    'report',
+    'consoleReport',
+    'printStatus',
+    'traceSpec',
+    'traceTestcase',
+    'manualOnly',
+    'automaticOnly',
+    'cleanResultsStatus',
+    'reportErrorsInstantly',
+    'rerunFaulty',
+    '_',
+    '$0'
+]
+
 let configFile
 let optionsOffset = 2 // config file defined as first "parameter"
 
@@ -271,6 +308,24 @@ if (process.argv.length === 2 || process.argv.length > 2 && process.argv[2].subs
 
 let argv = optimist.parse(process.argv.slice(optionsOffset))
 
+const allowedOpts = arrayFunctions.mapToObject(ALLOWED_OPTS, (element) => true)
+
+for (const optKey in argv)
+{
+    const unknownOpts = []
+
+    if (!(optKey in allowedOpts)) {
+        unknownOpts.push(optKey)
+    }
+
+    if (unknownOpts.length > 0)
+    {
+        optimist.showHelp()
+        console.error(`Unknown cli options: ${unknownOpts.join(', ')}`)
+        process.exit(1)
+    }
+}
+
 if (argv.help) {
     optimist.showHelp()
     process.exit(0)
@@ -411,7 +466,7 @@ checkReport().then(() => {
         }
     }
 
-    const criteriaAnalysis = analyseCriteria()
+    let criteriaAnalysis = analyseCriteria()
 
     if ('rerunFaulty' in argv) {
         handleRerunFaulty()
@@ -466,6 +521,8 @@ checkReport().then(() => {
     } else if (argv.automaticOnly) {
         handleAutomaticOnly()
     }
+
+    criteriaAnalysis = analyseCriteria()
 
     const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
     const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
@@ -1140,7 +1197,7 @@ checkReport().then(() => {
     function filterWildSpecsAndTestcases() {
 
         // remove leftover specs caused by testcases that have no validate function
-        if (Object.keys(mergedFilters.testcaseFiles).length > 0 || Object.keys(mergedFilters.testcases).length > 0
+        if ((Object.keys(mergedFilters.testcaseFiles).length > 0 || Object.keys(mergedFilters.testcases).length > 0)
             && Object.keys(mergedFilters.features).length === 0 && Object.keys(mergedFilters.specs).length === 0 && Object.keys(mergedFilters.specFiles).length === 0) {
 
             const validatedSpecs = {};
