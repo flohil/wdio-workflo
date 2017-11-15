@@ -54,7 +54,7 @@
     "wdio-selenium-standalone-service": "0.0.9",
     "wdio-workflo-allure-reporter": "0.0.28",
     "wdio-workflo-jasmine-framework": "0.0.5",
-    "wdio-workflo-spec-reporter": "0.0.16",
+    "wdio-workflo-spec-reporter": "0.0.15",
     "webdriverio-workflo": "0.0.49",
     "wrench": "^1.5.9"
   }
