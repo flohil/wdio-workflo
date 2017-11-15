@@ -532,6 +532,8 @@ checkReport().then(() => {
         handleAutomaticOnly()
     }
 
+    cleanResultsStatus()
+
     criteriaAnalysis = analyseCriteria()
 
     const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0
@@ -657,8 +659,6 @@ checkReport().then(() => {
 
         process.exit(0)
     }
-
-    cleanResultsStatus()
 
     handlePrintStatus()
 

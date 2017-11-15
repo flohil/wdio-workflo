@@ -336,6 +336,7 @@ checkReport().then(() => {
     else if (argv.automaticOnly) {
         handleAutomaticOnly();
     }
+    cleanResultsStatus();
     criteriaAnalysis = analyseCriteria();
     const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
     const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
@@ -430,7 +431,6 @@ checkReport().then(() => {
         }
         process.exit(0);
     }
-    cleanResultsStatus();
     handlePrintStatus();
     if (fs.existsSync(testInfoFilePath)) {
         fs.unlinkSync(testInfoFilePath);
