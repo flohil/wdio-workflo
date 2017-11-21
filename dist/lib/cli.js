@@ -257,7 +257,10 @@ checkReport().then(() => {
         testcases: {}
     };
     if (fs.existsSync(mergedResultsPath)) {
-        mergedResults = JSON.parse(fs.readFileSync(mergedResultsPath, 'utf8'));
+        const mergedResultsStr = fs.readFileSync(mergedResultsPath, 'utf8');
+        if (mergedResultsStr !== 'undefined') {
+            mergedResults = JSON.parse(mergedResultsStr);
+        }
     }
     // merge non-file cli filters
     mergeKeys.forEach(key => mergeIntoFilters(key, argv, mergedFilters));
@@ -1230,7 +1233,14 @@ checkReport().then(() => {
         if (!fs.existsSync(resultsJsonPath)) {
             throw new Error(`No results.json file found inside results folder: ${resultsFolderPath}`);
         }
-        const runResults = JSON.parse(fs.readFileSync(resultsJsonPath, 'utf8'));
+        let runResults = {
+            specs: {},
+            testcases: {}
+        };
+        const resultsStr = fs.readFileSync(resultsJsonPath, 'utf8');
+        if (resultsStr !== 'undefined') {
+            runResults = JSON.parse(resultsStr);
+        }
         const faultySpecs = {};
         const faultyTestcases = {};
         for (const testcase in runResults.testcases) {
@@ -1556,7 +1566,14 @@ checkReport().then(() => {
                 console.log("No mergedResults.json file found - did you run any tests yet?");
             }
             else {
-                const mergedResults = JSON.parse(fs.readFileSync(mergedResultsPath, 'utf8'));
+                const mergedResultsStr = fs.readFileSync(mergedResultsPath, 'utf8');
+                let mergedResults = {
+                    specs: {},
+                    testcases: {}
+                };
+                if (mergedResultsStr !== 'undefined') {
+                    mergedResults = JSON.parse(fs.readFileSync(mergedResultsPath, 'utf8'));
+                }
                 const counts = {
                     testcases: {
                         broken: 0,
@@ -1832,7 +1849,11 @@ function checkReport() {
                 run = fs.readFileSync(latestRunPath, 'utf8');
             }
             const reportPath = path.join(resultsPath, run, 'consoleReport.json');
-            const consoleReport = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            const reportStr = fs.readFileSync(reportPath, 'utf8');
+            let consoleReport = [];
+            if (reportStr !== 'undefined') {
+                consoleReport = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            }
             consoleReport.forEach(entry => {
                 switch (entry.type) {
                     case 'log':
