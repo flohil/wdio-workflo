@@ -372,9 +372,22 @@ process.env.WORKFLO_CONFIG = workfloConfigFile
 const workfloConfig = require(workfloConfigFile)
 
 const resultsPath = path.join(workfloConfig.testDir, 'results')
+const logsPath = path.join(workfloConfig.testDir, 'logs')
 const latestRunPath = path.join(resultsPath, 'latestRun')
 const mergedResultsPath = path.join(resultsPath, 'mergedResults.json')
 const consoleReportPath = path.join(resultsPath, dateTime, 'consoleReport.json')
+
+createMissingDirectories()
+
+function createMissingDirectories() {
+    if (!fs.existsSync(resultsPath)) {
+        fs.mkdirSync(resultsPath)
+    }
+
+    if (!fs.existsSync(logsPath)) {
+        fs.mkdirSync(logsPath)
+    }
+}
 
 checkReport().then(() => {
     // check workflo config properties
