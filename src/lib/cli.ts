@@ -375,7 +375,7 @@ const resultsPath = path.join(workfloConfig.testDir, 'results')
 const logsPath = path.join(workfloConfig.testDir, 'logs')
 const latestRunPath = path.join(resultsPath, 'latestRun')
 const mergedResultsPath = path.join(resultsPath, 'mergedResults.json')
-const consoleReportPath = path.join(resultsPath, dateTime, 'consoleReport.json')
+const consoleReportPath = path.join(resultsPath, process.env.LATEST_RUN, 'consoleReport.json')
 
 createMissingDirectories()
 
@@ -683,6 +683,10 @@ checkReport().then(() => {
         fs.unlinkSync(testInfoFilePath)
     }
 
+    if (typeof process.env.LATEST_RUN === 'undefined') {
+        process.env.LATEST_RUN = dateTime
+    }
+
     const testinfo = {
         criteriaAnalysis,
         executionFilters: filters,
@@ -698,7 +702,7 @@ checkReport().then(() => {
         resultsPath,
         latestRunPath,
         browser: workfloConfig.capabilities.browserName,
-        dateTime: dateTime,
+        dateTime: process.env.LATEST_RUN,
         mergedResultsPath,
         consoleReportPath
     }
@@ -715,20 +719,18 @@ checkReport().then(() => {
     }
 
     // write latest run file
-    if ( typeof process.env.LATEST_RUN === 'undefined' && (Object.keys(filters.specs).length > 0 || Object.keys(filters.testcases).length > 0)) {
+    if (Object.keys(filters.specs).length > 0 || Object.keys(filters.testcases).length > 0) {
         if (!fs.existsSync(resultsPath)){
             fs.mkdirSync(resultsPath);
         }
 
-        fs.writeFile(latestRunPath, dateTime, err => {
+        fs.writeFile(latestRunPath, process.env.LATEST_RUN, err => {
             if (err) {
                 return console.error(err)
             }
 
-            console.log(`Set latest run: ${dateTime}`)
+            console.log(`Set latest run: ${process.env.LATEST_RUN}`)
         })
-
-        process.env.LATEST_RUN = dateTime
     } else {
         console.log("No specs or testcases match execution filters. Quitting...")
         process.exit(0)
@@ -1749,7 +1751,7 @@ checkReport().then(() => {
             for (const criteria in parsedCriteria) {
                 if (!(criteria in resultsCriteria)) {
                     mergedResults.specs[spec][criteria] = {
-                        dateTime,
+                        dateTime: process.env.LATEST_RUN,
                         status: 'unknown',
                         resultsFolder: undefined
                     }
@@ -1765,7 +1767,7 @@ checkReport().then(() => {
             if (!(testcase in mergedResults.testcases)) {
                 mergedResults.testcases[testcase] = {
                     status: 'unknown',
-                    dateTime,
+                    dateTime: process.env.LATEST_RUN,
                     resultsFolder: undefined
                 }
             }
