@@ -8,6 +8,7 @@ const _ = require( 'lodash' )
 const fs = require( 'fs' )
 const workfloConf = require( process.env.WORKFLO_CONFIG )
 const jsonfile = require('jsonfile')
+const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursiveSync
 
 let assertionScreenshotCtr = 0
 let errorScreenshotCtr = 0
@@ -175,6 +176,7 @@ exports.config = {
     browser.timeouts('implicit', 1001)
   },
   onComplete: function(exitCode, config, capabilities) {
+    copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
   },
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {

@@ -371,10 +371,15 @@ process.env.WORKFLO_CONFIG = workfloConfigFile
 
 const workfloConfig = require(workfloConfigFile)
 
+if (typeof process.env.LATEST_RUN === 'undefined') {
+    process.env.LATEST_RUN = dateTime
+}
+
 const resultsPath = path.join(workfloConfig.testDir, 'results')
 const logsPath = path.join(workfloConfig.testDir, 'logs')
 const latestRunPath = path.join(resultsPath, 'latestRun')
 const mergedResultsPath = path.join(resultsPath, 'mergedResults.json')
+const mergedAllureResultsPath = path.join(resultsPath, 'mergedAllureResults')
 const consoleReportPath = path.join(resultsPath, process.env.LATEST_RUN, 'consoleReport.json')
 
 createMissingDirectories()
@@ -382,6 +387,10 @@ createMissingDirectories()
 function createMissingDirectories() {
     if (!fs.existsSync(resultsPath)) {
         fs.mkdirSync(resultsPath)
+    }
+
+    if (!fs.existsSync(mergedAllureResultsPath)) {
+        fs.mkdirSync(mergedAllureResultsPath)
     }
 
     if (!fs.existsSync(logsPath)) {
@@ -683,10 +692,6 @@ checkReport().then(() => {
         fs.unlinkSync(testInfoFilePath)
     }
 
-    if (typeof process.env.LATEST_RUN === 'undefined') {
-        process.env.LATEST_RUN = dateTime
-    }
-
     const testinfo = {
         criteriaAnalysis,
         executionFilters: filters,
@@ -704,7 +709,8 @@ checkReport().then(() => {
         browser: workfloConfig.capabilities.browserName,
         dateTime: process.env.LATEST_RUN,
         mergedResultsPath,
-        consoleReportPath
+        consoleReportPath,
+        mergedAllureResultsPath
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)

@@ -415,7 +415,8 @@ export const testcase = (
   if (description.length === 0) {
     throw new Error(`Testcase description must not be empty!`)
   }
-  const fullId = `${this.suiteIdStack.join('.')}.${description}`
+  const fullSuiteId = this.suiteIdStack.join('.')
+  const fullId = `${fullSuiteId}.${description}`
 
   this.__stepStack = []
 
@@ -425,6 +426,9 @@ export const testcase = (
 
   const _bodyFunc = () => {
     process.send({event: 'test:setCurrentId', id: fullId, testcase: true})
+
+    process.send({event: 'test:meta', feature: `--Testcases--`})
+    process.send({event: 'test:meta', story: fullSuiteId})
 
     // allure report metadata
     if (metadata.bugs) {
