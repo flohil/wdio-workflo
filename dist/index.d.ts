@@ -24,6 +24,30 @@ declare global  {
         interface JSError {
             notFound: string[];
         }
+        interface ScrollResult {
+            elemTop: number;
+            elemLeft: number;
+            containerTop: number;
+            containerLeft: number;
+            scrollTop: number;
+            scrollLeft: number;
+        }
+        interface ScrollParams {
+            containerSelector?: string;
+            directions: {
+                x?: boolean;
+                y?: boolean;
+            };
+            offsets?: {
+                x?: number;
+                y?: number;
+            };
+            padding?: {
+                x?: number;
+                y?: number;
+            };
+        }
+        type PageElementOptions = "timeout" | "wait" | "customScroll";
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }

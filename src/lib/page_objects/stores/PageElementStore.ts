@@ -131,7 +131,7 @@ export class PageElementStore {
    */
   Element(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, "timeout" | "wait" | "clickNoFocus">
+    options?: Pick<IPageElementOpts<this>, Workflo.PageElementOptions>
   ) {
     return this.get<PageElement<this>, IPageElementOpts<this>>(
       selector,
@@ -145,7 +145,7 @@ export class PageElementStore {
 
   ExistElement(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, "timeout" | "clickNoFocus">
+    options?: Pick<IPageElementOpts<this>, "timeout" | "customScroll">
   ) {
     return this.Element(
       selector,

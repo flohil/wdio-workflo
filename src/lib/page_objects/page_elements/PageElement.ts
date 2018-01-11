@@ -10,7 +10,7 @@ export interface IPageElementOpts<
 > extends IPageNodeOpts<Store> {
   wait?: Workflo.WaitType
   timeout?: number
-  clickNoFocus?: boolean
+  customScroll?: Workflo.ScrollParams
 }
 
 export class PageElement<
@@ -19,7 +19,7 @@ export class PageElement<
   protected wait: Workflo.WaitType
   protected timeout: number
   protected _$: Store
-  protected clickNoFocus: boolean
+  protected customScroll: Workflo.ScrollParams
 
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
@@ -28,7 +28,7 @@ export class PageElement<
     {
       wait = Workflo.WaitType.visible,
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
-      clickNoFocus = false,
+      customScroll = undefined,
       ...superOpts
     }: IPageElementOpts<Store>
   ) {
@@ -54,7 +54,7 @@ export class PageElement<
 
     this.wait = wait
     this.timeout = timeout
-    this.clickNoFocus = clickNoFocus
+    this.customScroll = customScroll
   }
 
   get $(): Store {
@@ -473,7 +473,7 @@ export class PageElement<
    * is fulfilled. (eg. element is visible)
    * In this case, postCondition function will be
    */
-  click(options?: {postCondition?: () => boolean, timeout?: number, offsets?: {x?: number, y?: number}, noFocus?: boolean}) {
+  click(options?: {postCondition?: () => boolean, timeout?: number, customScroll?: Workflo.ScrollParams}) {
     this.initialWait()
 
     let errorMessage = ''
@@ -484,21 +484,16 @@ export class PageElement<
     let remainingTimeout = this.timeout;
 
     if (!options) {
-      options = {
-        noFocus: this.clickNoFocus
+      options = {}
+    }
+
+    if (options && !options.customScroll) {
+      if (this.customScroll) {
+        options.customScroll = this.customScroll
       }
-    } else if (options && !options.noFocus) {
-      options.noFocus = this.clickNoFocus
     }
 
-    if (options && options.offsets && !options.noFocus) {
-        browser.moveToObject(this.getSelector(), -options.offsets.x || -x, -options.offsets.y || -y);
-    } else if (JSON.parse(process.env.WORKFLO_CONFIG).centerClicks) {
-        // per default, move element in middle of screen
-        browser.moveToObject(this.getSelector(), -x, -y)
-    }
-
-    const clickFunc = (options.noFocus === false) ? () => this._element.click() : () => {
+    const clickFunc = !options.customScroll ? () => this._element.click() : () => {
       const result: Workflo.JSError = browser.selectorExecute(this.getSelector(), function (elems: HTMLElement[], selector) {
         if (elems.length === 0) {
           return {
@@ -509,9 +504,13 @@ export class PageElement<
         elems[0].click()
       }, this.getSelector())
 
-      if (result && result.notFound && result.notFound.length > 0) {
+      if (isJsError(result)) {
         throw new Error(`Element could not be clicked: ${result.notFound.join(', ')}`)
       }
+    }
+
+    if (options.customScroll) {
+      this.scrollTo(options.customScroll)
     }
 
     // wait for other overlapping elements to disappear
@@ -560,4 +559,114 @@ export class PageElement<
 
     return this
   }
+
+  scrollTo(
+    params: Workflo.ScrollParams
+  ) : Workflo.ScrollResult {
+    if (!params.offsets) {
+      params.offsets = {
+        x: 0,
+        y: 0
+      }
+    }
+    if (!params.offsets.x) {
+      params.offsets.x = 0
+    }
+    if (!params.offsets.y) {
+      params.offsets.y = 0
+    }
+
+    const result: Workflo.JSError | Workflo.ScrollResult = browser.selectorExecute([this.getSelector()], function (elems: HTMLElement[], elementSelector, params) {
+      var error: Workflo.JSError = {
+        notFound: []
+      };
+
+      if (elems.length === 0) {
+        error.notFound.push(elementSelector);
+      };
+
+      if (error.notFound.length > 0) {
+        return error;
+      }
+
+      var elem: HTMLElement = elems[0];
+      var container: HTMLElement = undefined
+
+      function getScrollParent(element, includeHidden) {
+        var style = getComputedStyle(element);
+        var excludeStaticParent = style.position === "absolute";
+        var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+
+        if (style.position === "fixed") return document.body;
+        for (var parent = element; (parent = parent.parentElement);) {
+            style = getComputedStyle(parent);
+            if (excludeStaticParent && style.position === "static") {
+                continue;
+            }
+            if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) return parent;
+        }
+
+        return document.body;
+      }
+
+      if (typeof params.containerSelector === 'undefined') {
+        container = getScrollParent(elem, true)
+      } else {
+        container = <HTMLElement> document.evaluate(params.containerSelector, document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+        if (container === null) {
+          error.notFound.push(params.containerSelector)
+          return error
+        }
+      }
+
+      var elemTop = elem.getBoundingClientRect().top;
+      var elemLeft = elem.getBoundingClientRect().left;
+
+      var containerTop = container.getBoundingClientRect().top;
+      var containerLeft = container.getBoundingClientRect().left;
+
+      var previousScrollTop = container.scrollTop;
+      var previousScrollLeft = container.scrollLeft;
+
+      var scrollTop = elemTop - containerTop + previousScrollTop + params.offsets.y;
+      var scrollLeft = elemLeft - containerLeft + previousScrollLeft + params.offsets.x;
+
+      if (typeof params.directions !== 'undefined') {
+        if (params.directions.y) {
+          container.scrollTop = scrollTop;
+        }
+        if (params.directions.x) {
+          container.scrollLeft = scrollLeft;
+        }
+      }
+
+      return {
+        elemTop: elemTop,
+        elemLeft: elemLeft,
+        containerTop: containerTop,
+        containerLeft: containerLeft,
+        scrollTop: scrollTop,
+        scrollLeft: scrollLeft
+      };
+    }, this.getSelector(), params)
+
+    if (isJsError(result)) {
+      throw new Error(`Elements could not be located: ${result.notFound.join(', ')}`)
+    } else {
+      return result
+    }
+  }
+}
+
+// type guards
+function isJsError(result: any): result is Workflo.JSError {
+  if (!result) {
+    return false
+  }
+  return result.notFound !== undefined;
+}
+
+function isScrollResult(result: any): result is Workflo.ScrollResult {
+  return result.elemTop !== undefined;
 }

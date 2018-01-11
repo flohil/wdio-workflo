@@ -4,15 +4,15 @@ import { PageElementStore } from '../stores';
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     wait?: Workflo.WaitType;
     timeout?: number;
-    clickNoFocus?: boolean;
+    customScroll?: Workflo.ScrollParams;
 }
 export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
     protected selector: string;
     protected wait: Workflo.WaitType;
     protected timeout: number;
     protected _$: Store;
-    protected clickNoFocus: boolean;
-    constructor(selector: string, {wait, timeout, clickNoFocus, ...superOpts}: IPageElementOpts<Store>);
+    protected customScroll: Workflo.ScrollParams;
+    constructor(selector: string, {wait, timeout, customScroll, ...superOpts}: IPageElementOpts<Store>);
     readonly $: Store;
     /**
      *
@@ -76,10 +76,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     click(options?: {
         postCondition?: () => boolean;
         timeout?: number;
-        offsets?: {
-            x?: number;
-            y?: number;
-        };
-        noFocus?: boolean;
+        customScroll?: Workflo.ScrollParams;
     }): this;
+    scrollTo(params: Workflo.ScrollParams): Workflo.ScrollResult;
 }

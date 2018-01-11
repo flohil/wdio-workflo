@@ -16,7 +16,7 @@ class PageElement extends _1.PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
     constructor(selector, _a) {
-        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, clickNoFocus = false } = _a, superOpts = __rest(_a, ["wait", "timeout", "clickNoFocus"]);
+        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, customScroll = undefined } = _a, superOpts = __rest(_a, ["wait", "timeout", "customScroll"]);
         super(selector, superOpts);
         this.selector = selector;
         this._$ = Object.create(null);
@@ -34,7 +34,7 @@ class PageElement extends _1.PageNode {
         }
         this.wait = wait;
         this.timeout = timeout;
-        this.clickNoFocus = clickNoFocus;
+        this.customScroll = customScroll;
     }
     get $() {
         return this._$;
@@ -375,21 +375,14 @@ class PageElement extends _1.PageNode {
         let x = viewPortSize.width / 2;
         let remainingTimeout = this.timeout;
         if (!options) {
-            options = {
-                noFocus: this.clickNoFocus
-            };
+            options = {};
         }
-        else if (options && !options.noFocus) {
-            options.noFocus = this.clickNoFocus;
+        if (options && !options.customScroll) {
+            if (this.customScroll) {
+                options.customScroll = this.customScroll;
+            }
         }
-        if (options && options.offsets && !options.noFocus) {
-            browser.moveToObject(this.getSelector(), -options.offsets.x || -x, -options.offsets.y || -y);
-        }
-        else if (JSON.parse(process.env.WORKFLO_CONFIG).centerClicks) {
-            // per default, move element in middle of screen
-            browser.moveToObject(this.getSelector(), -x, -y);
-        }
-        const clickFunc = (options.noFocus === false) ? () => this._element.click() : () => {
+        const clickFunc = !options.customScroll ? () => this._element.click() : () => {
             const result = browser.selectorExecute(this.getSelector(), function (elems, selector) {
                 if (elems.length === 0) {
                     return {
@@ -398,10 +391,13 @@ class PageElement extends _1.PageNode {
                 }
                 elems[0].click();
             }, this.getSelector());
-            if (result && result.notFound && result.notFound.length > 0) {
+            if (isJsError(result)) {
                 throw new Error(`Element could not be clicked: ${result.notFound.join(', ')}`);
             }
         };
+        if (options.customScroll) {
+            this.scrollTo(options.customScroll);
+        }
         // wait for other overlapping elements to disappear
         try {
             browser.waitUntil(() => {
@@ -449,6 +445,100 @@ class PageElement extends _1.PageNode {
         }
         return this;
     }
+    scrollTo(params) {
+        if (!params.offsets) {
+            params.offsets = {
+                x: 0,
+                y: 0
+            };
+        }
+        if (!params.offsets.x) {
+            params.offsets.x = 0;
+        }
+        if (!params.offsets.y) {
+            params.offsets.y = 0;
+        }
+        const result = browser.selectorExecute([this.getSelector()], function (elems, elementSelector, params) {
+            var error = {
+                notFound: []
+            };
+            if (elems.length === 0) {
+                error.notFound.push(elementSelector);
+            }
+            ;
+            if (error.notFound.length > 0) {
+                return error;
+            }
+            var elem = elems[0];
+            var container = undefined;
+            function getScrollParent(element, includeHidden) {
+                var style = getComputedStyle(element);
+                var excludeStaticParent = style.position === "absolute";
+                var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+                if (style.position === "fixed")
+                    return document.body;
+                for (var parent = element; (parent = parent.parentElement);) {
+                    style = getComputedStyle(parent);
+                    if (excludeStaticParent && style.position === "static") {
+                        continue;
+                    }
+                    if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX))
+                        return parent;
+                }
+                return document.body;
+            }
+            if (typeof params.containerSelector === 'undefined') {
+                container = getScrollParent(elem, true);
+            }
+            else {
+                container = document.evaluate(params.containerSelector, document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                if (container === null) {
+                    error.notFound.push(params.containerSelector);
+                    return error;
+                }
+            }
+            var elemTop = elem.getBoundingClientRect().top;
+            var elemLeft = elem.getBoundingClientRect().left;
+            var containerTop = container.getBoundingClientRect().top;
+            var containerLeft = container.getBoundingClientRect().left;
+            var previousScrollTop = container.scrollTop;
+            var previousScrollLeft = container.scrollLeft;
+            var scrollTop = elemTop - containerTop + previousScrollTop + params.offsets.y;
+            var scrollLeft = elemLeft - containerLeft + previousScrollLeft + params.offsets.x;
+            if (typeof params.directions !== 'undefined') {
+                if (params.directions.y) {
+                    container.scrollTop = scrollTop;
+                }
+                if (params.directions.x) {
+                    container.scrollLeft = scrollLeft;
+                }
+            }
+            return {
+                elemTop: elemTop,
+                elemLeft: elemLeft,
+                containerTop: containerTop,
+                containerLeft: containerLeft,
+                scrollTop: scrollTop,
+                scrollLeft: scrollLeft
+            };
+        }, this.getSelector(), params);
+        if (isJsError(result)) {
+            throw new Error(`Elements could not be located: ${result.notFound.join(', ')}`);
+        }
+        else {
+            return result;
+        }
+    }
 }
 exports.PageElement = PageElement;
+// type guards
+function isJsError(result) {
+    if (!result) {
+        return false;
+    }
+    return result.notFound !== undefined;
+}
+function isScrollResult(result) {
+    return result.elemTop !== undefined;
+}
 //# sourceMappingURL=PageElement.js.map
