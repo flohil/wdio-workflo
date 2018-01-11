@@ -27,6 +27,9 @@ declare global {
   type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>
 
   namespace Workflo {
+    interface JSError {
+      notFound: string[]
+    }
 
     interface IRecObj<Type> {
       [key: string] : Type | IRecObj<Type>

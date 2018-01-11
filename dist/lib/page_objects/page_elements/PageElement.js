@@ -16,7 +16,7 @@ class PageElement extends _1.PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
     constructor(selector, _a) {
-        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default } = _a, superOpts = __rest(_a, ["wait", "timeout"]);
+        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, clickNoFocus = false } = _a, superOpts = __rest(_a, ["wait", "timeout", "clickNoFocus"]);
         super(selector, superOpts);
         this.selector = selector;
         this._$ = Object.create(null);
@@ -34,6 +34,7 @@ class PageElement extends _1.PageNode {
         }
         this.wait = wait;
         this.timeout = timeout;
+        this.clickNoFocus = clickNoFocus;
     }
     get $() {
         return this._$;
@@ -373,19 +374,40 @@ class PageElement extends _1.PageNode {
         let y = viewPortSize.height / 2;
         let x = viewPortSize.width / 2;
         let remainingTimeout = this.timeout;
-        if (options && options.offsets) {
+        if (!options) {
+            options = {
+                noFocus: this.clickNoFocus
+            };
+        }
+        else if (options && !options.noFocus) {
+            options.noFocus = this.clickNoFocus;
+        }
+        if (options && options.offsets && !options.noFocus) {
             browser.moveToObject(this.getSelector(), -options.offsets.x || -x, -options.offsets.y || -y);
         }
         else if (JSON.parse(process.env.WORKFLO_CONFIG).centerClicks) {
             // per default, move element in middle of screen
             browser.moveToObject(this.getSelector(), -x, -y);
         }
+        const clickFunc = (options.noFocus === false) ? () => this._element.click() : () => {
+            const result = browser.selectorExecute(this.getSelector(), function (elems, selector) {
+                if (elems.length === 0) {
+                    return {
+                        notFound: [selector]
+                    };
+                }
+                elems[0].click();
+            }, this.getSelector());
+            if (result && result.notFound && result.notFound.length > 0) {
+                throw new Error(`Element could not be clicked: ${result.notFound.join(', ')}`);
+            }
+        };
         // wait for other overlapping elements to disappear
         try {
             browser.waitUntil(() => {
                 remainingTimeout -= interval;
                 try {
-                    this._element.click();
+                    clickFunc();
                     errorMessage = undefined;
                     return true;
                 }
@@ -411,7 +433,7 @@ class PageElement extends _1.PageNode {
                         }
                         else {
                             if (this.isVisible() && this.isEnabled()) {
-                                this._element.click();
+                                clickFunc();
                             }
                         }
                     }

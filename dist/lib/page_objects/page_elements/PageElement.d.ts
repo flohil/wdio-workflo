@@ -4,13 +4,15 @@ import { PageElementStore } from '../stores';
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     wait?: Workflo.WaitType;
     timeout?: number;
+    clickNoFocus?: boolean;
 }
 export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
     protected selector: string;
     protected wait: Workflo.WaitType;
     protected timeout: number;
     protected _$: Store;
-    constructor(selector: string, {wait, timeout, ...superOpts}: IPageElementOpts<Store>);
+    protected clickNoFocus: boolean;
+    constructor(selector: string, {wait, timeout, clickNoFocus, ...superOpts}: IPageElementOpts<Store>);
     readonly $: Store;
     /**
      *
@@ -72,11 +74,12 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
      * In this case, postCondition function will be
      */
     click(options?: {
-        postCondition: () => boolean;
+        postCondition?: () => boolean;
         timeout?: number;
         offsets?: {
             x?: number;
             y?: number;
         };
+        noFocus?: boolean;
     }): this;
 }

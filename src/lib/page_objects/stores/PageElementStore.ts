@@ -58,8 +58,8 @@ export class PageElementStore {
       PageElementGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
       Pick<IPageElementGroupOpts<
         this,
-        Content, 
-        PageElementGroupWalker<this>, 
+        Content,
+        PageElementGroupWalker<this>,
         IPageElementGroupWalkerOpts
       >, "content" | "walkerType" | "walkerOptions">
     > (
@@ -83,8 +83,8 @@ export class PageElementStore {
       TextGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
       Pick<ITextGroupOpts<
         this,
-        Content, 
-        PageElementGroupWalker<this>, 
+        Content,
+        PageElementGroupWalker<this>,
         IPageElementGroupWalkerOpts
       >, "content" | "walkerType" | "walkerOptions">
     > (
@@ -108,8 +108,8 @@ export class PageElementStore {
       ValueGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
       Pick<IValueGroupOpts<
         this,
-        Content, 
-        PageElementGroupWalker<this>, 
+        Content,
+        PageElementGroupWalker<this>,
         IPageElementGroupWalkerOpts
       >, "content" | "walkerType" | "walkerOptions">
     > (
@@ -125,13 +125,13 @@ export class PageElementStore {
   // DEFINE YOUR SINGLE ELEMENT TYPE ACCESSOR FUNCTIONS HERE
 
   /**
-   * 
-   * @param selector 
-   * @param options 
+   *
+   * @param selector
+   * @param options
    */
   Element(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, "timeout" | "wait">
+    options?: Pick<IPageElementOpts<this>, "timeout" | "wait" | "clickNoFocus">
   ) {
     return this.get<PageElement<this>, IPageElementOpts<this>>(
       selector,
@@ -141,17 +141,17 @@ export class PageElementStore {
         ...options
       }
     )
-  } 
+  }
 
   ExistElement(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, "timeout">
+    options?: Pick<IPageElementOpts<this>, "timeout" | "clickNoFocus">
   ) {
     return this.Element(
       selector,
       {
         wait: Workflo.WaitType.exist,
-        ...options 
+        ...options
       }
     )
   }
@@ -159,12 +159,12 @@ export class PageElementStore {
   // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
 
   protected List<
-    PageElementType extends PageElement<this>, 
+    PageElementType extends PageElement<this>,
     PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
   > (
-    selector: Workflo.XPath, 
+    selector: Workflo.XPath,
     options: Pick<
-      IPageElementListOpts<this, PageElementType, PageElementOpts>, 
+      IPageElementListOpts<this, PageElementType, PageElementOpts>,
       "wait" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier"
     >
   ) {
@@ -183,9 +183,9 @@ export class PageElementStore {
   }
 
   ElementList(
-    selector: Workflo.XPath, 
+    selector: Workflo.XPath,
     options?: PickPartial<
-      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait">>, 
+      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait">>,
       "wait" | "timeout" | "disableCache" | "identifier",
       "elementOptions"
     >
@@ -201,7 +201,7 @@ export class PageElementStore {
   }
 
   ExistElementList(
-    selector: Workflo.XPath, 
+    selector: Workflo.XPath,
     options?: PickPartial<
       IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
       "timeout" | "disableCache" | "identifier",
@@ -222,8 +222,8 @@ export class PageElementStore {
   // Element Maps
 
   protected Map<
-    K extends string, 
-    PageElementType extends PageElement<this>, 
+    K extends string,
+    PageElementType extends PageElement<this>,
     PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
   >(
     selector: Workflo.XPath,
@@ -249,7 +249,7 @@ export class PageElementStore {
   ElementMap<K extends string>(
     selector: Workflo.XPath,
     options: PickPartial<
-      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>, 
+      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>,
       "identifier",
       "elementOptions"
     >
@@ -267,7 +267,7 @@ export class PageElementStore {
   ExistElementMap<K extends string>(
     selector: Workflo.XPath,
     options: PickPartial<
-      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>, 
+      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>,
       "identifier",
       "elementOptions"
     >
@@ -286,17 +286,17 @@ export class PageElementStore {
 
   /**
    * Returns a page element with the given selector, type and options.
-   * 
+   *
    * If a page element with identical parameters already exists in this store,
    * a cached instance of this page element will be returned.
-   * 
-   * @param selector 
-   * @param type 
-   * @param options 
+   *
+   * @param selector
+   * @param type
+   * @param options
    */
   protected get<Type, Options>(
-    selector: Workflo.XPath, 
-    type: { new(selector: string, options: Options): Type }, 
+    selector: Workflo.XPath,
+    type: { new(selector: string, options: Options): Type },
     options: Options = Object.create(Object.prototype)
   ) : Type {
     const _selector = (selector instanceof XPathBuilder) ? this.xPathBuilder.build() : selector
@@ -323,7 +323,7 @@ export class PageElementStore {
     WalkerOptions extends IPageElementGroupWalkerOpts,
     GroupType extends PageElementGroup<
       Store,
-      Content, 
+      Content,
       WalkerType,
       WalkerOptions
     >,
