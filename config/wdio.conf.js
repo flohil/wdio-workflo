@@ -95,18 +95,20 @@ exports.config = {
       } else {
         if ( assertion.matcherName ) {
           // receive screenshot as Buffer
-          const screenshot = browser.saveScreenshot(); // returns base64 string buffer
+          if( browser.sessions().length > 0 ) {
+            const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
-          const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
-          const screenshotFilename = `${screenshotFolder}/assertionFailure_${assertionScreenshotCtr}.png`
+            const screenshotFolder = path.join( workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results' )
+            const screenshotFilename = `${screenshotFolder}/assertionFailure_${assertionScreenshotCtr}.png`
 
-          assertionScreenshotCtr++
-          assertion.screenshotFilename = screenshotFilename
+            assertionScreenshotCtr++
+            assertion.screenshotFilename = screenshotFilename
 
-          try {
-              fs.writeFileSync(screenshotFilename, screenshot)
-          } catch (err) {
-              console.log('Error writing screenshot:' + err.message)
+            try {
+              fs.writeFileSync( screenshotFilename, screenshot )
+            } catch( err ) {
+              console.log( `Error writing screenshot:${  err.message}` )
+            }
           }
 
           var stack = new Error().stack
@@ -171,9 +173,18 @@ exports.config = {
     require('../dist/inject.js')
   },
   beforeTest: function(test) {
+    const tabIds = browser.getTabIds()
+
+    for( const tabId of tabIds ) {
+      try {
+        browser.close()
+      } catch( e ) {
+        // could not switch to tab if last tab was closed
+      }
+    }
   },
   beforeSuite: function(suite) {
-    browser.timeouts('implicit', 1001)
+    browser.timeouts( 'implicit', workfloConf.timeouts.default )
   },
   onComplete: function(exitCode, config, capabilities) {
     copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
@@ -181,20 +192,22 @@ exports.config = {
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {
     if (error) {
-      browser.saveScreenshot()
+      if( browser.sessions().length > 0 ) {
+        browser.saveScreenshot()
 
-      const screenshot = browser.saveScreenshot(); // returns base64 string buffer
+        const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
-      const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
-      const screenshotFilename = `${screenshotFolder}/error_${errorScreenshotCtr}.png`
+        const screenshotFolder = path.join( workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results' )
+        const screenshotFilename = `${screenshotFolder}/error_${errorScreenshotCtr}.png`
 
-      errorScreenshotCtr++
-      errorScreenshotFilename = screenshotFilename
+        errorScreenshotCtr++
+        errorScreenshotFilename = screenshotFilename
 
-      try {
-          fs.writeFileSync(screenshotFilename, screenshot)
-      } catch (err) {
-          console.log('Error writing screenshot:' + err.message)
+        try {
+          fs.writeFileSync( screenshotFilename, screenshot )
+        } catch( err ) {
+          console.log( `Error writing screenshot:${  err.message}` )
+        }
       }
     }
   }

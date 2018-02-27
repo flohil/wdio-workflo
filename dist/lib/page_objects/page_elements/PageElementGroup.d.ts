@@ -15,7 +15,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
 }, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts> implements Workflo.PageNode.INode {
     protected __id: string;
     protected __walker: WalkerType;
-    protected __content: Content;
+    readonly __content: Content;
     constructor({id, content, walkerType, walkerOptions}: IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>);
     __getNodeId(): string;
     Solve<ValueType, ResultType>(problem: Workflo.IProblem<ValueType, ResultType>, options?: Workflo.IWalkerOptions): Workflo.IRecObj<ResultType>;

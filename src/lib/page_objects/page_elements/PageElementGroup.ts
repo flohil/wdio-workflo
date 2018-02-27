@@ -29,7 +29,7 @@ export class PageElementGroup<
 > implements Workflo.PageNode.INode {
   protected __id: string
   protected __walker: WalkerType
-  protected __content: Content
+  public readonly __content: Content
 
   constructor({
     id,
@@ -67,5 +67,5 @@ export class PageElementGroup<
     options: Workflo.IWalkerOptions = { throwUnmatchedKey: true, throwSolveError: true }
   ) : Workflo.IRecObj<ResultType> {
     return this.__walker.walk( problem, this.__content, options )
-  } 
+  }
 }
