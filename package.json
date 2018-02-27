@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.216",
+  "version": "0.0.217",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

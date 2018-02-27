@@ -173,13 +173,15 @@ exports.config = {
     require('../dist/inject.js')
   },
   beforeTest: function(test) {
-    const tabIds = browser.getTabIds()
+    if (browser.sessions().length > 0) {
+      const tabIds = browser.getTabIds()
 
-    for( const tabId of tabIds ) {
-      try {
-        browser.close()
-      } catch( e ) {
-        // could not switch to tab if last tab was closed
+      for( const tabId of tabIds ) {
+        try {
+          browser.close()
+        } catch( e ) {
+          // could not switch to tab if last tab was closed
+        }
       }
     }
   },
