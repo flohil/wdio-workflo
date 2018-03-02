@@ -186,7 +186,7 @@ exports.config = {
     }
   },
   beforeSuite: function(suite) {
-    browser.timeouts( 'implicit', workfloConf.timeouts.default )
+    browser.timeouts( 'implicit', 1001 )
   },
   onComplete: function(exitCode, config, capabilities) {
     copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
