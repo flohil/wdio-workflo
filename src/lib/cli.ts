@@ -29,7 +29,7 @@ const VERSION = pkg.version
 const ALLOWED_ARGV = [
     'host', 'port',  'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
     'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath',
-    'workfloOpts'
+    'workfloOpts', 'retries'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ]
 
@@ -68,6 +68,7 @@ const ALLOWED_OPTS = [
     'cleanResultsStatus',
     'reportErrorsInstantly',
     'rerunFaulty',
+    'retries',
     '_',
     '$0'
 ]
@@ -270,6 +271,8 @@ optimist
     .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'\n')
 
+    .describe('retries', 'how many times flaky tests should be rerun (default: 0)')
+
     // wdio-workflo options
 
     // support priority: low
@@ -295,7 +298,7 @@ optimist
     // .describe('reporters', 'reporters to print out the results on stdout') // supports only workflo adaptions of spec and allure reporters
     // .alias('reporters', 'r')
 
-    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty'
+    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'retries'
      /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */])
     .boolean(['coloredLogs', 'watch', 'reportErrorsInstantly', 'cleanResultsStatus'])
     .default({ coloredLogs: true })
@@ -692,6 +695,12 @@ checkReport().then(() => {
         fs.unlinkSync(testInfoFilePath)
     }
 
+    if (typeof argv.retries === 'undefined' && typeof workfloConfig.retries !== 'undefined') {
+        argv.retries = workfloConfig.retries;
+    } else if ( typeof argv.retries !== 'undefined') {
+        argv.retries = parseInt(argv.retries)
+    }
+
     const testinfo = {
         criteriaAnalysis,
         executionFilters: filters,
@@ -710,7 +719,8 @@ checkReport().then(() => {
         dateTime: process.env.LATEST_RUN,
         mergedResultsPath,
         consoleReportPath,
-        mergedAllureResultsPath
+        mergedAllureResultsPath,
+        retries: argv.retries || 0
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)

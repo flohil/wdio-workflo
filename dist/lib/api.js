@@ -7,6 +7,7 @@ const traceInfo = testinfo.traceInfo;
 const criteriaAnalysis = testinfo.criteriaAnalysis;
 const automaticOnly = testinfo.automaticOnly;
 const manualOnly = testinfo.manualOnly;
+const retries = testinfo.retries;
 const storyMap = new Map();
 const words = {
     'Given': 'Given',
@@ -290,7 +291,7 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
         bodyFunc();
     };
     if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
-        jasmineFunc(JSON.stringify(testData), _bodyFunc);
+        jasmineFunc(JSON.stringify(testData), _bodyFunc, retries);
     }
 };
 exports.ftestcase = (description, metadata, bodyFunc) => {

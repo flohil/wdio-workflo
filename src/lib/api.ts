@@ -7,6 +7,7 @@ const traceInfo = <ITraceInfo> testinfo.traceInfo
 const criteriaAnalysis = <IAnalysedCriteria> testinfo.criteriaAnalysis
 const automaticOnly = <boolean> testinfo.automaticOnly
 const manualOnly = <boolean> testinfo.manualOnly
+const retries = <number> testinfo.retries
 
 const storyMap: Map<string, Workflo.IStoryMapEntry> = new Map<string, Workflo.IStoryMapEntry>()
 
@@ -410,7 +411,7 @@ export const testcase = (
   description: string,
   metadata: Workflo.ITestcaseMetadata,
   bodyFunc: () => void,
-  jasmineFunc: (description: string, bodyFunc: () => void) => void = it
+  jasmineFunc: (description: string, bodyFunc: () => void, retires: number) => void = it
 ) => {
   if (description.length === 0) {
     throw new Error(`Testcase description must not be empty!`)
@@ -440,7 +441,7 @@ export const testcase = (
   }
 
   if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
-    jasmineFunc(JSON.stringify(testData), _bodyFunc)
+    jasmineFunc(JSON.stringify(testData), _bodyFunc, retries)
   }
 }
 
