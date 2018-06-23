@@ -246,11 +246,11 @@ exports.suite = (description, metadata, bodyFunc, jasmineFunc = describe) => {
     if (description.length === 0) {
         throw new Error(`Suite description must not be empty!`);
     }
-    if (description.indexOf('.') > -1) {
+    else if (description.indexOf('.') > -1) {
         throw new Error(`Suite description must not contain '.' character: ${description}`);
     }
     else if (description.substr(0, 1) === '-') {
-        throw new Error(`Suite description must start with '-' character: ${description}`);
+        throw new Error(`Suite description must not start with '-' character: ${description}`);
     }
     if (!this.suiteIdStack) {
         this.suiteIdStack = [description];
@@ -272,6 +272,9 @@ exports.xsuite = (description, metadata, bodyFunc) => {
 exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     if (description.length === 0) {
         throw new Error(`Testcase description must not be empty!`);
+    }
+    else if (description.indexOf('.') > -1) {
+        throw new Error(`Testcase description must not contain '.' character: ${description}`);
     }
     const fullSuiteId = this.suiteIdStack.join('.');
     const fullId = `${fullSuiteId}.${description}`;
