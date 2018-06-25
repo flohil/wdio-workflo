@@ -1260,14 +1260,15 @@ checkReport().then(() => {
         const faultySpecs = {};
         const faultyTestcases = {};
         for (const testcase in runResults.testcases) {
-            if (runResults.testcases[testcase] === 'fail' || runResults.testcases[testcase] === 'broken') {
+            const status = runResults.testcases[testcase].status;
+            if (status === 'failed' || status === 'broken') {
                 faultyTestcases[testcase] = true;
             }
         }
         for (const spec in runResults.specs) {
             for (const criteria in runResults.specs[spec]) {
                 const status = runResults.specs[spec][criteria].status;
-                if (status === 'fail' || status === 'broken' || status === 'unvalidated') {
+                if (status === 'failed' || status === 'unvalidated') {
                     faultySpecs[spec] = true;
                 }
             }

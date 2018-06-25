@@ -19,6 +19,7 @@ import * as merge from 'deepmerge'
 import { objectFunctions, arrayFunctions } from '../'
 
 import { Launcher, baseReporter } from 'webdriverio-workflo'
+import { StringifyOptions } from 'querystring';
 
 const table = require('text-table')
 const pkg = require('../../package.json')
@@ -1630,8 +1631,8 @@ checkReport().then(() => {
 
     function handleRerunFaulty() {
         interface IRunResults {
-            specs: Record<string, Record<string, {status: string}>>
-            testcases: Record<string, string>
+            specs: Record<string, Record<string, MergedResultsSpec>>
+            testcases: Record<string, MergedResultsTestcase>
         }
 
         if (!fs.existsSync(latestRunPath)) {
@@ -1666,7 +1667,8 @@ checkReport().then(() => {
         const faultyTestcases: Record<string, true> = {}
 
         for (const testcase in runResults.testcases) {
-            if (runResults.testcases[testcase] === 'fail' || runResults.testcases[testcase] === 'broken') {
+            const status = runResults.testcases[testcase].status
+            if (status === 'failed' || status === 'broken') {
                 faultyTestcases[testcase] = true
             }
         }
@@ -1675,7 +1677,7 @@ checkReport().then(() => {
             for (const criteria in runResults.specs[spec]) {
                 const status = runResults.specs[spec][criteria].status
 
-                if (status === 'fail' || status === 'broken' || status === 'unvalidated') {
+                if (status === 'failed' || status === 'unvalidated') {
                     faultySpecs[spec] = true
                 }
             }
