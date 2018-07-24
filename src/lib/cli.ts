@@ -2265,7 +2265,7 @@ checkReport().then(() => {
     }
 
     function color (type, str) {
-        if (!supportsColor) return String(str)
+        if (!supportsColor.supportsColor().hasBasic) return String(str)
         return `\u001b[${baseReporter.COLORS[type]}m${str}\u001b[0m`
     }
 
