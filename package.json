@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.225",
+  "version": "0.0.226",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,7 @@
     "url": "https://github.com/flohil/wdio-workflo"
   },
   "bin": {
-    "wdio": "bin/wdio"
+    "wdio": "./bin/wdio"
   },
   "bugs": {
     "url": "https://github.com/flohil/wdio-workflo/issues"
