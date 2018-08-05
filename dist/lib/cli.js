@@ -1751,7 +1751,7 @@ checkReport().then(() => {
         console.log(output);
     }
     function color(type, str) {
-        if (!supportsColor)
+        if (!supportsColor.supportsColor().hasBasic)
             return String(str);
         return `\u001b[${webdriverio_workflo_1.baseReporter.COLORS[type]}m${str}\u001b[0m`;
     }

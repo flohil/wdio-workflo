@@ -38,5 +38,6 @@ module.exports = {
   timeouts: {
     default: 5000
   },
-  reportErrorsInstantly: false
+  reportErrorsInstantly: false,
+  deprecationWarnings: false
 }
