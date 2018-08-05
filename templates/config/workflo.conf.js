@@ -17,7 +17,6 @@ module.exports = {
     baseURL: 'http://selenium-release.storage.googleapis.com'
   },
   capabilities: {
-    maxInstances: 1,
     browserName: 'chrome',
     requireWindowFocus: true,
     nativeEvents: true,
@@ -36,8 +35,9 @@ module.exports = {
     bugPrefix: "" // will be appended to issue url to identify it as bug in report
   },
   timeouts: {
-    default: 5000
+    waitforTimeout: 5000
   },
   reportErrorsInstantly: false,
-  deprecationWarnings: false
+  deprecationWarnings: false,
+  retries: 0, // eg. 3
 }

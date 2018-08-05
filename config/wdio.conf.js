@@ -66,6 +66,7 @@ exports.config = {
   /**
    * test configurations
    */
+  bail: workfloConf.bail || 0,
   logLevel: workfloConf.logLevel,
   logOutput: path.join(workfloConf.testDir, 'logs'),
   protocol: workfloConf.protocol || 'http',

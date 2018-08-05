@@ -410,7 +410,7 @@ export const testcase = (
   description: string,
   metadata: Workflo.ITestcaseMetadata,
   bodyFunc: () => void,
-  jasmineFunc: (description: string, bodyFunc: () => void, retires: number) => void = it
+  jasmineFunc: (description: string, bodyFunc: () => void, retries: number) => void = it
 ) => {
   if (description.length === 0) {
     throw new Error(`Testcase description must not be empty!`)
