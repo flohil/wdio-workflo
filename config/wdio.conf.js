@@ -38,32 +38,46 @@ exports.config = {
    */
   host: workfloConf.webdriver.host,
   port: workfloConf.webdriver.port,
+  path: workfloConf.path,
+  agent: workfloConf.agent,
+  proxy: workfloConf.proxy,
   /**
    * specify test files
    */
-  // specs: 'src/example.spec.ts',
   specs: workfloConf.specFiles,
   testcases: workfloConf.testcaseFiles,
   manualTestcases: workfloConf.manualTestcaseFiles,
   uidStorePath: workfloConf.uidStorePath,
   waitforTimeout: workfloConf.waitforTimeout,
+  waitforInterval: workfloConf.waitforInterval || 500,
+  connectionRetryTimeout: workfloConf.connectionRetryTimeout || 30000,
+  connectionRetryCount: 0,
   testDir: workfloConf.testDir,
   /**
    * capabilities
    */
-  capabilities: [workfloConf.capabilities],
+  capabilities: [ Object.assign( workfloConf.capabilities, { maxInstances: 1 } ) ],
   services: ['selenium-standalone'],
   seleniumLogs: path.relative('./', path.join(workfloConf.testDir, 'logs', 'selenium', process.env.LATEST_RUN)),
   seleniumArgs: workfloConf.selenium.args,
   seleniumInstallArgs: workfloConf.selenium.installArgs,
+  queryParams: workfloConf.queryParams || {},
+  headers: workfloConf.headers || {},
   /**
    * test configurations
    */
   logLevel: workfloConf.logLevel,
   logOutput: path.join(workfloConf.testDir, 'logs'),
-  coloredLogs: true,
+  protocol: workfloConf.protocol || 'http',
+  debug: workfloConf.debug || false,
+  execArgv: workfloConf.execArgv || null,
+  coloredLogs: true || workfloConf.coloredLogs,
   deprecationWarnings: workfloConf.deprecationWarnings || false,
   screenshotPath: null,
+  screenshotOnReject: workfloConf.screenshotOnReject || {
+    connectionRetryTimeout: 15000,
+    connectionRetryCount: 3
+  },
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: workfloConf.timeouts.waitforTimeout,
   framework: 'workflo-jasmine',
@@ -96,7 +110,7 @@ exports.config = {
       } else {
         if (assertion.matcherName) {
           // receive screenshot as Buffer
-          if (/* browser.sessions().length > 0 */ true) {
+          if (true) {
             const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
             const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
@@ -174,17 +188,6 @@ exports.config = {
     require('../dist/inject.js')
   },
   beforeTest: function (test) {
-    // if (browser.sessions().length > 0) {
-    //   const tabIds = browser.getTabIds()
-
-    //   for( const tabId of tabIds ) {
-    //     try {
-    //       browser.close()
-    //     } catch( e ) {
-    //       // could not switch to tab if last tab was closed
-    //     }
-    //   }
-    // }
   },
   afterTest: function (test) {
     if (test.passed === false) {
@@ -200,7 +203,7 @@ exports.config = {
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {
     if (error) {
-      if (/* browser.sessions().length > 0 */ true) {
+      if (true) {
         browser.saveScreenshot()
 
         const screenshot = browser.saveScreenshot() // returns base64 string buffer
