@@ -62,7 +62,7 @@ exports.config = {
   logLevel: workfloConf.logLevel,
   logOutput: path.join(workfloConf.testDir, 'logs'),
   coloredLogs: true,
-  deprecationWarnings: workfloConf.deprecationWarnings,
+  deprecationWarnings: workfloConf.deprecationWarnings || false,
   screenshotPath: null,
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: workfloConf.timeouts.waitforTimeout,
