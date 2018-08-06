@@ -14,7 +14,7 @@ export interface IPageElementListIdentifier<
 // use disableCache for a "dynamic" list whose structure changes over time
 // alternatively, call refresh() when the times of structure changes are known
 export interface IPageElementListOpts<
-  Store extends PageElementStore, 
+  Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends IPageNodeOpts<Store> {
@@ -28,13 +28,13 @@ export interface IPageElementListOpts<
 
 // holds several PageElement instances of the same type
 export class PageElementList<
-  Store extends PageElementStore,   
+  Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> implements Workflo.PageNode.INode {
   protected wait: Workflo.WaitType
   protected timeout: number
-  
+
   protected disableCache: boolean
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected elementOptions: PageElementOptions
@@ -42,9 +42,9 @@ export class PageElementList<
   protected identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>
 
-  constructor( 
+  constructor(
     protected selector: string,
-    { 
+    {
       wait = Workflo.WaitType.visible,
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
       disableCache = false,
@@ -52,13 +52,13 @@ export class PageElementList<
       elementOptions,
       identifier,
       ...superOpts
-    } : IPageElementListOpts<Store, PageElementType, PageElementOptions> 
+    } : IPageElementListOpts<Store, PageElementType, PageElementOptions>
   ) {
     super(selector, superOpts)
 
     this.wait = wait
     this.timeout = timeout
-    
+
     this.selector = selector
     this.elementOptions = elementOptions
     this.elementStoreFunc = elementStoreFunc
@@ -101,13 +101,13 @@ export class PageElementList<
 
   // Retrieves list of elements identified by this.selector
   // which reflect browser state after first element is found.
-  // 
+  //
   // Waits for at least one element to reach the waiting condition defined
   // in wait type.
 
 
   // Todo add _listElements() that does not wait for wait type condition for all elements
-  
+
   // Returns elements matching list selector that reflect current browser state
   // -> no implicit waiting!!!
   // does not use cache
@@ -122,12 +122,12 @@ export class PageElementList<
         // make each list element individually selectable via xpath
         const selector = `(${this.selector})[${i + 1}]`
 
-        const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )      
-        
+        const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )
+
         elements.push( listElement )
       }
     }
-    
+
     return elements
   }
 
@@ -138,19 +138,19 @@ export class PageElementList<
 
     try {
       const value = this.elements.value
-      
+
       if (value && value.length) {
         // create list elements
         for ( let i = 0; i < value.length; i++ ) {
           // make each list element individually selectable via xpath
           const selector = `(${this.selector})[${i + 1}]`
-  
-          const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )      
-          
+
+          const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )
+
           elements.push( listElement )
         }
       }
-  
+
       return elements
     } catch(error) {
       // this.elements will throw error if no elements were found
@@ -164,11 +164,11 @@ export class PageElementList<
     return this
   }
 
-  /** 
+  /**
    * Returns an object consisting of this._identifier.object's keys
    * as keys and the elements mapped by this._identifier.func()
    * as values.
-   * 
+   *
    * If this.identifier is undefined, the mapped object's keys will be defined
    * by the index of an element's occurence in the element list (first element -> 0, seconed element -> 1...)
    *
@@ -180,10 +180,10 @@ export class PageElementList<
    * while its contents are still guaranteed to be refreshed on each access!
    *
    * Attention: this may take a long time, try to avoid: if only single elements of list
-   * are needed, use firstBy() instead. 
+   * are needed, use firstBy() instead.
    **/
   identify(
-    {identifier = this.identifier, resetCache = false}: 
+    {identifier = this.identifier, resetCache = false}:
     {identifier?: IPageElementListIdentifier<Store, PageElementType>, resetCache?: boolean} = {}
   ) {
     const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index'
@@ -195,11 +195,11 @@ export class PageElementList<
 
       if (identifier) { // manually set identifier
         const queryResults: {[key:string]:PageElementType} = {}
-        
+
         // create hash where result of identifier func is key
         // and list element is value
-        listElements.forEach( 
-          ( element ) => { 
+        listElements.forEach(
+          ( element ) => {
             const resultKey = identifier.func( element )
             queryResults[ resultKey ] = element
           }
@@ -220,14 +220,14 @@ export class PageElementList<
 
       this.identifiedObjCache[cacheKey] = mappedObj
     }
-      
+
     return this.identifiedObjCache[cacheKey]
   }
 
   // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
 
   /**
-   * 
+   *
    * @param index Index starts with 0
    */
   get( index: number ) {
@@ -250,31 +250,31 @@ export class PageElementList<
   // WAIT FUNCTIONS
 
   // Waits for at least one element of the list to exist.
-  // 
+  //
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector exists.
   waitExist(
     { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
   ) {
     this._elements.waitForExist(timeout, reverse)
-    
+
     return this
   }
 
   // Waits for at least one element of the list to be visible.
-  // 
+  //
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector is visible.
   waitVisible(
     { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
   ) {
     this._elements.waitForVisible(timeout, reverse)
-    
+
     return this
   }
 
   // Waits for at least one element of the list has a text.
-  // 
+  //
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector has a text.
   waitText(
@@ -286,7 +286,7 @@ export class PageElementList<
   }
 
   // Waits for at least one element of the list have a value.
-  // 
+  //
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector has a value.
   waitValue(
@@ -299,13 +299,13 @@ export class PageElementList<
 
   // waits until list has given length
   waitLength( {
-    length, 
-    timeout = this.timeout, 
+    length,
+    timeout = this.timeout,
     comparator = Workflo.Comparator.equalTo,
     interval = 500
   }: {
-    length: number, 
-    timeout?: number, 
+    length: number,
+    timeout?: number,
     comparator?: Workflo.Comparator,
     interval?: number
   }) {

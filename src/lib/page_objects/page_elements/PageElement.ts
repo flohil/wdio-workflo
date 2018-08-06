@@ -152,6 +152,10 @@ export class PageElement<
     return !reverse
   }
 
+  eventuallyDoesNotExist({ timeout = this.timeout }: Workflo.WDIOParams = {}) {
+    return this.eventuallyExists({reverse: true, timeout})
+  }
+
   // checks if at least one element matching selector is visible within timeout
   // reverse is optional and false by default
   // timeout is optional and this._timeout by default
@@ -248,6 +252,12 @@ export class PageElement<
     this._element.waitForExist(timeout, reverse)
 
     return this
+  }
+
+  waitDoesNotExist(
+    { timeout = this.timeout }: Workflo.WDIOParams = {}
+  ) {
+    return this.waitExist({reverse: true, timeout})
   }
 
   // Waits until at least one matching element is visible.

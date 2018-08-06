@@ -56,7 +56,7 @@ class PageElementList extends _1.PageNode {
     }
     // Retrieves list of elements identified by this.selector
     // which reflect browser state after first element is found.
-    // 
+    //
     // Waits for at least one element to reach the waiting condition defined
     // in wait type.
     // Todo add _listElements() that does not wait for wait type condition for all elements
@@ -170,7 +170,7 @@ class PageElementList extends _1.PageNode {
     }
     // WAIT FUNCTIONS
     // Waits for at least one element of the list to exist.
-    // 
+    //
     // If reverse is set to true, function will wait until no element
     // that matches the this.selector exists.
     waitExist({ timeout = this.timeout, reverse = false } = {}) {
@@ -178,7 +178,7 @@ class PageElementList extends _1.PageNode {
         return this;
     }
     // Waits for at least one element of the list to be visible.
-    // 
+    //
     // If reverse is set to true, function will wait until no element
     // that matches the this.selector is visible.
     waitVisible({ timeout = this.timeout, reverse = false } = {}) {
@@ -186,7 +186,7 @@ class PageElementList extends _1.PageNode {
         return this;
     }
     // Waits for at least one element of the list has a text.
-    // 
+    //
     // If reverse is set to true, function will wait until no element
     // that matches the this.selector has a text.
     waitText({ timeout = this.timeout, reverse = false } = {}) {
@@ -194,7 +194,7 @@ class PageElementList extends _1.PageNode {
         return this;
     }
     // Waits for at least one element of the list have a value.
-    // 
+    //
     // If reverse is set to true, function will wait until no element
     // that matches the this.selector has a value.
     waitValue({ timeout = this.timeout, reverse = false } = {}) {

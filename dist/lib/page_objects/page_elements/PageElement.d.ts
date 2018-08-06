@@ -29,6 +29,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     isEnabled(): boolean;
     isSelected(): boolean;
     eventuallyExists({reverse, timeout}?: Workflo.WDIOParams): boolean;
+    eventuallyDoesNotExist({timeout}?: Workflo.WDIOParams): boolean;
     eventuallyIsVisible({reverse, timeout}?: Workflo.WDIOParams): boolean;
     eventuallyIsHidden({reverse, timeout}?: Workflo.WDIOParams): boolean;
     eventuallyHasText({reverse, timeout, text}?: Workflo.WDIOParams & {
@@ -43,6 +44,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     eventuallyIsEnabled({reverse, timeout}: Workflo.WDIOParams): boolean;
     eventuallyIsSelected({reverse, timeout}: Workflo.WDIOParams): boolean;
     waitExist({timeout, reverse}?: Workflo.WDIOParams): this;
+    waitDoesNotExist({timeout}?: Workflo.WDIOParams): this;
     waitVisible({timeout, reverse}?: Workflo.WDIOParams): this;
     waitHidden({timeout, reverse}?: Workflo.WDIOParams): this;
     waitText({reverse, timeout, text}?: Workflo.WDIOParams & {

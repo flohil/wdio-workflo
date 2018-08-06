@@ -117,6 +117,9 @@ class PageElement extends _1.PageNode {
         }
         return !reverse;
     }
+    eventuallyDoesNotExist({ timeout = this.timeout } = {}) {
+        return this.eventuallyExists({ reverse: true, timeout });
+    }
     // checks if at least one element matching selector is visible within timeout
     // reverse is optional and false by default
     // timeout is optional and this._timeout by default
@@ -192,6 +195,9 @@ class PageElement extends _1.PageNode {
     waitExist({ timeout = this.timeout, reverse = false } = {}) {
         this._element.waitForExist(timeout, reverse);
         return this;
+    }
+    waitDoesNotExist({ timeout = this.timeout } = {}) {
+        return this.waitExist({ reverse: true, timeout });
     }
     // Waits until at least one matching element is visible.
     //
