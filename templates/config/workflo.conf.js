@@ -40,4 +40,5 @@ module.exports = {
   reportErrorsInstantly: false,
   deprecationWarnings: false,
   retries: 0, // eg. 3
+  bail: 0
 }

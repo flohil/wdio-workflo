@@ -66,6 +66,8 @@ exports.config = {
   /**
    * test configurations
    */
+  user: workfloConf.user,
+  key: workfloConf.key,
   bail: workfloConf.bail || 0,
   logLevel: workfloConf.logLevel,
   logOutput: path.join(workfloConf.testDir, 'logs'),
@@ -81,6 +83,7 @@ exports.config = {
   },
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: workfloConf.timeouts.waitforTimeout,
+  plugins: workfloConf.plugins,
   framework: 'workflo-jasmine',
   reporters: ['workflo-spec', 'workflo-allure'],
   reporterOptions: {
@@ -156,8 +159,16 @@ exports.config = {
    * hooks
    */
   onPrepare: function (config, capabilities) {
+    if (typeof workfloConf.onPrepare === 'function') {
+      workfloConf.onPrepare(config, capabilities)
+    }
   },
-  before: function (capabilties, specs) {
+  beforeSession: function (config, capabilities, specs) {
+    if (typeof workfloConf.beforeSession === 'function') {
+      workfloConf.beforeSession(config, capabilities, specs)
+    }
+  },
+  before: function (capabilties, testcases) {
     process.env.WORKFLO_CONFIG = JSON.stringify(workfloConf)
 
     // allow custom failure messages in jasmine
@@ -179,48 +190,105 @@ exports.config = {
     // some gui tests require a sized window
     browser.windowHandleSize(workfloConf.windowSize)
 
-    // extend default object and string prototypes
-    // with custom utitily functions
+    if (typeof workfloConf.before === 'function') {
+      workfloConf.before(capabilities, specs)
+    }
+  },
+  beforeSuite: function (suite) {
+    browser.timeouts('implicit', 1001)
+
+    if (typeof workfloConf.beforeSuite === 'function') {
+      workfloConf.beforeSuite(suite)
+    }
   },
   beforeValidator: function (capabilties, specs) {
     require('ts-node/register')
     require('tsconfig-paths/register')
 
     require('../dist/inject.js')
-  },
-  beforeTest: function (test) {
-  },
-  afterTest: function (test) {
-    if (test.passed === false) {
-      browser.reload()
+
+    if (typeof workfloConf.beforeValidator === 'function') {
+      workfloConf.beforeValidator(capabilities, specs)
     }
   },
-  beforeSuite: function (suite) {
-    browser.timeouts('implicit', 1001)
+  beforeHook: function () {
+    if (typeof workfloConf.beforeHook === 'function') {
+      workfloConf.beforeHook()
+    }
   },
-  onComplete: function (exitCode, config, capabilities) {
-    copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
+  afterHook: function () {
+    if (typeof workfloConf.afterHook === 'function') {
+      workfloConf.afterHook()
+    }
+  },
+  beforeTest: function (test) {
+    if (typeof workfloConf.beforeTest === 'function') {
+      workfloConf.beforeTest(test)
+    }
+  },
+  beforeCommand: function (commandName, args) {
+    if (typeof workfloConf.beforeCommand === 'function') {
+      workfloConf.beforeCommand(commandName, args)
+    }
   },
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {
     if (error) {
-      if (true) {
-        browser.saveScreenshot()
+      browser.saveScreenshot()
 
-        const screenshot = browser.saveScreenshot() // returns base64 string buffer
+      const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
-        const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
-        const screenshotFilename = `${screenshotFolder}/error_${errorScreenshotCtr}.png`
+      const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
+      const screenshotFilename = `${screenshotFolder}/error_${errorScreenshotCtr}.png`
 
-        errorScreenshotCtr++
-        errorScreenshotFilename = screenshotFilename
+      errorScreenshotCtr++
+      errorScreenshotFilename = screenshotFilename
 
-        try {
-          fs.writeFileSync(screenshotFilename, screenshot)
-        } catch (err) {
-          console.log(`Error writing screenshot:${err.message}`)
-        }
+      try {
+        fs.writeFileSync(screenshotFilename, screenshot)
+      } catch (err) {
+        console.log(`Error writing screenshot:${err.message}`)
       }
+    }
+
+    if (typeof workfloConf.afterCommand === 'function') {
+      workfloConf.afterCommand(commandName, args, result, error)
+    }
+  },
+  afterTest: function (test) {
+    if (typeof workfloConf.afterTest === 'function') {
+      workfloConf.afterTest(test)
+    }
+
+    if (test.passed === false) {
+      browser.reload()
+    }
+  },
+  afterSuite: function (suite) {
+    if (typeof workfloConf.afterSuite === 'function') {
+      workfloConf.afterSuite(suite)
+    }
+  },
+  after: function (result, capabilities, specs) {
+    if (typeof workfloConf.after === 'function') {
+      workfloConf.after(result, capabilities, specs)
+    }
+  },
+  afterSession: function (config, capabilities, specs) {
+    if (typeof workfloConf.afterSession === 'function') {
+      workfloConf.afterSession(config, capabilities, specs)
+    }
+  },
+  onComplete: function (exitCode, config, capabilities) {
+    copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
+
+    if (typeof workfloConf.onComplete === 'function') {
+      workfloConf.onComplete(exitCode, config, capabilities)
+    }
+  },
+  onError: function(message) {
+    if (typeof workfloConf.onError === 'function') {
+      workfloConf.onError(message)
     }
   }
 }
