@@ -111,6 +111,11 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
               specParserState.addArgFunc(
                 (node) => {
                   const featureId = (<ts.StringLiteral> node).text
+
+                  if (featureId.length === 0) {
+                    throw new Error(`Feature description must not be empty!`)
+                  }
+
                   specParserState.activeFeature = featureId
 
                   if (!(featureId in specTree)) {
@@ -154,6 +159,11 @@ export function parseSpecFiles(sourceFile: ts.SourceFile) {
               specParserState.addArgFunc(
                 (node) => {
                   const specId = (<ts.StringLiteral> node).text
+
+                  if (specId.length === 0) {
+                    throw new Error(`Story id must not be empty!`)
+                  }
+
                   specParserState.activeSpecId = specId
 
                   if (!(specId in specTree[specParserState.activeFeature])) {
@@ -322,6 +332,14 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                 (node) => {
                   const suiteId = (<ts.StringLiteral> node).text
 
+                  if (suiteId.length === 0) {
+                    throw new Error(`Suite description must not be empty`)
+                  } else if (suiteId.indexOf('.') > -1) {
+                      throw new Error(`Suite description must not contain the '.' character: ${suiteId}`)
+                  } else if (suiteId.substr(0, 1) === '-') {
+                    throw new Error(`Suite description must not start with '-' character: ${suiteId}`)
+                  }
+
                   if (typeof testcaseParserState.activeSuiteId === 'undefined') {
                     testcaseParserState.activeSuiteId = suiteId
                   } else {
@@ -378,6 +396,13 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
               testcaseParserState.addArgFunc(
                 (node) => {
                   const testcaseId = (<ts.StringLiteral> node).text
+
+                  if (testcaseId.length === 0) {
+                    throw new Error(`Testcase description must not be empty`)
+                  } else if (testcaseId.indexOf('.') > -1) {
+                      throw new Error(`Testcase description must not contain the '.' character: ${testcaseId}`)
+                  }
+
                   let fullTestcaseId
 
                   try {
@@ -392,9 +417,7 @@ export function parseTestcaseFiles(sourceFile: ts.SourceFile) {
                   } catch (e) {
                     if (!testcaseTree[testcaseParserState.activeSuiteId]) {
 
-                        console.error(`Parsed testcase function outside of suite: ${testcaseId}\n
-                        Always define testcase functions inside suites and do not use them
-                        inside "external" functions invoked from inside suites`)
+                        console.error(`Parsed testcase function outside of suite: ${testcaseId}\nAlways define testcase functions inside suites and do not use them\ninside "external" functions invoked from inside suites`)
 
                         throw e
                     }

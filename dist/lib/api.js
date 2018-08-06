@@ -50,9 +50,6 @@ function shouldRunThen(story, criteria) {
     return false;
 }
 exports.Feature = (description, metadata, bodyFunc, jasmineFunc = describe) => {
-    if (description.length === 0) {
-        throw new Error(`Feature description must not be empty!`);
-    }
     this.__currentFeature = description;
     if (featuresInclude(description)) {
         jasmineFunc(`${description}:`, bodyFunc);
@@ -65,9 +62,6 @@ exports.xFeature = (description, metadata, bodyFunc) => {
     exports.Feature(description, metadata, bodyFunc, xdescribe);
 };
 exports.Story = (id, description, metadata, bodyFunc, jasmineFunc = describe) => {
-    if (id.length === 0) {
-        throw new Error(`Story id must not be empty!`);
-    }
     const fullStoryName = `${id} - ${description}`;
     this.__currentStoryId = id;
     storyMap.set(id, {
@@ -243,15 +237,6 @@ exports.xThen = (id, description) => {
     exports.Then(id, description, it, true);
 };
 exports.suite = (description, metadata, bodyFunc, jasmineFunc = describe) => {
-    if (description.length === 0) {
-        throw new Error(`Suite description must not be empty!`);
-    }
-    else if (description.indexOf('.') > -1) {
-        throw new Error(`Suite description must not contain '.' character: ${description}`);
-    }
-    else if (description.substr(0, 1) === '-') {
-        throw new Error(`Suite description must not start with '-' character: ${description}`);
-    }
     if (!this.suiteIdStack) {
         this.suiteIdStack = [description];
     }
@@ -270,12 +255,6 @@ exports.xsuite = (description, metadata, bodyFunc) => {
     exports.suite(description, metadata, bodyFunc, xdescribe);
 };
 exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
-    if (description.length === 0) {
-        throw new Error(`Testcase description must not be empty!`);
-    }
-    else if (description.indexOf('.') > -1) {
-        throw new Error(`Testcase description must not contain '.' character: ${description}`);
-    }
     const fullSuiteId = this.suiteIdStack.join('.');
     const fullId = `${fullSuiteId}.${description}`;
     this.__stepStack = [];

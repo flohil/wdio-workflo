@@ -49,6 +49,9 @@ function parseSpecFiles(sourceFile) {
                         case 'Feature':
                             specParserState.addArgFunc((node) => {
                                 const featureId = node.text;
+                                if (featureId.length === 0) {
+                                    throw new Error(`Feature description must not be empty!`);
+                                }
                                 specParserState.activeFeature = featureId;
                                 if (!(featureId in specTree)) {
                                     specTree[featureId] = {
@@ -84,6 +87,9 @@ function parseSpecFiles(sourceFile) {
                         case 'Story':
                             specParserState.addArgFunc((node) => {
                                 const specId = node.text;
+                                if (specId.length === 0) {
+                                    throw new Error(`Story id must not be empty!`);
+                                }
                                 specParserState.activeSpecId = specId;
                                 if (!(specId in specTree[specParserState.activeFeature])) {
                                     specTree[specParserState.activeFeature].specHash[specId] = {};
@@ -182,6 +188,15 @@ function parseTestcaseFiles(sourceFile) {
                         case 'suite':
                             testcaseParserState.addArgFunc((node) => {
                                 const suiteId = node.text;
+                                if (suiteId.length === 0) {
+                                    throw new Error(`Suite description must not be empty`);
+                                }
+                                else if (suiteId.indexOf('.') > -1) {
+                                    throw new Error(`Suite description must not contain the '.' character: ${suiteId}`);
+                                }
+                                else if (suiteId.substr(0, 1) === '-') {
+                                    throw new Error(`Suite description must not start with '-' character: ${suiteId}`);
+                                }
                                 if (typeof testcaseParserState.activeSuiteId === 'undefined') {
                                     testcaseParserState.activeSuiteId = suiteId;
                                 }
@@ -227,6 +242,12 @@ function parseTestcaseFiles(sourceFile) {
                         case 'testcase':
                             testcaseParserState.addArgFunc((node) => {
                                 const testcaseId = node.text;
+                                if (testcaseId.length === 0) {
+                                    throw new Error(`Testcase description must not be empty`);
+                                }
+                                else if (testcaseId.indexOf('.') > -1) {
+                                    throw new Error(`Testcase description must not contain the '.' character: ${testcaseId}`);
+                                }
                                 let fullTestcaseId;
                                 try {
                                     fullTestcaseId = `${testcaseParserState.activeSuiteId}.${testcaseId}`;
@@ -239,9 +260,7 @@ function parseTestcaseFiles(sourceFile) {
                                 }
                                 catch (e) {
                                     if (!testcaseTree[testcaseParserState.activeSuiteId]) {
-                                        console.error(`Parsed testcase function outside of suite: ${testcaseId}\n
-                        Always define testcase functions inside suites and do not use them
-                        inside "external" functions invoked from inside suites`);
+                                        console.error(`Parsed testcase function outside of suite: ${testcaseId}\nAlways define testcase functions inside suites and do not use them\ninside "external" functions invoked from inside suites`);
                                         throw e;
                                     }
                                 }

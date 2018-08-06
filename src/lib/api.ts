@@ -69,10 +69,6 @@ export const Feature = (
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
 ) => {
-  if (description.length === 0) {
-    throw new Error(`Feature description must not be empty!`)
-  }
-
   this.__currentFeature = description
 
   if (featuresInclude(description)) {
@@ -103,10 +99,6 @@ export const Story = (
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
 ) => {
-  if (id.length === 0) {
-    throw new Error(`Story id must not be empty!`)
-  }
-
   const fullStoryName = `${id} - ${description}`
 
   this.__currentStoryId = id
@@ -368,14 +360,6 @@ export const suite = (
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void) => void = describe
 ) => {
-  if (description.length === 0) {
-    throw new Error(`Suite description must not be empty!`)
-  } else if (description.indexOf('.') > -1) {
-    throw new Error(`Suite description must not contain '.' character: ${description}`)
-  } else if (description.substr(0, 1) === '-') {
-    throw new Error(`Suite description must not start with '-' character: ${description}`)
-  }
-
   if (!this.suiteIdStack) {
     this.suiteIdStack = [description]
   }
@@ -412,12 +396,6 @@ export const testcase = (
   bodyFunc: () => void,
   jasmineFunc: (description: string, bodyFunc: () => void, retries: number) => void = it
 ) => {
-  if (description.length === 0) {
-    throw new Error(`Testcase description must not be empty!`)
-  } else if (description.indexOf('.') > -1) {
-    throw new Error(`Testcase description must not contain '.' character: ${description}`)
-  }
-
   const fullSuiteId = this.suiteIdStack.join('.')
   const fullId = `${fullSuiteId}.${description}`
 
