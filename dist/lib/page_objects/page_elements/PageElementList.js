@@ -125,7 +125,7 @@ class PageElementList extends _1.PageNode {
         if (this.disableCache || resetCache || !(cacheKey in this.identifiedObjCache)) {
             const listElements = this.listElements;
             const mappedObj = {};
-            if (identifier) { // manually set identifier
+            if (identifier) {
                 const queryResults = {};
                 // create hash where result of identifier func is key
                 // and list element is value
@@ -141,7 +141,7 @@ class PageElementList extends _1.PageNode {
                     }
                 }
             }
-            else { // default identifier -> mapped by index of results
+            else {
                 for (let i = 0; i < listElements.length; ++i) {
                     mappedObj[i] = listElements[i];
                 }

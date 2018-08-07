@@ -30,7 +30,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    constructor(selector: string, { wait, timeout, disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts }: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    constructor(selector: string, {wait, timeout, disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     initialWait(): void;
@@ -55,7 +55,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * Attention: this may take a long time, try to avoid: if only single elements of list
      * are needed, use firstBy() instead.
      **/
-    identify({ identifier, resetCache }?: {
+    identify({identifier, resetCache}?: {
         identifier?: IPageElementListIdentifier<Store, PageElementType>;
         resetCache?: boolean;
     }): {
@@ -69,25 +69,25 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getAll(): PageElementType[];
     getLength(): number;
     firstBy(): FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    waitExist({ timeout, reverse }?: Workflo.WDIOParams): this;
-    waitVisible({ timeout, reverse }?: Workflo.WDIOParams): this;
-    waitText({ timeout, reverse }?: Workflo.WDIOParams): this;
-    waitValue({ timeout, reverse }?: Workflo.WDIOParams): this;
-    waitLength({ length, timeout, comparator, interval }: {
+    waitExist({timeout, reverse}?: Workflo.WDIOParams): this;
+    waitVisible({timeout, reverse}?: Workflo.WDIOParams): this;
+    waitText({timeout, reverse}?: Workflo.WDIOParams): this;
+    waitValue({timeout, reverse}?: Workflo.WDIOParams): this;
+    waitLength({length, timeout, comparator, interval}: {
         length: number;
         timeout?: number;
         comparator?: Workflo.Comparator;
         interval?: number;
     }): this;
-    eventuallyHasLength({ length, timeout }: {
+    eventuallyHasLength({length, timeout}: {
         length: number;
         timeout: number;
     }): boolean;
     isEmpty(): boolean;
-    eventuallyIsEmpty({ timeout }: {
+    eventuallyIsEmpty({timeout}: {
         timeout?: number;
     }): boolean;
-    waitEmpty({ timeout, interval }: {
+    waitEmpty({timeout, interval}: {
         timeout?: number;
         interval?: number;
     }): void;

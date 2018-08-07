@@ -1,5 +1,5 @@
 import * as pageObjects from './lib/page_objects';
-declare global {
+declare global  {
     namespace WebdriverIO {
         interface Client<T> {
             /**
@@ -86,7 +86,7 @@ declare global {
             exist = "exist",
             visible = "visible",
             value = "value",
-            text = "text"
+            text = "text",
         }
         const enum Comparator {
             equalTo = "==",
@@ -96,7 +96,7 @@ declare global {
             ne = "!=",
             eq = "==",
             lt = "<",
-            gt = ">"
+            gt = ">",
         }
         type XPath = pageObjects.builders.XPathBuilder | string;
         namespace Object {

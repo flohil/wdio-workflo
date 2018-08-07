@@ -1,4 +1,4 @@
-declare global {
+declare global  {
     interface Date {
         addDays: Function;
     }
@@ -48,3 +48,4 @@ export interface IAnalysedCriteria {
     manualCriteriaCount: number;
     uncoveredCriteriaCount: number;
 }
+export {};

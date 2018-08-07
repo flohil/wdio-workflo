@@ -6,7 +6,7 @@ export declare class PageNode<Store extends PageElementStore> {
     protected selector: string;
     protected store: Store;
     protected timeout: number;
-    constructor(selector: string, { store }: IPageNodeOpts<Store>);
+    constructor(selector: string, {store}: IPageNodeOpts<Store>);
     __getNodeId(): string;
     getSelector(): string;
 }

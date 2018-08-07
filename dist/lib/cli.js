@@ -19,7 +19,7 @@ const io_1 = require("./io");
 const allureReport_1 = require("./allureReport");
 const optimist = require("optimist");
 const merge = require("deepmerge");
-const __1 = require("../");
+const _1 = require("../");
 const webdriverio_workflo_1 = require("webdriverio-workflo");
 const table = require('text-table');
 const pkg = require('../../package.json');
@@ -162,26 +162,6 @@ optimist
     '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'\n')
     .describe('silentRetries', 'how many times flaky tests should be rerun (default: 0)\n' +
     '\t\t\t   silently rerun Tests won\'t show up under "Retries" in the allure report')
-    // wdio-workflo options
-    // support priority: low
-    // .describe('path', 'Selenium server path (default: /wd/hub)')
-    // .describe('user', 'username if using a cloud service as Selenium backend')
-    // .alias('user', 'u')
-    // .describe('key', 'corresponding access key to the user')
-    // .alias('key', 'k')
-    // .describe('watch', 'watch specs for changes')
-    // .describe('jasmineOpts.*', 'Jasmine options, see the full list options at https://github.com/webdriverio/wdio-jasmine-framework#jasminenodeopts-options')
-    // not supported
-    // .describe('suite', 'overwrites the specs attribute and runs the defined suite') // replaced by 'testcases'
-    // .describe('spec', 'run only a certain spec file') // replaced by 'testcaseFiles' and 'specFiles'
-    // .describe('cucumberOpts.*', 'Cucumber options, see the full list options at https://github.com/webdriverio/wdio-cucumber-framework#cucumberopts-options') // only jasmine is supported
-    // .describe('mochaOpts.*', 'Mocha options, see the full list options at http://mochajs.org') // only jasmine is supported
-    // .describe('screenshotPath', 'saves a screenshot to a given path if a command fails') // stored with allure results
-    // .alias('screenshotPath', 's')
-    // .describe('framework', 'defines the framework (Mocha, Jasmine or Cucumber) to run the specs (default: mocha)')
-    // .alias('framework', 'f')
-    // .describe('reporters', 'reporters to print out the results on stdout') // supports only workflo adaptions of spec and allure reporters
-    // .alias('reporters', 'r')
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'silentRetries'
     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
@@ -197,7 +177,7 @@ if (process.argv.length === 2 || process.argv.length > 2 && process.argv[2].subs
     optionsOffset = 1; // no config file specified
 }
 let argv = optimist.parse(process.argv.slice(optionsOffset));
-const allowedOpts = __1.arrayFunctions.mapToObject(ALLOWED_OPTS, (element) => true);
+const allowedOpts = _1.arrayFunctions.mapToObject(ALLOWED_OPTS, (element) => true);
 for (const optKey in argv) {
     const unknownOpts = [];
     if (!(optKey in allowedOpts)) {
@@ -434,8 +414,8 @@ checkReport().then(() => {
         uncoveredCriteria: 'Uncovered Criteria',
         uncoveredCriteriaObject: 'Uncovered Criteria Object'
     };
-    const invertedTranslations = __1.objectFunctions.invert(translations);
-    const printObject = __1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
+    const invertedTranslations = _1.objectFunctions.invert(translations);
+    const printObject = _1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
     if (argv.info) {
         function toTable(key) {
             return [key, printObject[key], ''];
@@ -853,7 +833,7 @@ checkReport().then(() => {
                         }
                     }
                 }
-                else { // testcase is a testcase
+                else {
                     let matchSuite = testcase;
                     const testcaseParts = testcase.split('.');
                     // at least one suite followed by a testcase
@@ -1121,7 +1101,7 @@ checkReport().then(() => {
         let testcaseFile = testcaseTableEntry.testcaseFile.replace(srcDir, '');
         testcaseFile = testcaseFile.substring(1, testcaseFile.length).replace('\\', '\/');
         const specHash = parseResults.testcases.tree[testcaseTableEntry.suiteId].testcaseHash[testcase].specValidateHash;
-        const specFilesHash = (specHash) ? __1.arrayFunctions.mapToObject(Object.keys(specHash).map(spec => {
+        const specFilesHash = (specHash) ? _1.arrayFunctions.mapToObject(Object.keys(specHash).map(spec => {
             if (parseResults.specs.specTable[spec]) {
                 return parseResults.specs.specTable[spec].specFile;
             }
@@ -1147,7 +1127,7 @@ checkReport().then(() => {
         specFile = specFile.substring(1, specFile.length).replace('\\', '\/');
         const testcaseHash = parseResults.testcases.validateTable[spec];
         const testcases = (testcaseHash) ? Object.keys(testcaseHash) : [];
-        const testcaseFileHash = (testcaseHash) ? __1.arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true) : {};
+        const testcaseFileHash = (testcaseHash) ? _1.arrayFunctions.mapToObject(testcases.map(testcase => parseResults.testcases.testcaseTable[testcase].testcaseFile), (testcase) => true) : {};
         const testcaseFiles = Object.keys(testcaseFileHash);
         let manualFile = (spec in manualResults.specTable) ? manualResults.specTable[spec].file.replace(srcDir, '') : '';
         if (manualFile.length > 0) {

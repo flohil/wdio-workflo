@@ -21,7 +21,7 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
     protected elementOptions: PageElementOptions;
     protected identifier: IPageElementMapIdentifier<K>;
     protected _$: Record<K, PageElementType>;
-    constructor(selector: string, { identifier, elementStoreFunc, elementOptions, ...superOpts }: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
+    constructor(selector: string, {identifier, elementStoreFunc, elementOptions, ...superOpts}: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
     readonly $: Record<K, PageElementType>;
     /**
      * In case of language changes, for example, change values of mappingObject while keys must stay the same.

@@ -2,7 +2,7 @@ export declare class XPathBuilder {
     private static instance;
     private _selector;
     static getInstance(): XPathBuilder;
-    private SelectorBuilder;
+    private SelectorBuilder();
     reset(selector: string): this;
     append(selector: string): this;
     constraint(constraint: string): this;

@@ -8,17 +8,17 @@ export interface IValueGroupOpts<Store extends PageElementStore, Content extends
 export declare class ValueGroup<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts> extends TextGroup<Store, Content, WalkerType, WalkerOptions> {
-    constructor({ ...superOpts }: IValueGroupOpts<Store, Content, WalkerType, WalkerOptions>);
+    constructor({...superOpts}: IValueGroupOpts<Store, Content, WalkerType, WalkerOptions>);
     /**
      * Returns node value for nodes which implement Workflo.PageNode.IGetValue
      * or undefined for those which don't.
      * @param param
      */
-    GetValue({ filter, options }?: {
+    GetValue({filter, options}?: {
         filter?: Workflo.IRecObj<boolean>;
         options?: Workflo.IWalkerOptions;
-    }): Workflo.IRecObj<Workflo.Value>;
-    SetValue({ values, options }: {
+    }): Workflo.IRecObj<string | number | boolean>;
+    SetValue({values, options}: {
         values: Workflo.IRecObj<Workflo.Value>;
         options?: Workflo.IWalkerOptions;
     }): Workflo.IRecObj<void>;
