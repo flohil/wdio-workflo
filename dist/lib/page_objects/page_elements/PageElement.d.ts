@@ -12,7 +12,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     protected timeout: number;
     protected _$: Store;
     protected customScroll: Workflo.ScrollParams;
-    constructor(selector: string, {wait, timeout, customScroll, ...superOpts}: IPageElementOpts<Store>);
+    constructor(selector: string, { wait, timeout, customScroll, ...superOpts }: IPageElementOpts<Store>);
     readonly $: Store;
     /**
      *
@@ -30,39 +30,39 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     containsValue(value?: string): boolean;
     isEnabled(): boolean;
     isSelected(): boolean;
-    eventuallyExists({reverse, timeout}?: Workflo.WDIOParams): boolean;
-    eventuallyNotExists({timeout}?: Workflo.WDIOParams): boolean;
-    eventuallyIsVisible({reverse, timeout}?: Workflo.WDIOParams): boolean;
-    eventuallyIsHidden({reverse, timeout}?: Workflo.WDIOParams): boolean;
-    eventuallyHasText({reverse, timeout, text}?: Workflo.WDIOParams & {
+    eventuallyExists({ reverse, timeout }?: Workflo.WDIOParams): boolean;
+    eventuallyNotExists({ timeout }?: Workflo.WDIOParams): boolean;
+    eventuallyIsVisible({ reverse, timeout }?: Workflo.WDIOParams): boolean;
+    eventuallyIsHidden({ reverse, timeout }?: Workflo.WDIOParams): boolean;
+    eventuallyHasText({ reverse, timeout, text }?: Workflo.WDIOParams & {
         text?: string;
     }): boolean;
-    eventuallyContainsText({reverse, timeout, text}?: Workflo.WDIOParams & {
+    eventuallyContainsText({ reverse, timeout, text }?: Workflo.WDIOParams & {
         text?: string;
     }): boolean;
-    eventuallyHasValue({reverse, timeout, value}?: Workflo.WDIOParams & {
+    eventuallyHasValue({ reverse, timeout, value }?: Workflo.WDIOParams & {
         value?: string;
     }): boolean;
-    eventuallyIsEnabled({reverse, timeout}: Workflo.WDIOParams): boolean;
-    eventuallyIsSelected({reverse, timeout}: Workflo.WDIOParams): boolean;
-    waitExist({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitNotExists({timeout}?: Workflo.WDIOParams): this;
-    waitVisible({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitHidden({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitText({reverse, timeout, text}?: Workflo.WDIOParams & {
+    eventuallyIsEnabled({ reverse, timeout }: Workflo.WDIOParams): boolean;
+    eventuallyIsSelected({ reverse, timeout }: Workflo.WDIOParams): boolean;
+    waitExist({ timeout, reverse }?: Workflo.WDIOParams): this;
+    waitNotExists({ timeout }?: Workflo.WDIOParams): this;
+    waitVisible({ timeout, reverse }?: Workflo.WDIOParams): this;
+    waitHidden({ timeout, reverse }?: Workflo.WDIOParams): this;
+    waitText({ reverse, timeout, text }?: Workflo.WDIOParams & {
         text?: string;
     }): this;
-    waitContainsText({reverse, timeout, text}?: Workflo.WDIOParams & {
+    waitContainsText({ reverse, timeout, text }?: Workflo.WDIOParams & {
         text?: string;
     }): this;
-    waitValue({reverse, timeout, value}?: Workflo.WDIOParams & {
+    waitValue({ reverse, timeout, value }?: Workflo.WDIOParams & {
         value?: string;
     }): this;
-    waitContainsValue({reverse, timeout, value}?: Workflo.WDIOParams & {
+    waitContainsValue({ reverse, timeout, value }?: Workflo.WDIOParams & {
         value?: string;
     }): this;
-    waitEnabled({reverse, timeout}?: Workflo.WDIOParams): this;
-    waitSelected({reverse, timeout}?: Workflo.WDIOParams): this;
+    waitEnabled({ reverse, timeout }?: Workflo.WDIOParams): this;
+    waitSelected({ reverse, timeout }?: Workflo.WDIOParams): this;
     getAllHTML(): WebdriverIO.Client<string> & string;
     getText(): WebdriverIO.Client<string> & string;
     getDirectText(): string;

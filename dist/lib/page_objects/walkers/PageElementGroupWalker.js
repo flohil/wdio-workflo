@@ -124,7 +124,7 @@ class PageElementGroupWalker {
     solveList(problem, list, values, options) {
         const results = Object.create(Object.prototype);
         const identifiedObject = list.identify();
-        if (values && typeof values === 'object') {
+        if (values && typeof values === 'object') { // if e.g. values for SetValue are defined
             for (const key in values) {
                 if (!identifiedObject.hasOwnProperty(key) || typeof identifiedObject[key] === 'undefined') {
                     if (options.throwUnmatchedKey) {
@@ -138,7 +138,7 @@ class PageElementGroupWalker {
                 }
             }
         }
-        else {
+        else { // e.g. for GetText -> values are undefined
             for (const key in identifiedObject) {
                 this.writeNodeResult(results, key, problem, identifiedObject[key], undefined, options);
             }
@@ -150,7 +150,7 @@ class PageElementGroupWalker {
     // and values taken from the solved function.
     solveMap(problem, map, values, options) {
         const results = Object.create(Object.prototype);
-        if (values && typeof values === 'object') {
+        if (values && typeof values === 'object') { // if e.g. values for SetValue are defined
             for (const key in values) {
                 if (!map.$.hasOwnProperty(key)) {
                     if (options.throwUnmatchedKey) {
@@ -164,7 +164,7 @@ class PageElementGroupWalker {
                 }
             }
         }
-        else {
+        else { // e.gg for GetText -> values are undefined
             for (const key in map.$) {
                 this.writeNodeResult(results, key, problem, map.$[key], undefined, options);
             }
