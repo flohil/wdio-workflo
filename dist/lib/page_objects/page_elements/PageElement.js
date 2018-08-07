@@ -77,9 +77,15 @@ class PageElement extends _1.PageNode {
     exists() {
         return this._element.isExisting();
     }
+    notExists() {
+        return !this.exists();
+    }
     // Returns true if element matching this selector currently is visible.
     isVisible() {
         return this._element.isVisible();
+    }
+    isHidden() {
+        return !this.isVisible();
     }
     // Returns true if element matching this selector currently has text.
     hasText(text = undefined) {
@@ -117,7 +123,7 @@ class PageElement extends _1.PageNode {
         }
         return !reverse;
     }
-    eventuallyDoesNotExist({ timeout = this.timeout } = {}) {
+    eventuallyNotExists({ timeout = this.timeout } = {}) {
         return this.eventuallyExists({ reverse: true, timeout });
     }
     // checks if at least one element matching selector is visible within timeout
@@ -196,7 +202,7 @@ class PageElement extends _1.PageNode {
         this._element.waitForExist(timeout, reverse);
         return this;
     }
-    waitDoesNotExist({ timeout = this.timeout } = {}) {
+    waitNotExists({ timeout = this.timeout } = {}) {
         return this.waitExist({ reverse: true, timeout });
     }
     // Waits until at least one matching element is visible.

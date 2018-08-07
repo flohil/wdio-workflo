@@ -28,7 +28,7 @@ const VERSION = pkg.version;
 const ALLOWED_ARGV = [
     'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
     'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath',
-    'workfloOpts', 'retries'
+    'workfloOpts', 'silentRetries'
     //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
 ];
 const ALLOWED_OPTS = [
@@ -66,7 +66,7 @@ const ALLOWED_OPTS = [
     'cleanResultsStatus',
     'reportErrorsInstantly',
     'rerunFaulty',
-    'retries',
+    'silentRetries',
     '_',
     '$0'
 ];
@@ -160,8 +160,9 @@ optimist
     .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly')
     .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'\n')
-    .describe('retries', 'how many times flaky tests should be rerun (default: 0)')
-    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'retries'
+    .describe('silentRetries', 'how many times flaky tests should be rerun (default: 0)\n' +
+    '\t\t\t   silently rerun Tests won\'t show up under "Retries" in the allure report')
+    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'silentRetries'
     /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
     .boolean(['coloredLogs', 'watch', 'reportErrorsInstantly', 'cleanResultsStatus'])
@@ -457,11 +458,11 @@ checkReport().then(() => {
     if (fs.existsSync(testInfoFilePath)) {
         fs.unlinkSync(testInfoFilePath);
     }
-    if (typeof argv.retries === 'undefined' && typeof workfloConfig.retries !== 'undefined') {
-        argv.retries = workfloConfig.retries;
+    if (typeof argv.silentRetries === 'undefined' && typeof workfloConfig.silentRetries !== 'undefined') {
+        argv.silentRetries = workfloConfig.silentRetries;
     }
     else if (typeof argv.retries !== 'undefined') {
-        argv.retries = parseInt(argv.retries);
+        argv.silentRetries = parseInt(argv.silentRetries);
     }
     const testinfo = {
         criteriaAnalysis,
@@ -482,7 +483,7 @@ checkReport().then(() => {
         mergedResultsPath,
         consoleReportPath,
         mergedAllureResultsPath,
-        retries: argv.retries || 0
+        retries: argv.silentRetries || 0
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;

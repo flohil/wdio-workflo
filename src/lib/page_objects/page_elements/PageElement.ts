@@ -104,9 +104,17 @@ export class PageElement<
     return this._element.isExisting()
   }
 
+  notExists() : boolean {
+    return !this.exists()
+  }
+
   // Returns true if element matching this selector currently is visible.
   isVisible() : boolean {
     return this._element.isVisible()
+  }
+
+  isHidden() : boolean {
+    return !this.isVisible()
   }
 
   // Returns true if element matching this selector currently has text.
@@ -152,7 +160,7 @@ export class PageElement<
     return !reverse
   }
 
-  eventuallyDoesNotExist({ timeout = this.timeout }: Workflo.WDIOParams = {}) {
+  eventuallyNotExists({ timeout = this.timeout }: Workflo.WDIOParams = {}) {
     return this.eventuallyExists({reverse: true, timeout})
   }
 
@@ -254,7 +262,7 @@ export class PageElement<
     return this
   }
 
-  waitDoesNotExist(
+  waitNotExists(
     { timeout = this.timeout }: Workflo.WDIOParams = {}
   ) {
     return this.waitExist({reverse: true, timeout})

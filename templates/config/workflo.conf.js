@@ -20,25 +20,25 @@ module.exports = {
     browserName: 'chrome',
     requireWindowFocus: true,
     nativeEvents: true,
-    unexpectedAlertBehaviour: "accept",
+    unexpectedAlertBehaviour: 'accept',
     ignoreProtectedModeSettings: true,
-    "disable-popup-blocking": true,
-    enablePersistentHover: true,
+    'disable-popup-blocking': true,
+    enablePersistentHover: true
   },
   specFiles: [ `${testDir}/src/specs/**/*.spec.ts` ],
   testcaseFiles: [ `${testDir}/src/testcases/**/*.tc.ts` ],
   manualResultFiles: [ `${testDir}/src/manualResults/**/*.man.ts` ],
-  uidStorePath: "",
+  uidStorePath: '',
   allure: {
-    issueTrackerPattern: "http://issueTracker/issue-%s",
-    bugAppendix: "#bug", // will be appended to issue url to identify it as bug in report
-    bugPrefix: "" // will be appended to issue url to identify it as bug in report
+    issueTrackerPattern: 'http://issueTracker/issue-%s',
+    bugAppendix: '#bug', // will be appended to issue url to identify it as bug in report
+    bugPrefix: '' // will be appended to issue url to identify it as bug in report
   },
   timeouts: {
     waitforTimeout: 5000
   },
   reportErrorsInstantly: false,
   deprecationWarnings: false,
-  retries: 0, // eg. 3
+  silentRetries: 0, // eg. 3
   bail: 0
 }

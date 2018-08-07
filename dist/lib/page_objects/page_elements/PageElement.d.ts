@@ -21,7 +21,9 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     initialWait(): void;
     exists(): boolean;
+    notExists(): boolean;
     isVisible(): boolean;
+    isHidden(): boolean;
     hasText(text?: string): boolean;
     containsText(text?: string): boolean;
     hasValue(value?: string): boolean;
@@ -29,7 +31,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     isEnabled(): boolean;
     isSelected(): boolean;
     eventuallyExists({reverse, timeout}?: Workflo.WDIOParams): boolean;
-    eventuallyDoesNotExist({timeout}?: Workflo.WDIOParams): boolean;
+    eventuallyNotExists({timeout}?: Workflo.WDIOParams): boolean;
     eventuallyIsVisible({reverse, timeout}?: Workflo.WDIOParams): boolean;
     eventuallyIsHidden({reverse, timeout}?: Workflo.WDIOParams): boolean;
     eventuallyHasText({reverse, timeout, text}?: Workflo.WDIOParams & {
@@ -44,7 +46,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     eventuallyIsEnabled({reverse, timeout}: Workflo.WDIOParams): boolean;
     eventuallyIsSelected({reverse, timeout}: Workflo.WDIOParams): boolean;
     waitExist({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitDoesNotExist({timeout}?: Workflo.WDIOParams): this;
+    waitNotExists({timeout}?: Workflo.WDIOParams): this;
     waitVisible({timeout, reverse}?: Workflo.WDIOParams): this;
     waitHidden({timeout, reverse}?: Workflo.WDIOParams): this;
     waitText({reverse, timeout, text}?: Workflo.WDIOParams & {
