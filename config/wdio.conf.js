@@ -56,7 +56,7 @@ exports.config = {
    * capabilities
    */
   capabilities: [ Object.assign(workfloConf.capabilities, { maxInstances: 1 }) ],
-  services: workfloConf.services || ['selenium_standalone'],
+  services: workfloConf.services || ['selenium-standalone'],
   seleniumLogs: path.relative('./', path.join(workfloConf.testDir, 'logs', 'selenium', process.env.LATEST_RUN)),
   seleniumArgs: workfloConf.selenium.args,
   seleniumInstallArgs: workfloConf.selenium.installArgs,
