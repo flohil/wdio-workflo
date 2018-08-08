@@ -48,7 +48,6 @@ exports.config = {
   testcases: workfloConf.testcaseFiles,
   manualTestcases: workfloConf.manualTestcaseFiles,
   uidStorePath: workfloConf.uidStorePath,
-  waitforTimeout: workfloConf.waitforTimeout,
   waitforInterval: workfloConf.waitforInterval || 500,
   connectionRetryTimeout: workfloConf.connectionRetryTimeout || 30000,
   connectionRetryCount: 0,
@@ -56,8 +55,8 @@ exports.config = {
   /**
    * capabilities
    */
-  capabilities: [ Object.assign( workfloConf.capabilities, { maxInstances: 1 } ) ],
-  services: ['selenium-standalone'],
+  capabilities: [ Object.assign(workfloConf.capabilities, { maxInstances: 1 }) ],
+  services: workfloConf.services || ['selenium_standalone'],
   seleniumLogs: path.relative('./', path.join(workfloConf.testDir, 'logs', 'selenium', process.env.LATEST_RUN)),
   seleniumArgs: workfloConf.selenium.args,
   seleniumInstallArgs: workfloConf.selenium.installArgs,
@@ -286,7 +285,7 @@ exports.config = {
       workfloConf.onComplete(exitCode, config, capabilities)
     }
   },
-  onError: function(message) {
+  onError: function (message) {
     if (typeof workfloConf.onError === 'function') {
       workfloConf.onError(message)
     }
