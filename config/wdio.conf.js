@@ -12,6 +12,7 @@ const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursive
 
 let screenshotIdCtr = 1
 let errorScreenshotFilename
+let finishedTestcases = false
 
 // set defaults for workflo config
 if (!workfloConf.timeouts) {
@@ -211,6 +212,8 @@ exports.config = {
 
     require('../dist/inject.js')
 
+    finishedTestcases = true
+
     if (typeof workfloConf.beforeValidator === 'function') {
       workfloConf.beforeValidator(capabilities, specs)
     }
@@ -227,7 +230,9 @@ exports.config = {
   },
   beforeTest: function (test) {
     // some gui tests require a sized window
-    browser.windowHandleSize(workfloConf.windowSize)
+    if (!finishedTestcases) {
+      browser.windowHandleSize(workfloConf.windowSize)
+    }
 
     if (typeof workfloConf.beforeTest === 'function') {
       workfloConf.beforeTest(test)
