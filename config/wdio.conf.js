@@ -194,9 +194,6 @@ exports.config = {
       return promise
     })
 
-    // some gui tests require a sized window
-    browser.windowHandleSize(workfloConf.windowSize)
-
     if (typeof workfloConf.before === 'function') {
       workfloConf.before(capabilities, specs)
     }
@@ -229,6 +226,9 @@ exports.config = {
     }
   },
   beforeTest: function (test) {
+    // some gui tests require a sized window
+    browser.windowHandleSize(workfloConf.windowSize)
+
     if (typeof workfloConf.beforeTest === 'function') {
       workfloConf.beforeTest(test)
     }
