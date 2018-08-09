@@ -154,7 +154,10 @@ exports.config = {
           errorScreenshotFilename = undefined
 
           process.send({event: 'step:broken', assertion: assertion})
-          process.send({event: 'validate:broken', assertion: assertion})
+
+          if (assertion.specObj) {
+            process.send({event: 'validate:broken', assertion: assertion})
+          }
         }
       }
     }
