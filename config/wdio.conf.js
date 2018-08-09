@@ -10,8 +10,7 @@ const workfloConf = require(process.env.WORKFLO_CONFIG)
 const jsonfile = require('jsonfile')
 const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursiveSync
 
-let assertionScreenshotCtr = 0
-let errorScreenshotCtr = 0
+let screenshotIdCtr = 1
 let errorScreenshotFilename
 
 // set defaults for workflo config
@@ -117,9 +116,8 @@ exports.config = {
             const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
             const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
-            const screenshotFilename = `${screenshotFolder}/assertionFailure_${assertionScreenshotCtr}.png`
+            const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
 
-            assertionScreenshotCtr++
             assertion.screenshotFilename = screenshotFilename
 
             try {
@@ -131,6 +129,9 @@ exports.config = {
 
           var stack = new Error().stack
           assertion.stack = stack
+
+          assertion.screenshotId = screenshotIdCtr
+          screenshotIdCtr++
 
           process.send({event: 'step:failed', assertion: assertion})
           process.send({event: 'validate:failure', assertion: assertion})
@@ -147,9 +148,13 @@ exports.config = {
             assertion.screenshotFilename = errorScreenshotFilename
           }
 
+          assertion.screenshotId = screenshotIdCtr
+          screenshotIdCtr++
+
           errorScreenshotFilename = undefined
 
           process.send({event: 'step:broken', assertion: assertion})
+          process.send({event: 'validate:broken', assertion: assertion})
         }
       }
     }
@@ -238,9 +243,8 @@ exports.config = {
       const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
       const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
-      const screenshotFilename = `${screenshotFolder}/error_${errorScreenshotCtr}.png`
+      const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
 
-      errorScreenshotCtr++
       errorScreenshotFilename = screenshotFilename
 
       try {
