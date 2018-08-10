@@ -37,7 +37,7 @@ class ParameterizedStep {
         // HACK!!!
         // patch browser object to create stacktrace which can be displayed on selenium errors
         // to show the line number in the testcase where the error occured
-        //  
+        //
         // TODO: look for a better place to do this
         if (!ParameterizedStep.patchedBrowser) {
             browser = new Proxy(browser, {
@@ -165,10 +165,6 @@ ParameterizedStep.commandBlacklist = {
     'windowHandlePosition': true,
     'windowHandleSize': true,
     'windowHandles': true,
-    '$$': true,
-    '$': true,
-    'element': true,
-    'elements': true,
     'close': true,
     'deleteCookie': true,
     'end': true,

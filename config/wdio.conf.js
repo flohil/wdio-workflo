@@ -12,6 +12,7 @@ const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursive
 
 let screenshotIdCtr = 1
 let errorScreenshotFilename
+let errorType
 let finishedTestcases = false
 
 // set defaults for workflo config
@@ -147,10 +148,13 @@ exports.config = {
 
           if (errorScreenshotFilename) {
             assertion.screenshotFilename = errorScreenshotFilename
+            assertion.screenshotId = screenshotIdCtr
+            screenshotIdCtr++
           }
 
-          assertion.screenshotId = screenshotIdCtr
-          screenshotIdCtr++
+          if (errorType) {
+            assertion.errorType = errorType
+          }
 
           errorScreenshotFilename = undefined
 
@@ -254,6 +258,7 @@ exports.config = {
       const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
 
       errorScreenshotFilename = screenshotFilename
+      errorType = error.type
 
       try {
         fs.writeFileSync(screenshotFilename, screenshot)

@@ -129,10 +129,6 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
     'windowHandlePosition': true,
     'windowHandleSize': true,
     'windowHandles': true,
-    '$$': true,
-    '$': true,
-    'element': true,
-    'elements': true,
     'close': true,
     'deleteCookie': true,
     'end': true,
@@ -147,7 +143,7 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
     // HACK!!!
     // patch browser object to create stacktrace which can be displayed on selenium errors
     // to show the line number in the testcase where the error occured
-    //  
+    //
     // TODO: look for a better place to do this
     if (!ParameterizedStep.patchedBrowser) {
       browser = new Proxy(browser, {
@@ -158,7 +154,7 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
 
                   process.send({ event: 'runner:currentStack', stack: stack, name: name });
               }
-              
+
               return target[name]
           }
         })
