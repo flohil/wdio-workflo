@@ -22,6 +22,12 @@ if (!workfloConf.timeouts) {
 if (!workfloConf.timeouts.waitforTimeout) {
   workfloConf.timeouts.waitforTimeout = workfloConf.timeouts.waitforTimeout || 5000
 }
+if (!workfloConf.capabilities) {
+  workfloConf.capabilities = {}
+}
+if (!workfloConf.capabilities.browserName) {
+  workfloConf.capabilities.browserName = "chrome"
+}
 
 const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g
 
@@ -296,7 +302,7 @@ exports.config = {
     }
   },
   onComplete: function (exitCode, config, capabilities) {
-    copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
+    copyFolderRecursiveSync(path.join(config.resultsPath, `${config.dateTime}_${config.browser}`, 'allure-results'), config.mergedAllureResultsPath)
 
     if (typeof workfloConf.onComplete === 'function') {
       workfloConf.onComplete(exitCode, config, capabilities)

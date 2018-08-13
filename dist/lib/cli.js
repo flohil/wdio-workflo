@@ -221,7 +221,7 @@ if (!fs.existsSync(workfloConfigFile)) {
 process.env.WORKFLO_CONFIG = workfloConfigFile;
 const workfloConfig = require(workfloConfigFile);
 if (typeof process.env.LATEST_RUN === 'undefined') {
-    process.env.LATEST_RUN = dateTime;
+    process.env.LATEST_RUN = `${dateTime}_${workfloConfig.capabilities.browserName}`;
 }
 const resultsPath = path.join(workfloConfig.testDir, 'results');
 const logsPath = path.join(workfloConfig.testDir, 'logs');
@@ -479,7 +479,7 @@ checkReport().then(() => {
         resultsPath,
         latestRunPath,
         browser: workfloConfig.capabilities.browserName,
-        dateTime: process.env.LATEST_RUN,
+        dateTime: dateTime,
         mergedResultsPath,
         consoleReportPath,
         mergedAllureResultsPath,
@@ -1344,8 +1344,9 @@ checkReport().then(() => {
             for (const criteria in parsedCriteria) {
                 if (!(criteria in resultsCriteria)) {
                     mergedResults.specs[spec][criteria] = {
-                        dateTime: process.env.LATEST_RUN,
                         status: 'unknown',
+                        dateTime: dateTime,
+                        browser: workfloConfig.capabilities.browserName,
                         resultsFolder: undefined
                     };
                     if (criteria in criteriaAnalysis.specs[spec].manual) {
@@ -1358,7 +1359,8 @@ checkReport().then(() => {
             if (!(testcase in mergedResults.testcases)) {
                 mergedResults.testcases[testcase] = {
                     status: 'unknown',
-                    dateTime: process.env.LATEST_RUN,
+                    dateTime: dateTime,
+                    browser: workfloConfig.capabilities.browserName,
                     resultsFolder: undefined
                 };
             }
