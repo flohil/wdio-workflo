@@ -32,10 +32,21 @@ function rmdir(dir) {
     }
     fs.rmdirSync(dir);
 }
-function generateReport(workfloConf, runPath) {
+function ensureRunPath(run) {
+    let latestRun;
+    if (fs.existsSync(process.env.WDIO_WORKFLO_LATEST_RUN_PATH)) {
+        latestRun = fs.readFileSync(process.env.WDIO_WORKFLO_LATEST_RUN_PATH, 'utf8');
+    }
+    run = run || latestRun;
+    const runPath = path.join(process.env.WDIO_WORKFLO_RESULTS_PATH, run);
+    if (!fs.existsSync(runPath)) {
+        throw new Error(`Could not find folder ${runPath} for generating or opening allure report`);
+    }
+    return runPath;
+}
+function generateReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-        const latestRunPath = path.join(workfloConf.testDir, 'results', 'latestRun');
-        runPath = runPath || fs.readFileSync(latestRunPath, 'utf8');
+        const runPath = ensureRunPath(run);
         const allureCliPath = require.resolve('allure-commandline');
         // replace original allure-commandline bin files with patched ones,
         // which support issue tracker pattern and bug tracker pattern
@@ -54,9 +65,9 @@ function generateReport(workfloConf, runPath) {
         // returns ChildProcess instance
         const generation = allure([
             'generate',
-            path.join(workfloConf.testDir, 'results', runPath, 'allure-results'),
+            path.join(runPath, 'allure-results'),
             '-o',
-            path.join(workfloConf.testDir, 'results', runPath, 'allure-report'),
+            path.join(runPath, 'allure-report'),
             '--clean'
         ]);
         generation.on('exit', function (exitCode) {
@@ -70,14 +81,13 @@ function generateReport(workfloConf, runPath) {
     }));
 }
 exports.generateReport = generateReport;
-function openReport(workfloConf, runPath) {
+function openReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-        const latestRunPath = path.join(workfloConf.testDir, 'results', 'latestRun');
-        runPath = runPath || fs.readFileSync(latestRunPath, 'utf8');
+        const runPath = ensureRunPath(run);
         // returns ChildProcess instance
         const open = allure([
             'open',
-            path.join(workfloConf.testDir, 'results', runPath, 'allure-report')
+            path.join(runPath, 'allure-report')
         ]);
         open.on('exit', function (exitCode) {
             console.log('Showing report for run:', runPath);

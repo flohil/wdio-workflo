@@ -3,6 +3,7 @@ require('tsconfig-paths/register')
 
 import * as path from 'path'
 import * as fs from 'fs'
+import * as fxExtra from 'fs-extra'
 import * as ejs from 'ejs'
 import * as jsonfile from 'jsonfile'
 import * as supportsColor from 'supports-color'
@@ -62,6 +63,7 @@ const ALLOWED_OPTS = [
     'report',
     'consoleReport',
     'printStatus',
+    'browserName',
     'traceSpec',
     'traceTestcase',
     'manualOnly',
@@ -156,15 +158,13 @@ interface MergedResultsSpec {
     status: 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending',
     dateTime: string,
     resultsFolder: string,
-    browser: string,
     manual?: boolean
 }
 
 interface MergedResultsTestcase {
     status: 'passed' | 'failed' | 'broken' | 'unknown' | 'pending',
     dateTime: string,
-    resultsFolder: string,
-    browser: string
+    resultsFolder: string
 }
 
 interface MergedResults {
@@ -259,7 +259,9 @@ optimist
     .describe('consoleReport', 'displays report messages written to console during latest test execution\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => display report messages written to console for given result folder\n')
 
-    .describe('printStatus', 'show current status of all testcases and specs')
+    .describe('printStatus', 'show current status of all testcases and specs for the specified browser')
+
+    .describe('browserName', 'name of the browser used for executing tests or displaying results')
 
     .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files validating this spec\n' +
     '\t\t\t   \'4.1\' => show traceability information for spec 4.1\n')
@@ -378,34 +380,36 @@ process.env.WORKFLO_CONFIG = workfloConfigFile
 
 const workfloConfig = require(workfloConfigFile)
 
-if (typeof process.env.LATEST_RUN === 'undefined') {
-    process.env.LATEST_RUN = `${dateTime}_${workfloConfig.capabilities.browserName}`
+if (argv.browserName) {
+    workfloConfig.capabilities.browserName = argv.browserName
 }
 
-const resultsPath = path.join(workfloConfig.testDir, 'results')
-const logsPath = path.join(workfloConfig.testDir, 'logs')
+let cleanedBrowserName = workfloConfig.capabilities.browserName.replace(' ', '-')
+
+if (typeof process.env.LATEST_RUN === 'undefined') {
+    process.env.LATEST_RUN = dateTime
+}
+
+const resultsPath = path.join(workfloConfig.testDir, 'results', cleanedBrowserName)
+const logsPath = path.join(workfloConfig.testDir, 'logs', 'selenium', cleanedBrowserName, process.env.LATEST_RUN)
+const allureResultsPath = path.join(resultsPath, process.env.LATEST_RUN, 'allure-results')
+
 const latestRunPath = path.join(resultsPath, 'latestRun')
-const mergedResultsPath = path.join(resultsPath, 'mergedResults.json')
-const mergedAllureResultsPath = path.join(resultsPath, 'mergedAllureResults')
+const mergedResultsPath = path.join(resultsPath, `mergedResults.json`)
+const mergedAllureResultsPath = path.join(resultsPath, `mergedAllureResults`)
 const consoleReportPath = path.join(resultsPath, process.env.LATEST_RUN, 'consoleReport.json')
 
-createMissingDirectories()
+fxExtra.ensureDirSync(resultsPath)
 
-function createMissingDirectories() {
-    if (!fs.existsSync(resultsPath)) {
-        fs.mkdirSync(resultsPath)
-    }
-
-    if (!fs.existsSync(mergedAllureResultsPath)) {
-        fs.mkdirSync(mergedAllureResultsPath)
-    }
-
-    if (!fs.existsSync(logsPath)) {
-        fs.mkdirSync(logsPath)
-    }
-}
+process.env.WDIO_WORKFLO_RUN_PATH = path.join(resultsPath, process.env.LATEST_RUN)
+process.env.WDIO_WORKFLO_RESULTS_PATH = resultsPath
+process.env.WDIO_WORKFLO_LATEST_RUN_PATH = path.join(resultsPath, 'latestRun')
 
 checkReport().then(() => {
+    fxExtra.ensureDirSync(mergedAllureResultsPath)
+    fxExtra.ensureDirSync(logsPath)
+    fxExtra.ensureDirSync(allureResultsPath)
+
     // check workflo config properties
     const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath']
 
@@ -425,7 +429,7 @@ checkReport().then(() => {
     const testcasesDir = path.join(srcDir, 'testcases')
     const listsDir = path.join(srcDir, 'lists')
     const manDir = path.join(srcDir, 'manualResults')
-    const testInfoFilePath = path.join(testDir, 'testinfo.json')
+    const testInfoFilePath = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'testinfo.json')
 
     const filters: IExecutionFilters = {}
     const mergedFilters: IExecutionFilters = {}
@@ -719,7 +723,7 @@ checkReport().then(() => {
         manualOnly: argv.manualOnly,
         resultsPath,
         latestRunPath,
-        browser: workfloConfig.capabilities.browserName,
+        browser: cleanedBrowserName,
         dateTime: dateTime,
         mergedResultsPath,
         consoleReportPath,
@@ -738,6 +742,18 @@ checkReport().then(() => {
         }
     }
 
+    // patch wdio.conf.js
+    args['logOutput'] = logsPath,
+    args['seleniumLogs'] = path.relative('./', path.join(logsPath))
+    args['reporterOptions'] = JSON.stringify({
+        outputDir: path.join(resultsPath, process.env.LATEST_RUN),
+        'workflo-allure': {
+            outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
+            debug: false,
+            debugSeleniumCommand: true
+        }
+    })
+
     // write latest run file
     if (Object.keys(filters.specs).length > 0 || Object.keys(filters.testcases).length > 0) {
         if (!fs.existsSync(resultsPath)){
@@ -749,7 +765,7 @@ checkReport().then(() => {
                 return console.error(err)
             }
 
-            console.log(`Set latest run: ${process.env.LATEST_RUN}`)
+            console.log(`Setting latest run: ${process.env.LATEST_RUN}`)
         })
     } else {
         console.log("No specs or testcases match execution filters. Quitting...")
@@ -1774,7 +1790,6 @@ checkReport().then(() => {
                     mergedResults.specs[spec][criteria] = {
                         status: 'unknown',
                         dateTime: dateTime,
-                        browser: workfloConfig.capabilities.browserName,
                         resultsFolder: undefined
                     }
 
@@ -1790,7 +1805,6 @@ checkReport().then(() => {
                 mergedResults.testcases[testcase] = {
                     status: 'unknown',
                     dateTime: dateTime,
-                    browser: workfloConfig.capabilities.browserName,
                     resultsFolder: undefined
                 }
             }
@@ -2043,7 +2057,7 @@ checkReport().then(() => {
             console.log()
 
             if (!fs.existsSync(mergedResultsPath)) {
-                console.log("No mergedResults.json file found - did you run any tests yet?")
+                console.log(`No mergedResults.json file found - did you run any tests on browser '${argv.printStatus}' yet?`)
             } else {
                 const mergedResultsStr = fs.readFileSync(mergedResultsPath, 'utf8')
 
@@ -2364,6 +2378,9 @@ checkReport().then(() => {
 }).catch((error) => console.error(error))
 
 async function checkReport() {
+    console.log()
+    console.log(`Selected browser:  ${cleanedBrowserName}`)
+
     // generate and display reports
     if (argv.generateReport) {
         if (typeof argv.generateReport === 'boolean') {
@@ -2393,7 +2410,7 @@ async function checkReport() {
         process.exit(exitCode)
     }
     if (argv.consoleReport) {
-        let run
+         let run
 
         if (typeof argv.consoleReport === 'string' && argv.consoleReport.length > 0) {
             run = argv.consoleReport

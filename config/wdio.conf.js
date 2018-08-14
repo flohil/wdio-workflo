@@ -64,7 +64,6 @@ exports.config = {
    */
   capabilities: [ Object.assign(workfloConf.capabilities, { maxInstances: 1 }) ],
   services: workfloConf.services || ['selenium-standalone'],
-  seleniumLogs: path.relative('./', path.join(workfloConf.testDir, 'logs', 'selenium', process.env.LATEST_RUN)),
   seleniumArgs: workfloConf.selenium.args,
   seleniumInstallArgs: workfloConf.selenium.installArgs,
   queryParams: workfloConf.queryParams || {},
@@ -76,7 +75,6 @@ exports.config = {
   key: workfloConf.key,
   bail: workfloConf.bail || 0,
   logLevel: workfloConf.logLevel,
-  logOutput: path.join(workfloConf.testDir, 'logs'),
   protocol: workfloConf.protocol || 'http',
   debug: workfloConf.debug || false,
   execArgv: workfloConf.execArgv || null,
@@ -92,14 +90,6 @@ exports.config = {
   plugins: workfloConf.plugins,
   framework: 'workflo-jasmine',
   reporters: ['workflo-spec', 'workflo-allure'],
-  reporterOptions: {
-    outputDir: path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN),
-    'workflo-allure': {
-      outputDir: path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results'),
-      debug: false,
-      debugSeleniumCommand: true
-    }
-  },
   jasmineNodeOpts: {
     defaultTimeoutInterval: 9999999,
     expectationResultHandler: function (passed, assertion) {
@@ -120,19 +110,17 @@ exports.config = {
       } else {
         if (assertion.matcherName) {
           // receive screenshot as Buffer
-          if (true) {
-            const screenshot = browser.saveScreenshot() // returns base64 string buffer
+          const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
-            const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
-            const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
+          const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
+          const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
 
-            assertion.screenshotFilename = screenshotFilename
+          assertion.screenshotFilename = screenshotFilename
 
-            try {
-              fs.writeFileSync(screenshotFilename, screenshot)
-            } catch (err) {
-              console.log(`Error writing screenshot:${err.message}`)
-            }
+          try {
+            fs.writeFileSync(screenshotFilename, screenshot)
+          } catch (err) {
+            console.log(`Error writing screenshot:${err.message}`)
           }
 
           var stack = new Error().stack
@@ -260,7 +248,7 @@ exports.config = {
 
       const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
-      const screenshotFolder = path.join(workfloConf.testDir, 'results', process.env.LATEST_RUN, 'allure-results')
+      const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
       const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
 
       errorScreenshotFilename = screenshotFilename
@@ -302,7 +290,7 @@ exports.config = {
     }
   },
   onComplete: function (exitCode, config, capabilities) {
-    copyFolderRecursiveSync(path.join(config.resultsPath, `${config.dateTime}_${config.browser}`, 'allure-results'), config.mergedAllureResultsPath)
+    copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
 
     if (typeof workfloConf.onComplete === 'function') {
       workfloConf.onComplete(exitCode, config, capabilities)
