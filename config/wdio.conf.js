@@ -109,18 +109,18 @@ exports.config = {
         return
       } else {
         if (assertion.matcherName) {
-          // receive screenshot as Buffer
-          const screenshot = browser.saveScreenshot() // returns base64 string buffer
-
-          const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
-          const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
-
-          assertion.screenshotFilename = screenshotFilename
-
           try {
+            const screenshot = browser.saveScreenshot() // returns base64 string buffer
+
+            const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
+            const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
+
+            assertion.screenshotFilename = screenshotFilename
+
             fs.writeFileSync(screenshotFilename, screenshot)
           } catch (err) {
-            console.log(`Error writing screenshot:${err.message}`)
+            console.log(`Failed to take screenshot: ${err.message}`)
+            console.log(err.stack)
           }
 
           var stack = new Error().stack
@@ -232,6 +232,9 @@ exports.config = {
       browser.windowHandleSize(workfloConf.windowSize)
     }
 
+    errorScreenshotFilename = undefined
+    errorType = undefined
+
     if (typeof workfloConf.beforeTest === 'function') {
       workfloConf.beforeTest(test)
     }
@@ -244,20 +247,20 @@ exports.config = {
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {
     if (error) {
-      browser.saveScreenshot()
-
-      const screenshot = browser.saveScreenshot() // returns base64 string buffer
-
-      const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
-      const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
-
-      errorScreenshotFilename = screenshotFilename
       errorType = error.type
 
       try {
+        const screenshot = browser.saveScreenshot() // returns base64 string buffer
+
+        const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
+        const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
+
+        errorScreenshotFilename = screenshotFilename
+
         fs.writeFileSync(screenshotFilename, screenshot)
       } catch (err) {
-        console.log(`Error writing screenshot:${err.message}`)
+        console.log(`Failed to take screenshot: ${err.message}`)
+        console.log(err.stack)
       }
     }
 
