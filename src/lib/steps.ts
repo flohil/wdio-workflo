@@ -149,6 +149,8 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
       browser = new Proxy(browser, {
           get: function(target, name) {
               if (!ParameterizedStep.commandBlacklist.hasOwnProperty(name) || ParameterizedStep.commandBlacklist[name] === false) {
+                  Error.stackTraceLimit = 30
+
                   const error = new Error()
                   const stack = error.stack
 
