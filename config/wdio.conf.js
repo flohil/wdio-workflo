@@ -26,7 +26,7 @@ if (!workfloConf.capabilities) {
   workfloConf.capabilities = {}
 }
 if (!workfloConf.capabilities.browserName) {
-  workfloConf.capabilities.browserName = "chrome"
+  workfloConf.capabilities.browserName = 'chrome'
 }
 
 const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g
@@ -234,6 +234,10 @@ exports.config = {
 
     errorScreenshotFilename = undefined
     errorType = undefined
+
+    if (process.workflo) {
+      process.workflo.specObj = undefined
+    }
 
     if (typeof workfloConf.beforeTest === 'function') {
       workfloConf.beforeTest(test)
