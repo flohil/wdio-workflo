@@ -44,6 +44,18 @@ function ensureRunPath(run) {
     }
     return runPath;
 }
+function ensureExecutable() {
+    const allureCliPath = require.resolve('allure-commandline');
+    const allureBinPath = path.resolve(allureCliPath, '../', 'dist/bin');
+    try {
+        fs.chmodSync(path.join(allureBinPath, 'allure'), 0o755);
+    }
+    finally { }
+    try {
+        fs.chmodSync(path.join(allureBinPath, 'allure.bat'), 0o755);
+    }
+    finally { }
+}
 function generateReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
@@ -53,13 +65,16 @@ function generateReport(workfloConf, run) {
         const allureBinPath = path.resolve(allureCliPath, '../', 'dist/bin');
         const allureBinBakPath = `${allureBinPath}_bak`;
         const allurePatchBinPath = path.resolve(__dirname, '../../templates/node_modules/allure-commandline/dist/bin');
-        if (fs.existsSync(allureBinBakPath)) {
-            rmdir(allureBinBakPath);
-        }
-        if (fs.existsSync(allureBinPath)) {
-            fs.renameSync(allureBinPath, allureBinBakPath);
-        }
+        ensureExecutable();
         wrench.copyDirSyncRecursive(allurePatchBinPath, allureBinPath);
+        try {
+            fs.chmodSync(path.join(allureBinPath, 'allure'), 0o755);
+        }
+        finally { }
+        try {
+            fs.chmodSync(path.join(allureBinPath, 'allure.bat'), 0o755);
+        }
+        finally { }
         process.env.ALLURE_BUG_TRACKER_PATTERN = workfloConf.allure.bugTrackerPattern;
         process.env.ALLURE_ISSUE_TRACKER_PATTERN = workfloConf.allure.issueTrackerPattern;
         // returns ChildProcess instance
@@ -84,6 +99,7 @@ exports.generateReport = generateReport;
 function openReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
+        ensureExecutable();
         // returns ChildProcess instance
         const open = allure([
             'open',

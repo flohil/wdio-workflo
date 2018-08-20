@@ -41,6 +41,19 @@ function ensureRunPath(run?: string) {
     return runPath
 }
 
+function ensureExecutable() {
+    const allureCliPath = require.resolve('allure-commandline')
+    const allureBinPath = path.resolve(allureCliPath, '../', 'dist/bin')
+
+    try {
+        fs.chmodSync(path.join(allureBinPath, 'allure'), 0o755)
+    } finally {}
+
+    try {
+        fs.chmodSync(path.join(allureBinPath, 'allure.bat'), 0o755)
+    } finally {}
+}
+
 export function generateReport(workfloConf: any, run?: string) {
     return new Promise<number>(async (resolve, reject) => {
         const runPath = ensureRunPath(run)
@@ -54,15 +67,17 @@ export function generateReport(workfloConf: any, run?: string) {
         const allureBinBakPath = `${allureBinPath}_bak`
         const allurePatchBinPath = path.resolve(__dirname, '../../templates/node_modules/allure-commandline/dist/bin')
 
-        if (fs.existsSync(allureBinBakPath)) {
-            rmdir(allureBinBakPath)
-        }
-
-        if (fs.existsSync(allureBinPath)) {
-            fs.renameSync(allureBinPath, allureBinBakPath)
-        }
+        ensureExecutable()
 
         wrench.copyDirSyncRecursive(allurePatchBinPath, allureBinPath)
+
+        try {
+            fs.chmodSync(path.join(allureBinPath, 'allure'), 0o755)
+        } finally {}
+
+        try {
+            fs.chmodSync(path.join(allureBinPath, 'allure.bat'), 0o755)
+        } finally {}
 
         process.env.ALLURE_BUG_TRACKER_PATTERN = workfloConf.allure.bugTrackerPattern
         process.env.ALLURE_ISSUE_TRACKER_PATTERN = workfloConf.allure.issueTrackerPattern
@@ -89,6 +104,8 @@ export function generateReport(workfloConf: any, run?: string) {
 export function openReport(workfloConf: any, run?: string) {
     return new Promise<number>(async (resolve, reject) => {
         const runPath = ensureRunPath(run)
+
+        ensureExecutable()
 
         // returns ChildProcess instance
         const open = allure([
