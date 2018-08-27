@@ -161,7 +161,7 @@ export class PageElement<
   }
 
   eventuallyNotExists({ timeout = this.timeout }: Workflo.WDIOParams = {}) {
-    return this.eventuallyExists({reverse: true, timeout})
+    return !this.eventuallyExists({reverse: true, timeout})
   }
 
   // checks if at least one element matching selector is visible within timeout

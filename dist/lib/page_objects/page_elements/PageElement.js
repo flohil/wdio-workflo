@@ -124,7 +124,7 @@ class PageElement extends _1.PageNode {
         return !reverse;
     }
     eventuallyNotExists({ timeout = this.timeout } = {}) {
-        return this.eventuallyExists({ reverse: true, timeout });
+        return !this.eventuallyExists({ reverse: true, timeout });
     }
     // checks if at least one element matching selector is visible within timeout
     // reverse is optional and false by default
