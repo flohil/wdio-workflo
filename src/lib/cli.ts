@@ -72,6 +72,7 @@ const ALLOWED_OPTS = [
     'reportErrorsInstantly',
     'rerunFaulty',
     'silentRetries',
+    'consoleLogLevel',
     '_',
     '$0'
 ]
@@ -271,13 +272,20 @@ optimist
     .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
     .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
 
-    .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly')
+    .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly (default: false)' +
+    '\t\t\t   allowed values are (true|false)' +
+    '\t\t\t   will be enabled by default if consoleLogLevel is set to "steps"')
 
     .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'\n')
 
     .describe('silentRetries', 'how many times flaky tests should be rerun (default: 0)\n' +
     '\t\t\t   silently rerun Tests won\'t show up under "Retries" in the allure report')
+
+    .describe('consoleLogLevel', 'Defines the log level for the console output (default: "testcases")\n' +
+    '\t\t\t   "results" will only output the results and errors of testcases and specs' +
+    '\t\t\t   "testcases" will additionally print the name of the currently executed test' +
+    '\t\t\t   "steps" will additionally print all executed steps in the console')
 
     // wdio-workflo options
 
@@ -306,7 +314,7 @@ optimist
 
     .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'silentRetries'
      /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */])
-    .boolean(['coloredLogs', 'watch', 'reportErrorsInstantly', 'cleanResultsStatus'])
+    .boolean(['coloredLogs', 'watch', 'cleanResultsStatus'])
     .default({ coloredLogs: true })
 
     .check((arg) => {
@@ -703,11 +711,39 @@ checkReport().then(() => {
         fs.unlinkSync(testInfoFilePath)
     }
 
-    if (typeof argv.silentRetries === 'undefined' && typeof workfloConfig.silentRetries !== 'undefined') {
-        argv.silentRetries = workfloConfig.silentRetries;
-    } else if ( typeof argv.retries !== 'undefined') {
-        argv.silentRetries = parseInt(argv.silentRetries)
+    const setBooleanArg = (key: string, defaultValue: boolean) => {
+        if (typeof argv[key] === 'undefined' && typeof workfloConfig[key] !== 'undefined') {
+            return workfloConfig[key]
+        } else if ( typeof argv[key] !== 'undefined') {
+            return JSON.parse(argv[key])
+        } else {
+            return defaultValue
+        }
     }
+
+    if (typeof argv.silentRetries === 'undefined' && typeof workfloConfig.silentRetries !== 'undefined') {
+        argv.silentRetries = workfloConfig.silentRetries
+    } else if ( typeof argv.silentRetries !== 'undefined') {
+        argv.silentRetries = parseInt(argv.silentRetries)
+    } else {
+        argv.silentRetries = 0
+    }
+
+    if (typeof argv.consoleLogLevel === 'undefined' && typeof workfloConfig.consoleLogLevel !== 'undefined') {
+        argv.consoleLogLevel = workfloConfig.consoleLogLevel
+    } else if ( typeof argv.consoleLogLevel !== 'undefined') {
+        argv.consoleLogLevel = argv.consoleLogLevel
+    } else {
+        argv.consoleLogLevel = "testcases"
+    }
+
+    if ( ["results", "testcases", "steps" ].indexOf( argv.consoleLogLevel) < 0 ) {
+        console.warn(`Unknown console log level: ${argv.consoleLogLevel}`)
+        console.warn("Setting console log level to default value 'testcases'")
+        argv.consoleLogLevel = "testcases"
+    }
+
+    const defaultReportErrorsInstantly = (argv.consoleLogLevel === "steps") ? true : false
 
     const testinfo = {
         criteriaAnalysis,
@@ -718,7 +754,8 @@ checkReport().then(() => {
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
         reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false,
-        reportErrorsInstantly: argv.reportErrorsInstantly || (typeof workfloConfig.reportErrorsInstantly !== 'undefined') ? workfloConfig.reportErrorsInstantly : false,
+        reportErrorsInstantly: setBooleanArg('reportErrorsInstantly', defaultReportErrorsInstantly),
+        consoleLogLevel: argv.consoleLogLevel,
         automaticOnly: argv.automaticOnly,
         manualOnly: argv.manualOnly,
         resultsPath,
@@ -765,7 +802,7 @@ checkReport().then(() => {
                 return console.error(err)
             }
 
-            console.log(`Setting latest run: ${process.env.LATEST_RUN}`)
+            console.log(`Setting latest run: ${process.env.LATEST_RUN}\n`)
         })
     } else {
         console.log("No specs or testcases match execution filters. Quitting...")

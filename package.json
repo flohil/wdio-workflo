@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.262",
+  "version": "0.0.264",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -64,8 +64,8 @@
     "wdio-selenium-standalone-service": "0.0.9",
     "wdio-workflo-allure-reporter": "0.0.34",
     "wdio-workflo-jasmine-framework": "0.0.5",
-    "wdio-workflo-spec-reporter": "0.0.17",
-    "webdriverio-workflo": "0.0.75",
+    "wdio-workflo-spec-reporter": "0.0.19",
+    "webdriverio-workflo": "0.0.76",
     "wrench": "^1.5.9"
   }
 }
