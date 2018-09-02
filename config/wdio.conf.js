@@ -10,6 +10,8 @@ const workfloConf = require(process.env.WORKFLO_CONFIG)
 const jsonfile = require('jsonfile')
 const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursiveSync
 
+const workfloMatcherNames = [ 'toExist' ]
+
 let screenshotIdCtr = 1
 let errorScreenshotFilename
 let errorType
@@ -99,6 +101,11 @@ exports.config = {
 
       if (process.workflo && process.workflo.specObj) {
         assertion.specObj = process.workflo.specObj
+      }
+
+      if (assertion.matcherName && workfloMatcherNames.indexOf(assertion.matcherName) >= 0 ) {
+        delete assertion.actual
+        delete assertion.expected
       }
 
       if (passed) {
