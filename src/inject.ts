@@ -7,6 +7,7 @@ import * as arrayFunctions from './lib/utility_functions/array'
 import * as classFunctions from './lib/utility_functions/class'
 import * as stringFunctions from './lib/utility_functions/string'
 import * as utilFunctions from './lib/utility_functions/util'
+import {elementMatchers, expectElement} from './lib/matchers'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {
@@ -31,7 +32,7 @@ function inject( config ) {
 
   // setup variables
   //safeAdd( context, 'steps', {} )
-  
+
   safeAddAll(context, [Functions])
 
   context.Workflo = {
@@ -47,8 +48,14 @@ function inject( config ) {
   safeAddAll(context.Workflo.String, [stringFunctions])
   safeAddAll(context.Workflo.Class, [classFunctions])
   safeAddAll(context.Workflo.Util, [utilFunctions])
+
+  context.expectElement = expectElement
 }
 
 inject({})
+
+beforeAll(() => {
+  jasmine.addMatchers(elementMatchers)
+})
 
 export { inject }

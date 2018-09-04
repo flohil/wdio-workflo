@@ -3,6 +3,15 @@ import * as pageObjects from './lib/page_objects'
 // global should be replaced with declare ... at some point...
 declare global {
 
+  interface ElementMatchers {
+    toExist(): boolean
+  }
+
+  function expectElement<
+    S extends pageObjects.stores.PageElementStore,
+    E extends pageObjects.elements.PageElement<S>
+  >(element: E): ElementMatchers
+
   namespace WebdriverIO {
     interface Client<T> {
       /**

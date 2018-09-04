@@ -8,6 +8,7 @@ const arrayFunctions = require("./lib/utility_functions/array");
 const classFunctions = require("./lib/utility_functions/class");
 const stringFunctions = require("./lib/utility_functions/string");
 const utilFunctions = require("./lib/utility_functions/util");
+const matchers_1 = require("./lib/matchers");
 function safeAdd(context, key, obj) {
     if (context.hasOwnProperty(key)) {
         throw new Error(`${key} is already defined within context`);
@@ -42,7 +43,11 @@ function inject(config) {
     safeAddAll(context.Workflo.String, [stringFunctions]);
     safeAddAll(context.Workflo.Class, [classFunctions]);
     safeAddAll(context.Workflo.Util, [utilFunctions]);
+    context.expectElement = matchers_1.expectElement;
 }
 exports.inject = inject;
 inject({});
+beforeAll(() => {
+    jasmine.addMatchers(matchers_1.elementMatchers);
+});
 //# sourceMappingURL=inject.js.map
