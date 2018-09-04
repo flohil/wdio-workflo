@@ -223,6 +223,18 @@ export class PageElement<
     return !reverse
   }
 
+  eventuallyContainsValue(
+    { reverse = false, timeout = this.timeout, value = undefined }: Workflo.WDIOParams & { value?: string } = {}
+  ) {
+    try {
+      this.waitContainsValue({reverse, timeout, value})
+    } catch (error) {
+      return reverse
+    }
+
+    return !reverse
+  }
+
   eventuallyIsEnabled(
     { reverse = false, timeout = this.timeout }: Workflo.WDIOParams
   ) {

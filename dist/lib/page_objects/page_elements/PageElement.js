@@ -174,6 +174,15 @@ class PageElement extends _1.PageNode {
         }
         return !reverse;
     }
+    eventuallyContainsValue({ reverse = false, timeout = this.timeout, value = undefined } = {}) {
+        try {
+            this.waitContainsValue({ reverse, timeout, value });
+        }
+        catch (error) {
+            return reverse;
+        }
+        return !reverse;
+    }
     eventuallyIsEnabled({ reverse = false, timeout = this.timeout }) {
         try {
             this.waitEnabled({ reverse, timeout });

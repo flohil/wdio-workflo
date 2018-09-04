@@ -43,6 +43,9 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     eventuallyHasValue({reverse, timeout, value}?: Workflo.WDIOParams & {
         value?: string;
     }): boolean;
+    eventuallyContainsValue({reverse, timeout, value}?: Workflo.WDIOParams & {
+        value?: string;
+    }): boolean;
     eventuallyIsEnabled({reverse, timeout}: Workflo.WDIOParams): boolean;
     eventuallyIsSelected({reverse, timeout}: Workflo.WDIOParams): boolean;
     waitExist({timeout, reverse}?: Workflo.WDIOParams): this;
