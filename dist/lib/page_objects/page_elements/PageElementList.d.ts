@@ -16,7 +16,7 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     elementOptions: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
-export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> implements Workflo.PageNode.INode {
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
     protected selector: string;
     protected wait: Workflo.WaitType;
     protected timeout: number;

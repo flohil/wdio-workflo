@@ -15,7 +15,7 @@ export interface IPageElementOpts<
 
 export class PageElement<
   Store extends PageElementStore
-> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
+> extends PageNode<Store> implements Workflo.PageNode.IGetText {
   protected wait: Workflo.WaitType
   protected timeout: number
   protected _$: Store

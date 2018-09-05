@@ -60,8 +60,13 @@ declare global  {
             reverse?: boolean;
         }
         namespace PageNode {
+            interface ElementJSON {
+                pageNodeType: string;
+                nodeId: string;
+            }
             interface INode {
                 __getNodeId(): string;
+                toJSON(): ElementJSON;
             }
             interface IGetText extends INode {
                 getText(): string;

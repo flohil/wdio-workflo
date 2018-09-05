@@ -33,6 +33,12 @@ class PageElementGroup {
     __getNodeId() {
         return this.__id;
     }
+    toJSON() {
+        return {
+            pageNodeType: this.constructor.name,
+            nodeId: this.__id
+        };
+    }
     Solve(problem, options = { throwUnmatchedKey: true, throwSolveError: true }) {
         return this.__walker.walk(problem, this.__content, options);
     }

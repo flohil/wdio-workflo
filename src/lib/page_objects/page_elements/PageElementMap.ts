@@ -33,23 +33,23 @@ export class PageElementMap<
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOptions
-> extends PageNode<Store> implements Workflo.PageNode.INode {
+> extends PageNode<Store> {
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected elementOptions: PageElementOptions
   protected identifier: IPageElementMapIdentifier<K>
   protected _$: Record<K, PageElementType>
 
-  constructor( 
+  constructor(
     protected selector: string,
-    { 
+    {
       identifier,
       elementStoreFunc,
       elementOptions,
       ...superOpts
-    } : IPageElementMapOpts<Store, K, PageElementType, PageElementOptions> 
+    } : IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>
   ) {
     super(selector, superOpts)
-    
+
     this.selector = selector
     this.elementOptions = elementOptions
     this.elementStoreFunc = elementStoreFunc
@@ -72,7 +72,7 @@ export class PageElementMap<
 
   /**
    * In case of language changes, for example, change values of mappingObject while keys must stay the same.
-   * @param mappingObject 
+   * @param mappingObject
    */
   changeMappingObject(mappingObject: Record<K, string>) {
     this._$ = Workflo.Object.mapProperties(

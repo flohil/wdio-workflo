@@ -4,7 +4,7 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
   store: Store
 }
 
-export class PageNode<Store extends PageElementStore> {
+export class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
   protected store: Store
   protected timeout: number
 
@@ -12,7 +12,7 @@ export class PageNode<Store extends PageElementStore> {
   // - wait -> initial wait operation: exist, visible, text, value
   constructor(
     protected selector: string,
-    { 
+    {
       store
     } : IPageNodeOpts<Store>
   ) {
@@ -21,6 +21,13 @@ export class PageNode<Store extends PageElementStore> {
 
   __getNodeId() {
     return this.selector
+  }
+
+  toJSON(): Workflo.PageNode.ElementJSON {
+    return {
+      pageNodeType: this.constructor.name,
+      nodeId: this.selector
+    }
   }
 
   getSelector() {

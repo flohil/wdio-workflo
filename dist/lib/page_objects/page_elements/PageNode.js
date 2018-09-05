@@ -10,6 +10,12 @@ class PageNode {
     __getNodeId() {
         return this.selector;
     }
+    toJSON() {
+        return {
+            pageNodeType: this.constructor.name,
+            nodeId: this.selector
+        };
+    }
     getSelector() {
         return this.selector;
     }

@@ -62,6 +62,13 @@ export class PageElementGroup<
     return this.__id
   }
 
+  toJSON(): Workflo.PageNode.ElementJSON {
+    return {
+      pageNodeType: this.constructor.name,
+      nodeId: this.__id
+    }
+  }
+
   Solve<ValueType, ResultType>(
     problem: Workflo.IProblem<ValueType, ResultType>,
     options: Workflo.IWalkerOptions = { throwUnmatchedKey: true, throwSolveError: true }

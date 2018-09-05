@@ -18,5 +18,6 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     readonly __content: Content;
     constructor({id, content, walkerType, walkerOptions}: IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>);
     __getNodeId(): string;
+    toJSON(): Workflo.PageNode.ElementJSON;
     Solve<ValueType, ResultType>(problem: Workflo.IProblem<ValueType, ResultType>, options?: Workflo.IWalkerOptions): Workflo.IRecObj<ResultType>;
 }

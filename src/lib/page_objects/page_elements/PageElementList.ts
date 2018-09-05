@@ -31,7 +31,7 @@ export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions
-> extends PageNode<Store> implements Workflo.PageNode.INode {
+> extends PageNode<Store> {
   protected wait: Workflo.WaitType
   protected timeout: number
 

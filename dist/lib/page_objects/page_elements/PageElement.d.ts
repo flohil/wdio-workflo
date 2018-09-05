@@ -6,7 +6,7 @@ export interface IPageElementOpts<Store extends PageElementStore> extends IPageN
     timeout?: number;
     customScroll?: Workflo.ScrollParams;
 }
-export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, Workflo.PageNode.INode {
+export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText {
     protected selector: string;
     protected wait: Workflo.WaitType;
     protected timeout: number;
