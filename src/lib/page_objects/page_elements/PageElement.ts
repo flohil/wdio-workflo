@@ -97,6 +97,8 @@ export class PageElement<
       }
       break
     }
+
+    return this
   }
 
   // Returns true if element matching this selector currently exists.
