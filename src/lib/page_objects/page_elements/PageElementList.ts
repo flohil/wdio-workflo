@@ -254,7 +254,7 @@ export class PageElementList<
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector exists.
   waitExist(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
+    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
   ) {
     this._elements.waitForExist(timeout, reverse)
 
@@ -266,7 +266,7 @@ export class PageElementList<
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector is visible.
   waitVisible(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
+    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
   ) {
     this._elements.waitForVisible(timeout, reverse)
 
@@ -278,7 +278,7 @@ export class PageElementList<
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector has a text.
   waitText(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
+    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
   ) {
     this._elements.waitForText(timeout, reverse)
 
@@ -290,7 +290,7 @@ export class PageElementList<
   // If reverse is set to true, function will wait until no element
   // that matches the this.selector has a value.
   waitValue(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParams = {}
+    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
   ) {
     this._elements.waitForValue(timeout, reverse)
 

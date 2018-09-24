@@ -72,6 +72,7 @@ class PageElement extends _1.PageNode {
                 }
                 break;
         }
+        return this;
     }
     // Returns true if element matching this selector currently exists.
     exists() {
@@ -367,8 +368,14 @@ class PageElement extends _1.PageNode {
           return ret
         }, this.element).value*/
     }
+    getValue() {
+        return this.element.getValue();
+    }
     getAttribute(attrName) {
         return this.element.getAttribute(attrName);
+    }
+    getClass() {
+        return this.element.getAttribute('class');
     }
     getId() {
         return this.element.getAttribute('id');
@@ -380,6 +387,9 @@ class PageElement extends _1.PageNode {
         return this.element.getLocation(axis);
     }
     // INTERACTION FUNCTIONS
+    setValue(value) {
+        this.element.setValue(value);
+    }
     /**
      *
      * @param postCondition Sometimes javascript that is to be executed after a click

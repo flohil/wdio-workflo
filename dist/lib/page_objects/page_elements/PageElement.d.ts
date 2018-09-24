@@ -19,7 +19,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
      */
     readonly _element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
-    initialWait(): void;
+    initialWait(): this;
     exists(): boolean;
     notExists(): boolean;
     isVisible(): boolean;
@@ -69,10 +69,13 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     getAllHTML(): WebdriverIO.Client<string> & string;
     getText(): WebdriverIO.Client<string> & string;
     getDirectText(): string;
+    getValue(): WebdriverIO.Client<string> & string;
     getAttribute(attrName: any): WebdriverIO.Client<string> & WebdriverIO.Client<null> & string;
+    getClass(): WebdriverIO.Client<string> & WebdriverIO.Client<null> & string;
     getId(): WebdriverIO.Client<string> & WebdriverIO.Client<null> & string;
     getName(): WebdriverIO.Client<string> & WebdriverIO.Client<null> & string;
     getLocation(axis: WebdriverIO.Axis): WebdriverIO.Client<number> & number;
+    setValue(value: string): void;
     /**
      *
      * @param postCondition Sometimes javascript that is to be executed after a click

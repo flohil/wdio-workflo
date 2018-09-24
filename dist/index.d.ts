@@ -1,7 +1,19 @@
 import * as pageObjects from './lib/page_objects';
 declare global  {
-    interface ElementMatchers {
+    interface CustomMatchers {
         toExist(): boolean;
+        toBeVisible(): boolean;
+        toBeHidden(): boolean;
+        toBeEnabled(): boolean;
+        toBeDisabled(): boolean;
+        toBeSelected(): boolean;
+        toHaveText(text?: string): boolean;
+        toContainText(text?: string): boolean;
+        toHaveValue(value?: string): boolean;
+        toContainValue(value?: string): boolean;
+    }
+    interface ElementMatchers extends CustomMatchers {
+        not: CustomMatchers;
     }
     function expectElement<S extends pageObjects.stores.PageElementStore, E extends pageObjects.elements.PageElement<S>>(element: E): ElementMatchers;
     namespace WebdriverIO {

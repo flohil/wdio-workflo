@@ -3,8 +3,21 @@ import * as pageObjects from './lib/page_objects'
 // global should be replaced with declare ... at some point...
 declare global {
 
-  interface ElementMatchers {
+  interface CustomMatchers {
     toExist(): boolean
+    toBeVisible(): boolean
+    toBeHidden(): boolean
+    toBeEnabled(): boolean
+    toBeDisabled(): boolean
+    toBeSelected(): boolean
+    toHaveText(text?: string): boolean
+    toContainText(text?: string): boolean
+    toHaveValue(value?: string): boolean
+    toContainValue(value?: string): boolean
+  }
+
+  interface ElementMatchers extends CustomMatchers {
+    not: CustomMatchers
   }
 
   function expectElement<
@@ -62,7 +75,8 @@ declare global {
       padding?: {
         x?: number,
         y?: number
-      }
+      },
+      closestContainerIncludesHidden?: boolean
     }
 
     type PageElementOptions = "timeout" | "wait" | "customScroll"
@@ -71,9 +85,8 @@ declare global {
       [key: string] : Type | IRecObj<Type>
     }
 
-    interface WDIOParams {
+    interface WDIOParamsOptional {
       timeout?: number,
-      reverse?: boolean
     }
 
     namespace PageNode {
