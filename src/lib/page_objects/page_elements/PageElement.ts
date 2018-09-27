@@ -13,6 +13,66 @@ export interface IPageElementOpts<
   customScroll?: Workflo.ScrollParams
 }
 
+export interface IPageElementWaitAPI<Store extends PageElementStore> {
+  exists: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  isVisible: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasText: (text: string, opts:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAnyText: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsText: (text: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAnyValue: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  isEnabled: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+  isSelected: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>
+
+  not: {
+    exists: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    isVisible: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    hasClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    containsClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    hasText: (text: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    hasAnyText: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    containsText: (text: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    hasValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    hasAnyValue: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    containsValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    isEnabled: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>,
+    isSelected: (opts?:  Workflo.WDIOParamsOptional) => PageElement<Store>
+  }
+}
+
+export interface IPageElementEventuallyAPI {
+  exists: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+  isVisible: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+  hasClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+  containsClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+  hasText: (text: string, opts:  Workflo.WDIOParamsOptional) => boolean,
+  hasAnyText: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+  containsText: (text: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+  hasValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+  hasAnyValue: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+  containsValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+  isEnabled: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+  isSelected: (opts?:  Workflo.WDIOParamsOptional) => boolean
+
+  not: {
+    exists: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+    isVisible: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+    hasClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+    containsClass: (className: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+    hasText: (text: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+    hasAnyText: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+    containsText: (text: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+    hasValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+    hasAnyValue: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+    containsValue: (value: string, opts?:  Workflo.WDIOParamsOptional) => boolean,
+    isEnabled: (opts?:  Workflo.WDIOParamsOptional) => boolean,
+    isSelected: (opts?:  Workflo.WDIOParamsOptional) => boolean
+  }
+}
+
 export class PageElement<
   Store extends PageElementStore
 > extends PageNode<Store> implements Workflo.PageNode.IGetText {
@@ -725,7 +785,7 @@ export class PageElement<
     return this
   }
 
-  public wait = {
+  public wait: IPageElementWaitAPI<Store> = {
     exists: this._waitExists,
     isVisible: this._waitIsVisible,
     hasClass: this._waitHasClass,
@@ -908,7 +968,7 @@ export class PageElement<
     return this._eventually(() => this._waitNotIsSelected({timeout}))
   }
 
-  public eventually = {
+  public eventually: IPageElementEventuallyAPI = {
     exists: this._eventuallyExists,
     isVisible: this._eventuallyIsVisible,
     hasClass: this._eventuallyHasClass,
