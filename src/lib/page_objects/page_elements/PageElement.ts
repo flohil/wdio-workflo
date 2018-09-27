@@ -8,7 +8,7 @@ import * as htmlParser from 'htmlparser2'
 export interface IPageElementOpts<
   Store extends PageElementStore
 > extends IPageNodeOpts<Store> {
-  wait?: Workflo.WaitType
+  waitType?: Workflo.WaitType
   timeout?: number
   customScroll?: Workflo.ScrollParams
 }
@@ -16,7 +16,7 @@ export interface IPageElementOpts<
 export class PageElement<
   Store extends PageElementStore
 > extends PageNode<Store> implements Workflo.PageNode.IGetText {
-  protected wait: Workflo.WaitType
+  protected waitType: Workflo.WaitType
   protected timeout: number
   protected _$: Store
   protected customScroll: Workflo.ScrollParams
@@ -26,7 +26,7 @@ export class PageElement<
   constructor(
     protected selector: string,
     {
-      wait = Workflo.WaitType.visible,
+      waitType = Workflo.WaitType.visible,
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
       customScroll = undefined,
       ...superOpts
@@ -52,10 +52,12 @@ export class PageElement<
       }
     }
 
-    this.wait = wait
+    this.waitType = waitType
     this.timeout = timeout
     this.customScroll = customScroll
   }
+
+// RETRIEVE ELEMENT FUNCTIONS
 
   get $(): Store {
     return this._$
@@ -75,31 +77,33 @@ export class PageElement<
   }
 
   initialWait() {
-    switch(this.wait) {
+    switch(this.waitType) {
       case Workflo.WaitType.exist:
       if (!this.exists()) {
-        this.waitExists()
+        this._waitExists()
       }
       break
       case Workflo.WaitType.visible:
       if (!this.isVisible()) {
-        this.waitIsVisible()
+        this._waitIsVisible()
       }
       break
       case Workflo.WaitType.value:
       if (!this.hasAnyValue()) {
-        this.waitHasAnyValue()
+        this._waitHasAnyValue()
       }
       break
       case Workflo.WaitType.text:
       if (!this.hasAnyText()) {
-        this.waitHasAnyText()
+        this._waitHasAnyText()
       }
       break
     }
 
     return this
   }
+
+// CHECK STATE FUNCTIONS
 
   // Returns true if element matching this selector currently exists.
   exists() : boolean {
@@ -109,10 +113,6 @@ export class PageElement<
   // Returns true if element matching this selector currently is visible.
   isVisible() : boolean {
     return this._element.isVisible()
-  }
-
-  isHidden() : boolean {
-    return !this.isVisible()
   }
 
   hasClass(className: string) : boolean {
@@ -156,437 +156,12 @@ export class PageElement<
     return this._element.isEnabled()
   }
 
-  isDisabled() : boolean {
-    return !this.isEnabled()
-  }
-
   // Returns true if element matching this selector is enabled.
   isSelected() : boolean {
     return this._element.isSelected()
   }
 
-  isDeselected() : boolean {
-    return !this.isSelected()
-  }
-
-  _eventually(func: () => void) : boolean {
-    try {
-      func();
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  // checks if at least one element matching selector is existing within timeout
-  // reverse is optional and false by default
-  // timeout is optional and this._timeout by default
-  eventuallyExists({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
-    return this._eventually(() => this.waitExists({timeout}))
-  }
-
-  eventuallyNotExists({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
-    return this._eventually(() => this.waitNotExists({timeout}))
-  }
-
-  // checks if at least one element matching selector is visible within timeout
-  // reverse is optional and false by default
-  // timeout is optional and this._timeout by default
-  eventuallyIsVisible({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
-    return this._eventually(() => this.waitIsVisible({timeout}))
-  }
-
-  eventuallyIsHidden({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
-    return this._eventually(() => this.waitIsHidden({timeout}))
-  }
-
-  eventuallyHasClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitHasClass(className, {timeout}))
-  }
-
-  eventuallyNotHasClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotHasClass(className, {timeout}))
-  }
-
-  eventuallyContainsClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitContainsClass(className, {timeout}))
-  }
-
-  eventuallyNotContainsClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotContainsClass(className, {timeout}))
-  }
-
-  eventuallyHasText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitHasText(text, {timeout}))
-  }
-
-  eventuallyNotHasText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotHasText(text, {timeout}))
-  }
-
-  eventuallyHasAnyText(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitHasAnyText({timeout}))
-  }
-
-  eventuallyNotHasAnyText(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotHasAnyText({timeout}))
-  }
-
-  eventuallyContainsText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitContainsText(text, {timeout}))
-  }
-
-  eventuallyNotContainsText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotContainsText(text, {timeout}))
-  }
-
-  eventuallyHasValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitHasValue(value, {timeout}))
-  }
-
-  eventuallyNotHasValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotHasValue(value, {timeout}))
-  }
-
-  eventuallyHasAnyValue(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitHasAnyValue({timeout}))
-  }
-
-  eventuallyNotHasAnyValue(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotHasAnyValue({timeout}))
-  }
-
-  eventuallyContainsValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitContainsValue(value, {timeout}))
-  }
-
-  eventuallyNotContainsValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitNotContainsValue(value, {timeout}))
-  }
-
-  eventuallyIsEnabled(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitIsEnabled({timeout}))
-  }
-
-  eventuallyIsDisabled(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitIsDisabled({timeout}))
-  }
-
-  eventuallyIsSelected(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitIsSelected({timeout}))
-  }
-
-  eventuallyIsDeselected(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    return this._eventually(() => this.waitIsDeselected({timeout}))
-  }
-
-  // WAIT FUNCTIONS
-
-  // Waits until at least one matching element exists.
-  //
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // exists that matches the this.selector.
-  waitExists(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForExist(timeout)
-
-    return this
-  }
-
-  waitNotExists(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForExist(timeout, true)
-
-    return this
-  }
-
-  // Waits until at least one matching element is visible.
-  //
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // is visible that matches the this.selector.
-  waitIsVisible(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForVisible(timeout)
-
-    return this
-  }
-
-  waitIsHidden(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForVisible(timeout, true)
-
-    return this
-  }
-
-  waitHasClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return this.hasClass(className)
-    }, timeout, `${this.selector}: Class never became '${className}'`)
-
-    return this
-  }
-
-  waitNotHasClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return !this.hasClass(className)
-    }, timeout, `${this.selector}: Class never became other than '${className}'`)
-
-    return this
-  }
-
-  waitContainsClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return this.containsClass(className)
-    }, timeout, `${this.selector}: Class never contained '${className}'`)
-
-    return this
-  }
-
-  waitNotContainsClass(
-    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return !this.containsClass(className)
-    }, timeout, `${this.selector}: Class never not contained '${className}'`)
-
-    return this
-  }
-
-  // Waits until at least one matching element has a text.
-  //
-  // text -> defines the text that element should have
-  // If text is undefined, waits until element's text is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a text that matches the this.selector.
-  waitHasText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return this.hasText(text)
-    }, timeout, `${this.selector}: Text never became '${text}'`)
-
-    return this
-  }
-
-  waitNotHasText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return !this.hasText(text)
-    }, timeout, `${this.selector}: Text never became other than '${text}'`)
-
-    return this
-  }
-
-  waitHasAnyText(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForText(timeout)
-
-    return this
-  }
-
-  waitNotHasAnyText(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForText(timeout, true)
-
-    return this
-  }
-
-  // Waits until at least one matching element contains a text.
-  //
-  // text -> defines the text that element should have
-  // If text is undefined, waits until element's text is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a text that matches the this.selector.
-  waitContainsText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return this.containsText(text)
-    }, timeout, `${this.selector}: Text never contained '${text}'`)
-
-    return this
-  }
-
-  waitNotContainsText(
-    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return !this.containsText(text)
-    }, timeout, `${this.selector}: Text never not contained '${text}'`)
-
-    return this
-  }
-
-  // Waits until at least one matching element has a value.
-  //
-  // value -> defines the value that element should have
-  // If value is undefined, waits until element's value is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a value that matches the this.selector.
-  waitHasValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return this.hasValue(value)
-    }, timeout, `${this.selector}: Value never became '${value}'`)
-
-    return this
-  }
-
-  waitNotHasValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return !this.hasValue(value)
-    }, timeout, `${this.selector}: Value never became other than '${value}'`)
-
-    return this
-  }
-
-  waitHasAnyValue(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForValue(timeout)
-
-    return this
-  }
-
-  waitNotHasAnyValue(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForValue(timeout, true)
-
-    return this
-  }
-
-  // Waits until at least one matching element contains a value.
-  //
-  // value -> defines the value that element should have
-  // If value is undefined, waits until element's value is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a text that matches the this.selector.
-  waitContainsValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return this.containsValue(value)
-    }, timeout, `${this.selector}: Value never contained '${value}'`)
-
-    return this
-  }
-
-  waitNotContainsValue(
-    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    browser.waitUntil(() => {
-      return !this.containsValue(value)
-    }, timeout, `${this.selector}: Value never not contained '${value}'`)
-
-    return this
-  }
-
-  // Waits until at least one matching element is enabled.
-  //
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // is enabled that matches the this.selector.
-  waitIsEnabled(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForEnabled(timeout)
-
-    return this
-  }
-
-  waitIsDisabled(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForEnabled(timeout, true)
-
-    return this
-  }
-
-  // Waits until at least one matching element is selected.
-  //
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // is selected that matches the this.selector.
-  waitIsSelected(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForSelected(timeout)
-
-    return this
-  }
-
-  waitIsDeselected(
-    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._element.waitForSelected(timeout, true)
-
-    return this
-  }
-
-  // AWAITED GETTER FUNCTIONS
+// GETTER FUNCTIONS
 
   // returns html af all matches for a given selector,
   // even if only ONE WebDriverElement is returned!!!!!
@@ -677,7 +252,11 @@ export class PageElement<
     return this.element.getElementSize();
   }
 
-  // INTERACTION FUNCTIONS
+  getTimeout() {
+    return this.timeout
+  }
+
+// INTERACTION FUNCTIONS
 
   setValue(value: string) {
     this.element.setValue(value)
@@ -880,8 +459,483 @@ export class PageElement<
     }
   }
 
-  getTimeout() {
-    return this.timeout
+// WAIT
+
+  // Waits until at least one matching element exists.
+  //
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // exists that matches the this.selector.
+  private _waitExists(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForExist(timeout)
+
+    return this
+  }
+
+  private _waitNotExists(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForExist(timeout, true)
+
+    return this
+  }
+
+  // Waits until at least one matching element is visible.
+  //
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // is visible that matches the this.selector.
+  private _waitIsVisible(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForVisible(timeout)
+
+    return this
+  }
+
+  private _waitNotIsVisible(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForVisible(timeout, true)
+
+    return this
+  }
+
+  private _waitHasClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return this.hasClass(className)
+    }, timeout, `${this.selector}: Class never became '${className}'`)
+
+    return this
+  }
+
+  private _waitNotHasClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return !this.hasClass(className)
+    }, timeout, `${this.selector}: Class never became other than '${className}'`)
+
+    return this
+  }
+
+  private _waitContainsClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return this.containsClass(className)
+    }, timeout, `${this.selector}: Class never contained '${className}'`)
+
+    return this
+  }
+
+  private _waitNotContainsClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return !this.containsClass(className)
+    }, timeout, `${this.selector}: Class never not contained '${className}'`)
+
+    return this
+  }
+
+  // Waits until at least one matching element has a text.
+  //
+  // text -> defines the text that element should have
+  // If text is undefined, waits until element's text is not empty.
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // has a text that matches the this.selector.
+  private _waitHasText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return this.hasText(text)
+    }, timeout, `${this.selector}: Text never became '${text}'`)
+
+    return this
+  }
+
+  private _waitNotHasText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return !this.hasText(text)
+    }, timeout, `${this.selector}: Text never became other than '${text}'`)
+
+    return this
+  }
+
+  private _waitHasAnyText(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForText(timeout)
+
+    return this
+  }
+
+  private _waitNotHasAnyText(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForText(timeout, true)
+
+    return this
+  }
+
+  // Waits until at least one matching element contains a text.
+  //
+  // text -> defines the text that element should have
+  // If text is undefined, waits until element's text is not empty.
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // has a text that matches the this.selector.
+  private _waitContainsText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return this.containsText(text)
+    }, timeout, `${this.selector}: Text never contained '${text}'`)
+
+    return this
+  }
+
+  private _waitNotContainsText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return !this.containsText(text)
+    }, timeout, `${this.selector}: Text never not contained '${text}'`)
+
+    return this
+  }
+
+  // Waits until at least one matching element has a value.
+  //
+  // value -> defines the value that element should have
+  // If value is undefined, waits until element's value is not empty.
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // has a value that matches the this.selector.
+  private _waitHasValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return this.hasValue(value)
+    }, timeout, `${this.selector}: Value never became '${value}'`)
+
+    return this
+  }
+
+  private _waitNotHasValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return !this.hasValue(value)
+    }, timeout, `${this.selector}: Value never became other than '${value}'`)
+
+    return this
+  }
+
+  private _waitHasAnyValue(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForValue(timeout)
+
+    return this
+  }
+
+  private _waitNotHasAnyValue(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForValue(timeout, true)
+
+    return this
+  }
+
+  // Waits until at least one matching element contains a value.
+  //
+  // value -> defines the value that element should have
+  // If value is undefined, waits until element's value is not empty.
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // has a text that matches the this.selector.
+  private _waitContainsValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return this.containsValue(value)
+    }, timeout, `${this.selector}: Value never contained '${value}'`)
+
+    return this
+  }
+
+  private _waitNotContainsValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    browser.waitUntil(() => {
+      return !this.containsValue(value)
+    }, timeout, `${this.selector}: Value never not contained '${value}'`)
+
+    return this
+  }
+
+  // Waits until at least one matching element is enabled.
+  //
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // is enabled that matches the this.selector.
+  private _waitIsEnabled(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForEnabled(timeout)
+
+    return this
+  }
+
+  private _waitNotIsEnabled(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForEnabled(timeout, true)
+
+    return this
+  }
+
+  // Waits until at least one matching element is selected.
+  //
+  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+  // If reverse is set to true, function will wait until no element
+  // is selected that matches the this.selector.
+  private _waitIsSelected(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForSelected(timeout)
+
+    return this
+  }
+
+  private _waitNotIsSelected(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    this._element.waitForSelected(timeout, true)
+
+    return this
+  }
+
+  public wait = {
+    exists: this._waitExists,
+    isVisible: this._waitIsVisible,
+    hasClass: this._waitHasClass,
+    containsClass: this._waitContainsClass,
+    hasText: this._waitHasText,
+    hasAnyText: this._waitHasAnyText,
+    containsText: this._waitContainsText,
+    hasValue: this._waitHasValue,
+    hasAnyValue: this._waitHasAnyValue,
+    containsValue: this._waitContainsValue,
+    isEnabled: this._waitIsEnabled,
+    isSelected: this._waitIsSelected,
+
+    not: {
+      exists: this._waitNotExists,
+      isVisible: this._waitNotIsVisible,
+      hasClass: this._waitNotHasClass,
+      containsClass: this._waitNotContainsClass,
+      hasText: this._waitNotHasText,
+      hasAnyText: this._waitNotHasAnyText,
+      containsText: this._waitNotContainsText,
+      hasValue: this._waitNotHasValue,
+      hasAnyValue: this._waitNotHasAnyValue,
+      containsValue: this._waitNotContainsValue,
+      isEnabled: this._waitNotIsEnabled,
+      isSelected: this._waitNotIsSelected,
+    }
+  }
+
+// EVENTUALLY FUNCTIONS
+
+  private _eventually(func: () => void) : boolean {
+    try {
+      func();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  // checks if at least one element matching selector is existing within timeout
+  // reverse is optional and false by default
+  // timeout is optional and this._timeout by default
+  private _eventuallyExists({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
+    return this._eventually(() => this._waitExists({timeout}))
+  }
+
+  private _eventuallyNotExists({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
+    return this._eventually(() => this._waitNotExists({timeout}))
+  }
+
+  // checks if at least one element matching selector is visible within timeout
+  // reverse is optional and false by default
+  // timeout is optional and this._timeout by default
+  private _eventuallyIsVisible({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
+    return this._eventually(() => this._waitIsVisible({timeout}))
+  }
+
+  private _eventuallyNotIsVisible({ timeout = this.timeout }: Workflo.WDIOParamsOptional = {}) {
+    return this._eventually(() => this._waitNotIsVisible({timeout}))
+  }
+
+  private _eventuallyHasClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitHasClass(className, {timeout}))
+  }
+
+  private _eventuallyNotHasClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotHasClass(className, {timeout}))
+  }
+
+  private _eventuallyContainsClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitContainsClass(className, {timeout}))
+  }
+
+  private _eventuallyNotContainsClass(
+    className: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotContainsClass(className, {timeout}))
+  }
+
+  private _eventuallyHasText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitHasText(text, {timeout}))
+  }
+
+  private _eventuallyNotHasText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotHasText(text, {timeout}))
+  }
+
+  private _eventuallyHasAnyText(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitHasAnyText({timeout}))
+  }
+
+  private _eventuallyNotHasAnyText(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotHasAnyText({timeout}))
+  }
+
+  private _eventuallyContainsText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitContainsText(text, {timeout}))
+  }
+
+  private _eventuallyNotContainsText(
+    text: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotContainsText(text, {timeout}))
+  }
+
+  private _eventuallyHasValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitHasValue(value, {timeout}))
+  }
+
+  private _eventuallyNotHasValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotHasValue(value, {timeout}))
+  }
+
+  private _eventuallyHasAnyValue(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitHasAnyValue({timeout}))
+  }
+
+  private _eventuallyNotHasAnyValue(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotHasAnyValue({timeout}))
+  }
+
+  private _eventuallyContainsValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitContainsValue(value, {timeout}))
+  }
+
+  private _eventuallyNotContainsValue(
+    value: string, { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotContainsValue(value, {timeout}))
+  }
+
+  private _eventuallyIsEnabled(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitIsEnabled({timeout}))
+  }
+
+  private _eventuallyNotIsEnabled(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotIsEnabled({timeout}))
+  }
+
+  private _eventuallyIsSelected(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitIsSelected({timeout}))
+  }
+
+  private _eventuallyNotIsSelected(
+    { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
+  ) {
+    return this._eventually(() => this._waitNotIsSelected({timeout}))
+  }
+
+  public eventually = {
+    exists: this._eventuallyExists,
+    isVisible: this._eventuallyIsVisible,
+    hasClass: this._eventuallyHasClass,
+    containsClass: this._eventuallyContainsClass,
+    hasText: this._eventuallyHasText,
+    hasAnyText: this._eventuallyHasAnyText,
+    containsText: this._eventuallyContainsText,
+    hasValue: this._eventuallyHasValue,
+    hasAnyValue: this._eventuallyHasAnyValue,
+    containsValue: this._eventuallyContainsValue,
+    isEnabled: this._eventuallyIsEnabled,
+    isSelected: this._eventuallyIsSelected,
+
+    not: {
+      exists: this._eventuallyNotExists,
+      isVisible: this._eventuallyNotIsVisible,
+      hasClass: this._eventuallyNotHasClass,
+      containsClass: this._eventuallyNotContainsClass,
+      hasText: this._eventuallyNotHasText,
+      hasAnyText: this._eventuallyNotHasAnyText,
+      containsText: this._eventuallyNotContainsText,
+      hasValue: this._eventuallyNotHasValue,
+      hasAnyValue: this._eventuallyNotHasAnyValue,
+      containsValue: this._eventuallyNotContainsValue,
+      isEnabled: this._eventuallyNotIsEnabled,
+      isSelected: this._eventuallyNotIsSelected,
+    }
   }
 }
 
