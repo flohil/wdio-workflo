@@ -1,4 +1,5 @@
 import { elements, stores } from './page_objects'
+import * as _ from 'lodash'
 
 interface ResultFuncArgs<ExpectedType> {
   element: elements.PageElement<stores.PageElementStore>;
@@ -17,9 +18,9 @@ type AssertionFunction<ExpectedType, ActualType> = (actual: ActualType, expected
 type ErrorTextFunction<ExpectedType, ActualType> = (args: ErrorFuncArgs<ExpectedType, ActualType>) => string
 
 function elementMatcherFunction<ExpectedType, ActualType>(
-  resultFunctions: ResultFunction<ExpectedType, ActualType>[],
-  assertionFunctions: AssertionFunction<ExpectedType, ActualType>[],
-  errorTextFunctions: ErrorTextFunction<ExpectedType, ActualType>[]
+  resultFunctions: ResultFunction<ExpectedType, ActualType> | ResultFunction<ExpectedType, ActualType>[],
+  assertionFunctions: AssertionFunction<ExpectedType, ActualType> | AssertionFunction<ExpectedType, ActualType>[],
+  errorTextFunctions: ErrorTextFunction<ExpectedType, ActualType> | ErrorTextFunction<ExpectedType, ActualType>[]
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
 
@@ -30,13 +31,14 @@ function elementMatcherFunction<ExpectedType, ActualType>(
       timeout?: number
     ): jasmine.CustomMatcherResult {
       let result: jasmine.CustomMatcherResult = {
-        pass: !negativeComparison,
+        pass: true,
         message: ''
       };
 
-      let resultFunction = resultFunctions[0]
-      let assertionFunction = assertionFunctions[0]
-      let errorTextFunction = errorTextFunctions[0]
+      let resultFunction = (_.isArray(resultFunctions)) ? resultFunctions[0] : resultFunctions
+      let assertionFunction = (_.isArray(assertionFunctions)) ? assertionFunctions[0] : assertionFunctions
+      let errorTextFunction = (_.isArray(errorTextFunctions)) ? errorTextFunctions[0] : errorTextFunctions
+      let negateAssertionResult = false
       let defaultNegativeMessage = ''
 
       if ( negativeComparison ) {
@@ -45,6 +47,8 @@ function elementMatcherFunction<ExpectedType, ActualType>(
         }
         if ( assertionFunctions.length > 1 ) {
           assertionFunction = assertionFunctions[1]
+        } else {
+          negateAssertionResult = true
         }
         if ( errorTextFunctions.length > 1 ) {
           errorTextFunction = errorTextFunctions[1]
@@ -54,7 +58,11 @@ function elementMatcherFunction<ExpectedType, ActualType>(
       }
 
       const actual: ActualType | boolean = resultFunction({element, expected, timeout})
-      const success: boolean = ( typeof actual === 'boolean'  ) ? actual : assertionFunction(actual, expected)
+      let success: boolean = ( typeof actual === 'boolean'  ) ? actual : assertionFunction(actual, expected)
+
+      if ( negateAssertionResult ) {
+        success = !success
+      }
 
       if (!success) {
         if (typeof timeout === 'undefined') {
@@ -70,44 +78,10 @@ function elementMatcherFunction<ExpectedType, ActualType>(
 
     return {
       compare: (element: elements.PageElement<stores.PageElementStore>, expected: ExpectedType, timeout?: number): jasmine.CustomMatcherResult => {
-        let result: jasmine.CustomMatcherResult = {
-          pass: true,
-          message: ''
-        };
-
-        const actual: ActualType | boolean = resultFunction({element, expected, timeout})
-        const success: boolean = ( typeof actual === 'boolean'  ) ? actual : assertionFunction(actual, expected)
-
-        if (!success) {
-          if (typeof timeout === 'undefined') {
-            timeout = element.getTimeout()
-          }
-
-          result.pass = false;
-          result.message = `Expected ${element.constructor.name}${errorTextFunction({actual, expected, timeout})}.\n( ${element.getSelector()} )`;
-        }
-
-        return result;
+        return baseCompareFunction(element, expected, false, timeout);
       },
       negativeCompare: (element: elements.PageElement<stores.PageElementStore>, expected: ExpectedType, timeout?: number): jasmine.CustomMatcherResult => {
-        let result: jasmine.CustomMatcherResult = {
-          pass: true,
-          message: ''
-        };
-
-        const actual: ActualType | boolean = resultFunction({element, expected, timeout})
-        const success: boolean = ( typeof actual === 'boolean'  ) ? actual : assertionFunction(actual, expected)
-
-        if (!success) {
-          if (typeof timeout === 'undefined') {
-            timeout = element.getTimeout()
-          }
-
-          result.pass = false;
-          result.message = `Expected ${element.constructor.name}${errorTextFunction({actual, expected, timeout})}.\n( ${element.getSelector()} )`;
-        }
-
-        return result;
+        return baseCompareFunction(element, expected, true, timeout);
       }
     }
   }
