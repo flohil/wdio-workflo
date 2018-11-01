@@ -23,9 +23,9 @@ type ErrorTextFunction<ExpectedType, ActualType> =
   (args: ErrorFuncArgs<ExpectedType, ActualType>) => string | string[]
 
 function elementMatcherFunction<ExpectedType, ActualType>(
-  resultFunctions: ResultFunction<ExpectedType, ActualType> | ResultFunction<ExpectedType, ActualType>[],
-  assertionFunctions: AssertionFunction<ExpectedType, ActualType> | AssertionFunction<ExpectedType, ActualType>[],
-  errorTextFunctions: ErrorTextFunction<ExpectedType, ActualType> | ErrorTextFunction<ExpectedType, ActualType>[]
+  resultFunction: ResultFunction<ExpectedType, ActualType> | ResultFunction<ExpectedType, ActualType>,
+  assertionFunction: AssertionFunction<ExpectedType, ActualType> | AssertionFunction<ExpectedType, ActualType>,
+  errorTextFunction: ErrorTextFunction<ExpectedType, ActualType> | ErrorTextFunction<ExpectedType, ActualType>
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
 
@@ -40,33 +40,43 @@ function elementMatcherFunction<ExpectedType, ActualType>(
         message: ''
       };
 
-      let resultFunction = (_.isArray(resultFunctions)) ? resultFunctions[0] : resultFunctions
-      let assertionFunction = (_.isArray(assertionFunctions)) ? assertionFunctions[0] : assertionFunctions
-      let errorTextFunction = (_.isArray(errorTextFunctions)) ? errorTextFunctions[0] : errorTextFunctions
       let negateAssertionResult = false
       let defaultNegativeMessage = ''
 
-      if ( negativeComparison ) {
-        if ( resultFunctions.length > 1 ) {
-          resultFunction = resultFunctions[1]
-        }
-        if ( assertionFunctions.length > 1 ) {
-          assertionFunction = assertionFunctions[1]
+      const actuals: ActualOrBoolean<ActualType> | ActualOrBoolean<ActualType>[] =
+        resultFunction({element, expected, timeout})
+      let actual: ActualOrBoolean<ActualType> = undefined
+
+      if ( _.isArray( actuals ) ) {
+        if ( negativeComparison && actuals.length > 1 ) {
+          actual = actuals[1]
         } else {
-          negateAssertionResult = true
+          actual = actuals[0]
         }
-        if ( errorTextFunctions.length > 1 ) {
-          errorTextFunction = errorTextFunctions[1]
-        } else {
-          defaultNegativeMessage = ' NOT'
-        }
+      } else {
+        actual = actuals
       }
 
-      const actual: ActualType | boolean = resultFunction({element, expected, timeout})
-      let success: boolean = ( typeof actual === 'boolean'  ) ? actual : assertionFunction(actual, expected)
+      const successes: boolean | boolean[] =
+        ( typeof actual === 'boolean'  ) ? actual : assertionFunction(actual, expected)
+      let success: boolean = undefined
 
-      if ( negateAssertionResult ) {
-        success = !success
+      if ( _.isArray( successes ) ) {
+        if ( negativeComparison ) {
+          if ( successes.length > 1 ) {
+            success = successes[ 1 ]
+          } else {
+            success = !successes[ 0 ]
+          }
+        } else {
+          success = successes[ 0 ]
+        }
+      } else {
+        if ( negativeComparison ) {
+          success = !successes
+        } else {
+          success = successes
+        }
       }
 
       if (!success) {
@@ -74,8 +84,25 @@ function elementMatcherFunction<ExpectedType, ActualType>(
           timeout = element.getTimeout()
         }
 
+        const errorTexts = errorTextFunction({actual, expected, timeout})
+        let errorText: string = undefined
+
+        if ( _.isArray( errorTexts ) ) {
+          if ( negativeComparison && errorTexts.length > 1 ) {
+            errorText = errorTexts[1]
+          } else {
+            errorText = errorTexts[0]
+          }
+        } else {
+          if ( negativeComparison ) {
+            defaultNegativeMessage = ' NOT'
+          }
+
+          errorText = errorTexts
+        }
+
         result.pass = false;
-        result.message = `Expected ${element.constructor.name}${defaultNegativeMessage}${errorTextFunction({actual, expected, timeout})}.\n( ${element.getSelector()} )`;
+        result.message = `Expected ${element.constructor.name}${defaultNegativeMessage}${errorText}.\n( ${element.getSelector()} )`;
       }
 
       return result;
