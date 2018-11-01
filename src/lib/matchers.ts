@@ -13,9 +13,14 @@ interface ErrorFuncArgs<ExpectedType, ActualType> {
   timeout?: number
 }
 
-type ResultFunction<ExpectedType, ActualType> = (args: ResultFuncArgs<ExpectedType>) => ActualType | boolean
-type AssertionFunction<ExpectedType, ActualType> = (actual: ActualType, expected: ExpectedType) => boolean
-type ErrorTextFunction<ExpectedType, ActualType> = (args: ErrorFuncArgs<ExpectedType, ActualType>) => string
+type ActualOrBoolean<ActualType> = ActualType | boolean
+
+type ResultFunction<ExpectedType, ActualType> =
+  (args: ResultFuncArgs<ExpectedType>) => ActualOrBoolean<ActualType> | ActualOrBoolean<ActualType>[]
+type AssertionFunction<ExpectedType, ActualType> =
+  (actual: ActualType, expected: ExpectedType) => boolean | boolean[]
+type ErrorTextFunction<ExpectedType, ActualType> =
+  (args: ErrorFuncArgs<ExpectedType, ActualType>) => string | string[]
 
 function elementMatcherFunction<ExpectedType, ActualType>(
   resultFunctions: ResultFunction<ExpectedType, ActualType> | ResultFunction<ExpectedType, ActualType>[],
