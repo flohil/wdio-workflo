@@ -48,6 +48,8 @@ declare global {
    */
   type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>
 
+  type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
   namespace Workflo {
     interface JSError {
       notFound: string[]

@@ -15,16 +15,31 @@ const builders_1 = require("../builders");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(selector, _a) {
-        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, disableCache = false, elementStoreFunc, elementOptions, identifier } = _a, superOpts = __rest(_a, ["wait", "timeout", "disableCache", "elementStoreFunc", "elementOptions", "identifier"]);
+        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, disableCache = false, elementStoreFunc, elementOptions, identifier, interval } = _a, superOpts = __rest(_a, ["wait", "timeout", "disableCache", "elementStoreFunc", "elementOptions", "identifier", "interval"]);
         super(selector, superOpts);
         this.selector = selector;
-        this.wait = wait;
+        // WAIT FUNCTION
+        this.wait = {
+            hasLength: this._waitHasLength,
+            isEmpty: this._waitEmpty,
+            any: this._anyWait,
+            none: this._noneWait
+        };
+        // EVENTUALLY
+        this.eventually = {
+            hasLength: this._eventuallyHasLength,
+            isEmpty: this._eventuallyIsEmpty,
+            any: this._anyEventually,
+            none: this._noneEventually
+        };
+        this.waitType = wait;
         this.timeout = timeout;
         this.selector = selector;
         this.elementOptions = elementOptions;
         this.elementStoreFunc = elementStoreFunc;
         this.identifier = identifier;
         this.identifiedObjCache = {};
+        this.interval = this.interval || 500;
         this.firstByBuilder = new builders_1.FirstByBuilder(this.selector, {
             store: this.store,
             elementStoreFunc: this.elementStoreFunc,
@@ -39,18 +54,18 @@ class PageElementList extends _1.PageNode {
         return this._elements;
     }
     initialWait() {
-        switch (this.wait) {
+        switch (this.waitType) {
             case "exist" /* exist */:
-                this.waitExist();
+                this.wait.any.exists();
                 break;
             case "visible" /* visible */:
-                this.waitVisible();
+                this.wait.any.isVisible();
                 break;
             case "value" /* value */:
-                this.waitValue();
+                this.wait.any.hasAnyValue();
                 break;
             case "text" /* text */:
-                this.waitText();
+                this.wait.any.hasAnyText();
                 break;
         }
     }
@@ -165,44 +180,14 @@ class PageElementList extends _1.PageNode {
     getLength() {
         return this.listElements.length;
     }
+    isEmpty() {
+        return !browser.isExisting(this.selector);
+    }
     firstBy() {
         return this.firstByBuilder.reset();
     }
-    // WAIT FUNCTIONS
-    // Waits for at least one element of the list to exist.
-    //
-    // If reverse is set to true, function will wait until no element
-    // that matches the this.selector exists.
-    waitExist({ timeout = this.timeout, reverse = false } = {}) {
-        this._elements.waitForExist(timeout, reverse);
-        return this;
-    }
-    // Waits for at least one element of the list to be visible.
-    //
-    // If reverse is set to true, function will wait until no element
-    // that matches the this.selector is visible.
-    waitVisible({ timeout = this.timeout, reverse = false } = {}) {
-        this._elements.waitForVisible(timeout, reverse);
-        return this;
-    }
-    // Waits for at least one element of the list has a text.
-    //
-    // If reverse is set to true, function will wait until no element
-    // that matches the this.selector has a text.
-    waitText({ timeout = this.timeout, reverse = false } = {}) {
-        this._elements.waitForText(timeout, reverse);
-        return this;
-    }
-    // Waits for at least one element of the list have a value.
-    //
-    // If reverse is set to true, function will wait until no element
-    // that matches the this.selector has a value.
-    waitValue({ timeout = this.timeout, reverse = false } = {}) {
-        this._elements.waitForValue(timeout, reverse);
-        return this;
-    }
     // waits until list has given length
-    waitLength({ length, timeout = this.timeout, comparator = "==" /* equalTo */, interval = 500 }) {
+    _waitHasLength(length, { timeout = this.timeout, comparator = "==" /* equalTo */, interval = this.interval }) {
         browser.waitUntil(() => {
             let value = this._elements.value;
             if (!value || !value.length) {
@@ -214,35 +199,39 @@ class PageElementList extends _1.PageNode {
         }, timeout, `${this.selector}: List length never became ${comparator.toString()} ${length}`, interval);
         return this;
     }
-    // returns true if list has length within timeout
-    // else returns false
-    eventuallyHasLength({ length, timeout = this.timeout }) {
-        try {
-            this.waitLength({ length, timeout });
-            return true;
-        }
-        catch (error) {
-            return false;
-        }
-    }
-    isEmpty() {
-        return !browser.isExisting(this.selector);
-    }
-    eventuallyIsEmpty({ timeout = this.timeout }) {
-        try {
-            browser.waitUntil(() => {
-                return !browser.isExisting(this.selector);
-            }, timeout, `List never became empty: ${this.selector}`);
-            return true;
-        }
-        catch (error) {
-            return false;
-        }
-    }
-    waitEmpty({ timeout = this.timeout, interval = 500 }) {
+    _waitEmpty({ timeout = this.timeout, interval = this.interval }) {
         browser.waitUntil(() => {
             return !browser.isExisting(this.selector);
         }, timeout, `List never became empty: ${this.selector}`, interval);
+        return this;
+    }
+    get _anyWait() {
+        const element = this.elementStoreFunc.apply(this.store, [this.selector, this.elementOptions]);
+        const wait = Object.assign({}, element.wait);
+        delete wait.not;
+        return wait;
+    }
+    get _noneWait() {
+        const element = this.elementStoreFunc.apply(this.store, [this.selector, this.elementOptions]);
+        return element.wait.not;
+    }
+    // returns true if list has length within timeout
+    // else returns false
+    _eventuallyHasLength(length, { timeout = this.timeout, comparator = "==" /* equalTo */, interval = this.interval }) {
+        return this._eventually(() => this._waitHasLength(length, { timeout, comparator, interval }));
+    }
+    _eventuallyIsEmpty({ timeout = this.timeout, interval = this.interval }) {
+        return this._eventually(() => this._waitEmpty({ timeout, interval }));
+    }
+    get _anyEventually() {
+        const element = this.elementStoreFunc.apply(this.store, [this.selector, this.elementOptions]);
+        const eventually = Object.assign({}, element.eventually);
+        delete eventually.not;
+        return eventually;
+    }
+    get _noneEventually() {
+        const element = this.elementStoreFunc.apply(this.store, [this.selector, this.elementOptions]);
+        return element.eventually.not;
     }
 }
 exports.PageElementList = PageElementList;

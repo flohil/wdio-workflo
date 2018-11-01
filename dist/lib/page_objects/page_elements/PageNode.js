@@ -19,6 +19,15 @@ class PageNode {
     getSelector() {
         return this.selector;
     }
+    _eventually(func) {
+        try {
+            func();
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    }
 }
 exports.PageNode = PageNode;
 //# sourceMappingURL=PageNode.js.map

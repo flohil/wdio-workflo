@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageElement } from './';
+import { PageNode, IPageNodeOpts, PageElement, IPageElementWaitAPI, IPageElementWaitNotAPI, IPageElementEventuallyAPI, IPageElementEventuallyNotAPI } from './';
 import { PageElementStore } from '../stores';
 import { FirstByBuilder } from '../builders';
 export interface IPageElementListIdentifier<Store extends PageElementStore, ElementType extends PageElement<Store>> {
@@ -8,18 +8,38 @@ export interface IPageElementListIdentifier<Store extends PageElementStore, Elem
     };
     func: (element: ElementType) => string;
 }
+export interface IPageElementListWaitEmptyParams extends Workflo.WDIOParamsOptional {
+    interval?: number;
+}
+export interface IPageElementListWaitLengthParams extends IPageElementListWaitEmptyParams {
+    comparator?: Workflo.Comparator;
+}
 export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
     wait?: Workflo.WaitType;
     timeout?: number;
+    interval?: number;
     disableCache?: boolean;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
+export interface IPageElementListWaitAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> {
+    hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => PageElementList<Store, PageElementType, PageElementOptions>;
+    isEmpty: (opts?: IPageElementListWaitEmptyParams) => PageElementList<Store, PageElementType, PageElementOptions>;
+    any: Omit<IPageElementWaitAPI<Store>, 'not'>;
+    none: IPageElementWaitNotAPI<Store>;
+}
+export interface IPageElementListEventuallyAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> {
+    hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
+    isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
+    any: Omit<IPageElementEventuallyAPI<Store>, 'not'>;
+    none: IPageElementEventuallyNotAPI<Store>;
+}
 export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
     protected selector: string;
-    protected wait: Workflo.WaitType;
+    protected waitType: Workflo.WaitType;
     protected timeout: number;
+    protected interval: number;
     protected disableCache: boolean;
     protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected elementOptions: PageElementOptions;
@@ -30,7 +50,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    constructor(selector: string, {wait, timeout, disableCache, elementStoreFunc, elementOptions, identifier, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    constructor(selector: string, {wait, timeout, disableCache, elementStoreFunc, elementOptions, identifier, interval, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     initialWait(): void;
@@ -68,27 +88,16 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     get(index: number): PageElementType;
     getAll(): PageElementType[];
     getLength(): number;
-    firstBy(): FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    waitExist({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitVisible({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitText({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitValue({timeout, reverse}?: Workflo.WDIOParams): this;
-    waitLength({length, timeout, comparator, interval}: {
-        length: number;
-        timeout?: number;
-        comparator?: Workflo.Comparator;
-        interval?: number;
-    }): this;
-    eventuallyHasLength({length, timeout}: {
-        length: number;
-        timeout: number;
-    }): boolean;
     isEmpty(): boolean;
-    eventuallyIsEmpty({timeout}: {
-        timeout?: number;
-    }): boolean;
-    waitEmpty({timeout, interval}: {
-        timeout?: number;
-        interval?: number;
-    }): void;
+    firstBy(): FirstByBuilder<Store, PageElementType, PageElementOptions>;
+    wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
+    private _waitHasLength(length, {timeout, comparator, interval});
+    private _waitEmpty({timeout, interval});
+    private readonly _anyWait;
+    private readonly _noneWait;
+    eventually: IPageElementListEventuallyAPI<Store, PageElementType, PageElementOptions>;
+    private _eventuallyHasLength(length, {timeout, comparator, interval});
+    private _eventuallyIsEmpty({timeout, interval});
+    private readonly _anyEventually;
+    private readonly _noneEventually;
 }

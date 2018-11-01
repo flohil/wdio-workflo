@@ -33,4 +33,13 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   getSelector() {
     return this.selector
   }
+
+  protected _eventually(func: () => void) : boolean {
+    try {
+      func();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

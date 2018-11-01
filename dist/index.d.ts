@@ -62,14 +62,14 @@ declare global  {
                 x?: number;
                 y?: number;
             };
+            closestContainerIncludesHidden?: boolean;
         }
         type PageElementOptions = "timeout" | "wait" | "customScroll";
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }
-        interface WDIOParams {
+        interface WDIOParamsOptional {
             timeout?: number;
-            reverse?: boolean;
         }
         namespace PageNode {
             interface ElementJSON {

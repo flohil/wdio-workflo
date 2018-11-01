@@ -1,5 +1,13 @@
 import { compare } from '../../utility_functions/util'
-import { PageNode, IPageNodeOpts, PageElement } from './'
+import {
+  PageNode,
+  IPageNodeOpts,
+  PageElement,
+  IPageElementWaitAPI,
+  IPageElementWaitNotAPI,
+  IPageElementEventuallyAPI,
+  IPageElementEventuallyNotAPI
+} from './'
 import { PageElementStore } from '../stores'
 import { FirstByBuilder } from '../builders'
 
@@ -11,6 +19,14 @@ export interface IPageElementListIdentifier<
   func: ( element: ElementType ) => string
 }
 
+export interface IPageElementListWaitEmptyParams extends Workflo.WDIOParamsOptional {
+  interval?: number
+}
+
+export interface IPageElementListWaitLengthParams extends IPageElementListWaitEmptyParams {
+  comparator?: Workflo.Comparator,
+}
+
 // use disableCache for a "dynamic" list whose structure changes over time
 // alternatively, call refresh() when the times of structure changes are known
 export interface IPageElementListOpts<
@@ -20,10 +36,33 @@ export interface IPageElementListOpts<
 > extends IPageNodeOpts<Store> {
   wait?: Workflo.WaitType,
   timeout?: number,
+  interval?: number,
   disableCache?: boolean,
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
   elementOptions: PageElementOptions
   identifier?: IPageElementListIdentifier<Store, PageElementType>
+}
+
+export interface IPageElementListWaitAPI<
+  Store extends PageElementStore,
+  PageElementType extends PageElement<Store>,
+  PageElementOptions
+> {
+  hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => PageElementList<Store, PageElementType, PageElementOptions>
+  isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => PageElementList<Store, PageElementType, PageElementOptions>
+  any: Omit<IPageElementWaitAPI<Store>, 'not'>
+  none: IPageElementWaitNotAPI<Store>
+}
+
+export interface IPageElementListEventuallyAPI<
+  Store extends PageElementStore,
+  PageElementType extends PageElement<Store>,
+  PageElementOptions
+> {
+  hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
+  isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
+  any: Omit<IPageElementEventuallyAPI<Store>, 'not'>
+  none: IPageElementEventuallyNotAPI<Store>
 }
 
 // holds several PageElement instances of the same type
@@ -32,8 +71,9 @@ export class PageElementList<
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> {
-  protected wait: Workflo.WaitType
+  protected waitType: Workflo.WaitType
   protected timeout: number
+  protected interval: number
 
   protected disableCache: boolean
   protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
@@ -51,12 +91,13 @@ export class PageElementList<
       elementStoreFunc,
       elementOptions,
       identifier,
+      interval,
       ...superOpts
     } : IPageElementListOpts<Store, PageElementType, PageElementOptions>
   ) {
     super(selector, superOpts)
 
-    this.wait = wait
+    this.waitType = wait
     this.timeout = timeout
 
     this.selector = selector
@@ -64,6 +105,7 @@ export class PageElementList<
     this.elementStoreFunc = elementStoreFunc
     this.identifier = identifier
     this.identifiedObjCache = {}
+    this.interval = this.interval || 500
 
     this.firstByBuilder = new FirstByBuilder(this.selector, {
       store: this.store,
@@ -83,18 +125,18 @@ export class PageElementList<
   }
 
   initialWait() {
-    switch(this.wait) {
+    switch(this.waitType) {
       case Workflo.WaitType.exist:
-      this.waitExist()
+      this.wait.any.exists()
       break
       case Workflo.WaitType.visible:
-      this.waitVisible()
+      this.wait.any.isVisible()
       break
       case Workflo.WaitType.value:
-      this.waitValue()
+      this.wait.any.hasAnyValue()
       break
       case Workflo.WaitType.text:
-      this.waitText()
+      this.wait.any.hasAnyText()
       break
     }
   }
@@ -243,72 +285,29 @@ export class PageElementList<
     return this.listElements.length
   }
 
+  isEmpty() {
+    return !browser.isExisting(this.selector)
+  }
+
   firstBy() {
     return this.firstByBuilder.reset()
   }
 
-  // WAIT FUNCTIONS
+  // WAIT FUNCTION
 
-  // Waits for at least one element of the list to exist.
-  //
-  // If reverse is set to true, function will wait until no element
-  // that matches the this.selector exists.
-  waitExist(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._elements.waitForExist(timeout, reverse)
-
-    return this
-  }
-
-  // Waits for at least one element of the list to be visible.
-  //
-  // If reverse is set to true, function will wait until no element
-  // that matches the this.selector is visible.
-  waitVisible(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._elements.waitForVisible(timeout, reverse)
-
-    return this
-  }
-
-  // Waits for at least one element of the list has a text.
-  //
-  // If reverse is set to true, function will wait until no element
-  // that matches the this.selector has a text.
-  waitText(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._elements.waitForText(timeout, reverse)
-
-    return this
-  }
-
-  // Waits for at least one element of the list have a value.
-  //
-  // If reverse is set to true, function will wait until no element
-  // that matches the this.selector has a value.
-  waitValue(
-    { timeout = this.timeout, reverse = false }: Workflo.WDIOParamsOptional = {}
-  ) {
-    this._elements.waitForValue(timeout, reverse)
-
-    return this
+  public wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions> = {
+    hasLength: this._waitHasLength,
+    isEmpty: this._waitEmpty,
+    any: this._anyWait,
+    none: this._noneWait
   }
 
   // waits until list has given length
-  waitLength( {
-    length,
+  private _waitHasLength( length: number, {
     timeout = this.timeout,
     comparator = Workflo.Comparator.equalTo,
-    interval = 500
-  }: {
-    length: number,
-    timeout?: number,
-    comparator?: Workflo.Comparator,
-    interval?: number
-  }) {
+    interval = this.interval
+  }: IPageElementListWaitLengthParams) {
     browser.waitUntil(
       () => {
         let value = this._elements.value
@@ -324,36 +323,70 @@ export class PageElementList<
     return this
   }
 
-  // returns true if list has length within timeout
-  // else returns false
-  eventuallyHasLength( {length, timeout = this.timeout}: {length: number, timeout: number} ) {
-    try {
-      this.waitLength( {length, timeout} )
-      return true
-    } catch (error) {
-      return false
-    }
-  }
-
-  isEmpty() {
-    return !browser.isExisting(this.selector)
-  }
-
-  eventuallyIsEmpty({timeout = this.timeout} : {timeout?: number}) {
-    try {
-      browser.waitUntil(() => {
-        return !browser.isExisting(this.selector)
-      }, timeout, `List never became empty: ${this.selector}`)
-
-      return true
-    } catch (error) {
-      return false
-    }
-  }
-
-  waitEmpty({timeout = this.timeout, interval = 500} : {timeout?: number, interval?: number}) {
+  private _waitEmpty({
+    timeout = this.timeout,
+    interval = this.interval
+  } : IPageElementListWaitEmptyParams ) {
     browser.waitUntil(() => {
       return !browser.isExisting(this.selector)
     }, timeout, `List never became empty: ${this.selector}`, interval)
+
+    return this
+  }
+
+  private get _anyWait() : Omit<IPageElementWaitAPI<Store>, 'not'> {
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+    const wait = Object.assign({}, element.wait)
+
+    delete wait.not
+
+    return wait
+  }
+
+  private get _noneWait() : IPageElementWaitNotAPI<Store> {
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+
+    return element.wait.not
+  }
+
+  // EVENTUALLY
+
+  public eventually: IPageElementListEventuallyAPI<Store, PageElementType, PageElementOptions> = {
+    hasLength: this._eventuallyHasLength,
+    isEmpty: this._eventuallyIsEmpty,
+    any: this._anyEventually,
+    none: this._noneEventually
+  }
+
+  // returns true if list has length within timeout
+  // else returns false
+  private _eventuallyHasLength( length: number, {
+    timeout = this.timeout,
+    comparator = Workflo.Comparator.equalTo,
+    interval = this.interval
+  }: IPageElementListWaitLengthParams ) {
+    return this._eventually( () => this._waitHasLength( length, { timeout, comparator, interval } ) )
+  }
+
+  private _eventuallyIsEmpty({
+    timeout = this.timeout,
+    interval = this.interval
+  } : IPageElementListWaitEmptyParams) {
+    return this._eventually( () => this._waitEmpty( { timeout, interval } ) )
+  }
+
+  private get _anyEventually() : Omit<IPageElementEventuallyAPI<Store>, 'not'> {
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+    const eventually = Object.assign({}, element.eventually)
+
+    delete eventually.not
+
+    return eventually
+  }
+
+  private get _noneEventually() : IPageElementEventuallyNotAPI<Store> {
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+
+    return element.eventually.not
   }
 }

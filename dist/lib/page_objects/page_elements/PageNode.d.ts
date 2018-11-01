@@ -10,4 +10,5 @@ export declare class PageNode<Store extends PageElementStore> implements Workflo
     __getNodeId(): string;
     toJSON(): Workflo.PageNode.ElementJSON;
     getSelector(): string;
+    protected _eventually(func: () => void): boolean;
 }
