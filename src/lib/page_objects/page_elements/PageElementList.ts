@@ -34,7 +34,7 @@ export interface IPageElementListOpts<
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends IPageNodeOpts<Store> {
-  wait?: Workflo.WaitType,
+  waitType?: Workflo.WaitType,
   timeout?: number,
   interval?: number,
   disableCache?: boolean,
@@ -85,7 +85,7 @@ export class PageElementList<
   constructor(
     protected selector: string,
     {
-      wait = Workflo.WaitType.visible,
+      waitType = Workflo.WaitType.visible,
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
       disableCache = false,
       elementStoreFunc,
@@ -97,7 +97,7 @@ export class PageElementList<
   ) {
     super(selector, superOpts)
 
-    this.waitType = wait
+    this.waitType = waitType
     this.timeout = timeout
 
     this.selector = selector

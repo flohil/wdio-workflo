@@ -150,7 +150,7 @@ export class PageElementStore {
     return this.Element(
       selector,
       {
-        wait: Workflo.WaitType.exist,
+        waitType: Workflo.WaitType.exist,
         ...options
       }
     )
@@ -160,12 +160,12 @@ export class PageElementStore {
 
   protected List<
     PageElementType extends PageElement<this>,
-    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
+    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'waitType'>
   > (
     selector: Workflo.XPath,
     options: Pick<
       IPageElementListOpts<this, PageElementType, PageElementOpts>,
-      "wait" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier"
+      "waitType" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier"
     >
   ) {
     return this.get<
@@ -185,8 +185,8 @@ export class PageElementStore {
   ElementList(
     selector: Workflo.XPath,
     options?: PickPartial<
-      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "wait">>,
-      "wait" | "timeout" | "disableCache" | "identifier",
+      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "waitType">>,
+      "waitType" | "timeout" | "disableCache" | "identifier",
       "elementOptions"
     >
   ) {
@@ -213,7 +213,7 @@ export class PageElementStore {
       {
         elementOptions: {},
         elementStoreFunc: this.ExistElement,
-        wait: Workflo.WaitType.exist,
+        waitType: Workflo.WaitType.exist,
         ...options
       }
     )
@@ -224,7 +224,7 @@ export class PageElementStore {
   protected Map<
     K extends string,
     PageElementType extends PageElement<this>,
-    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'wait'>
+    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'waitType'>
   >(
     selector: Workflo.XPath,
     options: Pick<
@@ -249,7 +249,7 @@ export class PageElementStore {
   ElementMap<K extends string>(
     selector: Workflo.XPath,
     options: PickPartial<
-      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'wait'>>,
+      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'waitType'>>,
       "identifier",
       "elementOptions"
     >

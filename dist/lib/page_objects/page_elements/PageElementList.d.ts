@@ -15,7 +15,7 @@ export interface IPageElementListWaitLengthParams extends IPageElementListWaitEm
     comparator?: Workflo.Comparator;
 }
 export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
-    wait?: Workflo.WaitType;
+    waitType?: Workflo.WaitType;
     timeout?: number;
     interval?: number;
     disableCache?: boolean;
@@ -50,7 +50,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    constructor(selector: string, {wait, timeout, disableCache, elementStoreFunc, elementOptions, identifier, interval, ...superOpts}: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    constructor(selector: string, { waitType, timeout, disableCache, elementStoreFunc, elementOptions, identifier, interval, ...superOpts }: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     initialWait(): void;
@@ -75,7 +75,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * Attention: this may take a long time, try to avoid: if only single elements of list
      * are needed, use firstBy() instead.
      **/
-    identify({identifier, resetCache}?: {
+    identify({ identifier, resetCache }?: {
         identifier?: IPageElementListIdentifier<Store, PageElementType>;
         resetCache?: boolean;
     }): {
@@ -91,13 +91,13 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     isEmpty(): boolean;
     firstBy(): FirstByBuilder<Store, PageElementType, PageElementOptions>;
     wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
-    private _waitHasLength(length, {timeout, comparator, interval});
-    private _waitEmpty({timeout, interval});
+    private _waitHasLength;
+    private _waitEmpty;
     private readonly _anyWait;
     private readonly _noneWait;
     eventually: IPageElementListEventuallyAPI<Store, PageElementType, PageElementOptions>;
-    private _eventuallyHasLength(length, {timeout, comparator, interval});
-    private _eventuallyIsEmpty({timeout, interval});
+    private _eventuallyHasLength;
+    private _eventuallyIsEmpty;
     private readonly _anyEventually;
     private readonly _noneEventually;
 }

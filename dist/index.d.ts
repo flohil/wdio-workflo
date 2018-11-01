@@ -1,5 +1,5 @@
 import * as pageObjects from './lib/page_objects';
-declare global  {
+declare global {
     interface CustomMatchers {
         toExist(): boolean;
         toBeVisible(): boolean;
@@ -36,6 +36,7 @@ declare global  {
      * KPartial represents the original object's property keys to be picked from the original object and turned into optional properties.
      */
     type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>;
+    type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
     namespace Workflo {
         interface JSError {
             notFound: string[];
@@ -64,7 +65,7 @@ declare global  {
             };
             closestContainerIncludesHidden?: boolean;
         }
-        type PageElementOptions = "timeout" | "wait" | "customScroll";
+        type PageElementOptions = "timeout" | "waitType" | "customScroll";
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }
@@ -107,7 +108,7 @@ declare global  {
             exist = "exist",
             visible = "visible",
             value = "value",
-            text = "text",
+            text = "text"
         }
         const enum Comparator {
             equalTo = "==",
@@ -117,7 +118,7 @@ declare global  {
             ne = "!=",
             eq = "==",
             lt = "<",
-            gt = ">",
+            gt = ">"
         }
         type XPath = pageObjects.builders.XPathBuilder | string;
         namespace Object {

@@ -81,7 +81,7 @@ declare global {
       closestContainerIncludesHidden?: boolean
     }
 
-    type PageElementOptions = "timeout" | "wait" | "customScroll"
+    type PageElementOptions = "timeout" | "waitType" | "customScroll"
 
     interface IRecObj<Type> {
       [key: string] : Type | IRecObj<Type>

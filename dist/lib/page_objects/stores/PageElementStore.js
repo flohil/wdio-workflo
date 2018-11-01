@@ -60,7 +60,7 @@ class PageElementStore {
         return this.get(selector, page_elements_1.PageElement, Object.assign({ store: this }, options));
     }
     ExistElement(selector, options) {
-        return this.Element(selector, Object.assign({ wait: "exist" /* exist */ }, options));
+        return this.Element(selector, Object.assign({ waitType: "exist" /* exist */ }, options));
     }
     // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
     List(selector, options) {
@@ -70,7 +70,7 @@ class PageElementStore {
         return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.Element }, options));
     }
     ExistElementList(selector, options) {
-        return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.ExistElement, wait: "exist" /* exist */ }, options));
+        return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.ExistElement, waitType: "exist" /* exist */ }, options));
     }
     // Element Maps
     Map(selector, options) {

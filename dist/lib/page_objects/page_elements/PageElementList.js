@@ -15,7 +15,7 @@ const builders_1 = require("../builders");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(selector, _a) {
-        var { wait = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, disableCache = false, elementStoreFunc, elementOptions, identifier, interval } = _a, superOpts = __rest(_a, ["wait", "timeout", "disableCache", "elementStoreFunc", "elementOptions", "identifier", "interval"]);
+        var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, disableCache = false, elementStoreFunc, elementOptions, identifier, interval } = _a, superOpts = __rest(_a, ["waitType", "timeout", "disableCache", "elementStoreFunc", "elementOptions", "identifier", "interval"]);
         super(selector, superOpts);
         this.selector = selector;
         // WAIT FUNCTION
@@ -32,7 +32,7 @@ class PageElementList extends _1.PageNode {
             any: this._anyEventually,
             none: this._noneEventually
         };
-        this.waitType = wait;
+        this.waitType = waitType;
         this.timeout = timeout;
         this.selector = selector;
         this.elementOptions = elementOptions;
@@ -140,7 +140,7 @@ class PageElementList extends _1.PageNode {
         if (this.disableCache || resetCache || !(cacheKey in this.identifiedObjCache)) {
             const listElements = this.listElements;
             const mappedObj = {};
-            if (identifier) {
+            if (identifier) { // manually set identifier
                 const queryResults = {};
                 // create hash where result of identifier func is key
                 // and list element is value
@@ -156,7 +156,7 @@ class PageElementList extends _1.PageNode {
                     }
                 }
             }
-            else {
+            else { // default identifier -> mapped by index of results
                 for (let i = 0; i < listElements.length; ++i) {
                     mappedObj[i] = listElements[i];
                 }

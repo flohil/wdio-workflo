@@ -6,7 +6,7 @@ export declare class PageNode<Store extends PageElementStore> implements Workflo
     protected selector: string;
     protected store: Store;
     protected timeout: number;
-    constructor(selector: string, {store}: IPageNodeOpts<Store>);
+    constructor(selector: string, { store }: IPageNodeOpts<Store>);
     __getNodeId(): string;
     toJSON(): Workflo.PageNode.ElementJSON;
     getSelector(): string;

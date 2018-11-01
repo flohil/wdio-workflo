@@ -146,7 +146,13 @@ class PageElement extends _1.PageNode {
         return this.getClass() === className;
     }
     containsClass(className) {
-        return this.getClass().indexOf(className) > -1;
+        const _class = this.getClass();
+        if (!_class) {
+            return false;
+        }
+        else {
+            return _class.indexOf(className) > -1;
+        }
     }
     // Returns true if element matching this selector currently has text.
     hasText(text) {
