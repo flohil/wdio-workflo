@@ -83,7 +83,7 @@ export class PageElementList<
   protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>
 
   constructor(
-    protected selector: string,
+    protected _selector: string,
     {
       waitType = Workflo.WaitType.visible,
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
@@ -95,19 +95,19 @@ export class PageElementList<
       ...superOpts
     } : IPageElementListOpts<Store, PageElementType, PageElementOptions>
   ) {
-    super(selector, superOpts)
+    super(_selector, superOpts)
 
     this.waitType = waitType
     this.timeout = timeout
 
-    this.selector = selector
+    this._selector = _selector
     this.elementOptions = elementOptions
     this.elementStoreFunc = elementStoreFunc
     this.identifier = identifier
     this.identifiedObjCache = {}
     this.interval = this.interval || 500
 
-    this.firstByBuilder = new FirstByBuilder(this.selector, {
+    this.firstByBuilder = new FirstByBuilder(this._selector, {
       store: this.store,
       elementStoreFunc: this.elementStoreFunc,
       elementOptions: this.elementOptions
@@ -115,7 +115,7 @@ export class PageElementList<
   }
 
   get _elements() {
-    return browser.elements( this.selector )
+    return browser.elements( this._selector )
   }
 
   get elements() {
@@ -162,7 +162,7 @@ export class PageElementList<
       // create list elements
       for ( let i = 0; i < value.length; i++ ) {
         // make each list element individually selectable via xpath
-        const selector = `(${this.selector})[${i + 1}]`
+        const selector = `(${this._selector})[${i + 1}]`
 
         const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )
 
@@ -185,7 +185,7 @@ export class PageElementList<
         // create list elements
         for ( let i = 0; i < value.length; i++ ) {
           // make each list element individually selectable via xpath
-          const selector = `(${this.selector})[${i + 1}]`
+          const selector = `(${this._selector})[${i + 1}]`
 
           const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )
 
@@ -286,7 +286,7 @@ export class PageElementList<
   }
 
   isEmpty() {
-    return !browser.isExisting(this.selector)
+    return !browser.isExisting(this._selector)
   }
 
   firstBy() {
@@ -318,7 +318,7 @@ export class PageElementList<
           return compare(value.length, length, comparator)
         }
       },
-    timeout, `${this.selector}: List length never became ${comparator.toString()} ${length}`, interval )
+    timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._selector} )`, interval )
 
     return this
   }
@@ -328,14 +328,14 @@ export class PageElementList<
     interval = this.interval
   } : IPageElementListWaitEmptyParams ) {
     browser.waitUntil(() => {
-      return !browser.isExisting(this.selector)
-    }, timeout, `List never became empty: ${this.selector}`, interval)
+      return !browser.isExisting(this._selector)
+    }, timeout, `${this.constructor.name} never became empty.\n( ${this._selector} )`, interval)
 
     return this
   }
 
   private get _anyWait() : Omit<IPageElementWaitAPI<Store>, 'not'> {
-    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this._selector, this.elementOptions ] )
     const wait = Object.assign({}, element.wait)
 
     delete wait.not
@@ -344,7 +344,7 @@ export class PageElementList<
   }
 
   private get _noneWait() : IPageElementWaitNotAPI<Store> {
-    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this._selector, this.elementOptions ] )
 
     return element.wait.not
   }
@@ -376,7 +376,7 @@ export class PageElementList<
   }
 
   private get _anyEventually() : Omit<IPageElementEventuallyAPI<Store>, 'not'> {
-    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this._selector, this.elementOptions ] )
     const eventually = Object.assign({}, element.eventually)
 
     delete eventually.not
@@ -385,7 +385,7 @@ export class PageElementList<
   }
 
   private get _noneEventually() : IPageElementEventuallyNotAPI<Store> {
-    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this.selector, this.elementOptions ] )
+    const element: PageElement<Store> = this.elementStoreFunc.apply( this.store, [ this._selector, this.elementOptions ] )
 
     return element.eventually.not
   }

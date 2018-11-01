@@ -40,7 +40,7 @@ export class PageElementMap<
   protected _$: Record<K, PageElementType>
 
   constructor(
-    protected selector: string,
+    protected _selector: string,
     {
       identifier,
       elementStoreFunc,
@@ -48,9 +48,9 @@ export class PageElementMap<
       ...superOpts
     } : IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>
   ) {
-    super(selector, superOpts)
+    super(_selector, superOpts)
 
-    this.selector = selector
+    this._selector = _selector
     this.elementOptions = elementOptions
     this.elementStoreFunc = elementStoreFunc
     this.identifier = identifier
@@ -59,7 +59,7 @@ export class PageElementMap<
       this.identifier.mappingObject,
       (value, key) => <PageElementType> this.elementStoreFunc.apply(
         this.store, [
-          this.identifier.func(this.selector, value),
+          this.identifier.func(this._selector, value),
           this.elementOptions
         ]
       )
@@ -79,7 +79,7 @@ export class PageElementMap<
       mappingObject,
       (value, key) => <PageElementType> this.elementStoreFunc.apply(
         this.store, [
-          this.identifier.func(this.selector, value),
+          this.identifier.func(this._selector, value),
           this.elementOptions
         ]
       )

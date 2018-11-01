@@ -90,7 +90,7 @@ export class PageElement<
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
   constructor(
-    protected selector: string,
+    protected _selector: string,
     {
       waitType = Workflo.WaitType.visible,
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
@@ -98,7 +98,7 @@ export class PageElement<
       ...superOpts
     }: IPageElementOpts<Store>
   ) {
-    super(selector, superOpts)
+    super(_selector, superOpts)
 
     this._$ = Object.create(null)
 
@@ -111,7 +111,7 @@ export class PageElement<
           }
 
           // chain selectors
-          _selector = `${selector}${_selector}`
+          _selector = `${_selector}${_selector}`
 
           return this.store[ method ].apply( this.store, [ _selector, _options ] )
         }
@@ -129,11 +129,8 @@ export class PageElement<
     return this._$
   }
 
-  /**
-   *
-   */
   get _element() {
-    return browser.element(this.selector)
+    return browser.element(this._selector)
   }
 
   get element() {
@@ -257,10 +254,12 @@ export class PageElement<
   getDirectText(): string {
     const html = this.element.getHTML()
     let text = ""
+    const constructorName = this.constructor.name
+    const selector = this._selector
 
     const handler = new htmlParser.DomHandler(function (error, dom) {
       if (error) {
-        throw new Error(`Error creating dom for exclusive text in ${this.element.selector}: ${error}`)
+        throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`)
       }
       else {
         dom.forEach(node => {
@@ -373,7 +372,7 @@ export class PageElement<
       }, this.getSelector())
 
       if (isJsError(result)) {
-        throw new Error(`Element could not be clicked: ${result.notFound.join(', ')}`)
+        throw new Error(`${this.constructor.name} could not be clicked: ${result.notFound.join(', ')}\n( ${this._selector} )`)
       }
     }
 
@@ -396,7 +395,7 @@ export class PageElement<
               return false;
             }
           }
-      }, this.timeout, `Element did not become clickable after timeout: ${this.selector}`, interval);
+      }, this.timeout, `${this.constructor.name} did not become clickable after timeout.\n( ${this._selector} )`, interval);
     } catch (waitE) {
         waitE.message = errorMessage.replace('unknown error: ', '')
         throw waitE
@@ -418,7 +417,7 @@ export class PageElement<
           } catch( error ) {
             errorMessage = error.message
           }
-        }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}`, interval)
+        }, remainingTimeout + options.timeout, `${this.constructor.name}: Postcondition for click never became true.\n( ${this._selector} )`, interval)
       } catch (waitE) {
         waitE.message = errorMessage.replace('unknown error: ', '')
         throw waitE
@@ -541,17 +540,19 @@ export class PageElement<
   private _waitExists(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForExist(timeout)
-
-    return this
+    return this._wait(
+      () => this._element.waitForExist(timeout),
+      ` never existed`
+    )
   }
 
   private _waitNotExists(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForExist(timeout, true)
-
-    return this
+    return this._wait(
+      () => this._element.waitForExist(timeout, true),
+      ` never not existed`
+    )
   }
 
   // Waits until at least one matching element is visible.
@@ -562,17 +563,19 @@ export class PageElement<
   private _waitIsVisible(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForVisible(timeout)
-
-    return this
+    return this._wait(
+      () => this._element.waitForVisible(timeout),
+      ` never became visible`
+    )
   }
 
   private _waitNotIsVisible(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForVisible(timeout, true)
-
-    return this
+    return this._wait(
+      () => this._element.waitForVisible(timeout, true),
+      ` never became invisible`
+    )
   }
 
   private _waitHasClass(
@@ -580,7 +583,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return this.hasClass(className)
-    }, timeout, `${this.selector}: Class never became '${className}'`)
+    }, timeout, `${this.constructor.name}: Class never became '${className}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -590,7 +593,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return !this.hasClass(className)
-    }, timeout, `${this.selector}: Class never became other than '${className}'`)
+    }, timeout, `${this.constructor.name}: Class never became other than '${className}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -600,7 +603,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return this.containsClass(className)
-    }, timeout, `${this.selector}: Class never contained '${className}'`)
+    }, timeout, `${this.constructor.name}: Class never contained '${className}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -610,7 +613,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return !this.containsClass(className)
-    }, timeout, `${this.selector}: Class never not contained '${className}'`)
+    }, timeout, `${this.constructor.name}: Class never not contained '${className}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -627,7 +630,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return this.hasText(text)
-    }, timeout, `${this.selector}: Text never became '${text}'`)
+    }, timeout, `${this.constructor.name}: Text never became '${text}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -637,7 +640,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return !this.hasText(text)
-    }, timeout, `${this.selector}: Text never became other than '${text}'`)
+    }, timeout, `${this.constructor.name}: Text never became other than '${text}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -645,17 +648,19 @@ export class PageElement<
   private _waitHasAnyText(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForText(timeout)
-
-    return this
+    return this._wait(
+      () => this._element.waitForText(timeout),
+      ` never had any text`
+    )
   }
 
   private _waitNotHasAnyText(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForText(timeout, true)
-
-    return this
+    return this._wait(
+      () => this._element.waitForText(timeout, true),
+      ` never not had any text`
+    )
   }
 
   // Waits until at least one matching element contains a text.
@@ -670,7 +675,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return this.containsText(text)
-    }, timeout, `${this.selector}: Text never contained '${text}'`)
+    }, timeout, `${this.constructor.name}: Text never contained '${text}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -680,7 +685,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return !this.containsText(text)
-    }, timeout, `${this.selector}: Text never not contained '${text}'`)
+    }, timeout, `${this.constructor.name}: Text never not contained '${text}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -697,7 +702,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return this.hasValue(value)
-    }, timeout, `${this.selector}: Value never became '${value}'`)
+    }, timeout, `${this.constructor.name}: Value never became '${value}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -707,7 +712,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return !this.hasValue(value)
-    }, timeout, `${this.selector}: Value never became other than '${value}'`)
+    }, timeout, `${this.constructor.name}: Value never became other than '${value}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -715,17 +720,19 @@ export class PageElement<
   private _waitHasAnyValue(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForValue(timeout)
-
-    return this
+    return this._wait(
+      () => this._element.waitForValue(timeout),
+      ` never had any value`
+    )
   }
 
   private _waitNotHasAnyValue(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForValue(timeout, true)
-
-    return this
+    return this._wait(
+      () => this._element.waitForValue(timeout, true),
+      ` never not had any value`
+    )
   }
 
   // Waits until at least one matching element contains a value.
@@ -740,7 +747,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return this.containsValue(value)
-    }, timeout, `${this.selector}: Value never contained '${value}'`)
+    }, timeout, `${this.constructor.name}: Value never contained '${value}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -750,7 +757,7 @@ export class PageElement<
   ) {
     browser.waitUntil(() => {
       return !this.containsValue(value)
-    }, timeout, `${this.selector}: Value never not contained '${value}'`)
+    }, timeout, `${this.constructor.name}: Value never not contained '${value}'.\n( ${this._selector} )`)
 
     return this
   }
@@ -763,17 +770,19 @@ export class PageElement<
   private _waitIsEnabled(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForEnabled(timeout)
-
-    return this
+    return this._wait(
+      () => this._element.waitForEnabled(timeout),
+      ` never became enabled`
+    )
   }
 
   private _waitNotIsEnabled(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForEnabled(timeout, true)
-
-    return this
+    return this._wait(
+      () => this._element.waitForEnabled(timeout, true),
+      ` never became disabled`
+    )
   }
 
   // Waits until at least one matching element is selected.
@@ -784,9 +793,10 @@ export class PageElement<
   private _waitIsSelected(
     { timeout = this.timeout }: Workflo.WDIOParamsOptional = {}
   ) {
-    this._element.waitForSelected(timeout)
-
-    return this
+    return this._wait(
+      () => this._element.waitForSelected(timeout),
+      ` never became selected`
+    )
   }
 
   private _waitNotIsSelected(
@@ -794,7 +804,10 @@ export class PageElement<
   ) {
     this._element.waitForSelected(timeout, true)
 
-    return this
+    return this._wait(
+      () => this._element.waitForSelected(timeout, true),
+      ` never became deselected`
+    )
   }
 
   private _waitUntil(
@@ -803,7 +816,7 @@ export class PageElement<
     browser.waitUntil(
       () => condition( this ),
       timeout,
-      `${this.selector}: Wait until element ${description} failed`
+      `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`
     )
 
     return this

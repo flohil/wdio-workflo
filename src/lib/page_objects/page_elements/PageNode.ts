@@ -11,7 +11,7 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
   constructor(
-    protected selector: string,
+    protected _selector: string,
     {
       store
     } : IPageNodeOpts<Store>
@@ -20,18 +20,18 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   }
 
   __getNodeId() {
-    return this.selector
+    return this._selector
   }
 
   toJSON(): Workflo.PageNode.ElementJSON {
     return {
       pageNodeType: this.constructor.name,
-      nodeId: this.selector
+      nodeId: this._selector
     }
   }
 
   getSelector() {
-    return this.selector
+    return this._selector
   }
 
   protected _eventually(func: () => void) : boolean {
@@ -41,5 +41,15 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
     } catch (error) {
       return false;
     }
+  }
+
+  protected _wait(func: () => void, errorMessage: string) : this {
+    try {
+      func();
+    } catch (error) {
+      throw new Error(`${this.constructor.name}${errorMessage}.\n( ${this._selector} )`)
+    }
+
+    return this
   }
 }
