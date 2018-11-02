@@ -13,7 +13,7 @@ export interface IPageElementOpts<
   customScroll?: Workflo.ScrollParams
 }
 
-export interface IPageElementWaitAPI<Store extends PageElementStore> {
+export interface IPageElementCommonStateAPI<Store extends PageElementStore> {
   exists: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
   isVisible: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
   hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
@@ -24,60 +24,38 @@ export interface IPageElementWaitAPI<Store extends PageElementStore> {
   hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
   hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
   containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  isEnabled: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  isSelected: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  untilElement: (description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-
-  not: IPageElementWaitNotAPI<Store>
-}
-
-export interface IPageElementWaitNotAPI<Store extends PageElementStore> {
-  exists: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  isVisible: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  containsClass: (className: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  hasText: (text: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  hasAnyText: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  containsText: (text: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
-  containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasHtml: (html: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAnyHtml: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsHtml: (html: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAttribute: (attribute: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAnyAttribute: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsAttribute: (attribute: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasId: (id: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAnyId: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsId: (id: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasName: (name: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAnyName: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsName: (name: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasDirectText: (directText: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  hasAnyDirectText: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+  containsDirectText: (directText: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
   isEnabled: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
   isSelected: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>
 }
 
-export interface IPageElementEventuallyAPI<Store extends PageElementStore> {
-  exists: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  isVisible: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  containsClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasText: (text: string, opts: Workflo.WDIOParamsOptional) => boolean,
-  hasAnyText: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  containsText: (text: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  isEnabled: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  isSelected: (opts?: Workflo.WDIOParamsOptional) => boolean,
+export interface IPageElementWaitAPI<Store extends PageElementStore> extends IPageElementCommonStateAPI<Store>{
+  untilElement: (description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>,
+
+  not: IPageElementWaitNotAPI<Store>
+}
+export interface IPageElementWaitNotAPI<Store extends PageElementStore> extends IPageElementCommonStateAPI<Store> {}
+export interface IPageElementEventuallyAPI<Store extends PageElementStore> extends IPageElementCommonStateAPI<Store> {
   meetsCondition: (condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => boolean
 
   not: IPageElementEventuallyNotAPI<Store>
 }
-
-export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> {
-  exists: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  isVisible: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  containsClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasText: (text: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasAnyText: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  containsText: (text: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean,
-  isEnabled: (opts?: Workflo.WDIOParamsOptional) => boolean,
-  isSelected: (opts?: Workflo.WDIOParamsOptional) => boolean
-}
+export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> extends IPageElementCommonStateAPI<Store> {}
+export interface IPageElementCurrentlyAPI<Store extends PageElementStore> extends IPageElementCommonStateAPI<Store> {}
 
 export class PageElement<
   Store extends PageElementStore
@@ -142,22 +120,22 @@ export class PageElement<
   initialWait() {
     switch (this._waitType) {
       case Workflo.WaitType.exist:
-        if (!this.exists()) {
+        if (!this._exists()) {
           this._waitExists()
         }
         break
       case Workflo.WaitType.visible:
-        if (!this.isVisible()) {
+        if (!this._isVisible()) {
           this._waitIsVisible()
         }
         break
       case Workflo.WaitType.value:
-        if (!this.hasAnyValue()) {
+        if (!this._hasAnyValue()) {
           this._waitHasAnyValue()
         }
         break
       case Workflo.WaitType.text:
-        if (!this.hasAnyText()) {
+        if (!this._hasAnyText()) {
           this._waitHasAnyText()
         }
         break
@@ -166,23 +144,23 @@ export class PageElement<
     return this
   }
 
-  // CHECK STATE FUNCTIONS
+// CURRENT CHECK STATE FUNCTIONS
 
   // Returns true if element matching this selector currently exists.
-  exists(): boolean {
+  private _exists(): boolean {
     return this.__element.isExisting()
   }
 
   // Returns true if element matching this selector currently is visible.
-  isVisible(): boolean {
+  private _isVisible(): boolean {
     return this.__element.isVisible()
   }
 
-  hasClass(className: string): boolean {
+  private _hasClass(className: string): boolean {
     return this.getClass() === className
   }
 
-  containsClass(className: string): boolean {
+  private _containsClass(className: string): boolean {
     const _class: string = this.getClass()
 
     if (!_class) {
@@ -193,44 +171,164 @@ export class PageElement<
   }
 
   // Returns true if element matching this selector currently has text.
-  hasText(text: string): boolean {
+  private _hasText(text: string): boolean {
     return this.__element.getText() === text
   }
 
-  hasAnyText(): boolean {
+  private _hasAnyText(): boolean {
     return this.__element.getText().length > 0
   }
 
   // Returns true if element matching this selector currently contains text.
-  containsText(text: string): boolean {
+  private _containsText(text: string): boolean {
     return this.__element.getText().indexOf(text) > -1
   }
 
   // Returns true if element matching this selector currently has value.
-  hasValue(value: string): boolean {
+  private _hasValue(value: string): boolean {
     return this.__element.getValue() === value
   }
 
-  hasAnyValue(): boolean {
+  private _hasAnyValue(): boolean {
     return this.__element.getValue().length > 0
   }
 
   // Returns true if element matching this selector currently contains value.
-  containsValue(value: string): boolean {
+  private _containsValue(value: string): boolean {
     return this.__element.getValue().indexOf(value) > -1
   }
 
+  private _hasAttribute(attrName: string, attrValue: string) {
+    return this.__element.getAttribute(attrName) === attrValue
+  }
+
+  private _hasAnyAttribute(attrName: string) {
+    return this.__element.getAttribute(attrName).length > 0
+  }
+
+  private _containsAttribute(attrName: string, attrValue: string) {
+    return this.__element.getAttribute(attrName).indexOf(attrValue) > 0
+  }
+
+  // Returns true if element matching this selector currently has value.
+  private _hasDirectText(directText: string): boolean {
+    const html = this.__element.getHTML()
+
+    if (directText.length === 0 && html.length === 0) {
+      return true
+    } else if ( html.length === 0 ) {
+      return false
+    } else {
+      return this._getDirectText(html) === directText
+    }
+  }
+
+  private _hasAnyDirectText(): boolean {
+    const html = this.__element.getHTML()
+
+    if (html.length === 0) {
+      return false
+    } else {
+      return this._getDirectText(html).length > 0
+    }
+  }
+
+  // Returns true if element matching this selector currently contains value.
+  private _containsDirectText(directText: string): boolean {
+    const html = this.__element.getHTML()
+
+    if (directText.length === 0 && html.length === 0) {
+      return true
+    } else if ( html.length === 0 ) {
+      return false
+    } else {
+      return this._getDirectText(html).indexOf(directText) > 0
+    }
+  }
+
   // Returns true if element matching this selector is enabled.
-  isEnabled(): boolean {
+  private _isEnabled(): boolean {
     return this.__element.isEnabled()
   }
 
   // Returns true if element matching this selector is enabled.
-  isSelected(): boolean {
+  private _isSelected(): boolean {
     return this.__element.isSelected()
   }
 
-  // GETTER FUNCTIONS
+  currently: IPageElementCurrentlyAPI<Store> = {
+    exists: this._exists,
+    isVisible: this._isVisible,
+    hasClass: this._hasClass,
+    containsClass: this._containsClass,
+    hasText: this._hasText,
+    hasAnyText: this._hasAnyText,
+    containsText: this._containsText,
+    hasValue: this._hasValue,
+    hasAnyValue: this._hasAnyValue,
+    containsValue: this._containsValue,
+    hasDirectText: this._hasDirectText,
+    hasAnyDirectText: this._hasAnyDirectText,
+    containsDirectText: this._containsDirectText,
+    hasAttribute: this._hasAttribute,
+    hasAnyAttribute: this._hasAnyAttribute,
+    containsAttribute: this._containsAttribute,
+    hasHtml: this._hasHtml,
+    hasAnyHtml: this._hasAnyHtml,
+    containsHtml: this._containsHtml,
+    hasId: this._hasId,
+    hasAnyId: this._hasAnyId,
+    containsId: this._containsId,
+    hasName: this._hasName,
+    hasAnyName: this._hasAnyName,
+    containsName: this._containsName,
+    isEnabled: this._isEnabled,
+    isSelected: this._isSelected,
+  }
+
+// GETTER FUNCTIONS (return state after initial wait)
+
+  private _getDirectText(html: string): string {
+    let text = ""
+    const constructorName = this.constructor.name
+    const selector = this._selector
+
+    const handler = new htmlParser.DomHandler(function (error, dom) {
+      if (error) {
+        throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`)
+      }
+      else {
+        dom.forEach(node => {
+          node.children.forEach(childNode => {
+            if (childNode.type === 'text') {
+              text += childNode.data
+            }
+          })
+        });
+      }
+    });
+
+    return text
+
+    // var parser = new htmlParser.Parser(handler);
+    // parser.write(html);
+    // parser.end();
+
+    // executing javascript on page does not work in internet explorer
+    /*return browser.execute((myelem) : string => {
+      const parent = myelem.value
+      let child = parent.firstChild
+      let ret = ''
+      while (child) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          ret += child.textContent
+        }
+
+        child = child.nextSibling
+      }
+      return ret
+    }, this.element).value*/
+  }
 
   // returns html af all matches for a given selector,
   // even if only ONE WebDriverElement is returned!!!!!
@@ -253,53 +351,15 @@ export class PageElement<
   // works only for a single matched element (by selector)
   getDirectText(): string {
     const html = this.element.getHTML()
-    let text = ""
-    const constructorName = this.constructor.name
-    const selector = this._selector
 
-    const handler = new htmlParser.DomHandler(function (error, dom) {
-      if (error) {
-        throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`)
-      }
-      else {
-        dom.forEach(node => {
-          node.children.forEach(childNode => {
-            if (childNode.type === 'text') {
-              text += childNode.data
-            }
-          })
-        });
-      }
-    });
-
-    var parser = new htmlParser.Parser(handler);
-    parser.write(html);
-    parser.end();
-
-
-    return text
-
-    // executing javascript on page does not work in internet explorer
-    /*return browser.execute((myelem) : string => {
-      const parent = myelem.value
-      let child = parent.firstChild
-      let ret = ''
-      while (child) {
-        if (child.nodeType === Node.TEXT_NODE) {
-          ret += child.textContent
-        }
-
-        child = child.nextSibling
-      }
-      return ret
-    }, this.element).value*/
+    return this._getDirectText(html)
   }
 
   getValue() {
     return this.element.getValue()
   }
 
-  getAttribute(attrName) {
+  getAttribute(attrName: string) {
     return this.element.getAttribute(attrName)
   }
 
@@ -315,6 +375,14 @@ export class PageElement<
     return this.element.getAttribute('name')
   }
 
+  getEnabled() {
+    return this.element.isEnabled()
+  }
+
+  getSelected() {
+    return this.element.isSelected()
+  }
+
   getLocation(axis: WebdriverIO.Axis) {
     return this.element.getLocation(axis)
   }
@@ -327,7 +395,7 @@ export class PageElement<
     return this._timeout
   }
 
-  // INTERACTION FUNCTIONS
+// INTERACTION FUNCTIONS (interact with state after initial wait)
 
   setValue(value: string) {
     this.element.setValue(value)
@@ -410,7 +478,7 @@ export class PageElement<
             if (options.postCondition()) {
               return true
             } else {
-              if (this.isVisible() && this.isEnabled()) {
+              if (this._isVisible() && this._isEnabled()) {
                 clickFunc()
               }
             }
@@ -530,13 +598,8 @@ export class PageElement<
     }
   }
 
-  // WAIT
+// WAIT (for certain state within timeout)
 
-  // Waits until at least one matching element exists.
-  //
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // exists that matches the this.selector.
   private _waitExists = (
     { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
@@ -555,11 +618,6 @@ export class PageElement<
     )
   }
 
-  // Waits until at least one matching element is visible.
-  //
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // is visible that matches the this.selector.
   private _waitIsVisible = (
     { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
@@ -582,7 +640,7 @@ export class PageElement<
     className: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return this.hasClass(className)
+      return this._hasClass(className)
     }, timeout, `${this.constructor.name}: Class never became '${className}'.\n( ${this._selector} )`)
 
     return this
@@ -592,7 +650,7 @@ export class PageElement<
     className: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return !this.hasClass(className)
+      return !this._hasClass(className)
     }, timeout, `${this.constructor.name}: Class never became other than '${className}'.\n( ${this._selector} )`)
 
     return this
@@ -602,7 +660,7 @@ export class PageElement<
     className: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return this.containsClass(className)
+      return this._containsClass(className)
     }, timeout, `${this.constructor.name}: Class never contained '${className}'.\n( ${this._selector} )`)
 
     return this
@@ -612,24 +670,17 @@ export class PageElement<
     className: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return !this.containsClass(className)
+      return !this._containsClass(className)
     }, timeout, `${this.constructor.name}: Class never not contained '${className}'.\n( ${this._selector} )`)
 
     return this
   }
 
-  // Waits until at least one matching element has a text.
-  //
-  // text -> defines the text that element should have
-  // If text is undefined, waits until element's text is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a text that matches the this.selector.
   private _waitHasText = (
     text: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return this.hasText(text)
+      return this._hasText(text)
     }, timeout, `${this.constructor.name}: Text never became '${text}'.\n( ${this._selector} )`)
 
     return this
@@ -639,7 +690,7 @@ export class PageElement<
     text: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return !this.hasText(text)
+      return !this._hasText(text)
     }, timeout, `${this.constructor.name}: Text never became other than '${text}'.\n( ${this._selector} )`)
 
     return this
@@ -663,18 +714,11 @@ export class PageElement<
     )
   }
 
-  // Waits until at least one matching element contains a text.
-  //
-  // text -> defines the text that element should have
-  // If text is undefined, waits until element's text is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a text that matches the this.selector.
   private _waitContainsText = (
     text: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return this.containsText(text)
+      return this._containsText(text)
     }, timeout, `${this.constructor.name}: Text never contained '${text}'.\n( ${this._selector} )`)
 
     return this
@@ -684,24 +728,17 @@ export class PageElement<
     text: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return !this.containsText(text)
+      return !this._containsText(text)
     }, timeout, `${this.constructor.name}: Text never not contained '${text}'.\n( ${this._selector} )`)
 
     return this
   }
 
-  // Waits until at least one matching element has a value.
-  //
-  // value -> defines the value that element should have
-  // If value is undefined, waits until element's value is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a value that matches the this.selector.
   private _waitHasValue = (
     value: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return this.hasValue(value)
+      return this._hasValue(value)
     }, timeout, `${this.constructor.name}: Value never became '${value}'.\n( ${this._selector} )`)
 
     return this
@@ -711,7 +748,7 @@ export class PageElement<
     value: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return !this.hasValue(value)
+      return !this._hasValue(value)
     }, timeout, `${this.constructor.name}: Value never became other than '${value}'.\n( ${this._selector} )`)
 
     return this
@@ -735,18 +772,11 @@ export class PageElement<
     )
   }
 
-  // Waits until at least one matching element contains a value.
-  //
-  // value -> defines the value that element should have
-  // If value is undefined, waits until element's value is not empty.
-  // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-  // If reverse is set to true, function will wait until no element
-  // has a text that matches the this.selector.
   private _waitContainsValue = (
     value: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return this.containsValue(value)
+      return this._containsValue(value)
     }, timeout, `${this.constructor.name}: Value never contained '${value}'.\n( ${this._selector} )`)
 
     return this
@@ -756,11 +786,149 @@ export class PageElement<
     value: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
   ) => {
     browser.waitUntil(() => {
-      return !this.containsValue(value)
+      return !this._containsValue(value)
     }, timeout, `${this.constructor.name}: Value never not contained '${value}'.\n( ${this._selector} )`)
 
     return this
   }
+
+  private _waitHasDirectText = (
+    directText: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return this._hasDirectText(directText)
+    }, timeout, `${this.constructor.name}: DirectText never became '${directText}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitNotHasDirectText = (
+    directText: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return !this._hasDirectText(directText)
+    }, timeout, `${this.constructor.name}: DirectText never became other than '${directText}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitHasAnyDirectText = (
+    { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return this._hasAnyDirectText()
+    }, timeout, `${this.constructor.name} never had any direct text.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitNotHasAnyDirectText = (
+    { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return !this._hasAnyDirectText()
+    }, timeout, `${this.constructor.name} never not had any direct text.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitContainsDirectText = (
+    directText: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return this._containsDirectText(directText)
+    }, timeout, `${this.constructor.name}: Direct text never contained '${directText}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitNotContainsDirectText = (
+    directText: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return !this._containsDirectText(directText)
+    }, timeout, `${this.constructor.name}: Direct text never not contained '${directText}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitHasAttribute = (
+    attribute: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return this._hasAttribute(attribute)
+    }, timeout, `${this.constructor.name}: Attribute never became '${attribute}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitNotHasAttribute = (
+    attribute: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return !this._hasAttribute(attribute)
+    }, timeout, `${this.constructor.name}: Attribute never became other than '${attribute}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitHasAnyAttribute = (
+    { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    return this._wait(
+      () => this.__element.waitForAttribute(timeout),
+      ` never had any attribute`
+    )
+  }
+
+  private _waitNotHasAnyAttribute = (
+    { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    return this._wait(
+      () => this.__element.waitForAttribute(timeout, true),
+      ` never not had any attribute`
+    )
+  }
+
+  private _waitContainsAttribute = (
+    attribute: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return this._containsAttribute(attribute)
+    }, timeout, `${this.constructor.name}: Attribute never contained '${attribute}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  private _waitNotContainsAttribute = (
+    attribute: string, { timeout = this._timeout }: Workflo.WDIOParamsOptional = {}
+  ) => {
+    browser.waitUntil(() => {
+      return !this._containsValue(attribute)
+    }, timeout, `${this.constructor.name}: Value never not contained '${attribute}'.\n( ${this._selector} )`)
+
+    return this
+  }
+
+  _waitHasHtml: any;
+  _waitHasAnyHtml: any;
+  _waitContainsHtml: any;
+  _waitHasId: any;
+  _waitHasAnyId: any;
+  _waitContainsId: any;
+  _waitHasName: any;
+  _waitHasAnyName: any;
+  _waitContainsName: any;
+  _waitNotHasHtml: any;
+  _waitNotHasAnyHtml: any;
+  _waitNotContainsHtml: any;
+  _waitNotHasId: any;
+  _waitNotHasAnyId: any;
+  _waitNotContainsId: any;
+  _waitNotHasName: any;
+  _waitNotHasAnyName: any;
+  _waitNotContainsName: any;
+
 
   // Waits until at least one matching element is enabled.
   //
@@ -833,6 +1001,21 @@ export class PageElement<
     hasValue: this._waitHasValue,
     hasAnyValue: this._waitHasAnyValue,
     containsValue: this._waitContainsValue,
+    hasDirectText: this._waitHasDirectText,
+    hasAnyDirectText: this._waitHasAnyDirectText,
+    containsDirectText: this._waitContainsDirectText,
+    hasAttribute: this._waitHasAttribute,
+    hasAnyAttribute: this._waitHasAnyAttribute,
+    containsAttribute: this._waitContainsAttribute,
+    hasHtml: this._waitHasHtml,
+    hasAnyHtml: this._waitHasAnyHtml,
+    containsHtml: this._waitContainsHtml,
+    hasId: this._waitHasId,
+    hasAnyId: this._waitHasAnyId,
+    containsId: this._waitContainsId,
+    hasName: this._waitHasName,
+    hasAnyName: this._waitHasAnyName,
+    containsName: this._waitContainsName,
     isEnabled: this._waitIsEnabled,
     isSelected: this._waitIsSelected,
     untilElement: this._waitUntilElement,
@@ -848,12 +1031,27 @@ export class PageElement<
       hasValue: this._waitNotHasValue,
       hasAnyValue: this._waitNotHasAnyValue,
       containsValue: this._waitNotContainsValue,
+      hasDirectText: this._waitNotHasDirectText,
+      hasAnyDirectText: this._waitNotHasAnyDirectText,
+      containsDirectText: this._waitNotContainsDirectText,
+      hasAttribute: this._waitNotHasAttribute,
+      hasAnyAttribute: this._waitNotHasAnyAttribute,
+      containsAttribute: this._waitNotContainsAttribute,
+      hasHtml: this._waitNotHasHtml,
+      hasAnyHtml: this._waitNotHasAnyHtml,
+      containsHtml: this._waitNotContainsHtml,
+      hasId: this._waitNotHasId,
+      hasAnyId: this._waitNotHasAnyId,
+      containsId: this._waitNotContainsId,
+      hasName: this._waitNotHasName,
+      hasAnyName: this._waitNotHasAnyName,
+      containsName: this._waitNotContainsName,
       isEnabled: this._waitNotIsEnabled,
       isSelected: this._waitNotIsSelected,
     }
   }
 
-  // EVENTUALLY FUNCTIONS
+// EVENTUALLY FUNCTIONS (check wether certain state if reached after timeout)
 
   // checks if at least one element matching selector is existing within timeout
   // reverse is optional and false by default
@@ -1005,6 +1203,37 @@ export class PageElement<
     )
   }
 
+  _eventuallyHasDirectText: any;
+  _eventuallyHasAnyDirectText: any;
+  _eventuallyContainsDirectText: any;
+  _eventuallyHasAttribute: any;
+  _eventuallyHasAnyAttribute: any;
+  _eventuallyContainsAttribute: any;
+  _eventuallyHasHtml: any;
+  _eventuallyHasAnyHtml: any;
+  _eventuallyContainsHtml: any;
+  _eventuallyHasId: any;
+  _eventuallyHasAnyId: any;
+  _eventuallyContainsId: any;
+  _eventuallyHasName: any;
+  _eventuallyHasAnyName: any;
+  _eventuallyContainsName: any;
+  _eventuallyNotHasDirectText: any;
+  _eventuallyNotHasAnyDirectText: any;
+  _eventuallyNotContainsDirectText: any;
+  _eventuallyNotHasAttribute: any;
+  _eventuallyNotHasAnyAttribute: any;
+  _eventuallyNotContainsAttribute: any;
+  _eventuallyNotHasHtml: any;
+  _eventuallyNotHasAnyHtml: any;
+  _eventuallyNotContainsHtml: any;
+  _eventuallyNotHasId: any;
+  _eventuallyNotHasAnyId: any;
+  _eventuallyNotContainsId: any;
+  _eventuallyNotHasName: any;
+  _eventuallyNotHasAnyName: any;
+  _eventuallyNotContainsName: any;
+
   public eventually: IPageElementEventuallyAPI<Store> = {
     exists: this._eventuallyExists,
     isVisible: this._eventuallyIsVisible,
@@ -1016,6 +1245,21 @@ export class PageElement<
     hasValue: this._eventuallyHasValue,
     hasAnyValue: this._eventuallyHasAnyValue,
     containsValue: this._eventuallyContainsValue,
+    hasDirectText: this._eventuallyHasDirectText,
+    hasAnyDirectText: this._eventuallyHasAnyDirectText,
+    containsDirectText: this._eventuallyContainsDirectText,
+    hasAttribute: this._eventuallyHasAttribute,
+    hasAnyAttribute: this._eventuallyHasAnyAttribute,
+    containsAttribute: this._eventuallyContainsAttribute,
+    hasHtml: this._eventuallyHasHtml,
+    hasAnyHtml: this._eventuallyHasAnyHtml,
+    containsHtml: this._eventuallyContainsHtml,
+    hasId: this._eventuallyHasId,
+    hasAnyId: this._eventuallyHasAnyId,
+    containsId: this._eventuallyContainsId,
+    hasName: this._eventuallyHasName,
+    hasAnyName: this._eventuallyHasAnyName,
+    containsName: this._eventuallyContainsName,
     isEnabled: this._eventuallyIsEnabled,
     isSelected: this._eventuallyIsSelected,
     meetsCondition: this._eventuallyMeetsCondition,
@@ -1031,6 +1275,21 @@ export class PageElement<
       hasValue: this._eventuallyNotHasValue,
       hasAnyValue: this._eventuallyNotHasAnyValue,
       containsValue: this._eventuallyNotContainsValue,
+      hasDirectText: this._eventuallyNotHasDirectText,
+      hasAnyDirectText: this._eventuallyNotHasAnyDirectText,
+      containsDirectText: this._eventuallyNotContainsDirectText,
+      hasAttribute: this._eventuallyNotHasAttribute,
+      hasAnyAttribute: this._eventuallyNotHasAnyAttribute,
+      containsAttribute: this._eventuallyNotContainsAttribute,
+      hasHtml: this._eventuallyNotHasHtml,
+      hasAnyHtml: this._eventuallyNotHasAnyHtml,
+      containsHtml: this._eventuallyNotContainsHtml,
+      hasId: this._eventuallyNotHasId,
+      hasAnyId: this._eventuallyNotHasAnyId,
+      containsId: this._eventuallyNotContainsId,
+      hasName: this._eventuallyNotHasName,
+      hasAnyName: this._eventuallyNotHasAnyName,
+      containsName: this._eventuallyNotContainsName,
       isEnabled: this._eventuallyNotIsEnabled,
       isSelected: this._eventuallyNotIsSelected,
     }

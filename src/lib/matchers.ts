@@ -121,57 +121,74 @@ function elementMatcherFunction<ExpectedType, ActualType>(
   }
 }
 
-function checkHave(actual: string, expected: string) {
-  return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0
-}
-
-function checkContains(actual: string, expected: string) {
-  return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0
+function createLongErrorMessage(property: string, comparison: string, actual: ActualOrBoolean<string>, expected: string) {
+  return [
+    `'s ${property} "${actual}" to ${comparison} "${expected}"`,
+    `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
+  ]
 }
 
 // TODO: add not functions for eventually not
 export const elementMatchers: jasmine.CustomMatcherFactories = {
   toExist: elementMatcherFunction(
-    ({element}) => element.exists(),
+    ({element}) => element._exists(),
     actual => actual === true,
     () => " to exist"
   ),
   toBeVisible: elementMatcherFunction(
-    ({element}) => element.isVisible(),
+    ({element}) => element._isVisible(),
     actual => actual === true,
     () => " to be visible"
+  ),
+  toBeSelected: elementMatcherFunction(
+    ({element}) => element._isSelected(),
+    actual => actual === true,
+    () => " to be selected"
+  ),
+  toBeEnabled: elementMatcherFunction(
+    ({element}) => element._isEnabled(),
+    actual => actual === true,
+    () => " to be selected"
   ),
   toHaveClass: elementMatcherFunction<string, string>(
     ({element}) => element.getClass(),
     (actual, expected) => actual === expected,
-    ({actual, expected}) => [
-      `'s class "${actual}" to be "${expected}"`,
-      `'s class "${actual}" not to be "${expected}"`,
-    ]
+    ({actual, expected}) => createLongErrorMessage('class', 'be', actual, expected)
   ),
   toContainClass: elementMatcherFunction<string, string>(
     ({element}) => element.getClass(),
     (actual, expected) => actual.indexOf(expected) > -1,
-    ({actual, expected}) => [
-      `'s class "${actual}" to contain "${expected}"`,
-      `'s class "${actual}" not to contain "${expected}"`
-    ]
+    ({actual, expected}) => createLongErrorMessage('class', 'contain', actual, expected)
   ),
   toHaveText: elementMatcherFunction<string, string>(
     ({element}) => element.getText(),
     (actual, expected) => actual === expected,
-    ({actual, expected}) => [
-      `'s text "${actual}" to be "${expected}"`,
-      `'s text "${actual}" not to be "${expected}"`,
-    ]
+    ({actual, expected}) => createLongErrorMessage('text', 'be', actual, expected)
+  ),
+  toHaveAnyText: elementMatcherFunction<string, string>(
+    ({element}) => element.getText(),
+    (actual) => actual.length > 0,
+    () => " to have any text"
   ),
   toContainText: elementMatcherFunction<string, string>(
     ({element}) => element.getText(),
     (actual, expected) => actual.indexOf(expected) > -1,
-    ({actual, expected}) => [
-      `'s text "${actual}" to contain "${expected}"`,
-      `'s text "${actual}" not to contain "${expected}"`
-    ]
+    ({actual, expected}) => createLongErrorMessage('text', 'contain', actual, expected)
+  ),
+  toHaveValue: elementMatcherFunction<string, string>(
+    ({element}) => element.getValue(),
+    (actual, expected) => actual === expected,
+    ({actual, expected}) => createLongErrorMessage('value', 'be', actual, expected)
+  ),
+  toHaveAnyValue: elementMatcherFunction<string, string>(
+    ({element}) => element.getValue(),
+    (actual) => actual.length > 0,
+    () => " to have any value"
+  ),
+  toContainValue: elementMatcherFunction<string, string>(
+    ({element}) => element.getValue(),
+    (actual, expected) => actual.indexOf(expected) > -1,
+    ({actual, expected}) => createLongErrorMessage('value', 'contain', actual, expected)
   ),
 
   // toHaveText: elementMatcherFunction<string, string>(
