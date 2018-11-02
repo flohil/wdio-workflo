@@ -330,7 +330,7 @@ export class PageElementList<
     timeout = this._timeout,
     comparator = Workflo.Comparator.equalTo,
     interval = this._interval
-  }: IPageElementListWaitLengthParams) => {
+  }: IPageElementListWaitLengthParams = {}) => {
     browser.waitUntil(
       () => {
         let value = this._elements.value
@@ -349,7 +349,7 @@ export class PageElementList<
   private _waitEmpty = ({
     timeout = this._timeout,
     interval = this._interval
-  } : IPageElementListWaitEmptyParams ) => {
+  } : IPageElementListWaitEmptyParams = {}) => {
     browser.waitUntil(() => {
       return !browser.isExisting(this._selector)
     }, timeout, `${this.constructor.name} never became empty.\n( ${this._selector} )`, interval)
@@ -387,14 +387,14 @@ export class PageElementList<
     timeout = this._timeout,
     comparator = Workflo.Comparator.equalTo,
     interval = this._interval
-  }: IPageElementListWaitLengthParams ) => {
+  }: IPageElementListWaitLengthParams = {} ) => {
     return this._eventually( () => this._waitHasLength( length, { timeout, comparator, interval } ) )
   }
 
   private _eventuallyIsEmpty = ({
     timeout = this._timeout,
     interval = this._interval
-  } : IPageElementListWaitEmptyParams) => {
+  } : IPageElementListWaitEmptyParams = {}) => {
     return this._eventually( () => this._waitEmpty( { timeout, interval } ) )
   }
 

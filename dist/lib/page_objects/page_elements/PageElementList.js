@@ -9,7 +9,7 @@ class PageElementList extends _1.PageNode {
         super(_selector, opts);
         this._selector = _selector;
         // waits until list has given length
-        this._waitHasLength = (length, { timeout = this._timeout, comparator = "==" /* equalTo */, interval = this._interval }) => {
+        this._waitHasLength = (length, { timeout = this._timeout, comparator = "==" /* equalTo */, interval = this._interval } = {}) => {
             browser.waitUntil(() => {
                 let value = this._elements.value;
                 if (!value || !value.length) {
@@ -21,7 +21,7 @@ class PageElementList extends _1.PageNode {
             }, timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._selector} )`, interval);
             return this;
         };
-        this._waitEmpty = ({ timeout = this._timeout, interval = this._interval }) => {
+        this._waitEmpty = ({ timeout = this._timeout, interval = this._interval } = {}) => {
             browser.waitUntil(() => {
                 return !browser.isExisting(this._selector);
             }, timeout, `${this.constructor.name} never became empty.\n( ${this._selector} )`, interval);
@@ -29,10 +29,10 @@ class PageElementList extends _1.PageNode {
         };
         // returns true if list has length within timeout
         // else returns false
-        this._eventuallyHasLength = (length, { timeout = this._timeout, comparator = "==" /* equalTo */, interval = this._interval }) => {
+        this._eventuallyHasLength = (length, { timeout = this._timeout, comparator = "==" /* equalTo */, interval = this._interval } = {}) => {
             return this._eventually(() => this._waitHasLength(length, { timeout, comparator, interval }));
         };
-        this._eventuallyIsEmpty = ({ timeout = this._timeout, interval = this._interval }) => {
+        this._eventuallyIsEmpty = ({ timeout = this._timeout, interval = this._interval } = {}) => {
             return this._eventually(() => this._waitEmpty({ timeout, interval }));
         };
         this._waitType = opts.waitType || "visible" /* visible */;
