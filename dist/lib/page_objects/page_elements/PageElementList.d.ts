@@ -37,19 +37,19 @@ export interface IPageElementListEventuallyAPI<Store extends PageElementStore, P
 }
 export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
     protected _selector: string;
-    protected waitType: Workflo.WaitType;
-    protected timeout: number;
-    protected interval: number;
-    protected disableCache: boolean;
-    protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    protected elementOptions: PageElementOptions;
-    protected identifier: IPageElementListIdentifier<Store, PageElementType>;
-    protected identifiedObjCache: {
+    protected _waitType: Workflo.WaitType;
+    protected _timeout: number;
+    protected _interval: number;
+    protected _disableCache: boolean;
+    protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
+    protected _elementOptions: PageElementOptions;
+    protected _identifier: IPageElementListIdentifier<Store, PageElementType>;
+    protected _identifiedObjCache: {
         [key: string]: {
             [key: string]: PageElementType;
         };
     };
-    protected whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
+    protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     protected _cloneFunc: (subSelector: string) => this;
     constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: <T extends PageElementList<Store, PageElementType, PageElementOptions>>(selector: Workflo.XPath) => T);
     readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;

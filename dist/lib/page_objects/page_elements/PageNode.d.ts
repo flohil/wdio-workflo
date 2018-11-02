@@ -4,8 +4,8 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
 }
 export declare class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
     protected _selector: string;
-    protected store: Store;
-    protected timeout: number;
+    protected _store: Store;
+    protected _timeout: number;
     constructor(_selector: string, { store }: IPageNodeOpts<Store>);
     __getNodeId(): string;
     toJSON(): Workflo.PageNode.ElementJSON;

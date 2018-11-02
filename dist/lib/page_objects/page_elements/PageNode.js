@@ -5,7 +5,7 @@ class PageNode {
     // - wait -> initial wait operation: exist, visible, text, value
     constructor(_selector, { store }) {
         this._selector = _selector;
-        this.store = store;
+        this._store = store;
     }
     __getNodeId() {
         return this._selector;

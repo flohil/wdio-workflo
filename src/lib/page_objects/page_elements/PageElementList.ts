@@ -71,17 +71,15 @@ export class PageElementList<
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> {
-  protected waitType: Workflo.WaitType
-  protected timeout: number
-  protected interval: number
-
-  protected disableCache: boolean
-  protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  protected elementOptions: PageElementOptions
-  protected identifier: IPageElementListIdentifier<Store, PageElementType>
-  protected identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
-  protected whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
-
+  protected _waitType: Workflo.WaitType
+  protected _timeout: number
+  protected _interval: number
+  protected _disableCache: boolean
+  protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
+  protected _elementOptions: PageElementOptions
+  protected _identifier: IPageElementListIdentifier<Store, PageElementType>
+  protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
+  protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
   protected _cloneFunc: (subSelector: string) => this
 
   constructor(
@@ -95,23 +93,23 @@ export class PageElementList<
   ) {
     super(_selector, opts)
 
-    this.waitType = opts.waitType || Workflo.WaitType.visible
-    this.timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default
-    this.disableCache = opts.disableCache || false
+    this._waitType = opts.waitType || Workflo.WaitType.visible
+    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default
+    this._disableCache = opts.disableCache || false
 
     this._selector = _selector
-    this.elementOptions = opts.elementOptions
-    this.elementStoreFunc = opts.elementStoreFunc
-    this.identifier = opts.identifier
-    this.identifiedObjCache = {}
-    this.interval = opts.interval || 500
+    this._elementOptions = opts.elementOptions
+    this._elementStoreFunc = opts.elementStoreFunc
+    this._identifier = opts.identifier
+    this._identifiedObjCache = {}
+    this._interval = opts.interval || 500
 
     this._cloneFunc = cloneFunc
 
-    this.whereBuilder = new ListWhereBuilder(this._selector, {
-      store: this.store,
-      elementStoreFunc: this.elementStoreFunc,
-      elementOptions: this.elementOptions,
+    this._whereBuilder = new ListWhereBuilder(this._selector, {
+      store: this._store,
+      elementStoreFunc: this._elementStoreFunc,
+      elementOptions: this._elementOptions,
       cloneFunc: this._cloneFunc
     })
   }
@@ -127,7 +125,7 @@ export class PageElementList<
   }
 
   initialWait() {
-    switch(this.waitType) {
+    switch(this._waitType) {
       case Workflo.WaitType.exist:
       this.wait.any.exists()
       break
@@ -166,7 +164,7 @@ export class PageElementList<
         // make each list element individually selectable via xpath
         const selector = `(${this._selector})[${i + 1}]`
 
-        const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )
+        const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
 
         elements.push( listElement )
       }
@@ -189,7 +187,7 @@ export class PageElementList<
           // make each list element individually selectable via xpath
           const selector = `(${this._selector})[${i + 1}]`
 
-          const listElement = this.elementStoreFunc.apply( this.store, [ selector, this.elementOptions ] )
+          const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
 
           elements.push( listElement )
         }
@@ -203,7 +201,7 @@ export class PageElementList<
   }
 
   setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>) {
-    this.identifier = identifier
+    this._identifier = identifier
 
     return this
   }
@@ -227,12 +225,12 @@ export class PageElementList<
    * are needed, use get() or| firstBy() instead.
    **/
   identify(
-    {identifier = this.identifier, resetCache = false}:
+    {identifier = this._identifier, resetCache = false}:
     {identifier?: IPageElementListIdentifier<Store, PageElementType>, resetCache?: boolean} = {}
   ) {
     const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index'
 
-    if (this.disableCache || resetCache || !(cacheKey in this.identifiedObjCache)) {
+    if (this._disableCache || resetCache || !(cacheKey in this._identifiedObjCache)) {
       const listElements = this.listElements
 
       const mappedObj: {[key: string] : PageElementType} = {}
@@ -262,14 +260,14 @@ export class PageElementList<
         }
       }
 
-      this.identifiedObjCache[cacheKey] = mappedObj
+      this._identifiedObjCache[cacheKey] = mappedObj
     }
 
-    return this.identifiedObjCache[cacheKey]
+    return this._identifiedObjCache[cacheKey]
   }
 
   get where() {
-    return this.whereBuilder.reset()
+    return this._whereBuilder.reset()
   }
 
   // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
@@ -329,9 +327,9 @@ export class PageElementList<
 
   // waits until list has given length
   private _waitHasLength = ( length: number, {
-    timeout = this.timeout,
+    timeout = this._timeout,
     comparator = Workflo.Comparator.equalTo,
-    interval = this.interval
+    interval = this._interval
   }: IPageElementListWaitLengthParams) => {
     browser.waitUntil(
       () => {
@@ -349,8 +347,8 @@ export class PageElementList<
   }
 
   private _waitEmpty = ({
-    timeout = this.timeout,
-    interval = this.interval
+    timeout = this._timeout,
+    interval = this._interval
   } : IPageElementListWaitEmptyParams ) => {
     browser.waitUntil(() => {
       return !browser.isExisting(this._selector)
@@ -386,16 +384,16 @@ export class PageElementList<
   // returns true if list has length within timeout
   // else returns false
   private _eventuallyHasLength = ( length: number, {
-    timeout = this.timeout,
+    timeout = this._timeout,
     comparator = Workflo.Comparator.equalTo,
-    interval = this.interval
+    interval = this._interval
   }: IPageElementListWaitLengthParams ) => {
     return this._eventually( () => this._waitHasLength( length, { timeout, comparator, interval } ) )
   }
 
   private _eventuallyIsEmpty = ({
-    timeout = this.timeout,
-    interval = this.interval
+    timeout = this._timeout,
+    interval = this._interval
   } : IPageElementListWaitEmptyParams) => {
     return this._eventually( () => this._waitEmpty( { timeout, interval } ) )
   }

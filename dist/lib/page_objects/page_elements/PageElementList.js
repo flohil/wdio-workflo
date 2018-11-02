@@ -9,7 +9,7 @@ class PageElementList extends _1.PageNode {
         super(_selector, opts);
         this._selector = _selector;
         // waits until list has given length
-        this._waitHasLength = (length, { timeout = this.timeout, comparator = "==" /* equalTo */, interval = this.interval }) => {
+        this._waitHasLength = (length, { timeout = this._timeout, comparator = "==" /* equalTo */, interval = this._interval }) => {
             browser.waitUntil(() => {
                 let value = this._elements.value;
                 if (!value || !value.length) {
@@ -21,7 +21,7 @@ class PageElementList extends _1.PageNode {
             }, timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._selector} )`, interval);
             return this;
         };
-        this._waitEmpty = ({ timeout = this.timeout, interval = this.interval }) => {
+        this._waitEmpty = ({ timeout = this._timeout, interval = this._interval }) => {
             browser.waitUntil(() => {
                 return !browser.isExisting(this._selector);
             }, timeout, `${this.constructor.name} never became empty.\n( ${this._selector} )`, interval);
@@ -29,26 +29,26 @@ class PageElementList extends _1.PageNode {
         };
         // returns true if list has length within timeout
         // else returns false
-        this._eventuallyHasLength = (length, { timeout = this.timeout, comparator = "==" /* equalTo */, interval = this.interval }) => {
+        this._eventuallyHasLength = (length, { timeout = this._timeout, comparator = "==" /* equalTo */, interval = this._interval }) => {
             return this._eventually(() => this._waitHasLength(length, { timeout, comparator, interval }));
         };
-        this._eventuallyIsEmpty = ({ timeout = this.timeout, interval = this.interval }) => {
+        this._eventuallyIsEmpty = ({ timeout = this._timeout, interval = this._interval }) => {
             return this._eventually(() => this._waitEmpty({ timeout, interval }));
         };
-        this.waitType = opts.waitType || "visible" /* visible */;
-        this.timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default;
-        this.disableCache = opts.disableCache || false;
+        this._waitType = opts.waitType || "visible" /* visible */;
+        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default;
+        this._disableCache = opts.disableCache || false;
         this._selector = _selector;
-        this.elementOptions = opts.elementOptions;
-        this.elementStoreFunc = opts.elementStoreFunc;
-        this.identifier = opts.identifier;
-        this.identifiedObjCache = {};
-        this.interval = opts.interval || 500;
+        this._elementOptions = opts.elementOptions;
+        this._elementStoreFunc = opts.elementStoreFunc;
+        this._identifier = opts.identifier;
+        this._identifiedObjCache = {};
+        this._interval = opts.interval || 500;
         this._cloneFunc = cloneFunc;
-        this.whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
-            store: this.store,
-            elementStoreFunc: this.elementStoreFunc,
-            elementOptions: this.elementOptions,
+        this._whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
+            store: this._store,
+            elementStoreFunc: this._elementStoreFunc,
+            elementOptions: this._elementOptions,
             cloneFunc: this._cloneFunc
         });
     }
@@ -60,7 +60,7 @@ class PageElementList extends _1.PageNode {
         return this._elements;
     }
     initialWait() {
-        switch (this.waitType) {
+        switch (this._waitType) {
             case "exist" /* exist */:
                 this.wait.any.exists();
                 break;
@@ -92,7 +92,7 @@ class PageElementList extends _1.PageNode {
             for (let i = 0; i < value.length; i++) {
                 // make each list element individually selectable via xpath
                 const selector = `(${this._selector})[${i + 1}]`;
-                const listElement = this.elementStoreFunc.apply(this.store, [selector, this.elementOptions]);
+                const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOptions]);
                 elements.push(listElement);
             }
         }
@@ -108,7 +108,7 @@ class PageElementList extends _1.PageNode {
                 for (let i = 0; i < value.length; i++) {
                     // make each list element individually selectable via xpath
                     const selector = `(${this._selector})[${i + 1}]`;
-                    const listElement = this.elementStoreFunc.apply(this.store, [selector, this.elementOptions]);
+                    const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOptions]);
                     elements.push(listElement);
                 }
             }
@@ -120,7 +120,7 @@ class PageElementList extends _1.PageNode {
         }
     }
     setIdentifier(identifier) {
-        this.identifier = identifier;
+        this._identifier = identifier;
         return this;
     }
     /**
@@ -141,9 +141,9 @@ class PageElementList extends _1.PageNode {
      * Attention: this may take a long time, try to avoid: if only single elements of list
      * are needed, use get() or| firstBy() instead.
      **/
-    identify({ identifier = this.identifier, resetCache = false } = {}) {
+    identify({ identifier = this._identifier, resetCache = false } = {}) {
         const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index';
-        if (this.disableCache || resetCache || !(cacheKey in this.identifiedObjCache)) {
+        if (this._disableCache || resetCache || !(cacheKey in this._identifiedObjCache)) {
             const listElements = this.listElements;
             const mappedObj = {};
             if (identifier) { // manually set identifier
@@ -167,12 +167,12 @@ class PageElementList extends _1.PageNode {
                     mappedObj[i] = listElements[i];
                 }
             }
-            this.identifiedObjCache[cacheKey] = mappedObj;
+            this._identifiedObjCache[cacheKey] = mappedObj;
         }
-        return this.identifiedObjCache[cacheKey];
+        return this._identifiedObjCache[cacheKey];
     }
     get where() {
-        return this.whereBuilder.reset();
+        return this._whereBuilder.reset();
     }
     // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
     /**

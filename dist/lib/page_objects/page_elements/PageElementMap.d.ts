@@ -17,9 +17,9 @@ export interface IPageElementMapOpts<Store extends PageElementStore, K extends s
 }
 export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
     protected _selector: string;
-    protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    protected elementOptions: PageElementOptions;
-    protected identifier: IPageElementMapIdentifier<K>;
+    protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
+    protected _elementOptions: PageElementOptions;
+    protected _identifier: IPageElementMapIdentifier<K>;
     protected _$: Record<K, PageElementType>;
     constructor(_selector: string, { identifier, elementStoreFunc, elementOptions, ...superOpts }: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
     readonly $: Record<K, PageElementType>;

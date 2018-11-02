@@ -68,13 +68,13 @@ export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> {
 }
 export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText {
     protected _selector: string;
-    protected waitType: Workflo.WaitType;
-    protected timeout: number;
+    protected _waitType: Workflo.WaitType;
+    protected _timeout: number;
     protected _$: Store;
-    protected customScroll: Workflo.ScrollParams;
+    protected _customScroll: Workflo.ScrollParams;
     constructor(_selector: string, { waitType, timeout, customScroll, ...superOpts }: IPageElementOpts<Store>);
     readonly $: Store;
-    readonly _element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
+    readonly __element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     initialWait(): this;
     exists(): boolean;

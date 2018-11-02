@@ -40,8 +40,8 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
   public description: string
   public execute: (prefix: string) => void
 
-  private static patchedBrowser = false
-  private static commandBlacklist = {
+  private static _patchedBrowser = false
+  private static _commandBlacklist = {
     'isExecuted': true,
     'isMultiremote': true,
     'defer': true,
@@ -145,10 +145,10 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
     // to show the line number in the testcase where the error occured
     //
     // TODO: look for a better place to do this
-    if (!ParameterizedStep.patchedBrowser) {
+    if (!ParameterizedStep._patchedBrowser) {
       browser = new Proxy(browser, {
           get: function(target, name) {
-              if (!ParameterizedStep.commandBlacklist.hasOwnProperty(name) || ParameterizedStep.commandBlacklist[name] === false) {
+              if (!ParameterizedStep._commandBlacklist.hasOwnProperty(name) || ParameterizedStep._commandBlacklist[name] === false) {
                   Error.stackTraceLimit = 30
 
                   const error = new Error()
@@ -161,7 +161,7 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
           }
         })
 
-      ParameterizedStep.patchedBrowser = true
+      ParameterizedStep._patchedBrowser = true
   }
 
     if( typeof params.description !== "undefined" ) {

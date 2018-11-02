@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class XPathBuilder {
     static getInstance() {
-        if (typeof XPathBuilder.instance === 'undefined') {
-            XPathBuilder.instance = new XPathBuilder();
+        if (typeof XPathBuilder._instance === 'undefined') {
+            XPathBuilder._instance = new XPathBuilder();
         }
-        return XPathBuilder.instance;
+        return XPathBuilder._instance;
     }
     SelectorBuilder() {
         this._selector = '';

@@ -1,13 +1,13 @@
 export class XPathBuilder {
-  private static instance: XPathBuilder
+  private static _instance: XPathBuilder
   private _selector: string
 
   static getInstance() {
-    if (typeof XPathBuilder.instance === 'undefined') {
-      XPathBuilder.instance = new XPathBuilder()
+    if (typeof XPathBuilder._instance === 'undefined') {
+      XPathBuilder._instance = new XPathBuilder()
     }
 
-    return XPathBuilder.instance
+    return XPathBuilder._instance
   }
 
   private SelectorBuilder() {

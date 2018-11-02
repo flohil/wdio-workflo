@@ -34,9 +34,9 @@ export class PageElementMap<
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends PageNode<Store> {
-  protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  protected elementOptions: PageElementOptions
-  protected identifier: IPageElementMapIdentifier<K>
+  protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
+  protected _elementOptions: PageElementOptions
+  protected _identifier: IPageElementMapIdentifier<K>
   protected _$: Record<K, PageElementType>
 
   constructor(
@@ -51,16 +51,16 @@ export class PageElementMap<
     super(_selector, superOpts)
 
     this._selector = _selector
-    this.elementOptions = elementOptions
-    this.elementStoreFunc = elementStoreFunc
-    this.identifier = identifier
+    this._elementOptions = elementOptions
+    this._elementStoreFunc = elementStoreFunc
+    this._identifier = identifier
 
     this._$ = Workflo.Object.mapProperties(
-      this.identifier.mappingObject,
-      (value, key) => <PageElementType> this.elementStoreFunc.apply(
-        this.store, [
-          this.identifier.func(this._selector, value),
-          this.elementOptions
+      this._identifier.mappingObject,
+      (value, key) => <PageElementType> this._elementStoreFunc.apply(
+        this._store, [
+          this._identifier.func(this._selector, value),
+          this._elementOptions
         ]
       )
     )
@@ -77,10 +77,10 @@ export class PageElementMap<
   changeMappingObject(mappingObject: Record<K, string>) {
     this._$ = Workflo.Object.mapProperties(
       mappingObject,
-      (value, key) => <PageElementType> this.elementStoreFunc.apply(
-        this.store, [
-          this.identifier.func(this._selector, value),
-          this.elementOptions
+      (value, key) => <PageElementType> this._elementStoreFunc.apply(
+        this._store, [
+          this._identifier.func(this._selector, value),
+          this._elementOptions
         ]
       )
     )

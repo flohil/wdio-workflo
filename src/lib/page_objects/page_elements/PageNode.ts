@@ -5,8 +5,8 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
 }
 
 export class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
-  protected store: Store
-  protected timeout: number
+  protected _store: Store
+  protected _timeout: number
 
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
@@ -16,7 +16,7 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
       store
     } : IPageNodeOpts<Store>
   ) {
-    this.store = store
+    this._store = store
   }
 
   __getNodeId() {

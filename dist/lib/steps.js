@@ -39,10 +39,10 @@ class ParameterizedStep {
         // to show the line number in the testcase where the error occured
         //
         // TODO: look for a better place to do this
-        if (!ParameterizedStep.patchedBrowser) {
+        if (!ParameterizedStep._patchedBrowser) {
             browser = new Proxy(browser, {
                 get: function (target, name) {
-                    if (!ParameterizedStep.commandBlacklist.hasOwnProperty(name) || ParameterizedStep.commandBlacklist[name] === false) {
+                    if (!ParameterizedStep._commandBlacklist.hasOwnProperty(name) || ParameterizedStep._commandBlacklist[name] === false) {
                         Error.stackTraceLimit = 30;
                         const error = new Error();
                         const stack = error.stack;
@@ -51,7 +51,7 @@ class ParameterizedStep {
                     return target[name];
                 }
             });
-            ParameterizedStep.patchedBrowser = true;
+            ParameterizedStep._patchedBrowser = true;
         }
         if (typeof params.description !== "undefined") {
             this.description = Kiwi_1.default.compose(params.description, params.arg);
@@ -77,8 +77,8 @@ class ParameterizedStep {
         }
     }
 }
-ParameterizedStep.patchedBrowser = false;
-ParameterizedStep.commandBlacklist = {
+ParameterizedStep._patchedBrowser = false;
+ParameterizedStep._commandBlacklist = {
     'isExecuted': true,
     'isMultiremote': true,
     'defer': true,

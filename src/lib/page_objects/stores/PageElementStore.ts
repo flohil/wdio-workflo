@@ -24,12 +24,12 @@ export type CloneFunc<Type> = (
 // Stores singleton instances of page elements to avoid creating new
 // elements on each invocation of a page element.
 export class PageElementStore {
-  protected instanceCache: {[id: string] : any}
-  protected xPathBuilder: XPathBuilder
+  protected _instanceCache: {[id: string] : any}
+  protected _xPathBuilder: XPathBuilder
 
   constructor() {
-    this.instanceCache = Object.create(null)
-    this.xPathBuilder = XPathBuilder.getInstance()
+    this._instanceCache = Object.create(null)
+    this._xPathBuilder = XPathBuilder.getInstance()
   }
 
   // DEFINE YOUR ELEMENT GROUPS HERE
@@ -54,7 +54,7 @@ export class PageElementStore {
   ElementGroup<Content extends Record<string, Workflo.PageNode.INode>> (
     content: Content
   ) {
-    return this.getGroup<
+    return this._getGroup<
       this,
       Content,
       PageElementGroupWalker<this>,
@@ -79,7 +79,7 @@ export class PageElementStore {
   TextGroup<Content extends Record<string, Workflo.PageNode.INode>>(
     content: Content
   ) {
-    return this.getGroup<
+    return this._getGroup<
       this,
       Content,
       PageElementGroupWalker<this>,
@@ -104,7 +104,7 @@ export class PageElementStore {
   ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(
     content: Content
   ) {
-    return this.getGroup<
+    return this._getGroup<
       this,
       Content,
       PageElementGroupWalker<this>,
@@ -137,7 +137,7 @@ export class PageElementStore {
     selector: Workflo.XPath,
     options?: Pick<IPageElementOpts<this>, Workflo.PageElementOptions>
   ) {
-    return this.get<PageElement<this>, IPageElementOpts<this>>(
+    return this._get<PageElement<this>, IPageElementOpts<this>>(
       selector,
       PageElement,
       {
@@ -172,7 +172,7 @@ export class PageElementStore {
       "waitType" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier"
     >
   ) {
-    return this.get<
+    return this._get<
       PageElementList<this, PageElementType, PageElementOpts>,
       IPageElementListOpts<this, PageElementType, PageElementOpts>
     > (
@@ -236,7 +236,7 @@ export class PageElementStore {
       "elementOptions" | "identifier" | "elementStoreFunc"
     >
   ) {
-    return this.get<
+    return this._get<
       PageElementMap<this, K, PageElementType, PageElementOpts>,
       IPageElementMapOpts<this, K, PageElementType, PageElementOpts>
     > (
@@ -298,12 +298,12 @@ export class PageElementStore {
    * @param type
    * @param options
    */
-  public get<Type, Options>(
+  public _get<Type, Options>(
     selector: Workflo.XPath,
     type: { new(selector: string, options: Options, cloneFunc: CloneFunc<Type>): Type },
     options: Exclude<Options, 'cloneFunc'> = Object.create(Object.prototype)
   ) : Type {
-    const _selector = (selector instanceof XPathBuilder) ? this.xPathBuilder.build() : selector
+    const _selector = (selector instanceof XPathBuilder) ? this._xPathBuilder.build() : selector
 
     // catch: selector must not contain |
     if (_selector.indexOf('|||') > -1) {
@@ -317,18 +317,18 @@ export class PageElementStore {
         cloneSelector = selector
       }
 
-      return this.get<Type, Options>(cloneSelector, type, options)
+      return this._get<Type, Options>(cloneSelector, type, options)
     }
 
-    if(!(id in this.instanceCache)) {
+    if(!(id in this._instanceCache)) {
       const result = new type(_selector, options, cloneFunc)
-      this.instanceCache[id] = result
+      this._instanceCache[id] = result
     }
 
-    return this.instanceCache[id]
+    return this._instanceCache[id]
   }
 
-  public getGroup<
+  public _getGroup<
     Store extends PageElementStore,
     Content extends {[key: string] : Workflo.PageNode.INode},
     WalkerType extends PageElementGroupWalker<Store>,
@@ -363,15 +363,15 @@ export class PageElementStore {
 
     const key = `${groupType.name}:${groupOptions.walkerType.name}:${idStr}`
 
-    if (!(key in this.instanceCache)) {
+    if (!(key in this._instanceCache)) {
 
       const fullGroupOptions = _.merge({
         id: idStr,
       }, groupOptions)
 
-      this.instanceCache[key] = new groupType(fullGroupOptions)
+      this._instanceCache[key] = new groupType(fullGroupOptions)
     }
 
-    return this.instanceCache[key]
+    return this._instanceCache[key]
   }
 }

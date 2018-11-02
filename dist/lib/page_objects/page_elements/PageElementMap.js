@@ -17,12 +17,12 @@ class PageElementMap extends _1.PageNode {
         super(_selector, superOpts);
         this._selector = _selector;
         this._selector = _selector;
-        this.elementOptions = elementOptions;
-        this.elementStoreFunc = elementStoreFunc;
-        this.identifier = identifier;
-        this._$ = Workflo.Object.mapProperties(this.identifier.mappingObject, (value, key) => this.elementStoreFunc.apply(this.store, [
-            this.identifier.func(this._selector, value),
-            this.elementOptions
+        this._elementOptions = elementOptions;
+        this._elementStoreFunc = elementStoreFunc;
+        this._identifier = identifier;
+        this._$ = Workflo.Object.mapProperties(this._identifier.mappingObject, (value, key) => this._elementStoreFunc.apply(this._store, [
+            this._identifier.func(this._selector, value),
+            this._elementOptions
         ]));
     }
     get $() {
@@ -33,9 +33,9 @@ class PageElementMap extends _1.PageNode {
      * @param mappingObject
      */
     changeMappingObject(mappingObject) {
-        this._$ = Workflo.Object.mapProperties(mappingObject, (value, key) => this.elementStoreFunc.apply(this.store, [
-            this.identifier.func(this._selector, value),
-            this.elementOptions
+        this._$ = Workflo.Object.mapProperties(mappingObject, (value, key) => this._elementStoreFunc.apply(this._store, [
+            this._identifier.func(this._selector, value),
+            this._elementOptions
         ]));
     }
 }

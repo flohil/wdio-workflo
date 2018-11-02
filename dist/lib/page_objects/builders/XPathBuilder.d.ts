@@ -1,5 +1,5 @@
 export declare class XPathBuilder {
-    private static instance;
+    private static _instance;
     private _selector;
     static getInstance(): XPathBuilder;
     private SelectorBuilder;

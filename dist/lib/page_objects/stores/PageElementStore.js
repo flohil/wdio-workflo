@@ -8,8 +8,8 @@ const builders_1 = require("../builders");
 // elements on each invocation of a page element.
 class PageElementStore {
     constructor() {
-        this.instanceCache = Object.create(null);
-        this.xPathBuilder = builders_1.XPathBuilder.getInstance();
+        this._instanceCache = Object.create(null);
+        this._xPathBuilder = builders_1.XPathBuilder.getInstance();
     }
     // DEFINE YOUR ELEMENT GROUPS HERE
     // Encapsulates arbitrary page element types.
@@ -30,21 +30,21 @@ class PageElementStore {
     // If id is not defined, the group instance will be identified
     // by a concatenated string of its node key names and types.
     ElementGroup(content) {
-        return this.getGroup(page_elements_1.PageElementGroup, {
+        return this._getGroup(page_elements_1.PageElementGroup, {
             walkerType: walkers_1.PageElementGroupWalker,
             walkerOptions: {},
             content: content
         });
     }
     TextGroup(content) {
-        return this.getGroup(page_elements_1.TextGroup, {
+        return this._getGroup(page_elements_1.TextGroup, {
             walkerType: walkers_1.PageElementGroupWalker,
             walkerOptions: {},
             content: content
         });
     }
     ValueGroup(content) {
-        return this.getGroup(page_elements_1.ValueGroup, {
+        return this._getGroup(page_elements_1.ValueGroup, {
             walkerType: walkers_1.PageElementGroupWalker,
             walkerOptions: {},
             content: content
@@ -57,14 +57,14 @@ class PageElementStore {
      * @param options
      */
     Element(selector, options) {
-        return this.get(selector, page_elements_1.PageElement, Object.assign({ store: this }, options));
+        return this._get(selector, page_elements_1.PageElement, Object.assign({ store: this }, options));
     }
     ExistElement(selector, options) {
         return this.Element(selector, Object.assign({ waitType: "exist" /* exist */ }, options));
     }
     // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
     List(selector, options) {
-        return this.get(selector, page_elements_1.PageElementList, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
+        return this._get(selector, page_elements_1.PageElementList, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
     }
     ElementList(selector, options) {
         return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.Element }, options));
@@ -74,7 +74,7 @@ class PageElementStore {
     }
     // Element Maps
     Map(selector, options) {
-        return this.get(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
+        return this._get(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
     }
     ElementMap(selector, options) {
         return this.Map(selector, Object.assign({ elementStoreFunc: this.Element, elementOptions: {} }, options));
@@ -93,8 +93,8 @@ class PageElementStore {
      * @param type
      * @param options
      */
-    get(selector, type, options = Object.create(Object.prototype)) {
-        const _selector = (selector instanceof builders_1.XPathBuilder) ? this.xPathBuilder.build() : selector;
+    _get(selector, type, options = Object.create(Object.prototype)) {
+        const _selector = (selector instanceof builders_1.XPathBuilder) ? this._xPathBuilder.build() : selector;
         // catch: selector must not contain |
         if (_selector.indexOf('|||') > -1) {
             throw new Error(`Selector must not contain character sequence '|||': ${_selector}`);
@@ -104,15 +104,15 @@ class PageElementStore {
             if (!cloneSelector) {
                 cloneSelector = selector;
             }
-            return this.get(cloneSelector, type, options);
+            return this._get(cloneSelector, type, options);
         };
-        if (!(id in this.instanceCache)) {
+        if (!(id in this._instanceCache)) {
             const result = new type(_selector, options, cloneFunc);
-            this.instanceCache[id] = result;
+            this._instanceCache[id] = result;
         }
-        return this.instanceCache[id];
+        return this._instanceCache[id];
     }
-    getGroup(groupType, groupOptions) {
+    _getGroup(groupType, groupOptions) {
         // Build id from group's elements' ids.
         // If two groups have the same content,
         // they are the same.
@@ -123,13 +123,13 @@ class PageElementStore {
             }
         }
         const key = `${groupType.name}:${groupOptions.walkerType.name}:${idStr}`;
-        if (!(key in this.instanceCache)) {
+        if (!(key in this._instanceCache)) {
             const fullGroupOptions = _.merge({
                 id: idStr,
             }, groupOptions);
-            this.instanceCache[key] = new groupType(fullGroupOptions);
+            this._instanceCache[key] = new groupType(fullGroupOptions);
         }
-        return this.instanceCache[key];
+        return this._instanceCache[key];
     }
 }
 exports.PageElementStore = PageElementStore;
