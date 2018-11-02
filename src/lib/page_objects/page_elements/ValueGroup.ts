@@ -1,4 +1,4 @@
-import { TextGroup, ITextGroupOpts } from './'
+import { TextGroup, ITextGroupOpts } from '.'
 import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
 import { PageElementStore } from '../stores'
 

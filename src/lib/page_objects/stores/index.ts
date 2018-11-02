@@ -1,5 +1,5 @@
-import { PageElementStore } from './PageElementStore'
+import { PageElementStore, CloneFunc } from './PageElementStore'
 
 export const pageElement = new PageElementStore()
 
-export { PageElementStore }
+export { PageElementStore, CloneFunc }

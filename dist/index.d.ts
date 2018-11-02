@@ -3,14 +3,13 @@ declare global {
     interface CustomMatchers {
         toExist(): boolean;
         toBeVisible(): boolean;
-        toBeHidden(): boolean;
         toBeEnabled(): boolean;
-        toBeDisabled(): boolean;
         toBeSelected(): boolean;
         toHaveText(text?: string): boolean;
         toContainText(text?: string): boolean;
         toHaveValue(value?: string): boolean;
         toContainValue(value?: string): boolean;
+        toHaveClass(className: string): boolean;
     }
     interface ElementMatchers extends CustomMatchers {
         not: CustomMatchers;

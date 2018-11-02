@@ -1,2 +1,2 @@
 export * from './XPathBuilder';
-export * from './FirstByBuilder';
+export * from './ListWhereBuilder';

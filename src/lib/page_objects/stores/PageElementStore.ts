@@ -17,6 +17,10 @@ import {
   XPathBuilder
 } from '../builders'
 
+export type CloneFunc<Type> = (
+  selector?: Workflo.XPath,
+) => Type
+
 // Stores singleton instances of page elements to avoid creating new
 // elements on each invocation of a page element.
 export class PageElementStore {
@@ -294,10 +298,10 @@ export class PageElementStore {
    * @param type
    * @param options
    */
-  protected get<Type, Options>(
+  public get<Type, Options>(
     selector: Workflo.XPath,
-    type: { new(selector: string, options: Options): Type },
-    options: Options = Object.create(Object.prototype)
+    type: { new(selector: string, options: Options, cloneFunc: CloneFunc<Type>): Type },
+    options: Exclude<Options, 'cloneFunc'> = Object.create(Object.prototype)
   ) : Type {
     const _selector = (selector instanceof XPathBuilder) ? this.xPathBuilder.build() : selector
 
@@ -308,15 +312,23 @@ export class PageElementStore {
 
     const id = `${_selector}|||${type}|||${options.toString()}`
 
+    const cloneFunc: CloneFunc<Type> = cloneSelector => {
+      if ( !cloneSelector ) {
+        cloneSelector = selector
+      }
+
+      return this.get<Type, Options>(cloneSelector, type, options)
+    }
+
     if(!(id in this.instanceCache)) {
-      const result = new type(_selector, options)
+      const result = new type(_selector, options, cloneFunc)
       this.instanceCache[id] = result
     }
 
     return this.instanceCache[id]
   }
 
-  protected getGroup<
+  public getGroup<
     Store extends PageElementStore,
     Content extends {[key: string] : Workflo.PageNode.INode},
     WalkerType extends PageElementGroupWalker<Store>,

@@ -1,4 +1,4 @@
-import { PageNode, IPageNodeOpts, PageElement } from './';
+import { PageNode, IPageNodeOpts, PageElement } from '.';
 import { PageElementStore } from '../stores';
 import { XPathBuilder } from '../builders';
 /**
@@ -16,12 +16,12 @@ export interface IPageElementMapOpts<Store extends PageElementStore, K extends s
     elementOptions: PageElementOptions;
 }
 export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
-    protected selector: string;
+    protected _selector: string;
     protected elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected elementOptions: PageElementOptions;
     protected identifier: IPageElementMapIdentifier<K>;
     protected _$: Record<K, PageElementType>;
-    constructor(selector: string, { identifier, elementStoreFunc, elementOptions, ...superOpts }: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
+    constructor(_selector: string, { identifier, elementStoreFunc, elementOptions, ...superOpts }: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
     readonly $: Record<K, PageElementType>;
     /**
      * In case of language changes, for example, change values of mappingObject while keys must stay the same.

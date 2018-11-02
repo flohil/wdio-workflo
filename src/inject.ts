@@ -1,7 +1,7 @@
 //import functions from './functions'
 //import registerSteps from './registerSteps'
 import * as Functions from './lib/api'
-import * as wf from './index'
+import * as wf from '.'
 import * as objectFunctions from './lib/utility_functions/object'
 import * as arrayFunctions from './lib/utility_functions/array'
 import * as classFunctions from './lib/utility_functions/class'

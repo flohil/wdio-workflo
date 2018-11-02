@@ -9,7 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require("./");
+const _1 = require(".");
 class TextGroup extends _1.PageElementGroup {
     constructor(_a) {
         var superOpts = __rest(_a, []);

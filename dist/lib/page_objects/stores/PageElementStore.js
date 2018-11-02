@@ -100,8 +100,14 @@ class PageElementStore {
             throw new Error(`Selector must not contain character sequence '|||': ${_selector}`);
         }
         const id = `${_selector}|||${type}|||${options.toString()}`;
+        const cloneFunc = cloneSelector => {
+            if (!cloneSelector) {
+                cloneSelector = selector;
+            }
+            return this.get(cloneSelector, type, options);
+        };
         if (!(id in this.instanceCache)) {
-            const result = new type(_selector, options);
+            const result = new type(_selector, options, cloneFunc);
             this.instanceCache[id] = result;
         }
         return this.instanceCache[id];

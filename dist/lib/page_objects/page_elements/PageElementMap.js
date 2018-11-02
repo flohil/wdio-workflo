@@ -9,19 +9,19 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require("./");
+const _1 = require(".");
 // holds several PageElement instances of the same type
 class PageElementMap extends _1.PageNode {
-    constructor(selector, _a) {
+    constructor(_selector, _a) {
         var { identifier, elementStoreFunc, elementOptions } = _a, superOpts = __rest(_a, ["identifier", "elementStoreFunc", "elementOptions"]);
-        super(selector, superOpts);
-        this.selector = selector;
-        this.selector = selector;
+        super(_selector, superOpts);
+        this._selector = _selector;
+        this._selector = _selector;
         this.elementOptions = elementOptions;
         this.elementStoreFunc = elementStoreFunc;
         this.identifier = identifier;
         this._$ = Workflo.Object.mapProperties(this.identifier.mappingObject, (value, key) => this.elementStoreFunc.apply(this.store, [
-            this.identifier.func(this.selector, value),
+            this.identifier.func(this._selector, value),
             this.elementOptions
         ]));
     }
@@ -34,7 +34,7 @@ class PageElementMap extends _1.PageNode {
      */
     changeMappingObject(mappingObject) {
         this._$ = Workflo.Object.mapProperties(mappingObject, (value, key) => this.elementStoreFunc.apply(this.store, [
-            this.identifier.func(this.selector, value),
+            this.identifier.func(this._selector, value),
             this.elementOptions
         ]));
     }

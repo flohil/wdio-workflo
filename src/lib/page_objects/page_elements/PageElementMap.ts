@@ -1,4 +1,4 @@
-import { PageNode, IPageNodeOpts, PageElement } from './'
+import { PageNode, IPageNodeOpts, PageElement } from '.'
 import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
 

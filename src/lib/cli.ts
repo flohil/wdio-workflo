@@ -17,7 +17,7 @@ import * as inquirer from 'inquirer'
 import * as optimist from 'optimist'
 import * as merge from 'deepmerge'
 
-import { objectFunctions, arrayFunctions } from '../'
+import { objectFunctions, arrayFunctions } from '..'
 
 import { Launcher, baseReporter } from 'webdriverio-workflo'
 import { StringifyOptions } from 'querystring';

@@ -1,7 +1,7 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageElement, IPageElementWaitAPI, IPageElementWaitNotAPI, IPageElementEventuallyAPI, IPageElementEventuallyNotAPI } from './';
+import { PageNode, IPageNodeOpts, PageElement, IPageElementWaitAPI, IPageElementWaitNotAPI, IPageElementEventuallyAPI, IPageElementEventuallyNotAPI } from '.';
 import { PageElementStore } from '../stores';
-import { FirstByBuilder } from '../builders';
+import { ListWhereBuilder } from '../builders';
 export interface IPageElementListIdentifier<Store extends PageElementStore, ElementType extends PageElement<Store>> {
     mappingObject: {
         [key: string]: string;
@@ -36,7 +36,7 @@ export interface IPageElementListEventuallyAPI<Store extends PageElementStore, P
     none: IPageElementEventuallyNotAPI<Store>;
 }
 export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
-    protected selector: string;
+    protected _selector: string;
     protected waitType: Workflo.WaitType;
     protected timeout: number;
     protected interval: number;
@@ -49,8 +49,9 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
             [key: string]: PageElementType;
         };
     };
-    protected firstByBuilder: FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    constructor(selector: string, { waitType, timeout, disableCache, elementStoreFunc, elementOptions, identifier, interval, ...superOpts }: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    protected whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
+    protected _cloneFunc: (subSelector: string) => this;
+    constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: <T extends PageElementList<Store, PageElementType, PageElementOptions>>(selector: Workflo.XPath) => T);
     readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     initialWait(): void;
@@ -73,7 +74,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * while its contents are still guaranteed to be refreshed on each access!
      *
      * Attention: this may take a long time, try to avoid: if only single elements of list
-     * are needed, use firstBy() instead.
+     * are needed, use get() or| firstBy() instead.
      **/
     identify({ identifier, resetCache }?: {
         identifier?: IPageElementListIdentifier<Store, PageElementType>;
@@ -81,21 +82,31 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     }): {
         [key: string]: PageElementType;
     };
+    readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
+    /**
+     * Returns the first page element found in the DOM that matches the list selector.
+     */
+    readonly first: PageElementType;
     /**
      *
-     * @param index Index starts with 0
+     * @param index starts at 0
      */
-    get(index: number): PageElementType;
-    getAll(): PageElementType[];
+    at(index: number): PageElementType;
+    /**
+     * Returns all page elements found in the DOM that match the list selector.
+     */
+    readonly all: PageElementType[];
+    /**
+     * Returns the number of page elements found in the DOM that match the list selector.
+     */
     getLength(): number;
     isEmpty(): boolean;
-    firstBy(): FirstByBuilder<Store, PageElementType, PageElementOptions>;
-    wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
+    readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
     private _waitHasLength;
     private _waitEmpty;
     private readonly _anyWait;
     private readonly _noneWait;
-    eventually: IPageElementListEventuallyAPI<Store, PageElementType, PageElementOptions>;
+    readonly eventually: IPageElementListEventuallyAPI<Store, PageElementType, PageElementOptions>;
     private _eventuallyHasLength;
     private _eventuallyIsEmpty;
     private readonly _anyEventually;

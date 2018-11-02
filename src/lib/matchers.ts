@@ -50,6 +50,7 @@ function elementMatcherFunction<ExpectedType, ActualType>(
       if ( _.isArray( actuals ) ) {
         if ( negativeComparison && actuals.length > 1 ) {
           actual = actuals[1]
+          console.log("in not result")
         } else {
           actual = actuals[0]
         }
@@ -65,6 +66,7 @@ function elementMatcherFunction<ExpectedType, ActualType>(
         if ( negativeComparison ) {
           if ( successes.length > 1 ) {
             success = successes[ 1 ]
+            console.log("in not assertion")
           } else {
             success = !successes[ 0 ]
           }
@@ -95,7 +97,7 @@ function elementMatcherFunction<ExpectedType, ActualType>(
           }
         } else {
           if ( negativeComparison ) {
-            defaultNegativeMessage = ' NOT'
+            defaultNegativeMessage = ' not'
           }
 
           errorText = errorTexts
@@ -119,6 +121,14 @@ function elementMatcherFunction<ExpectedType, ActualType>(
   }
 }
 
+function checkHave(actual: string, expected: string) {
+  return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0
+}
+
+function checkContains(actual: string, expected: string) {
+  return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0
+}
+
 // TODO: add not functions for eventually not
 export const elementMatchers: jasmine.CustomMatcherFactories = {
   toExist: elementMatcherFunction(
@@ -133,10 +143,36 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
   ),
   toHaveClass: elementMatcherFunction<string, string>(
     ({element}) => element.getClass(),
-    (actual, expected) => (typeof expected !== 'undefined') ? actual === expected : actual.length > 0,
-    ({actual, expected}) => `'s class "${actual}" to be "${expected}"`
+    (actual, expected) => actual === expected,
+    ({actual, expected}) => [
+      `'s class "${actual}" to be "${expected}"`,
+      `'s class "${actual}" not to be "${expected}"`,
+    ]
   ),
-
+  toContainClass: elementMatcherFunction<string, string>(
+    ({element}) => element.getClass(),
+    (actual, expected) => actual.indexOf(expected) > -1,
+    ({actual, expected}) => [
+      `'s class "${actual}" to contain "${expected}"`,
+      `'s class "${actual}" not to contain "${expected}"`
+    ]
+  ),
+  toHaveText: elementMatcherFunction<string, string>(
+    ({element}) => element.getText(),
+    (actual, expected) => actual === expected,
+    ({actual, expected}) => [
+      `'s text "${actual}" to be "${expected}"`,
+      `'s text "${actual}" not to be "${expected}"`,
+    ]
+  ),
+  toContainText: elementMatcherFunction<string, string>(
+    ({element}) => element.getText(),
+    (actual, expected) => actual.indexOf(expected) > -1,
+    ({actual, expected}) => [
+      `'s text "${actual}" to contain "${expected}"`,
+      `'s text "${actual}" not to contain "${expected}"`
+    ]
+  ),
 
   // toHaveText: elementMatcherFunction<string, string>(
   //   ({element}) => element.getText(),

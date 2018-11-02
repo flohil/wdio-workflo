@@ -15,6 +15,7 @@ function elementMatcherFunction(resultFunction, assertionFunction, errorTextFunc
             if (_.isArray(actuals)) {
                 if (negativeComparison && actuals.length > 1) {
                     actual = actuals[1];
+                    console.log("in not result");
                 }
                 else {
                     actual = actuals[0];
@@ -29,6 +30,7 @@ function elementMatcherFunction(resultFunction, assertionFunction, errorTextFunc
                 if (negativeComparison) {
                     if (successes.length > 1) {
                         success = successes[1];
+                        console.log("in not assertion");
                     }
                     else {
                         success = !successes[0];
@@ -62,7 +64,7 @@ function elementMatcherFunction(resultFunction, assertionFunction, errorTextFunc
                 }
                 else {
                     if (negativeComparison) {
-                        defaultNegativeMessage = ' NOT';
+                        defaultNegativeMessage = ' not';
                     }
                     errorText = errorTexts;
                 }
@@ -81,11 +83,32 @@ function elementMatcherFunction(resultFunction, assertionFunction, errorTextFunc
         };
     };
 }
+function checkHave(actual, expected) {
+    return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0;
+}
+function checkContains(actual, expected) {
+    return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0;
+}
 // TODO: add not functions for eventually not
 exports.elementMatchers = {
     toExist: elementMatcherFunction(({ element }) => element.exists(), actual => actual === true, () => " to exist"),
     toBeVisible: elementMatcherFunction(({ element }) => element.isVisible(), actual => actual === true, () => " to be visible"),
-    toHaveClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => (typeof expected !== 'undefined') ? actual === expected : actual.length > 0, ({ actual, expected }) => `'s class "${actual}" to be "${expected}"`),
+    toHaveClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual === expected, ({ actual, expected }) => [
+        `'s class "${actual}" to be "${expected}"`,
+        `'s class "${actual}" not to be "${expected}"`,
+    ]),
+    toContainClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => [
+        `'s class "${actual}" to contain "${expected}"`,
+        `'s class "${actual}" not to contain "${expected}"`
+    ]),
+    toHaveText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual === expected, ({ actual, expected }) => [
+        `'s text "${actual}" to be "${expected}"`,
+        `'s text "${actual}" not to be "${expected}"`,
+    ]),
+    toContainText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => [
+        `'s text "${actual}" to contain "${expected}"`,
+        `'s text "${actual}" not to contain "${expected}"`
+    ]),
 };
 function expectElement(element) {
     return expect(element);

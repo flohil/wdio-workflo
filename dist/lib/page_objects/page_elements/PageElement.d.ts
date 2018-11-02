@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts } from './';
+import { PageNode, IPageNodeOpts } from '.';
 import { PageElementStore } from '../stores';
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     waitType?: Workflo.WaitType;
@@ -19,7 +19,7 @@ export interface IPageElementWaitAPI<Store extends PageElementStore> {
     containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
     isEnabled: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
     isSelected: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    until: (description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
+    untilElement: (description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
     not: IPageElementWaitNotAPI<Store>;
 }
 export interface IPageElementWaitNotAPI<Store extends PageElementStore> {
@@ -49,7 +49,7 @@ export interface IPageElementEventuallyAPI<Store extends PageElementStore> {
     containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean;
     isEnabled: (opts?: Workflo.WDIOParamsOptional) => boolean;
     isSelected: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    does: (description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => boolean;
+    meetsCondition: (condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => boolean;
     not: IPageElementEventuallyNotAPI<Store>;
 }
 export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> {
@@ -67,16 +67,13 @@ export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> {
     isSelected: (opts?: Workflo.WDIOParamsOptional) => boolean;
 }
 export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText {
-    protected selector: string;
+    protected _selector: string;
     protected waitType: Workflo.WaitType;
     protected timeout: number;
     protected _$: Store;
     protected customScroll: Workflo.ScrollParams;
-    constructor(selector: string, { waitType, timeout, customScroll, ...superOpts }: IPageElementOpts<Store>);
+    constructor(_selector: string, { waitType, timeout, customScroll, ...superOpts }: IPageElementOpts<Store>);
     readonly $: Store;
-    /**
-     *
-     */
     readonly _element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     initialWait(): this;
@@ -141,7 +138,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     private _waitNotIsEnabled;
     private _waitIsSelected;
     private _waitNotIsSelected;
-    private _waitUntil;
+    private _waitUntilElement;
     wait: IPageElementWaitAPI<Store>;
     private _eventuallyExists;
     private _eventuallyNotExists;
@@ -167,6 +164,6 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     private _eventuallyNotIsEnabled;
     private _eventuallyIsSelected;
     private _eventuallyNotIsSelected;
-    private _eventuallyDoes;
+    private _eventuallyMeetsCondition;
     eventually: IPageElementEventuallyAPI<Store>;
 }

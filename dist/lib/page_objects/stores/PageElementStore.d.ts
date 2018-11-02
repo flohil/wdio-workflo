@@ -1,6 +1,7 @@
 import { PageElement, IPageElementOpts, PageElementList, IPageElementListOpts, PageElementMap, IPageElementMapOpts, PageElementGroup, IPageElementGroupOpts, TextGroup, ValueGroup } from '../page_elements';
 import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers';
 import { XPathBuilder } from '../builders';
+export declare type CloneFunc<Type> = (selector?: Workflo.XPath) => Type;
 export declare class PageElementStore {
     protected instanceCache: {
         [id: string]: any;
@@ -33,10 +34,10 @@ export declare class PageElementStore {
      * @param type
      * @param options
      */
-    protected get<Type, Options>(selector: Workflo.XPath, type: {
-        new (selector: string, options: Options): Type;
-    }, options?: Options): Type;
-    protected getGroup<Store extends PageElementStore, Content extends {
+    get<Type, Options>(selector: Workflo.XPath, type: {
+        new (selector: string, options: Options, cloneFunc: CloneFunc<Type>): Type;
+    }, options?: Exclude<Options, 'cloneFunc'>): Type;
+    getGroup<Store extends PageElementStore, Content extends {
         [key: string]: Workflo.PageNode.INode;
     }, WalkerType extends PageElementGroupWalker<Store>, WalkerOptions extends IPageElementGroupWalkerOpts, GroupType extends PageElementGroup<Store, Content, WalkerType, WalkerOptions>, GroupOptions extends Pick<IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>, "content" | "walkerType" | "walkerOptions">>(groupType: {
         new (options: IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>): GroupType;

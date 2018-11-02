@@ -9,16 +9,178 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require("./");
+const _1 = require(".");
 const builders_1 = require("../builders");
 const htmlParser = require("htmlparser2");
 class PageElement extends _1.PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
-    constructor(selector, _a) {
+    constructor(_selector, _a) {
         var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, customScroll = undefined } = _a, superOpts = __rest(_a, ["waitType", "timeout", "customScroll"]);
-        super(selector, superOpts);
-        this.selector = selector;
+        super(_selector, superOpts);
+        this._selector = _selector;
+        // WAIT
+        // Waits until at least one matching element exists.
+        //
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // exists that matches the this.selector.
+        this._waitExists = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForExist(timeout), ` never existed`);
+        };
+        this._waitNotExists = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForExist(timeout, true), ` never not existed`);
+        };
+        // Waits until at least one matching element is visible.
+        //
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // is visible that matches the this.selector.
+        this._waitIsVisible = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForVisible(timeout), ` never became visible`);
+        };
+        this._waitNotIsVisible = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForVisible(timeout, true), ` never became invisible`);
+        };
+        this._waitHasClass = (className, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return this.hasClass(className);
+            }, timeout, `${this.constructor.name}: Class never became '${className}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitNotHasClass = (className, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return !this.hasClass(className);
+            }, timeout, `${this.constructor.name}: Class never became other than '${className}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitContainsClass = (className, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return this.containsClass(className);
+            }, timeout, `${this.constructor.name}: Class never contained '${className}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitNotContainsClass = (className, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return !this.containsClass(className);
+            }, timeout, `${this.constructor.name}: Class never not contained '${className}'.\n( ${this._selector} )`);
+            return this;
+        };
+        // Waits until at least one matching element has a text.
+        //
+        // text -> defines the text that element should have
+        // If text is undefined, waits until element's text is not empty.
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // has a text that matches the this.selector.
+        this._waitHasText = (text, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return this.hasText(text);
+            }, timeout, `${this.constructor.name}: Text never became '${text}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitNotHasText = (text, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return !this.hasText(text);
+            }, timeout, `${this.constructor.name}: Text never became other than '${text}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitHasAnyText = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForText(timeout), ` never had any text`);
+        };
+        this._waitNotHasAnyText = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForText(timeout, true), ` never not had any text`);
+        };
+        // Waits until at least one matching element contains a text.
+        //
+        // text -> defines the text that element should have
+        // If text is undefined, waits until element's text is not empty.
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // has a text that matches the this.selector.
+        this._waitContainsText = (text, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return this.containsText(text);
+            }, timeout, `${this.constructor.name}: Text never contained '${text}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitNotContainsText = (text, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return !this.containsText(text);
+            }, timeout, `${this.constructor.name}: Text never not contained '${text}'.\n( ${this._selector} )`);
+            return this;
+        };
+        // Waits until at least one matching element has a value.
+        //
+        // value -> defines the value that element should have
+        // If value is undefined, waits until element's value is not empty.
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // has a value that matches the this.selector.
+        this._waitHasValue = (value, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return this.hasValue(value);
+            }, timeout, `${this.constructor.name}: Value never became '${value}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitNotHasValue = (value, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return !this.hasValue(value);
+            }, timeout, `${this.constructor.name}: Value never became other than '${value}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitHasAnyValue = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForValue(timeout), ` never had any value`);
+        };
+        this._waitNotHasAnyValue = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForValue(timeout, true), ` never not had any value`);
+        };
+        // Waits until at least one matching element contains a value.
+        //
+        // value -> defines the value that element should have
+        // If value is undefined, waits until element's value is not empty.
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // has a text that matches the this.selector.
+        this._waitContainsValue = (value, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return this.containsValue(value);
+            }, timeout, `${this.constructor.name}: Value never contained '${value}'.\n( ${this._selector} )`);
+            return this;
+        };
+        this._waitNotContainsValue = (value, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => {
+                return !this.containsValue(value);
+            }, timeout, `${this.constructor.name}: Value never not contained '${value}'.\n( ${this._selector} )`);
+            return this;
+        };
+        // Waits until at least one matching element is enabled.
+        //
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // is enabled that matches the this.selector.
+        this._waitIsEnabled = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForEnabled(timeout), ` never became enabled`);
+        };
+        this._waitNotIsEnabled = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForEnabled(timeout, true), ` never became disabled`);
+        };
+        // Waits until at least one matching element is selected.
+        //
+        // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
+        // If reverse is set to true, function will wait until no element
+        // is selected that matches the this.selector.
+        this._waitIsSelected = ({ timeout = this.timeout } = {}) => {
+            return this._wait(() => this._element.waitForSelected(timeout), ` never became selected`);
+        };
+        this._waitNotIsSelected = ({ timeout = this.timeout } = {}) => {
+            this._element.waitForSelected(timeout, true);
+            return this._wait(() => this._element.waitForSelected(timeout, true), ` never became deselected`);
+        };
+        this._waitUntilElement = (description, condition, { timeout = this.timeout } = {}) => {
+            browser.waitUntil(() => condition(this), timeout, `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`);
+            return this;
+        };
         this.wait = {
             exists: this._waitExists,
             isVisible: this._waitIsVisible,
@@ -32,7 +194,7 @@ class PageElement extends _1.PageNode {
             containsValue: this._waitContainsValue,
             isEnabled: this._waitIsEnabled,
             isSelected: this._waitIsSelected,
-            until: this._waitUntil,
+            untilElement: this._waitUntilElement,
             not: {
                 exists: this._waitNotExists,
                 isVisible: this._waitNotIsVisible,
@@ -48,6 +210,88 @@ class PageElement extends _1.PageNode {
                 isSelected: this._waitNotIsSelected,
             }
         };
+        // EVENTUALLY FUNCTIONS
+        // checks if at least one element matching selector is existing within timeout
+        // reverse is optional and false by default
+        // timeout is optional and this._timeout by default
+        this._eventuallyExists = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitExists({ timeout }));
+        };
+        this._eventuallyNotExists = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotExists({ timeout }));
+        };
+        // checks if at least one element matching selector is visible within timeout
+        // reverse is optional and false by default
+        // timeout is optional and this._timeout by default
+        this._eventuallyIsVisible = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitIsVisible({ timeout }));
+        };
+        this._eventuallyNotIsVisible = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotIsVisible({ timeout }));
+        };
+        this._eventuallyHasClass = (className, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitHasClass(className, { timeout }));
+        };
+        this._eventuallyNotHasClass = (className, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotHasClass(className, { timeout }));
+        };
+        this._eventuallyContainsClass = (className, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitContainsClass(className, { timeout }));
+        };
+        this._eventuallyNotContainsClass = (className, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotContainsClass(className, { timeout }));
+        };
+        this._eventuallyHasText = (text, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitHasText(text, { timeout }));
+        };
+        this._eventuallyNotHasText = (text, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotHasText(text, { timeout }));
+        };
+        this._eventuallyHasAnyText = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitHasAnyText({ timeout }));
+        };
+        this._eventuallyNotHasAnyText = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotHasAnyText({ timeout }));
+        };
+        this._eventuallyContainsText = (text, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitContainsText(text, { timeout }));
+        };
+        this._eventuallyNotContainsText = (text, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotContainsText(text, { timeout }));
+        };
+        this._eventuallyHasValue = (value, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitHasValue(value, { timeout }));
+        };
+        this._eventuallyNotHasValue = (value, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotHasValue(value, { timeout }));
+        };
+        this._eventuallyHasAnyValue = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitHasAnyValue({ timeout }));
+        };
+        this._eventuallyNotHasAnyValue = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotHasAnyValue({ timeout }));
+        };
+        this._eventuallyContainsValue = (value, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitContainsValue(value, { timeout }));
+        };
+        this._eventuallyNotContainsValue = (value, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotContainsValue(value, { timeout }));
+        };
+        this._eventuallyIsEnabled = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitIsEnabled({ timeout }));
+        };
+        this._eventuallyNotIsEnabled = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotIsEnabled({ timeout }));
+        };
+        this._eventuallyIsSelected = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitIsSelected({ timeout }));
+        };
+        this._eventuallyNotIsSelected = ({ timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitNotIsSelected({ timeout }));
+        };
+        this._eventuallyMeetsCondition = (condition, { timeout = this.timeout } = {}) => {
+            return this._eventually(() => this._waitUntilElement(' meets condition', () => condition(this), { timeout }));
+        };
         this.eventually = {
             exists: this._eventuallyExists,
             isVisible: this._eventuallyIsVisible,
@@ -61,7 +305,7 @@ class PageElement extends _1.PageNode {
             containsValue: this._eventuallyContainsValue,
             isEnabled: this._eventuallyIsEnabled,
             isSelected: this._eventuallyIsSelected,
-            does: this._eventuallyDoes,
+            meetsCondition: this._eventuallyMeetsCondition,
             not: {
                 exists: this._eventuallyNotExists,
                 isVisible: this._eventuallyNotIsVisible,
@@ -80,13 +324,13 @@ class PageElement extends _1.PageNode {
         this._$ = Object.create(null);
         for (const method of Workflo.Class.getAllMethods(this.store)) {
             if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
-                this._$[method] = (_selector, _options) => {
-                    if (_selector instanceof builders_1.XPathBuilder) {
-                        _selector = builders_1.XPathBuilder.getInstance().build();
+                this._$[method] = (selector, _options) => {
+                    if (selector instanceof builders_1.XPathBuilder) {
+                        selector = builders_1.XPathBuilder.getInstance().build();
                     }
                     // chain selectors
-                    _selector = `${selector}${_selector}`;
-                    return this.store[method].apply(this.store, [_selector, _options]);
+                    selector = `${_selector}${selector}`;
+                    return this.store[method].apply(this.store, [selector, _options]);
                 };
             }
         }
@@ -98,11 +342,8 @@ class PageElement extends _1.PageNode {
     get $() {
         return this._$;
     }
-    /**
-     *
-     */
     get _element() {
-        return browser.element(this.selector);
+        return browser.element(this._selector);
     }
     get element() {
         this.initialWait();
@@ -205,9 +446,11 @@ class PageElement extends _1.PageNode {
     getDirectText() {
         const html = this.element.getHTML();
         let text = "";
+        const constructorName = this.constructor.name;
+        const selector = this._selector;
         const handler = new htmlParser.DomHandler(function (error, dom) {
             if (error) {
-                throw new Error(`Error creating dom for exclusive text in ${this.element.selector}: ${error}`);
+                throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`);
             }
             else {
                 dom.forEach(node => {
@@ -299,7 +542,7 @@ class PageElement extends _1.PageNode {
                 elems[0].click();
             }, this.getSelector());
             if (isJsError(result)) {
-                throw new Error(`Element could not be clicked: ${result.notFound.join(', ')}`);
+                throw new Error(`${this.constructor.name} could not be clicked: ${result.notFound.join(', ')}\n( ${this._selector} )`);
             }
         };
         if (options.customScroll) {
@@ -320,7 +563,7 @@ class PageElement extends _1.PageNode {
                         return false;
                     }
                 }
-            }, this.timeout, `Element did not become clickable after timeout: ${this.selector}`, interval);
+            }, this.timeout, `${this.constructor.name} did not become clickable after timeout.\n( ${this._selector} )`, interval);
         }
         catch (waitE) {
             waitE.message = errorMessage.replace('unknown error: ', '');
@@ -343,7 +586,7 @@ class PageElement extends _1.PageNode {
                     catch (error) {
                         errorMessage = error.message;
                     }
-                }, remainingTimeout + options.timeout, `Postcondition for click never became true: ${this.selector}`, interval);
+                }, remainingTimeout + options.timeout, `${this.constructor.name}: Postcondition for click never became true.\n( ${this._selector} )`, interval);
             }
             catch (waitE) {
                 waitE.message = errorMessage.replace('unknown error: ', '');
@@ -438,261 +681,6 @@ class PageElement extends _1.PageNode {
         else {
             return result;
         }
-    }
-    // WAIT
-    // Waits until at least one matching element exists.
-    //
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // exists that matches the this.selector.
-    _waitExists({ timeout = this.timeout } = {}) {
-        this._element.waitForExist(timeout);
-        return this;
-    }
-    _waitNotExists({ timeout = this.timeout } = {}) {
-        this._element.waitForExist(timeout, true);
-        return this;
-    }
-    // Waits until at least one matching element is visible.
-    //
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // is visible that matches the this.selector.
-    _waitIsVisible({ timeout = this.timeout } = {}) {
-        this._element.waitForVisible(timeout);
-        return this;
-    }
-    _waitNotIsVisible({ timeout = this.timeout } = {}) {
-        this._element.waitForVisible(timeout, true);
-        return this;
-    }
-    _waitHasClass(className, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return this.hasClass(className);
-        }, timeout, `${this.selector}: Class never became '${className}'`);
-        return this;
-    }
-    _waitNotHasClass(className, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return !this.hasClass(className);
-        }, timeout, `${this.selector}: Class never became other than '${className}'`);
-        return this;
-    }
-    _waitContainsClass(className, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return this.containsClass(className);
-        }, timeout, `${this.selector}: Class never contained '${className}'`);
-        return this;
-    }
-    _waitNotContainsClass(className, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return !this.containsClass(className);
-        }, timeout, `${this.selector}: Class never not contained '${className}'`);
-        return this;
-    }
-    // Waits until at least one matching element has a text.
-    //
-    // text -> defines the text that element should have
-    // If text is undefined, waits until element's text is not empty.
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // has a text that matches the this.selector.
-    _waitHasText(text, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return this.hasText(text);
-        }, timeout, `${this.selector}: Text never became '${text}'`);
-        return this;
-    }
-    _waitNotHasText(text, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return !this.hasText(text);
-        }, timeout, `${this.selector}: Text never became other than '${text}'`);
-        return this;
-    }
-    _waitHasAnyText({ timeout = this.timeout } = {}) {
-        this._element.waitForText(timeout);
-        return this;
-    }
-    _waitNotHasAnyText({ timeout = this.timeout } = {}) {
-        this._element.waitForText(timeout, true);
-        return this;
-    }
-    // Waits until at least one matching element contains a text.
-    //
-    // text -> defines the text that element should have
-    // If text is undefined, waits until element's text is not empty.
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // has a text that matches the this.selector.
-    _waitContainsText(text, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return this.containsText(text);
-        }, timeout, `${this.selector}: Text never contained '${text}'`);
-        return this;
-    }
-    _waitNotContainsText(text, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return !this.containsText(text);
-        }, timeout, `${this.selector}: Text never not contained '${text}'`);
-        return this;
-    }
-    // Waits until at least one matching element has a value.
-    //
-    // value -> defines the value that element should have
-    // If value is undefined, waits until element's value is not empty.
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // has a value that matches the this.selector.
-    _waitHasValue(value, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return this.hasValue(value);
-        }, timeout, `${this.selector}: Value never became '${value}'`);
-        return this;
-    }
-    _waitNotHasValue(value, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return !this.hasValue(value);
-        }, timeout, `${this.selector}: Value never became other than '${value}'`);
-        return this;
-    }
-    _waitHasAnyValue({ timeout = this.timeout } = {}) {
-        this._element.waitForValue(timeout);
-        return this;
-    }
-    _waitNotHasAnyValue({ timeout = this.timeout } = {}) {
-        this._element.waitForValue(timeout, true);
-        return this;
-    }
-    // Waits until at least one matching element contains a value.
-    //
-    // value -> defines the value that element should have
-    // If value is undefined, waits until element's value is not empty.
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // has a text that matches the this.selector.
-    _waitContainsValue(value, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return this.containsValue(value);
-        }, timeout, `${this.selector}: Value never contained '${value}'`);
-        return this;
-    }
-    _waitNotContainsValue(value, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => {
-            return !this.containsValue(value);
-        }, timeout, `${this.selector}: Value never not contained '${value}'`);
-        return this;
-    }
-    // Waits until at least one matching element is enabled.
-    //
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // is enabled that matches the this.selector.
-    _waitIsEnabled({ timeout = this.timeout } = {}) {
-        this._element.waitForEnabled(timeout);
-        return this;
-    }
-    _waitNotIsEnabled({ timeout = this.timeout } = {}) {
-        this._element.waitForEnabled(timeout, true);
-        return this;
-    }
-    // Waits until at least one matching element is selected.
-    //
-    // wdioParams -> { timeout: <Number in ms>, reverse: <boolean> }
-    // If reverse is set to true, function will wait until no element
-    // is selected that matches the this.selector.
-    _waitIsSelected({ timeout = this.timeout } = {}) {
-        this._element.waitForSelected(timeout);
-        return this;
-    }
-    _waitNotIsSelected({ timeout = this.timeout } = {}) {
-        this._element.waitForSelected(timeout, true);
-        return this;
-    }
-    _waitUntil(description, condition, { timeout = this.timeout } = {}) {
-        browser.waitUntil(() => condition(this), timeout, `${this.selector}: Wait until element ${description} failed`);
-        return this;
-    }
-    // EVENTUALLY FUNCTIONS
-    // checks if at least one element matching selector is existing within timeout
-    // reverse is optional and false by default
-    // timeout is optional and this._timeout by default
-    _eventuallyExists({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitExists({ timeout }));
-    }
-    _eventuallyNotExists({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotExists({ timeout }));
-    }
-    // checks if at least one element matching selector is visible within timeout
-    // reverse is optional and false by default
-    // timeout is optional and this._timeout by default
-    _eventuallyIsVisible({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitIsVisible({ timeout }));
-    }
-    _eventuallyNotIsVisible({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotIsVisible({ timeout }));
-    }
-    _eventuallyHasClass(className, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitHasClass(className, { timeout }));
-    }
-    _eventuallyNotHasClass(className, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotHasClass(className, { timeout }));
-    }
-    _eventuallyContainsClass(className, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitContainsClass(className, { timeout }));
-    }
-    _eventuallyNotContainsClass(className, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotContainsClass(className, { timeout }));
-    }
-    _eventuallyHasText(text, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitHasText(text, { timeout }));
-    }
-    _eventuallyNotHasText(text, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotHasText(text, { timeout }));
-    }
-    _eventuallyHasAnyText({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitHasAnyText({ timeout }));
-    }
-    _eventuallyNotHasAnyText({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotHasAnyText({ timeout }));
-    }
-    _eventuallyContainsText(text, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitContainsText(text, { timeout }));
-    }
-    _eventuallyNotContainsText(text, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotContainsText(text, { timeout }));
-    }
-    _eventuallyHasValue(value, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitHasValue(value, { timeout }));
-    }
-    _eventuallyNotHasValue(value, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotHasValue(value, { timeout }));
-    }
-    _eventuallyHasAnyValue({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitHasAnyValue({ timeout }));
-    }
-    _eventuallyNotHasAnyValue({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotHasAnyValue({ timeout }));
-    }
-    _eventuallyContainsValue(value, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitContainsValue(value, { timeout }));
-    }
-    _eventuallyNotContainsValue(value, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotContainsValue(value, { timeout }));
-    }
-    _eventuallyIsEnabled({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitIsEnabled({ timeout }));
-    }
-    _eventuallyNotIsEnabled({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotIsEnabled({ timeout }));
-    }
-    _eventuallyIsSelected({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitIsSelected({ timeout }));
-    }
-    _eventuallyNotIsSelected({ timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitNotIsSelected({ timeout }));
-    }
-    _eventuallyDoes(description, condition, { timeout = this.timeout } = {}) {
-        return this._eventually(() => this._waitUntil(description, () => condition(this), { timeout }));
     }
 }
 exports.PageElement = PageElement;

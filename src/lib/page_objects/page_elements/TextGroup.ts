@@ -1,4 +1,4 @@
-import { PageElementGroup, IPageElementGroupOpts } from './'
+import { PageElementGroup, IPageElementGroupOpts } from '.'
 import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
 import { PageElementStore } from '../stores'
 

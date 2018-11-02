@@ -1,3 +1,3 @@
-import { PageElementStore } from './PageElementStore';
+import { PageElementStore, CloneFunc } from './PageElementStore';
 export declare const pageElement: PageElementStore;
-export { PageElementStore };
+export { PageElementStore, CloneFunc };

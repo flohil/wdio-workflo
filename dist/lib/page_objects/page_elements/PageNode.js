@@ -3,21 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
-    constructor(selector, { store }) {
-        this.selector = selector;
+    constructor(_selector, { store }) {
+        this._selector = _selector;
         this.store = store;
     }
     __getNodeId() {
-        return this.selector;
+        return this._selector;
     }
     toJSON() {
         return {
             pageNodeType: this.constructor.name,
-            nodeId: this.selector
+            nodeId: this._selector
         };
     }
     getSelector() {
-        return this.selector;
+        return this._selector;
     }
     _eventually(func) {
         try {
@@ -27,6 +27,15 @@ class PageNode {
         catch (error) {
             return false;
         }
+    }
+    _wait(func, errorMessage) {
+        try {
+            func();
+        }
+        catch (error) {
+            throw new Error(`${this.constructor.name}${errorMessage}.\n( ${this._selector} )`);
+        }
+        return this;
     }
 }
 exports.PageNode = PageNode;
