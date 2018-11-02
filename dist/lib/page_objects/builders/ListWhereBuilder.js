@@ -10,38 +10,42 @@ class ListWhereBuilder {
         this._cloneFunc = opts.cloneFunc;
         this._xPathBuilder = XPathBuilder_1.XPathBuilder.getInstance();
     }
+    // XPathBuilder facade
     reset() {
         this._xPathBuilder.reset(this._selector);
         return this;
     }
-    constraint(constraint) {
-        this._xPathBuilder.constraint(constraint);
+    /**
+     * Appends plain xPath string to current selector.
+     * @param appendedSelector
+     */
+    append(appendedSelector) {
+        this._xPathBuilder.append(appendedSelector);
         return this;
     }
-    // Modifies element selector, so use only once for
-    // the same element.
+    /**
+     * Adds plain xPath constraint to current selector.
+     * @param constraintSelector
+     * @param builderFunc optional -> can be used to apply XPathSelector API to constraintSelector
+     */
+    constraint(constraintSelector, builderFunc) {
+        this._xPathBuilder.constraint(constraintSelector);
+        return this;
+    }
     text(text) {
         this._xPathBuilder.text(text);
         return this;
     }
-    // Modifies element selector, so use only once for
-    // the same element.
-    containedText(text) {
-        this._xPathBuilder.containedText(text);
+    containsText(text) {
+        this._xPathBuilder.containsText(text);
         return this;
     }
-    // Modifies element selector, so use only once for
-    // the same element.
     attr(key, value) {
         this._xPathBuilder.attr(key, value);
         return this;
     }
-    containedAttr(key, value) {
-        this._xPathBuilder.containedAttr(key, value);
-        return this;
-    }
-    level(level) {
-        this._xPathBuilder.level(level);
+    containsAttr(key, value) {
+        this._xPathBuilder.containsAttr(key, value);
         return this;
     }
     id(value) {
@@ -50,18 +54,28 @@ class ListWhereBuilder {
     class(value) {
         return this.attr('class', value);
     }
-    containedClass(value) {
-        return this.containedAttr('class', value);
+    containsClass(value) {
+        return this.containsAttr('class', value);
     }
     /**
-     * Starts with 1
-     * @param index
+     * Finds element by index of accurence on a single "level" of the DOM.
+     * Eg.: If index === 3, there must be 3 siblings on the same DOM level that match the current selector
+     * and the third one will be selected.
+     * @param index starts at 1
      */
-    index(index) {
-        const selector = `(${this._xPathBuilder.build()})[${index}]`;
-        this._xPathBuilder.reset(selector);
+    levelIndex(level) {
+        this._xPathBuilder.levelIndex(level);
         return this;
     }
+    /**
+     * Finds element by index of accurence accross all "levels/depths" of the DOM.
+     * @param index starts at 1
+     */
+    index(index) {
+        this._xPathBuilder.index(index);
+        return this;
+    }
+    // Result retrieval functions
     getFirst() {
         return this._elementStoreFunc.apply(this._store, [this._xPathBuilder.build(), this._elementOptions]);
     }

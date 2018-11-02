@@ -39,44 +39,49 @@ export class ListWhereBuilder<
     this._xPathBuilder = XPathBuilder.getInstance()
   }
 
+// XPathBuilder facade
+
   reset() {
     this._xPathBuilder.reset(this._selector)
     return this
   }
 
-  constraint(constraint: string) {
-    this._xPathBuilder.constraint(constraint)
+  /**
+   * Appends plain xPath string to current selector.
+   * @param appendedSelector
+   */
+  append(appendedSelector: string) {
+    this._xPathBuilder.append(appendedSelector)
     return this
   }
 
-  // Modifies element selector, so use only once for
-  // the same element.
+  /**
+   * Adds plain xPath constraint to current selector.
+   * @param constraintSelector
+   * @param builderFunc optional -> can be used to apply XPathSelector API to constraintSelector
+   */
+  constraint(constraintSelector: string, builderFunc?: (xPath: XPathBuilder) => XPathBuilder) {
+    this._xPathBuilder.constraint(constraintSelector)
+    return this
+  }
+
   text(text: string) {
     this._xPathBuilder.text(text)
     return this
   }
 
-  // Modifies element selector, so use only once for
-  // the same element.
-  containedText(text: string) {
-    this._xPathBuilder.containedText(text)
+  containsText(text: string) {
+    this._xPathBuilder.containsText(text)
     return this
   }
 
-  // Modifies element selector, so use only once for
-  // the same element.
   attr(key: string, value: string) {
     this._xPathBuilder.attr(key, value)
     return this
   }
 
-  containedAttr(key: string, value: string) {
-    this._xPathBuilder.containedAttr(key, value)
-    return this
-  }
-
-  level(level: number) {
-    this._xPathBuilder.level(level)
+  containsAttr(key: string, value: string) {
+    this._xPathBuilder.containsAttr(key, value)
     return this
   }
 
@@ -88,20 +93,31 @@ export class ListWhereBuilder<
     return this.attr('class', value)
   }
 
-  containedClass(value: string) {
-    return this.containedAttr('class', value)
+  containsClass(value: string) {
+    return this.containsAttr('class', value)
   }
 
   /**
-   * Starts with 1
-   * @param index
+   * Finds element by index of accurence on a single "level" of the DOM.
+   * Eg.: If index === 3, there must be 3 siblings on the same DOM level that match the current selector
+   * and the third one will be selected.
+   * @param index starts at 1
    */
-  index(index: number) {
-    const selector = `(${this._xPathBuilder.build()})[${index}]`
-    this._xPathBuilder.reset(selector)
-
+  levelIndex(level: number) {
+    this._xPathBuilder.levelIndex(level)
     return this
   }
+
+  /**
+   * Finds element by index of accurence accross all "levels/depths" of the DOM.
+   * @param index starts at 1
+   */
+  index(index: number) {
+    this._xPathBuilder.index( index )
+    return this
+  }
+
+// Result retrieval functions
 
   getFirst(): PageElementType {
     return this._elementStoreFunc.apply(

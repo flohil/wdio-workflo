@@ -14,12 +14,27 @@ class XPathBuilder {
         this._selector = selector;
         return this;
     }
-    append(selector) {
-        this._selector = `${this._selector}${selector}`;
+    /**
+     * Appends plain xPath string to current selector.
+     * @param appendedSelector
+     */
+    append(appendedSelector) {
+        this._selector = `${this._selector}${appendedSelector}`;
         return this;
     }
-    constraint(constraint) {
-        this._selector = `${this._selector}[${constraint}]`;
+    /**
+     * Adds plain xPath constraint to current selector.
+     * @param constraintSelector
+     * @param builderFunc optional -> can be used to apply XPathSelector API to constraintSelector
+     */
+    constraint(constraintSelector, builderFunc) {
+        if (!builderFunc) {
+            this._selector = `${this._selector}[${constraintSelector}]`;
+        }
+        else {
+            const constraintBuilder = XPathBuilder.getInstance().reset(constraintSelector);
+            this._selector = `${this._selector}${builderFunc(constraintBuilder).build()}`;
+        }
         return this;
     }
     // Modifies element selector, so use only once for
@@ -30,7 +45,7 @@ class XPathBuilder {
     }
     // Modifies element selector, so use only once for
     // the same element.
-    containedText(text) {
+    containsText(text) {
         this._selector = `${this._selector}[contains(.,'${text}')]`;
         return this;
     }
@@ -40,22 +55,40 @@ class XPathBuilder {
         this._selector = `${this._selector}[@${key}='${value}']`;
         return this;
     }
-    containedAttr(key, value) {
+    containsAttr(key, value) {
         this._selector = `${this._selector}[contains(@${key},'${value}')]`;
-        return this;
-    }
-    level(level) {
-        this._selector = `${this._selector}[${level}]`;
         return this;
     }
     id(value) {
         return this.attr('id', value);
     }
+    containsId(value) {
+        return this.containsAttr('id', value);
+    }
     class(value) {
         return this.attr('class', value);
     }
-    containedClass(value) {
-        return this.containedAttr('class', value);
+    containsClass(value) {
+        return this.containsAttr('class', value);
+    }
+    /**
+     * Finds element by index of accurence on a single "level" of the DOM.
+     * Eg.: If index === 3, there must be 3 siblings on the same DOM level that match the current selector
+     * and the third one will be selected.
+     * @param index starts at 1
+     */
+    levelIndex(index) {
+        this._selector = `${this._selector}[${index}]`;
+        return this;
+    }
+    /**
+     * Finds element by index of accurence accross all "levels/depths" of the DOM.
+     * @param index starts at 1
+     */
+    index(index) {
+        const selector = `(${this.build()})[${index}]`;
+        this.reset(selector);
+        return this;
     }
     build() {
         const selector = this._selector;
