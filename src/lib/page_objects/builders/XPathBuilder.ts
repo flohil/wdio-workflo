@@ -37,11 +37,26 @@ export class XPathBuilder {
     if ( !builderFunc ) {
       this._selector = `${this._selector}[${constraintSelector}]`
     } else {
-      const constraintBuilder = XPathBuilder.getInstance().reset(constraintSelector)
+      const outerSelector = this.build()
 
-      this._selector = `${this._selector}${builderFunc(constraintBuilder).build()}`
+      this.reset(constraintSelector)
+
+      this._selector = `${outerSelector}[${builderFunc(this).build()}]`
+
+      this.reset(this._selector)
     }
 
+    return this
+  }
+
+  /**
+   * Restrict current selector to elements which have at least one child defined by childSelector.
+   * Calls constraint() but adds a '.' to the beginning of the constraint to select only child elements.
+   * @param childSelector
+   * @param builderFunc optional -> can be used to apply XPathSelector API to childrenSelector
+   */
+  child(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder) {
+    this.constraint(`.${childSelector}`, builderFunc)
     return this
   }
 

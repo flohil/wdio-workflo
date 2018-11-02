@@ -27,6 +27,13 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
      * @param builderFunc optional -> can be used to apply XPathSelector API to constraintSelector
      */
     constraint(constraintSelector: string, builderFunc?: (xPath: XPathBuilder) => XPathBuilder): this;
+    /**
+     * Restrict current selector to elements which have at least one child defined by childrenSelector.
+     * Calls constraint() but adds a '.' to the beginning of the constraint to select only child elements.
+     * @param childSelector
+     * @param builderFunc optional -> can be used to apply XPathSelector API to childrenSelector
+     */
+    child(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder): this;
     text(text: string): this;
     containsText(text: string): this;
     attr(key: string, value: string): this;

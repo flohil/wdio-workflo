@@ -29,7 +29,17 @@ class ListWhereBuilder {
      * @param builderFunc optional -> can be used to apply XPathSelector API to constraintSelector
      */
     constraint(constraintSelector, builderFunc) {
-        this._xPathBuilder.constraint(constraintSelector);
+        this._xPathBuilder.constraint(constraintSelector, builderFunc);
+        return this;
+    }
+    /**
+     * Restrict current selector to elements which have at least one child defined by childrenSelector.
+     * Calls constraint() but adds a '.' to the beginning of the constraint to select only child elements.
+     * @param childSelector
+     * @param builderFunc optional -> can be used to apply XPathSelector API to childrenSelector
+     */
+    child(childSelector, builderFunc) {
+        this.constraint(`.${childSelector}`, builderFunc);
         return this;
     }
     text(text) {
