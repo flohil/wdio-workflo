@@ -26,18 +26,18 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Retur
   hasValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   containsValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // hasHtml: (html: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // hasAnyHtml: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // containsHtml: (html: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  hasAnyHTML: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  containsHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // hasId: (id: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // hasAnyId: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // containsId: (id: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // hasName: (name: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // hasAnyName: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  // containsName: (name: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  hasId: (id: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  hasAnyId: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  containsId: (id: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  hasName: (name: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  hasAnyName: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  containsName: (name: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
@@ -48,6 +48,8 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Retur
 export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   exists: () => boolean,
   isVisible: () => boolean,
+  isEnabled: () => boolean,
+  isSelected: () => boolean,
   hasClass: (className: string) => boolean,
   containsClass: (className: string) => boolean,
   hasText: (text: string) => boolean,
@@ -56,23 +58,21 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   hasValue: (value: string) => boolean,
   hasAnyValue: () => boolean,
   containsValue: (value: string) => boolean,
-  // hasHtml: (html: string => boolean,
-  // hasAnyHtml: () => boolean,
-  // containsHtml: (html: string => boolean,
+  hasHTML: (html: string) => boolean,
+  hasAnyHTML: () => boolean,
+  containsHTML: (html: string) => boolean,
   hasAttribute: (attributeName: string, attributeValue: string) => boolean,
   hasAnyAttribute: (attributeName: string) => boolean,
   containsAttribute: (attributeName: string, attributeValue: string) => boolean,
-  // hasId: (id: string => boolean,
-  // hasAnyId: () => boolean,
-  // containsId: (id: string => boolean,
-  // hasName: (name: string => boolean,
-  // hasAnyName: () => boolean,
-  // containsName: (name: string => boolean,
+  hasId: (id: string) => boolean,
+  hasAnyId: () => boolean,
+  containsId: (id: string) => boolean,
+  hasName: (name: string) => boolean,
+  hasAnyName: () => boolean,
+  containsName: (name: string) => boolean,
   hasDirectText: (directText: string) => boolean,
   hasAnyDirectText: () => boolean,
-  containsDirectText: (directText: string) => boolean,
-  isEnabled: () => boolean,
-  isSelected: () => boolean
+  containsDirectText: (directText: string) => boolean
 }
 
 export interface IPageElementGetStateAPI<Store extends PageElementStore> {
@@ -109,7 +109,9 @@ export interface IPageElementEventuallyNotAPI<Store extends PageElementStore>
 extends IPageElementCommonWaitAPI<Store, boolean> {}
 
 export interface IPageElementCurrentlyAPI<Store extends PageElementStore>
-extends IPageElementCheckStateAPI<Store>, IPageElementGetStateAPI<Store> {}
+extends IPageElementCheckStateAPI<Store>, IPageElementGetStateAPI<Store> {
+  not: IPageElementCheckStateAPI<Store>
+}
 
 export class PageElement<
   Store extends PageElementStore
@@ -605,17 +607,11 @@ export class PageElement<
     isVisible: (): boolean => {
       return this.__element.isVisible()
     },
-    hasClass: (className: string): boolean => {
-      return this.currently.getClass() === className
+    isEnabled: (): boolean => {
+      return this._isEnabled(this.__element)
     },
-    containsClass: (className: string): boolean => {
-      const _class: string = this.currently.getClass()
-
-      if (!_class) {
-        return false
-      } else {
-        return _class.indexOf(className) > -1
-      }
+    isSelected: (): boolean => {
+      return this._isSelected(this.__element)
     },
     hasText: (text: string): boolean => {
       return this.currently.getText() === text
@@ -635,6 +631,15 @@ export class PageElement<
     containsValue: (value: string): boolean => {
       return this.currently.getValue().indexOf(value) > -1
     },
+    hasHTML: (html: string): boolean => {
+      return this.currently.getHTML() === html
+    },
+    hasAnyHTML: (): boolean => {
+      return this.currently.getHTML().length > 0
+    },
+    containsHTML: (html: string): boolean => {
+      return this.currently.getHTML().indexOf(html) > -1
+    },
     hasDirectText: (directText: string): boolean => {
       return this.currently.getDirectText() === directText
     },
@@ -644,30 +649,75 @@ export class PageElement<
     containsDirectText: (directText: string): boolean => {
       return this.currently.getDirectText().indexOf(directText) > 0
     },
-    hasAttribute: (attrName: string, attrValue: string): boolean => {
-      return this.currently.getAttribute(attrName) === attrValue
+    hasAttribute: (attributeName: string, attributeValue: string): boolean => {
+      return this.currently.getAttribute(attributeName) === attributeValue
     },
-    hasAnyAttribute: (attrName: string): boolean => {
-      return this.currently.getAttribute(attrName).length > 0
+    hasAnyAttribute: (attributeName: string): boolean => {
+      return this.currently.getAttribute(attributeName).length > 0
     },
-    containsAttribute: (attrName: string, attrValue: string): boolean => {
-      return this.currently.getAttribute(attrName).indexOf(attrValue) > 0
+    containsAttribute: (attributeName: string, attributeValue: string): boolean => {
+      return this.currently.getAttribute(attributeName).indexOf(attributeValue) > 0
     },
-    // hasHtml: this._hasHtml,
-    // hasAnyHtml: this._hasAnyHtml,
-    // containsHtml: this._containsHtml,
-    // hasId: this._hasId,
-    // hasAnyId: this._hasAnyId,
-    // containsId: this._containsId,
-    // hasName: this._hasName,
-    // hasAnyName: this._hasAnyName,
-    // containsName: this._containsName,
-    isEnabled: (): boolean => {
-      return this._isEnabled(this.__element)
+    hasClass: (className: string): boolean => {
+      return this.currently.getClass() === className
     },
-    isSelected: (): boolean => {
-      return this._isSelected(this.__element)
+    containsClass: (className: string): boolean => {
+      const _class: string = this.currently.getClass()
+
+      if (!_class) {
+        return false
+      } else {
+        return _class.indexOf(className) > -1
+      }
     },
+    hasId: (id: string): boolean => {
+      return this.currently.getId() === id
+    },
+    hasAnyId: (): boolean => {
+      return this.currently.getId().length > 0
+    },
+    containsId: (id: string): boolean => {
+      return this.currently.getId().indexOf(id) > -1
+    },
+    hasName: (name: string): boolean => {
+      return this.currently.getName() === name
+    },
+    hasAnyName: (): boolean => {
+      return this.currently.getName().length > 0
+    },
+    containsName: (name: string): boolean => {
+      return this.currently.getName().indexOf(name) > -1
+    },
+
+    not: {
+      exists: () => !this.currently.exists(),
+      isVisible: () => !this.currently.isVisible(),
+      isEnabled: (): boolean => !this.currently.isEnabled(),
+      isSelected: (): boolean => !this.currently.isSelected(),
+      hasClass: (className: string) => !this.currently.hasClass(className),
+      containsClass: (className: string) => !this.currently.containsClass(className),
+      hasText: (text: string) => !this.currently.hasText(text),
+      hasAnyText: () => !this.currently.hasAnyText(),
+      containsText: (text: string) => !this.currently.containsText(text),
+      hasValue: (value: string): boolean => !this.currently.hasValue(value),
+      hasAnyValue: (): boolean => !this.currently.hasAnyValue(),
+      containsValue: (value: string): boolean => !this.currently.containsValue(value),
+      hasDirectText: (directText: string): boolean => !this.currently.hasDirectText(directText),
+      hasAnyDirectText: (): boolean => !this.currently.hasAnyDirectText(),
+      containsDirectText: (directText: string): boolean => !this.currently.containsDirectText(directText),
+      hasAttribute: (attributeName: string, attributeValue: string): boolean => !this.currently.hasAttribute(attributeName, attributeValue),
+      hasAnyAttribute: (attributeName: string): boolean => !this.currently.hasAnyAttribute(attributeName),
+      containsAttribute: (attributeName: string, attributeValue: string): boolean => !this.currently.containsAttribute(attributeName, attributeValue),
+      hasHTML: (html: string) => !this.currently.hasHTML(html),
+      hasAnyHTML: () => !this.currently.hasAnyHTML(),
+      containsHTML: (html: string) => !this.currently.containsHTML(html),
+      hasId: (id: string) => !this.currently.hasId(id),
+      hasAnyId: () => !this.currently.hasAnyId(),
+      containsId: (id: string) => !this.currently.containsId(id),
+      hasName: (name: string) => !this.currently.hasName(name),
+      hasAnyName: () => !this.currently.hasAnyName(),
+      containsName: (name: string) => !this.currently.containsName(name),
+    }
   }
 
 // WAIT (for certain state within timeout)
@@ -984,18 +1034,18 @@ export class PageElement<
     return this
   }
 
-  _waitHasHtml: any;
-  _waitHasAnyHtml: any;
-  _waitContainsHtml: any;
+  _waitHasHTML: any;
+  _waitHasAnyHTML: any;
+  _waitContainsHTML: any;
   _waitHasId: any;
   _waitHasAnyId: any;
   _waitContainsId: any;
   _waitHasName: any;
   _waitHasAnyName: any;
   _waitContainsName: any;
-  _waitNotHasHtml: any;
-  _waitNotHasAnyHtml: any;
-  _waitNotContainsHtml: any;
+  _waitNotHasHTML: any;
+  _waitNotHasAnyHTML: any;
+  _waitNotContainsHTML: any;
   _waitNotHasId: any;
   _waitNotHasAnyId: any;
   _waitNotContainsId: any;
@@ -1056,6 +1106,8 @@ export class PageElement<
   public wait: IPageElementWaitAPI<Store> = {
     exists: this._waitExists,
     isVisible: this._waitIsVisible,
+    isEnabled: this._waitIsEnabled,
+    isSelected: this._waitIsSelected,
     hasClass: this._waitHasClass,
     containsClass: this._waitContainsClass,
     hasText: this._waitHasText,
@@ -1070,22 +1122,22 @@ export class PageElement<
     hasAttribute: this._waitHasAttribute,
     hasAnyAttribute: this._waitHasAnyAttribute,
     containsAttribute: this._waitContainsAttribute,
-    hasHtml: this._waitHasHtml,
-    hasAnyHtml: this._waitHasAnyHtml,
-    containsHtml: this._waitContainsHtml,
+    hasHTML: this._waitHasHTML,
+    hasAnyHTML: this._waitHasAnyHTML,
+    containsHTML: this._waitContainsHTML,
     hasId: this._waitHasId,
     hasAnyId: this._waitHasAnyId,
     containsId: this._waitContainsId,
     hasName: this._waitHasName,
     hasAnyName: this._waitHasAnyName,
     containsName: this._waitContainsName,
-    isEnabled: this._waitIsEnabled,
-    isSelected: this._waitIsSelected,
     untilElement: this._waitUntilElement,
 
     not: {
       exists: this._waitNotExists,
       isVisible: this._waitNotIsVisible,
+      isEnabled: this._waitNotIsEnabled,
+      isSelected: this._waitNotIsSelected,
       hasClass: this._waitNotHasClass,
       containsClass: this._waitNotContainsClass,
       hasText: this._waitNotHasText,
@@ -1100,17 +1152,15 @@ export class PageElement<
       hasAttribute: this._waitNotHasAttribute,
       hasAnyAttribute: this._waitNotHasAnyAttribute,
       containsAttribute: this._waitNotContainsAttribute,
-      hasHtml: this._waitNotHasHtml,
-      hasAnyHtml: this._waitNotHasAnyHtml,
-      containsHtml: this._waitNotContainsHtml,
+      hasHTML: this._waitNotHasHTML,
+      hasAnyHTML: this._waitNotHasAnyHTML,
+      containsHTML: this._waitNotContainsHTML,
       hasId: this._waitNotHasId,
       hasAnyId: this._waitNotHasAnyId,
       containsId: this._waitNotContainsId,
       hasName: this._waitNotHasName,
       hasAnyName: this._waitNotHasAnyName,
-      containsName: this._waitNotContainsName,
-      isEnabled: this._waitNotIsEnabled,
-      isSelected: this._waitNotIsSelected,
+      containsName: this._waitNotContainsName
     }
   }
 
@@ -1272,9 +1322,9 @@ export class PageElement<
   _eventuallyHasAttribute: any;
   _eventuallyHasAnyAttribute: any;
   _eventuallyContainsAttribute: any;
-  _eventuallyHasHtml: any;
-  _eventuallyHasAnyHtml: any;
-  _eventuallyContainsHtml: any;
+  _eventuallyHasHTML: any;
+  _eventuallyHasAnyHTML: any;
+  _eventuallyContainsHTML: any;
   _eventuallyHasId: any;
   _eventuallyHasAnyId: any;
   _eventuallyContainsId: any;
@@ -1287,9 +1337,9 @@ export class PageElement<
   _eventuallyNotHasAttribute: any;
   _eventuallyNotHasAnyAttribute: any;
   _eventuallyNotContainsAttribute: any;
-  _eventuallyNotHasHtml: any;
-  _eventuallyNotHasAnyHtml: any;
-  _eventuallyNotContainsHtml: any;
+  _eventuallyNotHasHTML: any;
+  _eventuallyNotHasAnyHTML: any;
+  _eventuallyNotContainsHTML: any;
   _eventuallyNotHasId: any;
   _eventuallyNotHasAnyId: any;
   _eventuallyNotContainsId: any;
@@ -1300,6 +1350,8 @@ export class PageElement<
   public eventually: IPageElementEventuallyAPI<Store> = {
     exists: this._eventuallyExists,
     isVisible: this._eventuallyIsVisible,
+    isEnabled: this._eventuallyIsEnabled,
+    isSelected: this._eventuallyIsSelected,
     hasClass: this._eventuallyHasClass,
     containsClass: this._eventuallyContainsClass,
     hasText: this._eventuallyHasText,
@@ -1314,22 +1366,22 @@ export class PageElement<
     hasAttribute: this._eventuallyHasAttribute,
     hasAnyAttribute: this._eventuallyHasAnyAttribute,
     containsAttribute: this._eventuallyContainsAttribute,
-    hasHtml: this._eventuallyHasHtml,
-    hasAnyHtml: this._eventuallyHasAnyHtml,
-    containsHtml: this._eventuallyContainsHtml,
+    hasHTML: this._eventuallyHasHTML,
+    hasAnyHTML: this._eventuallyHasAnyHTML,
+    containsHTML: this._eventuallyContainsHTML,
     hasId: this._eventuallyHasId,
     hasAnyId: this._eventuallyHasAnyId,
     containsId: this._eventuallyContainsId,
     hasName: this._eventuallyHasName,
     hasAnyName: this._eventuallyHasAnyName,
     containsName: this._eventuallyContainsName,
-    isEnabled: this._eventuallyIsEnabled,
-    isSelected: this._eventuallyIsSelected,
     meetsCondition: this._eventuallyMeetsCondition,
 
     not: {
       exists: this._eventuallyNotExists,
       isVisible: this._eventuallyNotIsVisible,
+      isEnabled: this._eventuallyNotIsEnabled,
+      isSelected: this._eventuallyNotIsSelected,
       hasClass: this._eventuallyNotHasClass,
       containsClass: this._eventuallyNotContainsClass,
       hasText: this._eventuallyNotHasText,
@@ -1344,17 +1396,15 @@ export class PageElement<
       hasAttribute: this._eventuallyNotHasAttribute,
       hasAnyAttribute: this._eventuallyNotHasAnyAttribute,
       containsAttribute: this._eventuallyNotContainsAttribute,
-      hasHtml: this._eventuallyNotHasHtml,
-      hasAnyHtml: this._eventuallyNotHasAnyHtml,
-      containsHtml: this._eventuallyNotContainsHtml,
+      hasHTML: this._eventuallyNotHasHTML,
+      hasAnyHTML: this._eventuallyNotHasAnyHTML,
+      containsHTML: this._eventuallyNotContainsHTML,
       hasId: this._eventuallyNotHasId,
       hasAnyId: this._eventuallyNotHasAnyId,
       containsId: this._eventuallyNotContainsId,
       hasName: this._eventuallyNotHasName,
       hasAnyName: this._eventuallyNotHasAnyName,
-      containsName: this._eventuallyNotContainsName,
-      isEnabled: this._eventuallyNotIsEnabled,
-      isSelected: this._eventuallyNotIsSelected,
+      containsName: this._eventuallyNotContainsName
     }
   }
 }
