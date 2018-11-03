@@ -15,9 +15,16 @@ export interface IPageElementOpts<
 
 export type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>
 
+export interface ITolerance {
+  lower: number,
+  upper: number
+}
+
 export interface IPageElementCommonWaitAPI<Store extends PageElementStore, ReturnType> {
   exists: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   isVisible: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  isEnabled: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
+  isSelected: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   containsClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasText: (text: string, opts: Workflo.IWDIOParamsOptional) => ReturnType,
@@ -40,9 +47,7 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Retur
   containsName: (name: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
   hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  isEnabled: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  isSelected: (opts?: Workflo.IWDIOParamsOptional) => ReturnType
+  containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType
 }
 
 export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
@@ -72,7 +77,9 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   containsName: (name: string) => boolean,
   hasDirectText: (directText: string) => boolean,
   hasAnyDirectText: () => boolean,
-  containsDirectText: (directText: string) => boolean
+  containsDirectText: (directText: string) => boolean,
+  hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Partial<Workflo.ICoordinates>) => boolean,
+  hasSize: (size: Workflo.ISize, tolerances?: Partial<Workflo.ISize>) => boolean,
 }
 
 export interface IPageElementGetStateAPI<Store extends PageElementStore> {
@@ -688,6 +695,56 @@ export class PageElement<
     containsName: (name: string): boolean => {
       return this.currently.getName().indexOf(name) > -1
     },
+    hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates): boolean => {
+      const actualCoordinates = this.currently.getLocation()
+      const xTolerance: ITolerance = {
+        lower: coordinates.x,
+        upper: coordinates.x
+      }
+      const yTolerance: ITolerance = {
+        lower: coordinates.y,
+        upper: coordinates.y
+      }
+
+      if ( tolerances ) {
+        if ( tolerances.x ) {
+          xTolerance.lower = xTolerance.lower - tolerances.x
+          xTolerance.upper = xTolerance.lower + tolerances.x
+        }
+        if ( tolerances.y ) {
+          yTolerance.lower = yTolerance.lower - tolerances.y
+          yTolerance.upper = yTolerance.lower + tolerances.y
+        }
+      }
+
+      return coordinates.x >= xTolerance.lower && coordinates.x <= xTolerance.upper &&
+        coordinates.y >= yTolerance.lower && coordinates.y <= yTolerance.upper
+    },
+    hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize): boolean => {
+      const actualCoordinates = this.currently.getLocation()
+      const widthTolerance: ITolerance = {
+        lower: size.width,
+        upper: size.width
+      }
+      const heightTolerance: ITolerance = {
+        lower: size.height,
+        upper: size.height
+      }
+
+      if ( tolerances ) {
+        if ( tolerances.width ) {
+          widthTolerance.lower = widthTolerance.lower - tolerances.width
+          widthTolerance.upper = widthTolerance.lower + tolerances.width
+        }
+        if ( tolerances.height ) {
+          heightTolerance.lower = heightTolerance.lower - tolerances.height
+          heightTolerance.upper = heightTolerance.lower + tolerances.height
+        }
+      }
+
+      return size.width >= widthTolerance.lower && size.width <= widthTolerance.upper &&
+        size.height >= heightTolerance.lower && size.height <= heightTolerance.upper
+    },
 
     not: {
       exists: () => !this.currently.exists(),
@@ -717,6 +774,10 @@ export class PageElement<
       hasName: (name: string) => !this.currently.hasName(name),
       hasAnyName: () => !this.currently.hasAnyName(),
       containsName: (name: string) => !this.currently.containsName(name),
+      hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates): boolean =>
+        !this.currently.hasLocation(coordinates, tolerances),
+      hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize): boolean =>
+        !this.currently.hasSize(size, tolerances)
     }
   }
 
