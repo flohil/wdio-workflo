@@ -192,22 +192,22 @@ export class PageElement<
     switch (this._waitType) {
       case Workflo.WaitType.exist:
         if (!this.currently.exists()) {
-          this._waitExists()
+          this.wait.exists()
         }
         break
       case Workflo.WaitType.visible:
         if (!this.currently.isVisible()) {
-          this._waitIsVisible()
+          this.wait.isVisible()
         }
         break
       case Workflo.WaitType.value:
         if (!this.currently.hasAnyValue()) {
-          this._waitHasAnyValue()
+          this.wait.hasAnyValue()
         }
         break
       case Workflo.WaitType.text:
         if (!this.currently.hasAnyText()) {
-          this._waitHasAnyText()
+          this.wait.hasAnyText()
         }
         break
     }
@@ -783,327 +783,6 @@ export class PageElement<
 
 // WAIT (for certain state within timeout)
 
-  private _waitExists = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForExist(timeout),
-      ` never existed`
-    )
-  }
-
-  private _waitNotExists = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForExist(timeout, true),
-      ` never not existed`
-    )
-  }
-
-  private _waitIsVisible = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForVisible(timeout),
-      ` never became visible`
-    )
-  }
-
-  private _waitNotIsVisible = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForVisible(timeout, true),
-      ` never became invisible`
-    )
-  }
-
-  private _waitHasClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.hasClass(className)
-    }, timeout, `${this.constructor.name}: Class never became '${className}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotHasClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.hasClass(className)
-    }, timeout, `${this.constructor.name}: Class never became other than '${className}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitContainsClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.containsClass(className)
-    }, timeout, `${this.constructor.name}: Class never contained '${className}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotContainsClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.containsClass(className)
-    }, timeout, `${this.constructor.name}: Class never not contained '${className}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.hasText(text)
-    }, timeout, `${this.constructor.name}: Text never became '${text}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotHasText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.hasText(text)
-    }, timeout, `${this.constructor.name}: Text never became other than '${text}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasAnyText = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForText(timeout),
-      ` never had any text`
-    )
-  }
-
-  private _waitNotHasAnyText = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForText(timeout, true),
-      ` never not had any text`
-    )
-  }
-
-  private _waitContainsText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.containsText(text)
-    }, timeout, `${this.constructor.name}: Text never contained '${text}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotContainsText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.containsText(text)
-    }, timeout, `${this.constructor.name}: Text never not contained '${text}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.hasValue(value)
-    }, timeout, `${this.constructor.name}: Value never became '${value}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotHasValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.hasValue(value)
-    }, timeout, `${this.constructor.name}: Value never became other than '${value}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasAnyValue = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForValue(timeout),
-      ` never had any value`
-    )
-  }
-
-  private _waitNotHasAnyValue = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForValue(timeout, true),
-      ` never not had any value`
-    )
-  }
-
-  private _waitContainsValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.containsValue(value)
-    }, timeout, `${this.constructor.name}: Value never contained '${value}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotContainsValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.containsValue(value)
-    }, timeout, `${this.constructor.name}: Value never not contained '${value}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasDirectText = (
-    directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.hasDirectText(directText)
-    }, timeout, `${this.constructor.name}: DirectText never became '${directText}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotHasDirectText = (
-    directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.hasDirectText(directText)
-    }, timeout, `${this.constructor.name}: DirectText never became other than '${directText}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasAnyDirectText = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.hasAnyDirectText()
-    }, timeout, `${this.constructor.name} never had any direct text.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotHasAnyDirectText = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.hasAnyDirectText()
-    }, timeout, `${this.constructor.name} never not had any direct text.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitContainsDirectText = (
-    directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.containsDirectText(directText)
-    }, timeout, `${this.constructor.name}: Direct text never contained '${directText}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotContainsDirectText = (
-    directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.containsDirectText(directText)
-    }, timeout, `${this.constructor.name}: Direct text never not contained '${directText}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasAttribute = (
-    attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.hasAttribute(attributeName, attributeValue)
-    }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never became '${attributeValue}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotHasAttribute = (
-    attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.hasAttribute(attributeName, attributeValue)
-    }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never became other than '${attributeValue}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitHasAnyAttribute = (
-    attributeName: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.hasAnyAttribute(attributeName)
-    }, timeout, `${this.constructor.name}: Attribute '${attributeName}' never had any value.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotHasAnyAttribute = (
-    attributeName: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.hasAnyAttribute(attributeName)
-    }, timeout, `${this.constructor.name}: Attribute '${attributeName}' never not had any value.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitContainsAttribute = (
-    attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return this.currently.containsAttribute(attributeName, attributeValue)
-    }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never contained '${attributeValue}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  private _waitNotContainsAttribute = (
-    attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(() => {
-      return !this.currently.containsAttribute(attributeName, attributeValue)
-    }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never not contained '${attributeValue}'.\n( ${this._selector} )`)
-
-    return this
-  }
-
-  _waitHasHTML: any;
-  _waitHasAnyHTML: any;
-  _waitContainsHTML: any;
-  _waitHasId: any;
-  _waitHasAnyId: any;
-  _waitContainsId: any;
-  _waitHasName: any;
-  _waitHasAnyName: any;
-  _waitContainsName: any;
   _waitNotHasHTML: any;
   _waitNotHasAnyHTML: any;
   _waitNotContainsHTML: any;
@@ -1114,105 +793,415 @@ export class PageElement<
   _waitNotHasAnyName: any;
   _waitNotContainsName: any;
 
-  private _waitIsEnabled = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForEnabled(timeout),
-      ` never became enabled`
-    )
-  }
-
-  private _waitNotIsEnabled = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForEnabled(timeout, true),
-      ` never became disabled`
-    )
-  }
-
-  private _waitIsSelected = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._wait(
-      () => this.__element.waitForSelected(timeout),
-      ` never became selected`
-    )
-  }
-
-  private _waitNotIsSelected = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    this.__element.waitForSelected(timeout, true)
-
-    return this._wait(
-      () => this.__element.waitForSelected(timeout, true),
-      ` never became deselected`
-    )
-  }
-
-  private _waitUntilElement = (
-    description: string, condition: (element: this) => boolean, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    browser.waitUntil(
-      () => condition(this),
-      timeout,
-      `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`
-    )
-
-    return this
-  }
-
   public wait: IPageElementWaitAPI<Store> = {
-    exists: this._waitExists,
-    isVisible: this._waitIsVisible,
-    isEnabled: this._waitIsEnabled,
-    isSelected: this._waitIsSelected,
-    hasClass: this._waitHasClass,
-    containsClass: this._waitContainsClass,
-    hasText: this._waitHasText,
-    hasAnyText: this._waitHasAnyText,
-    containsText: this._waitContainsText,
-    hasValue: this._waitHasValue,
-    hasAnyValue: this._waitHasAnyValue,
-    containsValue: this._waitContainsValue,
-    hasDirectText: this._waitHasDirectText,
-    hasAnyDirectText: this._waitHasAnyDirectText,
-    containsDirectText: this._waitContainsDirectText,
-    hasAttribute: this._waitHasAttribute,
-    hasAnyAttribute: this._waitHasAnyAttribute,
-    containsAttribute: this._waitContainsAttribute,
-    hasHTML: this._waitHasHTML,
-    hasAnyHTML: this._waitHasAnyHTML,
-    containsHTML: this._waitContainsHTML,
-    hasId: this._waitHasId,
-    hasAnyId: this._waitHasAnyId,
-    containsId: this._waitContainsId,
-    hasName: this._waitHasName,
-    hasAnyName: this._waitHasAnyName,
-    containsName: this._waitContainsName,
-    untilElement: this._waitUntilElement,
+    exists: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      return this._wait(
+        () => this.__element.waitForExist(timeout),
+        ` never existed`
+      )
+    },
+    isVisible: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      return this._wait(
+        () => this.__element.waitForVisible(timeout),
+        ` never became visible`
+      )
+    },
+    isEnabled: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      return this._wait(
+        () => this.__element.waitForEnabled(timeout),
+        ` never became enabled`
+      )
+    },
+    isSelected: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      return this._wait(
+        () => this.__element.waitForSelected(timeout),
+        ` never became selected`
+      )
+    },
+    hasText: (
+      text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasText(text)
+      }, timeout, `${this.constructor.name}: Text never became '${text}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAnyText: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      return this._wait(
+        () => this.__element.waitForText(timeout),
+        ` never had any text`
+      )
+    },
+    containsText: (
+      text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsText(text)
+      }, timeout, `${this.constructor.name}: Text never contained '${text}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasValue: (
+      value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasValue(value)
+      }, timeout, `${this.constructor.name}: Value never became '${value}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAnyValue: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      return this._wait(
+        () => this.__element.waitForValue(timeout),
+        ` never had any value`
+      )
+    },
+    containsValue: (
+      value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsValue(value)
+      }, timeout, `${this.constructor.name}: Value never contained '${value}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasHTML: (
+      html: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasHTML(html)
+      }, timeout, `${this.constructor.name}: HTML never became '${html}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAnyHTML: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasAnyHTML()
+      }, timeout, `${this.constructor.name} never had any HTML.\n( ${this._selector} )`)
+
+      return this
+    },
+    containsHTML: (
+      html: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsHTML(html)
+      }, timeout, `${this.constructor.name}: HTML never contained '${html}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasDirectText: (
+      directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasDirectText(directText)
+      }, timeout, `${this.constructor.name}: DirectText never became '${directText}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAnyDirectText: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasAnyDirectText()
+      }, timeout, `${this.constructor.name} never had any direct text.\n( ${this._selector} )`)
+
+      return this
+    },
+    containsDirectText: (
+      directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsDirectText(directText)
+      }, timeout, `${this.constructor.name}: Direct text never contained '${directText}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAttribute: (
+      attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasAttribute(attributeName, attributeValue)
+      }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never became '${attributeValue}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAnyAttribute: (
+      attributeName: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasAnyAttribute(attributeName)
+      }, timeout, `${this.constructor.name}: Attribute '${attributeName}' never had any value.\n( ${this._selector} )`)
+
+      return this
+    },
+    containsAttribute: (
+      attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsAttribute(attributeName, attributeValue)
+      }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never contained '${attributeValue}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasClass: (
+      className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasClass(className)
+      }, timeout, `${this.constructor.name}: Class never became '${className}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    containsClass: (
+      className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsClass(className)
+      }, timeout, `${this.constructor.name}: Class never contained '${className}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasId: (
+      id: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasId(id)
+      }, timeout, `${this.constructor.name}: Id never became '${id}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAnyId: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasAnyId()
+      }, timeout, `${this.constructor.name} never had any id'.\n( ${this._selector} )`)
+
+      return this
+    },
+    containsId: (
+      id: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsId(id)
+      }, timeout, `${this.constructor.name}: Id never contained '${id}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasName: (
+      name: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasName(name)
+      }, timeout, `${this.constructor.name}: Name never became '${name}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    hasAnyName: (
+      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.hasAnyName()
+      }, timeout, `${this.constructor.name} never had any name'.\n( ${this._selector} )`)
+
+      return this
+    },
+    containsName: (
+      name: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(() => {
+        return this.currently.containsName(name)
+      }, timeout, `${this.constructor.name}: Name never contained '${name}'.\n( ${this._selector} )`)
+
+      return this
+    },
+    untilElement: (
+      description: string, condition: (element: this) => boolean, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+    ) => {
+      browser.waitUntil(
+        () => condition(this),
+        timeout,
+        `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`
+      )
+
+      return this
+    },
 
     not: {
-      exists: this._waitNotExists,
-      isVisible: this._waitNotIsVisible,
-      isEnabled: this._waitNotIsEnabled,
-      isSelected: this._waitNotIsSelected,
-      hasClass: this._waitNotHasClass,
-      containsClass: this._waitNotContainsClass,
-      hasText: this._waitNotHasText,
-      hasAnyText: this._waitNotHasAnyText,
-      containsText: this._waitNotContainsText,
-      hasValue: this._waitNotHasValue,
-      hasAnyValue: this._waitNotHasAnyValue,
-      containsValue: this._waitNotContainsValue,
-      hasDirectText: this._waitNotHasDirectText,
-      hasAnyDirectText: this._waitNotHasAnyDirectText,
-      containsDirectText: this._waitNotContainsDirectText,
-      hasAttribute: this._waitNotHasAttribute,
-      hasAnyAttribute: this._waitNotHasAnyAttribute,
-      containsAttribute: this._waitNotContainsAttribute,
+      exists: (
+        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        return this._wait(
+          () => this.__element.waitForExist(timeout, true),
+          ` never not existed`
+        )
+      },
+      isVisible: (
+        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        return this._wait(
+          () => this.__element.waitForVisible(timeout, true),
+          ` never became invisible`
+        )
+      },
+      isEnabled: (
+        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        return this._wait(
+          () => this.__element.waitForEnabled(timeout, true),
+          ` never became disabled`
+        )
+      },
+      isSelected: (
+        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        this.__element.waitForSelected(timeout, true)
+
+        return this._wait(
+          () => this.__element.waitForSelected(timeout, true),
+          ` never became deselected`
+        )
+      },
+      hasClass: (
+        className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.hasClass(className)
+        }, timeout, `${this.constructor.name}: Class never became other than '${className}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      containsClass: (
+        className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.containsClass(className)
+        }, timeout, `${this.constructor.name}: Class never not contained '${className}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasText: (
+        text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.hasText(text)
+        }, timeout, `${this.constructor.name}: Text never became other than '${text}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasAnyText: (
+        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        return this._wait(
+          () => this.__element.waitForText(timeout, true),
+          ` never not had any text`
+        )
+      },
+      containsText: (
+        text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.containsText(text)
+        }, timeout, `${this.constructor.name}: Text never not contained '${text}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasValue: (
+        value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.hasValue(value)
+        }, timeout, `${this.constructor.name}: Value never became other than '${value}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasAnyValue: (
+        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        return this._wait(
+          () => this.__element.waitForValue(timeout, true),
+          ` never not had any value`
+        )
+      },
+      containsValue: (
+        value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.containsValue(value)
+        }, timeout, `${this.constructor.name}: Value never not contained '${value}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasDirectText: (
+        directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.hasDirectText(directText)
+        }, timeout, `${this.constructor.name}: DirectText never became other than '${directText}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasAnyDirectText: (
+        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.hasAnyDirectText()
+        }, timeout, `${this.constructor.name} never not had any direct text.\n( ${this._selector} )`)
+
+        return this
+      },
+      containsDirectText: (
+        directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.containsDirectText(directText)
+        }, timeout, `${this.constructor.name}: Direct text never not contained '${directText}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasAttribute: (
+        attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.hasAttribute(attributeName, attributeValue)
+        }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never became other than '${attributeValue}'.\n( ${this._selector} )`)
+
+        return this
+      },
+      hasAnyAttribute: (
+        attributeName: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.hasAnyAttribute(attributeName)
+        }, timeout, `${this.constructor.name}: Attribute '${attributeName}' never not had any value.\n( ${this._selector} )`)
+
+        return this
+      },
+      containsAttribute: (
+        attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
+      ) => {
+        browser.waitUntil(() => {
+          return !this.currently.containsAttribute(attributeName, attributeValue)
+        }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never not contained '${attributeValue}'.\n( ${this._selector} )`)
+
+        return this
+      },
       hasHTML: this._waitNotHasHTML,
       hasAnyHTML: this._waitNotHasAnyHTML,
       containsHTML: this._waitNotContainsHTML,
@@ -1226,156 +1215,6 @@ export class PageElement<
   }
 
 // EVENTUALLY FUNCTIONS (check wether certain state if reached after timeout)
-
-  // checks if at least one element matching selector is existing within timeout
-  // reverse is optional and false by default
-  // timeout is optional and this._timeout by default
-  private _eventuallyExists = ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
-    return this._eventually(() => this._waitExists({ timeout }))
-  }
-
-  private _eventuallyNotExists = ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
-    return this._eventually(() => this._waitNotExists({ timeout }))
-  }
-
-  // checks if at least one element matching selector is visible within timeout
-  // reverse is optional and false by default
-  // timeout is optional and this._timeout by default
-  private _eventuallyIsVisible = ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
-    return this._eventually(() => this._waitIsVisible({ timeout }))
-  }
-
-  private _eventuallyNotIsVisible = ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
-    return this._eventually(() => this._waitNotIsVisible({ timeout }))
-  }
-
-  private _eventuallyHasClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitHasClass(className, { timeout }))
-  }
-
-  private _eventuallyNotHasClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotHasClass(className, { timeout }))
-  }
-
-  private _eventuallyContainsClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitContainsClass(className, { timeout }))
-  }
-
-  private _eventuallyNotContainsClass = (
-    className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotContainsClass(className, { timeout }))
-  }
-
-  private _eventuallyHasText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitHasText(text, { timeout }))
-  }
-
-  private _eventuallyNotHasText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotHasText(text, { timeout }))
-  }
-
-  private _eventuallyHasAnyText = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitHasAnyText({ timeout }))
-  }
-
-  private _eventuallyNotHasAnyText = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotHasAnyText({ timeout }))
-  }
-
-  private _eventuallyContainsText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitContainsText(text, { timeout }))
-  }
-
-  private _eventuallyNotContainsText = (
-    text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotContainsText(text, { timeout }))
-  }
-
-  private _eventuallyHasValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitHasValue(value, { timeout }))
-  }
-
-  private _eventuallyNotHasValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotHasValue(value, { timeout }))
-  }
-
-  private _eventuallyHasAnyValue = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitHasAnyValue({ timeout }))
-  }
-
-  private _eventuallyNotHasAnyValue = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotHasAnyValue({ timeout }))
-  }
-
-  private _eventuallyContainsValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitContainsValue(value, { timeout }))
-  }
-
-  private _eventuallyNotContainsValue = (
-    value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotContainsValue(value, { timeout }))
-  }
-
-  private _eventuallyIsEnabled = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitIsEnabled({ timeout }))
-  }
-
-  private _eventuallyNotIsEnabled = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotIsEnabled({ timeout }))
-  }
-
-  private _eventuallyIsSelected = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitIsSelected({ timeout }))
-  }
-
-  private _eventuallyNotIsSelected = (
-    { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(() => this._waitNotIsSelected({ timeout }))
-  }
-
-  private _eventuallyMeetsCondition = (
-    condition: (element: this) => boolean, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-  ) => {
-    return this._eventually(
-      () => this._waitUntilElement(' meets condition', () => condition(this), { timeout })
-    )
-  }
 
   _eventuallyHasDirectText: any;
   _eventuallyHasAnyDirectText: any;
@@ -1409,18 +1248,42 @@ export class PageElement<
   _eventuallyNotContainsName: any;
 
   public eventually: IPageElementEventuallyAPI<Store> = {
-    exists: this._eventuallyExists,
-    isVisible: this._eventuallyIsVisible,
-    isEnabled: this._eventuallyIsEnabled,
-    isSelected: this._eventuallyIsSelected,
-    hasClass: this._eventuallyHasClass,
-    containsClass: this._eventuallyContainsClass,
-    hasText: this._eventuallyHasText,
-    hasAnyText: this._eventuallyHasAnyText,
-    containsText: this._eventuallyContainsText,
-    hasValue: this._eventuallyHasValue,
-    hasAnyValue: this._eventuallyHasAnyValue,
-    containsValue: this._eventuallyContainsValue,
+    exists: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.exists({ timeout }))
+    },
+    isVisible: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.isVisible({ timeout }))
+    },
+    isEnabled: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.isEnabled({ timeout }))
+    },
+    isSelected: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.isSelected({ timeout }))
+    },
+    hasClass: (className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.hasClass(className, { timeout }))
+    },
+    containsClass: (className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.containsClass(className, { timeout }))
+    },
+    hasText: (text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.hasText(text, { timeout }))
+    },
+    hasAnyText: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.hasAnyText({ timeout }))
+    },
+    containsText: (text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.containsText(text, { timeout }))
+    },
+    hasValue: (value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.hasValue(value, { timeout }))
+    },
+    hasAnyValue: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.hasAnyValue({ timeout }))
+    },
+    containsValue: (value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(() => this.wait.containsValue(value, { timeout }))
+    },
     hasDirectText: this._eventuallyHasDirectText,
     hasAnyDirectText: this._eventuallyHasAnyDirectText,
     containsDirectText: this._eventuallyContainsDirectText,
@@ -1436,21 +1299,49 @@ export class PageElement<
     hasName: this._eventuallyHasName,
     hasAnyName: this._eventuallyHasAnyName,
     containsName: this._eventuallyContainsName,
-    meetsCondition: this._eventuallyMeetsCondition,
+    meetsCondition: (condition: (element: this) => boolean, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+      return this._eventually(
+        () => this.wait.untilElement(' meets condition', () => condition(this), { timeout })
+      )
+    },
 
     not: {
-      exists: this._eventuallyNotExists,
-      isVisible: this._eventuallyNotIsVisible,
-      isEnabled: this._eventuallyNotIsEnabled,
-      isSelected: this._eventuallyNotIsSelected,
-      hasClass: this._eventuallyNotHasClass,
-      containsClass: this._eventuallyNotContainsClass,
-      hasText: this._eventuallyNotHasText,
-      hasAnyText: this._eventuallyNotHasAnyText,
-      containsText: this._eventuallyNotContainsText,
-      hasValue: this._eventuallyNotHasValue,
-      hasAnyValue: this._eventuallyNotHasAnyValue,
-      containsValue: this._eventuallyNotContainsValue,
+      exists: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.exists({ timeout }))
+      },
+      isVisible: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.isVisible({ timeout }))
+      },
+      isEnabled: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.isEnabled({ timeout }))
+      },
+      isSelected: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.isSelected({ timeout }))
+      },
+      hasClass: (className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.hasClass(className, { timeout }))
+      },
+      containsClass: (className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.containsClass(className, { timeout }))
+      },
+      hasText: (text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.hasText(text, { timeout }))
+      },
+      hasAnyText: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.hasAnyText({ timeout }))
+      },
+      containsText: (text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.containsText(text, { timeout }))
+      },
+      hasValue: (value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.hasValue(value, { timeout }))
+      },
+      hasAnyValue: ({ timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.hasAnyValue({ timeout }))
+      },
+      containsValue: (value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}) => {
+        return this._eventually(() => this.wait.not.containsValue(value, { timeout }))
+      },
       hasDirectText: this._eventuallyNotHasDirectText,
       hasAnyDirectText: this._eventuallyNotHasAnyDirectText,
       containsDirectText: this._eventuallyNotContainsDirectText,
