@@ -78,8 +78,12 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   hasDirectText: (directText: string) => boolean,
   hasAnyDirectText: () => boolean,
   containsDirectText: (directText: string) => boolean,
-  hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Partial<Workflo.ICoordinates>) => boolean,
-  hasSize: (size: Workflo.ISize, tolerances?: Partial<Workflo.ISize>) => boolean,
+  hasLocation: (coordinates: Partial<Workflo.ICoordinates>, tolerances?: Partial<Workflo.ICoordinates>) => boolean,
+  hasX: (x: number, tolerance?: number) => boolean,
+  hasY: (y: number, tolerance?: number) => boolean,
+  hasSize: (size: Partial<Workflo.ISize>, tolerances?: Partial<Workflo.ISize>) => boolean,
+  hasWidth: (width: number, tolerance?: number) => boolean,
+  hasHeight: (height: number, tolerance?: number) => boolean,
 }
 
 export interface IPageElementGetStateAPI<Store extends PageElementStore> {
@@ -93,7 +97,11 @@ export interface IPageElementGetStateAPI<Store extends PageElementStore> {
   getId: () => string
   getName: () => string
   getLocation: () => Workflo.ICoordinates
+  getX: () => number
+  getY: () => number
   getSize: () => Workflo.ISize
+  getWidth: () => number
+  getHeight: () => number
 }
 
 export interface IPageElementWaitAPI<Store extends PageElementStore>
@@ -359,8 +367,24 @@ export class PageElement<
     return this._getLocation(this.element)
   }
 
+  getX() {
+    return this._getLocation(this.element).x
+  }
+
+  getY() {
+    return this._getLocation(this.element).y
+  }
+
   getSize() {
     return this._getSize(this.element)
+  }
+
+  getWidth() {
+    return this._getSize(this.element).width
+  }
+
+  getHeight() {
+    return this._getSize(this.element).height
   }
 
   getTimeout() {
@@ -603,8 +627,20 @@ export class PageElement<
     getLocation: (): Workflo.ICoordinates => {
       return this._getLocation(this.__element)
     },
+    getX: (): number => {
+      return this._getLocation(this.__element).x
+    },
+    getY: (): number => {
+      return this._getLocation(this.__element).y
+    },
     getSize: (): Workflo.ISize => {
       return this._getSize(this.__element)
+    },
+    getWidth: (): number => {
+      return this._getSize(this.__element).width
+    },
+    getHeight: (): number => {
+      return this._getSize(this.__element).height
     },
 
     // CHECK STATE
@@ -698,12 +734,12 @@ export class PageElement<
     hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates): boolean => {
       const actualCoordinates = this.currently.getLocation()
       const xTolerance: ITolerance = {
-        lower: coordinates.x,
-        upper: coordinates.x
+        lower: actualCoordinates.x,
+        upper: actualCoordinates.x
       }
       const yTolerance: ITolerance = {
-        lower: coordinates.y,
-        upper: coordinates.y
+        lower: actualCoordinates.y,
+        upper: actualCoordinates.y
       }
 
       if ( tolerances ) {
@@ -720,15 +756,43 @@ export class PageElement<
       return coordinates.x >= xTolerance.lower && coordinates.x <= xTolerance.upper &&
         coordinates.y >= yTolerance.lower && coordinates.y <= yTolerance.upper
     },
-    hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize): boolean => {
+    hasX: (x: number, tolerance?: number): boolean => {
       const actualCoordinates = this.currently.getLocation()
+      const tolerances: ITolerance = {
+        lower: actualCoordinates.x,
+        upper: actualCoordinates.x
+      }
+
+      if ( tolerance ) {
+        tolerances.lower = tolerances.lower - tolerance
+        tolerances.upper = tolerances.lower + tolerance
+      }
+
+      return x >= tolerances.lower && x <= tolerances.upper
+    },
+    hasY: (y: number, tolerance?: number): boolean => {
+      const actualCoordinates = this.currently.getLocation()
+      const tolerances: ITolerance = {
+        lower: actualCoordinates.y,
+        upper: actualCoordinates.y
+      }
+
+      if ( tolerance ) {
+        tolerances.lower = tolerances.lower - tolerance
+        tolerances.upper = tolerances.lower + tolerance
+      }
+
+      return y >= tolerances.lower && y <= tolerances.upper
+    },
+    hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize): boolean => {
+      const actualSize = this.currently.getSize()
       const widthTolerance: ITolerance = {
-        lower: size.width,
-        upper: size.width
+        lower: actualSize.width,
+        upper: actualSize.width
       }
       const heightTolerance: ITolerance = {
-        lower: size.height,
-        upper: size.height
+        lower: actualSize.height,
+        upper: actualSize.height
       }
 
       if ( tolerances ) {
@@ -743,7 +807,35 @@ export class PageElement<
       }
 
       return size.width >= widthTolerance.lower && size.width <= widthTolerance.upper &&
-        size.height >= heightTolerance.lower && size.height <= heightTolerance.upper
+      size.height >= heightTolerance.lower && size.height <= heightTolerance.upper
+    },
+    hasWidth: (width: number, tolerance?: number): boolean => {
+      const actualSize = this.currently.getSize()
+      const tolerances: ITolerance = {
+        lower: actualSize.width,
+        upper: actualSize.width
+      }
+
+      if ( tolerance ) {
+        tolerances.lower = tolerances.lower - tolerance
+        tolerances.upper = tolerances.lower + tolerance
+      }
+
+      return width >= tolerances.lower && width <= tolerances.upper
+    },
+    hasHeight: (height: number, tolerance?: number): boolean => {
+      const actualSize = this.currently.getSize()
+      const tolerances: ITolerance = {
+        lower: actualSize.height,
+        upper: actualSize.height
+      }
+
+      if ( tolerance ) {
+        tolerances.lower = tolerances.lower - tolerance
+        tolerances.upper = tolerances.lower + tolerance
+      }
+
+      return height >= tolerances.lower && height <= tolerances.upper
     },
 
     not: {
@@ -776,8 +868,12 @@ export class PageElement<
       containsName: (name: string) => !this.currently.containsName(name),
       hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates): boolean =>
         !this.currently.hasLocation(coordinates, tolerances),
+      hasX: (x: number, tolerance?: number) => !this.currently.hasX(x, tolerance),
+      hasY: (y: number, tolerance?: number) => !this.currently.hasY(y, tolerance),
       hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize): boolean =>
-        !this.currently.hasSize(size, tolerances)
+        !this.currently.hasSize(size, tolerances),
+      hasWidth: (width: number, tolerance?: number) => !this.currently.hasWidth(width, tolerance),
+      hasHeight: (height: number, tolerance?: number) => !this.currently.hasHeight(height, tolerance),
     }
   }
 
