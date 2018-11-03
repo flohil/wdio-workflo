@@ -13,6 +13,7 @@ export interface IPageElementOpts<
   customScroll?: Workflo.IScrollParams
 }
 
+
 export type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>
 
 export interface ITolerance {
@@ -21,33 +22,33 @@ export interface ITolerance {
 }
 
 export interface IPageElementCommonWaitAPI<Store extends PageElementStore, ReturnType> {
-  exists: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  isVisible: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  isEnabled: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  isSelected: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasText: (text: string, opts: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsText: (text: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAnyHTML: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasId: (id: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAnyId: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsId: (id: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasName: (name: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAnyName: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsName: (name: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => ReturnType,
-  containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => ReturnType
+  exists: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  isVisible: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  isEnabled: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  isSelected: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasText: (text: string, opts: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAnyText: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsText: (text: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAnyValue: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAnyHTML: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsHTML: (html: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasId: (id: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAnyId: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsId: (id: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasName: (name: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAnyName: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsName: (name: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType,
+  containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptionalReverse) => ReturnType
 }
 
 export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
@@ -596,6 +597,32 @@ export class PageElement<
 
 // CURRENT CHECK STATE FUNCTIONS
 
+  private _withinTolerance(actual: number, expected: number, tolerance?: number) {
+    const tolerances: ITolerance = {
+      lower: actual,
+      upper: actual
+    }
+
+    if ( tolerance ) {
+      tolerances.lower -= - tolerance
+      tolerances.upper += + tolerance
+    }
+
+    return expected >= tolerances.lower && expected <= tolerances.upper
+  }
+
+  private _hasAxisLocation(axis: 'x' | 'y', expected: number, tolerance?: number): boolean {
+    const actualCoordinates = this.currently.getLocation()
+
+    return this._withinTolerance(actualCoordinates[axis], expected, tolerance)
+  }
+
+  private _hasSideSize(side: 'width' | 'height', expected: number, tolerance?: number): boolean {
+    const actualSize = this.currently.getSize()
+
+    return this._withinTolerance(actualSize[side], expected, tolerance)
+  }
+
   currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store> = {
     element: this.__element,
 
@@ -731,111 +758,23 @@ export class PageElement<
     containsName: (name: string): boolean => {
       return this.currently.getName().indexOf(name) > -1
     },
-    hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates): boolean => {
-      const actualCoordinates = this.currently.getLocation()
-      const xTolerance: ITolerance = {
-        lower: actualCoordinates.x,
-        upper: actualCoordinates.x
-      }
-      const yTolerance: ITolerance = {
-        lower: actualCoordinates.y,
-        upper: actualCoordinates.y
-      }
-
-      if ( tolerances ) {
-        if ( tolerances.x ) {
-          xTolerance.lower = xTolerance.lower - tolerances.x
-          xTolerance.upper = xTolerance.lower + tolerances.x
-        }
-        if ( tolerances.y ) {
-          yTolerance.lower = yTolerance.lower - tolerances.y
-          yTolerance.upper = yTolerance.lower + tolerances.y
-        }
-      }
-
-      return coordinates.x >= xTolerance.lower && coordinates.x <= xTolerance.upper &&
-        coordinates.y >= yTolerance.lower && coordinates.y <= yTolerance.upper
+    hasLocation: (coordinates: Workflo.ICoordinates, tolerances: Workflo.ICoordinates = { x: 0, y: 0 }): boolean => {
+      return this._hasAxisLocation('x', coordinates.x, tolerances.x) && this._hasAxisLocation('y', coordinates.y, tolerances.y)
     },
     hasX: (x: number, tolerance?: number): boolean => {
-      const actualCoordinates = this.currently.getLocation()
-      const tolerances: ITolerance = {
-        lower: actualCoordinates.x,
-        upper: actualCoordinates.x
-      }
-
-      if ( tolerance ) {
-        tolerances.lower = tolerances.lower - tolerance
-        tolerances.upper = tolerances.lower + tolerance
-      }
-
-      return x >= tolerances.lower && x <= tolerances.upper
+       return this._hasAxisLocation('x', x, tolerance)
     },
     hasY: (y: number, tolerance?: number): boolean => {
-      const actualCoordinates = this.currently.getLocation()
-      const tolerances: ITolerance = {
-        lower: actualCoordinates.y,
-        upper: actualCoordinates.y
-      }
-
-      if ( tolerance ) {
-        tolerances.lower = tolerances.lower - tolerance
-        tolerances.upper = tolerances.lower + tolerance
-      }
-
-      return y >= tolerances.lower && y <= tolerances.upper
+      return this._hasAxisLocation('y', y, tolerance)
     },
-    hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize): boolean => {
-      const actualSize = this.currently.getSize()
-      const widthTolerance: ITolerance = {
-        lower: actualSize.width,
-        upper: actualSize.width
-      }
-      const heightTolerance: ITolerance = {
-        lower: actualSize.height,
-        upper: actualSize.height
-      }
-
-      if ( tolerances ) {
-        if ( tolerances.width ) {
-          widthTolerance.lower = widthTolerance.lower - tolerances.width
-          widthTolerance.upper = widthTolerance.lower + tolerances.width
-        }
-        if ( tolerances.height ) {
-          heightTolerance.lower = heightTolerance.lower - tolerances.height
-          heightTolerance.upper = heightTolerance.lower + tolerances.height
-        }
-      }
-
-      return size.width >= widthTolerance.lower && size.width <= widthTolerance.upper &&
-      size.height >= heightTolerance.lower && size.height <= heightTolerance.upper
+    hasSize: (size: Workflo.ISize, tolerances: Workflo.ISize = {width: 0, height: 0}): boolean => {
+      return this._hasSideSize('width', size.width, tolerances.width) && this._hasSideSize('height', size.height, tolerances.height)
     },
     hasWidth: (width: number, tolerance?: number): boolean => {
-      const actualSize = this.currently.getSize()
-      const tolerances: ITolerance = {
-        lower: actualSize.width,
-        upper: actualSize.width
-      }
-
-      if ( tolerance ) {
-        tolerances.lower = tolerances.lower - tolerance
-        tolerances.upper = tolerances.lower + tolerance
-      }
-
-      return width >= tolerances.lower && width <= tolerances.upper
+      return this._hasSideSize('width', width, tolerance)
     },
     hasHeight: (height: number, tolerance?: number): boolean => {
-      const actualSize = this.currently.getSize()
-      const tolerances: ITolerance = {
-        lower: actualSize.height,
-        upper: actualSize.height
-      }
-
-      if ( tolerance ) {
-        tolerances.lower = tolerances.lower - tolerance
-        tolerances.upper = tolerances.lower + tolerance
-      }
-
-      return height >= tolerances.lower && height <= tolerances.upper
+      return this._hasSideSize('height', height, tolerance)
     },
 
     not: {
@@ -879,254 +818,174 @@ export class PageElement<
 
 // WAIT (for certain state within timeout)
 
-  _waitNotHasHTML: any;
-  _waitNotHasAnyHTML: any;
-  _waitNotContainsHTML: any;
-  _waitNotHasId: any;
-  _waitNotHasAnyId: any;
-  _waitNotContainsId: any;
-  _waitNotHasName: any;
-  _waitNotHasAnyName: any;
-  _waitNotContainsName: any;
+  private _waitWdioCheckFunc(
+    checkTypeStr: string,
+    conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean,
+    { timeout = this._timeout, reverse }: Workflo.IWDIOParamsOptionalReverse = {}
+  ) {
+    const reverseStr = (reverse) ? ' not' : ''
+
+    return this._wait(
+      () => conditionFunc({timeout, reverse}),
+      ` never${reverseStr} ${checkTypeStr}.\n( ${this._selector} )`
+    )
+  }
+
+  private _waitProperty(
+    name: string,
+    conditionType: 'has' | 'contains' | 'any',
+    conditionFunc: (value?: string) => boolean,
+    { timeout = this._timeout, reverse }: Workflo.IWDIOParamsOptionalReverse = {},
+    value?: string
+  ) {
+    const reverseStr = (reverse) ? ' not' : ''
+    let conditionStr = ''
+    let errorMessage = ''
+
+    if (conditionType === 'has') {
+      conditionStr = 'became'
+    } else if (conditionType === 'contains') {
+      conditionStr = 'contained'
+    } else if (conditionType === 'any') {
+      conditionStr = 'any'
+    }
+
+    if (conditionType === 'has' || conditionType === 'contains') {
+      // capitalize first letter
+      name = name.charAt(0).toUpperCase() + name.slice(1)
+
+      errorMessage = `${this.constructor.name}: ${name} never${reverseStr} ${conditionStr} '${value}'.\n( ${this._selector} )`
+    } else if (conditionType === 'any') {
+      errorMessage = `${this.constructor.name} never${reverseStr} had ${conditionStr} ${name}.\n( ${this._selector} )`
+    }
+
+    browser.waitUntil(() => {
+      if (reverse) {
+        return !conditionFunc(value)
+      } else {
+        return conditionFunc(value)
+      }
+    }, timeout, errorMessage)
+
+    return this
+  }
+
+  private _waitHasProperty(
+    name: string,
+    value: string,
+    conditionFunc: (value: string) => boolean,
+    opts?: Workflo.IWDIOParamsOptionalReverse
+  ) {
+    return this._waitProperty(name, 'has', conditionFunc, opts, value)
+  }
+
+  private _waitHasAnyProperty(
+    name: string,
+    conditionFunc: (value: string) => boolean,
+    opts?: Workflo.IWDIOParamsOptionalReverse
+  ) {
+    return this._waitProperty(name, 'any', conditionFunc, opts)
+  }
+
+  private _waitContainsProperty(
+    name: string,
+    value: string,
+    conditionFunc: (value: string) => boolean,
+    opts?: Workflo.IWDIOParamsOptionalReverse
+  ) {
+    return this._waitProperty(name, 'contains', conditionFunc, opts, value)
+  }
+
+  private _makeReverseParams(opts: Workflo.IWDIOParamsOptional = {}): Workflo.IWDIOParamsOptionalReverse {
+    return {timeout: opts.timeout, reverse: true}
+  }
 
   public wait: IPageElementWaitAPI<Store> = {
-    exists: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      return this._wait(
-        () => this.__element.waitForExist(timeout),
-        ` never existed`
+    exists: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
+      'existed', opts => this.currently.element.waitForExist(opts.timeout, opts.reverse), opts
+    ),
+    isVisible: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
+      'became visible', opts => this.currently.element.waitForVisible(opts.timeout, opts.reverse), opts
+    ),
+    isEnabled: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
+      'became enabled', opts => this.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts
+    ),
+    isSelected: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
+      'became selected', opts => this.currently.element.waitForSelected(opts.timeout, opts.reverse), opts
+    ),
+    hasText: (text: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      'text', text, () => this.currently.hasText(text), opts
+    ),
+    hasAnyText: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
+      'had any text', opts => this.currently.element.waitForText(opts.timeout, opts.reverse), opts
+    ),
+    containsText: (text: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      'text', text, () => this.currently.containsText(text), opts
+    ),
+    hasValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      'value', value, () => this.currently.hasValue(value), opts
+    ),
+    hasAnyValue: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
+      'had any value', opts => this.currently.element.waitForValue(opts.timeout, opts.reverse), opts
+    ),
+    containsValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
+      'value', value, () => this.currently.containsValue(value), opts
+    ),
+    hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      'HTML', html, () => this.currently.hasHTML(html), opts
+    ),
+    hasAnyHTML: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasAnyProperty(
+      'HTML', () => this.currently.hasAnyHTML(), opts
+    ),
+    containsHTML: (html: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
+      'HTML', html, () => this.currently.containsHTML(html), opts
+    ),
+    hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      'direct text', directText, () => this.currently.hasDirectText(directText), opts
+    ),
+    hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasAnyProperty(
+      'direct text', () => this.currently.hasAnyDirectText(), opts
+    ),
+    containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
+      'direct text', directText, () => this.currently.containsDirectText(directText), opts
+    ),
+    hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+      return this._waitHasProperty(
+        `Attribute '${attributeName}'`, attributeValue, () => this.currently.hasAttribute(attributeName, attributeValue), opts
       )
     },
-    isVisible: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      return this._wait(
-        () => this.__element.waitForVisible(timeout),
-        ` never became visible`
+    hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasAnyProperty(
+      `Attribute '${attributeName}'`, () => this.currently.hasAnyAttribute(attributeName), opts
+    ),
+    containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+      return this._waitContainsProperty(
+        `Attribute '${attributeName}'`, attributeValue, () => this.currently.containsAttribute(attributeName, attributeValue), opts
       )
     },
-    isEnabled: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      return this._wait(
-        () => this.__element.waitForEnabled(timeout),
-        ` never became enabled`
-      )
-    },
-    isSelected: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      return this._wait(
-        () => this.__element.waitForSelected(timeout),
-        ` never became selected`
-      )
-    },
-    hasText: (
-      text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasText(text)
-      }, timeout, `${this.constructor.name}: Text never became '${text}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAnyText: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      return this._wait(
-        () => this.__element.waitForText(timeout),
-        ` never had any text`
-      )
-    },
-    containsText: (
-      text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsText(text)
-      }, timeout, `${this.constructor.name}: Text never contained '${text}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasValue: (
-      value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasValue(value)
-      }, timeout, `${this.constructor.name}: Value never became '${value}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAnyValue: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      return this._wait(
-        () => this.__element.waitForValue(timeout),
-        ` never had any value`
-      )
-    },
-    containsValue: (
-      value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsValue(value)
-      }, timeout, `${this.constructor.name}: Value never contained '${value}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasHTML: (
-      html: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasHTML(html)
-      }, timeout, `${this.constructor.name}: HTML never became '${html}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAnyHTML: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasAnyHTML()
-      }, timeout, `${this.constructor.name} never had any HTML.\n( ${this._selector} )`)
-
-      return this
-    },
-    containsHTML: (
-      html: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsHTML(html)
-      }, timeout, `${this.constructor.name}: HTML never contained '${html}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasDirectText: (
-      directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasDirectText(directText)
-      }, timeout, `${this.constructor.name}: DirectText never became '${directText}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAnyDirectText: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasAnyDirectText()
-      }, timeout, `${this.constructor.name} never had any direct text.\n( ${this._selector} )`)
-
-      return this
-    },
-    containsDirectText: (
-      directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsDirectText(directText)
-      }, timeout, `${this.constructor.name}: Direct text never contained '${directText}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAttribute: (
-      attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasAttribute(attributeName, attributeValue)
-      }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never became '${attributeValue}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAnyAttribute: (
-      attributeName: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasAnyAttribute(attributeName)
-      }, timeout, `${this.constructor.name}: Attribute '${attributeName}' never had any value.\n( ${this._selector} )`)
-
-      return this
-    },
-    containsAttribute: (
-      attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsAttribute(attributeName, attributeValue)
-      }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never contained '${attributeValue}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasClass: (
-      className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasClass(className)
-      }, timeout, `${this.constructor.name}: Class never became '${className}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    containsClass: (
-      className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsClass(className)
-      }, timeout, `${this.constructor.name}: Class never contained '${className}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasId: (
-      id: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasId(id)
-      }, timeout, `${this.constructor.name}: Id never became '${id}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAnyId: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasAnyId()
-      }, timeout, `${this.constructor.name} never had any id'.\n( ${this._selector} )`)
-
-      return this
-    },
-    containsId: (
-      id: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsId(id)
-      }, timeout, `${this.constructor.name}: Id never contained '${id}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasName: (
-      name: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasName(name)
-      }, timeout, `${this.constructor.name}: Name never became '${name}'.\n( ${this._selector} )`)
-
-      return this
-    },
-    hasAnyName: (
-      { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.hasAnyName()
-      }, timeout, `${this.constructor.name} never had any name'.\n( ${this._selector} )`)
-
-      return this
-    },
-    containsName: (
-      name: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-    ) => {
-      browser.waitUntil(() => {
-        return this.currently.containsName(name)
-      }, timeout, `${this.constructor.name}: Name never contained '${name}'.\n( ${this._selector} )`)
-
-      return this
-    },
+    hasClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      `class`, className, () => this.currently.hasClass(className), opts
+    ),
+    containsClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
+      `class`, className, () => this.currently.containsClass(className), opts
+    ),
+    hasId: (id: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      `id`, id, () => this.currently.hasId(id), opts
+    ),
+    hasAnyId: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasAnyProperty(
+      `id`, () => this.currently.hasAnyId(), opts
+    ),
+    containsId: (id: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
+      `id`, id, () => this.currently.containsId(id), opts
+    ),
+    hasName: (name: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
+      `name`, name, () => this.currently.hasName(name), opts
+    ),
+    hasAnyName: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasAnyProperty(
+      `id`, () => this.currently.hasAnyName(), opts
+    ),
+    containsName: (name: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
+      `name`, name, () => this.currently.containsName(name), opts
+    ),
     untilElement: (
       description: string, condition: (element: this) => boolean, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
     ) => {
@@ -1140,173 +999,87 @@ export class PageElement<
     },
 
     not: {
-      exists: (
-        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        return this._wait(
-          () => this.__element.waitForExist(timeout, true),
-          ` never not existed`
-        )
+      exists: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.wait.exists(this._makeReverseParams(opts))
       },
-      isVisible: (
-        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        return this._wait(
-          () => this.__element.waitForVisible(timeout, true),
-          ` never became invisible`
-        )
+      isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.wait.isVisible(this._makeReverseParams(opts))
       },
-      isEnabled: (
-        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        return this._wait(
-          () => this.__element.waitForEnabled(timeout, true),
-          ` never became disabled`
-        )
+      isEnabled: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.wait.isEnabled(this._makeReverseParams(opts))
       },
-      isSelected: (
-        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        this.__element.waitForSelected(timeout, true)
-
-        return this._wait(
-          () => this.__element.waitForSelected(timeout, true),
-          ` never became deselected`
-        )
+      isSelected: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.wait.isSelected(this._makeReverseParams(opts))
       },
-      hasClass: (
-        className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.hasClass(className)
-        }, timeout, `${this.constructor.name}: Class never became other than '${className}'.\n( ${this._selector} )`)
-
-        return this
+      hasText: (text: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasText(text, this._makeReverseParams(opts))
       },
-      containsClass: (
-        className: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.containsClass(className)
-        }, timeout, `${this.constructor.name}: Class never not contained '${className}'.\n( ${this._selector} )`)
-
-        return this
+      hasAnyText: (opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAnyText(this._makeReverseParams(opts))
       },
-      hasText: (
-        text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.hasText(text)
-        }, timeout, `${this.constructor.name}: Text never became other than '${text}'.\n( ${this._selector} )`)
-
-        return this
+      containsText: (text: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsText(text, this._makeReverseParams(opts))
       },
-      hasAnyText: (
-        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        return this._wait(
-          () => this.__element.waitForText(timeout, true),
-          ` never not had any text`
-        )
+      hasValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasValue(value, this._makeReverseParams(opts))
       },
-      containsText: (
-        text: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.containsText(text)
-        }, timeout, `${this.constructor.name}: Text never not contained '${text}'.\n( ${this._selector} )`)
-
-        return this
+      hasAnyValue: (opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAnyValue(this._makeReverseParams(opts))
       },
-      hasValue: (
-        value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.hasValue(value)
-        }, timeout, `${this.constructor.name}: Value never became other than '${value}'.\n( ${this._selector} )`)
-
-        return this
+      containsValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsValue(value, this._makeReverseParams(opts))
       },
-      hasAnyValue: (
-        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        return this._wait(
-          () => this.__element.waitForValue(timeout, true),
-          ` never not had any value`
-        )
+      hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasHTML(html, this._makeReverseParams(opts))
       },
-      containsValue: (
-        value: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.containsValue(value)
-        }, timeout, `${this.constructor.name}: Value never not contained '${value}'.\n( ${this._selector} )`)
-
-        return this
+      hasAnyHTML: (opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAnyHTML(this._makeReverseParams(opts))
       },
-      hasDirectText: (
-        directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.hasDirectText(directText)
-        }, timeout, `${this.constructor.name}: DirectText never became other than '${directText}'.\n( ${this._selector} )`)
-
-        return this
+      containsHTML: (html: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsHTML(html, this._makeReverseParams(opts))
       },
-      hasAnyDirectText: (
-        { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.hasAnyDirectText()
-        }, timeout, `${this.constructor.name} never not had any direct text.\n( ${this._selector} )`)
-
-        return this
+      hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasDirectText(directText, this._makeReverseParams(opts))
       },
-      containsDirectText: (
-        directText: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.containsDirectText(directText)
-        }, timeout, `${this.constructor.name}: Direct text never not contained '${directText}'.\n( ${this._selector} )`)
-
-        return this
+      hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAnyDirectText(this._makeReverseParams(opts))
       },
-      hasAttribute: (
-        attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.hasAttribute(attributeName, attributeValue)
-        }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never became other than '${attributeValue}'.\n( ${this._selector} )`)
-
-        return this
+      containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsDirectText(directText, this._makeReverseParams(opts))
       },
-      hasAnyAttribute: (
-        attributeName: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.hasAnyAttribute(attributeName)
-        }, timeout, `${this.constructor.name}: Attribute '${attributeName}' never not had any value.\n( ${this._selector} )`)
-
-        return this
+      hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAttribute(attributeName, attributeValue, this._makeReverseParams(opts))
       },
-      containsAttribute: (
-        attributeName: string, attributeValue: string, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
-      ) => {
-        browser.waitUntil(() => {
-          return !this.currently.containsAttribute(attributeName, attributeValue)
-        }, timeout, `${this.constructor.name}: Value of attribute '${attributeName}' never not contained '${attributeValue}'.\n( ${this._selector} )`)
-
-        return this
+      hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAnyAttribute(attributeName, this._makeReverseParams(opts))
       },
-      hasHTML: this._waitNotHasHTML,
-      hasAnyHTML: this._waitNotHasAnyHTML,
-      containsHTML: this._waitNotContainsHTML,
-      hasId: this._waitNotHasId,
-      hasAnyId: this._waitNotHasAnyId,
-      containsId: this._waitNotContainsId,
-      hasName: this._waitNotHasName,
-      hasAnyName: this._waitNotHasAnyName,
-      containsName: this._waitNotContainsName
+      containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsAttribute(attributeName, attributeValue, this._makeReverseParams(opts))
+      },
+      hasClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasClass(className, this._makeReverseParams(opts))
+      },
+      containsClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsClass(className, this._makeReverseParams(opts))
+      },
+      hasId: (id: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasId(id, this._makeReverseParams(opts))
+      },
+      hasAnyId: (opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAnyId(this._makeReverseParams(opts))
+      },
+      containsId: (id: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsId(id, this._makeReverseParams(opts))
+      },
+      hasName: (name: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasName(name, this._makeReverseParams(opts))
+      },
+      hasAnyName: (opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.hasAnyName(this._makeReverseParams(opts))
+      },
+      containsName: (name: string, opts?: Workflo.IWDIOParamsOptionalReverse) => {
+        return this.wait.containsName(name, this._makeReverseParams(opts))
+      },
     }
   }
 

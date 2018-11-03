@@ -100,6 +100,10 @@ declare global {
       timeout?: number,
     }
 
+    interface IWDIOParamsOptionalReverse extends IWDIOParamsOptional {
+      reverse?: boolean,
+    }
+
     namespace PageNode {
       interface IElementJSON {
         pageNodeType: string,
