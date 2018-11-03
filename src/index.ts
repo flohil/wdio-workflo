@@ -50,11 +50,21 @@ declare global {
   type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
   namespace Workflo {
-    interface JSError {
+    interface ICoordinates {
+      x: number,
+      y: number
+    }
+
+    interface ISize {
+      width: number,
+      height: number
+    }
+
+    interface IJSError {
       notFound: string[]
     }
 
-    interface ScrollResult {
+    interface IScrollResult {
       elemTop: number
       elemLeft: number
       containerTop: number
@@ -63,7 +73,7 @@ declare global {
       scrollLeft: number
     }
 
-    interface ScrollParams {
+    interface IScrollParams {
       containerSelector?: string,
       directions: {
         x?: boolean,
@@ -86,19 +96,19 @@ declare global {
       [key: string] : Type | IRecObj<Type>
     }
 
-    interface WDIOParamsOptional {
+    interface IWDIOParamsOptional {
       timeout?: number,
     }
 
     namespace PageNode {
-      interface ElementJSON {
+      interface IElementJSON {
         pageNodeType: string,
         nodeId: string
       }
 
       interface INode {
         __getNodeId(): string
-        toJSON(): ElementJSON
+        toJSON(): IElementJSON
       }
 
       interface IGetText extends INode {

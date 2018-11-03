@@ -19,7 +19,7 @@ export interface IPageElementListIdentifier<
   func: ( element: ElementType ) => string
 }
 
-export interface IPageElementListWaitEmptyParams extends Workflo.WDIOParamsOptional {
+export interface IPageElementListWaitEmptyParams extends Workflo.IWDIOParamsOptional {
   interval?: number
 }
 

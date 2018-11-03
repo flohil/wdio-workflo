@@ -19,11 +19,15 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
     this._store = store
   }
 
+  bla = {
+    doSthg: (text: string ) => true
+  }
+
   __getNodeId() {
     return this._selector
   }
 
-  toJSON(): Workflo.PageNode.ElementJSON {
+  toJSON(): Workflo.PageNode.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
       nodeId: this._selector

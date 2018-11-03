@@ -62,7 +62,7 @@ export class PageElementGroup<
     return this.__id
   }
 
-  toJSON(): Workflo.PageNode.ElementJSON {
+  toJSON(): Workflo.PageNode.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
       nodeId: this.__id
