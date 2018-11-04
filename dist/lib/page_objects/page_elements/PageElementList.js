@@ -8,10 +8,20 @@ class PageElementList extends _1.PageNode {
     constructor(_selector, opts, cloneFunc) {
         super(_selector, opts);
         this._selector = _selector;
+        // CURRENTLY FUNCTIONS
+        this.currently = {
+            elements: this.__elements,
+            where: this.__where,
+            first: this.__first,
+            at: (index) => this.__where.getAt(index),
+            all: this.__listElements,
+            getLength: () => this._getLength(this.__elements),
+            isEmpty: () => !browser.isExisting(this._selector)
+        };
         // waits until list has given length
         this._waitHasLength = (length, { timeout = this._timeout, comparator = "==" /* equalTo */, interval = this._interval } = {}) => {
             browser.waitUntil(() => {
-                let value = this._elements.value;
+                let value = this.__elements.value;
                 if (!value || !value.length) {
                     return false;
                 }
@@ -49,15 +59,67 @@ class PageElementList extends _1.PageNode {
             store: this._store,
             elementStoreFunc: this._elementStoreFunc,
             elementOptions: this._elementOptions,
-            cloneFunc: this._cloneFunc
+            cloneFunc: this._cloneFunc,
+            getAllFunc: list => list.all
+        });
+        this.__whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
+            store: this._store,
+            elementStoreFunc: this._elementStoreFunc,
+            elementOptions: this._elementOptions,
+            cloneFunc: this._cloneFunc,
+            getAllFunc: list => list.currently.all
         });
     }
-    get _elements() {
+    // RETRIEVAL FUNCTIONS for wdio or list elements
+    get __elements() {
         return browser.elements(this._selector);
     }
     get elements() {
         this.initialWait();
-        return this._elements;
+        return this.__elements;
+    }
+    // Retrieves list of elements identified by this.selector
+    // which reflect browser state after first element is found.
+    //
+    // Waits for at least one element to reach the waiting condition defined
+    // in wait type.
+    // Todo add _listElements() that does not wait for wait type condition for all elements
+    // Returns elements matching list selector that reflect current browser state
+    // -> no implicit waiting!!!
+    // does not use cache
+    get __listElements() {
+        const elements = [];
+        const value = this.__elements.value;
+        if (value && value.length) {
+            // create list elements
+            for (let i = 0; i < value.length; i++) {
+                // make each list element individually selectable via xpath
+                const selector = `(${this._selector})[${i + 1}]`;
+                const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOptions]);
+                elements.push(listElement);
+            }
+        }
+        return elements;
+    }
+    _listElements() {
+        const _elements = [];
+        try {
+            const value = this.elements.value;
+            if (value && value.length) {
+                // create list elements
+                for (let i = 0; i < value.length; i++) {
+                    // make each list element individually selectable via xpath
+                    const selector = `(${this._selector})[${i + 1}]`;
+                    const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOptions]);
+                    _elements.push(listElement);
+                }
+            }
+            return _elements;
+        }
+        catch (error) {
+            // this.elements will throw error if no elements were found
+            return _elements;
+        }
     }
     initialWait() {
         switch (this._waitType) {
@@ -75,50 +137,41 @@ class PageElementList extends _1.PageNode {
                 break;
         }
     }
-    // Retrieves list of elements identified by this.selector
-    // which reflect browser state after first element is found.
-    //
-    // Waits for at least one element to reach the waiting condition defined
-    // in wait type.
-    // Todo add _listElements() that does not wait for wait type condition for all elements
-    // Returns elements matching list selector that reflect current browser state
-    // -> no implicit waiting!!!
-    // does not use cache
-    get _listElements() {
-        const elements = [];
-        const value = this._elements.value;
-        if (value && value.length) {
-            // create list elements
-            for (let i = 0; i < value.length; i++) {
-                // make each list element individually selectable via xpath
-                const selector = `(${this._selector})[${i + 1}]`;
-                const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOptions]);
-                elements.push(listElement);
-            }
-        }
-        return elements;
+    // RETRIEVE subset of list functions
+    get __where() {
+        return this.__whereBuilder.reset();
     }
-    // wait until at least one element satisfies the initial wait condition
-    get listElements() {
-        const elements = [];
-        try {
-            const value = this.elements.value;
-            if (value && value.length) {
-                // create list elements
-                for (let i = 0; i < value.length; i++) {
-                    // make each list element individually selectable via xpath
-                    const selector = `(${this._selector})[${i + 1}]`;
-                    const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOptions]);
-                    elements.push(listElement);
-                }
-            }
-            return elements;
-        }
-        catch (error) {
-            // this.elements will throw error if no elements were found
-            return elements;
-        }
+    /**
+     * Returns the first page element found in the DOM that matches the list selector.
+     */
+    get __first() {
+        return this.__where.getFirst();
     }
+    get where() {
+        return this._whereBuilder.reset();
+    }
+    /**
+     * Returns the first page element found in the DOM that matches the list selector.
+     */
+    get first() {
+        this.initialWait();
+        return this.where.getFirst();
+    }
+    /**
+     *
+     * @param index starts at 0
+     */
+    at(index) {
+        this.initialWait();
+        return this.where.getAt(index);
+    }
+    /**
+     * Returns all page elements found in the DOM that match the list selector after initial wait.
+     */
+    get all() {
+        return this._listElements();
+    }
+    // INTERACTION functions
     setIdentifier(identifier) {
         this._identifier = identifier;
         return this;
@@ -144,7 +197,7 @@ class PageElementList extends _1.PageNode {
     identify({ identifier = this._identifier, resetCache = false } = {}) {
         const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index';
         if (this._disableCache || resetCache || !(cacheKey in this._identifiedObjCache)) {
-            const listElements = this.listElements;
+            const listElements = this.all;
             const mappedObj = {};
             if (identifier) { // manually set identifier
                 const queryResults = {};
@@ -171,35 +224,13 @@ class PageElementList extends _1.PageNode {
         }
         return this._identifiedObjCache[cacheKey];
     }
-    get where() {
-        return this._whereBuilder.reset();
-    }
-    // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
-    /**
-     * Returns the first page element found in the DOM that matches the list selector.
-     */
-    get first() {
-        return this.where.getFirst();
-    }
-    /**
-     *
-     * @param index starts at 0
-     */
-    at(index) {
-        return this.where.getAt(index);
-    }
-    /**
-     * Returns all page elements found in the DOM that match the list selector.
-     */
-    get all() {
-        return this.listElements;
-    }
+    // PRIVATE GETTER FUNCTIONS
     /**
      * Returns the number of page elements found in the DOM that match the list selector.
      */
-    getLength() {
+    _getLength(elements) {
         try {
-            const value = this.elements.value;
+            const value = elements.value;
             if (value && value.length) {
                 return value.length;
             }
@@ -209,10 +240,11 @@ class PageElementList extends _1.PageNode {
             return 0;
         }
     }
-    isEmpty() {
-        return !browser.isExisting(this._selector);
+    // PUBLIC GETTER FUNCTIONS
+    getLength() {
+        return this._getLength(this.currently.elements);
     }
-    // WAIT FUNCTION
+    // WAIT functions
     get wait() {
         return {
             hasLength: this._waitHasLength,

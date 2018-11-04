@@ -5,6 +5,8 @@ import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
 import * as htmlParser from 'htmlparser2'
 
+export type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>
+
 export interface IPageElementOpts<
   Store extends PageElementStore
   > extends IPageNodeOpts<Store> {
@@ -12,8 +14,6 @@ export interface IPageElementOpts<
   timeout?: number
   customScroll?: Workflo.IScrollParams
 }
-
-export type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>
 
 export interface ITolerance {
   lower: number,

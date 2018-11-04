@@ -11,6 +11,8 @@ import {
 import { PageElementStore, CloneFunc } from '../stores'
 import { ListWhereBuilder } from '../builders'
 
+export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
+
 export interface IPageElementListIdentifier<
   Store extends PageElementStore,
   ElementType extends PageElement<Store>
@@ -43,6 +45,17 @@ export interface IPageElementListOpts<
   identifier?: IPageElementListIdentifier<Store, PageElementType>
 }
 
+export interface IPageElementListRetrievalAPI<
+  Store extends PageElementStore,
+  PageElementType extends PageElement<Store>,
+> {
+  elements: WdioElements,
+  first: PageElementType,
+  at: (index: number) => PageElementType,
+  all: PageElementType[],
+  getLength: () => number
+}
+
 export interface IPageElementListWaitAPI<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
@@ -65,12 +78,22 @@ export interface IPageElementListEventuallyAPI<
   none: IPageElementEventuallyNotAPI<Store>
 }
 
+export interface IPageElementListCurrentlyAPI<
+  Store extends PageElementStore,
+  PageElementType extends PageElement<Store>,
+  PageElementOptions,
+  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
+> extends IPageElementListRetrievalAPI<Store, PageElementType> {
+  where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
+  isEmpty: () => boolean
+}
+
 // holds several PageElement instances of the same type
 export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions
-> extends PageNode<Store> {
+> extends PageNode<Store> implements IPageElementListRetrievalAPI<Store, PageElementType> {
   protected _waitType: Workflo.WaitType
   protected _timeout: number
   protected _interval: number
@@ -80,6 +103,7 @@ export class PageElementList<
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
+  protected __whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
   protected _cloneFunc: (subSelector: string) => this
 
   constructor(
@@ -110,18 +134,86 @@ export class PageElementList<
       store: this._store,
       elementStoreFunc: this._elementStoreFunc,
       elementOptions: this._elementOptions,
-      cloneFunc: this._cloneFunc
+      cloneFunc: this._cloneFunc,
+      getAllFunc: list => list.all
+    })
+
+    this.__whereBuilder = new ListWhereBuilder(this._selector, {
+      store: this._store,
+      elementStoreFunc: this._elementStoreFunc,
+      elementOptions: this._elementOptions,
+      cloneFunc: this._cloneFunc,
+      getAllFunc: list => list.currently.all
     })
   }
 
-  get _elements() {
+// RETRIEVAL FUNCTIONS for wdio or list elements
+
+  private get __elements() {
     return browser.elements( this._selector )
   }
 
   get elements() {
     this.initialWait()
 
-    return this._elements
+    return this.__elements
+  }
+
+  // Retrieves list of elements identified by this.selector
+  // which reflect browser state after first element is found.
+  //
+  // Waits for at least one element to reach the waiting condition defined
+  // in wait type.
+
+
+  // Todo add _listElements() that does not wait for wait type condition for all elements
+
+  // Returns elements matching list selector that reflect current browser state
+  // -> no implicit waiting!!!
+  // does not use cache
+  private get __listElements() {
+    const elements: PageElementType[] = []
+
+    const value = this.__elements.value
+
+    if (value && value.length) {
+      // create list elements
+      for ( let i = 0; i < value.length; i++ ) {
+        // make each list element individually selectable via xpath
+        const selector = `(${this._selector})[${i + 1}]`
+
+        const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
+
+        elements.push( listElement )
+      }
+    }
+
+    return elements
+  }
+
+  private _listElements() {
+    const _elements: PageElementType[] = []
+
+    try {
+      const value = this.elements.value
+
+      if (value && value.length) {
+        // create list elements
+        for ( let i = 0; i < value.length; i++ ) {
+          // make each list element individually selectable via xpath
+          const selector = `(${this._selector})[${i + 1}]`
+
+          const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
+
+          _elements.push( listElement )
+        }
+      }
+
+      return _elements
+    } catch(error) {
+      // this.elements will throw error if no elements were found
+      return _elements
+    }
   }
 
   initialWait() {
@@ -141,64 +233,48 @@ export class PageElementList<
     }
   }
 
-  // Retrieves list of elements identified by this.selector
-  // which reflect browser state after first element is found.
-  //
-  // Waits for at least one element to reach the waiting condition defined
-  // in wait type.
+// RETRIEVE subset of list functions
 
-
-  // Todo add _listElements() that does not wait for wait type condition for all elements
-
-  // Returns elements matching list selector that reflect current browser state
-  // -> no implicit waiting!!!
-  // does not use cache
-  get _listElements() {
-    const elements: PageElementType[] = []
-
-    const value = this._elements.value
-
-    if (value && value.length) {
-      // create list elements
-      for ( let i = 0; i < value.length; i++ ) {
-        // make each list element individually selectable via xpath
-        const selector = `(${this._selector})[${i + 1}]`
-
-        const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
-
-        elements.push( listElement )
-      }
-    }
-
-    return elements
+  private get __where() {
+    return this.__whereBuilder.reset()
   }
 
-
-  // wait until at least one element satisfies the initial wait condition
-  get listElements() {
-    const elements: PageElementType[] = []
-
-    try {
-      const value = this.elements.value
-
-      if (value && value.length) {
-        // create list elements
-        for ( let i = 0; i < value.length; i++ ) {
-          // make each list element individually selectable via xpath
-          const selector = `(${this._selector})[${i + 1}]`
-
-          const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
-
-          elements.push( listElement )
-        }
-      }
-
-      return elements
-    } catch(error) {
-      // this.elements will throw error if no elements were found
-      return elements
-    }
+  /**
+   * Returns the first page element found in the DOM that matches the list selector.
+   */
+  private get __first() {
+    return this.__where.getFirst()
   }
+
+  get where() {
+    return this._whereBuilder.reset()
+  }
+
+  /**
+   * Returns the first page element found in the DOM that matches the list selector.
+   */
+  get first() {
+    this.initialWait()
+    return this.where.getFirst()
+  }
+
+  /**
+   *
+   * @param index starts at 0
+   */
+  at( index: number ) {
+    this.initialWait()
+    return this.where.getAt( index )
+  }
+
+  /**
+   * Returns all page elements found in the DOM that match the list selector after initial wait.
+   */
+  get all() {
+    return this._listElements()
+  }
+
+// INTERACTION functions
 
   setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>) {
     this._identifier = identifier
@@ -231,7 +307,7 @@ export class PageElementList<
     const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index'
 
     if (this._disableCache || resetCache || !(cacheKey in this._identifiedObjCache)) {
-      const listElements = this.listElements
+      const listElements = this.all
 
       const mappedObj: {[key: string] : PageElementType} = {}
 
@@ -266,40 +342,14 @@ export class PageElementList<
     return this._identifiedObjCache[cacheKey]
   }
 
-  get where() {
-    return this._whereBuilder.reset()
-  }
-
-  // TEMPORARY GET FUNCTIONS - NEWLY EVALUATED ON EACH CALL
-
-/**
- * Returns the first page element found in the DOM that matches the list selector.
- */
-  get first() {
-    return this.where.getFirst()
-  }
-
-  /**
-   *
-   * @param index starts at 0
-   */
-  at( index: number ) {
-    return this.where.getAt( index )
-  }
-
-  /**
-   * Returns all page elements found in the DOM that match the list selector.
-   */
-  get all() {
-    return this.listElements
-  }
+// PRIVATE GETTER FUNCTIONS
 
   /**
    * Returns the number of page elements found in the DOM that match the list selector.
    */
-  getLength() {
+  private _getLength(elements: WdioElements) {
     try {
-      const value = this.elements.value
+      const value = elements.value
 
       if (value && value.length) {
         return value.length
@@ -310,11 +360,25 @@ export class PageElementList<
     }
   }
 
-  isEmpty() {
-    return !browser.isExisting(this._selector)
+// PUBLIC GETTER FUNCTIONS
+
+  getLength() {
+    return this._getLength(this.currently.elements)
   }
 
-  // WAIT FUNCTION
+// CURRENTLY FUNCTIONS
+
+  currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this> = {
+    elements: this.__elements,
+    where: this.__where,
+    first: this.__first,
+    at: (index: number) => this.__where.getAt(index),
+    all: this.__listElements,
+    getLength: () => this._getLength(this.__elements),
+    isEmpty: () => !browser.isExisting(this._selector)
+  }
+
+// WAIT functions
 
   public get wait(): IPageElementListWaitAPI<Store, PageElementType, PageElementOptions> {
     return {
@@ -333,7 +397,7 @@ export class PageElementList<
   }: IPageElementListWaitLengthParams = {}) => {
     browser.waitUntil(
       () => {
-        let value = this._elements.value
+        let value = this.__elements.value
 
         if (!value || !value.length) {
           return false
@@ -370,7 +434,7 @@ export class PageElementList<
     return this.first.wait.not
   }
 
-  // EVENTUALLY
+// EVENTUALLY
 
   public get eventually() : IPageElementListEventuallyAPI<Store, PageElementType, PageElementOptions> {
     return {

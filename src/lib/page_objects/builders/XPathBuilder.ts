@@ -70,37 +70,45 @@ export class XPathBuilder {
 
   // Modifies element selector, so use only once for
   // the same element.
-  containsText(text: string) {
+  textContains(text: string) {
     this._selector = `${this._selector}[contains(.,'${text}')]`
     return this
   }
 
   // Modifies element selector, so use only once for
   // the same element.
-  attr(key: string, value: string) {
+  attribute(key: string, value: string) {
     this._selector = `${this._selector}[@${key}='${value}']`
     return this
   }
 
-  containsAttr(key: string, value: string) {
+  attributeContains(key: string, value: string) {
     this._selector = `${this._selector}[contains(@${key},'${value}')]`
     return this
   }
 
   id(value: string) {
-    return this.attr('id', value)
+    return this.attribute('id', value)
   }
 
-  containsId(value: string) {
-    return this.containsAttr('id', value)
+  idContains(value: string) {
+    return this.attributeContains('id', value)
   }
 
   class(value: string) {
-    return this.attr('class', value)
+    return this.attribute('class', value)
   }
 
-  containsClass(value: string) {
-    return this.containsAttr('class', value)
+  classContains(value: string) {
+    return this.attributeContains('class', value)
+  }
+
+  name(value: string) {
+    return this.attribute('name', value)
+  }
+
+  nameContains(value: string) {
+    return this.attributeContains('name', value)
   }
 
   /**

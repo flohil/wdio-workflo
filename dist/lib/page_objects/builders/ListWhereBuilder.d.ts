@@ -6,6 +6,7 @@ export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementTy
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
     cloneFunc: CloneFunc<ListType>;
+    getAllFunc: (list: ListType) => PageElementType[];
 }
 export declare class ListWhereBuilder<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
     protected _selector: string;
@@ -13,6 +14,7 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
     protected _elementStoreFunc: (selector: string, opts: PageElementOptions) => PageElementType;
     protected _elementOptions: PageElementOptions;
     protected _cloneFunc: CloneFunc<ListType>;
+    protected _getAllFunc: (list: ListType) => PageElementType[];
     protected _xPathBuilder: XPathBuilder;
     constructor(selector: string, opts: IWhereBuilderOpts<Store, PageElementType, PageElementOptions, ListType>);
     reset(): this;
@@ -35,12 +37,15 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
      */
     child(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder): this;
     text(text: string): this;
-    containsText(text: string): this;
-    attr(key: string, value: string): this;
-    containsAttr(key: string, value: string): this;
+    textContains(text: string): this;
+    attribute(key: string, value: string): this;
+    attributeContains(key: string, value: string): this;
     id(value: string): this;
+    idContains(value: string): this;
     class(value: string): this;
-    containsClass(value: string): this;
+    classContains(value: string): this;
+    name(value: string): this;
+    nameContains(value: string): this;
     /**
      * Finds element by index of accurence on a single "level" of the DOM.
      * Eg.: If index === 3, there must be 3 siblings on the same DOM level that match the current selector

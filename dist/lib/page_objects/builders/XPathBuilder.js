@@ -57,31 +57,37 @@ class XPathBuilder {
     }
     // Modifies element selector, so use only once for
     // the same element.
-    containsText(text) {
+    textContains(text) {
         this._selector = `${this._selector}[contains(.,'${text}')]`;
         return this;
     }
     // Modifies element selector, so use only once for
     // the same element.
-    attr(key, value) {
+    attribute(key, value) {
         this._selector = `${this._selector}[@${key}='${value}']`;
         return this;
     }
-    containsAttr(key, value) {
+    attributeContains(key, value) {
         this._selector = `${this._selector}[contains(@${key},'${value}')]`;
         return this;
     }
     id(value) {
-        return this.attr('id', value);
+        return this.attribute('id', value);
     }
-    containsId(value) {
-        return this.containsAttr('id', value);
+    idContains(value) {
+        return this.attributeContains('id', value);
     }
     class(value) {
-        return this.attr('class', value);
+        return this.attribute('class', value);
     }
-    containsClass(value) {
-        return this.containsAttr('class', value);
+    classContains(value) {
+        return this.attributeContains('class', value);
+    }
+    name(value) {
+        return this.attribute('name', value);
+    }
+    nameContains(value) {
+        return this.attributeContains('name', value);
     }
     /**
      * Finds element by index of accurence on a single "level" of the DOM.

@@ -46,26 +46,35 @@ class ListWhereBuilder {
         this._xPathBuilder.text(text);
         return this;
     }
-    containsText(text) {
-        this._xPathBuilder.containsText(text);
+    textContains(text) {
+        this._xPathBuilder.textContains(text);
         return this;
     }
-    attr(key, value) {
-        this._xPathBuilder.attr(key, value);
+    attribute(key, value) {
+        this._xPathBuilder.attribute(key, value);
         return this;
     }
-    containsAttr(key, value) {
-        this._xPathBuilder.containsAttr(key, value);
+    attributeContains(key, value) {
+        this._xPathBuilder.attributeContains(key, value);
         return this;
     }
     id(value) {
-        return this.attr('id', value);
+        return this.attribute('id', value);
+    }
+    idContains(value) {
+        return this.attributeContains('id', value);
     }
     class(value) {
-        return this.attr('class', value);
+        return this.attribute('class', value);
     }
-    containsClass(value) {
-        return this.containsAttr('class', value);
+    classContains(value) {
+        return this.attributeContains('class', value);
+    }
+    name(value) {
+        return this.attribute('name', value);
+    }
+    nameContains(value) {
+        return this.attributeContains('name', value);
     }
     /**
      * Finds element by index of accurence on a single "level" of the DOM.
@@ -98,7 +107,7 @@ class ListWhereBuilder {
         return this.getFirst();
     }
     getAll() {
-        return this.getList().all;
+        return this._getAllFunc(this.getList());
     }
     getList() {
         return this._cloneFunc(this._xPathBuilder.build());

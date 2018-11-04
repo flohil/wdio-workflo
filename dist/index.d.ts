@@ -37,10 +37,18 @@ declare global {
     type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>;
     type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
     namespace Workflo {
-        interface JSError {
+        interface ICoordinates {
+            x: number;
+            y: number;
+        }
+        interface ISize {
+            width: number;
+            height: number;
+        }
+        interface IJSError {
             notFound: string[];
         }
-        interface ScrollResult {
+        interface IScrollResult {
             elemTop: number;
             elemLeft: number;
             containerTop: number;
@@ -48,7 +56,7 @@ declare global {
             scrollTop: number;
             scrollLeft: number;
         }
-        interface ScrollParams {
+        interface IScrollParams {
             containerSelector?: string;
             directions: {
                 x?: boolean;
@@ -68,17 +76,20 @@ declare global {
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }
-        interface WDIOParamsOptional {
+        interface IWDIOParamsOptional {
             timeout?: number;
         }
+        interface IWDIOParamsOptionalReverse extends IWDIOParamsOptional {
+            reverse?: boolean;
+        }
         namespace PageNode {
-            interface ElementJSON {
+            interface IElementJSON {
                 pageNodeType: string;
                 nodeId: string;
             }
             interface INode {
                 __getNodeId(): string;
-                toJSON(): ElementJSON;
+                toJSON(): IElementJSON;
             }
             interface IGetText extends INode {
                 getText(): string;

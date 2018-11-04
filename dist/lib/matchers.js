@@ -83,32 +83,26 @@ function elementMatcherFunction(resultFunction, assertionFunction, errorTextFunc
         };
     };
 }
-function checkHave(actual, expected) {
-    return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0;
-}
-function checkContains(actual, expected) {
-    return (typeof expected !== 'undefined') ? actual === expected : actual.length > 0;
+function createLongErrorMessage(property, comparison, actual, expected) {
+    return [
+        `'s ${property} "${actual}" to ${comparison} "${expected}"`,
+        `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
+    ];
 }
 // TODO: add not functions for eventually not
 exports.elementMatchers = {
-    toExist: elementMatcherFunction(({ element }) => element.exists(), actual => actual === true, () => " to exist"),
-    toBeVisible: elementMatcherFunction(({ element }) => element.isVisible(), actual => actual === true, () => " to be visible"),
-    toHaveClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual === expected, ({ actual, expected }) => [
-        `'s class "${actual}" to be "${expected}"`,
-        `'s class "${actual}" not to be "${expected}"`,
-    ]),
-    toContainClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => [
-        `'s class "${actual}" to contain "${expected}"`,
-        `'s class "${actual}" not to contain "${expected}"`
-    ]),
-    toHaveText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual === expected, ({ actual, expected }) => [
-        `'s text "${actual}" to be "${expected}"`,
-        `'s text "${actual}" not to be "${expected}"`,
-    ]),
-    toContainText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => [
-        `'s text "${actual}" to contain "${expected}"`,
-        `'s text "${actual}" not to contain "${expected}"`
-    ]),
+    toExist: elementMatcherFunction(({ element }) => element._exists(), actual => actual === true, () => " to exist"),
+    toBeVisible: elementMatcherFunction(({ element }) => element._isVisible(), actual => actual === true, () => " to be visible"),
+    toBeSelected: elementMatcherFunction(({ element }) => element._isSelected(), actual => actual === true, () => " to be selected"),
+    toBeEnabled: elementMatcherFunction(({ element }) => element._isEnabled(), actual => actual === true, () => " to be selected"),
+    toHaveClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('class', 'be', actual, expected)),
+    toContainClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('class', 'contain', actual, expected)),
+    toHaveText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('text', 'be', actual, expected)),
+    toHaveAnyText: elementMatcherFunction(({ element }) => element.getText(), (actual) => actual.length > 0, () => " to have any text"),
+    toContainText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('text', 'contain', actual, expected)),
+    toHaveValue: elementMatcherFunction(({ element }) => element.getValue(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('value', 'be', actual, expected)),
+    toHaveAnyValue: elementMatcherFunction(({ element }) => element.getValue(), (actual) => actual.length > 0, () => " to have any value"),
+    toContainValue: elementMatcherFunction(({ element }) => element.getValue(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('value', 'contain', actual, expected)),
 };
 function expectElement(element) {
     return expect(element);

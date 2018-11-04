@@ -11,7 +11,8 @@ export interface IWhereBuilderOpts<
   store: Store
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   elementOptions: PageElementOptions,
-  cloneFunc: CloneFunc<ListType>
+  cloneFunc: CloneFunc<ListType>,
+  getAllFunc: (list: ListType) => PageElementType[]
 }
 
 export class ListWhereBuilder<
@@ -26,6 +27,7 @@ export class ListWhereBuilder<
   protected _elementStoreFunc: (selector: string, opts: PageElementOptions) => PageElementType
   protected _elementOptions: PageElementOptions
   protected _cloneFunc: CloneFunc<ListType>
+  protected _getAllFunc: (list: ListType) => PageElementType[]
 
   protected _xPathBuilder: XPathBuilder
 
@@ -81,31 +83,43 @@ export class ListWhereBuilder<
     return this
   }
 
-  containsText(text: string) {
-    this._xPathBuilder.containsText(text)
+  textContains(text: string) {
+    this._xPathBuilder.textContains(text)
     return this
   }
 
-  attr(key: string, value: string) {
-    this._xPathBuilder.attr(key, value)
+  attribute(key: string, value: string) {
+    this._xPathBuilder.attribute(key, value)
     return this
   }
 
-  containsAttr(key: string, value: string) {
-    this._xPathBuilder.containsAttr(key, value)
+  attributeContains(key: string, value: string) {
+    this._xPathBuilder.attributeContains(key, value)
     return this
   }
 
   id(value: string) {
-    return this.attr('id', value)
+    return this.attribute('id', value)
+  }
+
+  idContains(value: string) {
+    return this.attributeContains('id', value)
   }
 
   class(value: string) {
-    return this.attr('class', value)
+    return this.attribute('class', value)
   }
 
-  containsClass(value: string) {
-    return this.containsAttr('class', value)
+  classContains(value: string) {
+    return this.attributeContains('class', value)
+  }
+
+  name(value: string) {
+    return this.attribute('name', value)
+  }
+
+  nameContains(value: string) {
+    return this.attributeContains('name', value)
   }
 
   /**
@@ -147,7 +161,7 @@ export class ListWhereBuilder<
   }
 
   getAll() {
-    return this.getList().all
+    return this._getAllFunc(this.getList())
   }
 
   getList() {

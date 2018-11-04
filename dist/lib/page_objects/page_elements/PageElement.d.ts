@@ -1,104 +1,177 @@
 /// <reference types="webdriverio" />
 import { PageNode, IPageNodeOpts } from '.';
 import { PageElementStore } from '../stores';
+export declare type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     waitType?: Workflo.WaitType;
     timeout?: number;
-    customScroll?: Workflo.ScrollParams;
+    customScroll?: Workflo.IScrollParams;
 }
-export interface IPageElementWaitAPI<Store extends PageElementStore> {
-    exists: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    isVisible: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    containsClass: (className: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasText: (text: string, opts: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasAnyText: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    containsText: (text: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    isEnabled: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    isSelected: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    untilElement: (description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
+export interface ITolerance {
+    lower: number;
+    upper: number;
+}
+export interface IPageElementCommonWaitAPI<Store extends PageElementStore, OptionalParams, ReturnType> {
+    exists: (opts?: OptionalParams) => ReturnType;
+    isVisible: (opts?: OptionalParams) => ReturnType;
+    isEnabled: (opts?: OptionalParams) => ReturnType;
+    isSelected: (opts?: OptionalParams) => ReturnType;
+    hasClass: (className: string, opts?: OptionalParams) => ReturnType;
+    containsClass: (className: string, opts?: OptionalParams) => ReturnType;
+    hasText: (text: string, opts: OptionalParams) => ReturnType;
+    hasAnyText: (opts?: OptionalParams) => ReturnType;
+    containsText: (text: string, opts?: OptionalParams) => ReturnType;
+    hasValue: (value: string, opts?: OptionalParams) => ReturnType;
+    hasAnyValue: (opts?: OptionalParams) => ReturnType;
+    containsValue: (value: string, opts?: OptionalParams) => ReturnType;
+    hasHTML: (html: string, opts?: OptionalParams) => ReturnType;
+    hasAnyHTML: (opts?: OptionalParams) => ReturnType;
+    containsHTML: (html: string, opts?: OptionalParams) => ReturnType;
+    hasAttribute: (attributeName: string, attributeValue: string, opts?: OptionalParams) => ReturnType;
+    hasAnyAttribute: (attributeName: string, opts?: OptionalParams) => ReturnType;
+    containsAttribute: (attributeName: string, attributeValue: string, opts?: OptionalParams) => ReturnType;
+    hasId: (id: string, opts?: OptionalParams) => ReturnType;
+    hasAnyId: (opts?: OptionalParams) => ReturnType;
+    containsId: (id: string, opts?: OptionalParams) => ReturnType;
+    hasName: (name: string, opts?: OptionalParams) => ReturnType;
+    hasAnyName: (opts?: OptionalParams) => ReturnType;
+    containsName: (name: string, opts?: OptionalParams) => ReturnType;
+    hasDirectText: (directText: string, opts?: OptionalParams) => ReturnType;
+    hasAnyDirectText: (opts?: OptionalParams) => ReturnType;
+    containsDirectText: (directText: string, opts?: OptionalParams) => ReturnType;
+    hasLocation: (coordinates: Partial<Workflo.ICoordinates>, opts?: {
+        tolerances?: Partial<Workflo.ICoordinates>;
+    } & OptionalParams) => ReturnType;
+    hasX: (x: number, opts?: {
+        tolerance?: number;
+    } & OptionalParams) => ReturnType;
+    hasY: (y: number, opts?: {
+        tolerance?: number;
+    } & OptionalParams) => ReturnType;
+    hasSize: (size: Partial<Workflo.ISize>, opts?: {
+        tolerances?: Partial<Workflo.ISize>;
+    } & OptionalParams) => ReturnType;
+    hasWidth: (width: number, opts?: {
+        tolerance?: number;
+    } & OptionalParams) => ReturnType;
+    hasHeight: (height: number, opts?: {
+        tolerance?: number;
+    } & OptionalParams) => ReturnType;
+}
+export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
+    exists: () => boolean;
+    isVisible: () => boolean;
+    isEnabled: () => boolean;
+    isSelected: () => boolean;
+    hasClass: (className: string) => boolean;
+    containsClass: (className: string) => boolean;
+    hasText: (text: string) => boolean;
+    hasAnyText: () => boolean;
+    containsText: (text: string) => boolean;
+    hasValue: (value: string) => boolean;
+    hasAnyValue: () => boolean;
+    containsValue: (value: string) => boolean;
+    hasHTML: (html: string) => boolean;
+    hasAnyHTML: () => boolean;
+    containsHTML: (html: string) => boolean;
+    hasAttribute: (attributeName: string, attributeValue: string) => boolean;
+    hasAnyAttribute: (attributeName: string) => boolean;
+    containsAttribute: (attributeName: string, attributeValue: string) => boolean;
+    hasId: (id: string) => boolean;
+    hasAnyId: () => boolean;
+    containsId: (id: string) => boolean;
+    hasName: (name: string) => boolean;
+    hasAnyName: () => boolean;
+    containsName: (name: string) => boolean;
+    hasDirectText: (directText: string) => boolean;
+    hasAnyDirectText: () => boolean;
+    containsDirectText: (directText: string) => boolean;
+    hasLocation: (coordinates: Partial<Workflo.ICoordinates>, tolerances?: Partial<Workflo.ICoordinates>) => boolean;
+    hasX: (x: number, tolerance?: number) => boolean;
+    hasY: (y: number, tolerance?: number) => boolean;
+    hasSize: (size: Partial<Workflo.ISize>, tolerances?: Partial<Workflo.ISize>) => boolean;
+    hasWidth: (width: number, tolerance?: number) => boolean;
+    hasHeight: (height: number, tolerance?: number) => boolean;
+}
+export interface IPageElementGetStateAPI<Store extends PageElementStore> {
+    element: WdioElement;
+    getHTML: () => string;
+    getText: () => string;
+    getDirectText: () => string;
+    getValue: () => string;
+    getAttribute: (attributeName: string) => string;
+    getClass: () => string;
+    getId: () => string;
+    getName: () => string;
+    getLocation: () => Workflo.ICoordinates;
+    getX: () => number;
+    getY: () => number;
+    getSize: () => Workflo.ISize;
+    getWidth: () => number;
+    getHeight: () => number;
+}
+export interface IPageElementWaitAPI<Store extends PageElementStore> extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptionalReverse, PageElement<Store>> {
+    untilElement: (description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.IWDIOParamsOptional) => PageElement<Store>;
     not: IPageElementWaitNotAPI<Store>;
 }
-export interface IPageElementWaitNotAPI<Store extends PageElementStore> {
-    exists: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    isVisible: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    containsClass: (className: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasText: (text: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasAnyText: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    containsText: (text: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    isEnabled: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
-    isSelected: (opts?: Workflo.WDIOParamsOptional) => PageElement<Store>;
+export interface IPageElementWaitNotAPI<Store extends PageElementStore> extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, PageElement<Store>> {
 }
-export interface IPageElementEventuallyAPI<Store extends PageElementStore> {
-    exists: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    isVisible: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    containsClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasText: (text: string, opts: Workflo.WDIOParamsOptional) => boolean;
-    hasAnyText: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    containsText: (text: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    isEnabled: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    isSelected: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    meetsCondition: (condition: (element: PageElement<Store>) => boolean, opts?: Workflo.WDIOParamsOptional) => boolean;
+export interface IPageElementEventuallyAPI<Store extends PageElementStore> extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, boolean> {
+    meetsCondition: (condition: (element: PageElement<Store>) => boolean, opts?: Workflo.IWDIOParamsOptional) => boolean;
     not: IPageElementEventuallyNotAPI<Store>;
 }
-export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> {
-    exists: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    isVisible: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    containsClass: (className: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasText: (text: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasAnyText: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    containsText: (text: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    hasAnyValue: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    containsValue: (value: string, opts?: Workflo.WDIOParamsOptional) => boolean;
-    isEnabled: (opts?: Workflo.WDIOParamsOptional) => boolean;
-    isSelected: (opts?: Workflo.WDIOParamsOptional) => boolean;
+export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, boolean> {
 }
-export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText {
+export interface IPageElementCurrentlyAPI<Store extends PageElementStore> extends IPageElementCheckStateAPI<Store>, IPageElementGetStateAPI<Store> {
+    not: IPageElementCheckStateAPI<Store>;
+}
+export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, IPageElementGetStateAPI<Store> {
     protected _selector: string;
     protected _waitType: Workflo.WaitType;
     protected _timeout: number;
     protected _$: Store;
-    protected _customScroll: Workflo.ScrollParams;
+    protected _customScroll: Workflo.IScrollParams;
     constructor(_selector: string, { waitType, timeout, customScroll, ...superOpts }: IPageElementOpts<Store>);
+    /**
+     * Return WdioElement from current state, not performing an initial wait.
+     */
+    private readonly __element;
+    /**
+     * Return WdioElement after performing an initial wait.
+     */
+    readonly element: WdioElement;
     readonly $: Store;
-    readonly __element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
-    readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     initialWait(): this;
-    exists(): boolean;
-    isVisible(): boolean;
-    hasClass(className: string): boolean;
-    containsClass(className: string): boolean;
-    hasText(text: string): boolean;
-    hasAnyText(): boolean;
-    containsText(text: string): boolean;
-    hasValue(value: string): boolean;
-    hasAnyValue(): boolean;
-    containsValue(value: string): boolean;
-    isEnabled(): boolean;
-    isSelected(): boolean;
-    getAllHTML(): WebdriverIO.Client<string> & string;
-    getText(): WebdriverIO.Client<string> & string;
+    /**
+     * Get text that resides on the level directly below the selected page element.
+     * Does not include text of the page element's nested children elements.
+     */
+    private _getDirectText;
+    private _getHTML;
+    private _getText;
+    private _getValue;
+    private _getAttribute;
+    private _getClass;
+    private _getId;
+    private _getName;
+    private _getLocation;
+    private _getSize;
+    private _isEnabled;
+    private _isSelected;
     getDirectText(): string;
+    getHTML(): string;
+    getText(): WebdriverIO.Client<string> & string;
     getValue(): WebdriverIO.Client<string> & string;
-    getAttribute(attrName: any): null;
+    getAttribute(attributeName: string): null;
     getClass(): null;
     getId(): null;
     getName(): null;
-    getLocation(axis: WebdriverIO.Axis): WebdriverIO.Client<number> & number;
-    getSize(): WebdriverIO.Client<WebdriverIO.Size> & WebdriverIO.Size;
+    getLocation(): Workflo.ICoordinates;
+    getX(): number;
+    getY(): number;
+    getSize(): Workflo.ISize;
+    getWidth(): number;
+    getHeight(): number;
     getTimeout(): number;
     setValue(value: string): void;
     /**
@@ -111,59 +184,24 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     click(options?: {
         postCondition?: () => boolean;
         timeout?: number;
-        customScroll?: Workflo.ScrollParams;
+        customScroll?: Workflo.IScrollParams;
     }): this;
-    scrollTo(params: Workflo.ScrollParams): Workflo.ScrollResult;
-    private _waitExists;
-    private _waitNotExists;
-    private _waitIsVisible;
-    private _waitNotIsVisible;
-    private _waitHasClass;
-    private _waitNotHasClass;
-    private _waitContainsClass;
-    private _waitNotContainsClass;
-    private _waitHasText;
-    private _waitNotHasText;
-    private _waitHasAnyText;
-    private _waitNotHasAnyText;
-    private _waitContainsText;
-    private _waitNotContainsText;
-    private _waitHasValue;
-    private _waitNotHasValue;
-    private _waitHasAnyValue;
-    private _waitNotHasAnyValue;
-    private _waitContainsValue;
-    private _waitNotContainsValue;
-    private _waitIsEnabled;
-    private _waitNotIsEnabled;
-    private _waitIsSelected;
-    private _waitNotIsSelected;
-    private _waitUntilElement;
+    scrollTo(params: Workflo.IScrollParams): Workflo.IScrollResult;
+    /**
+     * @param actual the actual browser value in pixels
+     * @param expected the expected value in pixels or 0 if expected was smaller than 0
+     * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
+     */
+    private _withinTolerance;
+    private _hasAxisLocation;
+    private _hasSideSize;
+    currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store>;
+    private _waitWdioCheckFunc;
+    private _waitProperty;
+    private _waitHasProperty;
+    private _waitHasAnyProperty;
+    private _waitContainsProperty;
+    private _makeReverseParams;
     wait: IPageElementWaitAPI<Store>;
-    private _eventuallyExists;
-    private _eventuallyNotExists;
-    private _eventuallyIsVisible;
-    private _eventuallyNotIsVisible;
-    private _eventuallyHasClass;
-    private _eventuallyNotHasClass;
-    private _eventuallyContainsClass;
-    private _eventuallyNotContainsClass;
-    private _eventuallyHasText;
-    private _eventuallyNotHasText;
-    private _eventuallyHasAnyText;
-    private _eventuallyNotHasAnyText;
-    private _eventuallyContainsText;
-    private _eventuallyNotContainsText;
-    private _eventuallyHasValue;
-    private _eventuallyNotHasValue;
-    private _eventuallyHasAnyValue;
-    private _eventuallyNotHasAnyValue;
-    private _eventuallyContainsValue;
-    private _eventuallyNotContainsValue;
-    private _eventuallyIsEnabled;
-    private _eventuallyNotIsEnabled;
-    private _eventuallyIsSelected;
-    private _eventuallyNotIsSelected;
-    private _eventuallyMeetsCondition;
     eventually: IPageElementEventuallyAPI<Store>;
 }

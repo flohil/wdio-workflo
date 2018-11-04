@@ -2,13 +2,14 @@
 import { PageNode, IPageNodeOpts, PageElement, IPageElementWaitAPI, IPageElementWaitNotAPI, IPageElementEventuallyAPI, IPageElementEventuallyNotAPI } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
+export declare type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
 export interface IPageElementListIdentifier<Store extends PageElementStore, ElementType extends PageElement<Store>> {
     mappingObject: {
         [key: string]: string;
     };
     func: (element: ElementType) => string;
 }
-export interface IPageElementListWaitEmptyParams extends Workflo.WDIOParamsOptional {
+export interface IPageElementListWaitEmptyParams extends Workflo.IWDIOParamsOptional {
     interval?: number;
 }
 export interface IPageElementListWaitLengthParams extends IPageElementListWaitEmptyParams {
@@ -23,6 +24,13 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     elementOptions: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
+export interface IPageElementListRetrievalAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
+    elements: WdioElements;
+    first: PageElementType;
+    at: (index: number) => PageElementType;
+    all: PageElementType[];
+    getLength: () => number;
+}
 export interface IPageElementListWaitAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> {
     hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => PageElementList<Store, PageElementType, PageElementOptions>;
     isEmpty: (opts?: IPageElementListWaitEmptyParams) => PageElementList<Store, PageElementType, PageElementOptions>;
@@ -35,7 +43,11 @@ export interface IPageElementListEventuallyAPI<Store extends PageElementStore, P
     any: Omit<IPageElementEventuallyAPI<Store>, 'not'>;
     none: IPageElementEventuallyNotAPI<Store>;
 }
-export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
+export interface IPageElementListCurrentlyAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends IPageElementListRetrievalAPI<Store, PageElementType> {
+    where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
+    isEmpty: () => boolean;
+}
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> implements IPageElementListRetrievalAPI<Store, PageElementType> {
     protected _selector: string;
     protected _waitType: Workflo.WaitType;
     protected _timeout: number;
@@ -50,13 +62,33 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
+    protected __whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     protected _cloneFunc: (subSelector: string) => this;
     constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: <T extends PageElementList<Store, PageElementType, PageElementOptions>>(selector: Workflo.XPath) => T);
-    readonly _elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
-    readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
+    private readonly __elements;
+    readonly elements: WdioElements;
+    private readonly __listElements;
+    private _listElements;
     initialWait(): void;
-    readonly _listElements: PageElementType[];
-    readonly listElements: PageElementType[];
+    private readonly __where;
+    /**
+     * Returns the first page element found in the DOM that matches the list selector.
+     */
+    private readonly __first;
+    readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
+    /**
+     * Returns the first page element found in the DOM that matches the list selector.
+     */
+    readonly first: PageElementType;
+    /**
+     *
+     * @param index starts at 0
+     */
+    at(index: number): PageElementType;
+    /**
+     * Returns all page elements found in the DOM that match the list selector after initial wait.
+     */
+    readonly all: PageElementType[];
     setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>): this;
     /**
      * Returns an object consisting of this._identifier.object's keys
@@ -82,25 +114,12 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     }): {
         [key: string]: PageElementType;
     };
-    readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
-    /**
-     * Returns the first page element found in the DOM that matches the list selector.
-     */
-    readonly first: PageElementType;
-    /**
-     *
-     * @param index starts at 0
-     */
-    at(index: number): PageElementType;
-    /**
-     * Returns all page elements found in the DOM that match the list selector.
-     */
-    readonly all: PageElementType[];
     /**
      * Returns the number of page elements found in the DOM that match the list selector.
      */
+    private _getLength;
     getLength(): number;
-    isEmpty(): boolean;
+    currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this>;
     readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
     private _waitHasLength;
     private _waitEmpty;
