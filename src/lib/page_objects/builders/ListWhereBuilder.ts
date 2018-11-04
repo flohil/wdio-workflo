@@ -37,6 +37,7 @@ export class ListWhereBuilder<
     this._elementStoreFunc = opts.elementStoreFunc
     this._elementOptions = opts.elementOptions
     this._cloneFunc = opts.cloneFunc
+    this._getAllFunc = opts.getAllFunc
 
     this._xPathBuilder = XPathBuilder.getInstance()
   }

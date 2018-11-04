@@ -166,7 +166,7 @@ export class PageElementList<
   get elements() {
     this.initialWait()
 
-    return this.currently.elements
+    return browser.elements( this._selector )
   }
 
   get where() {
@@ -286,7 +286,16 @@ export class PageElementList<
 // PUBLIC GETTER FUNCTIONS
 
   getLength() {
-    return getLength(this.elements)
+    try {
+      const value = this.elements.value
+
+      if (value && value.length) {
+        return value.length
+      }
+    } catch(error) {
+      // this.elements will throw error if no elements were found
+      return 0
+    }
   }
 
   getTimeout() {
@@ -376,7 +385,18 @@ class Currently<
 
 // PUBLIC GETTER FUNCTIONS
 
-  getLength = () => getLength(this.elements)
+  getLength = () => {
+    try {
+      const value = this.elements.value
+
+      if (value && value.length) {
+        return value.length
+      }
+    } catch(error) {
+      // this.elements will throw error if no elements were found
+      return 0
+    }
+  }
 
 // CHECK STATE FUNCTIONS
 
@@ -429,7 +449,7 @@ class Wait<
   }
 
   get any() : Omit<IPageElementWaitAPI<Store>, 'not'> {
-    const element = this._list.first
+    const element = this._list.currently.first
     const wait = Object.assign({}, element.wait)
 
     delete wait.not
@@ -438,7 +458,7 @@ class Wait<
   }
 
   get none() : IPageElementWaitNotAPI<Store> {
-    return this._list.first.wait.not
+    return this._list.currently.first.wait.not
   }
 }
 
@@ -473,7 +493,7 @@ class Eventually<
   }
 
   get any(): Omit<IPageElementEventuallyAPI<Store>, 'not'> {
-    const element = this._list.first
+    const element = this._list.currently.first
     const eventually = Object.assign({}, element.eventually)
 
     delete eventually.not
@@ -482,24 +502,6 @@ class Eventually<
   }
 
   get none(): IPageElementEventuallyNotAPI<Store> {
-    return this._list.first.eventually.not
-  }
-}
-
-// UTILITY FUNCTIONS
-
-/**
- * Returns the number of page elements found in the DOM that match the list selector.
- */
-function getLength(elements: WdioElements) {
-  try {
-    const value = elements.value
-
-    if (value && value.length) {
-      return value.length
-    }
-  } catch(error) {
-    // this.elements will throw error if no elements were found
-    return 0
+    return this._list.currently.first.eventually.not
   }
 }
