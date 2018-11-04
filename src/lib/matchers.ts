@@ -7,25 +7,18 @@ interface ResultFuncArgs<ExpectedType> {
   timeout?: number;
 }
 
-interface ErrorFuncArgs<ExpectedType, ActualType> {
-  actual: ActualType | boolean;
+interface ErrorFuncArgs<ExpectedType> {
+  actual: string;
   expected?: ExpectedType;
   timeout?: number
 }
 
-type ActualOrBoolean<ActualType> = ActualType | boolean
+type ResultFunction<ExpectedType> = (args: ResultFuncArgs<ExpectedType>) => boolean[]
+type ErrorTextFunction<ExpectedType> = (args: ErrorFuncArgs<ExpectedType>) => string | string[]
 
-type ResultFunction<ExpectedType, ActualType> =
-  (args: ResultFuncArgs<ExpectedType>) => ActualOrBoolean<ActualType> | ActualOrBoolean<ActualType>[]
-type AssertionFunction<ExpectedType, ActualType> =
-  (actual: ActualType, expected: ExpectedType) => boolean | boolean[]
-type ErrorTextFunction<ExpectedType, ActualType> =
-  (args: ErrorFuncArgs<ExpectedType, ActualType>) => string | string[]
-
-function elementMatcherFunction<ExpectedType, ActualType>(
-  resultFunction: ResultFunction<ExpectedType, ActualType> | ResultFunction<ExpectedType, ActualType>,
-  assertionFunction: AssertionFunction<ExpectedType, ActualType> | AssertionFunction<ExpectedType, ActualType>,
-  errorTextFunction: ErrorTextFunction<ExpectedType, ActualType> | ErrorTextFunction<ExpectedType, ActualType>
+function elementMatcherFunction<ExpectedType = string>(
+  resultFunction: ResultFunction<ExpectedType>,
+  errorTextFunction: ErrorTextFunction<ExpectedType>
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
 
@@ -43,49 +36,15 @@ function elementMatcherFunction<ExpectedType, ActualType>(
       let negateAssertionResult = false
       let defaultNegativeMessage = ''
 
-      const actuals: ActualOrBoolean<ActualType> | ActualOrBoolean<ActualType>[] =
-        resultFunction({element, expected, timeout})
-      let actual: ActualOrBoolean<ActualType> = undefined
-
-      if ( _.isArray( actuals ) ) {
-        if ( negativeComparison && actuals.length > 1 ) {
-          actual = actuals[1]
-          console.log("in not result")
-        } else {
-          actual = actuals[0]
-        }
-      } else {
-        actual = actuals
-      }
-
-      const successes: boolean | boolean[] =
-        ( typeof actual === 'boolean'  ) ? actual : assertionFunction(actual, expected)
-      let success: boolean = undefined
-
-      if ( _.isArray( successes ) ) {
-        if ( negativeComparison ) {
-          if ( successes.length > 1 ) {
-            success = successes[ 1 ]
-            console.log("in not assertion")
-          } else {
-            success = !successes[ 0 ]
-          }
-        } else {
-          success = successes[ 0 ]
-        }
-      } else {
-        if ( negativeComparison ) {
-          success = !successes
-        } else {
-          success = successes
-        }
-      }
+      const successes: boolean[] = resultFunction({element, expected, timeout})
+      const success = (negativeComparison) ? successes[1] : successes[0]
 
       if (!success) {
         if (typeof timeout === 'undefined') {
           timeout = element.getTimeout()
         }
 
+        const actual = element.lastActualResult
         const errorTexts = errorTextFunction({actual, expected, timeout})
         let errorText: string = undefined
 
@@ -121,74 +80,61 @@ function elementMatcherFunction<ExpectedType, ActualType>(
   }
 }
 
-function createLongErrorMessage(property: string, comparison: string, actual: ActualOrBoolean<string>, expected: string) {
+function createLongErrorMessage(property: string, comparison: string, actual: string, expected: string) {
   return [
     `'s ${property} "${actual}" to ${comparison} "${expected}"`,
     `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
   ]
 }
 
-// TODO: add not functions for eventually not
 export const elementMatchers: jasmine.CustomMatcherFactories = {
   toExist: elementMatcherFunction(
-    ({element}) => element.currently.exists(),
-    actual => actual === true,
+    ({element}) => [element.currently.exists(), element.currently.not.exists()],
     () => " to exist"
   ),
   toBeVisible: elementMatcherFunction(
-    ({element}) => element.currently.isVisible(),
-    actual => actual === true,
+    ({element}) => [element.currently.isVisible(), element.currently.not.isVisible()],
     () => " to be visible"
   ),
   toBeSelected: elementMatcherFunction(
-    ({element}) => element.currently.isSelected(),
-    actual => actual === true,
+    ({element}) => [element.currently.isSelected(), element.currently.not.isSelected()],
     () => " to be selected"
   ),
   toBeEnabled: elementMatcherFunction(
-    ({element}) => element.currently.isEnabled(),
-    actual => actual === true,
+    ({element}) => [element.currently.isEnabled(), element.currently.not.isEnabled()],
     () => " to be selected"
   ),
-  toHaveText: elementMatcherFunction<string, string>(
-    ({element}) => element.currently.getText(),
-    (actual, expected) => actual === expected,
+  toHaveText: elementMatcherFunction(
+    ({element, expected}) => [element.currently.hasText(expected), element.currently.not.hasText(expected)],
     ({actual, expected}) => createLongErrorMessage('text', 'be', actual, expected)
   ),
-  toHaveAnyText: elementMatcherFunction<string, boolean>(
-    ({element}) => element.currently.hasAnyText(),
-    (actual) => actual === true,
+  toHaveAnyText: elementMatcherFunction(
+    ({element}) => [element.currently.hasAnyText(), element.currently.not.hasAnyText()],
     () => " to have any text"
   ),
-  toContainText: elementMatcherFunction<string, string>(
-    ({element}) => element.currently.getText(),
-    (actual, expected) => actual.indexOf(expected) > -1,
+  toContainText: elementMatcherFunction(
+    ({element, expected}) => [element.currently.containsText(expected), element.currently.not.containsText(expected)],
     ({actual, expected}) => createLongErrorMessage('text', 'contain', actual, expected)
   ),
-  toHaveValue: elementMatcherFunction<string, string>(
-    ({element}) => element.currently.getValue(),
-    (actual, expected) => actual === expected,
+  toHaveValue: elementMatcherFunction(
+    ({element, expected}) => [element.currently.hasValue(expected), element.currently.not.hasValue(expected)],
     ({actual, expected}) => createLongErrorMessage('value', 'be', actual, expected)
   ),
-  toHaveAnyValue: elementMatcherFunction<string, boolean>(
-    ({element}) => element.currently.hasAnyValue(),
-    (actual) => actual === true,
+  toHaveAnyValue: elementMatcherFunction(
+    ({element}) => [element.currently.hasAnyValue(), element.currently.not.hasAnyValue()],
     () => " to have any value"
   ),
-  toContainValue: elementMatcherFunction<string, string>(
-    ({element}) => element.currently.getValue(),
-    (actual, expected) => actual.indexOf(expected) > -1,
+  toContainValue: elementMatcherFunction(
+    ({element, expected}) => [element.currently.containsValue(expected), element.currently.not.containsValue(expected)],
     ({actual, expected}) => createLongErrorMessage('value', 'contain', actual, expected)
   ),
 
-  toHaveClass: elementMatcherFunction<string, string>(
-    ({element}) => element.currently.getClass(),
-    (actual, expected) => actual === expected,
+  toHaveClass: elementMatcherFunction(
+    ({element, expected}) => [element.currently.hasClass(expected), element.currently.not.hasClass(expected)],
     ({actual, expected}) => createLongErrorMessage('class', 'be', actual, expected)
   ),
-  toContainClass: elementMatcherFunction<string, string>(
-    ({element}) => element.currently.getClass(),
-    (actual, expected) => actual.indexOf(expected) > -1,
+  toContainClass: elementMatcherFunction(
+    ({element, expected}) => [element.currently.containsClass(expected), element.currently.not.containsClass(expected)],
     ({actual, expected}) => createLongErrorMessage('class', 'contain', actual, expected)
   ),
 
