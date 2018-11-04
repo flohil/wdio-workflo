@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 const builders_1 = require("../builders");
 const htmlParser = require("htmlparser2");
+const helpers_1 = require("../../helpers");
 class PageElement extends _1.PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
@@ -69,27 +70,27 @@ class PageElement extends _1.PageNode {
             containsName: (name, opts) => this._waitContainsProperty(`name`, name, () => this.currently.containsName(name), opts),
             hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, tolerancesObjectToString(coordinates, tolerances), () => this.currently.hasLocation(coordinates, tolerances), otherOpts);
+                return this._waitHasProperty(`location`, helpers_1.tolerancesObjectToString(coordinates, tolerances), () => this.currently.hasLocation(coordinates, tolerances), otherOpts);
             },
             hasX: (x, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`x`, tolerancesObjectToString({ x }, { x: tolerance }), () => this.currently.hasX(x, tolerance), otherOpts);
+                return this._waitHasProperty(`x`, helpers_1.tolerancesObjectToString({ x }, { x: tolerance }), () => this.currently.hasX(x, tolerance), otherOpts);
             },
             hasY: (y, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`y`, tolerancesObjectToString({ y }, { y: tolerance }), () => this.currently.hasY(y, tolerance), otherOpts);
+                return this._waitHasProperty(`y`, helpers_1.tolerancesObjectToString({ y }, { y: tolerance }), () => this.currently.hasY(y, tolerance), otherOpts);
             },
             hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, tolerancesObjectToString(size, tolerances), () => this.currently.hasSize(size, tolerances), otherOpts);
+                return this._waitHasProperty(`location`, helpers_1.tolerancesObjectToString(size, tolerances), () => this.currently.hasSize(size, tolerances), otherOpts);
             },
             hasWidth: (width, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`width`, tolerancesObjectToString({ width }, { width: tolerance }), () => this.currently.hasWidth(width, tolerance), otherOpts);
+                return this._waitHasProperty(`width`, helpers_1.tolerancesObjectToString({ width }, { width: tolerance }), () => this.currently.hasWidth(width, tolerance), otherOpts);
             },
             hasHeight: (height, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`height`, tolerancesObjectToString({ height }, { height: tolerance }), () => this.currently.hasHeight(height, tolerance), otherOpts);
+                return this._waitHasProperty(`height`, helpers_1.tolerancesObjectToString({ height }, { height: tolerance }), () => this.currently.hasHeight(height, tolerance), otherOpts);
             },
             untilElement: (description, condition, { timeout = this._timeout } = {}) => {
                 browser.waitUntil(() => condition(this), timeout, `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`);
@@ -713,7 +714,7 @@ class Currently {
         this.containsName = (name) => this._compareContains(name, this.getName());
         this.hasLocation = (coordinates, tolerances = { x: 0, y: 0 }) => {
             const actualCoords = this.getLocation();
-            this._lastActualResult = tolerancesObjectToString(actualCoords);
+            this._lastActualResult = helpers_1.tolerancesObjectToString(actualCoords);
             return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
                 && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y);
         };
@@ -729,7 +730,7 @@ class Currently {
         };
         this.hasSize = (size, tolerances = { width: 0, height: 0 }) => {
             const actualSize = this.getSize();
-            this._lastActualResult = tolerancesObjectToString(actualSize);
+            this._lastActualResult = helpers_1.tolerancesObjectToString(actualSize);
             return this._hasSideSize(size.width, actualSize.width, tolerances.width)
                 && this._hasSideSize(size.height, actualSize.width, tolerances.height);
         };
@@ -901,26 +902,6 @@ function isEnabled(element) {
 }
 function isSelected(element) {
     return element.isSelected();
-}
-function tolerancesObjectToString(actuals, tolerances) {
-    var str = '{';
-    var props = [];
-    for (var p in actuals) {
-        if (actuals.hasOwnProperty(p)) {
-            const actual = actuals[p];
-            let actualStr = '';
-            if (tolerances && tolerances[p] !== 0) {
-                const tolerance = Math.abs(tolerances[p]);
-                actualStr = `[${Math.max(actual - tolerance, 0)}, ${Math.max(actual + tolerance, 0)}]`;
-            }
-            else {
-                actualStr = `${actual}`;
-            }
-            props.push(`${p}: ${actualStr}`);
-        }
-    }
-    str += props.join(', ');
-    return str + '}';
 }
 // TYPE GUARDS
 function isJsError(result) {

@@ -26,7 +26,7 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
   isVisible: (opts?: OptionalParams) => ReturnType,
   isEnabled: (opts?: OptionalParams) => ReturnType,
   isSelected: (opts?: OptionalParams) => ReturnType,
-  hasText: (text: string, opts: OptionalParams) => ReturnType,
+  hasText: (text: string, opts?: OptionalParams) => ReturnType,
   hasAnyText: (opts?: OptionalParams) => ReturnType,
   containsText: (text: string, opts?: OptionalParams) => ReturnType,
   hasValue: (value: string, opts?: OptionalParams) => ReturnType,

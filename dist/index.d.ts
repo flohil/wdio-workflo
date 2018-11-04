@@ -5,11 +5,47 @@ declare global {
         toBeVisible(): boolean;
         toBeEnabled(): boolean;
         toBeSelected(): boolean;
-        toHaveText(text?: string): boolean;
-        toContainText(text?: string): boolean;
-        toHaveValue(value?: string): boolean;
-        toContainValue(value?: string): boolean;
+        toHaveText(text: string): boolean;
+        toHaveAnyText(): boolean;
+        toContainText(text: string): boolean;
+        toHaveValue(value: string): boolean;
+        toHaveAnyValue(): boolean;
+        toContainValue(value: string): boolean;
+        toHaveHTML(html: string): boolean;
+        toHaveAnyHTML(): boolean;
+        toContainHTML(html: string): boolean;
+        toHaveDirectText(directText: string): boolean;
+        toHaveAnyDirectText(): boolean;
+        toContainDirectText(directText: string): boolean;
+        toHaveAttribute(attributeArgs: Workflo.IAttributeArgs): boolean;
+        toHaveAnyAttribute(attributeArgs: Workflo.IAnyAttributeArgs): boolean;
+        toContainAttribute(attributeArgs: Workflo.IAttributeArgs): boolean;
         toHaveClass(className: string): boolean;
+        toContainClass(className: string): boolean;
+        toHaveId(id: string): boolean;
+        toHaveAnyId(): boolean;
+        toContainId(id: string): boolean;
+        toHaveName(name: string): boolean;
+        toHaveAnyName(): boolean;
+        toContainName(name: string): boolean;
+        toHaveLocation(coordinates: Partial<Workflo.ICoordinates>, opts?: {
+            tolerances?: Partial<Workflo.ICoordinates>;
+        }): boolean;
+        toHaveX(x: number, opts?: {
+            tolerance?: number;
+        }): boolean;
+        toHaveX(y: number, opts?: {
+            tolerance?: number;
+        }): boolean;
+        toHaveSize(size: Partial<Workflo.ISize>, opts?: {
+            tolerances?: Partial<Workflo.ISize>;
+        }): boolean;
+        toHaveWidth(width: number, opts?: {
+            tolerance?: number;
+        }): boolean;
+        toHaveHeight(height: number, opts?: {
+            tolerance?: number;
+        }): boolean;
     }
     interface ElementMatchers extends CustomMatchers {
         not: CustomMatchers;
@@ -81,6 +117,12 @@ declare global {
         }
         interface IWDIOParamsOptionalReverse extends IWDIOParamsOptional {
             reverse?: boolean;
+        }
+        interface IAnyAttributeArgs {
+            name: string;
+        }
+        interface IAttributeArgs extends IAnyAttributeArgs {
+            value: string;
         }
         namespace PageNode {
             interface IElementJSON {

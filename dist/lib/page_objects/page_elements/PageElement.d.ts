@@ -16,8 +16,6 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
     isVisible: (opts?: OptionalParams) => ReturnType;
     isEnabled: (opts?: OptionalParams) => ReturnType;
     isSelected: (opts?: OptionalParams) => ReturnType;
-    hasClass: (className: string, opts?: OptionalParams) => ReturnType;
-    containsClass: (className: string, opts?: OptionalParams) => ReturnType;
     hasText: (text: string, opts: OptionalParams) => ReturnType;
     hasAnyText: (opts?: OptionalParams) => ReturnType;
     containsText: (text: string, opts?: OptionalParams) => ReturnType;
@@ -27,18 +25,20 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
     hasHTML: (html: string, opts?: OptionalParams) => ReturnType;
     hasAnyHTML: (opts?: OptionalParams) => ReturnType;
     containsHTML: (html: string, opts?: OptionalParams) => ReturnType;
+    hasDirectText: (directText: string, opts?: OptionalParams) => ReturnType;
+    hasAnyDirectText: (opts?: OptionalParams) => ReturnType;
+    containsDirectText: (directText: string, opts?: OptionalParams) => ReturnType;
     hasAttribute: (attributeName: string, attributeValue: string, opts?: OptionalParams) => ReturnType;
     hasAnyAttribute: (attributeName: string, opts?: OptionalParams) => ReturnType;
     containsAttribute: (attributeName: string, attributeValue: string, opts?: OptionalParams) => ReturnType;
+    hasClass: (className: string, opts?: OptionalParams) => ReturnType;
+    containsClass: (className: string, opts?: OptionalParams) => ReturnType;
     hasId: (id: string, opts?: OptionalParams) => ReturnType;
     hasAnyId: (opts?: OptionalParams) => ReturnType;
     containsId: (id: string, opts?: OptionalParams) => ReturnType;
     hasName: (name: string, opts?: OptionalParams) => ReturnType;
     hasAnyName: (opts?: OptionalParams) => ReturnType;
     containsName: (name: string, opts?: OptionalParams) => ReturnType;
-    hasDirectText: (directText: string, opts?: OptionalParams) => ReturnType;
-    hasAnyDirectText: (opts?: OptionalParams) => ReturnType;
-    containsDirectText: (directText: string, opts?: OptionalParams) => ReturnType;
     hasLocation: (coordinates: Partial<Workflo.ICoordinates>, opts?: {
         tolerances?: Partial<Workflo.ICoordinates>;
     } & OptionalParams) => ReturnType;
