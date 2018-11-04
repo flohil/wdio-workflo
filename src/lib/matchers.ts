@@ -161,12 +161,12 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     () => " to have any text"
   ),
   toContainText: elementMatcherFunction<string, string>(
-    ({element}) => element.getText(),
+    ({element}) => element.currently.getText(),
     (actual, expected) => actual.indexOf(expected) > -1,
     ({actual, expected}) => createLongErrorMessage('text', 'contain', actual, expected)
   ),
   toHaveValue: elementMatcherFunction<string, string>(
-    ({element}) => element.getValue(),
+    ({element}) => element.currently.getValue(),
     (actual, expected) => actual === expected,
     ({actual, expected}) => createLongErrorMessage('value', 'be', actual, expected)
   ),
@@ -176,7 +176,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     () => " to have any value"
   ),
   toContainValue: elementMatcherFunction<string, string>(
-    ({element}) => element.getValue(),
+    ({element}) => element.currently.getValue(),
     (actual, expected) => actual.indexOf(expected) > -1,
     ({actual, expected}) => createLongErrorMessage('value', 'contain', actual, expected)
   ),

@@ -149,6 +149,7 @@ export class PageElement<
   protected _timeout: number
   protected _$: Store
   protected _customScroll: Workflo.IScrollParams
+  protected _lastActualResult: string
 
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
@@ -184,6 +185,20 @@ export class PageElement<
     this._waitType = waitType
     this._timeout = timeout
     this._customScroll = customScroll
+  }
+
+  /**
+   * Whenever a function that checks the state of the GUI
+   * by comparing an expected result to an actual result is called,
+   * the actual result will be stored in 'lastActualResult'.
+   *
+   * This can be useful to determine why the last invocation of such a function returned false.
+   *
+   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+   * defined in the .currently, .eventually and .wait API of PageElement.
+   */
+  get lastActualResult() {
+    return this._lastActualResult
   }
 
 // RETRIEVE ELEMENT FUNCTIONS
@@ -627,16 +642,27 @@ export class PageElement<
     return Math.min(expected, 0) >= Math.min(tolerances.lower, 0) && Math.min(expected, 0) <= Math.min(tolerances.upper, 0)
   }
 
-  private _hasAxisLocation(axis: 'x' | 'y', expected: number, tolerance?: number): boolean {
-    const actualCoordinates = this.currently.getLocation()
-
-    return this._withinTolerance(actualCoordinates[axis], expected, tolerance)
+  private _hasAxisLocation(expected: number, actual: number, tolerance?: number): boolean {
+    return this._withinTolerance(actual, expected, tolerance)
   }
 
-  private _hasSideSize(side: 'width' | 'height', expected: number, tolerance?: number): boolean {
-    const actualSize = this.currently.getSize()
+  private _hasSideSize(expected: number, actual: number, tolerance?: number): boolean {
+    return this._withinTolerance(actual, expected, tolerance)
+  }
 
-    return this._withinTolerance(actualSize[side], expected, tolerance)
+  private _compareHas(expected: string, actual: string) {
+    this._lastActualResult = actual
+    return actual === expected
+  }
+
+  private _compareHasAny(actual: string) {
+    this._lastActualResult = actual
+    return actual.length > 0
+  }
+
+  private _compareContains(expected: string, actual: string) {
+    this._lastActualResult = actual
+    return actual.indexOf(expected) > -1
   }
 
   currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store> = {
@@ -699,98 +725,112 @@ export class PageElement<
     isSelected: (): boolean => {
       return this._isSelected(this.__element)
     },
-    hasText: (text: string): boolean => {
-      return this.currently.getText() === text
-    },
-    hasAnyText: (): boolean => {
-      return this.currently.getText().length > 0
-    },
-    containsText: (text: string): boolean => {
-      return this.currently.getText().indexOf(text) > -1
-    },
-    hasValue: (value: string): boolean => {
-      return this.currently.getValue() === value
-    },
-    hasAnyValue: (): boolean => {
-      return this.currently.getValue().length > 0
-    },
-    containsValue: (value: string): boolean => {
-      return this.currently.getValue().indexOf(value) > -1
-    },
-    hasHTML: (html: string): boolean => {
-      return this.currently.getHTML() === html
-    },
-    hasAnyHTML: (): boolean => {
-      return this.currently.getHTML().length > 0
-    },
-    containsHTML: (html: string): boolean => {
-      return this.currently.getHTML().indexOf(html) > -1
-    },
-    hasDirectText: (directText: string): boolean => {
-      return this.currently.getDirectText() === directText
-    },
-    hasAnyDirectText: (): boolean => {
-      return this.currently.getDirectText().length > 0
-    },
-    containsDirectText: (directText: string): boolean => {
-      return this.currently.getDirectText().indexOf(directText) > 0
-    },
-    hasAttribute: (attributeName: string, attributeValue: string): boolean => {
-      return this.currently.getAttribute(attributeName) === attributeValue
-    },
-    hasAnyAttribute: (attributeName: string): boolean => {
-      return this.currently.getAttribute(attributeName).length > 0
-    },
-    containsAttribute: (attributeName: string, attributeValue: string): boolean => {
-      return this.currently.getAttribute(attributeName).indexOf(attributeValue) > 0
-    },
-    hasClass: (className: string): boolean => {
-      return this.currently.getClass() === className
-    },
-    containsClass: (className: string): boolean => {
-      const _class: string = this.currently.getClass()
-
-      if (!_class) {
-        return false
-      } else {
-        return _class.indexOf(className) > -1
-      }
-    },
-    hasId: (id: string): boolean => {
-      return this.currently.getId() === id
-    },
-    hasAnyId: (): boolean => {
-      return this.currently.getId().length > 0
-    },
-    containsId: (id: string): boolean => {
-      return this.currently.getId().indexOf(id) > -1
-    },
-    hasName: (name: string): boolean => {
-      return this.currently.getName() === name
-    },
-    hasAnyName: (): boolean => {
-      return this.currently.getName().length > 0
-    },
-    containsName: (name: string): boolean => {
-      return this.currently.getName().indexOf(name) > -1
-    },
+    hasText: (text: string): boolean => this._compareHas(
+      text, this.currently.getText()
+    ),
+    hasAnyText: (): boolean => this._compareHasAny(
+      this.currently.getText()
+    ),
+    containsText: (text: string): boolean => this._compareContains(
+      text, this.currently.getText()
+    ),
+    hasValue: (value: string): boolean => this._compareHas(
+      value, this.currently.getValue()
+    ),
+    hasAnyValue: (): boolean => this._compareHasAny(
+      this.currently.getValue()
+    ),
+    containsValue: (value: string): boolean => this._compareContains(
+      value, this.currently.getValue()
+    ),
+    hasHTML: (html: string): boolean => this._compareHas(
+      html, this.currently.getHTML()
+    ),
+    hasAnyHTML: (): boolean => this._compareHasAny(
+      this.currently.getHTML()
+    ),
+    containsHTML: (html: string): boolean => this._compareContains(
+      html, this.currently.getHTML()
+    ),
+    hasDirectText: (directText: string): boolean => this._compareHas(
+      directText, this.currently.getDirectText()
+    ),
+    hasAnyDirectText: (): boolean => this._compareHasAny(
+      this.currently.getDirectText()
+    ),
+    containsDirectText: (directText: string): boolean => this._compareContains(
+      directText, this.currently.getDirectText()
+    ),
+    hasAttribute: (attributeName: string, attributeValue: string): boolean => this._compareHas(
+      attributeValue, this.currently.getAttribute(attributeName)
+    ),
+    hasAnyAttribute: (attributeName: string): boolean => this._compareHasAny(
+      this.currently.getAttribute(attributeName)
+    ),
+    containsAttribute: (attributeName: string, attributeValue: string): boolean => this._compareContains(
+      attributeValue, this.currently.getAttribute(attributeName)
+    ),
+    hasClass: (className: string): boolean => this._compareHas(
+      className, this.currently.getClass()
+    ),
+    containsClass: (className: string): boolean => this._compareContains(
+      className, this.currently.getClass()
+    ),
+    hasId: (id: string): boolean => this._compareHas(
+      id, this.currently.getId()
+    ),
+    hasAnyId: (): boolean => this._compareHasAny(
+      this.currently.getId()
+    ),
+    containsId: (id: string): boolean => this._compareContains(
+      id, this.currently.getId()
+    ),
+    hasName: (name: string): boolean => this._compareHas(
+      name, this.currently.getName()
+    ),
+    hasAnyName: (): boolean => this._compareHasAny(
+      this.currently.getName()
+    ),
+    containsName: (name: string): boolean => this._compareContains(
+      name, this.currently.getName()
+    ),
     hasLocation: (coordinates: Workflo.ICoordinates, tolerances: Workflo.ICoordinates = { x: 0, y: 0 }): boolean => {
-      return this._hasAxisLocation('x', coordinates.x, tolerances.x) && this._hasAxisLocation('y', coordinates.y, tolerances.y)
+      const actualCoords = this.currently.getLocation()
+      this._lastActualResult = tolerancesObjectToString(actualCoords)
+
+      return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
+        && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y)
     },
     hasX: (x: number, tolerance?: number): boolean => {
-       return this._hasAxisLocation('x', x, tolerance)
+      const actual = this.currently.getX()
+      this._lastActualResult = actual.toString()
+
+      return this._hasAxisLocation(x, actual, tolerance)
     },
     hasY: (y: number, tolerance?: number): boolean => {
-      return this._hasAxisLocation('y', y, tolerance)
+      const actual = this.currently.getY()
+      this._lastActualResult = actual.toString()
+
+      return this._hasAxisLocation(y, actual, tolerance)
     },
     hasSize: (size: Workflo.ISize, tolerances: Workflo.ISize = {width: 0, height: 0}): boolean => {
-      return this._hasSideSize('width', size.width, tolerances.width) && this._hasSideSize('height', size.height, tolerances.height)
+      const actualSize = this.currently.getSize()
+      this._lastActualResult = tolerancesObjectToString(actualSize)
+
+      return this._hasSideSize(size.width, actualSize.width, tolerances.width)
+        && this._hasSideSize(size.height, actualSize.width, tolerances.height)
     },
     hasWidth: (width: number, tolerance?: number): boolean => {
-      return this._hasSideSize('width', width, tolerance)
+      const actual = this.currently.getWidth()
+      this._lastActualResult = actual.toString()
+
+      return this._hasSideSize(width, actual, tolerance)
     },
     hasHeight: (height: number, tolerance?: number): boolean => {
-      return this._hasSideSize('height', height, tolerance)
+      const actual = this.currently.getHeight()
+      this._lastActualResult = actual.toString()
+
+      return this._hasSideSize(height, actual, tolerance)
     },
 
     not: {
@@ -1011,7 +1051,7 @@ export class PageElement<
       return this._waitHasProperty(
         `location`,
         tolerancesObjectToString(coordinates, tolerances),
-        () => this._hasAxisLocation('x', coordinates.x, tolerances.x) && this._hasAxisLocation('y', coordinates.y, tolerances.y),
+        () => this.currently.hasLocation(coordinates, tolerances),
         otherOpts
       )
     },
@@ -1023,7 +1063,7 @@ export class PageElement<
       return this._waitHasProperty(
         `x`,
         tolerancesObjectToString({x}, {x: tolerance}),
-        () => this._hasAxisLocation('x', x, tolerance),
+        () => this.currently.hasX(x, tolerance),
         otherOpts
       )
     },
@@ -1035,7 +1075,7 @@ export class PageElement<
       return this._waitHasProperty(
         `y`,
         tolerancesObjectToString({y}, {y: tolerance}),
-        () => this._hasAxisLocation('y', y, tolerance),
+        () => this.currently.hasY(y, tolerance),
         otherOpts
       )
     },
@@ -1048,7 +1088,7 @@ export class PageElement<
       return this._waitHasProperty(
         `location`,
         tolerancesObjectToString(size, tolerances),
-        () => this._hasSideSize('width', size.width, tolerances.width) && this._hasSideSize('height', size.height, tolerances.height),
+        () => this.currently.hasSize(size, tolerances),
         otherOpts
       )
     },
@@ -1060,7 +1100,7 @@ export class PageElement<
       return this._waitHasProperty(
         `width`,
         tolerancesObjectToString({width}, {width: tolerance}),
-        () => this._hasSideSize('width', width, tolerance),
+        () => this.currently.hasWidth(width, tolerance),
         otherOpts
       )
     },
@@ -1072,7 +1112,7 @@ export class PageElement<
       return this._waitHasProperty(
         `height`,
         tolerancesObjectToString({height}, {height: tolerance}),
-        () => this._hasSideSize('height', height, tolerance),
+        () => this.currently.hasHeight(height, tolerance),
         otherOpts
       )
     },
@@ -1458,7 +1498,7 @@ function isScrollResult(result: any): result is Workflo.IScrollResult {
   return result.elemTop !== undefined;
 }
 
-function tolerancesObjectToString(actuals, tolerances) {
+function tolerancesObjectToString(actuals: Object, tolerances?: Object) {
   var str = '{';
   var props = []
 
@@ -1467,7 +1507,7 @@ function tolerancesObjectToString(actuals, tolerances) {
       const actual = actuals[p]
       let actualStr = ''
 
-      if (tolerances[p] !== 0) {
+      if (tolerances && tolerances[p] !== 0) {
         const tolerance = Math.abs(tolerances[p])
 
         actualStr = `[${Math.max(actual - tolerance, 0)}, ${Math.max(actual + tolerance, 0)}]`

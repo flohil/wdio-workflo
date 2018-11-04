@@ -91,18 +91,18 @@ function createLongErrorMessage(property, comparison, actual, expected) {
 }
 // TODO: add not functions for eventually not
 exports.elementMatchers = {
-    toExist: elementMatcherFunction(({ element }) => element._exists(), actual => actual === true, () => " to exist"),
-    toBeVisible: elementMatcherFunction(({ element }) => element._isVisible(), actual => actual === true, () => " to be visible"),
-    toBeSelected: elementMatcherFunction(({ element }) => element._isSelected(), actual => actual === true, () => " to be selected"),
-    toBeEnabled: elementMatcherFunction(({ element }) => element._isEnabled(), actual => actual === true, () => " to be selected"),
-    toHaveClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('class', 'be', actual, expected)),
-    toContainClass: elementMatcherFunction(({ element }) => element.getClass(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('class', 'contain', actual, expected)),
-    toHaveText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('text', 'be', actual, expected)),
-    toHaveAnyText: elementMatcherFunction(({ element }) => element.getText(), (actual) => actual.length > 0, () => " to have any text"),
-    toContainText: elementMatcherFunction(({ element }) => element.getText(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('text', 'contain', actual, expected)),
-    toHaveValue: elementMatcherFunction(({ element }) => element.getValue(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('value', 'be', actual, expected)),
-    toHaveAnyValue: elementMatcherFunction(({ element }) => element.getValue(), (actual) => actual.length > 0, () => " to have any value"),
-    toContainValue: elementMatcherFunction(({ element }) => element.getValue(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('value', 'contain', actual, expected)),
+    toExist: elementMatcherFunction(({ element }) => element.currently.exists(), actual => actual === true, () => " to exist"),
+    toBeVisible: elementMatcherFunction(({ element }) => element.currently.isVisible(), actual => actual === true, () => " to be visible"),
+    toBeSelected: elementMatcherFunction(({ element }) => element.currently.isSelected(), actual => actual === true, () => " to be selected"),
+    toBeEnabled: elementMatcherFunction(({ element }) => element.currently.isEnabled(), actual => actual === true, () => " to be selected"),
+    toHaveText: elementMatcherFunction(({ element }) => element.currently.getText(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('text', 'be', actual, expected)),
+    toHaveAnyText: elementMatcherFunction(({ element }) => element.currently.hasAnyText(), (actual) => actual === true, () => " to have any text"),
+    toContainText: elementMatcherFunction(({ element }) => element.currently.getText(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('text', 'contain', actual, expected)),
+    toHaveValue: elementMatcherFunction(({ element }) => element.currently.getValue(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('value', 'be', actual, expected)),
+    toHaveAnyValue: elementMatcherFunction(({ element }) => element.currently.hasAnyValue(), (actual) => actual === true, () => " to have any value"),
+    toContainValue: elementMatcherFunction(({ element }) => element.currently.getValue(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('value', 'contain', actual, expected)),
+    toHaveClass: elementMatcherFunction(({ element }) => element.currently.getClass(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('class', 'be', actual, expected)),
+    toContainClass: elementMatcherFunction(({ element }) => element.currently.getClass(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('class', 'contain', actual, expected)),
 };
 function expectElement(element) {
     return expect(element);
