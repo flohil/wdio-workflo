@@ -19,193 +19,22 @@ class PageElement extends _1.PageNode {
         var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, customScroll = undefined } = _a, superOpts = __rest(_a, ["waitType", "timeout", "customScroll"]);
         super(_selector, superOpts);
         this._selector = _selector;
-        this.currently = {
-            element: this.__element,
-            // GET STATE
-            getHTML: () => {
-                return this._getHTML(this.__element);
-            },
-            getText: () => {
-                return this._getText(this.__element);
-            },
-            getDirectText: () => {
-                return this._getDirectText(this.__element);
-            },
-            getValue: () => {
-                return this._getValue(this.__element);
-            },
-            getAttribute: (attributeName) => {
-                return this._getAttribute(this.__element, attributeName);
-            },
-            getClass: () => {
-                return this._getAttribute(this.__element, 'class');
-            },
-            getId: () => {
-                return this._getAttribute(this.__element, 'id');
-            },
-            getName: () => {
-                return this._getAttribute(this.__element, 'name');
-            },
-            getLocation: () => {
-                return this._getLocation(this.__element);
-            },
-            getX: () => {
-                return this._getLocation(this.__element).x;
-            },
-            getY: () => {
-                return this._getLocation(this.__element).y;
-            },
-            getSize: () => {
-                return this._getSize(this.__element);
-            },
-            getWidth: () => {
-                return this._getSize(this.__element).width;
-            },
-            getHeight: () => {
-                return this._getSize(this.__element).height;
-            },
-            // CHECK STATE
-            exists: () => {
-                return this.__element.isExisting();
-            },
-            isVisible: () => {
-                return this.__element.isVisible();
-            },
-            isEnabled: () => {
-                return this._isEnabled(this.__element);
-            },
-            isSelected: () => {
-                return this._isSelected(this.__element);
-            },
-            hasText: (text) => {
-                return this.currently.getText() === text;
-            },
-            hasAnyText: () => {
-                return this.currently.getText().length > 0;
-            },
-            containsText: (text) => {
-                return this.currently.getText().indexOf(text) > -1;
-            },
-            hasValue: (value) => {
-                return this.currently.getValue() === value;
-            },
-            hasAnyValue: () => {
-                return this.currently.getValue().length > 0;
-            },
-            containsValue: (value) => {
-                return this.currently.getValue().indexOf(value) > -1;
-            },
-            hasHTML: (html) => {
-                return this.currently.getHTML() === html;
-            },
-            hasAnyHTML: () => {
-                return this.currently.getHTML().length > 0;
-            },
-            containsHTML: (html) => {
-                return this.currently.getHTML().indexOf(html) > -1;
-            },
-            hasDirectText: (directText) => {
-                return this.currently.getDirectText() === directText;
-            },
-            hasAnyDirectText: () => {
-                return this.currently.getDirectText().length > 0;
-            },
-            containsDirectText: (directText) => {
-                return this.currently.getDirectText().indexOf(directText) > 0;
-            },
-            hasAttribute: (attributeName, attributeValue) => {
-                return this.currently.getAttribute(attributeName) === attributeValue;
-            },
-            hasAnyAttribute: (attributeName) => {
-                return this.currently.getAttribute(attributeName).length > 0;
-            },
-            containsAttribute: (attributeName, attributeValue) => {
-                return this.currently.getAttribute(attributeName).indexOf(attributeValue) > 0;
-            },
-            hasClass: (className) => {
-                return this.currently.getClass() === className;
-            },
-            containsClass: (className) => {
-                const _class = this.currently.getClass();
-                if (!_class) {
-                    return false;
-                }
-                else {
-                    return _class.indexOf(className) > -1;
-                }
-            },
-            hasId: (id) => {
-                return this.currently.getId() === id;
-            },
-            hasAnyId: () => {
-                return this.currently.getId().length > 0;
-            },
-            containsId: (id) => {
-                return this.currently.getId().indexOf(id) > -1;
-            },
-            hasName: (name) => {
-                return this.currently.getName() === name;
-            },
-            hasAnyName: () => {
-                return this.currently.getName().length > 0;
-            },
-            containsName: (name) => {
-                return this.currently.getName().indexOf(name) > -1;
-            },
-            hasLocation: (coordinates, tolerances = { x: 0, y: 0 }) => {
-                return this._hasAxisLocation('x', coordinates.x, tolerances.x) && this._hasAxisLocation('y', coordinates.y, tolerances.y);
-            },
-            hasX: (x, tolerance) => {
-                return this._hasAxisLocation('x', x, tolerance);
-            },
-            hasY: (y, tolerance) => {
-                return this._hasAxisLocation('y', y, tolerance);
-            },
-            hasSize: (size, tolerances = { width: 0, height: 0 }) => {
-                return this._hasSideSize('width', size.width, tolerances.width) && this._hasSideSize('height', size.height, tolerances.height);
-            },
-            hasWidth: (width, tolerance) => {
-                return this._hasSideSize('width', width, tolerance);
-            },
-            hasHeight: (height, tolerance) => {
-                return this._hasSideSize('height', height, tolerance);
-            },
-            not: {
-                exists: () => !this.currently.exists(),
-                isVisible: () => !this.currently.isVisible(),
-                isEnabled: () => !this.currently.isEnabled(),
-                isSelected: () => !this.currently.isSelected(),
-                hasClass: (className) => !this.currently.hasClass(className),
-                containsClass: (className) => !this.currently.containsClass(className),
-                hasText: (text) => !this.currently.hasText(text),
-                hasAnyText: () => !this.currently.hasAnyText(),
-                containsText: (text) => !this.currently.containsText(text),
-                hasValue: (value) => !this.currently.hasValue(value),
-                hasAnyValue: () => !this.currently.hasAnyValue(),
-                containsValue: (value) => !this.currently.containsValue(value),
-                hasDirectText: (directText) => !this.currently.hasDirectText(directText),
-                hasAnyDirectText: () => !this.currently.hasAnyDirectText(),
-                containsDirectText: (directText) => !this.currently.containsDirectText(directText),
-                hasAttribute: (attributeName, attributeValue) => !this.currently.hasAttribute(attributeName, attributeValue),
-                hasAnyAttribute: (attributeName) => !this.currently.hasAnyAttribute(attributeName),
-                containsAttribute: (attributeName, attributeValue) => !this.currently.containsAttribute(attributeName, attributeValue),
-                hasHTML: (html) => !this.currently.hasHTML(html),
-                hasAnyHTML: () => !this.currently.hasAnyHTML(),
-                containsHTML: (html) => !this.currently.containsHTML(html),
-                hasId: (id) => !this.currently.hasId(id),
-                hasAnyId: () => !this.currently.hasAnyId(),
-                containsId: (id) => !this.currently.containsId(id),
-                hasName: (name) => !this.currently.hasName(name),
-                hasAnyName: () => !this.currently.hasAnyName(),
-                containsName: (name) => !this.currently.containsName(name),
-                hasLocation: (coordinates, tolerances) => !this.currently.hasLocation(coordinates, tolerances),
-                hasX: (x, tolerance) => !this.currently.hasX(x, tolerance),
-                hasY: (y, tolerance) => !this.currently.hasY(y, tolerance),
-                hasSize: (size, tolerances) => !this.currently.hasSize(size, tolerances),
-                hasWidth: (width, tolerance) => !this.currently.hasWidth(width, tolerance),
-                hasHeight: (height, tolerance) => !this.currently.hasHeight(height, tolerance),
-            }
-        };
+        // Public GETTER FUNCTIONS (return state after initial wait)
+        this.getHTML = () => getHTML(this.element);
+        this.getText = () => getText(this.element);
+        this.getDirectText = () => getDirectText(this.element);
+        this.getValue = () => getValue(this.element);
+        this.getAttribute = (attributeName) => getAttribute(this.element, attributeName);
+        this.getClass = () => getAttribute(this.element, 'class');
+        this.getId = () => getAttribute(this.element, 'id');
+        this.getName = () => getAttribute(this.element, 'name');
+        this.getLocation = () => getLocation(this.element);
+        this.getX = () => getLocation(this.element).x;
+        this.getY = () => getLocation(this.element).y;
+        this.getSize = () => getSize(this.element);
+        this.getWidth = () => getSize(this.element).width;
+        this.getHeight = () => getSize(this.element).height;
+        this.getTimeout = () => this._timeout;
         this.wait = {
             exists: (opts) => this._waitWdioCheckFunc('existed', opts => this.currently.element.waitForExist(opts.timeout, opts.reverse), opts),
             isVisible: (opts) => this._waitWdioCheckFunc('became visible', opts => this.currently.element.waitForVisible(opts.timeout, opts.reverse), opts),
@@ -240,27 +69,27 @@ class PageElement extends _1.PageNode {
             containsName: (name, opts) => this._waitContainsProperty(`name`, name, () => this.currently.containsName(name), opts),
             hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, tolerancesObjectToString(coordinates, tolerances), () => this._hasAxisLocation('x', coordinates.x, tolerances.x) && this._hasAxisLocation('y', coordinates.y, tolerances.y), otherOpts);
+                return this._waitHasProperty(`location`, tolerancesObjectToString(coordinates, tolerances), () => this.currently.hasLocation(coordinates, tolerances), otherOpts);
             },
             hasX: (x, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`x`, tolerancesObjectToString({ x }, { x: tolerance }), () => this._hasAxisLocation('x', x, tolerance), otherOpts);
+                return this._waitHasProperty(`x`, tolerancesObjectToString({ x }, { x: tolerance }), () => this.currently.hasX(x, tolerance), otherOpts);
             },
             hasY: (y, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`y`, tolerancesObjectToString({ y }, { y: tolerance }), () => this._hasAxisLocation('y', y, tolerance), otherOpts);
+                return this._waitHasProperty(`y`, tolerancesObjectToString({ y }, { y: tolerance }), () => this.currently.hasY(y, tolerance), otherOpts);
             },
             hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, tolerancesObjectToString(size, tolerances), () => this._hasSideSize('width', size.width, tolerances.width) && this._hasSideSize('height', size.height, tolerances.height), otherOpts);
+                return this._waitHasProperty(`location`, tolerancesObjectToString(size, tolerances), () => this.currently.hasSize(size, tolerances), otherOpts);
             },
             hasWidth: (width, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`width`, tolerancesObjectToString({ width }, { width: tolerance }), () => this._hasSideSize('width', width, tolerance), otherOpts);
+                return this._waitHasProperty(`width`, tolerancesObjectToString({ width }, { width: tolerance }), () => this.currently.hasWidth(width, tolerance), otherOpts);
             },
             hasHeight: (height, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`height`, tolerancesObjectToString({ height }, { height: tolerance }), () => this._hasSideSize('height', height, tolerance), otherOpts);
+                return this._waitHasProperty(`height`, tolerancesObjectToString({ height }, { height: tolerance }), () => this.currently.hasHeight(height, tolerance), otherOpts);
             },
             untilElement: (description, condition, { timeout = this._timeout } = {}) => {
                 browser.waitUntil(() => condition(this), timeout, `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`);
@@ -554,6 +383,20 @@ class PageElement extends _1.PageNode {
         this._waitType = waitType;
         this._timeout = timeout;
         this._customScroll = customScroll;
+        this.currently = new Currently(this._selector);
+    }
+    /**
+     * Whenever a function that checks the state of the GUI
+     * by comparing an expected result to an actual result is called,
+     * the actual result will be stored in 'lastActualResult'.
+     *
+     * This can be useful to determine why the last invocation of such a function returned false.
+     *
+     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+     * defined in the .currently, .eventually and .wait API of PageElement.
+     */
+    get lastActualResult() {
+        return this._lastActualResult;
     }
     // RETRIEVE ELEMENT FUNCTIONS
     /**
@@ -596,135 +439,6 @@ class PageElement extends _1.PageNode {
                 break;
         }
         return this;
-    }
-    // Private GETTER FUNCTIONS (work with both element and currently.element)
-    /**
-     * Get text that resides on the level directly below the selected page element.
-     * Does not include text of the page element's nested children elements.
-     */
-    _getDirectText(element) {
-        const html = element.getHTML();
-        if (html.length === 0) {
-            return '';
-        }
-        let text = "";
-        const constructorName = this.constructor.name;
-        const selector = this._selector;
-        const handler = new htmlParser.DomHandler(function (error, dom) {
-            if (error) {
-                throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`);
-            }
-            else {
-                dom.forEach(node => {
-                    node.children.forEach(childNode => {
-                        if (childNode.type === 'text') {
-                            text += childNode.data;
-                        }
-                    });
-                });
-            }
-        });
-        return text;
-    }
-    _getHTML(element) {
-        const result = browser.selectorExecute([this.getSelector()], function (elems, elementSelector) {
-            var error = {
-                notFound: []
-            };
-            if (elems.length === 0) {
-                error.notFound.push(elementSelector);
-            }
-            ;
-            if (error.notFound.length > 0) {
-                return error;
-            }
-            var elem = elems[0];
-            return elem.innerHTML;
-        }, this.getSelector());
-        if (isJsError(result)) {
-            throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`);
-        }
-        else {
-            return result;
-        }
-    }
-    // returns text of this.element including
-    // all texts of nested children
-    _getText(element) {
-        return element.getText();
-    }
-    _getValue(element) {
-        return element.getValue();
-    }
-    _getAttribute(element, attrName) {
-        return element.getAttribute(attrName);
-    }
-    _getClass(element) {
-        return element.getAttribute('class');
-    }
-    _getId(element) {
-        return element.getAttribute('id');
-    }
-    _getName(element) {
-        return element.getAttribute('name');
-    }
-    _getLocation(element) {
-        return element.getLocation();
-    }
-    _getSize(element) {
-        return this.element.getElementSize();
-    }
-    _isEnabled(element) {
-        return element.isEnabled();
-    }
-    _isSelected(element) {
-        return element.isSelected();
-    }
-    // Public GETTER FUNCTIONS (return state after initial wait)
-    getDirectText() {
-        return this._getDirectText(this.element);
-    }
-    getHTML() {
-        return this._getHTML(this.element);
-    }
-    getText() {
-        return this._getText(this.element);
-    }
-    getValue() {
-        return this._getValue(this.element);
-    }
-    getAttribute(attributeName) {
-        return this._getAttribute(this.element, attributeName);
-    }
-    getClass() {
-        return this._getClass(this.element);
-    }
-    getId() {
-        return this._getId(this.element);
-    }
-    getName() {
-        return this._getName(this.element);
-    }
-    getLocation() {
-        return this._getLocation(this.element);
-    }
-    getX() {
-        return this._getLocation(this.element).x;
-    }
-    getY() {
-        return this._getLocation(this.element).y;
-    }
-    getSize() {
-        return this._getSize(this.element);
-    }
-    getWidth() {
-        return this._getSize(this.element).width;
-    }
-    getHeight() {
-        return this._getSize(this.element).height;
-    }
-    getTimeout() {
-        return this._timeout;
     }
     // INTERACTION FUNCTIONS (interact with state after initial wait)
     setValue(value) {
@@ -903,31 +617,6 @@ class PageElement extends _1.PageNode {
             return result;
         }
     }
-    // CURRENT CHECK STATE FUNCTIONS
-    /**
-     * @param actual the actual browser value in pixels
-     * @param expected the expected value in pixels or 0 if expected was smaller than 0
-     * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
-     */
-    _withinTolerance(actual, expected, tolerance) {
-        const tolerances = {
-            lower: actual,
-            upper: actual
-        };
-        if (tolerance) {
-            tolerances.lower -= Math.min(tolerance, 0);
-            tolerances.upper += Math.min(tolerance, 0);
-        }
-        return Math.min(expected, 0) >= Math.min(tolerances.lower, 0) && Math.min(expected, 0) <= Math.min(tolerances.upper, 0);
-    }
-    _hasAxisLocation(axis, expected, tolerance) {
-        const actualCoordinates = this.currently.getLocation();
-        return this._withinTolerance(actualCoordinates[axis], expected, tolerance);
-    }
-    _hasSideSize(side, expected, tolerance) {
-        const actualSize = this.currently.getSize();
-        return this._withinTolerance(actualSize[side], expected, tolerance);
-    }
     // WAIT (for certain state within timeout)
     _waitWdioCheckFunc(checkTypeStr, conditionFunc, { timeout = this._timeout, reverse } = {}) {
         const reverseStr = (reverse) ? ' not' : '';
@@ -978,15 +667,240 @@ class PageElement extends _1.PageNode {
     }
 }
 exports.PageElement = PageElement;
-// type guards
-function isJsError(result) {
-    if (!result) {
-        return false;
+class Currently {
+    constructor(selector) {
+        // GET STATE
+        this.getHTML = () => getHTML(this.element);
+        this.getText = () => getText(this.element);
+        this.getDirectText = () => getDirectText(this.element);
+        this.getValue = () => getValue(this.element);
+        this.getAttribute = (attributeName) => getAttribute(this.element, attributeName);
+        this.getClass = () => getAttribute(this.element, 'class');
+        this.getId = () => getAttribute(this.element, 'id');
+        this.getName = () => getAttribute(this.element, 'name');
+        this.getLocation = () => getLocation(this.element);
+        this.getX = () => getLocation(this.element).x;
+        this.getY = () => getLocation(this.element).y;
+        this.getSize = () => getSize(this.element);
+        this.getWidth = () => getSize(this.element).width;
+        this.getHeight = () => getSize(this.element).height;
+        this.exists = () => this.element.isExisting();
+        this.isVisible = () => this.element.isVisible();
+        this.isEnabled = () => isEnabled(this.element);
+        this.isSelected = () => isSelected(this.element);
+        this.hasText = (text) => this._compareHas(text, this.getText());
+        this.hasAnyText = () => this._compareHasAny(this.getText());
+        this.containsText = (text) => this._compareContains(text, this.getText());
+        this.hasValue = (value) => this._compareHas(value, this.getValue());
+        this.hasAnyValue = () => this._compareHasAny(this.getValue());
+        this.containsValue = (value) => this._compareContains(value, this.getValue());
+        this.hasHTML = (html) => this._compareHas(html, this.getHTML());
+        this.hasAnyHTML = () => this._compareHasAny(this.getHTML());
+        this.containsHTML = (html) => this._compareContains(html, this.getHTML());
+        this.hasDirectText = (directText) => this._compareHas(directText, this.getDirectText());
+        this.hasAnyDirectText = () => this._compareHasAny(this.getDirectText());
+        this.containsDirectText = (directText) => this._compareContains(directText, this.getDirectText());
+        this.hasAttribute = (attributeName, attributeValue) => this._compareHas(attributeValue, this.getAttribute(attributeName));
+        this.hasAnyAttribute = (attributeName) => this._compareHasAny(this.getAttribute(attributeName));
+        this.containsAttribute = (attributeName, attributeValue) => this._compareContains(attributeValue, this.getAttribute(attributeName));
+        this.hasClass = (className) => this._compareHas(className, this.getClass());
+        this.containsClass = (className) => this._compareContains(className, this.getClass());
+        this.hasId = (id) => this._compareHas(id, this.getId());
+        this.hasAnyId = () => this._compareHasAny(this.getId());
+        this.containsId = (id) => this._compareContains(id, this.getId());
+        this.hasName = (name) => this._compareHas(name, this.getName());
+        this.hasAnyName = () => this._compareHasAny(this.getName());
+        this.containsName = (name) => this._compareContains(name, this.getName());
+        this.hasLocation = (coordinates, tolerances = { x: 0, y: 0 }) => {
+            const actualCoords = this.getLocation();
+            this._lastActualResult = tolerancesObjectToString(actualCoords);
+            return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
+                && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y);
+        };
+        this.hasX = (x, tolerance) => {
+            const actual = this.getX();
+            this._lastActualResult = actual.toString();
+            return this._hasAxisLocation(x, actual, tolerance);
+        };
+        this.hasY = (y, tolerance) => {
+            const actual = this.getY();
+            this._lastActualResult = actual.toString();
+            return this._hasAxisLocation(y, actual, tolerance);
+        };
+        this.hasSize = (size, tolerances = { width: 0, height: 0 }) => {
+            const actualSize = this.getSize();
+            this._lastActualResult = tolerancesObjectToString(actualSize);
+            return this._hasSideSize(size.width, actualSize.width, tolerances.width)
+                && this._hasSideSize(size.height, actualSize.width, tolerances.height);
+        };
+        this.hasWidth = (width, tolerance) => {
+            const actual = this.getWidth();
+            this._lastActualResult = actual.toString();
+            return this._hasSideSize(width, actual, tolerance);
+        };
+        this.hasHeight = (height, tolerance) => {
+            const actual = this.getHeight();
+            this._lastActualResult = actual.toString();
+            return this._hasSideSize(height, actual, tolerance);
+        };
+        this.not = {
+            exists: () => !this.exists(),
+            isVisible: () => !this.isVisible(),
+            isEnabled: () => !this.isEnabled(),
+            isSelected: () => !this.isSelected(),
+            hasClass: (className) => !this.hasClass(className),
+            containsClass: (className) => !this.containsClass(className),
+            hasText: (text) => !this.hasText(text),
+            hasAnyText: () => !this.hasAnyText(),
+            containsText: (text) => !this.containsText(text),
+            hasValue: (value) => !this.hasValue(value),
+            hasAnyValue: () => !this.hasAnyValue(),
+            containsValue: (value) => !this.containsValue(value),
+            hasDirectText: (directText) => !this.hasDirectText(directText),
+            hasAnyDirectText: () => !this.hasAnyDirectText(),
+            containsDirectText: (directText) => !this.containsDirectText(directText),
+            hasAttribute: (attributeName, attributeValue) => !this.hasAttribute(attributeName, attributeValue),
+            hasAnyAttribute: (attributeName) => !this.hasAnyAttribute(attributeName),
+            containsAttribute: (attributeName, attributeValue) => !this.containsAttribute(attributeName, attributeValue),
+            hasHTML: (html) => !this.hasHTML(html),
+            hasAnyHTML: () => !this.hasAnyHTML(),
+            containsHTML: (html) => !this.containsHTML(html),
+            hasId: (id) => !this.hasId(id),
+            hasAnyId: () => !this.hasAnyId(),
+            containsId: (id) => !this.containsId(id),
+            hasName: (name) => !this.hasName(name),
+            hasAnyName: () => !this.hasAnyName(),
+            containsName: (name) => !this.containsName(name),
+            hasLocation: (coordinates, tolerances) => !this.hasLocation(coordinates, tolerances),
+            hasX: (x, tolerance) => !this.hasX(x, tolerance),
+            hasY: (y, tolerance) => !this.hasY(y, tolerance),
+            hasSize: (size, tolerances) => !this.hasSize(size, tolerances),
+            hasWidth: (width, tolerance) => !this.hasWidth(width, tolerance),
+            hasHeight: (height, tolerance) => !this.hasHeight(height, tolerance),
+        };
+        this._selector = selector;
     }
-    return result.notFound !== undefined;
+    get element() {
+        return browser.element(this._selector);
+    }
+    // CHECK STATE
+    /**
+   * @param actual the actual browser value in pixels
+   * @param expected the expected value in pixels or 0 if expected was smaller than 0
+   * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
+   */
+    _withinTolerance(actual, expected, tolerance) {
+        const tolerances = {
+            lower: actual,
+            upper: actual
+        };
+        if (tolerance) {
+            tolerances.lower -= Math.min(tolerance, 0);
+            tolerances.upper += Math.min(tolerance, 0);
+        }
+        return Math.min(expected, 0) >= Math.min(tolerances.lower, 0) && Math.min(expected, 0) <= Math.min(tolerances.upper, 0);
+    }
+    _hasAxisLocation(expected, actual, tolerance) {
+        return this._withinTolerance(actual, expected, tolerance);
+    }
+    _hasSideSize(expected, actual, tolerance) {
+        return this._withinTolerance(actual, expected, tolerance);
+    }
+    _compareHas(expected, actual) {
+        this._lastActualResult = actual;
+        return actual === expected;
+    }
+    _compareHasAny(actual) {
+        this._lastActualResult = actual;
+        return actual.length > 0;
+    }
+    _compareContains(expected, actual) {
+        this._lastActualResult = actual;
+        return actual.indexOf(expected) > -1;
+    }
 }
-function isScrollResult(result) {
-    return result.elemTop !== undefined;
+// UTILITY FUNCTIONS
+/**
+ * Get text that resides on the level directly below the selected page element.
+ * Does not include text of the page element's nested children elements.
+ */
+function getDirectText(element) {
+    const html = element.getHTML();
+    if (html.length === 0) {
+        return '';
+    }
+    let text = "";
+    const constructorName = this.constructor.name;
+    const selector = this._selector;
+    const handler = new htmlParser.DomHandler(function (error, dom) {
+        if (error) {
+            throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`);
+        }
+        else {
+            dom.forEach(node => {
+                node.children.forEach(childNode => {
+                    if (childNode.type === 'text') {
+                        text += childNode.data;
+                    }
+                });
+            });
+        }
+    });
+    return text;
+}
+function getHTML(element) {
+    const result = browser.selectorExecute([this.getSelector()], function (elems, elementSelector) {
+        var error = {
+            notFound: []
+        };
+        if (elems.length === 0) {
+            error.notFound.push(elementSelector);
+        }
+        ;
+        if (error.notFound.length > 0) {
+            return error;
+        }
+        var elem = elems[0];
+        return elem.innerHTML;
+    }, this.getSelector());
+    if (isJsError(result)) {
+        throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`);
+    }
+    else {
+        return result;
+    }
+}
+// returns text of this.element including
+// all texts of nested children
+function getText(element) {
+    return element.getText();
+}
+function getValue(element) {
+    return element.getValue();
+}
+function getAttribute(element, attrName) {
+    return element.getAttribute(attrName);
+}
+function getClass(element) {
+    return element.getAttribute('class');
+}
+function getId(element) {
+    return element.getAttribute('id');
+}
+function getName(element) {
+    return element.getAttribute('name');
+}
+function getLocation(element) {
+    return element.getLocation();
+}
+function getSize(element) {
+    return this.element.getElementSize();
+}
+function isEnabled(element) {
+    return element.isEnabled();
+}
+function isSelected(element) {
+    return element.isSelected();
 }
 function tolerancesObjectToString(actuals, tolerances) {
     var str = '{';
@@ -995,7 +909,7 @@ function tolerancesObjectToString(actuals, tolerances) {
         if (actuals.hasOwnProperty(p)) {
             const actual = actuals[p];
             let actualStr = '';
-            if (tolerances[p] !== 0) {
+            if (tolerances && tolerances[p] !== 0) {
                 const tolerance = Math.abs(tolerances[p]);
                 actualStr = `[${Math.max(actual - tolerance, 0)}, ${Math.max(actual + tolerance, 0)}]`;
             }
@@ -1007,5 +921,15 @@ function tolerancesObjectToString(actuals, tolerances) {
     }
     str += props.join(', ');
     return str + '}';
+}
+// TYPE GUARDS
+function isJsError(result) {
+    if (!result) {
+        return false;
+    }
+    return result.notFound !== undefined;
+}
+function isScrollResult(result) {
+    return result.elemTop !== undefined;
 }
 //# sourceMappingURL=PageElement.js.map

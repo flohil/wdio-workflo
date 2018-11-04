@@ -131,7 +131,20 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     protected _timeout: number;
     protected _$: Store;
     protected _customScroll: Workflo.IScrollParams;
+    protected _lastActualResult: string;
+    readonly currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store>;
     constructor(_selector: string, { waitType, timeout, customScroll, ...superOpts }: IPageElementOpts<Store>);
+    /**
+     * Whenever a function that checks the state of the GUI
+     * by comparing an expected result to an actual result is called,
+     * the actual result will be stored in 'lastActualResult'.
+     *
+     * This can be useful to determine why the last invocation of such a function returned false.
+     *
+     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+     * defined in the .currently, .eventually and .wait API of PageElement.
+     */
+    readonly lastActualResult: string;
     /**
      * Return WdioElement from current state, not performing an initial wait.
      */
@@ -142,37 +155,21 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     readonly element: WdioElement;
     readonly $: Store;
     initialWait(): this;
-    /**
-     * Get text that resides on the level directly below the selected page element.
-     * Does not include text of the page element's nested children elements.
-     */
-    private _getDirectText;
-    private _getHTML;
-    private _getText;
-    private _getValue;
-    private _getAttribute;
-    private _getClass;
-    private _getId;
-    private _getName;
-    private _getLocation;
-    private _getSize;
-    private _isEnabled;
-    private _isSelected;
-    getDirectText(): string;
-    getHTML(): string;
-    getText(): WebdriverIO.Client<string> & string;
-    getValue(): WebdriverIO.Client<string> & string;
-    getAttribute(attributeName: string): null;
-    getClass(): null;
-    getId(): null;
-    getName(): null;
-    getLocation(): Workflo.ICoordinates;
-    getX(): number;
-    getY(): number;
-    getSize(): Workflo.ISize;
-    getWidth(): number;
-    getHeight(): number;
-    getTimeout(): number;
+    getHTML: () => string;
+    getText: () => string;
+    getDirectText: () => string;
+    getValue: () => string;
+    getAttribute: (attributeName: string) => string;
+    getClass: () => string;
+    getId: () => string;
+    getName: () => string;
+    getLocation: () => Workflo.ICoordinates;
+    getX: () => number;
+    getY: () => number;
+    getSize: () => Workflo.ISize;
+    getWidth: () => number;
+    getHeight: () => number;
+    getTimeout: () => number;
     setValue(value: string): void;
     /**
      *
@@ -187,15 +184,6 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
         customScroll?: Workflo.IScrollParams;
     }): this;
     scrollTo(params: Workflo.IScrollParams): Workflo.IScrollResult;
-    /**
-     * @param actual the actual browser value in pixels
-     * @param expected the expected value in pixels or 0 if expected was smaller than 0
-     * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
-     */
-    private _withinTolerance;
-    private _hasAxisLocation;
-    private _hasSideSize;
-    currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store>;
     private _waitWdioCheckFunc;
     private _waitProperty;
     private _waitHasProperty;

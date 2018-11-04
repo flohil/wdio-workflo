@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
-function elementMatcherFunction(resultFunction, assertionFunction, errorTextFunction) {
+function elementMatcherFunction(resultFunction, errorTextFunction) {
     return (util, customEqualityTesters) => {
         function baseCompareFunction(element, expected, negativeComparison, timeout) {
             let result = {
@@ -10,48 +10,13 @@ function elementMatcherFunction(resultFunction, assertionFunction, errorTextFunc
             };
             let negateAssertionResult = false;
             let defaultNegativeMessage = '';
-            const actuals = resultFunction({ element, expected, timeout });
-            let actual = undefined;
-            if (_.isArray(actuals)) {
-                if (negativeComparison && actuals.length > 1) {
-                    actual = actuals[1];
-                    console.log("in not result");
-                }
-                else {
-                    actual = actuals[0];
-                }
-            }
-            else {
-                actual = actuals;
-            }
-            const successes = (typeof actual === 'boolean') ? actual : assertionFunction(actual, expected);
-            let success = undefined;
-            if (_.isArray(successes)) {
-                if (negativeComparison) {
-                    if (successes.length > 1) {
-                        success = successes[1];
-                        console.log("in not assertion");
-                    }
-                    else {
-                        success = !successes[0];
-                    }
-                }
-                else {
-                    success = successes[0];
-                }
-            }
-            else {
-                if (negativeComparison) {
-                    success = !successes;
-                }
-                else {
-                    success = successes;
-                }
-            }
+            const successes = resultFunction({ element, expected, timeout });
+            const success = (negativeComparison) ? successes[1] : successes[0];
             if (!success) {
                 if (typeof timeout === 'undefined') {
                     timeout = element.getTimeout();
                 }
+                const actual = element.lastActualResult;
                 const errorTexts = errorTextFunction({ actual, expected, timeout });
                 let errorText = undefined;
                 if (_.isArray(errorTexts)) {
@@ -89,20 +54,19 @@ function createLongErrorMessage(property, comparison, actual, expected) {
         `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
     ];
 }
-// TODO: add not functions for eventually not
 exports.elementMatchers = {
-    toExist: elementMatcherFunction(({ element }) => element.currently.exists(), actual => actual === true, () => " to exist"),
-    toBeVisible: elementMatcherFunction(({ element }) => element.currently.isVisible(), actual => actual === true, () => " to be visible"),
-    toBeSelected: elementMatcherFunction(({ element }) => element.currently.isSelected(), actual => actual === true, () => " to be selected"),
-    toBeEnabled: elementMatcherFunction(({ element }) => element.currently.isEnabled(), actual => actual === true, () => " to be selected"),
-    toHaveText: elementMatcherFunction(({ element }) => element.currently.getText(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('text', 'be', actual, expected)),
-    toHaveAnyText: elementMatcherFunction(({ element }) => element.currently.hasAnyText(), (actual) => actual === true, () => " to have any text"),
-    toContainText: elementMatcherFunction(({ element }) => element.currently.getText(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('text', 'contain', actual, expected)),
-    toHaveValue: elementMatcherFunction(({ element }) => element.currently.getValue(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('value', 'be', actual, expected)),
-    toHaveAnyValue: elementMatcherFunction(({ element }) => element.currently.hasAnyValue(), (actual) => actual === true, () => " to have any value"),
-    toContainValue: elementMatcherFunction(({ element }) => element.currently.getValue(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('value', 'contain', actual, expected)),
-    toHaveClass: elementMatcherFunction(({ element }) => element.currently.getClass(), (actual, expected) => actual === expected, ({ actual, expected }) => createLongErrorMessage('class', 'be', actual, expected)),
-    toContainClass: elementMatcherFunction(({ element }) => element.currently.getClass(), (actual, expected) => actual.indexOf(expected) > -1, ({ actual, expected }) => createLongErrorMessage('class', 'contain', actual, expected)),
+    toExist: elementMatcherFunction(({ element }) => [element.currently.exists(), element.currently.not.exists()], () => " to exist"),
+    toBeVisible: elementMatcherFunction(({ element }) => [element.currently.isVisible(), element.currently.not.isVisible()], () => " to be visible"),
+    toBeSelected: elementMatcherFunction(({ element }) => [element.currently.isSelected(), element.currently.not.isSelected()], () => " to be selected"),
+    toBeEnabled: elementMatcherFunction(({ element }) => [element.currently.isEnabled(), element.currently.not.isEnabled()], () => " to be selected"),
+    toHaveText: elementMatcherFunction(({ element, expected }) => [element.currently.hasText(expected), element.currently.not.hasText(expected)], ({ actual, expected }) => createLongErrorMessage('text', 'be', actual, expected)),
+    toHaveAnyText: elementMatcherFunction(({ element }) => [element.currently.hasAnyText(), element.currently.not.hasAnyText()], () => " to have any text"),
+    toContainText: elementMatcherFunction(({ element, expected }) => [element.currently.containsText(expected), element.currently.not.containsText(expected)], ({ actual, expected }) => createLongErrorMessage('text', 'contain', actual, expected)),
+    toHaveValue: elementMatcherFunction(({ element, expected }) => [element.currently.hasValue(expected), element.currently.not.hasValue(expected)], ({ actual, expected }) => createLongErrorMessage('value', 'be', actual, expected)),
+    toHaveAnyValue: elementMatcherFunction(({ element }) => [element.currently.hasAnyValue(), element.currently.not.hasAnyValue()], () => " to have any value"),
+    toContainValue: elementMatcherFunction(({ element, expected }) => [element.currently.containsValue(expected), element.currently.not.containsValue(expected)], ({ actual, expected }) => createLongErrorMessage('value', 'contain', actual, expected)),
+    toHaveClass: elementMatcherFunction(({ element, expected }) => [element.currently.hasClass(expected), element.currently.not.hasClass(expected)], ({ actual, expected }) => createLongErrorMessage('class', 'be', actual, expected)),
+    toContainClass: elementMatcherFunction(({ element, expected }) => [element.currently.containsClass(expected), element.currently.not.containsClass(expected)], ({ actual, expected }) => createLongErrorMessage('class', 'contain', actual, expected)),
 };
 function expectElement(element) {
     return expect(element);

@@ -151,6 +151,8 @@ export class PageElement<
   protected _customScroll: Workflo.IScrollParams
   protected _lastActualResult: string
 
+  readonly currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store>
+
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
   constructor(
@@ -185,6 +187,8 @@ export class PageElement<
     this._waitType = waitType
     this._timeout = timeout
     this._customScroll = customScroll
+
+    this.currently = new Currently(this._selector)
   }
 
   /**
@@ -250,173 +254,24 @@ export class PageElement<
     return this
   }
 
-// Private GETTER FUNCTIONS (work with both element and currently.element)
-
-  /**
-   * Get text that resides on the level directly below the selected page element.
-   * Does not include text of the page element's nested children elements.
-   */
-  private _getDirectText(element: WdioElement): string {
-    const html = element.getHTML()
-
-    if (html.length === 0) {
-      return ''
-    }
-
-    let text = ""
-    const constructorName = this.constructor.name
-    const selector = this._selector
-
-    const handler = new htmlParser.DomHandler(function (error, dom) {
-      if (error) {
-        throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`)
-      }
-      else {
-        dom.forEach(node => {
-          node.children.forEach(childNode => {
-            if (childNode.type === 'text') {
-              text += childNode.data
-            }
-          })
-        });
-      }
-    });
-
-    return text
-  }
-
-  private _getHTML(element: WdioElement) {
-
-    const result: Workflo.IJSError | string = browser.selectorExecute(
-      [this.getSelector()], function (elems: HTMLElement[], elementSelector: string
-    ) {
-        var error: Workflo.IJSError = {
-          notFound: []
-        };
-
-        if (elems.length === 0) {
-          error.notFound.push(elementSelector);
-        };
-
-        if (error.notFound.length > 0) {
-          return error;
-        }
-
-        var elem: HTMLElement = elems[0];
-
-        return elem.innerHTML;
-    }, this.getSelector())
-
-    if (isJsError(result)) {
-      throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`)
-    } else {
-      return result
-    }
-  }
-
-  // returns text of this.element including
-  // all texts of nested children
-  private _getText(element: WdioElement) {
-    return element.getText()
-  }
-
-  private _getValue(element: WdioElement) {
-    return element.getValue()
-  }
-
-  private _getAttribute(element: WdioElement, attrName: string) {
-    return element.getAttribute(attrName)
-  }
-
-  private _getClass(element: WdioElement) {
-    return element.getAttribute('class')
-  }
-
-  private _getId(element: WdioElement) {
-    return element.getAttribute('id')
-  }
-
-  private _getName(element: WdioElement) {
-    return element.getAttribute('name')
-  }
-
-  private _getLocation(element: WdioElement) {
-    return <Workflo.ICoordinates> (<any> element.getLocation())
-  }
-
-  private _getSize(element: WdioElement) {
-    return <Workflo.ISize> (<any> this.element.getElementSize())
-  }
-
-  private _isEnabled(element: WdioElement): boolean {
-    return element.isEnabled()
-  }
-
-  private _isSelected(element: WdioElement): boolean {
-    return element.isSelected()
-  }
-
 // Public GETTER FUNCTIONS (return state after initial wait)
 
-  getDirectText() {
-    return this._getDirectText(this.element)
-  }
+  getHTML = () => getHTML(this.element)
+  getText = () => getText(this.element)
+  getDirectText = () => getDirectText(this.element)
+  getValue = () => getValue(this.element)
+  getAttribute = (attributeName: string) => getAttribute(this.element, attributeName)
+  getClass = () => getAttribute(this.element, 'class')
+  getId = () => getAttribute(this.element, 'id')
+  getName = () => getAttribute(this.element, 'name')
+  getLocation = () => getLocation(this.element)
+  getX = () => getLocation(this.element).x
+  getY = () => getLocation(this.element).y
+  getSize = () => getSize(this.element)
+  getWidth = () => getSize(this.element).width
+  getHeight = () => getSize(this.element).height
 
-  getHTML() {
-    return this._getHTML(this.element)
-  }
-
-  getText() {
-    return this._getText(this.element)
-  }
-
-  getValue() {
-    return this._getValue(this.element)
-  }
-
-  getAttribute(attributeName: string) {
-    return this._getAttribute(this.element, attributeName)
-  }
-
-  getClass() {
-    return this._getClass(this.element)
-  }
-
-  getId() {
-    return this._getId(this.element)
-  }
-
-  getName() {
-    return this._getName(this.element)
-  }
-
-  getLocation() {
-    return this._getLocation(this.element)
-  }
-
-  getX() {
-    return this._getLocation(this.element).x
-  }
-
-  getY() {
-    return this._getLocation(this.element).y
-  }
-
-  getSize() {
-    return this._getSize(this.element)
-  }
-
-  getWidth() {
-    return this._getSize(this.element).width
-  }
-
-  getHeight() {
-    return this._getSize(this.element).height
-  }
-
-  getTimeout() {
-    return this._timeout
-  }
+  getTimeout = () => this._timeout
 
 // INTERACTION FUNCTIONS (interact with state after initial wait)
 
@@ -618,257 +473,6 @@ export class PageElement<
       throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`)
     } else {
       return result
-    }
-  }
-
-// CURRENT CHECK STATE FUNCTIONS
-
-  /**
-   * @param actual the actual browser value in pixels
-   * @param expected the expected value in pixels or 0 if expected was smaller than 0
-   * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
-   */
-  private _withinTolerance(actual: number, expected: number, tolerance?: number) {
-    const tolerances: ITolerance = {
-      lower: actual,
-      upper: actual
-    }
-
-    if ( tolerance ) {
-      tolerances.lower -= Math.min(tolerance, 0)
-      tolerances.upper += Math.min(tolerance, 0)
-    }
-
-    return Math.min(expected, 0) >= Math.min(tolerances.lower, 0) && Math.min(expected, 0) <= Math.min(tolerances.upper, 0)
-  }
-
-  private _hasAxisLocation(expected: number, actual: number, tolerance?: number): boolean {
-    return this._withinTolerance(actual, expected, tolerance)
-  }
-
-  private _hasSideSize(expected: number, actual: number, tolerance?: number): boolean {
-    return this._withinTolerance(actual, expected, tolerance)
-  }
-
-  private _compareHas(expected: string, actual: string) {
-    this._lastActualResult = actual
-    return actual === expected
-  }
-
-  private _compareHasAny(actual: string) {
-    this._lastActualResult = actual
-    return actual.length > 0
-  }
-
-  private _compareContains(expected: string, actual: string) {
-    this._lastActualResult = actual
-    return actual.indexOf(expected) > -1
-  }
-
-  currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store> = {
-    element: this.__element,
-
-    // GET STATE
-    getHTML: (): string => {
-      return this._getHTML(this.__element)
-    },
-    getText: (): string => {
-      return this._getText(this.__element)
-    },
-    getDirectText: (): string => {
-      return this._getDirectText(this.__element)
-    },
-    getValue: (): string => {
-      return this._getValue(this.__element)
-    },
-    getAttribute: (attributeName: string): string => {
-      return this._getAttribute(this.__element, attributeName)
-    },
-    getClass: (): string => {
-      return this._getAttribute(this.__element, 'class')
-    },
-    getId: (): string => {
-      return this._getAttribute(this.__element, 'id')
-    },
-    getName: (): string => {
-      return this._getAttribute(this.__element, 'name')
-    },
-    getLocation: (): Workflo.ICoordinates => {
-      return this._getLocation(this.__element)
-    },
-    getX: (): number => {
-      return this._getLocation(this.__element).x
-    },
-    getY: (): number => {
-      return this._getLocation(this.__element).y
-    },
-    getSize: (): Workflo.ISize => {
-      return this._getSize(this.__element)
-    },
-    getWidth: (): number => {
-      return this._getSize(this.__element).width
-    },
-    getHeight: (): number => {
-      return this._getSize(this.__element).height
-    },
-
-    // CHECK STATE
-    exists: (): boolean => {
-      return this.__element.isExisting()
-    },
-    isVisible: (): boolean => {
-      return this.__element.isVisible()
-    },
-    isEnabled: (): boolean => {
-      return this._isEnabled(this.__element)
-    },
-    isSelected: (): boolean => {
-      return this._isSelected(this.__element)
-    },
-    hasText: (text: string): boolean => this._compareHas(
-      text, this.currently.getText()
-    ),
-    hasAnyText: (): boolean => this._compareHasAny(
-      this.currently.getText()
-    ),
-    containsText: (text: string): boolean => this._compareContains(
-      text, this.currently.getText()
-    ),
-    hasValue: (value: string): boolean => this._compareHas(
-      value, this.currently.getValue()
-    ),
-    hasAnyValue: (): boolean => this._compareHasAny(
-      this.currently.getValue()
-    ),
-    containsValue: (value: string): boolean => this._compareContains(
-      value, this.currently.getValue()
-    ),
-    hasHTML: (html: string): boolean => this._compareHas(
-      html, this.currently.getHTML()
-    ),
-    hasAnyHTML: (): boolean => this._compareHasAny(
-      this.currently.getHTML()
-    ),
-    containsHTML: (html: string): boolean => this._compareContains(
-      html, this.currently.getHTML()
-    ),
-    hasDirectText: (directText: string): boolean => this._compareHas(
-      directText, this.currently.getDirectText()
-    ),
-    hasAnyDirectText: (): boolean => this._compareHasAny(
-      this.currently.getDirectText()
-    ),
-    containsDirectText: (directText: string): boolean => this._compareContains(
-      directText, this.currently.getDirectText()
-    ),
-    hasAttribute: (attributeName: string, attributeValue: string): boolean => this._compareHas(
-      attributeValue, this.currently.getAttribute(attributeName)
-    ),
-    hasAnyAttribute: (attributeName: string): boolean => this._compareHasAny(
-      this.currently.getAttribute(attributeName)
-    ),
-    containsAttribute: (attributeName: string, attributeValue: string): boolean => this._compareContains(
-      attributeValue, this.currently.getAttribute(attributeName)
-    ),
-    hasClass: (className: string): boolean => this._compareHas(
-      className, this.currently.getClass()
-    ),
-    containsClass: (className: string): boolean => this._compareContains(
-      className, this.currently.getClass()
-    ),
-    hasId: (id: string): boolean => this._compareHas(
-      id, this.currently.getId()
-    ),
-    hasAnyId: (): boolean => this._compareHasAny(
-      this.currently.getId()
-    ),
-    containsId: (id: string): boolean => this._compareContains(
-      id, this.currently.getId()
-    ),
-    hasName: (name: string): boolean => this._compareHas(
-      name, this.currently.getName()
-    ),
-    hasAnyName: (): boolean => this._compareHasAny(
-      this.currently.getName()
-    ),
-    containsName: (name: string): boolean => this._compareContains(
-      name, this.currently.getName()
-    ),
-    hasLocation: (coordinates: Workflo.ICoordinates, tolerances: Workflo.ICoordinates = { x: 0, y: 0 }): boolean => {
-      const actualCoords = this.currently.getLocation()
-      this._lastActualResult = tolerancesObjectToString(actualCoords)
-
-      return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
-        && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y)
-    },
-    hasX: (x: number, tolerance?: number): boolean => {
-      const actual = this.currently.getX()
-      this._lastActualResult = actual.toString()
-
-      return this._hasAxisLocation(x, actual, tolerance)
-    },
-    hasY: (y: number, tolerance?: number): boolean => {
-      const actual = this.currently.getY()
-      this._lastActualResult = actual.toString()
-
-      return this._hasAxisLocation(y, actual, tolerance)
-    },
-    hasSize: (size: Workflo.ISize, tolerances: Workflo.ISize = {width: 0, height: 0}): boolean => {
-      const actualSize = this.currently.getSize()
-      this._lastActualResult = tolerancesObjectToString(actualSize)
-
-      return this._hasSideSize(size.width, actualSize.width, tolerances.width)
-        && this._hasSideSize(size.height, actualSize.width, tolerances.height)
-    },
-    hasWidth: (width: number, tolerance?: number): boolean => {
-      const actual = this.currently.getWidth()
-      this._lastActualResult = actual.toString()
-
-      return this._hasSideSize(width, actual, tolerance)
-    },
-    hasHeight: (height: number, tolerance?: number): boolean => {
-      const actual = this.currently.getHeight()
-      this._lastActualResult = actual.toString()
-
-      return this._hasSideSize(height, actual, tolerance)
-    },
-
-    not: {
-      exists: () => !this.currently.exists(),
-      isVisible: () => !this.currently.isVisible(),
-      isEnabled: (): boolean => !this.currently.isEnabled(),
-      isSelected: (): boolean => !this.currently.isSelected(),
-      hasClass: (className: string) => !this.currently.hasClass(className),
-      containsClass: (className: string) => !this.currently.containsClass(className),
-      hasText: (text: string) => !this.currently.hasText(text),
-      hasAnyText: () => !this.currently.hasAnyText(),
-      containsText: (text: string) => !this.currently.containsText(text),
-      hasValue: (value: string): boolean => !this.currently.hasValue(value),
-      hasAnyValue: (): boolean => !this.currently.hasAnyValue(),
-      containsValue: (value: string): boolean => !this.currently.containsValue(value),
-      hasDirectText: (directText: string): boolean => !this.currently.hasDirectText(directText),
-      hasAnyDirectText: (): boolean => !this.currently.hasAnyDirectText(),
-      containsDirectText: (directText: string): boolean => !this.currently.containsDirectText(directText),
-      hasAttribute: (attributeName: string, attributeValue: string): boolean => !this.currently.hasAttribute(attributeName, attributeValue),
-      hasAnyAttribute: (attributeName: string): boolean => !this.currently.hasAnyAttribute(attributeName),
-      containsAttribute: (attributeName: string, attributeValue: string): boolean => !this.currently.containsAttribute(attributeName, attributeValue),
-      hasHTML: (html: string) => !this.currently.hasHTML(html),
-      hasAnyHTML: () => !this.currently.hasAnyHTML(),
-      containsHTML: (html: string) => !this.currently.containsHTML(html),
-      hasId: (id: string) => !this.currently.hasId(id),
-      hasAnyId: () => !this.currently.hasAnyId(),
-      containsId: (id: string) => !this.currently.containsId(id),
-      hasName: (name: string) => !this.currently.hasName(name),
-      hasAnyName: () => !this.currently.hasAnyName(),
-      containsName: (name: string) => !this.currently.containsName(name),
-      hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates): boolean =>
-        !this.currently.hasLocation(coordinates, tolerances),
-      hasX: (x: number, tolerance?: number) => !this.currently.hasX(x, tolerance),
-      hasY: (y: number, tolerance?: number) => !this.currently.hasY(y, tolerance),
-      hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize): boolean =>
-        !this.currently.hasSize(size, tolerances),
-      hasWidth: (width: number, tolerance?: number) => !this.currently.hasWidth(width, tolerance),
-      hasHeight: (height: number, tolerance?: number) => !this.currently.hasHeight(height, tolerance),
     }
   }
 
@@ -1485,17 +1089,294 @@ export class PageElement<
   }
 }
 
-// type guards
-function isJsError(result: any): result is Workflo.IJSError {
-  if (!result) {
-    return false
+class Currently<
+  Store extends PageElementStore
+> implements IPageElementCurrentlyAPI<Store>, IPageElementGetStateAPI<Store> {
+
+  protected _selector: string
+  protected _lastActualResult: string
+
+  constructor(selector: string) {
+    this._selector = selector
   }
 
-  return result.notFound !== undefined;
+  get element() {
+    return browser.element(this._selector)
+  }
+
+  // GET STATE
+  getHTML = () => getHTML(this.element)
+  getText = () => getText(this.element)
+  getDirectText = () => getDirectText(this.element)
+  getValue = () => getValue(this.element)
+  getAttribute = (attributeName: string) => getAttribute(this.element, attributeName)
+  getClass = () => getAttribute(this.element, 'class')
+  getId = () => getAttribute(this.element, 'id')
+  getName = () => getAttribute(this.element, 'name')
+  getLocation = () => getLocation(this.element)
+  getX = () => getLocation(this.element).x
+  getY = () => getLocation(this.element).y
+  getSize = () => getSize(this.element)
+  getWidth = () => getSize(this.element).width
+  getHeight = () => getSize(this.element).height
+
+  // CHECK STATE
+
+    /**
+   * @param actual the actual browser value in pixels
+   * @param expected the expected value in pixels or 0 if expected was smaller than 0
+   * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
+   */
+  private _withinTolerance(actual: number, expected: number, tolerance?: number) {
+    const tolerances: ITolerance = {
+      lower: actual,
+      upper: actual
+    }
+
+    if ( tolerance ) {
+      tolerances.lower -= Math.min(tolerance, 0)
+      tolerances.upper += Math.min(tolerance, 0)
+    }
+
+    return Math.min(expected, 0) >= Math.min(tolerances.lower, 0) && Math.min(expected, 0) <= Math.min(tolerances.upper, 0)
+  }
+
+  private _hasAxisLocation(expected: number, actual: number, tolerance?: number): boolean {
+    return this._withinTolerance(actual, expected, tolerance)
+  }
+
+  private _hasSideSize(expected: number, actual: number, tolerance?: number): boolean {
+    return this._withinTolerance(actual, expected, tolerance)
+  }
+
+  private _compareHas(expected: string, actual: string) {
+    this._lastActualResult = actual
+    return actual === expected
+  }
+
+  private _compareHasAny(actual: string) {
+    this._lastActualResult = actual
+    return actual.length > 0
+  }
+
+  private _compareContains(expected: string, actual: string) {
+    this._lastActualResult = actual
+    return actual.indexOf(expected) > -1
+  }
+
+  exists = () => this.element.isExisting()
+  isVisible = () => this.element.isVisible()
+  isEnabled = () => isEnabled(this.element)
+  isSelected = () => isSelected(this.element)
+  hasText = (text: string) => this._compareHas(text, this.getText())
+  hasAnyText = () => this._compareHasAny(this.getText())
+  containsText = (text: string) => this._compareContains(text, this.getText())
+  hasValue = (value: string) => this._compareHas(value, this.getValue())
+  hasAnyValue = () => this._compareHasAny(this.getValue())
+  containsValue = (value: string) => this._compareContains(value, this.getValue())
+  hasHTML = (html: string) => this._compareHas(html, this.getHTML())
+  hasAnyHTML = () => this._compareHasAny(this.getHTML())
+  containsHTML = (html: string) => this._compareContains(html, this.getHTML())
+  hasDirectText = (directText: string) => this._compareHas(directText, this.getDirectText())
+  hasAnyDirectText = () => this._compareHasAny(this.getDirectText())
+  containsDirectText = (directText: string) => this._compareContains(directText, this.getDirectText())
+  hasAttribute = (attributeName: string, attributeValue: string) => this._compareHas(
+    attributeValue, this.getAttribute(attributeName)
+  )
+  hasAnyAttribute = (attributeName: string) => this._compareHasAny(this.getAttribute(attributeName))
+  containsAttribute = (attributeName: string, attributeValue: string) => this._compareContains(
+    attributeValue, this.getAttribute(attributeName)
+  )
+  hasClass = (className: string) => this._compareHas(className, this.getClass())
+  containsClass = (className: string) => this._compareContains(className, this.getClass())
+  hasId = (id: string) => this._compareHas(id, this.getId())
+  hasAnyId = () => this._compareHasAny(this.getId())
+  containsId = (id: string) => this._compareContains(id, this.getId())
+  hasName = (name: string) => this._compareHas(name, this.getName())
+  hasAnyName = () => this._compareHasAny(this.getName())
+  containsName = (name: string) => this._compareContains(name, this.getName())
+  hasLocation = (coordinates: Workflo.ICoordinates, tolerances: Workflo.ICoordinates = { x: 0, y: 0 }) => {
+    const actualCoords = this.getLocation()
+    this._lastActualResult = tolerancesObjectToString(actualCoords)
+
+    return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
+      && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y)
+  }
+  hasX = (x: number, tolerance?: number) => {
+    const actual = this.getX()
+    this._lastActualResult = actual.toString()
+
+    return this._hasAxisLocation(x, actual, tolerance)
+  }
+  hasY = (y: number, tolerance?: number) => {
+    const actual = this.getY()
+    this._lastActualResult = actual.toString()
+
+    return this._hasAxisLocation(y, actual, tolerance)
+  }
+  hasSize = (size: Workflo.ISize, tolerances: Workflo.ISize = {width: 0, height: 0}) => {
+    const actualSize = this.getSize()
+    this._lastActualResult = tolerancesObjectToString(actualSize)
+
+    return this._hasSideSize(size.width, actualSize.width, tolerances.width)
+      && this._hasSideSize(size.height, actualSize.width, tolerances.height)
+  }
+  hasWidth = (width: number, tolerance?: number) => {
+    const actual = this.getWidth()
+    this._lastActualResult = actual.toString()
+
+    return this._hasSideSize(width, actual, tolerance)
+  }
+  hasHeight = (height: number, tolerance?: number) => {
+    const actual = this.getHeight()
+    this._lastActualResult = actual.toString()
+
+    return this._hasSideSize(height, actual, tolerance)
+  }
+
+  not = {
+    exists: () => !this.exists(),
+    isVisible: () => !this.isVisible(),
+    isEnabled: () => !this.isEnabled(),
+    isSelected: () => !this.isSelected(),
+    hasClass: (className: string) => !this.hasClass(className),
+    containsClass: (className: string) => !this.containsClass(className),
+    hasText: (text: string) => !this.hasText(text),
+    hasAnyText: () => !this.hasAnyText(),
+    containsText: (text: string) => !this.containsText(text),
+    hasValue: (value: string) => !this.hasValue(value),
+    hasAnyValue: () => !this.hasAnyValue(),
+    containsValue: (value: string) => !this.containsValue(value),
+    hasDirectText: (directText: string) => !this.hasDirectText(directText),
+    hasAnyDirectText: () => !this.hasAnyDirectText(),
+    containsDirectText: (directText: string) => !this.containsDirectText(directText),
+    hasAttribute: (attributeName: string, attributeValue: string) => !this.hasAttribute(attributeName, attributeValue),
+    hasAnyAttribute: (attributeName: string) => !this.hasAnyAttribute(attributeName),
+    containsAttribute: (attributeName: string, attributeValue: string) => !this.containsAttribute(attributeName, attributeValue),
+    hasHTML: (html: string) => !this.hasHTML(html),
+    hasAnyHTML: () => !this.hasAnyHTML(),
+    containsHTML: (html: string) => !this.containsHTML(html),
+    hasId: (id: string) => !this.hasId(id),
+    hasAnyId: () => !this.hasAnyId(),
+    containsId: (id: string) => !this.containsId(id),
+    hasName: (name: string) => !this.hasName(name),
+    hasAnyName: () => !this.hasAnyName(),
+    containsName: (name: string) => !this.containsName(name),
+    hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates) =>
+      !this.hasLocation(coordinates, tolerances),
+    hasX: (x: number, tolerance?: number) => !this.hasX(x, tolerance),
+    hasY: (y: number, tolerance?: number) => !this.hasY(y, tolerance),
+    hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize) =>
+      !this.hasSize(size, tolerances),
+    hasWidth: (width: number, tolerance?: number) => !this.hasWidth(width, tolerance),
+    hasHeight: (height: number, tolerance?: number) => !this.hasHeight(height, tolerance),
+  }
 }
 
-function isScrollResult(result: any): result is Workflo.IScrollResult {
-  return result.elemTop !== undefined;
+// UTILITY FUNCTIONS
+
+/**
+ * Get text that resides on the level directly below the selected page element.
+ * Does not include text of the page element's nested children elements.
+ */
+function getDirectText(element: WdioElement): string {
+  const html = element.getHTML()
+
+  if (html.length === 0) {
+    return ''
+  }
+
+  let text = ""
+  const constructorName = this.constructor.name
+  const selector = this._selector
+
+  const handler = new htmlParser.DomHandler(function (error, dom) {
+    if (error) {
+      throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`)
+    }
+    else {
+      dom.forEach(node => {
+        node.children.forEach(childNode => {
+          if (childNode.type === 'text') {
+            text += childNode.data
+          }
+        })
+      });
+    }
+  });
+
+  return text
+}
+
+function getHTML(element: WdioElement) {
+
+  const result: Workflo.IJSError | string = browser.selectorExecute(
+    [this.getSelector()], function (elems: HTMLElement[], elementSelector: string
+  ) {
+      var error: Workflo.IJSError = {
+        notFound: []
+      };
+
+      if (elems.length === 0) {
+        error.notFound.push(elementSelector);
+      };
+
+      if (error.notFound.length > 0) {
+        return error;
+      }
+
+      var elem: HTMLElement = elems[0];
+
+      return elem.innerHTML;
+  }, this.getSelector())
+
+  if (isJsError(result)) {
+    throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`)
+  } else {
+    return result
+  }
+}
+
+// returns text of this.element including
+// all texts of nested children
+function getText(element: WdioElement): string {
+  return element.getText()
+}
+
+function getValue(element: WdioElement): string {
+  return element.getValue()
+}
+
+function getAttribute(element: WdioElement, attrName: string): string {
+  return element.getAttribute(attrName)
+}
+
+function getClass(element: WdioElement): string {
+  return element.getAttribute('class')
+}
+
+function getId(element: WdioElement): string {
+  return element.getAttribute('id')
+}
+
+function getName(element: WdioElement): string {
+  return element.getAttribute('name')
+}
+
+function getLocation(element: WdioElement) {
+  return <Workflo.ICoordinates> (<any> element.getLocation())
+}
+
+function getSize(element: WdioElement) {
+  return <Workflo.ISize> (<any> this.element.getElementSize())
+}
+
+function isEnabled(element: WdioElement): boolean {
+  return element.isEnabled()
+}
+
+function isSelected(element: WdioElement): boolean {
+  return element.isSelected()
 }
 
 function tolerancesObjectToString(actuals: Object, tolerances?: Object) {
@@ -1522,4 +1403,18 @@ function tolerancesObjectToString(actuals: Object, tolerances?: Object) {
   str += props.join(', ')
 
   return str + '}';
+}
+
+// TYPE GUARDS
+
+function isJsError(result: any): result is Workflo.IJSError {
+  if (!result) {
+    return false
+  }
+
+  return result.notFound !== undefined;
+}
+
+function isScrollResult(result: any): result is Workflo.IScrollResult {
+  return result.elemTop !== undefined;
 }

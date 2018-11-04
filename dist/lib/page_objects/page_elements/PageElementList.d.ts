@@ -37,7 +37,7 @@ export interface IPageElementListWaitAPI<Store extends PageElementStore, PageEle
     any: Omit<IPageElementWaitAPI<Store>, 'not'>;
     none: IPageElementWaitNotAPI<Store>;
 }
-export interface IPageElementListEventuallyAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> {
+export interface IPageElementListEventuallyAPI<Store extends PageElementStore> {
     hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
     isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
     any: Omit<IPageElementEventuallyAPI<Store>, 'not'>;
@@ -62,29 +62,22 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
-    protected __whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     protected _cloneFunc: (subSelector: string) => this;
+    readonly currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this>;
+    readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
+    readonly eventually: IPageElementListEventuallyAPI<Store>;
     constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: <T extends PageElementList<Store, PageElementType, PageElementOptions>>(selector: Workflo.XPath) => T);
-    private readonly __elements;
-    readonly elements: WdioElements;
-    private readonly __listElements;
-    private _listElements;
     initialWait(): void;
-    private readonly __where;
-    /**
-     * Returns the first page element found in the DOM that matches the list selector.
-     */
-    private readonly __first;
+    readonly elements: WdioElements;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     /**
      * Returns the first page element found in the DOM that matches the list selector.
      */
     readonly first: PageElementType;
     /**
-     *
      * @param index starts at 0
      */
-    at(index: number): PageElementType;
+    at: (index: number) => PageElementType;
     /**
      * Returns all page elements found in the DOM that match the list selector after initial wait.
      */
@@ -114,20 +107,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     }): {
         [key: string]: PageElementType;
     };
-    /**
-     * Returns the number of page elements found in the DOM that match the list selector.
-     */
-    private _getLength;
     getLength(): number;
-    currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this>;
-    readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
-    private _waitHasLength;
-    private _waitEmpty;
-    private readonly _anyWait;
-    private readonly _noneWait;
-    readonly eventually: IPageElementListEventuallyAPI<Store, PageElementType, PageElementOptions>;
-    private _eventuallyHasLength;
-    private _eventuallyIsEmpty;
-    private readonly _anyEventually;
-    private readonly _noneEventually;
+    getTimeout(): number;
+    getInterval(): number;
 }
