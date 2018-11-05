@@ -36,18 +36,68 @@ declare global {
       opts?: {tolerances?: Partial<Workflo.ICoordinates>}
     ): boolean
     toHaveX(x: number, opts?: {tolerance?: number}): boolean
-    toHaveX(y: number, opts?: {tolerance?: number}): boolean
+    toHaveY(y: number, opts?: {tolerance?: number}): boolean
     toHaveSize(
       size: Partial<Workflo.ISize>,
       opts?: { tolerances?: Partial<Workflo.ISize> }
     ): boolean
     toHaveWidth(width: number, opts?: {tolerance?: number}): boolean,
-    toHaveHeight(height: number, opts?: {tolerance?: number}): boolean
+    toHaveHeight(height: number, opts?: {tolerance?: number}): boolean,
+
+    toEventuallyExist(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyBeVisible(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyBeEnabled(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyBeSelected(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveDirectText(directText: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyAttribute(attributeArgs: Workflo.IAnyAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveId(id: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyId(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainId(id: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveName(name: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyName(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainName(name: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveLocation(
+      coordinates: Partial<Workflo.ICoordinates>,
+      opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsOptional
+    ): boolean
+    toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveSize(
+      size: Partial<Workflo.ISize>,
+      opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.IWDIOParamsOptional
+    ): boolean
+    toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean,
+    toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean
+
+    toBeEmpty(): boolean
+    toHaveLength(length: number): boolean
+    toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveLength(length: number, opts?: Workflo.IWDIOParamsOptional): boolean
   }
 
   interface ElementMatchers extends CustomMatchers {
     not: CustomMatchers
   }
+
+  function expectElement<
+    S extends pageObjects.stores.PageElementStore,
+    E extends pageObjects.elements.PageElement<S>
+  >(element: E): ElementMatchers
 
   function expectElement<
     S extends pageObjects.stores.PageElementStore,

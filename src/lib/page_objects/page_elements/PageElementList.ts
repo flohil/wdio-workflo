@@ -82,8 +82,10 @@ export interface IPageElementListCurrentlyAPI<
   PageElementOptions,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > extends IPageElementListRetrievalAPI<Store, PageElementType> {
+  lastActualResult: string
   where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
   isEmpty: () => boolean
+  hasLength: ( length: number, comparator?: Workflo.Comparator ) => boolean
 }
 
 // holds several PageElement instances of the same type
@@ -102,6 +104,7 @@ export class PageElementList<
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
   protected _cloneFunc: (subSelector: string) => this
+  protected _lastActualResult: string
 
   readonly currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this>
   readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>
@@ -139,9 +142,23 @@ export class PageElementList<
       getAllFunc: list => list.all
     })
 
-    this.currently = new Currently<Store, PageElementType, PageElementOptions, this>(this._selector, opts, cloneFunc)
+    this.currently = new Currently<Store, PageElementType, PageElementOptions, this>(this, opts, cloneFunc)
     this.wait = new Wait<Store, PageElementType, PageElementOptions, this>(this)
     this.eventually = new Eventually<Store, PageElementType, PageElementOptions, this>(this, this._eventually)
+  }
+
+  /**
+   * Whenever a function that checks the state of the GUI
+   * by comparing an expected result to an actual result is called,
+   * the actual result will be stored in 'lastActualResult'.
+   *
+   * This can be useful to determine why the last invocation of such a function returned false.
+   *
+   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+   * defined in the .currently, .eventually and .wait API of PageElement.
+   */
+  get lastActualResult() {
+    return this._lastActualResult
   }
 
   initialWait() {
@@ -319,13 +336,15 @@ class Currently<
   protected _elementOptions: PageElementOptions
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
+  protected _lastActualResult: string
+  protected _list: ListType
 
   constructor(
-    selector: string,
+    list: ListType,
     opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>,
     cloneFunc: (selector: Workflo.XPath) => ListType
   ) {
-    this._selector = selector
+    this._selector = list.getSelector()
     this._store = opts.store
     this._elementOptions = opts.elementOptions
     this._elementStoreFunc = opts.elementStoreFunc
@@ -337,6 +356,22 @@ class Currently<
       cloneFunc: cloneFunc,
       getAllFunc: list => list.currently.all
     })
+
+    this._list = list
+  }
+
+  /**
+   * Whenever a function that checks the state of the GUI
+   * by comparing an expected result to an actual result is called,
+   * the actual result will be stored in 'lastActualResult'.
+   *
+   * This can be useful to determine why the last invocation of such a function returned false.
+   *
+   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+   * defined in the .currently, .eventually and .wait API of PageElement.
+   */
+  get lastActualResult() {
+    return this._lastActualResult
   }
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
@@ -401,6 +436,16 @@ class Currently<
 // CHECK STATE FUNCTIONS
 
   isEmpty = () => browser.isExisting(this._selector)
+
+  hasLength = (
+    length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
+  ) => {
+    const actualLength = this.getLength()
+
+    this._lastActualResult = actualLength.toString()
+
+    return compare(actualLength, length, comparator)
+  }
 }
 
 class Wait<
@@ -423,15 +468,7 @@ class Wait<
     interval = this._list.getInterval()
   }: IPageElementListWaitLengthParams = {}) => {
     browser.waitUntil(
-      () => {
-        let value = this._list.currently.elements.value
-
-        if (!value || !value.length) {
-          return false
-        } else {
-          return compare(value.length, length, comparator)
-        }
-      },
+      () => this._list.currently.hasLength(length, comparator),
     timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._list.getSelector()} )`, interval )
 
     return this._list
@@ -441,9 +478,9 @@ class Wait<
     timeout = this._list.getTimeout(),
     interval = this._list.getInterval()
   } : IPageElementListWaitEmptyParams = {}) => {
-    browser.waitUntil(() => {
-      return !browser.isExisting(this._list.getSelector())
-    }, timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval)
+    browser.waitUntil(
+      () => this._list.currently.isEmpty(),
+    timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval)
 
     return this._list
   }

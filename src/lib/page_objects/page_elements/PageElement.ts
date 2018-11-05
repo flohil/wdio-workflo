@@ -138,6 +138,7 @@ extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, boolean> {
 
 export interface IPageElementCurrentlyAPI<Store extends PageElementStore>
 extends IPageElementCheckStateAPI<Store>, IPageElementGetStateAPI<Store> {
+  lastActualResult: string
   not: IPageElementCheckStateAPI<Store>
 }
 
@@ -150,7 +151,6 @@ export class PageElement<
   protected _timeout: number
   protected _$: Store
   protected _customScroll: Workflo.IScrollParams
-  protected _lastActualResult: string
 
   readonly currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store>
 
@@ -190,20 +190,6 @@ export class PageElement<
     this._customScroll = customScroll
 
     this.currently = new Currently(this._selector)
-  }
-
-  /**
-   * Whenever a function that checks the state of the GUI
-   * by comparing an expected result to an actual result is called,
-   * the actual result will be stored in 'lastActualResult'.
-   *
-   * This can be useful to determine why the last invocation of such a function returned false.
-   *
-   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-   * defined in the .currently, .eventually and .wait API of PageElement.
-   */
-  get lastActualResult() {
-    return this._lastActualResult
   }
 
 // RETRIEVE ELEMENT FUNCTIONS
@@ -1099,6 +1085,20 @@ class Currently<
 
   constructor(selector: string) {
     this._selector = selector
+  }
+
+  /**
+   * Whenever a function that checks the state of the GUI
+   * by comparing an expected result to an actual result is called,
+   * the actual result will be stored in 'lastActualResult'.
+   *
+   * This can be useful to determine why the last invocation of such a function returned false.
+   *
+   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+   * defined in the .currently, .eventually and .wait API of PageElement.
+   */
+  get lastActualResult() {
+    return this._lastActualResult
   }
 
   get element() {
