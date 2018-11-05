@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const util_1 = require("./utility_functions/util");
 const _ = require("lodash");
 const helpers_1 = require("./helpers");
 function matcherFunction(resultFunction, errorTextFunction) {
@@ -201,6 +202,15 @@ exports.elementMatchers = {
 };
 exports.listMatchers = {
     toBeEmpty: listMatcherFunction(({ node }) => [node.currently.isEmpty(), node.currently.not.isEmpty()], () => " to be empty"),
+    toHaveLength: listMatcherFunction(({ node, expected, opts }) => [
+        node.currently.hasLength(expected, opts.comparator),
+        node.currently.not.hasLength(expected, opts.comparator)
+    ], ({ actual, expected, opts }) => `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected}`),
+    toEventuallyBeEmpty: listMatcherFunction(({ node, expected }) => [node.eventually.isEmpty(expected), node.eventually.not.isEmpty(expected)], ({ opts }) => ` to eventually be empty within ${opts.timeout} ms`),
+    toEventuallyHaveLength: listMatcherFunction(({ node, expected, opts }) => [
+        node.eventually.hasLength(expected, opts),
+        node.eventually.not.hasLength(expected, opts)
+    ], ({ actual, expected, opts }) => `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`),
 };
 function expectElement(element) {
     return expect(element);

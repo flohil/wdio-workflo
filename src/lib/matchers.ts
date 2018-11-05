@@ -1,6 +1,9 @@
+
+import { comparatorStr } from './utility_functions/util'
 import { elements, stores } from './page_objects'
 import * as _ from 'lodash'
 import { tolerancesObjectToString } from './helpers'
+import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams } from './page_objects/page_elements';
 
 type ElementOrList<Store extends stores.PageElementStore> =
   elements.PageElement<Store> | elements.PageElementList<Store, elements.PageElement<Store>, elements.IPageElementOpts<Store>>
@@ -547,6 +550,24 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
   toBeEmpty: listMatcherFunction(
     ({node}) => [node.currently.isEmpty(), node.currently.not.isEmpty()],
     () => " to be empty"
+  ),
+  toHaveLength: listMatcherFunction<number, {comparator?: Workflo.Comparator}>(
+    ({node, expected, opts}) => [
+      node.currently.hasLength(expected, opts.comparator),
+      node.currently.not.hasLength(expected, opts.comparator)
+    ],
+    ({actual, expected, opts}) => `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected}`
+  ),
+  toEventuallyBeEmpty: listMatcherFunction<IPageElementListWaitEmptyParams>(
+    ({node, expected}) => [node.eventually.isEmpty(expected), node.eventually.not.isEmpty(expected)],
+    ({opts}) => ` to eventually be empty within ${opts.timeout} ms`
+  ),
+  toEventuallyHaveLength: listMatcherFunction<number, IPageElementListWaitLengthParams>(
+    ({node, expected, opts}) => [
+      node.eventually.hasLength(expected, opts),
+      node.eventually.not.hasLength(expected, opts)
+    ],
+    ({actual, expected, opts}) => `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`
   ),
 }
 

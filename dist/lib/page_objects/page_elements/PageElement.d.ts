@@ -144,21 +144,21 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     readonly element: WdioElement;
     readonly $: Store;
     initialWait(): this;
-    getHTML: () => string;
-    getText: () => string;
-    getDirectText: () => string;
-    getValue: () => string;
-    getAttribute: (attributeName: string) => string;
-    getClass: () => string;
-    getId: () => string;
-    getName: () => string;
-    getLocation: () => Workflo.ICoordinates;
-    getX: () => number;
-    getY: () => number;
-    getSize: () => Workflo.ISize;
-    getWidth: () => number;
-    getHeight: () => number;
-    getTimeout: () => number;
+    getHTML(): string;
+    getText(): string;
+    getDirectText(): string;
+    getValue(): string;
+    getAttribute(attributeName: string): string;
+    getClass(): string;
+    getId(): string;
+    getName(): string;
+    getLocation(): Workflo.ICoordinates;
+    getX(): number;
+    getY(): number;
+    getSize(): Workflo.ISize;
+    getWidth(): number;
+    getHeight(): number;
+    getTimeout(): number;
     setValue(value: string): void;
     /**
      *

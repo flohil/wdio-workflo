@@ -243,22 +243,22 @@ export class PageElement<
 
 // Public GETTER FUNCTIONS (return state after initial wait)
 
-  getHTML = () => getHTML(this.element)
-  getText = () => getText(this.element)
-  getDirectText = () => getDirectText(this.element)
-  getValue = () => getValue(this.element)
-  getAttribute = (attributeName: string) => getAttribute(this.element, attributeName)
-  getClass = () => getAttribute(this.element, 'class')
-  getId = () => getAttribute(this.element, 'id')
-  getName = () => getAttribute(this.element, 'name')
-  getLocation = () => getLocation(this.element)
-  getX = () => getLocation(this.element).x
-  getY = () => getLocation(this.element).y
-  getSize = () => getSize(this.element)
-  getWidth = () => getSize(this.element).width
-  getHeight = () => getSize(this.element).height
+  getHTML() { return getHTML(this.element) }
+  getText() { return getText(this.element) }
+  getDirectText() { return getDirectText(this.element) }
+  getValue() { return getValue(this.element) }
+  getAttribute(attributeName: string) { return getAttribute(this.element, attributeName) }
+  getClass() { return getAttribute(this.element, 'class') }
+  getId() { return getAttribute(this.element, 'id') }
+  getName() { return getAttribute(this.element, 'name') }
+  getLocation() { return getLocation(this.element) }
+  getX() { return getLocation(this.element).x }
+  getY() { return getLocation(this.element).y }
+  getSize() { return getSize(this.element) }
+  getWidth() { return getSize(this.element).width }
+  getHeight() { return getSize(this.element).height }
 
-  getTimeout = () => this._timeout
+  getTimeout() { return this._timeout }
 
 // INTERACTION FUNCTIONS (interact with state after initial wait)
 
@@ -1106,20 +1106,20 @@ class Currently<
   }
 
   // GET STATE
-  getHTML = () => getHTML(this.element)
-  getText = () => getText(this.element)
-  getDirectText = () => getDirectText(this.element)
-  getValue = () => getValue(this.element)
-  getAttribute = (attributeName: string) => getAttribute(this.element, attributeName)
-  getClass = () => getAttribute(this.element, 'class')
-  getId = () => getAttribute(this.element, 'id')
-  getName = () => getAttribute(this.element, 'name')
-  getLocation = () => getLocation(this.element)
-  getX = () => getLocation(this.element).x
-  getY = () => getLocation(this.element).y
-  getSize = () => getSize(this.element)
-  getWidth = () => getSize(this.element).width
-  getHeight = () => getSize(this.element).height
+  getHTML() { return getHTML(this.element) }
+  getText() { return getText(this.element) }
+  getDirectText() { return getDirectText(this.element) }
+  getValue() { return getValue(this.element) }
+  getAttribute(attributeName: string) { return getAttribute(this.element, attributeName) }
+  getClass() { return getAttribute(this.element, 'class') }
+  getId() { return getAttribute(this.element, 'id') }
+  getName() { return getAttribute(this.element, 'name') }
+  getLocation() { return getLocation(this.element) }
+  getX() { return getLocation(this.element).x }
+  getY() { return getLocation(this.element).y }
+  getSize() { return getSize(this.element) }
+  getWidth() { return getSize(this.element).width }
+  getHeight() { return getSize(this.element).height }
 
   // CHECK STATE
 

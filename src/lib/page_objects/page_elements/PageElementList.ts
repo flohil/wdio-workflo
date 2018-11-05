@@ -1,4 +1,4 @@
-import { compare } from '../../utility_functions/util'
+import { compare, comparatorStr } from '../../utility_functions/util'
 import {
   PageNode,
   IPageNodeOpts,
@@ -440,7 +440,7 @@ class Currently<
 
 // PUBLIC GETTER FUNCTIONS
 
-  getLength = () => {
+  getLength() {
     try {
       const value = this.elements.value
 
@@ -503,7 +503,7 @@ class Wait<
           return this._list.currently.hasLength(length, comparator)
         }
       },
-    timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._list.getSelector()} )`, interval )
+    timeout, `${this.constructor.name}: Length never became${comparatorStr(comparator)} ${length}.\n( ${this._list.getSelector()} )`, interval )
 
     return this._list
   }

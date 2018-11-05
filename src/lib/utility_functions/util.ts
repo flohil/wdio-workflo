@@ -62,3 +62,15 @@ export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparat
   }
 }
 
+export function comparatorStr(comparator: Workflo.Comparator) {
+  if (comparator === Workflo.Comparator.ne) {
+    return ' other than'
+  } else if (comparator === Workflo.Comparator.gt) {
+    return ' greater than'
+  } else if (comparator === Workflo.Comparator.lt) {
+    return ' less than'
+  } else {
+    return ' '
+  }
+}
+

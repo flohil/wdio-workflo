@@ -180,19 +180,6 @@ class Currently {
          * @param index starts at 0
          */
         this.at = (index) => this.where.getAt(index);
-        // PUBLIC GETTER FUNCTIONS
-        this.getLength = () => {
-            try {
-                const value = this.elements.value;
-                if (value && value.length) {
-                    return value.length;
-                }
-            }
-            catch (error) {
-                // this.elements will throw error if no elements were found
-                return 0;
-            }
-        };
         // CHECK STATE FUNCTIONS
         this.isEmpty = () => browser.isExisting(this._selector);
         this.hasLength = (length, comparator = "==" /* equalTo */) => {
@@ -260,6 +247,19 @@ class Currently {
         }
         return elements;
     }
+    // PUBLIC GETTER FUNCTIONS
+    getLength() {
+        try {
+            const value = this.elements.value;
+            if (value && value.length) {
+                return value.length;
+            }
+        }
+        catch (error) {
+            // this.elements will throw error if no elements were found
+            return 0;
+        }
+    }
 }
 class Wait {
     constructor(list) {
@@ -272,7 +272,7 @@ class Wait {
                 else {
                     return this._list.currently.hasLength(length, comparator);
                 }
-            }, timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._list.getSelector()} )`, interval);
+            }, timeout, `${this.constructor.name}: Length never became${util_1.comparatorStr(comparator)} ${length}.\n( ${this._list.getSelector()} )`, interval);
             return this._list;
         };
         this.isEmpty = ({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) => {

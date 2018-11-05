@@ -20,22 +20,6 @@ class PageElement extends _1.PageNode {
         var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, customScroll = undefined } = _a, superOpts = __rest(_a, ["waitType", "timeout", "customScroll"]);
         super(_selector, superOpts);
         this._selector = _selector;
-        // Public GETTER FUNCTIONS (return state after initial wait)
-        this.getHTML = () => getHTML(this.element);
-        this.getText = () => getText(this.element);
-        this.getDirectText = () => getDirectText(this.element);
-        this.getValue = () => getValue(this.element);
-        this.getAttribute = (attributeName) => getAttribute(this.element, attributeName);
-        this.getClass = () => getAttribute(this.element, 'class');
-        this.getId = () => getAttribute(this.element, 'id');
-        this.getName = () => getAttribute(this.element, 'name');
-        this.getLocation = () => getLocation(this.element);
-        this.getX = () => getLocation(this.element).x;
-        this.getY = () => getLocation(this.element).y;
-        this.getSize = () => getSize(this.element);
-        this.getWidth = () => getSize(this.element).width;
-        this.getHeight = () => getSize(this.element).height;
-        this.getTimeout = () => this._timeout;
         this.wait = {
             exists: (opts) => this._waitWdioCheckFunc('existed', opts => this.currently.element.waitForExist(opts.timeout, opts.reverse), opts),
             isVisible: (opts) => this._waitWdioCheckFunc('became visible', opts => this.currently.element.waitForVisible(opts.timeout, opts.reverse), opts),
@@ -428,6 +412,22 @@ class PageElement extends _1.PageNode {
         }
         return this;
     }
+    // Public GETTER FUNCTIONS (return state after initial wait)
+    getHTML() { return getHTML(this.element); }
+    getText() { return getText(this.element); }
+    getDirectText() { return getDirectText(this.element); }
+    getValue() { return getValue(this.element); }
+    getAttribute(attributeName) { return getAttribute(this.element, attributeName); }
+    getClass() { return getAttribute(this.element, 'class'); }
+    getId() { return getAttribute(this.element, 'id'); }
+    getName() { return getAttribute(this.element, 'name'); }
+    getLocation() { return getLocation(this.element); }
+    getX() { return getLocation(this.element).x; }
+    getY() { return getLocation(this.element).y; }
+    getSize() { return getSize(this.element); }
+    getWidth() { return getSize(this.element).width; }
+    getHeight() { return getSize(this.element).height; }
+    getTimeout() { return this._timeout; }
     // INTERACTION FUNCTIONS (interact with state after initial wait)
     setValue(value) {
         this.element.setValue(value);
@@ -657,21 +657,6 @@ class PageElement extends _1.PageNode {
 exports.PageElement = PageElement;
 class Currently {
     constructor(selector) {
-        // GET STATE
-        this.getHTML = () => getHTML(this.element);
-        this.getText = () => getText(this.element);
-        this.getDirectText = () => getDirectText(this.element);
-        this.getValue = () => getValue(this.element);
-        this.getAttribute = (attributeName) => getAttribute(this.element, attributeName);
-        this.getClass = () => getAttribute(this.element, 'class');
-        this.getId = () => getAttribute(this.element, 'id');
-        this.getName = () => getAttribute(this.element, 'name');
-        this.getLocation = () => getLocation(this.element);
-        this.getX = () => getLocation(this.element).x;
-        this.getY = () => getLocation(this.element).y;
-        this.getSize = () => getSize(this.element);
-        this.getWidth = () => getSize(this.element).width;
-        this.getHeight = () => getSize(this.element).height;
         this.exists = () => this.element.isExisting();
         this.isVisible = () => this.element.isVisible();
         this.isEnabled = () => isEnabled(this.element);
@@ -784,6 +769,21 @@ class Currently {
     get element() {
         return browser.element(this._selector);
     }
+    // GET STATE
+    getHTML() { return getHTML(this.element); }
+    getText() { return getText(this.element); }
+    getDirectText() { return getDirectText(this.element); }
+    getValue() { return getValue(this.element); }
+    getAttribute(attributeName) { return getAttribute(this.element, attributeName); }
+    getClass() { return getAttribute(this.element, 'class'); }
+    getId() { return getAttribute(this.element, 'id'); }
+    getName() { return getAttribute(this.element, 'name'); }
+    getLocation() { return getLocation(this.element); }
+    getX() { return getLocation(this.element).x; }
+    getY() { return getLocation(this.element).y; }
+    getSize() { return getSize(this.element); }
+    getWidth() { return getSize(this.element).width; }
+    getHeight() { return getSize(this.element).height; }
     // CHECK STATE
     /**
    * @param actual the actual browser value in pixels

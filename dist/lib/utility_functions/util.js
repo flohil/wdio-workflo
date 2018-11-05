@@ -55,4 +55,19 @@ function compare(var1, var2, operator) {
     }
 }
 exports.compare = compare;
+function comparatorStr(comparator) {
+    if (comparator === "!=" /* ne */) {
+        return ' other than';
+    }
+    else if (comparator === ">" /* gt */) {
+        return ' greater than';
+    }
+    else if (comparator === "<" /* lt */) {
+        return ' less than';
+    }
+    else {
+        return ' ';
+    }
+}
+exports.comparatorStr = comparatorStr;
 //# sourceMappingURL=util.js.map

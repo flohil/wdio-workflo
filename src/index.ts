@@ -88,7 +88,7 @@ declare global {
 
   interface CustomListMatchers {
     toBeEmpty(): boolean
-    toHaveLength(length: number, comparator?: Workflo.Comparator): boolean
+    toHaveLength(length: number, opts?: {comparator?: Workflo.Comparator}): boolean
     toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
   }
