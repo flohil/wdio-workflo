@@ -1,9 +1,10 @@
 import * as pageObjects from './lib/page_objects'
+import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList'
 
 // global should be replaced with declare ... at some point...
 declare global {
 
-  interface CustomMatchers {
+  interface CustomElementMatchers {
     toExist(): boolean
     toBeVisible(): boolean
     toBeEnabled(): boolean
@@ -83,15 +84,21 @@ declare global {
     ): boolean
     toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean,
     toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean
+  }
 
+  interface CustomListMatchers {
     toBeEmpty(): boolean
-    toHaveLength(length: number): boolean
-    toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsOptional): boolean
-    toEventuallyHaveLength(length: number, opts?: Workflo.IWDIOParamsOptional): boolean
+    toHaveLength(length: number, comparator?: Workflo.Comparator): boolean
+    toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean
+    toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
   }
 
-  interface ElementMatchers extends CustomMatchers {
-    not: CustomMatchers
+  interface ElementMatchers extends CustomElementMatchers {
+    not: CustomElementMatchers
+  }
+
+  interface ListMatchers extends CustomListMatchers {
+    not: CustomListMatchers
   }
 
   function expectElement<
@@ -99,10 +106,12 @@ declare global {
     E extends pageObjects.elements.PageElement<S>
   >(element: E): ElementMatchers
 
-  function expectElement<
+  function expectList<
     S extends pageObjects.stores.PageElementStore,
-    E extends pageObjects.elements.PageElement<S>
-  >(element: E): ElementMatchers
+    PageElementType extends pageObjects.elements.PageElement<S>,
+    PageElementOptions,
+    L extends pageObjects.elements.PageElementList<S, PageElementType, PageElementOptions>
+  >(list: L): ListMatchers
 
   namespace WebdriverIO {
     interface Client<T> {

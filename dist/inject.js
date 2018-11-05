@@ -44,10 +44,12 @@ function inject(config) {
     safeAddAll(context.Workflo.Class, [classFunctions]);
     safeAddAll(context.Workflo.Util, [utilFunctions]);
     context.expectElement = matchers_1.expectElement;
+    context.expectList = matchers_1.expectList;
 }
 exports.inject = inject;
 inject({});
 beforeAll(() => {
     jasmine.addMatchers(matchers_1.elementMatchers);
+    jasmine.addMatchers(matchers_1.listMatchers);
 });
 //# sourceMappingURL=inject.js.map

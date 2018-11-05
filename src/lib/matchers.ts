@@ -2,21 +2,26 @@ import { elements, stores } from './page_objects'
 import * as _ from 'lodash'
 import { tolerancesObjectToString } from './helpers'
 
-interface ElementResultFuncArgs<ExpectedType, OptsType> {
-  element: elements.PageElement<stores.PageElementStore>;
+type ElementOrList<Store extends stores.PageElementStore> =
+  elements.PageElement<Store> | elements.PageElementList<Store, elements.PageElement<Store>, elements.IPageElementOpts<Store>>
+
+interface ResultFuncArgs<
+  Store extends stores.PageElementStore,
+  NodeType extends ElementOrList<Store>,
+  ExpectedType,
+  OptsType
+> {
+  node: NodeType;
   expected?: ExpectedType;
   opts?: OptsType;
 }
 
-interface ListResultFuncArgs<ExpectedType, OptsType> {
-  list: elements.PageElementList<
-    stores.PageElementStore,
-    elements.PageElement<stores.PageElementStore>,
-    elements.IPageElementOpts<stores.PageElementStore>
-  >;
-  expected?: ExpectedType;
-  opts?: OptsType;
-}
+type ResultFunction<
+  Store extends stores.PageElementStore,
+  NodeType extends ElementOrList<Store>,
+  ExpectedType,
+  OptsType
+> = (args: ResultFuncArgs<Store, NodeType, ExpectedType, OptsType & {timeout?: number}>) => boolean[]
 
 interface ErrorFuncArgs<ExpectedType, OptsType> {
   actual: string;
@@ -24,17 +29,21 @@ interface ErrorFuncArgs<ExpectedType, OptsType> {
   opts?: OptsType
 }
 
-type ElementResultFunction<ExpectedType, OptsType> = (args: ElementResultFuncArgs<ExpectedType, OptsType & {timeout?: number}>) => boolean[]
 type ErrorTextFunction<ExpectedType, OptsType> = (args: ErrorFuncArgs<ExpectedType, OptsType & {timeout?: number}>) => string | string[]
 
-function matcherFunction<ExpectedType = string, OptsType extends Object = {timeout?: number}>(
-  resultFunction: ElementResultFunction<ExpectedType, OptsType>,
+function matcherFunction<
+  Store extends stores.PageElementStore,
+  NodeType extends ElementOrList<Store>,
+  ExpectedType = string,
+  OptsType extends Object = {timeout?: number}
+>(
+  resultFunction: ResultFunction<Store, NodeType, ExpectedType, OptsType>,
   errorTextFunction: ErrorTextFunction<ExpectedType, OptsType>
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
 
     function baseCompareFunction(
-      element: elements.PageElement<stores.PageElementStore>,
+      node: NodeType,
       expected: ExpectedType,
       negativeComparison: boolean,
       opts?: OptsType
@@ -47,17 +56,17 @@ function matcherFunction<ExpectedType = string, OptsType extends Object = {timeo
       let negateAssertionResult = false
       let defaultNegativeMessage = ''
 
-      const successes: boolean[] = resultFunction({element, expected, opts})
+      const successes: boolean[] = resultFunction({node, expected, opts})
       const success = (negativeComparison) ? successes[1] : successes[0]
 
       if (!success) {
         let optsWithTimeout: OptsType & {timeout?: number} = opts || Object.create(null)
 
         if (typeof opts === 'undefined' || !opts['timeout'] ) {
-          optsWithTimeout.timeout = element.getTimeout()
+          optsWithTimeout.timeout = node.getTimeout()
         }
 
-        const actual = element.currently.lastActualResult
+        const actual = node.currently.lastActualResult
         const errorTexts = errorTextFunction({actual, expected, opts: optsWithTimeout})
         let errorText: string = undefined
 
@@ -76,28 +85,51 @@ function matcherFunction<ExpectedType = string, OptsType extends Object = {timeo
         }
 
         result.pass = false;
-        result.message = `Expected ${element.constructor.name}${defaultNegativeMessage}${errorText}.\n( ${element.getSelector()} )`;
+        result.message = `Expected ${node.constructor.name}${defaultNegativeMessage}${errorText}.\n( ${node.getSelector()} )`;
       }
 
       return result;
     }
 
     return {
-      compare: (element: elements.PageElement<stores.PageElementStore>, expected: ExpectedType, opts?: OptsType): jasmine.CustomMatcherResult => {
-        return baseCompareFunction(element, expected, false, opts);
+      compare: (node: NodeType, expected: ExpectedType, opts?: OptsType): jasmine.CustomMatcherResult => {
+        return baseCompareFunction(node, expected, false, opts);
       },
-      negativeCompare: (element: elements.PageElement<stores.PageElementStore>, expected: ExpectedType, opts?: OptsType): jasmine.CustomMatcherResult => {
-        return baseCompareFunction(element, expected, true, opts);
+      negativeCompare: (node: NodeType, expected: ExpectedType, opts?: OptsType): jasmine.CustomMatcherResult => {
+        return baseCompareFunction(node, expected, true, opts);
       }
     }
   }
 }
 
-function elementMatcherFunction<ExpectedType = string, OptsType extends Object = {timeout?: number}>(
-  resultFunction: ElementResultFunction<ExpectedType, OptsType>,
+function elementMatcherFunction<
+  ExpectedType = string,
+  OptsType extends Object = {timeout?: number}
+>(
+  resultFunction: ResultFunction<
+    stores.PageElementStore,
+    elements.PageElement<stores.PageElementStore>,
+    ExpectedType,
+    OptsType
+  >,
   errorTextFunction: ErrorTextFunction<ExpectedType, OptsType>
 ) {
+  return matcherFunction(resultFunction, errorTextFunction)
+}
 
+function listMatcherFunction<
+  ExpectedType = string,
+  OptsType extends Object = {timeout?: number}
+>(
+  resultFunction: ResultFunction<
+    stores.PageElementStore,
+    elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>,
+    ExpectedType,
+    OptsType
+  >,
+  errorTextFunction: ErrorTextFunction<ExpectedType, OptsType>
+) {
+  return matcherFunction(resultFunction, errorTextFunction)
 }
 
 function createLongErrorMessage(property: string, comparison: string, actual: string, expected: string) {
@@ -116,124 +148,124 @@ function createEventuallyErrorMessage(property: string, comparison: string, actu
 
 export const elementMatchers: jasmine.CustomMatcherFactories = {
   toExist: elementMatcherFunction(
-    ({element}) => [element.currently.exists(), element.currently.not.exists()],
+    ({node}) => [node.currently.exists(), node.currently.not.exists()],
     () => " to exist"
   ),
   toBeVisible: elementMatcherFunction(
-    ({element}) => [element.currently.isVisible(), element.currently.not.isVisible()],
+    ({node}) => [node.currently.isVisible(), node.currently.not.isVisible()],
     () => " to be visible"
   ),
   toBeSelected: elementMatcherFunction(
-    ({element}) => [element.currently.isSelected(), element.currently.not.isSelected()],
+    ({node}) => [node.currently.isSelected(), node.currently.not.isSelected()],
     () => " to be selected"
   ),
   toBeEnabled: elementMatcherFunction(
-    ({element}) => [element.currently.isEnabled(), element.currently.not.isEnabled()],
+    ({node}) => [node.currently.isEnabled(), node.currently.not.isEnabled()],
     () => " to be enabled"
   ),
   toHaveText: elementMatcherFunction(
-    ({element, expected}) => [element.currently.hasText(expected), element.currently.not.hasText(expected)],
+    ({node, expected}) => [node.currently.hasText(expected), node.currently.not.hasText(expected)],
     ({actual, expected}) => createLongErrorMessage('text', 'be', actual, expected)
   ),
   toHaveAnyText: elementMatcherFunction(
-    ({element}) => [element.currently.hasAnyText(), element.currently.not.hasAnyText()],
+    ({node}) => [node.currently.hasAnyText(), node.currently.not.hasAnyText()],
     () => " to have any text"
   ),
   toContainText: elementMatcherFunction(
-    ({element, expected}) => [element.currently.containsText(expected), element.currently.not.containsText(expected)],
+    ({node, expected}) => [node.currently.containsText(expected), node.currently.not.containsText(expected)],
     ({actual, expected}) => createLongErrorMessage('text', 'contain', actual, expected)
   ),
   toHaveValue: elementMatcherFunction(
-    ({element, expected}) => [element.currently.hasValue(expected), element.currently.not.hasValue(expected)],
+    ({node, expected}) => [node.currently.hasValue(expected), node.currently.not.hasValue(expected)],
     ({actual, expected}) => createLongErrorMessage('value', 'be', actual, expected)
   ),
   toHaveAnyValue: elementMatcherFunction(
-    ({element}) => [element.currently.hasAnyValue(), element.currently.not.hasAnyValue()],
+    ({node}) => [node.currently.hasAnyValue(), node.currently.not.hasAnyValue()],
     () => " to have any value"
   ),
   toContainValue: elementMatcherFunction(
-    ({element, expected}) => [element.currently.containsValue(expected), element.currently.not.containsValue(expected)],
+    ({node, expected}) => [node.currently.containsValue(expected), node.currently.not.containsValue(expected)],
     ({actual, expected}) => createLongErrorMessage('value', 'contain', actual, expected)
   ),
   toHaveHTML: elementMatcherFunction(
-    ({element, expected}) => [element.currently.hasHTML(expected), element.currently.not.hasHTML(expected)],
+    ({node, expected}) => [node.currently.hasHTML(expected), node.currently.not.hasHTML(expected)],
     ({actual, expected}) => createLongErrorMessage('HTML', 'be', actual, expected)
   ),
   toHaveAnyHTML: elementMatcherFunction(
-    ({element}) => [element.currently.hasAnyHTML(), element.currently.not.hasAnyHTML()],
+    ({node}) => [node.currently.hasAnyHTML(), node.currently.not.hasAnyHTML()],
     () => ` to have any HTML`
   ),
   toContainHTML: elementMatcherFunction(
-    ({element, expected}) => [element.currently.containsHTML(expected), element.currently.not.containsHTML(expected)],
+    ({node, expected}) => [node.currently.containsHTML(expected), node.currently.not.containsHTML(expected)],
     ({actual, expected}) => createLongErrorMessage('HTML', 'contain', actual, expected)
   ),
   toHaveDirectText: elementMatcherFunction(
-    ({element, expected}) => [element.currently.hasDirectText(expected), element.currently.not.hasDirectText(expected)],
+    ({node, expected}) => [node.currently.hasDirectText(expected), node.currently.not.hasDirectText(expected)],
     ({actual, expected}) => createLongErrorMessage('direct text', 'be', actual, expected)
   ),
   toHaveAnyDirectText: elementMatcherFunction(
-    ({element}) => [element.currently.hasAnyDirectText(), element.currently.not.hasAnyDirectText()],
+    ({node}) => [node.currently.hasAnyDirectText(), node.currently.not.hasAnyDirectText()],
     () => ` to have any direct text`
   ),
   toContainDirectText: elementMatcherFunction(
-    ({element, expected}) => [element.currently.containsDirectText(expected), element.currently.not.containsDirectText(expected)],
+    ({node, expected}) => [node.currently.containsDirectText(expected), node.currently.not.containsDirectText(expected)],
     ({actual, expected}) => createLongErrorMessage('direct text', 'contain', actual, expected)
   ),
   toHaveAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-    ({element, expected}) => [
-      element.currently.hasAttribute(expected.name, expected.value),
-      element.currently.not.hasAttribute(expected.name, expected.value),
+    ({node, expected}) => [
+      node.currently.hasAttribute(expected.name, expected.value),
+      node.currently.not.hasAttribute(expected.name, expected.value),
     ],
     ({actual, expected}) => createLongErrorMessage(expected.name, 'be', actual, expected.value)
   ),
   toHaveAnyAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-    ({element, expected}) => [
-      element.currently.hasAnyAttribute(expected.name),
-      element.currently.not.hasAnyAttribute(expected.name),
+    ({node, expected}) => [
+      node.currently.hasAnyAttribute(expected.name),
+      node.currently.not.hasAnyAttribute(expected.name),
     ],
     ({expected}) => ` to have any ${expected.name}`
   ),
   toContainAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-    ({element, expected}) => [
-      element.currently.containsAttribute(expected.name, expected.value),
-      element.currently.not.containsAttribute(expected.name, expected.value),
+    ({node, expected}) => [
+      node.currently.containsAttribute(expected.name, expected.value),
+      node.currently.not.containsAttribute(expected.name, expected.value),
     ],
     ({actual, expected}) => createLongErrorMessage(expected.name, 'contain', actual, expected.value)
   ),
   toHaveClass: elementMatcherFunction(
-    ({element, expected}) => [element.currently.hasClass(expected), element.currently.not.hasClass(expected)],
+    ({node, expected}) => [node.currently.hasClass(expected), node.currently.not.hasClass(expected)],
     ({actual, expected}) => createLongErrorMessage('class', 'be', actual, expected)
   ),
   toContainClass: elementMatcherFunction(
-    ({element, expected}) => [element.currently.containsClass(expected), element.currently.not.containsClass(expected)],
+    ({node, expected}) => [node.currently.containsClass(expected), node.currently.not.containsClass(expected)],
     ({actual, expected}) => createLongErrorMessage('class', 'contain', actual, expected)
   ),
   toHaveId: elementMatcherFunction(
-    ({element, expected}) => [element.currently.hasId(expected), element.currently.not.hasId(expected)],
+    ({node, expected}) => [node.currently.hasId(expected), node.currently.not.hasId(expected)],
     ({actual, expected}) => createLongErrorMessage('id', 'be', actual, expected)
   ),
   toHaveAnyId: elementMatcherFunction(
-    ({element}) => [element.currently.hasAnyId(), element.currently.not.hasAnyId()],
+    ({node}) => [node.currently.hasAnyId(), node.currently.not.hasAnyId()],
     () => ` to have any id`
   ),
   toContainId: elementMatcherFunction(
-    ({element, expected}) => [element.currently.containsId(expected), element.currently.not.containsId(expected)],
+    ({node, expected}) => [node.currently.containsId(expected), node.currently.not.containsId(expected)],
     ({actual, expected}) => createLongErrorMessage('id', 'contain', actual, expected)
   ),
   toHaveName: elementMatcherFunction(
-    ({element, expected}) => [element.currently.hasName(expected), element.currently.not.hasName(expected)],
+    ({node, expected}) => [node.currently.hasName(expected), node.currently.not.hasName(expected)],
     ({actual, expected}) => createLongErrorMessage('name', 'be', actual, expected)
   ),
   toHaveAnyName: elementMatcherFunction(
-    ({element}) => [element.currently.hasAnyName(), element.currently.not.hasAnyName()],
+    ({node}) => [node.currently.hasAnyName(), node.currently.not.hasAnyName()],
     () => ` to have any name`
   ),
   toContainName: elementMatcherFunction(
-    ({element, expected}) => [element.currently.containsName(expected), element.currently.not.containsName(expected)],
+    ({node, expected}) => [node.currently.containsName(expected), node.currently.not.containsName(expected)],
     ({actual, expected}) => createLongErrorMessage('name', 'contain', actual, expected)
   ),
   toHaveLocation: elementMatcherFunction<Partial<Workflo.ICoordinates>, {tolerances?: Partial<Workflo.ICoordinates>}>(
-    ({element, expected, opts}) => [element.currently.hasLocation(expected, opts.tolerances), element.currently.not.hasLocation(expected, opts.tolerances)],
+    ({node, expected, opts}) => [node.currently.hasLocation(expected, opts.tolerances), node.currently.not.hasLocation(expected, opts.tolerances)],
     ({actual, expected, opts}) => createLongErrorMessage(
       'location',
       (opts.tolerances && (opts.tolerances.x > 0 || opts.tolerances.y > 0)) ? 'be within' : 'be',
@@ -242,7 +274,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toHaveX: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.currently.hasX(expected, opts.tolerance), element.currently.not.hasX(expected, opts.tolerance)],
+    ({node, expected, opts}) => [node.currently.hasX(expected, opts.tolerance), node.currently.not.hasX(expected, opts.tolerance)],
     ({actual, expected, opts}) => createLongErrorMessage(
       'x',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -251,7 +283,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toHaveY: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.currently.hasY(expected, opts.tolerance), element.currently.not.hasY(expected, opts.tolerance)],
+    ({node, expected, opts}) => [node.currently.hasY(expected, opts.tolerance), node.currently.not.hasY(expected, opts.tolerance)],
     ({actual, expected, opts}) => createLongErrorMessage(
       'y',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -260,7 +292,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toHaveSize: elementMatcherFunction<Partial<Workflo.ISize>, {tolerances?: Partial<Workflo.ISize>}>(
-    ({element, expected, opts}) => [element.currently.hasSize(expected, opts.tolerances), element.currently.not.hasSize(expected, opts.tolerances)],
+    ({node, expected, opts}) => [node.currently.hasSize(expected, opts.tolerances), node.currently.not.hasSize(expected, opts.tolerances)],
     ({actual, expected, opts}) => createLongErrorMessage(
       'size',
       (opts.tolerances && (opts.tolerances.width > 0 || opts.tolerances.height > 0)) ? 'be within' : 'be',
@@ -269,7 +301,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toHaveWidth: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.currently.hasWidth(expected, opts.tolerance), element.currently.not.hasWidth(expected, opts.tolerance)],
+    ({node, expected, opts}) => [node.currently.hasWidth(expected, opts.tolerance), node.currently.not.hasWidth(expected, opts.tolerance)],
     ({actual, expected, opts}) => createLongErrorMessage(
       'width',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -278,7 +310,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toHaveHeight: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.currently.hasHeight(expected, opts.tolerance), element.currently.not.hasHeight(expected, opts.tolerance)],
+    ({node, expected, opts}) => [node.currently.hasHeight(expected, opts.tolerance), node.currently.not.hasHeight(expected, opts.tolerance)],
     ({actual, expected, opts}) => createLongErrorMessage(
       'height',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -288,169 +320,169 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
   ),
 
   toEventuallyExist: elementMatcherFunction(
-    ({element, opts}) => [element.eventually.exists(opts), element.eventually.not.exists(opts)],
+    ({node, opts}) => [node.eventually.exists(opts), node.eventually.not.exists(opts)],
     ({opts}) => ` to eventually exist within ${opts.timeout} ms`
   ),
   toEventuallyBeVisible: elementMatcherFunction(
-    ({element, opts}) => [element.eventually.isVisible(opts), element.eventually.not.isVisible(opts)],
+    ({node, opts}) => [node.eventually.isVisible(opts), node.eventually.not.isVisible(opts)],
     ({opts}) => ` to eventually be visible within ${opts.timeout} ms`
   ),
   toEventuallyBeSelected: elementMatcherFunction(
-    ({element, opts}) => [element.eventually.isSelected(opts), element.eventually.not.isSelected(opts)],
+    ({node, opts}) => [node.eventually.isSelected(opts), node.eventually.not.isSelected(opts)],
     ({opts}) => ` to eventually be selected within ${opts.timeout} ms`
   ),
   toEventuallyBeEnabled: elementMatcherFunction(
-    ({element, opts}) => [element.eventually.isEnabled(opts), element.eventually.not.isEnabled(opts)],
+    ({node, opts}) => [node.eventually.isEnabled(opts), node.eventually.not.isEnabled(opts)],
     ({opts}) => ` to eventually be enabled within ${opts.timeout} ms`
   ),
   toEventuallyHaveText: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.hasText(expected, opts),
-      element.eventually.not.hasText(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.hasText(expected, opts),
+      node.eventually.not.hasText(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('text', 'be', actual, expected, opts.timeout)
   ),
   toEventuallyHaveAnyText: elementMatcherFunction(
-    ({element}) => [element.eventually.hasAnyText(), element.eventually.not.hasAnyText()],
+    ({node}) => [node.eventually.hasAnyText(), node.eventually.not.hasAnyText()],
     ({opts}) => ` to eventually have any text within ${opts.timeout} ms`
   ),
   toEventuallyContainText: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.containsText(expected, opts),
-      element.eventually.not.containsText(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.containsText(expected, opts),
+      node.eventually.not.containsText(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('text', 'contain', actual, expected, opts.timeout)
   ),
   toEventuallyHaveValue: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.hasValue(expected, opts),
-      element.eventually.not.hasValue(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.hasValue(expected, opts),
+      node.eventually.not.hasValue(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'be', actual, expected, opts.timeout)
   ),
   toEventuallyHaveAnyValue: elementMatcherFunction(
-    ({element, opts}) => [element.eventually.hasAnyValue(opts), element.eventually.not.hasAnyValue(opts)],
+    ({node, opts}) => [node.eventually.hasAnyValue(opts), node.eventually.not.hasAnyValue(opts)],
     ({opts}) => ` to eventually have any value within ${opts.timeout} ms`
   ),
   toEventuallyContainValue: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.containsValue(expected, opts),
-      element.eventually.not.containsValue(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.containsValue(expected, opts),
+      node.eventually.not.containsValue(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'contain', actual, expected, opts.timeout)
   ),
   toEventuallyHaveHTML: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.hasHTML(expected, opts),
-      element.eventually.not.hasHTML(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.hasHTML(expected, opts),
+      node.eventually.not.hasHTML(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('HTML', 'be', actual, expected, opts.timeout)
   ),
   toEventuallyHaveAnyHTML: elementMatcherFunction(
-    ({element, opts}) => [element.eventually.hasAnyHTML(opts), element.eventually.not.hasAnyHTML(opts)],
+    ({node, opts}) => [node.eventually.hasAnyHTML(opts), node.eventually.not.hasAnyHTML(opts)],
     ({opts}) => ` to eventually have any HTML within ${opts.timeout} ms`
   ),
   toEventuallyContainHTML: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.containsHTML(expected, opts),
-      element.eventually.not.containsHTML(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.containsHTML(expected, opts),
+      node.eventually.not.containsHTML(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('HTML', 'contain', actual, expected, opts.timeout)
   ),
   toEventuallyHaveDirectText: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.hasDirectText(expected, opts),
-      element.eventually.not.hasDirectText(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.hasDirectText(expected, opts),
+      node.eventually.not.hasDirectText(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('direct text', 'be', actual, expected, opts.timeout)
   ),
   toEventuallyHaveAnyDirectText: elementMatcherFunction(
-    ({element, opts}) => [
-      element.eventually.hasAnyDirectText(opts),
-      element.eventually.not.hasAnyDirectText(opts)
+    ({node, opts}) => [
+      node.eventually.hasAnyDirectText(opts),
+      node.eventually.not.hasAnyDirectText(opts)
     ],
     ({opts}) => ` to eventually have any direct text within ${opts.timeout} ms`
   ),
   toEventuallyContainDirectText: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.containsDirectText(expected, opts),
-      element.eventually.not.containsDirectText(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.containsDirectText(expected, opts),
+      node.eventually.not.containsDirectText(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('direct text', 'contain', actual, expected, opts.timeout)
   ),
   toEventuallyHaveAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-    ({element, expected, opts}) => [
-      element.eventually.hasAttribute(expected.name, expected.value, opts),
-      element.eventually.not.hasAttribute(expected.name, expected.value, opts),
+    ({node, expected, opts}) => [
+      node.eventually.hasAttribute(expected.name, expected.value, opts),
+      node.eventually.not.hasAttribute(expected.name, expected.value, opts),
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage(expected.name, 'be', actual, expected.value, opts.timeout)
   ),
   toEventuallyHaveAnyAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-    ({element, expected, opts}) => [
-      element.eventually.hasAnyAttribute(expected.name, opts),
-      element.eventually.not.hasAnyAttribute(expected.name, opts),
+    ({node, expected, opts}) => [
+      node.eventually.hasAnyAttribute(expected.name, opts),
+      node.eventually.not.hasAnyAttribute(expected.name, opts),
     ],
     ({expected, opts}) => ` to eventually have any ${expected.name} within ${opts.timeout} ms`
   ),
   toEventuallyContainAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-    ({element, expected, opts}) => [
-      element.eventually.containsAttribute(expected.name, expected.value, opts),
-      element.eventually.not.containsAttribute(expected.name, expected.value, opts),
+    ({node, expected, opts}) => [
+      node.eventually.containsAttribute(expected.name, expected.value, opts),
+      node.eventually.not.containsAttribute(expected.name, expected.value, opts),
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage(expected.name, 'contain', actual, expected.value, opts.timeout)
   ),
   toEventuallyHaveClass: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.hasClass(expected, opts),
-      element.eventually.not.hasClass(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.hasClass(expected, opts),
+      node.eventually.not.hasClass(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('class', 'be', actual, expected, opts.timeout)
   ),
   toEventuallyContainClass: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.containsClass(expected, opts),
-      element.eventually.not.containsClass(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.containsClass(expected, opts),
+      node.eventually.not.containsClass(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('class', 'contain', actual, expected, opts.timeout)
   ),
   toEventuallyHaveId: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.hasId(expected, opts),
-      element.eventually.not.hasId(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.hasId(expected, opts),
+      node.eventually.not.hasId(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('id', 'be', actual, expected, opts.timeout)
   ),
   toEventuallyHaveAnyId: elementMatcherFunction(
-    ({element}) => [element.eventually.hasAnyId(), element.eventually.not.hasAnyId()],
+    ({node}) => [node.eventually.hasAnyId(), node.eventually.not.hasAnyId()],
     ({opts}) => ` to eventually have any id within ${opts.timeout} ms`
   ),
   toEventuallyContainId: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.containsId(expected, opts),
-      element.eventually.not.containsId(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.containsId(expected, opts),
+      node.eventually.not.containsId(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('id', 'contain', actual, expected, opts.timeout)
   ),
   toEventuallyHaveName: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.hasName(expected, opts),
-      element.eventually.not.hasName(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.hasName(expected, opts),
+      node.eventually.not.hasName(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('name', 'be', actual, expected, opts.timeout)
   ),
   toEventuallyHaveAnyName: elementMatcherFunction(
-    ({element}) => [element.eventually.hasAnyName(), element.eventually.not.hasAnyName()],
+    ({node}) => [node.eventually.hasAnyName(), node.eventually.not.hasAnyName()],
     ({opts}) => ` to eventually have any name within ${opts.timeout} ms`
   ),
   toEventuallyContainName: elementMatcherFunction(
-    ({element, expected, opts}) => [
-      element.eventually.containsName(expected, opts),
-      element.eventually.not.containsName(expected, opts)
+    ({node, expected, opts}) => [
+      node.eventually.containsName(expected, opts),
+      node.eventually.not.containsName(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('name', 'contain', actual, expected, opts.timeout)
   ),
   toEventuallyHaveLocation: elementMatcherFunction<Partial<Workflo.ICoordinates>, {tolerances?: Partial<Workflo.ICoordinates>}>(
-    ({element, expected, opts}) => [element.eventually.hasLocation(expected, opts), element.eventually.not.hasLocation(expected, opts)],
+    ({node, expected, opts}) => [node.eventually.hasLocation(expected, opts), node.eventually.not.hasLocation(expected, opts)],
     ({actual, expected, opts}) => createEventuallyErrorMessage(
       'location',
       (opts.tolerances && (opts.tolerances.x > 0 || opts.tolerances.y > 0)) ? 'be within' : 'be',
@@ -460,7 +492,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toEventuallyHaveX: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.eventually.hasX(expected, opts), element.eventually.not.hasX(expected, opts)],
+    ({node, expected, opts}) => [node.eventually.hasX(expected, opts), node.eventually.not.hasX(expected, opts)],
     ({actual, expected, opts}) => createEventuallyErrorMessage(
       'x',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -470,7 +502,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toEventuallyHaveY: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.eventually.hasY(expected, opts), element.eventually.not.hasY(expected, opts)],
+    ({node, expected, opts}) => [node.eventually.hasY(expected, opts), node.eventually.not.hasY(expected, opts)],
     ({actual, expected, opts}) => createEventuallyErrorMessage(
       'y',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -480,7 +512,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toEventuallyHaveSize: elementMatcherFunction<Partial<Workflo.ISize>, {tolerances?: Partial<Workflo.ISize>}>(
-    ({element, expected, opts}) => [element.eventually.hasSize(expected, opts), element.eventually.not.hasSize(expected, opts)],
+    ({node, expected, opts}) => [node.eventually.hasSize(expected, opts), node.eventually.not.hasSize(expected, opts)],
     ({actual, expected, opts}) => createEventuallyErrorMessage(
       'size',
       (opts.tolerances && (opts.tolerances.width > 0 || opts.tolerances.height > 0)) ? 'be within' : 'be',
@@ -490,7 +522,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toEventuallyHaveWidth: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.eventually.hasWidth(expected, opts), element.eventually.not.hasWidth(expected, opts)],
+    ({node, expected, opts}) => [node.eventually.hasWidth(expected, opts), node.eventually.not.hasWidth(expected, opts)],
     ({actual, expected, opts}) => createEventuallyErrorMessage(
       'width',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -500,7 +532,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     )
   ),
   toEventuallyHaveHeight: elementMatcherFunction<number, {tolerance?: number}>(
-    ({element, expected, opts}) => [element.eventually.hasHeight(expected, opts), element.eventually.not.hasHeight(expected, opts)],
+    ({node, expected, opts}) => [node.eventually.hasHeight(expected, opts), node.eventually.not.hasHeight(expected, opts)],
     ({actual, expected, opts}) => createEventuallyErrorMessage(
       'height',
       (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be',
@@ -512,7 +544,10 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
 };
 
 export const listMatchers: jasmine.CustomMatcherFactories = {
-
+  toBeEmpty: listMatcherFunction(
+    ({node}) => [node.currently.isEmpty(), node.currently.not.isEmpty()],
+    () => " to be empty"
+  ),
 }
 
 export function expectElement<

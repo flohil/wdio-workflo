@@ -16,7 +16,7 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
     isVisible: (opts?: OptionalParams) => ReturnType;
     isEnabled: (opts?: OptionalParams) => ReturnType;
     isSelected: (opts?: OptionalParams) => ReturnType;
-    hasText: (text: string, opts: OptionalParams) => ReturnType;
+    hasText: (text: string, opts?: OptionalParams) => ReturnType;
     hasAnyText: (opts?: OptionalParams) => ReturnType;
     containsText: (text: string, opts?: OptionalParams) => ReturnType;
     hasValue: (value: string, opts?: OptionalParams) => ReturnType;
@@ -123,6 +123,7 @@ export interface IPageElementEventuallyAPI<Store extends PageElementStore> exten
 export interface IPageElementEventuallyNotAPI<Store extends PageElementStore> extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, boolean> {
 }
 export interface IPageElementCurrentlyAPI<Store extends PageElementStore> extends IPageElementCheckStateAPI<Store>, IPageElementGetStateAPI<Store> {
+    lastActualResult: string;
     not: IPageElementCheckStateAPI<Store>;
 }
 export declare class PageElement<Store extends PageElementStore> extends PageNode<Store> implements Workflo.PageNode.IGetText, IPageElementGetStateAPI<Store> {
@@ -131,20 +132,8 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     protected _timeout: number;
     protected _$: Store;
     protected _customScroll: Workflo.IScrollParams;
-    protected _lastActualResult: string;
     readonly currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store>;
     constructor(_selector: string, { waitType, timeout, customScroll, ...superOpts }: IPageElementOpts<Store>);
-    /**
-     * Whenever a function that checks the state of the GUI
-     * by comparing an expected result to an actual result is called,
-     * the actual result will be stored in 'lastActualResult'.
-     *
-     * This can be useful to determine why the last invocation of such a function returned false.
-     *
-     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-     * defined in the .currently, .eventually and .wait API of PageElement.
-     */
-    readonly lastActualResult: string;
     /**
      * Return WdioElement from current state, not performing an initial wait.
      */

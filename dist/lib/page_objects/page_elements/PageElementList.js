@@ -29,9 +29,22 @@ class PageElementList extends _1.PageNode {
             cloneFunc: this._cloneFunc,
             getAllFunc: list => list.all
         });
-        this.currently = new Currently(this._selector, opts, cloneFunc);
+        this.currently = new Currently(this, opts, cloneFunc);
         this.wait = new Wait(this);
         this.eventually = new Eventually(this, this._eventually);
+    }
+    /**
+     * Whenever a function that checks the state of the GUI
+     * by comparing an expected result to an actual result is called,
+     * the actual result will be stored in 'lastActualResult'.
+     *
+     * This can be useful to determine why the last invocation of such a function returned false.
+     *
+     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+     * defined in the .currently, .eventually and .wait API of PageElement.
+     */
+    get lastActualResult() {
+        return this._lastActualResult;
     }
     initialWait() {
         switch (this._waitType) {
@@ -162,7 +175,7 @@ class PageElementList extends _1.PageNode {
 }
 exports.PageElementList = PageElementList;
 class Currently {
-    constructor(selector, opts, cloneFunc) {
+    constructor(list, opts, cloneFunc) {
         /**
          * @param index starts at 0
          */
@@ -182,7 +195,16 @@ class Currently {
         };
         // CHECK STATE FUNCTIONS
         this.isEmpty = () => browser.isExisting(this._selector);
-        this._selector = selector;
+        this.hasLength = (length, comparator = "==" /* equalTo */) => {
+            const actualLength = this.getLength();
+            this._lastActualResult = actualLength.toString();
+            return util_1.compare(actualLength, length, comparator);
+        };
+        this.not = {
+            isEmpty: () => !this.isEmpty(),
+            hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator)
+        };
+        this._selector = list.getSelector();
         this._store = opts.store;
         this._elementOptions = opts.elementOptions;
         this._elementStoreFunc = opts.elementStoreFunc;
@@ -193,6 +215,20 @@ class Currently {
             cloneFunc: cloneFunc,
             getAllFunc: list => list.currently.all
         });
+        this._list = list;
+    }
+    /**
+     * Whenever a function that checks the state of the GUI
+     * by comparing an expected result to an actual result is called,
+     * the actual result will be stored in 'lastActualResult'.
+     *
+     * This can be useful to determine why the last invocation of such a function returned false.
+     *
+     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+     * defined in the .currently, .eventually and .wait API of PageElement.
+     */
+    get lastActualResult() {
+        return this._lastActualResult;
     }
     // RETRIEVAL FUNCTIONS for wdio or list elements
     get elements() {
@@ -228,23 +264,35 @@ class Currently {
 class Wait {
     constructor(list) {
         // waits until list has given length
-        this.hasLength = (length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval() } = {}) => {
+        this.hasLength = (length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) => {
             browser.waitUntil(() => {
-                let value = this._list.currently.elements.value;
-                if (!value || !value.length) {
-                    return false;
+                if (reverse) {
+                    return !this._list.currently.hasLength(length, comparator);
                 }
                 else {
-                    return util_1.compare(value.length, length, comparator);
+                    return this._list.currently.hasLength(length, comparator);
                 }
             }, timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._list.getSelector()} )`, interval);
             return this._list;
         };
-        this.isEmpty = ({ timeout = this._list.getTimeout(), interval = this._list.getInterval() } = {}) => {
+        this.isEmpty = ({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) => {
             browser.waitUntil(() => {
-                return !browser.isExisting(this._list.getSelector());
+                if (reverse) {
+                    return !this._list.currently.isEmpty();
+                }
+                else {
+                    return this._list.currently.isEmpty();
+                }
             }, timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval);
             return this._list;
+        };
+        this.not = {
+            isEmpty: (opts) => this.isEmpty({
+                timeout: opts.timeout, interval: opts.interval, reverse: true
+            }),
+            hasLength: (length, opts) => this.hasLength(length, {
+                timeout: opts.timeout, interval: opts.interval, reverse: true
+            })
         };
         this._list = list;
     }
@@ -260,11 +308,19 @@ class Wait {
 }
 class Eventually {
     constructor(list, eventually) {
-        this.hasLength = (length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval() } = {}) => {
-            return this._eventually(() => this._list.wait.hasLength(length, { timeout, comparator, interval }));
+        this.hasLength = (length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) => {
+            return this._eventually(() => this._list.wait.hasLength(length, { timeout, comparator, interval, reverse }));
         };
-        this.isEmpty = ({ timeout = this._list.getTimeout(), interval = this._list.getInterval() } = {}) => {
-            return this._eventually(() => this._list.wait.isEmpty({ timeout, interval }));
+        this.isEmpty = ({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) => {
+            return this._eventually(() => this._list.wait.isEmpty({ timeout, interval, reverse }));
+        };
+        this.not = {
+            isEmpty: (opts) => this.isEmpty({
+                timeout: opts.timeout, interval: opts.interval, reverse: true
+            }),
+            hasLength: (length, opts) => this.hasLength(length, {
+                timeout: opts.timeout, interval: opts.interval, reverse: true
+            })
         };
         this._list = list;
         this._eventually = eventually;

@@ -22,11 +22,19 @@ export interface IPageElementListIdentifier<
 }
 
 export interface IPageElementListWaitEmptyParams extends Workflo.IWDIOParamsOptional {
-  interval?: number
+  interval?: number,
+}
+
+export interface IPageElementListWaitEmptyReverseParams extends IPageElementListWaitEmptyParams {
+  reverse?: boolean,
 }
 
 export interface IPageElementListWaitLengthParams extends IPageElementListWaitEmptyParams {
   comparator?: Workflo.Comparator,
+}
+
+export interface IPageElementListWaitLengthReverseParams extends IPageElementListWaitLengthParams {
+  reverse?: boolean,
 }
 
 // use disableCache for a "dynamic" list whose structure changes over time
@@ -61,10 +69,14 @@ export interface IPageElementListWaitAPI<
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > {
-  hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => PageElementList<Store, PageElementType, PageElementOptions>
-  isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => PageElementList<Store, PageElementType, PageElementOptions>
+  hasLength: ( length: number, opts?:  IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
+  isEmpty: ( opts?: IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
   any: Omit<IPageElementWaitAPI<Store>, 'not'>
   none: IPageElementWaitNotAPI<Store>
+  not: {
+    hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => PageElementList<Store, PageElementType, PageElementOptions>
+    isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => PageElementList<Store, PageElementType, PageElementOptions>
+  }
 }
 
 export interface IPageElementListEventuallyAPI<
@@ -74,6 +86,10 @@ export interface IPageElementListEventuallyAPI<
   isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
   any: Omit<IPageElementEventuallyAPI<Store>, 'not'>
   none: IPageElementEventuallyNotAPI<Store>
+  not: {
+    hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
+    isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
+  }
 }
 
 export interface IPageElementListCurrentlyAPI<
@@ -86,6 +102,10 @@ export interface IPageElementListCurrentlyAPI<
   where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
   isEmpty: () => boolean
   hasLength: ( length: number, comparator?: Workflo.Comparator ) => boolean
+  not: {
+    isEmpty: () => boolean
+    hasLength: ( length: number, comparator?: Workflo.Comparator ) => boolean
+  }
 }
 
 // holds several PageElement instances of the same type
@@ -446,6 +466,13 @@ class Currently<
 
     return compare(actualLength, length, comparator)
   }
+
+  not = {
+    isEmpty: () => !this.isEmpty(),
+    hasLength: (
+      length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
+    ) => !this.hasLength(length, comparator)
+  }
 }
 
 class Wait<
@@ -465,10 +492,17 @@ class Wait<
   hasLength = ( length: number, {
     timeout = this._list.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
-    interval = this._list.getInterval()
-  }: IPageElementListWaitLengthParams = {}) => {
+    interval = this._list.getInterval(),
+    reverse
+  }: IPageElementListWaitLengthReverseParams = {}) => {
     browser.waitUntil(
-      () => this._list.currently.hasLength(length, comparator),
+      () => {
+        if (reverse) {
+          return !this._list.currently.hasLength(length, comparator)
+        } else {
+          return this._list.currently.hasLength(length, comparator)
+        }
+      },
     timeout, `${this.constructor.name}: Length never became ${comparator.toString()} ${length}.\n( ${this._list.getSelector()} )`, interval )
 
     return this._list
@@ -476,10 +510,17 @@ class Wait<
 
   isEmpty = ({
     timeout = this._list.getTimeout(),
-    interval = this._list.getInterval()
-  } : IPageElementListWaitEmptyParams = {}) => {
+    interval = this._list.getInterval(),
+    reverse
+  } : IPageElementListWaitEmptyReverseParams = {}) => {
     browser.waitUntil(
-      () => this._list.currently.isEmpty(),
+      () => {
+        if (reverse) {
+          return !this._list.currently.isEmpty()
+        } else {
+          return this._list.currently.isEmpty()
+        }
+      },
     timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval)
 
     return this._list
@@ -496,6 +537,17 @@ class Wait<
 
   get none() : IPageElementWaitNotAPI<Store> {
     return this._list.currently.first.wait.not
+  }
+
+  not = {
+    isEmpty: (opts: IPageElementListWaitEmptyParams) => this.isEmpty({
+      timeout: opts.timeout, interval: opts.interval, reverse: true
+    }),
+    hasLength: (
+      length: number, opts?:  IPageElementListWaitLengthParams
+    ) => this.hasLength(length, {
+      timeout: opts.timeout, interval: opts.interval, reverse: true
+    })
   }
 }
 
@@ -517,16 +569,18 @@ class Eventually<
   hasLength = ( length: number, {
     timeout = this._list.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
-    interval = this._list.getInterval()
-  }: IPageElementListWaitLengthParams = {} ) => {
-    return this._eventually( () => this._list.wait.hasLength( length, { timeout, comparator, interval } ) )
+    interval = this._list.getInterval(),
+    reverse
+  }: IPageElementListWaitLengthReverseParams = {} ) => {
+    return this._eventually( () => this._list.wait.hasLength( length, { timeout, comparator, interval, reverse } ) )
   }
 
   isEmpty = ({
     timeout = this._list.getTimeout(),
-    interval = this._list.getInterval()
-  }: IPageElementListWaitEmptyParams = {}) => {
-    return this._eventually( () => this._list.wait.isEmpty( { timeout, interval } ) )
+    interval = this._list.getInterval(),
+    reverse
+  }: IPageElementListWaitEmptyReverseParams = {}) => {
+    return this._eventually( () => this._list.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
   get any(): Omit<IPageElementEventuallyAPI<Store>, 'not'> {
@@ -540,5 +594,14 @@ class Eventually<
 
   get none(): IPageElementEventuallyNotAPI<Store> {
     return this._list.currently.first.eventually.not
+  }
+
+  not = {
+    isEmpty: (opts: IPageElementListWaitEmptyParams) => this.isEmpty({
+      timeout: opts.timeout, interval: opts.interval, reverse: true
+    }),
+    hasLength: (length: number, opts: IPageElementListWaitLengthParams) => this.hasLength(length, {
+      timeout: opts.timeout, interval: opts.interval, reverse: true
+    })
   }
 }
