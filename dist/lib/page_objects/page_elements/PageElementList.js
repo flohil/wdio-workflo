@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("../../utility_functions/util");
 const _1 = require(".");
 const builders_1 = require("../builders");
+const __1 = require("../");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(_selector, opts, cloneFunc) {
@@ -13,7 +14,7 @@ class PageElementList extends _1.PageNode {
          */
         this.at = (index) => this.where.getAt(index);
         this._waitType = opts.waitType || "visible" /* visible */;
-        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default;
+        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         this._disableCache = opts.disableCache || false;
         this._selector = _selector;
         this._elementOptions = opts.elementOptions;
@@ -181,7 +182,7 @@ class Currently {
          */
         this.at = (index) => this.where.getAt(index);
         // CHECK STATE FUNCTIONS
-        this.isEmpty = () => browser.isExisting(this._selector);
+        this.isEmpty = () => !browser.isExisting(this._selector);
         this.hasLength = (length, comparator = "==" /* equalTo */) => {
             const actualLength = this.getLength();
             this._lastActualResult = actualLength.toString();

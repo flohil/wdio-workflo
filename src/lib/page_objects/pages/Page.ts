@@ -1,4 +1,5 @@
 import { PageElementStore } from '../stores'
+import { DEFAULT_TIMEOUT } from '../'
 
 export interface IPageArgs<Store extends PageElementStore> {
   elementStore: Store,
@@ -15,7 +16,7 @@ export abstract class Page<Store extends PageElementStore> {
     if ( args.timeout ) {
       this.timeout = args.timeout
     } else {
-      this.timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default
+      this.timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
     }
   }
 

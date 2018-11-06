@@ -5,6 +5,7 @@ import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
 import * as htmlParser from 'htmlparser2'
 import { tolerancesObjectToString } from '../../helpers'
+import { DEFAULT_TIMEOUT } from '../'
 
 export type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>
 
@@ -160,7 +161,7 @@ export class PageElement<
     protected _selector: string,
     {
       waitType = Workflo.WaitType.visible,
-      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default,
+      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
       customScroll = undefined,
       ...superOpts
     }: IPageElementOpts<Store>

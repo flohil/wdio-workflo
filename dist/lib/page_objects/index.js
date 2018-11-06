@@ -10,4 +10,5 @@ const stores = require("./stores");
 exports.stores = stores;
 const builders = require("./builders");
 exports.builders = builders;
+exports.DEFAULT_TIMEOUT = 5000;
 //# sourceMappingURL=index.js.map

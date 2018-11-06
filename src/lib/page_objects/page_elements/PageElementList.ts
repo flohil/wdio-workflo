@@ -8,8 +8,9 @@ import {
   IPageElementEventuallyAPI,
   IPageElementEventuallyNotAPI
 } from '.'
-import { PageElementStore, CloneFunc } from '../stores'
+import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
+import { DEFAULT_TIMEOUT } from '../'
 
 export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
 
@@ -142,7 +143,7 @@ export class PageElementList<
     super(_selector, opts)
 
     this._waitType = opts.waitType || Workflo.WaitType.visible
-    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default
+    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
     this._disableCache = opts.disableCache || false
 
     this._selector = _selector
@@ -455,7 +456,7 @@ class Currently<
 
 // CHECK STATE FUNCTIONS
 
-  isEmpty = () => browser.isExisting(this._selector)
+  isEmpty = () => !browser.isExisting(this._selector)
 
   hasLength = (
     length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo

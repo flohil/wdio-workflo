@@ -88,8 +88,17 @@ function matcherFunction<
       if (!success) {
         let optsWithTimeout: OptsType & {timeout?: number} = opts || Object.create(null)
 
+        console.log("opts before", opts, typeof opts === 'undefined', !opts['timeout'])
+
         if (typeof opts === 'undefined' || !opts['timeout'] ) {
+          console.log("opts inner", opts)
+
           optsWithTimeout.timeout = node.getTimeout()
+
+          console.log("node.getTimeout", node.getTimeout())
+
+          console.log("optsWithTimeout.timeout", optsWithTimeout)
+
         }
 
         const actual = node.currently.lastActualResult

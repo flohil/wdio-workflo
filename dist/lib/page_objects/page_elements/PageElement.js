@@ -13,11 +13,12 @@ const _1 = require(".");
 const builders_1 = require("../builders");
 const htmlParser = require("htmlparser2");
 const helpers_1 = require("../../helpers");
+const __1 = require("../");
 class PageElement extends _1.PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
     constructor(_selector, _a) {
-        var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default, customScroll = undefined } = _a, superOpts = __rest(_a, ["waitType", "timeout", "customScroll"]);
+        var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT, customScroll = undefined } = _a, superOpts = __rest(_a, ["waitType", "timeout", "customScroll"]);
         super(_selector, superOpts);
         this._selector = _selector;
         this.wait = {

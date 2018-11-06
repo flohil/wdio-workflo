@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("./utility_functions/util");
 const _ = require("lodash");
 const helpers_1 = require("./helpers");
-function matcherFunction(resultFunction, errorTextFunction) {
+function matcherFunction(resultFunction, errorTextFunction, noArgs = false) {
     return (util, customEqualityTesters) => {
-        function baseCompareFunction(node, expected, negativeComparison, opts) {
+        function baseCompareFunction(node, negativeComparison, opts = Object.create(null), expected = undefined) {
             let result = {
                 pass: true,
                 message: ''
@@ -16,8 +16,12 @@ function matcherFunction(resultFunction, errorTextFunction) {
             const success = (negativeComparison) ? successes[1] : successes[0];
             if (!success) {
                 let optsWithTimeout = opts || Object.create(null);
+                console.log("opts before", opts, typeof opts === 'undefined', !opts['timeout']);
                 if (typeof opts === 'undefined' || !opts['timeout']) {
+                    console.log("opts inner", opts);
                     optsWithTimeout.timeout = node.getTimeout();
+                    console.log("node.getTimeout", node.getTimeout());
+                    console.log("optsWithTimeout.timeout", optsWithTimeout);
                 }
                 const actual = node.currently.lastActualResult;
                 const errorTexts = errorTextFunction({ actual, expected, opts: optsWithTimeout });
@@ -41,21 +45,39 @@ function matcherFunction(resultFunction, errorTextFunction) {
             }
             return result;
         }
-        return {
-            compare: (node, expected, opts) => {
-                return baseCompareFunction(node, expected, false, opts);
-            },
-            negativeCompare: (node, expected, opts) => {
-                return baseCompareFunction(node, expected, true, opts);
-            }
-        };
+        if (noArgs) {
+            return {
+                compare: (node, opts) => {
+                    return baseCompareFunction(node, false, opts);
+                },
+                negativeCompare: (node, opts) => {
+                    return baseCompareFunction(node, true, opts);
+                }
+            };
+        }
+        else {
+            return {
+                compare: (node, expected, opts) => {
+                    return baseCompareFunction(node, false, opts, expected);
+                },
+                negativeCompare: (node, expected, opts) => {
+                    return baseCompareFunction(node, true, opts, expected);
+                }
+            };
+        }
     };
 }
 function elementMatcherFunction(resultFunction, errorTextFunction) {
     return matcherFunction(resultFunction, errorTextFunction);
 }
+function elementMatcherNoArgsFunction(resultFunction, errorTextFunction) {
+    return matcherFunction(resultFunction, errorTextFunction, true);
+}
 function listMatcherFunction(resultFunction, errorTextFunction) {
     return matcherFunction(resultFunction, errorTextFunction);
+}
+function listMatcherNoArgsFunction(resultFunction, errorTextFunction) {
+    return matcherFunction(resultFunction, errorTextFunction, true);
 }
 function createLongErrorMessage(property, comparison, actual, expected) {
     return [
@@ -112,15 +134,15 @@ exports.elementMatchers = {
     toHaveSize: elementMatcherFunction(({ node, expected, opts }) => [node.currently.hasSize(expected, opts.tolerances), node.currently.not.hasSize(expected, opts.tolerances)], ({ actual, expected, opts }) => createLongErrorMessage('size', (opts.tolerances && (opts.tolerances.width > 0 || opts.tolerances.height > 0)) ? 'be within' : 'be', helpers_1.tolerancesObjectToString(actual), helpers_1.tolerancesObjectToString(expected))),
     toHaveWidth: elementMatcherFunction(({ node, expected, opts }) => [node.currently.hasWidth(expected, opts.tolerance), node.currently.not.hasWidth(expected, opts.tolerance)], ({ actual, expected, opts }) => createLongErrorMessage('width', (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be', helpers_1.tolerancesObjectToString(actual), helpers_1.tolerancesObjectToString(expected))),
     toHaveHeight: elementMatcherFunction(({ node, expected, opts }) => [node.currently.hasHeight(expected, opts.tolerance), node.currently.not.hasHeight(expected, opts.tolerance)], ({ actual, expected, opts }) => createLongErrorMessage('height', (opts.tolerance && opts.tolerance > 0) ? 'be within' : 'be', helpers_1.tolerancesObjectToString(actual), helpers_1.tolerancesObjectToString(expected))),
-    toEventuallyExist: elementMatcherFunction(({ node, opts }) => [node.eventually.exists(opts), node.eventually.not.exists(opts)], ({ opts }) => ` to eventually exist within ${opts.timeout} ms`),
-    toEventuallyBeVisible: elementMatcherFunction(({ node, opts }) => [node.eventually.isVisible(opts), node.eventually.not.isVisible(opts)], ({ opts }) => ` to eventually be visible within ${opts.timeout} ms`),
-    toEventuallyBeSelected: elementMatcherFunction(({ node, opts }) => [node.eventually.isSelected(opts), node.eventually.not.isSelected(opts)], ({ opts }) => ` to eventually be selected within ${opts.timeout} ms`),
-    toEventuallyBeEnabled: elementMatcherFunction(({ node, opts }) => [node.eventually.isEnabled(opts), node.eventually.not.isEnabled(opts)], ({ opts }) => ` to eventually be enabled within ${opts.timeout} ms`),
+    toEventuallyExist: elementMatcherNoArgsFunction(({ node, opts }) => [node.eventually.exists(opts), node.eventually.not.exists(opts)], ({ opts }) => ` to eventually exist within ${opts.timeout} ms`),
+    toEventuallyBeVisible: elementMatcherNoArgsFunction(({ node, opts }) => [node.eventually.isVisible(opts), node.eventually.not.isVisible(opts)], ({ opts }) => ` to eventually be visible within ${opts.timeout} ms`),
+    toEventuallyBeSelected: elementMatcherNoArgsFunction(({ node, opts }) => [node.eventually.isSelected(opts), node.eventually.not.isSelected(opts)], ({ opts }) => ` to eventually be selected within ${opts.timeout} ms`),
+    toEventuallyBeEnabled: elementMatcherNoArgsFunction(({ node, opts }) => [node.eventually.isEnabled(opts), node.eventually.not.isEnabled(opts)], ({ opts }) => ` to eventually be enabled within ${opts.timeout} ms`),
     toEventuallyHaveText: elementMatcherFunction(({ node, expected, opts }) => [
         node.eventually.hasText(expected, opts),
         node.eventually.not.hasText(expected, opts)
     ], ({ actual, expected, opts }) => createEventuallyErrorMessage('text', 'be', actual, expected, opts.timeout)),
-    toEventuallyHaveAnyText: elementMatcherFunction(({ node }) => [node.eventually.hasAnyText(), node.eventually.not.hasAnyText()], ({ opts }) => ` to eventually have any text within ${opts.timeout} ms`),
+    toEventuallyHaveAnyText: elementMatcherNoArgsFunction(({ node }) => [node.eventually.hasAnyText(), node.eventually.not.hasAnyText()], ({ opts }) => ` to eventually have any text within ${opts.timeout} ms`),
     toEventuallyContainText: elementMatcherFunction(({ node, expected, opts }) => [
         node.eventually.containsText(expected, opts),
         node.eventually.not.containsText(expected, opts)
@@ -129,7 +151,7 @@ exports.elementMatchers = {
         node.eventually.hasValue(expected, opts),
         node.eventually.not.hasValue(expected, opts)
     ], ({ actual, expected, opts }) => createEventuallyErrorMessage('value', 'be', actual, expected, opts.timeout)),
-    toEventuallyHaveAnyValue: elementMatcherFunction(({ node, opts }) => [node.eventually.hasAnyValue(opts), node.eventually.not.hasAnyValue(opts)], ({ opts }) => ` to eventually have any value within ${opts.timeout} ms`),
+    toEventuallyHaveAnyValue: elementMatcherNoArgsFunction(({ node, opts }) => [node.eventually.hasAnyValue(opts), node.eventually.not.hasAnyValue(opts)], ({ opts }) => ` to eventually have any value within ${opts.timeout} ms`),
     toEventuallyContainValue: elementMatcherFunction(({ node, expected, opts }) => [
         node.eventually.containsValue(expected, opts),
         node.eventually.not.containsValue(expected, opts)
@@ -138,7 +160,7 @@ exports.elementMatchers = {
         node.eventually.hasHTML(expected, opts),
         node.eventually.not.hasHTML(expected, opts)
     ], ({ actual, expected, opts }) => createEventuallyErrorMessage('HTML', 'be', actual, expected, opts.timeout)),
-    toEventuallyHaveAnyHTML: elementMatcherFunction(({ node, opts }) => [node.eventually.hasAnyHTML(opts), node.eventually.not.hasAnyHTML(opts)], ({ opts }) => ` to eventually have any HTML within ${opts.timeout} ms`),
+    toEventuallyHaveAnyHTML: elementMatcherNoArgsFunction(({ node, opts }) => [node.eventually.hasAnyHTML(opts), node.eventually.not.hasAnyHTML(opts)], ({ opts }) => ` to eventually have any HTML within ${opts.timeout} ms`),
     toEventuallyContainHTML: elementMatcherFunction(({ node, expected, opts }) => [
         node.eventually.containsHTML(expected, opts),
         node.eventually.not.containsHTML(expected, opts)
@@ -147,7 +169,7 @@ exports.elementMatchers = {
         node.eventually.hasDirectText(expected, opts),
         node.eventually.not.hasDirectText(expected, opts)
     ], ({ actual, expected, opts }) => createEventuallyErrorMessage('direct text', 'be', actual, expected, opts.timeout)),
-    toEventuallyHaveAnyDirectText: elementMatcherFunction(({ node, opts }) => [
+    toEventuallyHaveAnyDirectText: elementMatcherNoArgsFunction(({ node, opts }) => [
         node.eventually.hasAnyDirectText(opts),
         node.eventually.not.hasAnyDirectText(opts)
     ], ({ opts }) => ` to eventually have any direct text within ${opts.timeout} ms`),
@@ -179,7 +201,7 @@ exports.elementMatchers = {
         node.eventually.hasId(expected, opts),
         node.eventually.not.hasId(expected, opts)
     ], ({ actual, expected, opts }) => createEventuallyErrorMessage('id', 'be', actual, expected, opts.timeout)),
-    toEventuallyHaveAnyId: elementMatcherFunction(({ node }) => [node.eventually.hasAnyId(), node.eventually.not.hasAnyId()], ({ opts }) => ` to eventually have any id within ${opts.timeout} ms`),
+    toEventuallyHaveAnyId: elementMatcherNoArgsFunction(({ node }) => [node.eventually.hasAnyId(), node.eventually.not.hasAnyId()], ({ opts }) => ` to eventually have any id within ${opts.timeout} ms`),
     toEventuallyContainId: elementMatcherFunction(({ node, expected, opts }) => [
         node.eventually.containsId(expected, opts),
         node.eventually.not.containsId(expected, opts)
@@ -188,7 +210,7 @@ exports.elementMatchers = {
         node.eventually.hasName(expected, opts),
         node.eventually.not.hasName(expected, opts)
     ], ({ actual, expected, opts }) => createEventuallyErrorMessage('name', 'be', actual, expected, opts.timeout)),
-    toEventuallyHaveAnyName: elementMatcherFunction(({ node }) => [node.eventually.hasAnyName(), node.eventually.not.hasAnyName()], ({ opts }) => ` to eventually have any name within ${opts.timeout} ms`),
+    toEventuallyHaveAnyName: elementMatcherNoArgsFunction(({ node }) => [node.eventually.hasAnyName(), node.eventually.not.hasAnyName()], ({ opts }) => ` to eventually have any name within ${opts.timeout} ms`),
     toEventuallyContainName: elementMatcherFunction(({ node, expected, opts }) => [
         node.eventually.containsName(expected, opts),
         node.eventually.not.containsName(expected, opts)
@@ -206,7 +228,7 @@ exports.listMatchers = {
         node.currently.hasLength(expected, opts.comparator),
         node.currently.not.hasLength(expected, opts.comparator)
     ], ({ actual, expected, opts }) => `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected}`),
-    toEventuallyBeEmpty: listMatcherFunction(({ node, expected }) => [node.eventually.isEmpty(expected), node.eventually.not.isEmpty(expected)], ({ opts }) => ` to eventually be empty within ${opts.timeout} ms`),
+    toEventuallyBeEmpty: listMatcherNoArgsFunction(({ node, opts }) => [node.eventually.isEmpty(opts), node.eventually.not.isEmpty(opts)], ({ opts }) => ` to eventually be empty within ${opts.timeout} ms`),
     toEventuallyHaveLength: listMatcherFunction(({ node, expected, opts }) => [
         node.eventually.hasLength(expected, opts),
         node.eventually.not.hasLength(expected, opts)
