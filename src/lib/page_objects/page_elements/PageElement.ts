@@ -4,7 +4,7 @@ import { PageNode, IPageNodeOpts } from '.'
 import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
 import * as htmlParser from 'htmlparser2'
-import { tolerancesObjectToString } from '../../helpers'
+import { tolerancesToString } from '../../helpers'
 import { DEFAULT_TIMEOUT } from '../'
 
 export type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>
@@ -642,7 +642,7 @@ export class PageElement<
 
       return this._waitHasProperty(
         `location`,
-        tolerancesObjectToString(coordinates, tolerances),
+        tolerancesToString(coordinates, tolerances),
         () => this.currently.hasLocation(coordinates, tolerances),
         otherOpts
       )
@@ -654,7 +654,7 @@ export class PageElement<
 
       return this._waitHasProperty(
         `x`,
-        tolerancesObjectToString({x}, {x: tolerance}),
+        tolerancesToString({x}, {x: tolerance}),
         () => this.currently.hasX(x, tolerance),
         otherOpts
       )
@@ -666,7 +666,7 @@ export class PageElement<
 
       return this._waitHasProperty(
         `y`,
-        tolerancesObjectToString({y}, {y: tolerance}),
+        tolerancesToString({y}, {y: tolerance}),
         () => this.currently.hasY(y, tolerance),
         otherOpts
       )
@@ -679,7 +679,7 @@ export class PageElement<
 
       return this._waitHasProperty(
         `location`,
-        tolerancesObjectToString(size, tolerances),
+        tolerancesToString(size, tolerances),
         () => this.currently.hasSize(size, tolerances),
         otherOpts
       )
@@ -691,7 +691,7 @@ export class PageElement<
 
       return this._waitHasProperty(
         `width`,
-        tolerancesObjectToString({width}, {width: tolerance}),
+        tolerancesToString({width}, {width: tolerance}),
         () => this.currently.hasWidth(width, tolerance),
         otherOpts
       )
@@ -703,7 +703,7 @@ export class PageElement<
 
       return this._waitHasProperty(
         `height`,
-        tolerancesObjectToString({height}, {height: tolerance}),
+        tolerancesToString({height}, {height: tolerance}),
         () => this.currently.hasHeight(height, tolerance),
         otherOpts
       )
@@ -1136,11 +1136,11 @@ class Currently<
     }
 
     if ( tolerance ) {
-      tolerances.lower -= Math.min(tolerance, 0)
-      tolerances.upper += Math.min(tolerance, 0)
+      tolerances.lower -= Math.max(tolerance, 0)
+      tolerances.upper += Math.max(tolerance, 0)
     }
 
-    return Math.min(expected, 0) >= Math.min(tolerances.lower, 0) && Math.min(expected, 0) <= Math.min(tolerances.upper, 0)
+    return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0)
   }
 
   private _hasAxisLocation(expected: number, actual: number, tolerance?: number): boolean {
@@ -1199,7 +1199,7 @@ class Currently<
   containsName = (name: string) => this._compareContains(name, this.getName())
   hasLocation = (coordinates: Workflo.ICoordinates, tolerances: Workflo.ICoordinates = { x: 0, y: 0 }) => {
     const actualCoords = this.getLocation()
-    this._lastActualResult = tolerancesObjectToString(actualCoords)
+    this._lastActualResult = tolerancesToString(actualCoords)
 
     return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
       && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y)
@@ -1218,7 +1218,7 @@ class Currently<
   }
   hasSize = (size: Workflo.ISize, tolerances: Workflo.ISize = {width: 0, height: 0}) => {
     const actualSize = this.getSize()
-    this._lastActualResult = tolerancesObjectToString(actualSize)
+    this._lastActualResult = tolerancesToString(actualSize)
 
     return this._hasSideSize(size.width, actualSize.width, tolerances.width)
       && this._hasSideSize(size.height, actualSize.width, tolerances.height)

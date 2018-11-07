@@ -55,27 +55,27 @@ class PageElement extends _1.PageNode {
             containsName: (name, opts) => this._waitContainsProperty(`name`, name, () => this.currently.containsName(name), opts),
             hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, helpers_1.tolerancesObjectToString(coordinates, tolerances), () => this.currently.hasLocation(coordinates, tolerances), otherOpts);
+                return this._waitHasProperty(`location`, helpers_1.tolerancesToString(coordinates, tolerances), () => this.currently.hasLocation(coordinates, tolerances), otherOpts);
             },
             hasX: (x, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`x`, helpers_1.tolerancesObjectToString({ x }, { x: tolerance }), () => this.currently.hasX(x, tolerance), otherOpts);
+                return this._waitHasProperty(`x`, helpers_1.tolerancesToString({ x }, { x: tolerance }), () => this.currently.hasX(x, tolerance), otherOpts);
             },
             hasY: (y, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`y`, helpers_1.tolerancesObjectToString({ y }, { y: tolerance }), () => this.currently.hasY(y, tolerance), otherOpts);
+                return this._waitHasProperty(`y`, helpers_1.tolerancesToString({ y }, { y: tolerance }), () => this.currently.hasY(y, tolerance), otherOpts);
             },
             hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, helpers_1.tolerancesObjectToString(size, tolerances), () => this.currently.hasSize(size, tolerances), otherOpts);
+                return this._waitHasProperty(`location`, helpers_1.tolerancesToString(size, tolerances), () => this.currently.hasSize(size, tolerances), otherOpts);
             },
             hasWidth: (width, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`width`, helpers_1.tolerancesObjectToString({ width }, { width: tolerance }), () => this.currently.hasWidth(width, tolerance), otherOpts);
+                return this._waitHasProperty(`width`, helpers_1.tolerancesToString({ width }, { width: tolerance }), () => this.currently.hasWidth(width, tolerance), otherOpts);
             },
             hasHeight: (height, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`height`, helpers_1.tolerancesObjectToString({ height }, { height: tolerance }), () => this.currently.hasHeight(height, tolerance), otherOpts);
+                return this._waitHasProperty(`height`, helpers_1.tolerancesToString({ height }, { height: tolerance }), () => this.currently.hasHeight(height, tolerance), otherOpts);
             },
             untilElement: (description, condition, { timeout = this._timeout } = {}) => {
                 browser.waitUntil(() => condition(this), timeout, `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`);
@@ -687,7 +687,7 @@ class Currently {
         this.containsName = (name) => this._compareContains(name, this.getName());
         this.hasLocation = (coordinates, tolerances = { x: 0, y: 0 }) => {
             const actualCoords = this.getLocation();
-            this._lastActualResult = helpers_1.tolerancesObjectToString(actualCoords);
+            this._lastActualResult = helpers_1.tolerancesToString(actualCoords);
             return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
                 && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y);
         };
@@ -703,7 +703,7 @@ class Currently {
         };
         this.hasSize = (size, tolerances = { width: 0, height: 0 }) => {
             const actualSize = this.getSize();
-            this._lastActualResult = helpers_1.tolerancesObjectToString(actualSize);
+            this._lastActualResult = helpers_1.tolerancesToString(actualSize);
             return this._hasSideSize(size.width, actualSize.width, tolerances.width)
                 && this._hasSideSize(size.height, actualSize.width, tolerances.height);
         };
@@ -797,10 +797,10 @@ class Currently {
             upper: actual
         };
         if (tolerance) {
-            tolerances.lower -= Math.min(tolerance, 0);
-            tolerances.upper += Math.min(tolerance, 0);
+            tolerances.lower -= Math.max(tolerance, 0);
+            tolerances.upper += Math.max(tolerance, 0);
         }
-        return Math.min(expected, 0) >= Math.min(tolerances.lower, 0) && Math.min(expected, 0) <= Math.min(tolerances.upper, 0);
+        return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0);
     }
     _hasAxisLocation(expected, actual, tolerance) {
         return this._withinTolerance(actual, expected, tolerance);

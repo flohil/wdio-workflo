@@ -1,1 +1,1 @@
-export declare function tolerancesObjectToString(actuals: Object, tolerances?: Object): string;
+export declare function tolerancesToString(values: any, tolerances?: any): any;

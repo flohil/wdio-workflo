@@ -33,13 +33,13 @@ declare global {
     toHaveAnyName(): boolean
     toContainName(name: string): boolean
     toHaveLocation(
-      coordinates: Partial<Workflo.ICoordinates>,
+      coordinates: Workflo.ICoordinates,
       opts?: {tolerances?: Partial<Workflo.ICoordinates>}
     ): boolean
     toHaveX(x: number, opts?: {tolerance?: number}): boolean
     toHaveY(y: number, opts?: {tolerance?: number}): boolean
     toHaveSize(
-      size: Partial<Workflo.ISize>,
+      size: Workflo.ISize,
       opts?: { tolerances?: Partial<Workflo.ISize> }
     ): boolean
     toHaveWidth(width: number, opts?: {tolerance?: number}): boolean,
@@ -73,13 +73,13 @@ declare global {
     toEventuallyHaveAnyName(opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyContainName(name: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveLocation(
-      coordinates: Partial<Workflo.ICoordinates>,
+      coordinates: Workflo.ICoordinates,
       opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsOptional
     ): boolean
     toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveSize(
-      size: Partial<Workflo.ISize>,
+      size: Workflo.ISize,
       opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.IWDIOParamsOptional
     ): boolean
     toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsOptional): boolean,
