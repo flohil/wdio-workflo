@@ -55,27 +55,57 @@ class PageElement extends _1.PageNode {
             containsName: (name, opts) => this._waitContainsProperty(`name`, name, () => this.currently.containsName(name), opts),
             hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, helpers_1.tolerancesToString(coordinates, tolerances), () => this.currently.hasLocation(coordinates, tolerances), otherOpts);
+                if (tolerances && (tolerances.x > 0 || tolerances.y > 0)) {
+                    return this._waitWithinProperty(`location`, helpers_1.tolerancesToString(coordinates, tolerances), () => this.currently.hasLocation(coordinates, tolerances), otherOpts);
+                }
+                else {
+                    return this._waitHasProperty(`location`, helpers_1.tolerancesToString(coordinates), () => this.currently.hasLocation(coordinates), otherOpts);
+                }
             },
             hasX: (x, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`x`, helpers_1.tolerancesToString({ x }, { x: tolerance }), () => this.currently.hasX(x, tolerance), otherOpts);
+                if (tolerance) {
+                    return this._waitWithinProperty(`X-location`, helpers_1.tolerancesToString(x, tolerance), () => this.currently.hasX(x, tolerance), otherOpts);
+                }
+                else {
+                    return this._waitHasProperty(`X-location`, x.toString(), () => this.currently.hasX(x), otherOpts);
+                }
             },
             hasY: (y, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`y`, helpers_1.tolerancesToString({ y }, { y: tolerance }), () => this.currently.hasY(y, tolerance), otherOpts);
+                if (tolerance) {
+                    return this._waitWithinProperty(`Y-location`, helpers_1.tolerancesToString(y, tolerance), () => this.currently.hasY(y, tolerance), otherOpts);
+                }
+                else {
+                    return this._waitHasProperty(`Y-location`, y.toString(), () => this.currently.hasY(y), otherOpts);
+                }
             },
             hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => {
                 const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
-                return this._waitHasProperty(`location`, helpers_1.tolerancesToString(size, tolerances), () => this.currently.hasSize(size, tolerances), otherOpts);
+                if (tolerances && (tolerances.width > 0 || tolerances.height > 0)) {
+                    return this._waitWithinProperty(`size`, helpers_1.tolerancesToString(size, tolerances), () => this.currently.hasSize(size, tolerances), otherOpts);
+                }
+                else {
+                    return this._waitHasProperty(`size`, helpers_1.tolerancesToString(size), () => this.currently.hasSize(size), otherOpts);
+                }
             },
             hasWidth: (width, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`width`, helpers_1.tolerancesToString({ width }, { width: tolerance }), () => this.currently.hasWidth(width, tolerance), otherOpts);
+                if (tolerance) {
+                    return this._waitWithinProperty(`width`, helpers_1.tolerancesToString(width, tolerance), () => this.currently.hasWidth(width, tolerance), otherOpts);
+                }
+                else {
+                    return this._waitHasProperty(`width`, width.toString(), () => this.currently.hasWidth(width), otherOpts);
+                }
             },
             hasHeight: (height, opts = { tolerance: 0 }) => {
                 const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
-                return this._waitHasProperty(`height`, helpers_1.tolerancesToString({ height }, { height: tolerance }), () => this.currently.hasHeight(height, tolerance), otherOpts);
+                if (tolerance) {
+                    return this._waitWithinProperty(`height`, helpers_1.tolerancesToString(height, tolerance), () => this.currently.hasHeight(height, tolerance), otherOpts);
+                }
+                else {
+                    return this._waitHasProperty(`height`, height.toString(), () => this.currently.hasHeight(height), otherOpts);
+                }
             },
             untilElement: (description, condition, { timeout = this._timeout } = {}) => {
                 browser.waitUntil(() => condition(this), timeout, `${this.constructor.name}: Wait until element ${description} failed.\n( ${this._selector} )`);
@@ -624,13 +654,14 @@ class PageElement extends _1.PageNode {
         else if (conditionType === 'any') {
             conditionStr = 'any';
         }
-        if (conditionType === 'has' || conditionType === 'contains') {
-            // capitalize first letter
-            name = name.charAt(0).toUpperCase() + name.slice(1);
-            errorMessage = `${this.constructor.name}: ${name} never${reverseStr} ${conditionStr} '${value}'.\n( ${this._selector} )`;
+        else if (conditionType === 'within') {
+            conditionStr = 'was in range';
+        }
+        if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
+            errorMessage = `${this.constructor.name}'s ${name} never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`;
         }
         else if (conditionType === 'any') {
-            errorMessage = `${this.constructor.name} never${reverseStr} had ${conditionStr} ${name}.\n( ${this._selector} )`;
+            errorMessage = `${this.constructor.name} never${reverseStr} ${conditionStr} any ${name} within ${timeout} ms.\n( ${this._selector} )`;
         }
         browser.waitUntil(() => {
             if (reverse) {
@@ -641,6 +672,9 @@ class PageElement extends _1.PageNode {
             }
         }, timeout, errorMessage);
         return this;
+    }
+    _waitWithinProperty(name, value, conditionFunc, opts) {
+        return this._waitProperty(name, 'within', conditionFunc, opts, value);
     }
     _waitHasProperty(name, value, conditionFunc, opts) {
         return this._waitProperty(name, 'has', conditionFunc, opts, value);
@@ -705,7 +739,7 @@ class Currently {
             const actualSize = this.getSize();
             this._lastActualResult = helpers_1.tolerancesToString(actualSize);
             return this._hasSideSize(size.width, actualSize.width, tolerances.width)
-                && this._hasSideSize(size.height, actualSize.width, tolerances.height);
+                && this._hasSideSize(size.height, actualSize.height, tolerances.height);
         };
         this.hasWidth = (width, tolerance) => {
             const actual = this.getWidth();
@@ -896,7 +930,7 @@ function getLocation(element) {
     return element.getLocation();
 }
 function getSize(element) {
-    return this.element.getElementSize();
+    return element.getElementSize();
 }
 function isEnabled(element) {
     return element.isEnabled();

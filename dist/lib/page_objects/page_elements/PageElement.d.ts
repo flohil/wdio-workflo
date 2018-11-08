@@ -175,6 +175,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     scrollTo(params: Workflo.IScrollParams): Workflo.IScrollResult;
     private _waitWdioCheckFunc;
     private _waitProperty;
+    private _waitWithinProperty;
     private _waitHasProperty;
     private _waitHasAnyProperty;
     private _waitContainsProperty;

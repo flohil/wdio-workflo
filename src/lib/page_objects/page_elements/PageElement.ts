@@ -481,7 +481,7 @@ export class PageElement<
 
   private _waitProperty(
     name: string,
-    conditionType: 'has' | 'contains' | 'any',
+    conditionType: 'has' | 'contains' | 'any' | 'within',
     conditionFunc: (value?: string) => boolean,
     { timeout = this._timeout, reverse }: Workflo.IWDIOParamsOptionalReverse = {},
     value?: string
@@ -496,15 +496,14 @@ export class PageElement<
       conditionStr = 'contained'
     } else if (conditionType === 'any') {
       conditionStr = 'any'
+    } else if (conditionType === 'within') {
+      conditionStr = 'was in range'
     }
 
-    if (conditionType === 'has' || conditionType === 'contains') {
-      // capitalize first letter
-      name = name.charAt(0).toUpperCase() + name.slice(1)
-
-      errorMessage = `${this.constructor.name}: ${name} never${reverseStr} ${conditionStr} '${value}'.\n( ${this._selector} )`
+    if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
+      errorMessage = `${this.constructor.name}'s ${name} never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`
     } else if (conditionType === 'any') {
-      errorMessage = `${this.constructor.name} never${reverseStr} had ${conditionStr} ${name}.\n( ${this._selector} )`
+      errorMessage = `${this.constructor.name} never${reverseStr} ${conditionStr} any ${name} within ${timeout} ms.\n( ${this._selector} )`
     }
 
     browser.waitUntil(() => {
@@ -516,6 +515,15 @@ export class PageElement<
     }, timeout, errorMessage)
 
     return this
+  }
+
+  private _waitWithinProperty(
+    name: string,
+    value: string,
+    conditionFunc: (value: string) => boolean,
+    opts?: Workflo.IWDIOParamsOptionalReverse
+  ) {
+    return this._waitProperty(name, 'within', conditionFunc, opts, value)
   }
 
   private _waitHasProperty(
@@ -640,36 +648,63 @@ export class PageElement<
     ) => {
       const { tolerances, ...otherOpts } = opts
 
-      return this._waitHasProperty(
-        `location`,
-        tolerancesToString(coordinates, tolerances),
-        () => this.currently.hasLocation(coordinates, tolerances),
-        otherOpts
-      )
+      if (tolerances && (tolerances.x > 0 || tolerances.y > 0)) {
+        return this._waitWithinProperty(
+          `location`,
+          tolerancesToString(coordinates, tolerances),
+          () => this.currently.hasLocation(coordinates, tolerances),
+          otherOpts
+        )
+      } else {
+        return this._waitHasProperty(
+          `location`,
+          tolerancesToString(coordinates),
+          () => this.currently.hasLocation(coordinates),
+          otherOpts
+        )
+      }
     },
     hasX: (
       x: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptionalReverse = { tolerance: 0 }
     ) => {
       const { tolerance, ...otherOpts } = opts
 
-      return this._waitHasProperty(
-        `x`,
-        tolerancesToString({x}, {x: tolerance}),
-        () => this.currently.hasX(x, tolerance),
-        otherOpts
-      )
+      if ( tolerance ) {
+        return this._waitWithinProperty(
+          `X-location`,
+          tolerancesToString(x, tolerance),
+          () => this.currently.hasX(x, tolerance),
+          otherOpts
+        )
+      } else {
+        return this._waitHasProperty(
+          `X-location`,
+          x.toString(),
+          () => this.currently.hasX(x),
+          otherOpts
+        )
+      }
     },
     hasY: (
       y: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptionalReverse = { tolerance: 0 }
     ) => {
       const { tolerance, ...otherOpts } = opts
 
-      return this._waitHasProperty(
-        `y`,
-        tolerancesToString({y}, {y: tolerance}),
-        () => this.currently.hasY(y, tolerance),
-        otherOpts
-      )
+      if ( tolerance ) {
+        return this._waitWithinProperty(
+          `Y-location`,
+          tolerancesToString(y, tolerance),
+          () => this.currently.hasY(y, tolerance),
+          otherOpts
+        )
+      } else {
+        return this._waitHasProperty(
+          `Y-location`,
+          y.toString(),
+          () => this.currently.hasY(y),
+          otherOpts
+        )
+      }
     },
     hasSize: (
       size: Workflo.ISize,
@@ -677,36 +712,63 @@ export class PageElement<
     ) => {
       const { tolerances, ...otherOpts } = opts
 
-      return this._waitHasProperty(
-        `location`,
-        tolerancesToString(size, tolerances),
-        () => this.currently.hasSize(size, tolerances),
-        otherOpts
-      )
+      if (tolerances && (tolerances.width > 0 || tolerances.height > 0)) {
+        return this._waitWithinProperty(
+          `size`,
+          tolerancesToString(size, tolerances),
+          () => this.currently.hasSize(size, tolerances),
+          otherOpts
+        )
+      } else {
+        return this._waitHasProperty(
+          `size`,
+          tolerancesToString(size),
+          () => this.currently.hasSize(size),
+          otherOpts
+        )
+      }
     },
     hasWidth: (
       width: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptionalReverse = { tolerance: 0 }
     ) => {
       const { tolerance, ...otherOpts } = opts
 
-      return this._waitHasProperty(
-        `width`,
-        tolerancesToString({width}, {width: tolerance}),
-        () => this.currently.hasWidth(width, tolerance),
-        otherOpts
-      )
+      if ( tolerance ) {
+        return this._waitWithinProperty(
+          `width`,
+          tolerancesToString(width, tolerance),
+          () => this.currently.hasWidth(width, tolerance),
+          otherOpts
+        )
+      } else {
+        return this._waitHasProperty(
+          `width`,
+          width.toString(),
+          () => this.currently.hasWidth(width),
+          otherOpts
+        )
+      }
     },
     hasHeight: (
       height: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptionalReverse = { tolerance: 0 }
     ) => {
       const { tolerance, ...otherOpts } = opts
 
-      return this._waitHasProperty(
-        `height`,
-        tolerancesToString({height}, {height: tolerance}),
-        () => this.currently.hasHeight(height, tolerance),
-        otherOpts
-      )
+      if ( tolerance ) {
+        return this._waitWithinProperty(
+          `height`,
+          tolerancesToString(height, tolerance),
+          () => this.currently.hasHeight(height, tolerance),
+          otherOpts
+        )
+      } else {
+        return this._waitHasProperty(
+          `height`,
+          height.toString(),
+          () => this.currently.hasHeight(height),
+          otherOpts
+        )
+      }
     },
     untilElement: (
       description: string, condition: (element: this) => boolean, { timeout = this._timeout }: Workflo.IWDIOParamsOptional = {}
@@ -1221,7 +1283,7 @@ class Currently<
     this._lastActualResult = tolerancesToString(actualSize)
 
     return this._hasSideSize(size.width, actualSize.width, tolerances.width)
-      && this._hasSideSize(size.height, actualSize.width, tolerances.height)
+      && this._hasSideSize(size.height, actualSize.height, tolerances.height)
   }
   hasWidth = (width: number, tolerance?: number) => {
     const actual = this.getWidth()
@@ -1370,7 +1432,7 @@ function getLocation(element: WdioElement) {
 }
 
 function getSize(element: WdioElement) {
-  return <Workflo.ISize> (<any> this.element.getElementSize())
+  return <Workflo.ISize> (<any> element.getElementSize())
 }
 
 function isEnabled(element: WdioElement): boolean {
