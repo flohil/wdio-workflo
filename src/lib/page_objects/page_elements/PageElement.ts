@@ -475,7 +475,7 @@ export class PageElement<
 
     return this._wait(
       () => conditionFunc({timeout, reverse}),
-      ` never${reverseStr} ${checkTypeStr}.\n( ${this._selector} )`
+      ` never${reverseStr} ${checkTypeStr} within ${timeout} ms`
     )
   }
 

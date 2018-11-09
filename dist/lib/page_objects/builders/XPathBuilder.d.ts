@@ -5,10 +5,18 @@ export declare class XPathBuilder {
     private SelectorBuilder;
     reset(selector: string): this;
     /**
-     * Appends plain xPath string to current selector.
-     * @param appendedSelector
+     * Appends plain xPath to current selector.
+     * @param appendedXPath
      */
-    append(appendedSelector: string): this;
+    append(appendedXPath: string): this;
+    /**
+     * Appends childSelector to current selector in order to select a child element.
+     *
+     * After executing .child, the selected child element will become the new
+     * "target" for all other xpath modifier functions like .id, .class ...
+     * @param childSelector
+     */
+    child(childSelector: string): this;
     /**
      * Adds plain xPath constraint to current selector.
      * @param constraintSelector
@@ -21,7 +29,7 @@ export declare class XPathBuilder {
      * @param childSelector
      * @param builderFunc optional -> can be used to apply XPathSelector API to childrenSelector
      */
-    child(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder): this;
+    hasChild(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder): this;
     text(text: string): this;
     textContains(text: string): this;
     attribute(key: string, value: string): this;

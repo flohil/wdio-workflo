@@ -19,10 +19,18 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
     constructor(selector: string, opts: IWhereBuilderOpts<Store, PageElementType, PageElementOptions, ListType>);
     reset(): this;
     /**
-     * Appends plain xPath string to current selector.
-     * @param appendedSelector
+     * Appends plain xPath to current selector.
+     * @param appendedXPath
      */
-    append(appendedSelector: string): this;
+    append(appendedXpath: string): this;
+    /**
+     * Appends childSelector to current selector in order to select a child element.
+     *
+     * After executing .child, the selected child element will become the new
+     * "target" for all other xpath modifier functions like .id, .class ...
+     * @param childSelector
+     */
+    child(childSelector: string): XPathBuilder;
     /**
      * Adds plain xPath constraint to current selector.
      * @param constraintSelector
@@ -35,7 +43,7 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
      * @param childSelector
      * @param builderFunc optional -> can be used to apply XPathSelector API to childrenSelector
      */
-    child(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder): this;
+    hasChild(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder): this;
     text(text: string): this;
     textContains(text: string): this;
     attribute(key: string, value: string): this;

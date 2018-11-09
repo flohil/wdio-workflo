@@ -17,12 +17,22 @@ class ListWhereBuilder {
         return this;
     }
     /**
-     * Appends plain xPath string to current selector.
-     * @param appendedSelector
+     * Appends plain xPath to current selector.
+     * @param appendedXPath
      */
-    append(appendedSelector) {
-        this._xPathBuilder.append(appendedSelector);
+    append(appendedXpath) {
+        this._xPathBuilder.append(appendedXpath);
         return this;
+    }
+    /**
+     * Appends childSelector to current selector in order to select a child element.
+     *
+     * After executing .child, the selected child element will become the new
+     * "target" for all other xpath modifier functions like .id, .class ...
+     * @param childSelector
+     */
+    child(childSelector) {
+        return this._xPathBuilder.append(childSelector);
     }
     /**
      * Adds plain xPath constraint to current selector.
@@ -39,8 +49,8 @@ class ListWhereBuilder {
      * @param childSelector
      * @param builderFunc optional -> can be used to apply XPathSelector API to childrenSelector
      */
-    child(childSelector, builderFunc) {
-        this.constraint(`.${childSelector}`, builderFunc);
+    hasChild(childSelector, builderFunc) {
+        this._xPathBuilder.hasChild(`.${childSelector}`, builderFunc);
         return this;
     }
     text(text) {

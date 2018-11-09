@@ -639,7 +639,7 @@ class PageElement extends _1.PageNode {
     // WAIT (for certain state within timeout)
     _waitWdioCheckFunc(checkTypeStr, conditionFunc, { timeout = this._timeout, reverse } = {}) {
         const reverseStr = (reverse) ? ' not' : '';
-        return this._wait(() => conditionFunc({ timeout, reverse }), ` never${reverseStr} ${checkTypeStr}.\n( ${this._selector} )`);
+        return this._wait(() => conditionFunc({ timeout, reverse }), ` never${reverseStr} ${checkTypeStr} within ${timeout} ms`);
     }
     _waitProperty(name, conditionType, conditionFunc, { timeout = this._timeout, reverse } = {}, value) {
         const reverseStr = (reverse) ? ' not' : '';

@@ -20,12 +20,23 @@ export class XPathBuilder {
   }
 
   /**
-   * Appends plain xPath string to current selector.
-   * @param appendedSelector
+   * Appends plain xPath to current selector.
+   * @param appendedXPath
    */
-  append(appendedSelector: string) {
-    this._selector = `${this._selector}${appendedSelector}`
+  append(appendedXPath: string) {
+    this._selector = `${this._selector}${appendedXPath}`
     return this
+  }
+
+  /**
+   * Appends childSelector to current selector in order to select a child element.
+   *
+   * After executing .child, the selected child element will become the new
+   * "target" for all other xpath modifier functions like .id, .class ...
+   * @param childSelector
+   */
+  child(childSelector: string) {
+    return this.append(childSelector)
   }
 
   /**
@@ -55,7 +66,7 @@ export class XPathBuilder {
    * @param childSelector
    * @param builderFunc optional -> can be used to apply XPathSelector API to childrenSelector
    */
-  child(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder) {
+  hasChild(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder) {
     this.constraint(`.${childSelector}`, builderFunc)
     return this
   }
