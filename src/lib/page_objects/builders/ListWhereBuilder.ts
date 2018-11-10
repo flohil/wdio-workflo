@@ -95,13 +95,28 @@ export class ListWhereBuilder<
     return this
   }
 
+  notText(text: string) {
+    this._xPathBuilder.notText(text)
+    return this
+  }
+
   textContains(text: string) {
     this._xPathBuilder.textContains(text)
     return this
   }
 
-  attribute(key: string, value: string) {
+  notTextContains(text: string) {
+    this._xPathBuilder.notTextContains(text)
+    return this
+  }
+
+  attribute(key: string, value?: string) {
     this._xPathBuilder.attribute(key, value)
+    return this
+  }
+
+  notAttribute(key: string, value?: string) {
+    this._xPathBuilder.notAttribute(key, value)
     return this
   }
 
@@ -110,28 +125,87 @@ export class ListWhereBuilder<
     return this
   }
 
-  id(value: string) {
+  notAttributeContains(key: string, value: string) {
+    this._xPathBuilder.notAttributeContains(key, value)
+    return this
+  }
+
+  id(value?: string) {
     return this.attribute('id', value)
+  }
+
+  notId(value?: string) {
+    return this.notAttribute('id', value)
   }
 
   idContains(value: string) {
     return this.attributeContains('id', value)
   }
 
-  class(value: string) {
+  notIdContains(value: string) {
+    return this.notAttributeContains('id', value)
+  }
+
+  class(value?: string) {
     return this.attribute('class', value)
+  }
+
+  notClass(value?: string) {
+    return this.notAttribute('class', value)
   }
 
   classContains(value: string) {
     return this.attributeContains('class', value)
   }
 
-  name(value: string) {
+  notClassContains(value: string) {
+    return this.notAttributeContains('class', value)
+  }
+
+  name(value?: string) {
     return this.attribute('name', value)
+  }
+
+  notName(value?: string) {
+    return this.notAttribute('name', value)
   }
 
   nameContains(value: string) {
     return this.attributeContains('name', value)
+  }
+
+  notNameContains(value: string) {
+    return this.notAttributeContains('name', value)
+  }
+
+  checked() {
+    this._xPathBuilder.attribute('checked')
+    return this
+  }
+
+  notChecked() {
+    this._xPathBuilder.notAttribute('checked')
+    return this
+  }
+
+  disabled() {
+    this._xPathBuilder.attribute('disabled')
+    return this
+  }
+
+  notDisabled() {
+    this._xPathBuilder.notAttribute('disabled')
+    return this
+  }
+
+  selected() {
+    this._xPathBuilder.attribute('selected')
+    return this
+  }
+
+  notSelected() {
+    this._xPathBuilder.notAttribute('selected')
+    return this
   }
 
   /**

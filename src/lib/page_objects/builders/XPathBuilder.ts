@@ -1,6 +1,7 @@
 export class XPathBuilder {
   private static _instance: XPathBuilder
   private _selector: string
+  private _notPending: boolean
 
   static getInstance() {
     if (typeof XPathBuilder._instance === 'undefined') {
@@ -16,6 +17,7 @@ export class XPathBuilder {
 
   reset(selector: string) {
     this._selector = selector
+    this._notPending = false
     return this
   }
 
@@ -71,25 +73,38 @@ export class XPathBuilder {
     return this
   }
 
-  // Modifies element selector, so use only once for
-  // the same element.
   text(text: string) {
     this._selector = `${this._selector}[. = '${text}']`
-
     return this
   }
 
-  // Modifies element selector, so use only once for
-  // the same element.
+  notText(text: string) {
+    this._selector = `not(${this.text(text)})`
+    return this
+  }
+
   textContains(text: string) {
     this._selector = `${this._selector}[contains(.,'${text}')]`
     return this
   }
 
-  // Modifies element selector, so use only once for
-  // the same element.
-  attribute(key: string, value: string) {
-    this._selector = `${this._selector}[@${key}='${value}']`
+  notTextContains(text: string) {
+    this._selector = `not(${this.textContains(text)})`
+    return this
+  }
+
+  attribute(key: string, value?: string) {
+    if (value) {
+      this._selector = `${this._selector}[@${key}='${value}']`
+    } else {
+      this._selector = `${this._selector}[@${key}]`
+    }
+
+    return this
+  }
+
+  notAttribute(key: string, value?: string) {
+    this._selector = `not(${this.attribute(key, value)})`
     return this
   }
 
@@ -98,28 +113,81 @@ export class XPathBuilder {
     return this
   }
 
-  id(value: string) {
+  notAttributeContains(key: string, value: string) {
+    this._selector = `not(${this.attributeContains(key, value)})`
+    return this
+  }
+
+  id(value?: string) {
     return this.attribute('id', value)
+  }
+
+  notId(value?: string) {
+    return this.notAttribute('id', value)
   }
 
   idContains(value: string) {
     return this.attributeContains('id', value)
   }
 
-  class(value: string) {
+  notIdContains(value: string) {
+    return this.notAttributeContains('id', value)
+  }
+
+  class(value?: string) {
     return this.attribute('class', value)
+  }
+
+  notClass(value?: string) {
+    return this.notAttribute('class', value)
   }
 
   classContains(value: string) {
     return this.attributeContains('class', value)
   }
 
-  name(value: string) {
+  notClassContains(value: string) {
+    return this.notAttributeContains('class', value)
+  }
+
+  name(value?: string) {
     return this.attribute('name', value)
+  }
+
+  notName(value?: string) {
+    return this.notAttribute('name', value)
   }
 
   nameContains(value: string) {
     return this.attributeContains('name', value)
+  }
+
+  notNameContains(value: string) {
+    return this.notAttributeContains('name', value)
+  }
+
+  checked() {
+    return this.attribute('checked')
+  }
+
+  notChecked() {
+    return this.notAttribute('checked')
+  }
+
+  disabled() {
+    return this.attribute('disabled')
+  }
+
+  notDisabled() {
+    return this.notAttribute('disabled')
+  }
+
+  selected() {
+    return this.attribute('selected')
+  }
+
+  notSelected() {
+    return this.notAttribute('selected')
   }
 
   /**
@@ -140,6 +208,13 @@ export class XPathBuilder {
   index(index: number) {
     const selector = `(${this.build()})[${index}]`
     this.reset(selector)
+
+    return this
+  }
+
+  get not() {
+    this._notPending = true
+    this._selector = `${this._selector}not(`
 
     return this
   }
