@@ -92,6 +92,7 @@ exports.elementMatchers = {
     toBeVisible: elementMatcherFunction(({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()], () => " to be visible"),
     toBeSelected: elementMatcherFunction(({ node }) => [() => node.currently.isSelected(), () => node.currently.not.isSelected()], () => " to be selected"),
     toBeEnabled: elementMatcherFunction(({ node }) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()], () => " to be enabled"),
+    toBeChecked: elementMatcherFunction(({ node }) => [() => node.currently.isChecked(), () => node.currently.not.isChecked()], () => " to be checked"),
     toHaveText: elementMatcherFunction(({ node, expected }) => [
         () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)
     ], ({ actual, expected }) => createLongErrorMessage('text', 'be', actual, expected)),
@@ -196,6 +197,9 @@ exports.elementMatchers = {
     toEventuallyBeEnabled: elementMatcherNoArgsFunction(({ node, opts }) => [
         () => node.eventually.isEnabled(opts), () => node.eventually.not.isEnabled(opts)
     ], ({ opts }) => ` to eventually be enabled within ${opts.timeout} ms`),
+    toEventuallyBeChecked: elementMatcherNoArgsFunction(({ node, opts }) => [
+        () => node.eventually.isChecked(opts), () => node.eventually.not.isChecked(opts)
+    ], ({ opts }) => ` to eventually be checked within ${opts.timeout} ms`),
     toEventuallyHaveText: elementMatcherFunction(({ node, expected, opts }) => [
         () => node.eventually.hasText(expected, opts),
         () => node.eventually.not.hasText(expected, opts)

@@ -6,6 +6,7 @@ declare global {
         toBeVisible(): boolean;
         toBeEnabled(): boolean;
         toBeSelected(): boolean;
+        toBeChecked(): boolean;
         toHaveText(text: string): boolean;
         toHaveAnyText(): boolean;
         toContainText(text: string): boolean;
@@ -51,6 +52,7 @@ declare global {
         toEventuallyBeVisible(opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyBeEnabled(opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyBeSelected(opts?: Workflo.IWDIOParamsOptional): boolean;
+        toEventuallyBeChecked(opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean;

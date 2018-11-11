@@ -228,6 +228,10 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ({node}) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()],
     () => " to be enabled"
   ),
+  toBeChecked: elementMatcherFunction(
+    ({node}) => [() => node.currently.isChecked(), () => node.currently.not.isChecked()],
+    () => " to be checked"
+  ),
   toHaveText: elementMatcherFunction(
     ({node, expected}) => [
       () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)
@@ -461,6 +465,12 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.isEnabled(opts), () => node.eventually.not.isEnabled(opts)
     ],
     ({opts}) => ` to eventually be enabled within ${opts.timeout} ms`
+  ),
+  toEventuallyBeChecked: elementMatcherNoArgsFunction(
+    ({node, opts}) => [
+      () => node.eventually.isChecked(opts), () => node.eventually.not.isChecked(opts)
+    ],
+    ({opts}) => ` to eventually be checked within ${opts.timeout} ms`
   ),
   toEventuallyHaveText: elementMatcherFunction(
     ({node, expected, opts}) => [
