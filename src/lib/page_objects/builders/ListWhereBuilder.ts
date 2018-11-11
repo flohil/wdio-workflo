@@ -178,6 +178,22 @@ export class ListWhereBuilder<
     return this.notAttributeContains('name', value)
   }
 
+  type(value?: string) {
+    return this.attribute('type', value)
+  }
+
+  notType(value?: string) {
+    return this.notAttribute('type', value)
+  }
+
+  typeContains(value: string) {
+    return this.attributeContains('type', value)
+  }
+
+  notTypeContains(value: string) {
+    return this.notAttributeContains('type', value)
+  }
+
   checked() {
     this._xPathBuilder.attribute('checked')
     return this

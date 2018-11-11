@@ -1,7 +1,6 @@
 export class XPathBuilder {
   private static _instance: XPathBuilder
   private _selector: string
-  private _notPending: boolean
 
   static getInstance() {
     if (typeof XPathBuilder._instance === 'undefined') {
@@ -17,7 +16,6 @@ export class XPathBuilder {
 
   reset(selector: string) {
     this._selector = selector
-    this._notPending = false
     return this
   }
 
@@ -79,7 +77,7 @@ export class XPathBuilder {
   }
 
   notText(text: string) {
-    this._selector = `not(${this.text(text)})`
+    this._selector = `${this._selector}[not(. = '${text}')]`
     return this
   }
 
@@ -89,7 +87,7 @@ export class XPathBuilder {
   }
 
   notTextContains(text: string) {
-    this._selector = `not(${this.textContains(text)})`
+    this._selector = `${this._selector}[not(contains(.,'${text}'))]`
     return this
   }
 
@@ -104,7 +102,12 @@ export class XPathBuilder {
   }
 
   notAttribute(key: string, value?: string) {
-    this._selector = `not(${this.attribute(key, value)})`
+    if (value) {
+      this._selector = `${this._selector}[not(@${key}='${value}')]`
+    } else {
+      this._selector = `${this._selector}[not(@${key})]`
+    }
+
     return this
   }
 
@@ -114,7 +117,7 @@ export class XPathBuilder {
   }
 
   notAttributeContains(key: string, value: string) {
-    this._selector = `not(${this.attributeContains(key, value)})`
+    this._selector = `${this._selector}[not(contains(@${key},'${value}'))]`
     return this
   }
 
@@ -166,6 +169,22 @@ export class XPathBuilder {
     return this.notAttributeContains('name', value)
   }
 
+  type(value?: string) {
+    return this.attribute('type', value)
+  }
+
+  notType(value?: string) {
+    return this.notAttribute('type', value)
+  }
+
+  typeContains(value: string) {
+    return this.attributeContains('type', value)
+  }
+
+  notTypeContains(value: string) {
+    return this.notAttributeContains('type', value)
+  }
+
   checked() {
     return this.attribute('checked')
   }
@@ -208,13 +227,6 @@ export class XPathBuilder {
   index(index: number) {
     const selector = `(${this.build()})[${index}]`
     this.reset(selector)
-
-    return this
-  }
-
-  get not() {
-    this._notPending = true
-    this._selector = `${this._selector}not(`
 
     return this
   }

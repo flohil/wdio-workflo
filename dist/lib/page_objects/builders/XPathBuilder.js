@@ -59,45 +59,113 @@ class XPathBuilder {
         this.constraint(`.${childSelector}`, builderFunc);
         return this;
     }
-    // Modifies element selector, so use only once for
-    // the same element.
     text(text) {
         this._selector = `${this._selector}[. = '${text}']`;
         return this;
     }
-    // Modifies element selector, so use only once for
-    // the same element.
+    notText(text) {
+        this._selector = `${this._selector}[not(. = '${text}')]`;
+        return this;
+    }
     textContains(text) {
         this._selector = `${this._selector}[contains(.,'${text}')]`;
         return this;
     }
-    // Modifies element selector, so use only once for
-    // the same element.
+    notTextContains(text) {
+        this._selector = `${this._selector}[not(contains(.,'${text}'))]`;
+        return this;
+    }
     attribute(key, value) {
-        this._selector = `${this._selector}[@${key}='${value}']`;
+        if (value) {
+            this._selector = `${this._selector}[@${key}='${value}']`;
+        }
+        else {
+            this._selector = `${this._selector}[@${key}]`;
+        }
+        return this;
+    }
+    notAttribute(key, value) {
+        if (value) {
+            this._selector = `${this._selector}[not(@${key}='${value}')]`;
+        }
+        else {
+            this._selector = `${this._selector}[not(@${key})]`;
+        }
         return this;
     }
     attributeContains(key, value) {
         this._selector = `${this._selector}[contains(@${key},'${value}')]`;
         return this;
     }
+    notAttributeContains(key, value) {
+        this._selector = `${this._selector}[not(contains(@${key},'${value}'))]`;
+        return this;
+    }
     id(value) {
         return this.attribute('id', value);
+    }
+    notId(value) {
+        return this.notAttribute('id', value);
     }
     idContains(value) {
         return this.attributeContains('id', value);
     }
+    notIdContains(value) {
+        return this.notAttributeContains('id', value);
+    }
     class(value) {
         return this.attribute('class', value);
+    }
+    notClass(value) {
+        return this.notAttribute('class', value);
     }
     classContains(value) {
         return this.attributeContains('class', value);
     }
+    notClassContains(value) {
+        return this.notAttributeContains('class', value);
+    }
     name(value) {
         return this.attribute('name', value);
     }
+    notName(value) {
+        return this.notAttribute('name', value);
+    }
     nameContains(value) {
         return this.attributeContains('name', value);
+    }
+    notNameContains(value) {
+        return this.notAttributeContains('name', value);
+    }
+    type(value) {
+        return this.attribute('type', value);
+    }
+    notType(value) {
+        return this.notAttribute('type', value);
+    }
+    typeContains(value) {
+        return this.attributeContains('type', value);
+    }
+    notTypeContains(value) {
+        return this.notAttributeContains('type', value);
+    }
+    checked() {
+        return this.attribute('checked');
+    }
+    notChecked() {
+        return this.notAttribute('checked');
+    }
+    disabled() {
+        return this.attribute('disabled');
+    }
+    notDisabled() {
+        return this.notAttribute('disabled');
+    }
+    selected() {
+        return this.attribute('selected');
+    }
+    notSelected() {
+        return this.notAttribute('selected');
     }
     /**
      * Finds element by index of accurence on a single "level" of the DOM.

@@ -26,6 +26,19 @@ class PageElement extends _1.PageNode {
             isVisible: (opts) => this._waitWdioCheckFunc('became visible', opts => this.currently.element.waitForVisible(opts.timeout, opts.reverse), opts),
             isEnabled: (opts) => this._waitWdioCheckFunc('became enabled', opts => this.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts),
             isSelected: (opts) => this._waitWdioCheckFunc('became selected', opts => this.currently.element.waitForSelected(opts.timeout, opts.reverse), opts),
+            isChecked: (opts = {}) => {
+                const timeout = opts.timeout || this._timeout;
+                const reverseStr = (opts.reverse) ? ' not' : '';
+                browser.waitUntil(() => {
+                    if (opts.reverse) {
+                        return this.currently.not.isChecked();
+                    }
+                    else {
+                        return this.currently.isChecked();
+                    }
+                }, timeout, `${this.constructor.name} never${reverseStr} became checked within ${timeout} ms.\n( ${this._selector} )`);
+                return this;
+            },
             hasText: (text, opts) => this._waitHasProperty('text', text, () => this.currently.hasText(text), opts),
             hasAnyText: (opts) => this._waitWdioCheckFunc('had any text', opts => this.currently.element.waitForText(opts.timeout, opts.reverse), opts),
             containsText: (text, opts) => this._waitHasProperty('text', text, () => this.currently.containsText(text), opts),
@@ -124,6 +137,9 @@ class PageElement extends _1.PageNode {
                 isSelected: (opts) => {
                     return this.wait.isSelected(this._makeReverseParams(opts));
                 },
+                isChecked: (opts) => {
+                    return this.wait.isChecked(this._makeReverseParams(opts));
+                },
                 hasText: (text, opts) => {
                     return this.wait.hasText(text, this._makeReverseParams(opts));
                 },
@@ -215,6 +231,9 @@ class PageElement extends _1.PageNode {
             isSelected: (opts) => {
                 return this._eventually(() => this.wait.isSelected(opts));
             },
+            isChecked: (opts) => {
+                return this._eventually(() => this.wait.isChecked(opts));
+            },
             hasText: (text, opts) => {
                 return this._eventually(() => this.wait.hasText(text, opts));
             },
@@ -305,6 +324,9 @@ class PageElement extends _1.PageNode {
                 },
                 isSelected: (opts) => {
                     return this._eventually(() => this.wait.not.isSelected(opts));
+                },
+                isChecked: (opts) => {
+                    return this._eventually(() => this.wait.not.isChecked(opts));
                 },
                 hasText: (text, opts) => {
                     return this._eventually(() => this.wait.not.hasText(text, opts));
@@ -696,6 +718,7 @@ class Currently {
         this.isVisible = () => this.element.isVisible();
         this.isEnabled = () => isEnabled(this.element);
         this.isSelected = () => isSelected(this.element);
+        this.isChecked = () => this.hasAnyAttribute('checked');
         this.hasText = (text) => this._compareHas(text, this.getText());
         this.hasAnyText = () => this._compareHasAny(this.getText());
         this.containsText = (text) => this._compareContains(text, this.getText());
@@ -756,6 +779,7 @@ class Currently {
             isVisible: () => !this.isVisible(),
             isEnabled: () => !this.isEnabled(),
             isSelected: () => !this.isSelected(),
+            isChecked: () => !this.isChecked(),
             hasClass: (className) => !this.hasClass(className),
             containsClass: (className) => !this.containsClass(className),
             hasText: (text) => !this.hasText(text),
@@ -847,12 +871,14 @@ class Currently {
         return actual === expected;
     }
     _compareHasAny(actual) {
-        this._lastActualResult = actual;
-        return actual.length > 0;
+        const result = (actual) ? actual.length > 0 : false;
+        this._lastActualResult = (result) ? 'true' : 'false';
+        return result;
     }
     _compareContains(expected, actual) {
-        this._lastActualResult = actual;
-        return actual.indexOf(expected) > -1;
+        const result = (actual) ? actual.indexOf(expected) > -1 : false;
+        this._lastActualResult = (result) ? 'true' : 'false';
+        return result;
     }
 }
 // UTILITY FUNCTIONS

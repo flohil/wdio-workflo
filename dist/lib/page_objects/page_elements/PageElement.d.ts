@@ -16,6 +16,7 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
     isVisible: (opts?: OptionalParams) => ReturnType;
     isEnabled: (opts?: OptionalParams) => ReturnType;
     isSelected: (opts?: OptionalParams) => ReturnType;
+    isChecked: (opts?: OptionalParams) => ReturnType;
     hasText: (text: string, opts?: OptionalParams) => ReturnType;
     hasAnyText: (opts?: OptionalParams) => ReturnType;
     containsText: (text: string, opts?: OptionalParams) => ReturnType;
@@ -63,6 +64,7 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
     isVisible: () => boolean;
     isEnabled: () => boolean;
     isSelected: () => boolean;
+    isChecked: () => boolean;
     hasClass: (className: string) => boolean;
     containsClass: (className: string) => boolean;
     hasText: (text: string) => boolean;

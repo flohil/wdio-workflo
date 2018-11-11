@@ -27,6 +27,7 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
   isVisible: (opts?: OptionalParams) => ReturnType,
   isEnabled: (opts?: OptionalParams) => ReturnType,
   isSelected: (opts?: OptionalParams) => ReturnType,
+  isChecked: (opts?: OptionalParams) => ReturnType,
   hasText: (text: string, opts?: OptionalParams) => ReturnType,
   hasAnyText: (opts?: OptionalParams) => ReturnType,
   containsText: (text: string, opts?: OptionalParams) => ReturnType,
@@ -69,6 +70,7 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   isVisible: () => boolean,
   isEnabled: () => boolean,
   isSelected: () => boolean,
+  isChecked: () => boolean,
   hasClass: (className: string) => boolean,
   containsClass: (className: string) => boolean,
   hasText: (text: string) => boolean,
@@ -569,6 +571,22 @@ export class PageElement<
     isSelected: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
       'became selected', opts => this.currently.element.waitForSelected(opts.timeout, opts.reverse), opts
     ),
+    isChecked: (opts: Workflo.IWDIOParamsOptionalReverse = {}) => {
+      const timeout = opts.timeout || this._timeout
+      const reverseStr = (opts.reverse) ? ' not' : ''
+
+      browser.waitUntil(
+        () => {
+          if ( opts.reverse ) {
+            return this.currently.not.isChecked()
+          } else {
+            return this.currently.isChecked()
+          }
+        }, timeout, `${this.constructor.name} never${reverseStr} became checked within ${timeout} ms.\n( ${this._selector} )`
+      )
+
+      return this
+    },
     hasText: (text: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
       'text', text, () => this.currently.hasText(text), opts
     ),
@@ -795,6 +813,9 @@ export class PageElement<
       isSelected: (opts?: Workflo.IWDIOParamsOptional) => {
         return this.wait.isSelected(this._makeReverseParams(opts))
       },
+      isChecked: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.wait.isChecked(this._makeReverseParams(opts))
+      },
       hasText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this.wait.hasText(text, this._makeReverseParams(opts))
       },
@@ -913,6 +934,9 @@ export class PageElement<
     },
     isSelected: (opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this.wait.isSelected(opts))
+    },
+    isChecked: (opts?: Workflo.IWDIOParamsOptional) => {
+      return this._eventually(() => this.wait.isChecked(opts))
     },
     hasText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this.wait.hasText(text, opts))
@@ -1033,6 +1057,9 @@ export class PageElement<
       },
       isSelected: (opts?: Workflo.IWDIOParamsOptional) => {
         return this._eventually(() => this.wait.not.isSelected(opts))
+      },
+      isChecked: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._eventually(() => this.wait.not.isChecked(opts))
       },
       hasText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this._eventually(() => this.wait.not.hasText(text, opts))
@@ -1219,19 +1246,22 @@ class Currently<
   }
 
   private _compareHasAny(actual: string) {
-    this._lastActualResult = actual
-    return actual.length > 0
+    const result = (actual) ? actual.length > 0 : false
+    this._lastActualResult = (result) ? 'true' : 'false'
+    return result
   }
 
   private _compareContains(expected: string, actual: string) {
-    this._lastActualResult = actual
-    return actual.indexOf(expected) > -1
+    const result = (actual) ? actual.indexOf(expected) > -1 : false
+    this._lastActualResult = (result) ? 'true' : 'false'
+    return result
   }
 
   exists = () => this.element.isExisting()
   isVisible = () => this.element.isVisible()
   isEnabled = () => isEnabled(this.element)
   isSelected = () => isSelected(this.element)
+  isChecked = () => this.hasAnyAttribute('checked')
   hasText = (text: string) => this._compareHas(text, this.getText())
   hasAnyText = () => this._compareHasAny(this.getText())
   containsText = (text: string) => this._compareContains(text, this.getText())
@@ -1303,6 +1333,7 @@ class Currently<
     isVisible: () => !this.isVisible(),
     isEnabled: () => !this.isEnabled(),
     isSelected: () => !this.isSelected(),
+    isChecked: () => !this.isChecked(),
     hasClass: (className: string) => !this.hasClass(className),
     containsClass: (className: string) => !this.containsClass(className),
     hasText: (text: string) => !this.hasText(text),

@@ -45,11 +45,11 @@ export interface IPageElementListOpts<
   PageElementType extends PageElement<Store>,
   PageElementOptions
 > extends IPageNodeOpts<Store> {
-  waitType?: Workflo.WaitType,
-  timeout?: number,
-  interval?: number,
-  disableCache?: boolean,
-  elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
+  waitType?: Workflo.WaitType
+  timeout?: number
+  interval?: number
+  disableCache?: boolean
+  elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   elementOptions: PageElementOptions
   identifier?: IPageElementListIdentifier<Store, PageElementType>
 }
