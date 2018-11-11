@@ -146,9 +146,9 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     readonly element: WdioElement;
     readonly $: Store;
     initialWait(): this;
-    getHTML(): string;
+    getHTML(): any;
     getText(): string;
-    getDirectText(): string;
+    getDirectText(): any;
     getValue(): string;
     getAttribute(attributeName: string): string;
     getClass(): string;

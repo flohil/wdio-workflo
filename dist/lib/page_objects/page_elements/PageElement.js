@@ -421,7 +421,7 @@ class PageElement extends _1.PageNode {
         this._waitType = waitType;
         this._timeout = timeout;
         this._customScroll = customScroll;
-        this.currently = new Currently(this._selector);
+        this.currently = new Currently(this);
     }
     // RETRIEVE ELEMENT FUNCTIONS
     /**
@@ -466,9 +466,12 @@ class PageElement extends _1.PageNode {
         return this;
     }
     // Public GETTER FUNCTIONS (return state after initial wait)
-    getHTML() { return getHTML(this.element); }
+    getHTML() {
+        this.initialWait();
+        return getHTML(this);
+    }
     getText() { return getText(this.element); }
-    getDirectText() { return getDirectText(this.element); }
+    getDirectText() { return getDirectText(this.getHTML(), this); }
     getValue() { return getValue(this.element); }
     getAttribute(attributeName) { return getAttribute(this.element, attributeName); }
     getClass() { return getAttribute(this.element, 'class'); }
@@ -713,11 +716,11 @@ class PageElement extends _1.PageNode {
 }
 exports.PageElement = PageElement;
 class Currently {
-    constructor(selector) {
+    constructor(pageElement) {
         this.exists = () => this.element.isExisting();
         this.isVisible = () => this.element.isVisible();
-        this.isEnabled = () => isEnabled(this.element);
-        this.isSelected = () => isSelected(this.element);
+        this.isEnabled = () => isEnabled(this.element, this._pageElement);
+        this.isSelected = () => isSelected(this.element, this._pageElement);
         this.isChecked = () => this.hasAnyAttribute('checked');
         this.hasText = (text) => this._compareHas(text, this.getText());
         this.hasAnyText = () => this._compareHasAny(this.getText());
@@ -810,7 +813,7 @@ class Currently {
             hasWidth: (width, tolerance) => !this.hasWidth(width, tolerance),
             hasHeight: (height, tolerance) => !this.hasHeight(height, tolerance),
         };
-        this._selector = selector;
+        this._pageElement = pageElement;
     }
     /**
      * Whenever a function that checks the state of the GUI
@@ -826,23 +829,23 @@ class Currently {
         return this._lastActualResult;
     }
     get element() {
-        return browser.element(this._selector);
+        return browser.element(this._pageElement.getSelector());
     }
     // GET STATE
-    getHTML() { return getHTML(this.element); }
-    getText() { return getText(this.element); }
-    getDirectText() { return getDirectText(this.element); }
-    getValue() { return getValue(this.element); }
-    getAttribute(attributeName) { return getAttribute(this.element, attributeName); }
-    getClass() { return getAttribute(this.element, 'class'); }
-    getId() { return getAttribute(this.element, 'id'); }
-    getName() { return getAttribute(this.element, 'name'); }
-    getLocation() { return getLocation(this.element); }
-    getX() { return getLocation(this.element).x; }
-    getY() { return getLocation(this.element).y; }
-    getSize() { return getSize(this.element); }
-    getWidth() { return getSize(this.element).width; }
-    getHeight() { return getSize(this.element).height; }
+    getHTML() { return getHTML(this._pageElement); }
+    getText() { return getText(this.element, this._pageElement); }
+    getDirectText() { return getDirectText(this.getHTML(), this._pageElement); }
+    getValue() { return getValue(this.element, this._pageElement); }
+    getAttribute(attributeName) { return getAttribute(this.element, attributeName, this._pageElement); }
+    getClass() { return getAttribute(this.element, 'class', this._pageElement); }
+    getId() { return getAttribute(this.element, 'id', this._pageElement); }
+    getName() { return getAttribute(this.element, 'name', this._pageElement); }
+    getLocation() { return getLocation(this.element, this._pageElement); }
+    getX() { return getLocation(this.element, this._pageElement).x; }
+    getY() { return getLocation(this.element, this._pageElement).y; }
+    getSize() { return getSize(this.element, this._pageElement); }
+    getWidth() { return getSize(this.element, this._pageElement).width; }
+    getHeight() { return getSize(this.element, this._pageElement).height; }
     // CHECK STATE
     /**
    * @param actual the actual browser value in pixels
@@ -886,17 +889,16 @@ class Currently {
  * Get text that resides on the level directly below the selected page element.
  * Does not include text of the page element's nested children elements.
  */
-function getDirectText(element) {
-    const html = element.getHTML();
+function getDirectText(html, pageElement) {
     if (html.length === 0) {
         return '';
     }
     let text = "";
-    const constructorName = this.constructor.name;
-    const selector = this._selector;
+    const constructorName = pageElement.constructor.name;
+    const selector = pageElement.getSelector();
     const handler = new htmlParser.DomHandler(function (error, dom) {
         if (error) {
-            throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`);
+            throw new Error(`Error creating dom for direct text in ${constructorName}: ${error}\n( ${selector} )`);
         }
         else {
             dom.forEach(node => {
@@ -910,8 +912,8 @@ function getDirectText(element) {
     });
     return text;
 }
-function getHTML(element) {
-    const result = browser.selectorExecute([this.getSelector()], function (elems, elementSelector) {
+function getHTML(pageElement) {
+    const result = browser.selectorExecute([pageElement.getSelector()], function (elems, elementSelector) {
         var error = {
             notFound: []
         };
@@ -924,9 +926,9 @@ function getHTML(element) {
         }
         var elem = elems[0];
         return elem.innerHTML;
-    }, this.getSelector());
+    }, pageElement.getSelector());
     if (isJsError(result)) {
-        throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`);
+        throw new Error(`${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`);
     }
     else {
         return result;
@@ -934,35 +936,55 @@ function getHTML(element) {
 }
 // returns text of this.element including
 // all texts of nested children
-function getText(element) {
-    return element.getText();
+function getText(element, pageElement) {
+    return elementExecute(() => element.getText(), pageElement);
 }
-function getValue(element) {
-    return element.getValue();
+function getValue(element, pageElement) {
+    return elementExecute(() => element.getValue(), pageElement);
 }
-function getAttribute(element, attrName) {
-    return element.getAttribute(attrName);
+function getAttribute(element, attrName, pageElement) {
+    return elementExecute(() => element.getAttribute(attrName), pageElement);
 }
-function getClass(element) {
-    return element.getAttribute('class');
+function getClass(element, pageElement) {
+    return elementExecute(() => element.getAttribute('class'), pageElement);
 }
-function getId(element) {
-    return element.getAttribute('id');
+function getId(element, pageElement) {
+    return elementExecute(() => element.getAttribute('id'), pageElement);
 }
-function getName(element) {
-    return element.getAttribute('name');
+function getName(element, pageElement) {
+    return elementExecute(() => element.getAttribute('name'), pageElement);
 }
-function getLocation(element) {
-    return element.getLocation();
+function getLocation(element, pageElement) {
+    return elementExecute(() => element.getLocation(), pageElement);
 }
-function getSize(element) {
-    return element.getElementSize();
+function getSize(element, pageElement) {
+    return elementExecute(() => element.getElementSize(), pageElement);
 }
-function isEnabled(element) {
-    return element.isEnabled();
+function isEnabled(element, pageElement) {
+    return elementExecute(() => element.isEnabled(), pageElement);
 }
-function isSelected(element) {
-    return element.isSelected();
+function isSelected(element, pageElement) {
+    return elementExecute(() => element.isSelected(), pageElement);
+}
+/**
+ * Executes func and, if pageElement is defined and an error occurs during execution of func,
+ * throws a custom error message that the page element could not be located on the page.
+ * @param func
+ * @param pageElement
+ */
+function elementExecute(func, pageElement) {
+    if (pageElement) {
+        try {
+            return func();
+        }
+        catch (error) {
+            const errorMsg = `${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`;
+            throw new Error(errorMsg);
+        }
+    }
+    else {
+        return func();
+    }
 }
 // TYPE GUARDS
 function isJsError(result) {

@@ -192,7 +192,7 @@ export class PageElement<
     this._timeout = timeout
     this._customScroll = customScroll
 
-    this.currently = new Currently(this._selector)
+    this.currently = new Currently(this)
   }
 
 // RETRIEVE ELEMENT FUNCTIONS
@@ -246,9 +246,12 @@ export class PageElement<
 
 // Public GETTER FUNCTIONS (return state after initial wait)
 
-  getHTML() { return getHTML(this.element) }
+  getHTML() {
+    this.initialWait()
+    return getHTML(this)
+  }
   getText() { return getText(this.element) }
-  getDirectText() { return getDirectText(this.element) }
+  getDirectText() { return getDirectText(this.getHTML(), this) }
   getValue() { return getValue(this.element) }
   getAttribute(attributeName: string) { return getAttribute(this.element, attributeName) }
   getClass() { return getAttribute(this.element, 'class') }
@@ -1167,14 +1170,14 @@ export class PageElement<
 }
 
 class Currently<
-  Store extends PageElementStore
+  Store extends PageElementStore,
 > implements IPageElementCurrentlyAPI<Store>, IPageElementGetStateAPI<Store> {
 
-  protected _selector: string
+  protected _pageElement: PageElement<Store>
   protected _lastActualResult: string
 
-  constructor(selector: string) {
-    this._selector = selector
+  constructor(pageElement: PageElement<Store>) {
+    this._pageElement = pageElement
   }
 
   /**
@@ -1192,24 +1195,24 @@ class Currently<
   }
 
   get element() {
-    return browser.element(this._selector)
+    return browser.element(this._pageElement.getSelector())
   }
 
   // GET STATE
-  getHTML() { return getHTML(this.element) }
-  getText() { return getText(this.element) }
-  getDirectText() { return getDirectText(this.element) }
-  getValue() { return getValue(this.element) }
-  getAttribute(attributeName: string) { return getAttribute(this.element, attributeName) }
-  getClass() { return getAttribute(this.element, 'class') }
-  getId() { return getAttribute(this.element, 'id') }
-  getName() { return getAttribute(this.element, 'name') }
-  getLocation() { return getLocation(this.element) }
-  getX() { return getLocation(this.element).x }
-  getY() { return getLocation(this.element).y }
-  getSize() { return getSize(this.element) }
-  getWidth() { return getSize(this.element).width }
-  getHeight() { return getSize(this.element).height }
+  getHTML() { return getHTML(this._pageElement) }
+  getText() { return getText(this.element, this._pageElement) }
+  getDirectText() { return getDirectText(this.getHTML(), this._pageElement) }
+  getValue() { return getValue(this.element, this._pageElement) }
+  getAttribute(attributeName: string) { return getAttribute(this.element, attributeName, this._pageElement) }
+  getClass() { return getAttribute(this.element, 'class', this._pageElement) }
+  getId() { return getAttribute(this.element, 'id', this._pageElement) }
+  getName() { return getAttribute(this.element, 'name', this._pageElement) }
+  getLocation() { return getLocation(this.element, this._pageElement) }
+  getX() { return getLocation(this.element, this._pageElement).x }
+  getY() { return getLocation(this.element, this._pageElement).y }
+  getSize() { return getSize(this.element, this._pageElement) }
+  getWidth() { return getSize(this.element, this._pageElement).width }
+  getHeight() { return getSize(this.element, this._pageElement).height }
 
   // CHECK STATE
 
@@ -1259,8 +1262,8 @@ class Currently<
 
   exists = () => this.element.isExisting()
   isVisible = () => this.element.isVisible()
-  isEnabled = () => isEnabled(this.element)
-  isSelected = () => isSelected(this.element)
+  isEnabled = () => isEnabled(this.element, this._pageElement)
+  isSelected = () => isSelected(this.element, this._pageElement)
   isChecked = () => this.hasAnyAttribute('checked')
   hasText = (text: string) => this._compareHas(text, this.getText())
   hasAnyText = () => this._compareHasAny(this.getText())
@@ -1374,20 +1377,18 @@ class Currently<
  * Get text that resides on the level directly below the selected page element.
  * Does not include text of the page element's nested children elements.
  */
-function getDirectText(element: WdioElement): string {
-  const html = element.getHTML()
-
+function getDirectText<Store extends PageElementStore>(html: string, pageElement?: PageElement<Store>): string {
   if (html.length === 0) {
     return ''
   }
 
   let text = ""
-  const constructorName = this.constructor.name
-  const selector = this._selector
+  const constructorName = pageElement.constructor.name
+  const selector = pageElement.getSelector()
 
   const handler = new htmlParser.DomHandler(function (error, dom) {
     if (error) {
-      throw new Error(`Error creating dom for exclusive text in ${constructorName}: ${error}\n( ${selector} )`)
+      throw new Error(`Error creating dom for direct text in ${constructorName}: ${error}\n( ${selector} )`)
     }
     else {
       dom.forEach(node => {
@@ -1403,10 +1404,10 @@ function getDirectText(element: WdioElement): string {
   return text
 }
 
-function getHTML(element: WdioElement) {
+function getHTML<Store extends PageElementStore>(pageElement: PageElement<Store>) {
 
   const result: Workflo.IJSError | string = browser.selectorExecute(
-    [this.getSelector()], function (elems: HTMLElement[], elementSelector: string
+    [pageElement.getSelector()], function (elems: HTMLElement[], elementSelector: string
   ) {
       var error: Workflo.IJSError = {
         notFound: []
@@ -1423,10 +1424,10 @@ function getHTML(element: WdioElement) {
       var elem: HTMLElement = elems[0];
 
       return elem.innerHTML;
-  }, this.getSelector())
+  }, pageElement.getSelector())
 
   if (isJsError(result)) {
-    throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`)
+    throw new Error(`${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`)
   } else {
     return result
   }
@@ -1434,44 +1435,64 @@ function getHTML(element: WdioElement) {
 
 // returns text of this.element including
 // all texts of nested children
-function getText(element: WdioElement): string {
-  return element.getText()
+function getText<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
+  return elementExecute(() => element.getText(), pageElement)
 }
 
-function getValue(element: WdioElement): string {
-  return element.getValue()
+function getValue<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
+  return elementExecute(() => element.getValue(), pageElement)
 }
 
-function getAttribute(element: WdioElement, attrName: string): string {
-  return element.getAttribute(attrName)
+function getAttribute<Store extends PageElementStore>(element: WdioElement, attrName: string, pageElement?: PageElement<Store>): string {
+  return elementExecute(() => element.getAttribute(attrName), pageElement)
 }
 
-function getClass(element: WdioElement): string {
-  return element.getAttribute('class')
+function getClass<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
+  return elementExecute(() => element.getAttribute('class'), pageElement)
 }
 
-function getId(element: WdioElement): string {
-  return element.getAttribute('id')
+function getId<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
+  return elementExecute(() => element.getAttribute('id'), pageElement)
 }
 
-function getName(element: WdioElement): string {
-  return element.getAttribute('name')
+function getName<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
+  return elementExecute(() => element.getAttribute('name'), pageElement)
 }
 
-function getLocation(element: WdioElement) {
-  return <Workflo.ICoordinates> (<any> element.getLocation())
+function getLocation<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>) {
+  return <Workflo.ICoordinates> (<any> elementExecute(() => element.getLocation(), pageElement))
 }
 
-function getSize(element: WdioElement) {
-  return <Workflo.ISize> (<any> element.getElementSize())
+function getSize<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>) {
+  return <Workflo.ISize> (<any> elementExecute(() => element.getElementSize(), pageElement))
 }
 
-function isEnabled(element: WdioElement): boolean {
-  return element.isEnabled()
+function isEnabled<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): boolean {
+  return elementExecute(() => element.isEnabled(), pageElement)
 }
 
-function isSelected(element: WdioElement): boolean {
-  return element.isSelected()
+function isSelected<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): boolean {
+  return elementExecute(() => element.isSelected(), pageElement)
+}
+
+/**
+ * Executes func and, if pageElement is defined and an error occurs during execution of func,
+ * throws a custom error message that the page element could not be located on the page.
+ * @param func
+ * @param pageElement
+ */
+function elementExecute<Store extends PageElementStore, ResultType>(func: () => ResultType, pageElement?: PageElement<Store>) {
+  if (pageElement) {
+    try {
+      return func()
+    } catch ( error ) {
+      const errorMsg = `${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`
+
+      throw new Error(errorMsg)
+    }
+  } else {
+    return func()
+  }
 }
 
 // TYPE GUARDS
