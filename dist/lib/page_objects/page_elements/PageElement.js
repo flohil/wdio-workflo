@@ -875,12 +875,12 @@ class Currently {
     }
     _compareHasAny(actual) {
         const result = (actual) ? actual.length > 0 : false;
-        this._lastActualResult = (result) ? 'true' : 'false';
+        this._lastActualResult = actual;
         return result;
     }
     _compareContains(expected, actual) {
         const result = (actual) ? actual.indexOf(expected) > -1 : false;
-        this._lastActualResult = (result) ? 'true' : 'false';
+        this._lastActualResult = actual;
         return result;
     }
 }

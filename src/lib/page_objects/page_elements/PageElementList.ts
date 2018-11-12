@@ -329,6 +329,8 @@ export class PageElementList<
 
       if (value && value.length) {
         return value.length
+      } else {
+        return 0
       }
     } catch(error) {
       // this.elements will throw error if no elements were found
@@ -447,6 +449,8 @@ class Currently<
 
       if (value && value.length) {
         return value.length
+      } else {
+        return 0
       }
     } catch(error) {
       // this.elements will throw error if no elements were found

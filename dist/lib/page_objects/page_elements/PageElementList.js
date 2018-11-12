@@ -161,6 +161,9 @@ class PageElementList extends _1.PageNode {
             if (value && value.length) {
                 return value.length;
             }
+            else {
+                return 0;
+            }
         }
         catch (error) {
             // this.elements will throw error if no elements were found
@@ -254,6 +257,9 @@ class Currently {
             const value = this.elements.value;
             if (value && value.length) {
                 return value.length;
+            }
+            else {
+                return 0;
             }
         }
         catch (error) {
