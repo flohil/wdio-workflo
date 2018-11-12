@@ -23,7 +23,7 @@ declare global {
     toHaveAnyDirectText(): boolean
     toContainDirectText(directText: string): boolean
     toHaveAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
-    toHaveAnyAttribute(attributeArgs: Workflo.IAnyAttributeArgs): boolean
+    toHaveAnyAttribute(attributeName: string): boolean
     toContainAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
     toHaveClass(className: string): boolean
     toHaveAnyClass(): boolean
@@ -65,7 +65,7 @@ declare global {
     toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
-    toEventuallyHaveAnyAttribute(attributeArgs: Workflo.IAnyAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsOptional): boolean

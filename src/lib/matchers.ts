@@ -307,12 +307,12 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ],
     ({actual, expected}) => createLongErrorMessage(expected.name, 'be', actual, expected.value)
   ),
-  toHaveAnyAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
+  toHaveAnyAttribute: elementMatcherFunction<string>(
     ({node, expected}) => [
-      () => node.currently.hasAnyAttribute(expected.name),
-      () => node.currently.not.hasAnyAttribute(expected.name),
+      () => node.currently.hasAnyAttribute(expected),
+      () => node.currently.not.hasAnyAttribute(expected)
     ],
-    ({expected}) => ` to have any ${expected.name}`
+    ({expected}) => ` to have any ${expected}`
   ),
   toContainAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
     ({node, expected}) => [
@@ -567,12 +567,12 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage(expected.name, 'be', actual, expected.value, opts.timeout)
   ),
-  toEventuallyHaveAnyAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
+  toEventuallyHaveAnyAttribute: elementMatcherFunction<string>(
     ({node, expected, opts}) => [
-      () => node.eventually.hasAnyAttribute(expected.name, opts),
-      () => node.eventually.not.hasAnyAttribute(expected.name, opts),
+      () => node.eventually.hasAnyAttribute(expected, opts),
+      () => node.eventually.not.hasAnyAttribute(expected, opts),
     ],
-    ({expected, opts}) => ` to eventually have any ${expected.name} within ${opts.timeout} ms`
+    ({expected, opts}) => ` to eventually have any ${expected} within ${opts.timeout} ms`
   ),
   toEventuallyContainAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
     ({node, expected, opts}) => [
