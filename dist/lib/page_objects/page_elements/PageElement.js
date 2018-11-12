@@ -59,6 +59,7 @@ class PageElement extends _1.PageNode {
                 return this._waitContainsProperty(`Attribute '${attributeName}'`, attributeValue, () => this.currently.containsAttribute(attributeName, attributeValue), opts);
             },
             hasClass: (className, opts) => this._waitHasProperty(`class`, className, () => this.currently.hasClass(className), opts),
+            hasAnyClass: (opts) => this._waitHasAnyProperty(`class`, () => this.currently.hasAnyClass(), opts),
             containsClass: (className, opts) => this._waitContainsProperty(`class`, className, () => this.currently.containsClass(className), opts),
             hasId: (id, opts) => this._waitHasProperty(`id`, id, () => this.currently.hasId(id), opts),
             hasAnyId: (opts) => this._waitHasAnyProperty(`id`, () => this.currently.hasAnyId(), opts),
@@ -188,6 +189,9 @@ class PageElement extends _1.PageNode {
                 hasClass: (className, opts) => {
                     return this.wait.hasClass(className, this._makeReverseParams(opts));
                 },
+                hasAnyClass: (opts) => {
+                    return this.wait.hasAnyClass(this._makeReverseParams(opts));
+                },
                 containsClass: (className, opts) => {
                     return this.wait.containsClass(className, this._makeReverseParams(opts));
                 },
@@ -282,6 +286,9 @@ class PageElement extends _1.PageNode {
             hasClass: (className, opts) => {
                 return this._eventually(() => this.wait.hasClass(className, opts));
             },
+            hasAnyClass: (opts) => {
+                return this._eventually(() => this.wait.hasAnyClass(opts));
+            },
             containsClass: (className, opts) => {
                 return this._eventually(() => this.wait.containsClass(className, opts));
             },
@@ -375,6 +382,9 @@ class PageElement extends _1.PageNode {
                 },
                 hasClass: (className, opts) => {
                     return this._eventually(() => this.wait.not.hasClass(className, opts));
+                },
+                hasAnyClass: (opts) => {
+                    return this._eventually(() => this.wait.not.hasAnyClass(opts));
                 },
                 containsClass: (className, opts) => {
                     return this._eventually(() => this.wait.not.containsClass(className, opts));
@@ -738,6 +748,7 @@ class Currently {
         this.hasAnyAttribute = (attributeName) => this._compareHasAny(this.getAttribute(attributeName));
         this.containsAttribute = (attributeName, attributeValue) => this._compareContains(attributeValue, this.getAttribute(attributeName));
         this.hasClass = (className) => this._compareHas(className, this.getClass());
+        this.hasAnyClass = () => this._compareHasAny(this.getClass());
         this.containsClass = (className) => this._compareContains(className, this.getClass());
         this.hasId = (id) => this._compareHas(id, this.getId());
         this.hasAnyId = () => this._compareHasAny(this.getId());
@@ -783,8 +794,6 @@ class Currently {
             isEnabled: () => !this.isEnabled(),
             isSelected: () => !this.isSelected(),
             isChecked: () => !this.isChecked(),
-            hasClass: (className) => !this.hasClass(className),
-            containsClass: (className) => !this.containsClass(className),
             hasText: (text) => !this.hasText(text),
             hasAnyText: () => !this.hasAnyText(),
             containsText: (text) => !this.containsText(text),
@@ -800,6 +809,9 @@ class Currently {
             hasHTML: (html) => !this.hasHTML(html),
             hasAnyHTML: () => !this.hasAnyHTML(),
             containsHTML: (html) => !this.containsHTML(html),
+            hasClass: (className) => !this.hasClass(className),
+            hasAnyClass: () => !this.hasAnyClass(),
+            containsClass: (className) => !this.containsClass(className),
             hasId: (id) => !this.hasId(id),
             hasAnyId: () => !this.hasAnyId(),
             containsId: (id) => !this.containsId(id),

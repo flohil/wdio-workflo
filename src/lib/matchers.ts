@@ -327,6 +327,12 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ],
     ({actual, expected}) => createLongErrorMessage('class', 'be', actual, expected)
   ),
+  toHaveAnyClass: elementMatcherFunction(
+    ({node}) => [
+      () => node.currently.hasAnyClass(), () => node.currently.not.hasAnyClass()
+    ],
+    () => ` to have any class`
+  ),
   toContainClass: elementMatcherFunction(
     ({node, expected}) => [
       () => node.currently.containsClass(expected), () => node.currently.not.containsClass(expected)
@@ -581,6 +587,12 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.not.hasClass(expected, opts)
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('class', 'be', actual, expected, opts.timeout)
+  ),
+  toEventuallyHaveAnyClass: elementMatcherNoArgsFunction(
+    ({node}) => [
+      () => node.eventually.hasAnyClass(), () => node.eventually.not.hasAnyClass()
+    ],
+    ({opts}) => ` to eventually have any class within ${opts.timeout} ms`
   ),
   toEventuallyContainClass: elementMatcherFunction(
     ({node, expected, opts}) => [

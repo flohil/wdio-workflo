@@ -44,6 +44,7 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
   hasAnyAttribute: (attributeName: string, opts?: OptionalParams) => ReturnType,
   containsAttribute: (attributeName: string, attributeValue: string, opts?: OptionalParams) => ReturnType,
   hasClass: (className: string, opts?: OptionalParams) => ReturnType,
+  hasAnyClass: (opts?: OptionalParams) => ReturnType,
   containsClass: (className: string, opts?: OptionalParams) => ReturnType,
   hasId: (id: string, opts?: OptionalParams) => ReturnType,
   hasAnyId: (opts?: OptionalParams) => ReturnType,
@@ -71,8 +72,6 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   isEnabled: () => boolean,
   isSelected: () => boolean,
   isChecked: () => boolean,
-  hasClass: (className: string) => boolean,
-  containsClass: (className: string) => boolean,
   hasText: (text: string) => boolean,
   hasAnyText: () => boolean,
   containsText: (text: string) => boolean,
@@ -85,6 +84,9 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   hasAttribute: (attributeName: string, attributeValue: string) => boolean,
   hasAnyAttribute: (attributeName: string) => boolean,
   containsAttribute: (attributeName: string, attributeValue: string) => boolean,
+  hasClass: (className: string) => boolean,
+  hasAnyClass: () => boolean,
+  containsClass: (className: string) => boolean,
   hasId: (id: string) => boolean,
   hasAnyId: () => boolean,
   containsId: (id: string) => boolean,
@@ -642,6 +644,9 @@ export class PageElement<
     hasClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
       `class`, className, () => this.currently.hasClass(className), opts
     ),
+    hasAnyClass: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasAnyProperty(
+      `class`, () => this.currently.hasAnyClass(), opts
+    ),
     containsClass: (className: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
       `class`, className, () => this.currently.containsClass(className), opts
     ),
@@ -867,6 +872,9 @@ export class PageElement<
       hasClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this.wait.hasClass(className, this._makeReverseParams(opts))
       },
+      hasAnyClass: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.wait.hasAnyClass(this._makeReverseParams(opts))
+      },
       containsClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this.wait.containsClass(className, this._makeReverseParams(opts))
       },
@@ -988,6 +996,9 @@ export class PageElement<
     },
     hasClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this.wait.hasClass(className, opts))
+    },
+    hasAnyClass: (opts?: Workflo.IWDIOParamsOptional) => {
+      return this._eventually(() => this.wait.hasAnyClass(opts))
     },
     containsClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this.wait.containsClass(className, opts))
@@ -1111,6 +1122,9 @@ export class PageElement<
       },
       hasClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this._eventually(() => this.wait.not.hasClass(className, opts))
+      },
+      hasAnyClass: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._eventually(() => this.wait.not.hasAnyClass(opts))
       },
       containsClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this._eventually(() => this.wait.not.containsClass(className, opts))
@@ -1285,6 +1299,7 @@ class Currently<
     attributeValue, this.getAttribute(attributeName)
   )
   hasClass = (className: string) => this._compareHas(className, this.getClass())
+  hasAnyClass = () => this._compareHasAny(this.getClass())
   containsClass = (className: string) => this._compareContains(className, this.getClass())
   hasId = (id: string) => this._compareHas(id, this.getId())
   hasAnyId = () => this._compareHasAny(this.getId())
@@ -1337,8 +1352,6 @@ class Currently<
     isEnabled: () => !this.isEnabled(),
     isSelected: () => !this.isSelected(),
     isChecked: () => !this.isChecked(),
-    hasClass: (className: string) => !this.hasClass(className),
-    containsClass: (className: string) => !this.containsClass(className),
     hasText: (text: string) => !this.hasText(text),
     hasAnyText: () => !this.hasAnyText(),
     containsText: (text: string) => !this.containsText(text),
@@ -1354,6 +1367,9 @@ class Currently<
     hasHTML: (html: string) => !this.hasHTML(html),
     hasAnyHTML: () => !this.hasAnyHTML(),
     containsHTML: (html: string) => !this.containsHTML(html),
+    hasClass: (className: string) => !this.hasClass(className),
+    hasAnyClass: () => !this.hasAnyClass(),
+    containsClass: (className: string) => !this.containsClass(className),
     hasId: (id: string) => !this.hasId(id),
     hasAnyId: () => !this.hasAnyId(),
     containsId: (id: string) => !this.containsId(id),

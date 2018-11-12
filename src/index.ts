@@ -26,6 +26,7 @@ declare global {
     toHaveAnyAttribute(attributeArgs: Workflo.IAnyAttributeArgs): boolean
     toContainAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
     toHaveClass(className: string): boolean
+    toHaveAnyClass(): boolean
     toContainClass(className: string): boolean
     toHaveId(id: string): boolean
     toHaveAnyId(): boolean
@@ -67,6 +68,7 @@ declare global {
     toEventuallyHaveAnyAttribute(attributeArgs: Workflo.IAnyAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveId(id: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveAnyId(opts?: Workflo.IWDIOParamsOptional): boolean
