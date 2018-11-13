@@ -1394,7 +1394,7 @@ class Currently<
 // UTILITY FUNCTIONS
 
 /**
- * Get text that resides on the level directly below the selected page element.
+ * Gets text that resides on the level directly below the selected page element.
  * Does not include text of the page element's nested children elements.
  */
 function getDirectText<Store extends PageElementStore>(html: string, pageElement?: PageElement<Store>): string {
@@ -1409,17 +1409,18 @@ function getDirectText<Store extends PageElementStore>(html: string, pageElement
   const handler = new htmlParser.DomHandler(function (error, dom) {
     if (error) {
       throw new Error(`Error creating dom for direct text in ${constructorName}: ${error}\n( ${selector} )`)
-    }
-    else {
+    } else {
       dom.forEach(node => {
-        node.children.forEach(childNode => {
-          if (childNode.type === 'text') {
-            text += childNode.data
-          }
-        })
+        if (node.type === 'text') {
+            text += node.data
+        }
       });
     }
   });
+
+  const parser = new htmlParser.Parser(handler);
+  parser.write(html);
+  parser.end();
 
   return text
 }
