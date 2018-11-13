@@ -507,19 +507,23 @@ export class PageElement<
       conditionStr = 'was in range'
     }
 
-    if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
-      errorMessage = `${this.constructor.name}'s ${name} "${this.currently.lastActualResult}" never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`
-    } else if (conditionType === 'any') {
-      errorMessage = `${this.constructor.name} never${reverseStr} ${conditionStr} any ${name} within ${timeout} ms.\n( ${this._selector} )`
-    }
-
-    browser.waitUntil(() => {
-      if (reverse) {
-        return !conditionFunc(value)
-      } else {
-        return conditionFunc(value)
+    try {
+      browser.waitUntil(() => {
+        if (reverse) {
+          return !conditionFunc(value)
+        } else {
+          return conditionFunc(value)
+        }
+      }, timeout)
+    } catch ( error ) {
+      if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
+        errorMessage = `${this.constructor.name}'s ${name} "${this.currently.lastActualResult}" never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`
+      } else if (conditionType === 'any') {
+        errorMessage = `${this.constructor.name} never${reverseStr} ${conditionStr} any ${name} within ${timeout} ms.\n( ${this._selector} )`
       }
-    }, timeout, errorMessage)
+
+      throw new Error(errorMessage)
+    }
 
     return this
   }
