@@ -693,7 +693,7 @@ class PageElement extends _1.PageNode {
             conditionStr = 'was in range';
         }
         if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
-            errorMessage = `${this.constructor.name}'s ${name} never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`;
+            errorMessage = `${this.constructor.name}'s ${name} "${this.currently.lastActualResult}" never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`;
         }
         else if (conditionType === 'any') {
             errorMessage = `${this.constructor.name} never${reverseStr} ${conditionStr} any ${name} within ${timeout} ms.\n( ${this._selector} )`;
@@ -882,17 +882,17 @@ class Currently {
         return this._withinTolerance(actual, expected, tolerance);
     }
     _compareHas(expected, actual) {
-        this._lastActualResult = actual;
+        this._lastActualResult = actual || '';
         return actual === expected;
     }
     _compareHasAny(actual) {
         const result = (actual) ? actual.length > 0 : false;
-        this._lastActualResult = actual;
+        this._lastActualResult = actual || '';
         return result;
     }
     _compareContains(expected, actual) {
         const result = (actual) ? actual.indexOf(expected) > -1 : false;
-        this._lastActualResult = actual;
+        this._lastActualResult = actual || '';
         return result;
     }
 }
@@ -943,7 +943,7 @@ function getHTML(pageElement) {
         throw new Error(`${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`);
     }
     else {
-        return result;
+        return result || '';
     }
 }
 // returns text of this.element including

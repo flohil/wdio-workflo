@@ -508,7 +508,7 @@ export class PageElement<
     }
 
     if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
-      errorMessage = `${this.constructor.name}'s ${name} never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`
+      errorMessage = `${this.constructor.name}'s ${name} "${this.currently.lastActualResult}" never${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._selector} )`
     } else if (conditionType === 'any') {
       errorMessage = `${this.constructor.name} never${reverseStr} ${conditionStr} any ${name} within ${timeout} ms.\n( ${this._selector} )`
     }
@@ -1258,19 +1258,19 @@ class Currently<
   }
 
   private _compareHas(expected: string, actual: string) {
-    this._lastActualResult = actual
+    this._lastActualResult = actual || ''
     return actual === expected
   }
 
   private _compareHasAny(actual: string) {
     const result = (actual) ? actual.length > 0 : false
-    this._lastActualResult = actual
+    this._lastActualResult = actual || ''
     return result
   }
 
   private _compareContains(expected: string, actual: string) {
     const result = (actual) ? actual.indexOf(expected) > -1 : false
-    this._lastActualResult = actual
+    this._lastActualResult = actual || ''
     return result
   }
 
@@ -1445,7 +1445,7 @@ function getHTML<Store extends PageElementStore>(pageElement: PageElement<Store>
   if (isJsError(result)) {
     throw new Error(`${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`)
   } else {
-    return result
+    return result || ''
   }
 }
 
