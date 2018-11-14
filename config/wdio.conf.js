@@ -258,7 +258,11 @@ exports.config = {
   // Runs after a WebdriverIO command gets executed
   afterCommand: function (commandName, args, result, error) {
     if (error) {
-      errorType = error.type
+      if ( error.type ) {
+        errorType = error.type
+      } else if ( error.toString().indexOf("Error: An element could not be located on the page using the given search parameters") > -1 ) {
+        errorType = true
+      }
 
       try {
         const screenshot = browser.saveScreenshot() // returns base64 string buffer
