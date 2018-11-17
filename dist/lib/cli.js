@@ -26,17 +26,31 @@ const table = require('text-table');
 const pkg = require('../../package.json');
 let dateTime = require('../../utils/report.js').getDateTime();
 const VERSION = pkg.version;
+// not supported ALLOWED_ARGV:
+// 'logLevel', 'screenshotPath', 'waitforTimeout', 'framework', 'reporters', 'suite', 'spec',
+// 'cucumberOpts', 'jasmineNodeOpts', 'mochaOpts', 'exclude', 'connectionRetryTimeout', 'connectionRetryCount',
+// 'watch',
 const ALLOWED_ARGV = [
-    'host', 'port', 'logLevel', 'coloredLogs', 'baseUrl', 'waitforTimeout',
-    'connectionRetryTimeout', 'connectionRetryCount', 'testInfoFilePath',
-    'workfloOpts', 'silentRetries'
-    //, 'jasmineOpts', 'user', 'key', 'watch', 'path'
+    'baseUrl',
+    'host',
+    'port',
+    'user',
+    'key',
+    'bail',
+    'testInfoFilePath',
+    'silentRetries'
 ];
 const ALLOWED_OPTS = [
     'help', 'h',
     'version', 'v',
+    'protocol',
+    'baseUrl',
     'host',
     'port',
+    'user',
+    'key',
+    'path',
+    'debug',
     'logLevel', 'l',
     'coloredLogs', 'c',
     'bail',
@@ -75,6 +89,7 @@ const ALLOWED_OPTS = [
 ];
 let configFile;
 let optionsOffset = 2; // config file defined as first "parameter"
+let bail = 0;
 Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
@@ -100,22 +115,32 @@ optimist
     .usage('wdio-workflo CLI runner\n\n' +
     'Usage: wdio-workflo [configFile] [options]\n' +
     'The [options] object will override values from the config file.')
+    // config options
     .describe('help', 'prints wdio-workflo help menu')
     .alias('help', 'h')
     .describe('version', 'prints wdio-workflo version')
     .alias('version', 'v')
-    .describe('host', 'Selenium server host address')
-    .describe('port', 'Selenium server port')
-    .describe('logLevel', 'level of logging verbosity (default: silent)')
-    .alias('logLevel', 'l')
-    .describe('coloredLogs', 'if true enables colors for log output (default: true)')
-    .alias('coloredLogs', 'c')
-    .describe('bail', 'stop test runner after specific amount of tests have failed (default: 0 - don\'t bail)')
-    .describe('baseUrl', 'shorten url command calls by setting a base url')
+    .describe('baseUrl', 'Set a base URL in order to shorten url command calls')
     .alias('baseUrl', 'b')
-    .describe('waitforTimeout', 'timeout for all waitForXXX commands (default: 5000ms)')
-    .alias('waitforTimeout', 'w')
-    .describe('info', 'shows static information about testcases and specs')
+    .describe('host', 'Host of your WebDriver server (default: \'127.0.0.1\')')
+    .describe('port', 'Port your WebDriver server is on (default: 4444)')
+    .describe('user', 'username if using a cloud service as Selenium backend')
+    .alias('user', 'u')
+    .describe('key', 'corresponding access key to the user')
+    .alias('key', 'k')
+    .describe('bail', 'Stop test runner after specific amount of tests have failed (default: 0 - don\'t bail)')
+    .describe('browserName', 'name of the browser used for executing tests or displaying results')
+    .describe('debug', 'enable debugging with Node-Inspect Manager chrome extension')
+    .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly (default: false)\n' +
+    '\t\t\t   allowed values are (true|false)\n' +
+    '\t\t\t   will be enabled by default if consoleLogLevel is set to "steps"\n')
+    .describe('silentRetries', 'how many times flaky tests should be rerun (default: 0)\n' +
+    '\t\t\t   silently rerun Tests won\'t show up under "Retries" in the allure report')
+    .describe('consoleLogLevel', 'Defines the log level for the console output (default: "testcases")\n' +
+    '\t\t\t   "results" will only output the results and errors of testcases and specs\n' +
+    '\t\t\t   "testcases" will additionally print the name of the currently executed test\n' +
+    '\t\t\t   "steps" will additionally print all executed steps in the console')
+    // filters
     .describe('testcases', 'restricts test execution to these testcases\n' +
     '\t\t\t   \'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
     '\t\t\t   \'["Suite2", "-Suite2.Testcase2"]\' => execute all testcases of Suite2 except for Testcase2\n')
@@ -145,6 +170,10 @@ optimist
     .describe('dates', 'restricts testcases and specs (oldest spec criteria) by given date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)\n' +
     '\t\t\t   \'["(2017-03-10,2017-10-28)"]\' => restricts by status set between 2017-03-10 and 2017-10-28 (both at 0 pm, 0 min, 0 sec)\n' +
     '\t\t\t   \'["2017-07-21", "2017-07-22T14:51:13"]\' => restricts by last status set on 2017-07-21 or 2017-07-22 at 2 pm, 51 min, 13 sec\n')
+    .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
+    .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
+    // actions
+    .describe('info', 'shows static information about testcases and specs')
     .describe('generateReport', 'generates report for latest results or\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => generate report for given result folder\n')
     .describe('openReport', 'opens report generated latest results or\n' +
@@ -154,31 +183,13 @@ optimist
     .describe('consoleReport', 'displays report messages written to console during latest test execution\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => display report messages written to console for given result folder\n')
     .describe('printStatus', 'show current status of all testcases and specs for the specified browser')
-    .describe('browserName', 'name of the browser used for executing tests or displaying results')
     .describe('traceSpec', 'show spec file defining and all testcases, testcase files and manual result files validating this spec\n' +
     '\t\t\t   \'4.1\' => show traceability information for spec 4.1\n')
     .describe('traceTestcase', 'show testcase file defining and all specs and spec files validated by this testcase\n' +
     '\t\t\t   \'Suite1.testcase1\' => show traceability information for testcase1 in Suite1\n')
-    .describe('manualOnly', 'do not run automatic testcases and consider only manual results')
-    .describe('automaticOnly', 'run only automatic testcases and do not consider manual results')
-    .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly (default: false)' +
-    '\t\t\t   allowed values are (true|false)' +
-    '\t\t\t   will be enabled by default if consoleLogLevel is set to "steps"')
     .describe('rerunFaulty', 'reruns all faulty specs and testcases from the latest execution\n' +
-    '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'\n')
-    .describe('silentRetries', 'how many times flaky tests should be rerun (default: 0)\n' +
-    '\t\t\t   silently rerun Tests won\'t show up under "Retries" in the allure report')
-    .describe('consoleLogLevel', 'Defines the log level for the console output (default: "testcases")\n' +
-    '\t\t\t   "results" will only output the results and errors of testcases and specs' +
-    '\t\t\t   "testcases" will additionally print the name of the currently executed test' +
-    '\t\t\t   "steps" will additionally print all executed steps in the console')
+    '\t\t\t   \'2017-10-10_20-38-13\' => reruns all faulty specs and testcases from the results folder \'2017-10-10_20-38-13\'')
     // wdio-workflo options
-    // support priority: low
-    // .describe('path', 'Selenium server path (default: /wd/hub)')
-    // .describe('user', 'username if using a cloud service as Selenium backend')
-    // .alias('user', 'u')
-    // .describe('key', 'corresponding access key to the user')
-    // .alias('key', 'k')
     // .describe('watch', 'watch specs for changes')
     // .describe('jasmineOpts.*', 'Jasmine options, see the full list options at https://github.com/webdriverio/wdio-jasmine-framework#jasminenodeopts-options')
     // not supported
@@ -192,11 +203,11 @@ optimist
     // .alias('framework', 'f')
     // .describe('reporters', 'reporters to print out the results on stdout') // supports only workflo adaptions of spec and allure reporters
     // .alias('reporters', 'r')
-    .string(['host', 'path', 'logLevel', 'baseUrl', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'silentRetries'
-    /*, 'user', 'key', 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
+    .string(['host', 'baseUrl', 'user', 'key', 'bail', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'silentRetries'
+    /*, 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
-    .boolean(['coloredLogs', 'watch', 'cleanResultsStatus'])
-    .default({ coloredLogs: true })
+    .boolean(['cleanResultsStatus', 'watch', 'debug'])
+    .default({ debug: false, watch: false, cleanResultsStatus: false })
     .check((arg) => {
     if (arg._.length > 1 && arg._[0] !== 'repl') {
         throw new Error('Error: more than one config file specified');
@@ -207,6 +218,7 @@ if (process.argv.length === 2 || process.argv.length > 2 && process.argv[2].subs
     optionsOffset = 1; // no config file specified
 }
 let argv = optimist.parse(process.argv.slice(optionsOffset));
+argv.coloredLogs = true;
 const allowedOpts = __1.arrayFunctions.mapToObject(ALLOWED_OPTS, (element) => true);
 for (const optKey in argv) {
     const unknownOpts = [];
@@ -517,6 +529,12 @@ checkReport().then(() => {
     else {
         argv.consoleLogLevel = "testcases";
     }
+    if (argv.bail) {
+        bail = parseInt(argv.bail);
+    }
+    else if (workfloConfig.bail) {
+        bail = workfloConfig.bail;
+    }
     if (["results", "testcases", "steps"].indexOf(argv.consoleLogLevel) < 0) {
         console.warn(`Unknown console log level: ${argv.consoleLogLevel}`);
         console.warn("Setting console log level to default value 'testcases'");
@@ -543,7 +561,9 @@ checkReport().then(() => {
         mergedResultsPath,
         consoleReportPath,
         mergedAllureResultsPath,
-        retries: argv.silentRetries || 0
+        retries: argv.silentRetries || 0,
+        bail: 0,
+        workfloBail: bail
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;
@@ -556,14 +576,20 @@ checkReport().then(() => {
     // patch wdio.conf.js
     args['logOutput'] = logsPath,
         args['seleniumLogs'] = path.relative('./', path.join(logsPath));
-    args['reporterOptions'] = JSON.stringify({
-        outputDir: path.join(resultsPath, process.env.LATEST_RUN),
-        'workflo-allure': {
-            outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
-            debug: false,
-            debugSeleniumCommand: true
-        }
-    });
+    args['logLevel'] = 'silent',
+        args['reporterOptions'] = JSON.stringify({
+            outputDir: path.join(resultsPath, process.env.LATEST_RUN),
+            'workflo-allure': {
+                outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
+                debug: false,
+                debugSeleniumCommand: true
+            }
+        });
+    args['bail'] = 0;
+    if (workfloConfig.debug === true || argv.debug === true) {
+        workfloConfig.execArgv = ['--inspect'];
+        workfloConfig.debug = false;
+    }
     // write latest run file
     if (Object.keys(filters.specs).length > 0 || Object.keys(filters.testcases).length > 0) {
         if (!fs.existsSync(resultsPath)) {

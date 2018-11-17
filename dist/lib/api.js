@@ -8,6 +8,7 @@ const criteriaAnalysis = testinfo.criteriaAnalysis;
 const automaticOnly = testinfo.automaticOnly;
 const manualOnly = testinfo.manualOnly;
 const retries = testinfo.retries;
+const bail = testinfo.workfloBail;
 const storyMap = new Map();
 const words = {
     'Given': 'Given',
@@ -270,7 +271,12 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
             process.send({ event: 'test:meta', bug: metadata.bugs });
         }
         process.send({ event: 'test:meta', severity: metadata.severity || 'normal' });
-        bodyFunc();
+        if (global.bailErrors && global.bailErrors >= bail) {
+            pending();
+        }
+        else {
+            bodyFunc();
+        }
     };
     if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
         jasmineFunc(JSON.stringify(testData), _bodyFunc, retries);

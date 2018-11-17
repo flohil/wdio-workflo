@@ -16,6 +16,7 @@ let screenshotIdCtr = 1
 let errorScreenshotFilename
 let errorType
 let finishedTestcases = false
+let bail = 0
 
 // set defaults for workflo config
 if (!workfloConf.timeouts) {
@@ -40,13 +41,21 @@ function cleanStack (error) {
   return error
 }
 
+function increaseBailErrors() {
+  if (!global.bailErrors) {
+    global.bailErrors = 1
+  } else {
+    global.bailErrors += 1
+  }
+}
+
 // buildSpecs()
 exports.config = {
   /**
    * server configurations
    */
-  host: workfloConf.webdriver.host,
-  port: workfloConf.webdriver.port,
+  host: workfloConf.host,
+  port: workfloConf.port,
   path: workfloConf.path,
   agent: workfloConf.agent,
   proxy: workfloConf.proxy,
@@ -58,8 +67,8 @@ exports.config = {
   manualTestcases: workfloConf.manualTestcaseFiles,
   uidStorePath: workfloConf.uidStorePath,
   waitforInterval: workfloConf.waitforInterval || 500,
-  connectionRetryTimeout: workfloConf.connectionRetryTimeout || 30000,
-  connectionRetryCount: 0,
+  connectionRetryTimeout: workfloConf.connectionRetryTimeout,
+  connectionRetryCount: workfloConf.connectionRetryCount,
   testDir: workfloConf.testDir,
   /**
    * capabilities
@@ -75,7 +84,7 @@ exports.config = {
    */
   user: workfloConf.user,
   key: workfloConf.key,
-  bail: workfloConf.bail || 0,
+  bail: 0,
   logLevel: workfloConf.logLevel,
   protocol: workfloConf.protocol || 'http',
   debug: workfloConf.debug || false,
@@ -83,10 +92,7 @@ exports.config = {
   coloredLogs: true || workfloConf.coloredLogs,
   deprecationWarnings: workfloConf.deprecationWarnings || false,
   screenshotPath: null,
-  screenshotOnReject: workfloConf.screenshotOnReject || {
-    connectionRetryTimeout: 15000,
-    connectionRetryCount: 3
-  },
+  screenshotOnReject: workfloConf.screenshotOnReject,
   baseUrl: workfloConf.baseUrl,
   waitforTimeout: workfloConf.timeouts.waitforTimeout,
   plugins: workfloConf.plugins,
@@ -136,6 +142,8 @@ exports.config = {
           assertion.screenshotId = screenshotIdCtr
           screenshotIdCtr++
 
+          increaseBailErrors()
+
           process.send({event: 'step:failed', assertion: assertion})
           process.send({event: 'validate:failure', assertion: assertion})
         } else {
@@ -159,6 +167,8 @@ exports.config = {
 
           errorScreenshotFilename = undefined
 
+          increaseBailErrors()
+
           process.send({event: 'step:broken', assertion: assertion})
 
           if (assertion.specObj) {
@@ -180,6 +190,9 @@ exports.config = {
     if (typeof workfloConf.beforeSession === 'function') {
       workfloConf.beforeSession(config, capabilities, specs)
     }
+
+    bail = config.workfloBail
+    global.bailErrors = config.bailErrors
   },
   before: function (capabilties, testcases) {
     process.env.WORKFLO_CONFIG = JSON.stringify(workfloConf)
@@ -236,7 +249,10 @@ exports.config = {
   beforeTest: function (test) {
     // some gui tests require a sized window
     if (!finishedTestcases) {
-      browser.windowHandleSize(workfloConf.windowSize)
+      browser.windowHandleSize({
+        width: workfloConf.width,
+        height: workfloConf.height
+      })
     }
 
     errorScreenshotFilename = undefined
