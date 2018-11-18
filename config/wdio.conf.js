@@ -34,9 +34,17 @@ if (!workfloConf.capabilities.browserName) {
 
 const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g
 
-function cleanStack (error) {
+function cleanStack (error, removeMessage) {
   let stack = error.split('\n')
-  stack = stack.filter((line) => !line.match(STACKTRACE_FILTER))
+  stack = stack.filter((line) => {
+    let keep = !line.match(STACKTRACE_FILTER)
+
+    if (removeMessage && keep) {
+      keep = line.startsWith('    at ')
+    }
+
+    return keep
+  })
   error = stack.join('\n')
   return error
 }
@@ -147,7 +155,7 @@ exports.config = {
           process.send({event: 'step:failed', assertion: assertion})
           process.send({event: 'validate:failure', assertion: assertion})
         } else {
-          assertion.stack = cleanStack(assertion.error.stack)
+          assertion.stack = cleanStack(assertion.error.stack, true)
 
           delete assertion.matcherName
           delete assertion.passed

@@ -406,6 +406,8 @@ export const testcase = (
     title: description
   }
 
+  let remainingTries = retries;
+
   const _bodyFunc = () => {
     process.send({event: 'test:setCurrentId', id: fullId, testcase: true})
 
@@ -421,12 +423,31 @@ export const testcase = (
     if (bail && (<any> global).bailErrors && (<any> global).bailErrors >= bail) {
       pending();
     } else {
-      bodyFunc();
+
+      while (remainingTries >= 0) {
+        if (remainingTries > 0) {
+          try {
+            bodyFunc();
+            remainingTries = -1;
+          }
+          catch (error) {
+            remainingTries--;
+          }
+        } else {
+          jasmineSpecObj.throwOnExpectationFailure = false
+          bodyFunc();
+          remainingTries = -1;
+        }
+      }
     }
   }
 
+  let jasmineSpecObj = undefined
+
   if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
-    jasmineFunc(JSON.stringify(testData), _bodyFunc, retries)
+    jasmineSpecObj = jasmineFunc(JSON.stringify(testData), _bodyFunc, retries)
+
+    jasmineSpecObj.throwOnExpectationFailure = true
   }
 }
 

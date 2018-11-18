@@ -275,6 +275,25 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
             pending();
         }
         else {
+            const bodyFuncStack = [bodyFunc];
+            let remainingRetries = testinfo.retries;
+            while (bodyFuncStack.length > 0) {
+                const _bodyFunc = bodyFuncStack.shift();
+                try {
+                    _bodyFunc();
+                }
+                catch (error) {
+                    if (remainingRetries > 0) {
+                        bodyFuncStack.push(bodyFunc);
+                        remainingRetries--;
+                    }
+                    else {
+                        if (error.stack.indexOf('at JasmineAdapter._callee$ ') < 0) {
+                            throw (error);
+                        }
+                    }
+                }
+            }
             bodyFunc();
         }
     };
