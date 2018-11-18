@@ -271,7 +271,7 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
             process.send({ event: 'test:meta', bug: metadata.bugs });
         }
         process.send({ event: 'test:meta', severity: metadata.severity || 'normal' });
-        if (global.bailErrors && global.bailErrors >= bail) {
+        if (bail && global.bailErrors && global.bailErrors >= bail) {
             pending();
         }
         else {

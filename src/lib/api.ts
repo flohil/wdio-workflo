@@ -418,7 +418,7 @@ export const testcase = (
     }
     process.send({event: 'test:meta', severity: metadata.severity || 'normal'})
 
-    if ((<any> global).bailErrors && (<any> global).bailErrors >= bail) {
+    if (bail && (<any> global).bailErrors && (<any> global).bailErrors >= bail) {
       pending();
     } else {
       bodyFunc();
