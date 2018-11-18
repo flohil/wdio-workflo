@@ -20,17 +20,12 @@ const words = {
 }
 
 const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g
+const STACKTRACE_FILTER_2 = /    at.*:\d+:\d+/;
 
-function cleanStack (error, removeMessage) {
+function cleanStack (error) {
   let stack = error.split('\n')
   stack = stack.filter((line) => {
-    let keep = !line.match(STACKTRACE_FILTER)
-
-    if (removeMessage && keep) {
-      keep = line.startsWith('    at ')
-    }
-
-    return keep
+    return !line.match(STACKTRACE_FILTER) && line.match(STACKTRACE_FILTER_2);
   })
   error = stack.join('\n')
   return error
@@ -458,12 +453,16 @@ export const testcase = (
             if (error.stack.indexOf('at JasmineAdapter._callee$') > -1) {
               process.send({event: 'retry:failed', retry:  performedTries})
             } else {
-              const stackLines = cleanStack(error.stack, true).split('\n')
-              stackLines.pop()
-
               const assertion = {
-                  message: error.message,
-                  stack: stackLines.join('\n')
+                message: error.message,
+                stack: cleanStack(error.stack),
+                screenshotFilename: undefined,
+                screenshotId: undefined
+              }
+
+              if ((<any> global).errorScreenshotFilename) {
+                  assertion.screenshotFilename = (<any> global).errorScreenshotFilename,
+                  assertion.screenshotId = (<any> global).screenshotId++
               }
 
               process.send({event: 'retry:broken', assertion: assertion, retry:  performedTries })

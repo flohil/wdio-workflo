@@ -12,11 +12,9 @@ const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursive
 
 const workfloMatcherNames = [ 'toExist' ]
 
-let screenshotIdCtr = 1
-let errorScreenshotFilename
+let screenshotId = 1
 let errorType
 let finishedTestcases = false
-let bail = 0
 
 // set defaults for workflo config
 if (!workfloConf.timeouts) {
@@ -134,7 +132,7 @@ exports.config = {
             const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
             const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
-            const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
+            const screenshotFilename = `${screenshotFolder}/${screenshotId}.png`
 
             assertion.screenshotFilename = screenshotFilename
 
@@ -147,8 +145,9 @@ exports.config = {
           var stack = new Error().stack
           assertion.stack = stack
 
-          assertion.screenshotId = screenshotIdCtr
-          screenshotIdCtr++
+          assertion.screenshotId = screenshotId
+          screenshotId++
+          global.screenshotId = screenshotId
 
           process.send({event: 'step:failed', assertion: assertion, ignoreErrors: global.ignoreErrors})
 
@@ -172,17 +171,18 @@ exports.config = {
           delete assertion.actual
           delete assertion.error
 
-          if (errorScreenshotFilename) {
-            assertion.screenshotFilename = errorScreenshotFilename
-            assertion.screenshotId = screenshotIdCtr
-            screenshotIdCtr++
+          if (global.errorScreenshotFilename) {
+            assertion.screenshotFilename = global.errorScreenshotFilename
+            assertion.screenshotId = screenshotId
+            screenshotId++
+            global.screenshotId = screenshotId
           }
 
           if (errorType) {
             assertion.errorType = errorType
           }
 
-          errorScreenshotFilename = undefined
+          global.errorScreenshotFilename = undefined
 
           process.send({event: 'step:broken', assertion: assertion, ignoreErrors: global.ignoreErrors})
 
@@ -209,6 +209,8 @@ exports.config = {
 
     bail = config.workfloBail
     global.bailErrors = config.bailErrors
+    global.screenshotId = screenshotId
+    global.errorScreenshotFilename = undefined
   },
   before: function (capabilties, testcases) {
     process.env.WORKFLO_CONFIG = JSON.stringify(workfloConf)
@@ -271,7 +273,7 @@ exports.config = {
       })
     }
 
-    errorScreenshotFilename = undefined
+    global.errorScreenshotFilename = undefined
     errorType = undefined
 
     if (process.workflo) {
@@ -300,9 +302,11 @@ exports.config = {
         const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
         const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
-        const screenshotFilename = `${screenshotFolder}/${screenshotIdCtr}.png`
+        const screenshotFilename = `${screenshotFolder}/${screenshotId}.png`
 
-        errorScreenshotFilename = screenshotFilename
+        screenshotId = global.screenshotId
+
+        global.errorScreenshotFilename = screenshotFilename
 
         fs.writeFileSync(screenshotFilename, screenshot)
       } catch (err) {

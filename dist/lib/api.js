@@ -17,14 +17,11 @@ const words = {
     'And': 'And',
 };
 const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g;
-function cleanStack(error, removeMessage) {
+const STACKTRACE_FILTER_2 = /    at.*:\d+:\d+/;
+function cleanStack(error) {
     let stack = error.split('\n');
     stack = stack.filter((line) => {
-        let keep = !line.match(STACKTRACE_FILTER);
-        if (removeMessage && keep) {
-            keep = line.startsWith('    at ');
-        }
-        return keep;
+        return !line.match(STACKTRACE_FILTER) && line.match(STACKTRACE_FILTER_2);
     });
     error = stack.join('\n');
     return error;
@@ -307,12 +304,16 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
                             process.send({ event: 'retry:failed', retry: performedTries });
                         }
                         else {
-                            const stackLines = cleanStack(error.stack, true).split('\n');
-                            stackLines.pop();
                             const assertion = {
                                 message: error.message,
-                                stack: stackLines.join('\n')
+                                stack: cleanStack(error.stack),
+                                screenshotFilename: undefined,
+                                screenshotId: undefined
                             };
+                            if (global.errorScreenshotFilename) {
+                                assertion.screenshotFilename = global.errorScreenshotFilename,
+                                    assertion.screenshotId = global.screenshotId++;
+                            }
                             process.send({ event: 'retry:broken', assertion: assertion, retry: performedTries });
                         }
                         remainingTries--;
