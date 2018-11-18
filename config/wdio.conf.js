@@ -150,10 +150,19 @@ exports.config = {
           assertion.screenshotId = screenshotIdCtr
           screenshotIdCtr++
 
-          increaseBailErrors()
+          process.send({event: 'step:failed', assertion: assertion, ignoreErrors: global.ignoreErrors})
 
-          process.send({event: 'step:failed', assertion: assertion})
-          process.send({event: 'validate:failure', assertion: assertion})
+          if (!global.ignoreErrors) {
+            increaseBailErrors()
+            process.send({event: 'validate:failure', assertion: assertion})
+          } else {
+            const stackLines = assertion.stack.split('\n').filter(line => line.startsWith('    at '))
+
+            stackLines.pop()
+            assertion.stack =  stackLines.join('\n')
+
+            process.send({event: 'retry:validateFailure', assertion: assertion})
+          }
         } else {
           assertion.stack = cleanStack(assertion.error.stack, true)
 
@@ -175,11 +184,10 @@ exports.config = {
 
           errorScreenshotFilename = undefined
 
-          increaseBailErrors()
+          process.send({event: 'step:broken', assertion: assertion, ignoreErrors: global.ignoreErrors})
 
-          process.send({event: 'step:broken', assertion: assertion})
-
-          if (assertion.specObj) {
+          if (assertion.specObj && !global.ignoreErrors) {
+            increaseBailErrors()
             process.send({event: 'validate:broken', assertion: assertion})
           }
         }

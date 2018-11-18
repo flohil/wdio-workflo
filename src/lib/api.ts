@@ -19,6 +19,23 @@ const words = {
   'And': 'And',
 }
 
+const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g
+
+function cleanStack (error, removeMessage) {
+  let stack = error.split('\n')
+  stack = stack.filter((line) => {
+    let keep = !line.match(STACKTRACE_FILTER)
+
+    if (removeMessage && keep) {
+      keep = line.startsWith('    at ')
+    }
+
+    return keep
+  })
+  error = stack.join('\n')
+  return error
+}
+
 function featuresInclude(id: string) {
   return id in executionFilters.features
 }
@@ -395,7 +412,7 @@ export const testcase = (
   description: string,
   metadata: Workflo.ITestcaseMetadata,
   bodyFunc: () => void,
-  jasmineFunc: (description: string, bodyFunc: () => void, retries: number) => void = it
+  jasmineFunc: (description: string, bodyFunc: () => void) => void = it
 ) => {
   const fullSuiteId = this.suiteIdStack.join('.')
   const fullId = `${fullSuiteId}.${description}`
@@ -423,17 +440,37 @@ export const testcase = (
     if (bail && (<any> global).bailErrors && (<any> global).bailErrors >= bail) {
       pending();
     } else {
+      process.send({event: 'retry:resetErrors' })
 
       while (remainingTries >= 0) {
+        jasmineSpecObj.result.failedExpectations = []
+        jasmineSpecObj.result.passedExpectations = []
+        jasmineSpecObj.result.deprecationWarnings = []
         if (remainingTries > 0) {
+          (<any> global).ignoreErrors = true
           try {
             bodyFunc();
             remainingTries = -1;
           }
           catch (error) {
+            if (error.stack.indexOf('at JasmineAdapter._callee$') > -1) {
+              process.send({event: 'retry:failed' })
+            } else {
+              const stackLines = cleanStack(error.stack, true).split('\n')
+              stackLines.pop()
+
+              const assertion = {
+                  message: error.message,
+                  stack: stackLines.join('\n')
+              }
+
+              process.send({event: 'retry:broken', assertion: assertion })
+            }
+
             remainingTries--;
           }
         } else {
+          (<any> global).ignoreErrors = false
           jasmineSpecObj.throwOnExpectationFailure = false
           bodyFunc();
           remainingTries = -1;
@@ -445,7 +482,7 @@ export const testcase = (
   let jasmineSpecObj = undefined
 
   if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
-    jasmineSpecObj = jasmineFunc(JSON.stringify(testData), _bodyFunc, retries)
+    jasmineSpecObj = jasmineFunc(JSON.stringify(testData), _bodyFunc)
 
     jasmineSpecObj.throwOnExpectationFailure = true
   }

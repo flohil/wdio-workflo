@@ -16,6 +16,19 @@ const words = {
     'Then': 'Then',
     'And': 'And',
 };
+const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g;
+function cleanStack(error, removeMessage) {
+    let stack = error.split('\n');
+    stack = stack.filter((line) => {
+        let keep = !line.match(STACKTRACE_FILTER);
+        if (removeMessage && keep) {
+            keep = line.startsWith('    at ');
+        }
+        return keep;
+    });
+    error = stack.join('\n');
+    return error;
+}
 function featuresInclude(id) {
     return id in executionFilters.features;
 }
@@ -262,6 +275,7 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     const testData = {
         title: description
     };
+    let remainingTries = retries;
     const _bodyFunc = () => {
         process.send({ event: 'test:setCurrentId', id: fullId, testcase: true });
         process.send({ event: 'test:meta', feature: `--Testcases--` });
@@ -275,30 +289,46 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
             pending();
         }
         else {
-            const bodyFuncStack = [bodyFunc];
-            let remainingRetries = testinfo.retries;
-            while (bodyFuncStack.length > 0) {
-                const _bodyFunc = bodyFuncStack.shift();
-                try {
-                    _bodyFunc();
-                }
-                catch (error) {
-                    if (remainingRetries > 0) {
-                        bodyFuncStack.push(bodyFunc);
-                        remainingRetries--;
+            process.send({ event: 'retry:resetErrors' });
+            while (remainingTries >= 0) {
+                jasmineSpecObj.result.failedExpectations = [];
+                jasmineSpecObj.result.passedExpectations = [];
+                jasmineSpecObj.result.deprecationWarnings = [];
+                if (remainingTries > 0) {
+                    global.ignoreErrors = true;
+                    try {
+                        bodyFunc();
+                        remainingTries = -1;
                     }
-                    else {
-                        if (error.stack.indexOf('at JasmineAdapter._callee$ ') < 0) {
-                            throw (error);
+                    catch (error) {
+                        if (error.stack.indexOf('at JasmineAdapter._callee$') > -1) {
+                            process.send({ event: 'retry:failed' });
                         }
+                        else {
+                            const stackLines = cleanStack(error.stack, true).split('\n');
+                            stackLines.pop();
+                            const assertion = {
+                                message: error.message,
+                                stack: stackLines.join('\n')
+                            };
+                            process.send({ event: 'retry:broken', assertion: assertion });
+                        }
+                        remainingTries--;
                     }
+                }
+                else {
+                    global.ignoreErrors = false;
+                    jasmineSpecObj.throwOnExpectationFailure = false;
+                    bodyFunc();
+                    remainingTries = -1;
                 }
             }
-            bodyFunc();
         }
     };
+    let jasmineSpecObj = undefined;
     if (testcasesInclude(`${this.suiteIdStack.join('.')}.${description}`)) {
-        jasmineFunc(JSON.stringify(testData), _bodyFunc, retries);
+        jasmineSpecObj = jasmineFunc(JSON.stringify(testData), _bodyFunc);
+        jasmineSpecObj.throwOnExpectationFailure = true;
     }
 };
 exports.ftestcase = (description, metadata, bodyFunc) => {
