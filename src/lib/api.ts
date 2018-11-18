@@ -424,6 +424,7 @@ export const testcase = (
   }
 
   let remainingTries = retries;
+  let performedTries = 0
 
   const _bodyFunc = () => {
     process.send({event: 'test:setCurrentId', id: fullId, testcase: true})
@@ -448,13 +449,14 @@ export const testcase = (
         jasmineSpecObj.result.deprecationWarnings = []
         if (remainingTries > 0) {
           (<any> global).ignoreErrors = true
+          performedTries++
           try {
             bodyFunc();
             remainingTries = -1;
           }
           catch (error) {
             if (error.stack.indexOf('at JasmineAdapter._callee$') > -1) {
-              process.send({event: 'retry:failed' })
+              process.send({event: 'retry:failed', retry:  performedTries})
             } else {
               const stackLines = cleanStack(error.stack, true).split('\n')
               stackLines.pop()
@@ -464,7 +466,7 @@ export const testcase = (
                   stack: stackLines.join('\n')
               }
 
-              process.send({event: 'retry:broken', assertion: assertion })
+              process.send({event: 'retry:broken', assertion: assertion, retry:  performedTries })
             }
 
             remainingTries--;

@@ -38,7 +38,8 @@ const ALLOWED_ARGV = [
     'key',
     'bail',
     'testInfoFilePath',
-    'silentRetries'
+    'silentRetries',
+    'retries'
 ];
 const ALLOWED_OPTS = [
     'help', 'h',
@@ -82,7 +83,7 @@ const ALLOWED_OPTS = [
     'cleanResultsStatus',
     'reportErrorsInstantly',
     'rerunFaulty',
-    'silentRetries',
+    'retries',
     'consoleLogLevel',
     '_',
     '$0'
@@ -134,8 +135,9 @@ optimist
     .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly (default: false)\n' +
     '\t\t\t   allowed values are (true|false)\n' +
     '\t\t\t   will be enabled by default if consoleLogLevel is set to "steps"\n')
-    .describe('silentRetries', 'how many times flaky tests should be rerun (default: 0)\n' +
-    '\t\t\t   silently rerun Tests won\'t show up under "Retries" in the allure report')
+    .describe('retries', 'how many times flaky tests should be rerun (default: 0)\n' +
+    '\t\t\t   the test results will always refer to the last try/execution\n' +
+    '\t\t\t   to show error messages and stacktraces of all tries enable \'reportErrorsInstantly\'')
     .describe('consoleLogLevel', 'Defines the log level for the console output (default: "testcases")\n' +
     '\t\t\t   "results" will only output the results and errors of testcases and specs\n' +
     '\t\t\t   "testcases" will additionally print the name of the currently executed test\n' +
@@ -203,7 +205,7 @@ optimist
     // .alias('framework', 'f')
     // .describe('reporters', 'reporters to print out the results on stdout') // supports only workflo adaptions of spec and allure reporters
     // .alias('reporters', 'r')
-    .string(['host', 'baseUrl', 'user', 'key', 'bail', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'silentRetries'
+    .string(['host', 'baseUrl', 'user', 'key', 'bail', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'retries'
     /*, 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
 ])
     .boolean(['cleanResultsStatus', 'watch', 'debug'])
@@ -511,11 +513,11 @@ checkReport().then(() => {
             return defaultValue;
         }
     };
-    if (typeof argv.silentRetries === 'undefined' && typeof workfloConfig.silentRetries !== 'undefined') {
-        argv.silentRetries = workfloConfig.silentRetries;
+    if (typeof argv.retries === 'undefined' && typeof workfloConfig.retries !== 'undefined') {
+        argv.silentRetries = workfloConfig.retries;
     }
-    else if (typeof argv.silentRetries !== 'undefined') {
-        argv.silentRetries = parseInt(argv.silentRetries);
+    else if (typeof argv.retries !== 'undefined') {
+        argv.silentRetries = parseInt(argv.retries);
     }
     else {
         argv.silentRetries = 0;
@@ -561,7 +563,7 @@ checkReport().then(() => {
         mergedResultsPath,
         consoleReportPath,
         mergedAllureResultsPath,
-        retries: argv.silentRetries || 0,
+        retries: argv.retries || 0,
         bail: 0,
         workfloBail: bail
     };
