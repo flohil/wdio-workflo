@@ -563,7 +563,7 @@ checkReport().then(() => {
         mergedResultsPath,
         consoleReportPath,
         mergedAllureResultsPath,
-        retries: argv.retries || 0,
+        retries: argv.silentRetries || 0,
         bail: 0,
         workfloBail: bail
     };

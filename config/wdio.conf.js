@@ -12,7 +12,6 @@ const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursive
 
 const workfloMatcherNames = [ 'toExist' ]
 
-let screenshotId = 1
 let errorType
 let finishedTestcases = false
 
@@ -132,7 +131,7 @@ exports.config = {
             const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
             const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
-            const screenshotFilename = `${screenshotFolder}/${screenshotId}.png`
+            const screenshotFilename = `${screenshotFolder}/${global.screenshotId}.png`
 
             assertion.screenshotFilename = screenshotFilename
 
@@ -145,9 +144,8 @@ exports.config = {
           var stack = new Error().stack
           assertion.stack = stack
 
-          assertion.screenshotId = screenshotId
-          screenshotId++
-          global.screenshotId = screenshotId
+          assertion.screenshotId = global.screenshotId
+          global.screenshotId++
 
           process.send({event: 'step:failed', assertion: assertion, ignoreErrors: global.ignoreErrors})
 
@@ -173,9 +171,8 @@ exports.config = {
 
           if (global.errorScreenshotFilename) {
             assertion.screenshotFilename = global.errorScreenshotFilename
-            assertion.screenshotId = screenshotId
-            screenshotId++
-            global.screenshotId = screenshotId
+            assertion.screenshotId = global.screenshotId
+            global.screenshotId++
           }
 
           if (errorType) {
@@ -209,7 +206,7 @@ exports.config = {
 
     bail = config.workfloBail
     global.bailErrors = config.bailErrors
-    global.screenshotId = screenshotId
+    global.screenshotId = config.screenshotId + 1
     global.errorScreenshotFilename = undefined
   },
   before: function (capabilties, testcases) {
@@ -302,9 +299,7 @@ exports.config = {
         const screenshot = browser.saveScreenshot() // returns base64 string buffer
 
         const screenshotFolder = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'allure-results')
-        const screenshotFilename = `${screenshotFolder}/${screenshotId}.png`
-
-        screenshotId = global.screenshotId
+        const screenshotFilename = `${screenshotFolder}/${global.screenshotId}.png`
 
         global.errorScreenshotFilename = screenshotFilename
 
