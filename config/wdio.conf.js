@@ -71,7 +71,6 @@ exports.config = {
   testcases: workfloConf.testcaseFiles,
   manualTestcases: workfloConf.manualTestcaseFiles,
   uidStorePath: workfloConf.uidStorePath,
-  waitforInterval: workfloConf.waitforInterval || 500,
   connectionRetryTimeout: workfloConf.connectionRetryTimeout,
   connectionRetryCount: workfloConf.connectionRetryCount,
   testDir: workfloConf.testDir,
@@ -80,7 +79,7 @@ exports.config = {
    */
   capabilities: [ Object.assign(workfloConf.capabilities, { maxInstances: 1 }) ],
   services: workfloConf.services || ['selenium-standalone'],
-  seleniumArgs: workfloConf.selenium.args,
+  seleniumArgs: workfloConf.selenium.seleniumStartArgs,
   seleniumInstallArgs: workfloConf.selenium.installArgs,
   queryParams: workfloConf.queryParams || {},
   headers: workfloConf.headers || {},
@@ -97,9 +96,10 @@ exports.config = {
   coloredLogs: true || workfloConf.coloredLogs,
   deprecationWarnings: workfloConf.deprecationWarnings || false,
   screenshotPath: null,
-  screenshotOnReject: workfloConf.screenshotOnReject,
+  screenshotOnReject: false,
   baseUrl: workfloConf.baseUrl,
-  waitforTimeout: workfloConf.timeouts.waitforTimeout,
+  waitforTimeout: workfloConf.timeouts.default,
+  waitforInterval: workfloConf.intervals.default,
   plugins: workfloConf.plugins,
   framework: 'workflo-jasmine',
   reporters: ['workflo-spec', 'workflo-allure'],
@@ -199,9 +199,9 @@ exports.config = {
       workfloConf.onPrepare(config, capabilities)
     }
   },
-  beforeSession: function (config, capabilities, specs) {
+  beforeSession: function (config, capabilities, testcases) {
     if (typeof workfloConf.beforeSession === 'function') {
-      workfloConf.beforeSession(config, capabilities, specs)
+      workfloConf.beforeSession(config, capabilities, testcases)
     }
 
     bail = config.workfloBail
@@ -209,7 +209,7 @@ exports.config = {
     global.screenshotId = config.screenshotId + 1
     global.errorScreenshotFilename = undefined
   },
-  before: function (capabilties, testcases) {
+  before: function (capabilities, testcases) {
     process.env.WORKFLO_CONFIG = JSON.stringify(workfloConf)
 
     // allow custom failure messages in jasmine
@@ -229,7 +229,7 @@ exports.config = {
     })
 
     if (typeof workfloConf.before === 'function') {
-      workfloConf.before(capabilities, specs)
+      workfloConf.before(capabilities, testcases)
     }
   },
   beforeSuite: function (suite) {
@@ -239,7 +239,7 @@ exports.config = {
       workfloConf.beforeSuite(suite)
     }
   },
-  beforeValidator: function (capabilties, specs) {
+  beforeValidator: function (capabilities, specs) {
     require('ts-node/register')
     require('tsconfig-paths/register')
 
@@ -328,14 +328,19 @@ exports.config = {
       workfloConf.afterSuite(suite)
     }
   },
-  after: function (result, capabilities, specs) {
+  after: function (result, capabilities, testcases) {
     if (typeof workfloConf.after === 'function') {
-      workfloConf.after(result, capabilities, specs)
+      workfloConf.after(result, capabilities, testcases)
     }
   },
-  afterSession: function (config, capabilities, specs) {
+  afterValidator: function (result, capabilities, specs) {
+    if (typeof workfloConf.after === 'function') {
+      workfloConf.afterValidator(result, capabilities, specs)
+    }
+  },
+  afterSession: function (config, capabilities, testcases) {
     if (typeof workfloConf.afterSession === 'function') {
-      workfloConf.afterSession(config, capabilities, specs)
+      workfloConf.afterSession(config, capabilities, testcases)
     }
   },
   onComplete: function (exitCode, config, capabilities) {

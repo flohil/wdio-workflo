@@ -27,6 +27,7 @@
     "@types/jasmine-expect": "^3.8.1",
     "@types/lodash": "^4.14.117",
     "@types/node": "^8.0.4",
+    "@types/selenium-standalone": "^6.15.0",
     "@types/webdriverio": "^4.10.3",
     "allure-commandline": "^2.7.0",
     "circular-json": "^0.3.3",
