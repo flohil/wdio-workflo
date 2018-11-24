@@ -196,12 +196,12 @@ exports.config = {
    */
   onPrepare: function (config, capabilities) {
     if (typeof workfloConf.onPrepare === 'function') {
-      workfloConf.onPrepare(config, capabilities)
+      return workfloConf.onPrepare(config, capabilities)
     }
   },
   beforeSession: function (config, capabilities, testcases) {
     if (typeof workfloConf.beforeSession === 'function') {
-      workfloConf.beforeSession(config, capabilities, testcases)
+      return workfloConf.beforeSession(config, capabilities, testcases)
     }
 
     bail = config.workfloBail

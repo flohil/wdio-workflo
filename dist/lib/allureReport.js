@@ -11,27 +11,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require('fs');
 const path = require('path');
 const allure = require('allure-commandline');
-const wrench = require('wrench');
-const getInstalledPath = require('get-installed-path');
-function rmdir(dir) {
-    const list = fs.readdirSync(dir);
-    for (let i = 0; i < list.length; i++) {
-        const filename = path.join(dir, list[i]);
-        const stat = fs.statSync(filename);
-        if (filename == "." || filename == "..") {
-            // pass these files
-        }
-        else if (stat.isDirectory()) {
-            // rmdir recursively
-            rmdir(filename);
-        }
-        else {
-            // rm fiilename
-            fs.unlinkSync(filename);
-        }
-    }
-    fs.rmdirSync(dir);
-}
 function ensureRunPath(run) {
     let latestRun;
     if (fs.existsSync(process.env.WDIO_WORKFLO_LATEST_RUN_PATH)) {
@@ -59,24 +38,22 @@ function ensureExecutable() {
 function generateReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
-        const allureCliPath = require.resolve('allure-commandline');
-        // replace original allure-commandline bin files with patched ones,
-        // which support issue tracker pattern and bug tracker pattern
-        const allureBinPath = path.resolve(allureCliPath, '../', 'dist/bin');
-        const allureBinBakPath = `${allureBinPath}_bak`;
-        const allurePatchBinPath = path.resolve(__dirname, '../../templates/node_modules/allure-commandline/dist/bin');
         ensureExecutable();
-        wrench.copyDirSyncRecursive(allurePatchBinPath, allureBinPath);
         try {
-            fs.chmodSync(path.join(allureBinPath, 'allure'), 0o755);
+            let allurePropertiesContents = [];
+            if (workfloConf.allure.issueTrackerPattern) {
+                allurePropertiesContents.push('allure.issues.tracker.pattern=' + workfloConf.allure.issueTrackerPattern);
+            }
+            if (workfloConf.allure.bugTrackerPattern) {
+                allurePropertiesContents.push('allure.tests.management.pattern=' + workfloConf.allure.bugTrackerPattern);
+            }
+            fs.writeFileSync(path.join(runPath, 'allure-results', 'allure.properties'), allurePropertiesContents.join('\n'), { mode: 0o755 });
         }
-        finally { }
-        try {
-            fs.chmodSync(path.join(allureBinPath, 'allure.bat'), 0o755);
+        catch (err) {
+            console.error('Writing allure.properties file failed: \n');
+            console.error(err);
+            process.exit(1);
         }
-        finally { }
-        process.env.ALLURE_BUG_TRACKER_PATTERN = workfloConf.allure.bugTrackerPattern;
-        process.env.ALLURE_ISSUE_TRACKER_PATTERN = workfloConf.allure.issueTrackerPattern;
         // returns ChildProcess instance
         const generation = allure([
             'generate',
@@ -86,10 +63,6 @@ function generateReport(workfloConf, run) {
             '--clean'
         ]);
         generation.on('exit', function (exitCode) {
-            if (fs.existsSync(allureBinBakPath)) {
-                rmdir(allureBinPath);
-                fs.renameSync(allureBinBakPath, allureBinPath);
-            }
             console.log('Report generation finished with code:', exitCode);
             resolve(exitCode);
         });

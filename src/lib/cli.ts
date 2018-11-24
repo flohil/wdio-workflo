@@ -173,14 +173,14 @@ interface ConsoleReportEntry {
 }
 
 interface MergedResultsSpec {
-    status: 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending',
+    status: Workflo.SpecStatus,
     dateTime: string,
     resultsFolder: string,
     manual?: boolean
 }
 
 interface MergedResultsTestcase {
-    status: 'passed' | 'failed' | 'broken' | 'unknown' | 'pending',
+    status: Workflo.TestcaseStatus,
     dateTime: string,
     resultsFolder: string
 }
@@ -269,7 +269,7 @@ optimist
     .describe('specFiles', 'restricts test execution to testcases validated by specs defined within these files\n' +
         '\t\t\t   \'["specFile1", "specFile2"]\' => execute all testcases validated by specs defined within specFile1.spec.ts and specFile2.spec.ts\n')
     .describe('listFiles', 'restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files \n' +
-        '\t\t\t   \'["listFile1"]\' => execute all testcases include by the contents of listFile1.list.ts\n')
+        '\t\t\t   \'["listFile1"]\' => execute all testcases included by the contents of listFile1.list.ts\n')
     .describe('specStatus', 'restricts specs by status of their criteria set during their last execution\n' +
         '\t\t\t   \'["passed", "failed", "broken", "unvalidated", "unknown"]\' => these are all available status - combine as you see fit\n' +
         '\t\t\t   \'["faulty"]\' => faulty is a shortcut for failed, broken, unvalidated and unknown\n')

@@ -403,6 +403,8 @@ declare global {
             [key: string]: StepImpl;
         };
         type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial';
+        type TestcaseStatus = 'passed' | 'failed' | 'broken' | 'unknown' | 'pending';
+        type SpecStatus = 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending';
         interface ISpecGiven {
             And: (description: string, bodyFunc?: () => void) => ISpecGiven;
         }
@@ -492,6 +494,9 @@ declare global {
     function validate(validateObject: Workflo.IValidateSpecObject, func: (...args: any[]) => void): void;
     function xpath(selector: string): pageObjects.builders.XPathBuilder;
 }
+export declare type Severity = Workflo.Severity;
+export declare type TestcaseStatus = Workflo.TestcaseStatus;
+export declare type SpecStatus = Workflo.SpecStatus;
 export * from './lib/steps';
 import * as objectFunctions from './lib/utility_functions/object';
 import * as arrayFunctions from './lib/utility_functions/array';

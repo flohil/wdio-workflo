@@ -460,8 +460,8 @@ declare global {
     type StepImplMap = { [key:string]: StepImpl }
 
     type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
-
-    // type severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
+    type TestcaseStatus = 'passed' | 'failed' | 'broken' | 'unknown' | 'pending'
+    type SpecStatus = 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending'
 
     interface ISpecGiven {
       And: (description: string, bodyFunc?: () => void) => ISpecGiven
@@ -580,6 +580,10 @@ declare global {
 
   function xpath(selector: string) : pageObjects.builders.XPathBuilder
 }
+
+export type Severity = Workflo.Severity
+export type TestcaseStatus = Workflo.TestcaseStatus
+export type SpecStatus = Workflo.SpecStatus
 
 export * from './lib/steps'
 
