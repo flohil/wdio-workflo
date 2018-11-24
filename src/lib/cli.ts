@@ -18,6 +18,7 @@ import * as optimist from 'optimist'
 import * as merge from 'deepmerge'
 
 import { objectFunctions, arrayFunctions } from '..'
+import { IWorkfloConfig } from '../'
 
 import { Launcher, baseReporter } from 'webdriverio-workflo'
 import { StringifyOptions } from 'querystring';
@@ -87,6 +88,7 @@ const ALLOWED_OPTS = [
     'rerunFaulty',
     'retries',
     'consoleLogLevel',
+    'debugSeleniumCommand',
     '_',
     '$0'
 ]
@@ -157,6 +159,11 @@ export interface IAnalysedCriteria {
     automatedCriteriaCount: number,
     manualCriteriaCount: number,
     uncoveredCriteriaCount: number,
+}
+
+export interface IParseResults {
+    specs: SpecParseResults
+    testcases: TestcaseParseResults
 }
 
 interface DateEntry {
@@ -249,6 +256,8 @@ optimist
     '\t\t\t   "results" will only output the results and errors of testcases and specs\n' +
     '\t\t\t   "testcases" will additionally print the name of the currently executed test\n' +
     '\t\t\t   "steps" will additionally print all executed steps in the console')
+
+    .describe('debugSeleniumCommand', 'Outputs selenium commands in the allure report if set to true (default: true)')
 
     // filters
 
@@ -420,7 +429,7 @@ if (!fs.existsSync(workfloConfigFile)) {
 
 process.env.WORKFLO_CONFIG = workfloConfigFile
 
-const workfloConfig = require(workfloConfigFile)
+const workfloConfig: IWorkfloConfig = require(workfloConfigFile)
 
 // merge config options into argv if argv does not already contain option itself
 const mergeOpts = [
@@ -434,7 +443,8 @@ const mergeOpts = [
     'testcaseSeverity',
     'dates',
     'manualOnly',
-    'automaticOnly'
+    'automaticOnly',
+    'debugSeleniumCommand'
 ]
 
 mergeOpts.forEach( opt => {
@@ -531,10 +541,7 @@ checkReport().then(() => {
     const completedSpecFiles = completeSpecFiles(argv, mergedFilters)
     const completedTestcaseFiles = completeTestcaseFiles(argv, mergedFilters)
 
-    const parseResults: {
-        specs: SpecParseResults
-        testcases: TestcaseParseResults
-    } = {
+    const parseResults: IParseResults = {
         specs: specFilesParse(Object.keys(mergedFilters.specFiles)),
         testcases: testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
     }
@@ -817,7 +824,6 @@ checkReport().then(() => {
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
-        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false,
         reportErrorsInstantly: setBooleanArg('reportErrorsInstantly', defaultReportErrorsInstantly),
         consoleLogLevel: argv.consoleLogLevel,
         automaticOnly: argv.automaticOnly,
@@ -844,6 +850,14 @@ checkReport().then(() => {
         }
     }
 
+    let debugSeleniumCommand = true
+
+    if ( typeof argv.debugSeleniumCommand !== 'undefined' ) {
+        if ( ( argv.debugSeleniumCommand === 'false' ) ) {
+            debugSeleniumCommand = false
+        }
+    }
+
     // patch wdio.conf.js
     args['logOutput'] = logsPath,
     args['seleniumLogs'] = path.relative('./', path.join(logsPath))
@@ -853,7 +867,7 @@ checkReport().then(() => {
         'workflo-allure': {
             outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
             debug: false,
-            debugSeleniumCommand: true
+            debugSeleniumCommand: debugSeleniumCommand
         }
     })
     args['bail'] = 0

@@ -100,7 +100,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     readonly lastActualResult: string;
     initialWait(): void;
-    readonly elements: WdioElements;
+    readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     /**
      * Returns the first page element found in the DOM that matches the list selector.

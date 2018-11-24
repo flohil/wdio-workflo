@@ -83,6 +83,7 @@ const ALLOWED_OPTS = [
     'rerunFaulty',
     'retries',
     'consoleLogLevel',
+    'debugSeleniumCommand',
     '_',
     '$0'
 ];
@@ -140,6 +141,7 @@ optimist
     '\t\t\t   "results" will only output the results and errors of testcases and specs\n' +
     '\t\t\t   "testcases" will additionally print the name of the currently executed test\n' +
     '\t\t\t   "steps" will additionally print all executed steps in the console')
+    .describe('debugSeleniumCommand', 'Outputs selenium commands in the allure report if set to true (default: true)')
     // filters
     .describe('testcases', 'restricts test execution to these testcases\n' +
     '\t\t\t   \'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
@@ -293,7 +295,8 @@ const mergeOpts = [
     'testcaseSeverity',
     'dates',
     'manualOnly',
-    'automaticOnly'
+    'automaticOnly',
+    'debugSeleniumCommand'
 ];
 mergeOpts.forEach(opt => {
     if (typeof workfloConfig[opt] !== 'undefined') {
@@ -591,7 +594,6 @@ checkReport().then(() => {
         printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
-        reportResultsInstantly: (typeof workfloConfig.reportResultsInstantly !== 'undefined') ? workfloConfig.reportResultsInstantly : false,
         reportErrorsInstantly: setBooleanArg('reportErrorsInstantly', defaultReportErrorsInstantly),
         consoleLogLevel: argv.consoleLogLevel,
         automaticOnly: argv.automaticOnly,
@@ -614,6 +616,12 @@ checkReport().then(() => {
             args[key] = argv[key];
         }
     }
+    let debugSeleniumCommand = true;
+    if (typeof argv.debugSeleniumCommand !== 'undefined') {
+        if ((argv.debugSeleniumCommand === 'false')) {
+            debugSeleniumCommand = false;
+        }
+    }
     // patch wdio.conf.js
     args['logOutput'] = logsPath,
         args['seleniumLogs'] = path.relative('./', path.join(logsPath));
@@ -623,7 +631,7 @@ checkReport().then(() => {
             'workflo-allure': {
                 outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
                 debug: false,
-                debugSeleniumCommand: true
+                debugSeleniumCommand: debugSeleniumCommand
             }
         });
     args['bail'] = 0;

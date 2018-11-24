@@ -1,3 +1,4 @@
+import { SpecParseResults, TestcaseParseResults } from './parser';
 declare global {
     interface Date {
         addDays: Function;
@@ -47,4 +48,8 @@ export interface IAnalysedCriteria {
     automatedCriteriaCount: number;
     manualCriteriaCount: number;
     uncoveredCriteriaCount: number;
+}
+export interface IParseResults {
+    specs: SpecParseResults;
+    testcases: TestcaseParseResults;
 }

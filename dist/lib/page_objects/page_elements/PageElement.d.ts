@@ -145,7 +145,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageNod
     /**
      * Return WdioElement after performing an initial wait.
      */
-    readonly element: WdioElement;
+    readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     readonly $: Store;
     initialWait(): this;
     getHTML(): any;
