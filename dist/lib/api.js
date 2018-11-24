@@ -8,7 +8,7 @@ const criteriaAnalysis = testinfo.criteriaAnalysis;
 const automaticOnly = testinfo.automaticOnly;
 const manualOnly = testinfo.manualOnly;
 const retries = testinfo.retries;
-const bail = testinfo.workfloBail;
+const bail = testinfo.bail;
 const storyMap = new Map();
 const words = {
     'Given': 'Given',
@@ -284,6 +284,7 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
         }
         process.send({ event: 'test:meta', severity: metadata.severity || 'normal' });
         if (bail && global.bailErrors && global.bailErrors >= bail) {
+            jasmineSpecObj.throwOnExpectationFailure = false;
             pending();
         }
         else {

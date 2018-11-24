@@ -204,7 +204,6 @@ exports.config = {
       return workfloConf.beforeSession(config, capabilities, testcases)
     }
 
-    bail = config.workfloBail
     global.bailErrors = config.bailErrors
     global.screenshotId = config.screenshotId + 1
     global.errorScreenshotFilename = undefined

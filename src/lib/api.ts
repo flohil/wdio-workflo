@@ -8,7 +8,7 @@ const criteriaAnalysis = <IAnalysedCriteria> testinfo.criteriaAnalysis
 const automaticOnly = <boolean> testinfo.automaticOnly
 const manualOnly = <boolean> testinfo.manualOnly
 const retries = <number> testinfo.retries
-const bail = testinfo.workfloBail;
+const bail = testinfo.bail;
 
 const storyMap: Map<string, Workflo.IStoryMapEntry> = new Map<string, Workflo.IStoryMapEntry>()
 
@@ -434,6 +434,7 @@ export const testcase = (
     process.send({event: 'test:meta', severity: metadata.severity || 'normal'})
 
     if (bail && (<any> global).bailErrors && (<any> global).bailErrors >= bail) {
+      jasmineSpecObj.throwOnExpectationFailure = false;
       pending();
     } else {
       process.send({event: 'retry:resetErrors' })

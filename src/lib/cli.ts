@@ -83,7 +83,6 @@ const ALLOWED_OPTS = [
     'traceTestcase',
     'manualOnly',
     'automaticOnly',
-    'cleanResultsStatus',
     'reportErrorsInstantly',
     'rerunFaulty',
     'retries',
@@ -236,7 +235,7 @@ optimist
     .describe('bail', 'Stop test runner after specific amount of tests have failed (default: 0 - don\'t bail)')
     .describe('browserName', 'name of the browser used for executing tests or displaying results')
 
-    .describe('debug', 'enable debugging with Node-Inspect Manager chrome extension')
+    .describe('debug', 'enable debugging with Node-Inspect Manager chrome extension (default: false)')
 
     .describe('reportErrorsInstantly', 'report broken testcase errors and errors from validation failures immediatly (default: false)\n' +
     '\t\t\t   allowed values are (true|false)\n' +
@@ -347,9 +346,7 @@ optimist
         'retries'
         /*, 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */
     ])
-    .boolean(['cleanResultsStatus', 'watch', 'debug'])
-    .default({ debug: false, watch: false, cleanResultsStatus: false })
-
+    .boolean(['debug'])
     .check((arg) => {
         if (arg._.length > 1 && arg._[0] !== 'repl') {
             throw new Error('Error: more than one config file specified')
@@ -400,6 +397,9 @@ if (argv.version) {
 if (typeof configFile === 'undefined') {
     configFile = argv._[0]
 }
+
+// default options of wdio
+argv.watch = false
 
 /**
  * sanitize jasmineOpts
@@ -830,8 +830,7 @@ checkReport().then(() => {
         consoleReportPath,
         mergedAllureResultsPath,
         retries: argv.retries || 0,
-        bail: 0,
-        workfloBail: bail
+        bail: bail
     }
 
     jsonfile.writeFileSync(testInfoFilePath, testinfo)
