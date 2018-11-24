@@ -38,7 +38,6 @@ const ALLOWED_ARGV = [
     'key',
     'bail',
     'testInfoFilePath',
-    'silentRetries',
     'retries'
 ];
 const ALLOWED_OPTS = [
@@ -205,8 +204,26 @@ optimist
     // .alias('framework', 'f')
     // .describe('reporters', 'reporters to print out the results on stdout') // supports only workflo adaptions of spec and allure reporters
     // .alias('reporters', 'r')
-    .string(['host', 'baseUrl', 'user', 'key', 'bail', 'specs', 'testcases', 'specFiles', 'testcaseFiles', 'listFiles', 'rerunFaulty', 'retries'
-    /*, 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */ 
+    .string([
+    'host',
+    'baseUrl',
+    'user',
+    'key',
+    'bail',
+    'specs',
+    'testcases',
+    'features',
+    'specFiles',
+    'testcaseFiles',
+    'listFiles',
+    'specStatus',
+    'testcaseStatus',
+    'specSeverity',
+    'testcaseSeverity',
+    'dates',
+    'rerunFaulty',
+    'retries'
+    /*, 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */
 ])
     .boolean(['cleanResultsStatus', 'watch', 'debug'])
     .default({ debug: false, watch: false, cleanResultsStatus: false })
@@ -264,6 +281,29 @@ if (!fs.existsSync(workfloConfigFile)) {
 }
 process.env.WORKFLO_CONFIG = workfloConfigFile;
 const workfloConfig = require(workfloConfigFile);
+// merge config options into argv if argv does not already contain option itself
+const mergeOpts = [
+    'listFiles',
+    'testcases',
+    'features',
+    'specs',
+    'specStatus',
+    'testcaseStatus',
+    'specSeverity',
+    'testcaseSeverity',
+    'dates',
+    'manualOnly',
+    'automaticOnly'
+];
+mergeOpts.forEach(opt => {
+    if (typeof workfloConfig[opt] !== 'undefined') {
+        if (typeof argv[opt] === 'undefined') {
+            argv[opt] = JSON.stringify(workfloConfig[opt]);
+        }
+        else {
+        }
+    }
+});
 if (argv.browserName) {
     workfloConfig.capabilities.browserName = argv.browserName;
 }
@@ -514,13 +554,13 @@ checkReport().then(() => {
         }
     };
     if (typeof argv.retries === 'undefined' && typeof workfloConfig.retries !== 'undefined') {
-        argv.silentRetries = workfloConfig.retries;
+        argv.retries = workfloConfig.retries;
     }
     else if (typeof argv.retries !== 'undefined') {
-        argv.silentRetries = parseInt(argv.retries);
+        argv.retries = parseInt(argv.retries);
     }
     else {
-        argv.silentRetries = 0;
+        argv.retries = 0;
     }
     if (typeof argv.consoleLogLevel === 'undefined' && typeof workfloConfig.consoleLogLevel !== 'undefined') {
         argv.consoleLogLevel = workfloConfig.consoleLogLevel;
@@ -563,7 +603,7 @@ checkReport().then(() => {
         mergedResultsPath,
         consoleReportPath,
         mergedAllureResultsPath,
-        retries: argv.silentRetries || 0,
+        retries: argv.retries || 0,
         bail: 0,
         workfloBail: bail
     };
