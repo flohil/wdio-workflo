@@ -216,6 +216,7 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
                 criteria: description
             } }); // split at last | occurence
         // allure report metadata
+        process.send({ event: 'test:meta', epic: `Specs` });
         process.send({ event: 'test:meta', feature: `${story.featureName}` });
         process.send({ event: 'test:meta', story: `${story.storyName}` });
         process.send({ event: 'test:meta', issue: story.metadata.issues });
@@ -276,7 +277,7 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     let performedTries = 0;
     const _bodyFunc = () => {
         process.send({ event: 'test:setCurrentId', id: fullId, testcase: true });
-        process.send({ event: 'test:meta', feature: `--Testcases--` });
+        process.send({ event: 'test:meta', epic: `Testcases` });
         process.send({ event: 'test:meta', story: fullSuiteId });
         // allure report metadata
         if (metadata.bugs) {

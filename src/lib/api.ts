@@ -323,6 +323,7 @@ export const Then = (
     }}) // split at last | occurence
 
     // allure report metadata
+    process.send({event: 'test:meta', epic: `Specs`});
     process.send({event: 'test:meta', feature: `${story.featureName}`})
     process.send({event: 'test:meta', story: `${story.storyName}`})
     process.send({event: 'test:meta', issue: story.metadata.issues})
@@ -424,7 +425,7 @@ export const testcase = (
   const _bodyFunc = () => {
     process.send({event: 'test:setCurrentId', id: fullId, testcase: true})
 
-    process.send({event: 'test:meta', feature: `--Testcases--`})
+    process.send({event: 'test:meta', epic: `Testcases`});
     process.send({event: 'test:meta', story: fullSuiteId})
 
     // allure report metadata
