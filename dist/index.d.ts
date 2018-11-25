@@ -975,7 +975,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * @param {ICallbackConfig} config wdio-workflo configuration object
      * @param {Array.<ICapabilities>} capabilities list of capabilities details
      */
-    onPrepare?<T>(config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> & undefined;
+    onPrepare?<T>(config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> | void;
     /**
      * Gets executed just before initialising the webdriver session and test framework. It allows you
      * to manipulate configurations depending on the capability or testcase.
@@ -986,7 +986,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * @param {Array.<ICapabilities>} capabilities list of capabilities details
      * @param {Array.<String>} testcaseFiles List of testcases file paths that are to be run
      */
-    beforeSession?<T>(config: ICallbackConfig, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> & undefined;
+    beforeSession?<T>(config: ICallbackConfig, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void;
     /**
      * Gets executed before testcases execution begins. At this point you can access to all global
      * variables like `browser`. It is the perfect place to define custom commands.
@@ -996,33 +996,33 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * @param {Array.<ICapabilities>} capabilities list of capabilities details
      * @param {Array.<String>} testcaseFiles List of testcases file paths that are to be run
      */
-    before?<T>(capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> & undefined;
+    before?<T>(capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void;
     /**
      * Hook that gets executed before the suite starts
      * @param {Suite} suite suite details
      */
-    beforeSuite?<T>(suite: Suite): Promise<T> & undefined;
+    beforeSuite?<T>(suite: Suite): Promise<T> | void;
     /**
      * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
      * beforeEach in Jasmine)
      */
-    beforeHook?<T>(): Promise<T> & undefined;
+    beforeHook?<T>(): Promise<T> | void;
     /**
      * Hook that gets executed _after_ a hook within the suite ends (e.g. runs after calling
      * afterEach in Jasmine)
      */
-    afterHook?<T>(): Promise<T> & undefined;
+    afterHook?<T>(): Promise<T> | void;
     /**
      * Function to be executed before a testcase starts.
      * @param {Test} test test details
      */
-    beforeTest?<T>(test: Test): Promise<T> & undefined;
+    beforeTest?<T>(test: Test): Promise<T> | void;
     /**
      * Runs before a WebdriverIO command gets executed.
      * @param {String} commandName hook command name
      * @param {Array} args arguments that command would receive
      */
-    beforeCommand?<T>(commandName: string, args: any[]): Promise<T> & undefined;
+    beforeCommand?<T>(commandName: string, args: any[]): Promise<T> | void;
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {String} commandName hook command name
@@ -1030,17 +1030,17 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * @param {Number} result 0 - command success, 1 - command error
      * @param {Error} error error object if any
      */
-    afterCommand?<T>(commandName: string, args: any[], result: number, error: Error): Promise<T> & undefined;
+    afterCommand?<T>(commandName: string, args: any[], result: number, error: Error): Promise<T> | void;
     /**
      * Function to be executed after a testcase ends.
      * @param {Test} test test details
      */
-    afterTest?<T>(test: Test): Promise<T> & undefined;
+    afterTest?<T>(test: Test): Promise<T> | void;
     /**
      * Hook that gets executed after the suite has ended
      * @param {Suite} suite suite details
      */
-    afterSuite?<T>(suite: Suite): Promise<T> & undefined;
+    afterSuite?<T>(suite: Suite): Promise<T> | void;
     /**
      * Gets executed after all tests are done. You still have access to all global variables from
      * the test.
@@ -1048,7 +1048,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * @param {Array.<ICapabilities>} capabilities list of capabilities details
      * @param {Array.<String>} testcaseFiles List of testcases file paths that ran
      */
-    after?<T>(result: number, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> & undefined;
+    after?<T>(result: number, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void;
     /**
      * Gets executed right after terminating the webdriver session.
      *
@@ -1058,7 +1058,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * @param {Array.<ICapabilities>} capabilities list of capabilities details
      * @param {Array.<String>} testcaseFiles List of testcases file paths that ran
      */
-    afterSession?<T>(config: ICallbackConfig, capabilities: ICapabilities, testcaseFiles: string[]): Promise<T> & undefined;
+    afterSession?<T>(config: ICallbackConfig, capabilities: ICapabilities, testcaseFiles: string[]): Promise<T> | void;
     /**
      * Gets executed before test execution begins. At this point you can access to all global
      * variables like `browser`. It is the perfect place to define custom commands.
@@ -1068,7 +1068,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * @param {Array.<ICapabilities>} capabilities list of capabilities details
      * @param {Array.<String>} specFiles List of spec file paths that are to be run
      */
-    beforeValidator?<T>(capabilities: ICapabilities[], specFiles: string[]): Promise<T> & undefined;
+    beforeValidator?<T>(capabilities: ICapabilities[], specFiles: string[]): Promise<T> | void;
     /**
     * Gets executed after all tests are done. You still have access to all global variables from
     * the test.
@@ -1076,17 +1076,17 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
     * @param {Array.<ICapabilities>} capabilities list of capabilities details
     * @param {Array.<String>} specFiles List of spec file paths that ran
     */
-    afterValidator?<T>(result: number, capabilities: ICapabilities[], specFiles: string[]): Promise<T> & undefined;
+    afterValidator?<T>(result: number, capabilities: ICapabilities[], specFiles: string[]): Promise<T> | void;
     /**
      * Gets executed after all workers got shut down and the process is about to exit.
      * @param {Number} exitCode 0 - success, 1 - fail
      * @param {ICallbackConfig} config wdio-workflo configuration object
      * @param {Array.<ICapabilities>} capabilities list of capabilities details
      */
-    onComplete?<T>(exitCode: number, config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> & undefined;
+    onComplete?<T>(exitCode: number, config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> | void;
     /**
     * Gets executed when an error happens, good place to take a screenshot
     * @ {Error} error
     */
-    onError?<T>(error: Error): Promise<T> & undefined;
+    onError?<T>(error: Error): Promise<T> | void;
 }

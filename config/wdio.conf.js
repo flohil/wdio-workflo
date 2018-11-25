@@ -203,13 +203,13 @@ exports.config = {
     }
   },
   beforeSession: function (config, capabilities, testcases) {
-    if (typeof workfloConf.beforeSession === 'function') {
-      return workfloConf.beforeSession(config, capabilities, testcases)
-    }
-
     global.bailErrors = config.bailErrors
     global.screenshotId = config.screenshotId + 1
     global.errorScreenshotFilename = undefined
+
+    if (typeof workfloConf.beforeSession === 'function') {
+      return workfloConf.beforeSession(config, capabilities, testcases)
+    }
   },
   before: function (capabilities, testcases) {
     process.env.WORKFLO_CONFIG = JSON.stringify(workfloConf)
@@ -231,14 +231,14 @@ exports.config = {
     })
 
     if (typeof workfloConf.before === 'function') {
-      workfloConf.before(capabilities, testcases)
+      return workfloConf.before(capabilities, testcases)
     }
   },
   beforeSuite: function (suite) {
     browser.timeouts('implicit', 1001)
 
     if (typeof workfloConf.beforeSuite === 'function') {
-      workfloConf.beforeSuite(suite)
+      return workfloConf.beforeSuite(suite)
     }
   },
   beforeValidator: function (capabilities, specs) {
@@ -250,17 +250,17 @@ exports.config = {
     finishedTestcases = true
 
     if (typeof workfloConf.beforeValidator === 'function') {
-      workfloConf.beforeValidator(capabilities, specs)
+      return workfloConf.beforeValidator(capabilities, specs)
     }
   },
   beforeHook: function () {
     if (typeof workfloConf.beforeHook === 'function') {
-      workfloConf.beforeHook()
+      return workfloConf.beforeHook()
     }
   },
   afterHook: function () {
     if (typeof workfloConf.afterHook === 'function') {
-      workfloConf.afterHook()
+      return workfloConf.afterHook()
     }
   },
   beforeTest: function (test) {
@@ -280,12 +280,12 @@ exports.config = {
     }
 
     if (typeof workfloConf.beforeTest === 'function') {
-      workfloConf.beforeTest(test)
+      return workfloConf.beforeTest(test)
     }
   },
   beforeCommand: function (commandName, args) {
     if (typeof workfloConf.beforeCommand === 'function') {
-      workfloConf.beforeCommand(commandName, args)
+      return workfloConf.beforeCommand(commandName, args)
     }
   },
   // Runs after a WebdriverIO command gets executed
@@ -313,48 +313,48 @@ exports.config = {
     }
 
     if (typeof workfloConf.afterCommand === 'function') {
-      workfloConf.afterCommand(commandName, args, result, error)
+      return workfloConf.afterCommand(commandName, args, result, error)
     }
   },
   afterTest: function (test) {
-    if (typeof workfloConf.afterTest === 'function') {
-      workfloConf.afterTest(test)
-    }
-
     if (test.passed === false) {
       browser.reload()
+    }
+
+    if (typeof workfloConf.afterTest === 'function') {
+      return workfloConf.afterTest(test)
     }
   },
   afterSuite: function (suite) {
     if (typeof workfloConf.afterSuite === 'function') {
-      workfloConf.afterSuite(suite)
+      return workfloConf.afterSuite(suite)
     }
   },
   after: function (result, capabilities, testcases) {
     if (typeof workfloConf.after === 'function') {
-      workfloConf.after(result, capabilities, testcases)
+      return workfloConf.after(result, capabilities, testcases)
     }
   },
   afterValidator: function (result, capabilities, specs) {
     if (typeof workfloConf.after === 'function') {
-      workfloConf.afterValidator(result, capabilities, specs)
+      return workfloConf.afterValidator(result, capabilities, specs)
     }
   },
   afterSession: function (config, capabilities, testcases) {
     if (typeof workfloConf.afterSession === 'function') {
-      workfloConf.afterSession(config, capabilities, testcases)
+      return workfloConf.afterSession(config, capabilities, testcases)
     }
   },
   onComplete: function (exitCode, config, capabilities) {
     copyFolderRecursiveSync(path.join(config.resultsPath, config.dateTime, 'allure-results'), config.mergedAllureResultsPath)
 
     if (typeof workfloConf.onComplete === 'function') {
-      workfloConf.onComplete(exitCode, config, capabilities)
+      return workfloConf.onComplete(exitCode, config, capabilities)
     }
   },
   onError: function (message) {
     if (typeof workfloConf.onError === 'function') {
-      workfloConf.onError(message)
+      return workfloConf.onError(message)
     }
   }
 }
