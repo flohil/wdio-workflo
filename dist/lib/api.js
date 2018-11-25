@@ -282,6 +282,9 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
         if (metadata.bugs) {
             process.send({ event: 'test:meta', bug: metadata.bugs });
         }
+        if (metadata.testId) {
+            process.send({ event: 'test:meta', testId: metadata.testId });
+        }
         process.send({ event: 'test:meta', severity: metadata.severity || 'normal' });
         if (bail && global.bailErrors && global.bailErrors >= bail) {
             jasmineSpecObj.throwOnExpectationFailure = false;

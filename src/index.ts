@@ -503,6 +503,7 @@ declare global {
 
     interface ITestcaseMetadata {
       bugs?: string[],
+      testId?: string,
       severity?: Workflo.Severity // Workflo.severity
     }
 
@@ -791,27 +792,35 @@ export interface IWorkfloCommonConfig {
      *
      * @example "http://example.com/jira/browse/%s"
      */
-    issueTrackerPattern: string,
+    issueTrackerPattern?: string,
+    /**
+     * Pattern used to create urls for testcase management system.
+     *
+     * '%s' in pattern will be replaced with testId keys defined in Story options.
+     *
+     * @example "http://example.com/tms/browse/%s"
+     */
+    testManagementPattern?: string,
     /**
      * Will be prepended to issue keys displayed in allure report.
-     * Has no effect on actual issue url.
+     * This can be useful as allure report provides no way to distinct issues and bugs by default.
      */
     issuePrefix?: string,
     /**
      * Will be appended to issue keys displayed in allure report.
-     * Has no effect on actual issue url.
+     * This can be useful as allure report provides no way to distinct issues and bugs by default.
      */
     issueAppendix?: string,
     /**
      * Will be prepended to bug keys displayed in allure report.
-     * Has no effect on actual bug url.
+     * This can be useful as allure report provides no way to distinct issues and bugs by default.
      */
     bugPrefix?: string
     /**
      * Will be appended to bug keys displayed in allure report.
-     * Has no effect on actual bug url.
+     * This can be useful as allure report provides no way to distinct issues and bugs by default.
      */
-    bugAppendix?: string,
+    bugAppendix?: string
   }
   /**
    * Log level output in spec reporter console.

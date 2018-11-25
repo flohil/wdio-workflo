@@ -431,6 +431,9 @@ export const testcase = (
     if (metadata.bugs) {
       process.send({event: 'test:meta', bug: metadata.bugs})
     }
+    if (metadata.testId) {
+      process.send({event: 'test:meta', testId: metadata.testId})
+    }
     process.send({event: 'test:meta', severity: metadata.severity || 'normal'})
 
     if (bail && (<any> global).bailErrors && (<any> global).bailErrors >= bail) {
