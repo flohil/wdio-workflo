@@ -1,12 +1,13 @@
 {
   "name": "wdio-workflo",
-  "version": "0.0.267",
+  "version": "0.1.6",
   "description": "Framework for automated functional system tests in gherkin style",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "postinstall": "node utils/postinstall.js"
   },
   "author": "Florian Hilbinger",
   "license": "MIT",

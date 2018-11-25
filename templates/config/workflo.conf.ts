@@ -10,19 +10,13 @@ const workfloConfig: IWorkfloConfig = {
   width: 1280,
   height: 800,
   capabilities: {
-    browserName: 'chrome',
-    requireWindowFocus: true,
-    nativeEvents: true,
-    unexpectedAlertBehaviour: "accept",
-    ignoreProtectedModeSettings: true,
-    "disable-popup-blocking": true,
-    enablePersistentHover: true,
+    browserName: 'chrome'
   },
   timeouts: {
-    default: 4000
+    default: 5000
   },
   intervals: {
-    default: 400
+    default: 500
   },
   specFiles: [ `${testDir}/src/specs/**/*.spec.ts` ],
   testcaseFiles: [ `${testDir}/src/testcases/**/*.tc.ts` ],

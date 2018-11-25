@@ -116,9 +116,9 @@ optimist
     .usage('wdio-workflo CLI runner\n\n' +
     'Usage: wdio-workflo [configFile] [options]\n' +
     'The [options] object will override values from the config file.')
-    .describe('help', 'prints wdio-workflo help menu')
+    .describe('help', 'Prints wdio-workflo help menu.')
     .alias('help', 'h')
-    .describe('version', 'prints wdio-workflo version')
+    .describe('version', 'Prints wdio-workflo version.')
     .alias('version', 'v')
     .describe('init', 'Initializes the folder structure for wdio-workflo tests. Define testDir in workflo.conf.ts before!')
     // config options
