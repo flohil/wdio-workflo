@@ -39,21 +39,6 @@ function generateReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
         ensureExecutable();
-        try {
-            let allurePropertiesContents = [];
-            if (workfloConf.allure.issueTrackerPattern) {
-                allurePropertiesContents.push('allure.issues.tracker.pattern=' + workfloConf.allure.issueTrackerPattern);
-            }
-            if (workfloConf.allure.bugTrackerPattern) {
-                allurePropertiesContents.push('allure.tests.management.pattern=' + workfloConf.allure.bugTrackerPattern);
-            }
-            fs.writeFileSync(path.join(runPath, 'allure-results', 'allure.properties'), allurePropertiesContents.join('\n'), { mode: 0o755 });
-        }
-        catch (err) {
-            console.error('Writing allure.properties file failed: \n');
-            console.error(err);
-            process.exit(1);
-        }
         // returns ChildProcess instance
         const generation = allure([
             'generate',
