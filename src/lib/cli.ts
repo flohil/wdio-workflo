@@ -8,12 +8,10 @@ import * as ejs from 'ejs'
 import * as jsonfile from 'jsonfile'
 import * as supportsColor from 'supports-color'
 
-import {specFilesParse, SpecTableEntry, testcaseFilesParse, TestcaseTableEntry, SpecParseResults, TestcaseParseResults} from './parser'
+import {specFilesParse, testcaseFilesParse, SpecParseResults, TestcaseParseResults} from './parser'
 import {getAllFiles} from './io'
 import {generateReport, openReport} from './allureReport'
 
-import * as npmInstallPackage from 'npm-install-package'
-import * as inquirer from 'inquirer'
 import * as optimist from 'optimist'
 import * as merge from 'deepmerge'
 
@@ -21,7 +19,6 @@ import { objectFunctions, arrayFunctions } from '..'
 import { IWorkfloConfig } from '../'
 
 import { Launcher, baseReporter } from 'webdriverio-workflo'
-import { StringifyOptions } from 'querystring';
 
 const table = require('text-table')
 const pkg = require('../../package.json')
@@ -363,7 +360,7 @@ optimist
     })
 
 if (process.argv.length === 2 || process.argv.length > 2 && process.argv[2].substr(0,1) === '-') {
-    configFile = './workflo.conf.js'
+    configFile = './workflo.conf.ts'
     optionsOffset = 1 // no config file specified
 }
 
@@ -429,7 +426,7 @@ if (!fs.existsSync(workfloConfigFile)) {
 
 process.env.WORKFLO_CONFIG = workfloConfigFile
 
-const workfloConfig: IWorkfloConfig = require(workfloConfigFile)
+const workfloConfig: IWorkfloConfig = require(workfloConfigFile).default
 
 // merge config options into argv if argv does not already contain option itself
 const mergeOpts = [

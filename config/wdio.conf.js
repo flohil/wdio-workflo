@@ -1,12 +1,15 @@
 if (typeof process.env.WORKFLO_CONFIG === 'undefined') {
-  console.error('Please provide the absolute path to workflo.conf.js location as WORKFLO_CONFIG environment variable!')
+  console.error('Please provide the absolute path to workflo.conf.ts location as WORKFLO_CONFIG environment variable!')
   process.exit(1)
 }
+
+require('ts-node/register')
+require('tsconfig-paths/register')
 
 const path = require('path')
 const _ = require('lodash')
 const fs = require('fs')
-const workfloConf = require(process.env.WORKFLO_CONFIG)
+const workfloConf = require(process.env.WORKFLO_CONFIG).default
 const jsonfile = require('jsonfile')
 const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursiveSync
 
@@ -79,8 +82,8 @@ exports.config = {
    */
   capabilities: [ Object.assign(workfloConf.capabilities, { maxInstances: 1 }) ],
   services: workfloConf.services || ['selenium-standalone'],
-  seleniumArgs: workfloConf.selenium.seleniumStartArgs,
-  seleniumInstallArgs: workfloConf.selenium.installArgs,
+  seleniumArgs: workfloConf.seleniumStartArgs,
+  seleniumInstallArgs: workfloConf.installArgs,
   queryParams: workfloConf.queryParams || {},
   headers: workfloConf.headers || {},
   /**

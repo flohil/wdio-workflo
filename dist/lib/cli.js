@@ -233,7 +233,7 @@ optimist
     }
 });
 if (process.argv.length === 2 || process.argv.length > 2 && process.argv[2].substr(0, 1) === '-') {
-    configFile = './workflo.conf.js';
+    configFile = './workflo.conf.ts';
     optionsOffset = 1; // no config file specified
 }
 let argv = optimist.parse(process.argv.slice(optionsOffset));
@@ -282,7 +282,7 @@ if (!fs.existsSync(workfloConfigFile)) {
     process.exit(1);
 }
 process.env.WORKFLO_CONFIG = workfloConfigFile;
-const workfloConfig = require(workfloConfigFile);
+const workfloConfig = require(workfloConfigFile).default;
 // merge config options into argv if argv does not already contain option itself
 const mergeOpts = [
     'listFiles',
