@@ -3,8 +3,7 @@ require('tsconfig-paths/register')
 
 import * as path from 'path'
 import * as fs from 'fs'
-import * as fxExtra from 'fs-extra'
-import * as ejs from 'ejs'
+import * as fsExtra from 'fs-extra'
 import * as jsonfile from 'jsonfile'
 import * as supportsColor from 'supports-color'
 
@@ -19,6 +18,7 @@ import { objectFunctions, arrayFunctions } from '..'
 import { IWorkfloConfig } from '../'
 
 import { Launcher, baseReporter } from 'webdriverio-workflo'
+import { flattenDiagnosticMessageText } from 'typescript';
 
 const table = require('text-table')
 const pkg = require('../../package.json')
@@ -45,6 +45,7 @@ const ALLOWED_ARGV = [
 const ALLOWED_OPTS = [
     'help', 'h',
     'version', 'v',
+    'init',
     'protocol',
     'baseUrl',
     'host',
@@ -222,12 +223,14 @@ optimist
         'Usage: wdio-workflo [configFile] [options]\n' +
         'The [options] object will override values from the config file.')
 
+    .describe('help', 'Prints wdio-workflo help menu.')
+    .alias('help', 'h')
+    .describe('version', 'Prints wdio-workflo version.')
+    .alias('version', 'v')
+    .describe('init', 'Initializes the folder structure for wdio-workflo tests. Define testDir in workflo.conf.ts before!')
+
     // config options
 
-    .describe('help', 'prints wdio-workflo help menu')
-    .alias('help', 'h')
-    .describe('version', 'prints wdio-workflo version')
-    .alias('version', 'v')
     .describe('baseUrl', 'Set a base URL in order to shorten url command calls')
     .alias('baseUrl', 'b')
     .describe('host', 'Host of your WebDriver server (default: \'127.0.0.1\')')
@@ -428,6 +431,11 @@ process.env.WORKFLO_CONFIG = workfloConfigFile
 
 const workfloConfig: IWorkfloConfig = require(workfloConfigFile).default
 
+if (argv.init) {
+    ensureFolderStructure(workfloConfig.testDir)
+    process.exit(0)
+}
+
 // merge config options into argv if argv does not already contain option itself
 const mergeOpts = [
     'listFiles',
@@ -472,16 +480,16 @@ const mergedResultsPath = path.join(resultsPath, `mergedResults.json`)
 const mergedAllureResultsPath = path.join(resultsPath, `mergedAllureResults`)
 const consoleReportPath = path.join(resultsPath, process.env.LATEST_RUN, 'consoleReport.json')
 
-fxExtra.ensureDirSync(resultsPath)
+fsExtra.ensureDirSync(resultsPath)
 
 process.env.WDIO_WORKFLO_RUN_PATH = path.join(resultsPath, process.env.LATEST_RUN)
 process.env.WDIO_WORKFLO_RESULTS_PATH = resultsPath
 process.env.WDIO_WORKFLO_LATEST_RUN_PATH = path.join(resultsPath, 'latestRun')
 
 checkReport().then(() => {
-    fxExtra.ensureDirSync(mergedAllureResultsPath)
-    fxExtra.ensureDirSync(logsPath)
-    fxExtra.ensureDirSync(allureResultsPath)
+    fsExtra.ensureDirSync(mergedAllureResultsPath)
+    fsExtra.ensureDirSync(logsPath)
+    fsExtra.ensureDirSync(allureResultsPath)
 
     // check workflo config properties
     const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath']
@@ -501,7 +509,7 @@ checkReport().then(() => {
     const specsDir = path.join(srcDir, 'specs')
     const testcasesDir = path.join(srcDir, 'testcases')
     const listsDir = path.join(srcDir, 'lists')
-    const manDir = path.join(srcDir, 'manualResults')
+    const manDir = path.join(srcDir, 'manual_results')
     const testInfoFilePath = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'testinfo.json')
 
     const filters: IExecutionFilters = {}
@@ -2564,5 +2572,55 @@ async function checkReport() {
         })
 
         process.exit(0)
+    }
+}
+
+function ensureFolderStructure(testDir: string) {
+    const srcDir = path.join(testDir, 'src')
+    const dataDir = path.join(testDir, 'data')
+    const logsDir = path.join(testDir, 'logs')
+    const resultsDir = path.join(testDir, 'results')
+    const listsDir = path.join(srcDir, 'lists')
+    const testcasesDir = path.join(srcDir, 'testcases')
+    const specsDir = path.join(srcDir, 'specs')
+    const manualResultsDir = path.join(srcDir, 'manual_results')
+    const stepsDir = path.join(srcDir, 'steps')
+    const pageObjectsDir = path.join(srcDir, 'page_objects')
+    const stepsIndexPath = path.join(stepsDir, 'index.ts')
+    const templatesDir = path.resolve(__dirname, '../../templates/');
+
+    const createDirs = [
+        testDir,
+        srcDir,
+        logsDir,
+        resultsDir,
+        dataDir,
+        listsDir,
+        testcasesDir,
+        specsDir,
+        manualResultsDir,
+        stepsDir,
+        pageObjectsDir
+    ]
+
+    try {
+        // create all necessary test directories
+        createDirs.forEach( dir => {
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir)
+            }
+        })
+
+        // add steps index file
+        if (!fs.existsSync(stepsIndexPath)) {
+            fsExtra.copySync(path.join(templatesDir, 'src', 'steps', 'index.ts'), stepsIndexPath);
+        }
+
+        console.log("\nSuccessfully initialized folder structure for wdio-workflo!")
+    } catch ( error ) {
+        console.error("\nFailed to initialize structure for wdio-workflo!")
+        console.error( error )
+
+        process.exit(1)
     }
 }

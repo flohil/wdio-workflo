@@ -12,7 +12,7 @@ require('ts-node/register');
 require('tsconfig-paths/register');
 const path = require("path");
 const fs = require("fs");
-const fxExtra = require("fs-extra");
+const fsExtra = require("fs-extra");
 const jsonfile = require("jsonfile");
 const supportsColor = require("supports-color");
 const parser_1 = require("./parser");
@@ -43,6 +43,7 @@ const ALLOWED_ARGV = [
 const ALLOWED_OPTS = [
     'help', 'h',
     'version', 'v',
+    'init',
     'protocol',
     'baseUrl',
     'host',
@@ -115,11 +116,12 @@ optimist
     .usage('wdio-workflo CLI runner\n\n' +
     'Usage: wdio-workflo [configFile] [options]\n' +
     'The [options] object will override values from the config file.')
-    // config options
     .describe('help', 'prints wdio-workflo help menu')
     .alias('help', 'h')
     .describe('version', 'prints wdio-workflo version')
     .alias('version', 'v')
+    .describe('init', 'Initializes the folder structure for wdio-workflo tests. Define testDir in workflo.conf.ts before!')
+    // config options
     .describe('baseUrl', 'Set a base URL in order to shorten url command calls')
     .alias('baseUrl', 'b')
     .describe('host', 'Host of your WebDriver server (default: \'127.0.0.1\')')
@@ -283,6 +285,10 @@ if (!fs.existsSync(workfloConfigFile)) {
 }
 process.env.WORKFLO_CONFIG = workfloConfigFile;
 const workfloConfig = require(workfloConfigFile).default;
+if (argv.init) {
+    ensureFolderStructure(workfloConfig.testDir);
+    process.exit(0);
+}
 // merge config options into argv if argv does not already contain option itself
 const mergeOpts = [
     'listFiles',
@@ -321,14 +327,14 @@ const latestRunPath = path.join(resultsPath, 'latestRun');
 const mergedResultsPath = path.join(resultsPath, `mergedResults.json`);
 const mergedAllureResultsPath = path.join(resultsPath, `mergedAllureResults`);
 const consoleReportPath = path.join(resultsPath, process.env.LATEST_RUN, 'consoleReport.json');
-fxExtra.ensureDirSync(resultsPath);
+fsExtra.ensureDirSync(resultsPath);
 process.env.WDIO_WORKFLO_RUN_PATH = path.join(resultsPath, process.env.LATEST_RUN);
 process.env.WDIO_WORKFLO_RESULTS_PATH = resultsPath;
 process.env.WDIO_WORKFLO_LATEST_RUN_PATH = path.join(resultsPath, 'latestRun');
 checkReport().then(() => {
-    fxExtra.ensureDirSync(mergedAllureResultsPath);
-    fxExtra.ensureDirSync(logsPath);
-    fxExtra.ensureDirSync(allureResultsPath);
+    fsExtra.ensureDirSync(mergedAllureResultsPath);
+    fsExtra.ensureDirSync(logsPath);
+    fsExtra.ensureDirSync(allureResultsPath);
     // check workflo config properties
     const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath'];
     for (const property of mandatoryProperties) {
@@ -344,7 +350,7 @@ checkReport().then(() => {
     const specsDir = path.join(srcDir, 'specs');
     const testcasesDir = path.join(srcDir, 'testcases');
     const listsDir = path.join(srcDir, 'lists');
-    const manDir = path.join(srcDir, 'manualResults');
+    const manDir = path.join(srcDir, 'manual_results');
     const testInfoFilePath = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'testinfo.json');
     const filters = {};
     const mergedFilters = {};
@@ -2036,5 +2042,50 @@ function checkReport() {
             process.exit(0);
         }
     });
+}
+function ensureFolderStructure(testDir) {
+    const srcDir = path.join(testDir, 'src');
+    const dataDir = path.join(testDir, 'data');
+    const logsDir = path.join(testDir, 'logs');
+    const resultsDir = path.join(testDir, 'results');
+    const listsDir = path.join(srcDir, 'lists');
+    const testcasesDir = path.join(srcDir, 'testcases');
+    const specsDir = path.join(srcDir, 'specs');
+    const manualResultsDir = path.join(srcDir, 'manual_results');
+    const stepsDir = path.join(srcDir, 'steps');
+    const pageObjectsDir = path.join(srcDir, 'page_objects');
+    const stepsIndexPath = path.join(stepsDir, 'index.ts');
+    const templatesDir = path.resolve(__dirname, '../../templates/');
+    const createDirs = [
+        testDir,
+        srcDir,
+        logsDir,
+        resultsDir,
+        dataDir,
+        listsDir,
+        testcasesDir,
+        specsDir,
+        manualResultsDir,
+        stepsDir,
+        pageObjectsDir
+    ];
+    try {
+        // create all necessary test directories
+        createDirs.forEach(dir => {
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+        });
+        // add steps index file
+        if (!fs.existsSync(stepsIndexPath)) {
+            fsExtra.copySync(path.join(templatesDir, 'src', 'steps', 'index.ts'), stepsIndexPath);
+        }
+        console.log("\nSuccessfully initialized folder structure for wdio-workflo!");
+    }
+    catch (error) {
+        console.error("\nFailed to initialize structure for wdio-workflo!");
+        console.error(error);
+        process.exit(1);
+    }
 }
 //# sourceMappingURL=cli.js.map
