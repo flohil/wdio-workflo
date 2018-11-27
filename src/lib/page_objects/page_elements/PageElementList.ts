@@ -3,10 +3,10 @@ import {
   PageNode,
   IPageNodeOpts,
   PageElement,
-  IPageElementWaitAPI,
-  IPageElementWaitNotAPI,
-  IPageElementEventuallyAPI,
-  IPageElementEventuallyNotAPI
+  IPageElementWait,
+  IPageElementWaitNot,
+  IPageElementEventually,
+  IPageElementEventuallyNot
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
@@ -72,8 +72,8 @@ export interface IPageElementListWaitAPI<
 > {
   hasLength: ( length: number, opts?:  IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
   isEmpty: ( opts?: IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
-  any: Omit<IPageElementWaitAPI<Store>, 'not'>
-  none: IPageElementWaitNotAPI<Store>
+  any: Omit<IPageElementWait<Store>, 'not'>
+  none: IPageElementWaitNot<Store>
   not: {
     hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => PageElementList<Store, PageElementType, PageElementOptions>
     isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => PageElementList<Store, PageElementType, PageElementOptions>
@@ -85,8 +85,8 @@ export interface IPageElementListEventuallyAPI<
 > {
   hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
   isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
-  any: Omit<IPageElementEventuallyAPI<Store>, 'not'>
-  none: IPageElementEventuallyNotAPI<Store>
+  any: Omit<IPageElementEventually<Store>, 'not'>
+  none: IPageElementEventuallyNot<Store>
   not: {
     hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
     isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
@@ -531,7 +531,7 @@ class Wait<
     return this._list
   }
 
-  get any() : Omit<IPageElementWaitAPI<Store>, 'not'> {
+  get any() : Omit<IPageElementWait<Store>, 'not'> {
     const element = this._list.currently.first
     const wait = Object.assign({}, element.wait)
 
@@ -540,7 +540,7 @@ class Wait<
     return wait
   }
 
-  get none() : IPageElementWaitNotAPI<Store> {
+  get none() : IPageElementWaitNot<Store> {
     return this._list.currently.first.wait.not
   }
 
@@ -588,7 +588,7 @@ class Eventually<
     return this._eventually( () => this._list.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  get any(): Omit<IPageElementEventuallyAPI<Store>, 'not'> {
+  get any(): Omit<IPageElementEventually<Store>, 'not'> {
     const element = this._list.currently.first
     const eventually = Object.assign({}, element.eventually)
 
@@ -597,7 +597,7 @@ class Eventually<
     return eventually
   }
 
-  get none(): IPageElementEventuallyNotAPI<Store> {
+  get none(): IPageElementEventuallyNot<Store> {
     return this._list.currently.first.eventually.not
   }
 

@@ -22,7 +22,7 @@ export interface ITolerance {
   upper: number
 }
 
-export interface IPageElementCommonWaitAPI<Store extends PageElementStore, OptionalParams, ReturnType> {
+export interface IPageElementWaitEventuallyBase<OptionalParams, ReturnType> {
   exists: (opts?: OptionalParams) => ReturnType,
   isVisible: (opts?: OptionalParams) => ReturnType,
   isEnabled: (opts?: OptionalParams) => ReturnType,
@@ -31,9 +31,6 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
   hasText: (text: string, opts?: OptionalParams) => ReturnType,
   hasAnyText: (opts?: OptionalParams) => ReturnType,
   containsText: (text: string, opts?: OptionalParams) => ReturnType,
-  hasValue: (value: string, opts?: OptionalParams) => ReturnType,
-  hasAnyValue: (opts?: OptionalParams) => ReturnType,
-  containsValue: (value: string, opts?: OptionalParams) => ReturnType,
   hasHTML: (html: string, opts?: OptionalParams) => ReturnType,
   hasAnyHTML: (opts?: OptionalParams) => ReturnType,
   containsHTML: (html: string, opts?: OptionalParams) => ReturnType,
@@ -66,7 +63,7 @@ export interface IPageElementCommonWaitAPI<Store extends PageElementStore, Optio
   hasHeight: (height: number, opts?: {tolerance?: number} & OptionalParams) => ReturnType
 }
 
-export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
+export interface IPageElementCheckState {
   exists: () => boolean,
   isVisible: () => boolean,
   isEnabled: () => boolean,
@@ -75,9 +72,6 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   hasText: (text: string) => boolean,
   hasAnyText: () => boolean,
   containsText: (text: string) => boolean,
-  hasValue: (value: string) => boolean,
-  hasAnyValue: () => boolean,
-  containsValue: (value: string) => boolean,
   hasHTML: (html: string) => boolean,
   hasAnyHTML: () => boolean,
   containsHTML: (html: string) => boolean,
@@ -104,12 +98,11 @@ export interface IPageElementCheckStateAPI<Store extends PageElementStore> {
   hasHeight: (height: number, tolerance?: number) => boolean,
 }
 
-export interface IPageElementGetStateAPI<Store extends PageElementStore> {
+export interface IPageElementGetState {
   element: WdioElement,
   getHTML: () => string
   getText: () => string
   getDirectText: () => string
-  getValue: () => string
   getAttribute: (attributeName: string) => string
   getClass: () => string
   getId: () => string
@@ -122,47 +115,62 @@ export interface IPageElementGetStateAPI<Store extends PageElementStore> {
   getHeight: () => number
 }
 
-export interface IPageElementWaitAPI<Store extends PageElementStore>
-extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptionalReverse, PageElement<Store>>{
+export interface IPageElementWait<
+  Store extends PageElementStore,
+  PageElementType extends IPageElement<Store>
+> extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>{
   untilElement: (
-    description: string, condition: (element: PageElement<Store>) => boolean, opts?: Workflo.IWDIOParamsOptional) => PageElement<Store>,
-  not: IPageElementWaitNotAPI<Store>
+    description: string, condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsOptional) => PageElementType,
+  not: IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>
 }
 
-export interface IPageElementWaitNotAPI<Store extends PageElementStore>
-extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, PageElement<Store>> {}
-
-export interface IPageElementEventuallyAPI<Store extends PageElementStore>
-extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, boolean> {
-  meetsCondition: (condition: (element: PageElement<Store>) => boolean, opts?: Workflo.IWDIOParamsOptional) => boolean
-  not: IPageElementEventuallyNotAPI<Store>
+export interface IPageElementEventually<
+  Store extends PageElementStore,
+  PageElementType extends IPageElement<Store>
+> extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean> {
+  meetsCondition: (condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsOptional) => boolean
+  not: IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean>
 }
 
-export interface IPageElementEventuallyNotAPI<Store extends PageElementStore>
-extends IPageElementCommonWaitAPI<Store, Workflo.IWDIOParamsOptional, boolean> {}
-
-export interface IPageElementCurrentlyAPI<Store extends PageElementStore>
-extends IPageElementCheckStateAPI<Store>, IPageElementGetStateAPI<Store> {
+export interface IPageElementCurrently
+extends IPageElementCheckState, IPageElementGetState {
   lastActualResult: string
-  not: IPageElementCheckStateAPI<Store>
+  not: IPageElementCheckState
+}
+
+export interface IPageElement<
+  Store extends PageElementStore,
+> extends IPageElementGetState, Workflo.PageNode.IGetText {
+  currently: IPageElementCurrently
+  wait: IPageElementWait<Store, this>
+  eventually: IPageElementEventually<Store, this>
+  element: WdioElement
+  $: Store
+  initialWait: () => this
+  click: (options?: {
+      postCondition?: () => boolean,
+      timeout?: number,
+      customScroll?: Workflo.IScrollParams
+  }) => this
+  scrollTo: (params: Workflo.IScrollParams) => this
 }
 
 export class PageElement<
   Store extends PageElementStore
   > extends PageNode<Store>
-  implements Workflo.PageNode.IGetText, IPageElementGetStateAPI<Store> {
+  implements IPageElement<Store> {
 
   protected _waitType: Workflo.WaitType
   protected _timeout: number
   protected _$: Store
   protected _customScroll: Workflo.IScrollParams
 
-  readonly currently: IPageElementCurrentlyAPI<Store> & IPageElementGetStateAPI<Store>
+  readonly currently: IPageElementCurrently
 
   // available options:
-  // - wait -> initial wait operation: exist, visible, text, value
+  // - wait -> initial wait operation: exist, visible, text
   constructor(
-    protected _selector: string,
+    selector: string,
     {
       waitType = Workflo.WaitType.visible,
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
@@ -170,22 +178,23 @@ export class PageElement<
       ...superOpts
     }: IPageElementOpts<Store>
   ) {
-    super(_selector, superOpts)
+    super(selector, superOpts)
 
+    this._selector = selector
     this._$ = Object.create(null)
 
     for (const method of Workflo.Class.getAllMethods(this._store)) {
       if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
-        this._$[method] = <Options extends IPageElementOpts<Store>>(selector: Workflo.XPath, _options: Options) => {
+        this._$[method] = <Options extends IPageElementOpts<Store>>(_selector: Workflo.XPath, _options: Options) => {
 
-          if (selector instanceof XPathBuilder) {
+          if (_selector instanceof XPathBuilder) {
             selector = XPathBuilder.getInstance().build()
           }
 
           // chain selectors
-          selector = `${_selector}${selector}`
+          _selector = `${selector}${_selector}`
 
-          return this._store[method].apply(this._store, [selector, _options])
+          return this._store[method].apply(this._store, [_selector, _options])
         }
       }
     }
@@ -194,7 +203,7 @@ export class PageElement<
     this._timeout = timeout
     this._customScroll = customScroll
 
-    this.currently = new Currently(this)
+    this.currently = new PageElementCurrently(this)
   }
 
 // RETRIEVE ELEMENT FUNCTIONS
@@ -202,7 +211,7 @@ export class PageElement<
   /**
    * Return WdioElement from current state, not performing an initial wait.
    */
-  private get __element() {
+  protected get __element() {
     return browser.element(this._selector)
   }
 
@@ -231,16 +240,13 @@ export class PageElement<
           this.wait.isVisible()
         }
         break
-      case Workflo.WaitType.value:
-        if (!this.currently.hasAnyValue()) {
-          this.wait.hasAnyValue()
-        }
-        break
       case Workflo.WaitType.text:
         if (!this.currently.hasAnyText()) {
           this.wait.hasAnyText()
         }
         break
+      default:
+        throw Error(`${this.constructor.name}: Unknown initial wait type '${this._waitType}'`)
     }
 
     return this
@@ -254,7 +260,6 @@ export class PageElement<
   }
   getText() { return getText(this.element) }
   getDirectText() { return getDirectText(this.getHTML(), this) }
-  getValue() { return getValue(this.element) }
   getAttribute(attributeName: string) { return getAttribute(this.element, attributeName) }
   getClass() { return getAttribute(this.element, 'class') }
   getId() { return getAttribute(this.element, 'id') }
@@ -269,10 +274,6 @@ export class PageElement<
   getTimeout() { return this._timeout }
 
 // INTERACTION FUNCTIONS (interact with state after initial wait)
-
-  setValue(value: string) {
-    this.element.setValue(value)
-  }
 
   /**
    *
@@ -318,7 +319,7 @@ export class PageElement<
     }
 
     if (options.customScroll) {
-      this.scrollTo(options.customScroll)
+      this._scrollTo(options.customScroll)
     }
 
     // wait for other overlapping elements to disappear
@@ -368,7 +369,7 @@ export class PageElement<
     return this
   }
 
-  scrollTo(
+  _scrollTo(
     params: Workflo.IScrollParams
   ): Workflo.IScrollResult {
     if (!params.offsets) {
@@ -471,9 +472,17 @@ export class PageElement<
     }
   }
 
+  scrollTo(
+    params: Workflo.IScrollParams
+  ) {
+    this._scrollTo(params)
+
+    return this
+  }
+
 // WAIT (for certain state within timeout)
 
-  private _waitWdioCheckFunc(
+  protected _waitWdioCheckFunc(
     checkTypeStr: string,
     conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean,
     { timeout = this._timeout, reverse }: Workflo.IWDIOParamsOptionalReverse = {}
@@ -486,7 +495,7 @@ export class PageElement<
     )
   }
 
-  private _waitProperty(
+  protected _waitProperty(
     name: string,
     conditionType: 'has' | 'contains' | 'any' | 'within',
     conditionFunc: (value?: string) => boolean,
@@ -528,7 +537,7 @@ export class PageElement<
     return this
   }
 
-  private _waitWithinProperty(
+  protected _waitWithinProperty(
     name: string,
     value: string,
     conditionFunc: (value: string) => boolean,
@@ -537,7 +546,7 @@ export class PageElement<
     return this._waitProperty(name, 'within', conditionFunc, opts, value)
   }
 
-  private _waitHasProperty(
+  protected _waitHasProperty(
     name: string,
     value: string,
     conditionFunc: (value: string) => boolean,
@@ -546,7 +555,7 @@ export class PageElement<
     return this._waitProperty(name, 'has', conditionFunc, opts, value)
   }
 
-  private _waitHasAnyProperty(
+  protected _waitHasAnyProperty(
     name: string,
     conditionFunc: (value: string) => boolean,
     opts?: Workflo.IWDIOParamsOptionalReverse
@@ -554,7 +563,7 @@ export class PageElement<
     return this._waitProperty(name, 'any', conditionFunc, opts)
   }
 
-  private _waitContainsProperty(
+  protected _waitContainsProperty(
     name: string,
     value: string,
     conditionFunc: (value: string) => boolean,
@@ -563,11 +572,11 @@ export class PageElement<
     return this._waitProperty(name, 'contains', conditionFunc, opts, value)
   }
 
-  private _makeReverseParams(opts: Workflo.IWDIOParamsOptional = {}): Workflo.IWDIOParamsOptionalReverse {
+  protected _makeReverseParams(opts: Workflo.IWDIOParamsOptional = {}): Workflo.IWDIOParamsOptionalReverse {
     return {timeout: opts.timeout, reverse: true}
   }
 
-  public wait: IPageElementWaitAPI<Store> = {
+  public wait: IPageElementWait<Store, this> = {
     exists: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
       'existed', opts => this.currently.element.waitForExist(opts.timeout, opts.reverse), opts
     ),
@@ -604,15 +613,6 @@ export class PageElement<
     ),
     containsText: (text: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
       'text', text, () => this.currently.containsText(text), opts
-    ),
-    hasValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
-      'value', value, () => this.currently.hasValue(value), opts
-    ),
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
-      'had any value', opts => this.currently.element.waitForValue(opts.timeout, opts.reverse), opts
-    ),
-    containsValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
-      'value', value, () => this.currently.containsValue(value), opts
     ),
     hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
       'HTML', html, () => this.currently.hasHTML(html), opts
@@ -837,15 +837,6 @@ export class PageElement<
       containsText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this.wait.containsText(text, this._makeReverseParams(opts))
       },
-      hasValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => {
-        return this.wait.hasValue(value, this._makeReverseParams(opts))
-      },
-      hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-        return this.wait.hasAnyValue(this._makeReverseParams(opts))
-      },
-      containsValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => {
-        return this.wait.containsValue(value, this._makeReverseParams(opts))
-      },
       hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this.wait.hasHTML(html, this._makeReverseParams(opts))
       },
@@ -937,7 +928,7 @@ export class PageElement<
 
 // EVENTUALLY FUNCTIONS (check wether certain state is reached after timeout)
 
-  public eventually: IPageElementEventuallyAPI<Store> = {
+  public eventually: IPageElementEventually<Store, this> = {
     exists: (opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this.wait.exists(opts))
     },
@@ -961,15 +952,6 @@ export class PageElement<
     },
     containsText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this.wait.containsText(text, opts))
-    },
-    hasValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this.wait.hasValue(value, opts))
-    },
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this.wait.hasAnyValue(opts))
-    },
-    containsValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this.wait.containsValue(value, opts))
     },
     hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this.wait.hasHTML(html, opts))
@@ -1088,15 +1070,6 @@ export class PageElement<
       containsText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this._eventually(() => this.wait.not.containsText(text, opts))
       },
-      hasValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => {
-        return this._eventually(() => this.wait.not.hasValue(value, opts))
-      },
-      hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-        return this._eventually(() => this.wait.not.hasAnyValue(opts))
-      },
-      containsValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => {
-        return this._eventually(() => this.wait.not.containsValue(value, opts))
-      },
       hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => {
         return this._eventually(() => this.wait.not.hasHTML(html, opts))
       },
@@ -1187,9 +1160,9 @@ export class PageElement<
   }
 }
 
-class Currently<
+export class PageElementCurrently<
   Store extends PageElementStore,
-> implements IPageElementCurrentlyAPI<Store>, IPageElementGetStateAPI<Store> {
+> implements IPageElementCurrently, IPageElementGetState {
 
   protected _pageElement: PageElement<Store>
   protected _lastActualResult: string
@@ -1220,7 +1193,6 @@ class Currently<
   getHTML() { return getHTML(this._pageElement) }
   getText() { return getText(this.element, this._pageElement) }
   getDirectText() { return getDirectText(this.getHTML(), this._pageElement) }
-  getValue() { return getValue(this.element, this._pageElement) }
   getAttribute(attributeName: string) { return getAttribute(this.element, attributeName, this._pageElement) }
   getClass() { return getAttribute(this.element, 'class', this._pageElement) }
   getId() { return getAttribute(this.element, 'id', this._pageElement) }
@@ -1239,7 +1211,7 @@ class Currently<
    * @param expected the expected value in pixels or 0 if expected was smaller than 0
    * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
    */
-  private _withinTolerance(actual: number, expected: number, tolerance?: number) {
+  protected _withinTolerance(actual: number, expected: number, tolerance?: number) {
     const tolerances: ITolerance = {
       lower: actual,
       upper: actual
@@ -1253,26 +1225,26 @@ class Currently<
     return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0)
   }
 
-  private _hasAxisLocation(expected: number, actual: number, tolerance?: number): boolean {
+  protected _hasAxisLocation(expected: number, actual: number, tolerance?: number): boolean {
     return this._withinTolerance(actual, expected, tolerance)
   }
 
-  private _hasSideSize(expected: number, actual: number, tolerance?: number): boolean {
+  protected _hasSideSize(expected: number, actual: number, tolerance?: number): boolean {
     return this._withinTolerance(actual, expected, tolerance)
   }
 
-  private _compareHas(expected: string, actual: string) {
+  protected _compareHas(expected: string, actual: string) {
     this._lastActualResult = actual || ''
     return actual === expected
   }
 
-  private _compareHasAny(actual: string) {
+  protected _compareHasAny(actual: string) {
     const result = (actual) ? actual.length > 0 : false
     this._lastActualResult = actual || ''
     return result
   }
 
-  private _compareContains(expected: string, actual: string) {
+  protected _compareContains(expected: string, actual: string) {
     const result = (actual) ? actual.indexOf(expected) > -1 : false
     this._lastActualResult = actual || ''
     return result
@@ -1286,9 +1258,6 @@ class Currently<
   hasText = (text: string) => this._compareHas(text, this.getText())
   hasAnyText = () => this._compareHasAny(this.getText())
   containsText = (text: string) => this._compareContains(text, this.getText())
-  hasValue = (value: string) => this._compareHas(value, this.getValue())
-  hasAnyValue = () => this._compareHasAny(this.getValue())
-  containsValue = (value: string) => this._compareContains(value, this.getValue())
   hasHTML = (html: string) => this._compareHas(html, this.getHTML())
   hasAnyHTML = () => this._compareHasAny(this.getHTML())
   containsHTML = (html: string) => this._compareContains(html, this.getHTML())
@@ -1359,9 +1328,6 @@ class Currently<
     hasText: (text: string) => !this.hasText(text),
     hasAnyText: () => !this.hasAnyText(),
     containsText: (text: string) => !this.containsText(text),
-    hasValue: (value: string) => !this.hasValue(value),
-    hasAnyValue: () => !this.hasAnyValue(),
-    containsValue: (value: string) => !this.containsValue(value),
     hasDirectText: (directText: string) => !this.hasDirectText(directText),
     hasAnyDirectText: () => !this.hasAnyDirectText(),
     containsDirectText: (directText: string) => !this.containsDirectText(directText),
@@ -1460,24 +1426,8 @@ function getText<Store extends PageElementStore>(element: WdioElement, pageEleme
   return elementExecute(() => element.getText(), pageElement)
 }
 
-function getValue<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
-  return elementExecute(() => element.getValue(), pageElement)
-}
-
 function getAttribute<Store extends PageElementStore>(element: WdioElement, attrName: string, pageElement?: PageElement<Store>): string {
   return elementExecute(() => element.getAttribute(attrName), pageElement)
-}
-
-function getClass<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
-  return elementExecute(() => element.getAttribute('class'), pageElement)
-}
-
-function getId<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
-  return elementExecute(() => element.getAttribute('id'), pageElement)
-}
-
-function getName<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
-  return elementExecute(() => element.getAttribute('name'), pageElement)
 }
 
 function getLocation<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>) {
@@ -1502,7 +1452,7 @@ function isSelected<Store extends PageElementStore>(element: WdioElement, pageEl
  * @param func
  * @param pageElement
  */
-function elementExecute<Store extends PageElementStore, ResultType>(func: () => ResultType, pageElement?: PageElement<Store>) {
+export function elementExecute<Store extends PageElementStore, ResultType>(func: () => ResultType, pageElement?: PageElement<Store>) {
   if (pageElement) {
     try {
       return func()
@@ -1524,8 +1474,4 @@ function isJsError(result: any): result is Workflo.IJSError {
   }
 
   return result.notFound !== undefined;
-}
-
-function isScrollResult(result: any): result is Workflo.IScrollResult {
-  return result.elemTop !== undefined;
 }

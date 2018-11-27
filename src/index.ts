@@ -225,11 +225,11 @@ declare global {
       }
 
       interface IGetValue extends INode {
-        getValue(): string
+        __getValue(): string
       }
 
       interface ISetValue<T> extends INode {
-        setValue(value: T): this
+        __setValue(value: T): this
       }
     }
 
@@ -256,8 +256,8 @@ declare global {
     const enum WaitType {
       exist = 'exist',
       visible = 'visible',
-      value = 'value',
-      text = 'text'
+      text = 'text',
+      wait = 'wait'
     }
 
     const enum Comparator {
