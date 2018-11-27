@@ -159,3 +159,5 @@ implements IValuePageElementCurrently, IValuePageElementGetState {
 function getValue<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
   return elementExecute(() => element.getValue(), pageElement)
 }
+
+const valEl = new ValuePageElement('asdf', {store: undefined})
