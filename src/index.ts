@@ -257,7 +257,7 @@ declare global {
       exist = 'exist',
       visible = 'visible',
       text = 'text',
-      wait = 'wait'
+      value = 'value'
     }
 
     const enum Comparator {

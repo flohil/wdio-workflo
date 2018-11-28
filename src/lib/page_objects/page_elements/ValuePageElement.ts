@@ -80,7 +80,7 @@ class ValuePageElement<
   }
 
   initialWait() {
-    if (this._waitType === Workflo.WaitType.wait) {
+    if (this._waitType === Workflo.WaitType.value) {
       if (!this.currently.hasAnyValue()) {
         this.wait.hasAnyValue()
       }

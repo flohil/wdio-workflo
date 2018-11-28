@@ -4,9 +4,10 @@ import {
   IPageNodeOpts,
   PageElement,
   IPageElementWait,
-  IPageElementWaitNot,
+  IPageElementWaitEventuallyBase,
   IPageElementEventually,
-  IPageElementEventuallyNot
+  IPageElementWaitNot,
+  IPageElementEventuallyNot,
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
@@ -72,8 +73,8 @@ export interface IPageElementListWaitAPI<
 > {
   hasLength: ( length: number, opts?:  IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
   isEmpty: ( opts?: IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
-  any: Omit<IPageElementWait<Store>, 'not'>
-  none: IPageElementWaitNot<Store>
+  any: Omit<IPageElementWait<Store, PageElementType>, 'not'>
+  none: IPageElementWaitNot<Store, PageElementType>
   not: {
     hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => PageElementList<Store, PageElementType, PageElementOptions>
     isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => PageElementList<Store, PageElementType, PageElementOptions>
@@ -81,11 +82,12 @@ export interface IPageElementListWaitAPI<
 }
 
 export interface IPageElementListEventuallyAPI<
-  Store extends PageElementStore
+  Store extends PageElementStore,
+  PageElementType extends PageElement<Store>
 > {
   hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
   isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
-  any: Omit<IPageElementEventually<Store>, 'not'>
+  any: Omit<IPageElementEventually<Store, PageElementType>, 'not'>
   none: IPageElementEventuallyNot<Store>
   not: {
     hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
@@ -129,7 +131,7 @@ export class PageElementList<
 
   readonly currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this>
   readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>
-  readonly eventually: IPageElementListEventuallyAPI<Store>
+  readonly eventually: IPageElementListEventuallyAPI<Store, PageElementType>
 
   constructor(
     protected _selector: string,
@@ -190,9 +192,9 @@ export class PageElementList<
       case Workflo.WaitType.visible:
       this.wait.any.isVisible()
       break
-      case Workflo.WaitType.value:
-      this.wait.any.hasAnyValue()
-      break
+      // case Workflo.WaitType.value:
+      // this.wait.any.hasAnyValue()
+      // break
       case Workflo.WaitType.text:
       this.wait.any.hasAnyText()
       break
@@ -531,7 +533,7 @@ class Wait<
     return this._list
   }
 
-  get any() : Omit<IPageElementWait<Store>, 'not'> {
+  get any() : Omit<IPageElementWait<Store, PageElementType>, 'not'> {
     const element = this._list.currently.first
     const wait = Object.assign({}, element.wait)
 
@@ -540,7 +542,7 @@ class Wait<
     return wait
   }
 
-  get none() : IPageElementWaitNot<Store> {
+  get none() : IPageElementWaitNot<Store, PageElementType> {
     return this._list.currently.first.wait.not
   }
 
@@ -561,7 +563,7 @@ class Eventually<
   PageElementType extends PageElement<Store>,
   PageElementOptions,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> implements IPageElementListEventuallyAPI<Store>{
+> implements IPageElementListEventuallyAPI<Store, PageElementType>{
 
   protected _list: ListType
   protected _eventually: (func: () => void) => boolean
@@ -588,7 +590,7 @@ class Eventually<
     return this._eventually( () => this._list.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  get any(): Omit<IPageElementEventually<Store>, 'not'> {
+  get any(): Omit<IPageElementEventually<Store, PageElementType>, 'not'> {
     const element = this._list.currently.first
     const eventually = Object.assign({}, element.eventually)
 

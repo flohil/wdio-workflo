@@ -115,21 +115,30 @@ export interface IPageElementGetState {
   getHeight: () => number
 }
 
+export interface IPageElementWaitNot<
+  Store extends PageElementStore,
+  PageElementType extends IPageElement<Store>
+> extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>{}
+
 export interface IPageElementWait<
   Store extends PageElementStore,
   PageElementType extends IPageElement<Store>
 > extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>{
   untilElement: (
     description: string, condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsOptional) => PageElementType,
-  not: IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>
+  not: IPageElementWaitNot<Store, PageElementType>
 }
+
+export interface IPageElementEventuallyNot<
+  Store extends PageElementStore
+> extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean> {}
 
 export interface IPageElementEventually<
   Store extends PageElementStore,
   PageElementType extends IPageElement<Store>
 > extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean> {
   meetsCondition: (condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsOptional) => boolean
-  not: IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean>
+  not: IPageElementEventuallyNot<Store>
 }
 
 export interface IPageElementCurrently
