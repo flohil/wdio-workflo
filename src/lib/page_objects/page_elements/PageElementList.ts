@@ -4,7 +4,8 @@ import {
   IPageNodeOpts,
   PageElement,
   PageElementWait,
-  PageElementEventually
+  PageElementEventually,
+  IPageElementOpts
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
@@ -14,10 +15,10 @@ export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.
 
 export interface IPageElementListIdentifier<
   Store extends PageElementStore,
-  ElementType extends PageElement<Store>
+  PageElementType extends PageElement<Store>
 > {
   mappingObject: {[key: string] : string},
-  func: ( element: ElementType ) => string
+  func: ( element: PageElementType ) => string
 }
 
 export interface IPageElementListWaitEmptyParams extends Workflo.IWDIOParamsOptional {
@@ -41,7 +42,7 @@ export interface IPageElementListWaitLengthReverseParams extends IPageElementLis
 export interface IPageElementListOpts<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions
+  PageElementOptions extends IPageElementOpts<Store>
 > extends IPageNodeOpts<Store> {
   waitType?: Workflo.WaitType
   timeout?: number
@@ -56,7 +57,7 @@ export interface IPageElementListOpts<
 export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions
+  PageElementOptions extends IPageElementOpts<Store>
 > extends PageNode<Store> {
   protected _waitType: Workflo.WaitType
   protected _timeout: number
@@ -293,7 +294,7 @@ export class PageElementList<
 class PageElementListCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions,
+  PageElementOptions extends IPageElementOpts<Store>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
@@ -426,7 +427,7 @@ class PageElementListCurrently<
 class PageElementListWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions,
+  PageElementOptions extends IPageElementOpts<Store>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
@@ -502,7 +503,7 @@ class PageElementListWait<
 class PageElementListEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions,
+  PageElementOptions extends IPageElementOpts<Store>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 

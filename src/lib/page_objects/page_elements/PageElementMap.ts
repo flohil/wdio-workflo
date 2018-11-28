@@ -1,4 +1,4 @@
-import { PageNode, IPageNodeOpts, PageElement } from '.'
+import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.'
 import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
 
@@ -19,7 +19,7 @@ export interface IPageElementMapOpts<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
-  PageElementOptions
+  PageElementOptions extends IPageElementOpts<Store>
 > extends IPageNodeOpts<Store> {
   store: Store,
   identifier: IPageElementMapIdentifier<K>,
@@ -32,7 +32,7 @@ export class PageElementMap<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
-  PageElementOptions
+  PageElementOptions extends IPageElementOpts<Store>
 > extends PageNode<Store> {
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _elementOptions: PageElementOptions
