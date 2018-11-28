@@ -1,12 +1,5 @@
 import {
   PageElement,
-  IPageElement,
-  IPageElementCurrently,
-  IPageElementWaitEventuallyBase,
-  IPageElementCheckState,
-  IPageElementWait,
-  IPageElementEventually,
-  IPageElementGetState,
   IPageElementOpts,
   WdioElement,
   elementExecute,
@@ -20,66 +13,13 @@ export interface IValuePageElementOpts<
   Store extends PageElementStore
 > extends IPageElementOpts<Store> {}
 
-export interface IValuePageElementWaitEventuallyBase<OptionalParams, ReturnType>
-extends IPageElementWaitEventuallyBase<OptionalParams, ReturnType> {
-  hasValue: (value: string, opts?: OptionalParams) => ReturnType,
-  hasAnyValue: (opts?: OptionalParams) => ReturnType,
-  containsValue: (value: string, opts?: OptionalParams) => ReturnType,
-}
-
-export interface IValuePageElementWait<
-  Store extends PageElementStore,
-  PageElementType extends IValuePageElement<Store>
-> extends
-  IPageElementWait<Store, PageElementType>,
-  IValuePageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>
-{
-  not: IValuePageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>
-}
-
-export interface IValuePageElementEventually<
-  Store extends PageElementStore,
-  PageElementType extends IValuePageElement<Store>
-> extends
-  IPageElementEventually<Store, PageElementType>,
-  IValuePageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean>
-{
-  not: IValuePageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean>
-}
-
-export interface IValuePageElementCheckState extends IPageElementCheckState {
-  hasValue: (value: string) => boolean
-  hasAnyValue: () => boolean
-  containsValue: (value: string) => boolean
-}
-
-export interface IValuePageElementGetState extends IPageElementGetState {
-  getValue: () => string
-}
-
-export interface IValuePageElementCurrently extends
-  IPageElementCurrently,
-  IValuePageElementCheckState,
-  IValuePageElementGetState
-{
-  not: IValuePageElementCheckState
-}
-
-export interface IValuePageElement<Store extends PageElementStore> extends
-  IPageElement<Store>, IValuePageElementGetState
-{
-  currently: IValuePageElementCurrently
-  wait: IPageElementWait<Store, this> & IValuePageElementWait<Store, this>
-  eventually: IPageElementEventually<Store, this> & IValuePageElementEventually<Store, this>
-}
-
 export class ValuePageElement<
   Store extends PageElementStore
-> extends PageElement<Store> implements IValuePageElement<Store> {
+> extends PageElement<Store> {
 
-  readonly currently: IValuePageElementCurrently
-  readonly wait: IValuePageElementWait<Store, this>
-  readonly eventually: IValuePageElementEventually<Store, this>
+  readonly currently: ValuePageElementCurrently<Store>
+  readonly wait: ValuePageElementWait<Store, this>
+  readonly eventually: ValuePageElementEventually<Store, this>
 
   constructor(selector: string, opts: IPageElementOpts<Store>) {
     super(selector, opts)
@@ -105,8 +45,7 @@ export class ValuePageElement<
 }
 
 class ValuePageElementCurrently<Store extends PageElementStore>
-extends PageElementCurrently<Store>
-implements IValuePageElementCurrently, IValuePageElementGetState {
+extends PageElementCurrently<Store> {
   getValue() { return getValue(this.element, this._pageElement) }
 
   hasValue = (value: string) => this._compareHas(value, this.getValue())
@@ -123,8 +62,7 @@ implements IValuePageElementCurrently, IValuePageElementGetState {
 class ValuePageElementWait<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store>
-> extends PageElementWait<Store, PageElementType>
-implements IValuePageElementWait<Store, PageElementType> {
+> extends PageElementWait<Store, PageElementType> {
   hasValue = (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
     'value', value, () => this._pageElement.currently.hasValue(value), opts
   )
@@ -151,8 +89,7 @@ implements IValuePageElementWait<Store, PageElementType> {
 class ValuePageElementEventually<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store>
-> extends PageElementEventually<Store, PageElementType>
-implements IValuePageElementEventually<Store, PageElementType> {
+> extends PageElementEventually<Store, PageElementType> {
   hasValue = (value: string, opts?: Workflo.IWDIOParamsOptional) => {
     return this._eventually(() => this._pageElement.wait.hasValue(value, opts))
   }

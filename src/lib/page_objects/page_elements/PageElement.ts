@@ -22,163 +22,18 @@ export interface IPageElementOpts<
   customScroll?: Workflo.IScrollParams
 }
 
-export interface IPageElementWaitEventuallyBase<OptionalParams, ReturnType> {
-  exists: (opts?: OptionalParams) => ReturnType,
-  isVisible: (opts?: OptionalParams) => ReturnType,
-  isEnabled: (opts?: OptionalParams) => ReturnType,
-  isSelected: (opts?: OptionalParams) => ReturnType,
-  isChecked: (opts?: OptionalParams) => ReturnType,
-  hasText: (text: string, opts?: OptionalParams) => ReturnType,
-  hasAnyText: (opts?: OptionalParams) => ReturnType,
-  containsText: (text: string, opts?: OptionalParams) => ReturnType,
-  hasHTML: (html: string, opts?: OptionalParams) => ReturnType,
-  hasAnyHTML: (opts?: OptionalParams) => ReturnType,
-  containsHTML: (html: string, opts?: OptionalParams) => ReturnType,
-  hasDirectText: (directText: string, opts?: OptionalParams) => ReturnType,
-  hasAnyDirectText: (opts?: OptionalParams) => ReturnType,
-  containsDirectText: (directText: string, opts?: OptionalParams) => ReturnType,
-  hasAttribute: (attributeName: string, attributeValue: string, opts?: OptionalParams) => ReturnType,
-  hasAnyAttribute: (attributeName: string, opts?: OptionalParams) => ReturnType,
-  containsAttribute: (attributeName: string, attributeValue: string, opts?: OptionalParams) => ReturnType,
-  hasClass: (className: string, opts?: OptionalParams) => ReturnType,
-  hasAnyClass: (opts?: OptionalParams) => ReturnType,
-  containsClass: (className: string, opts?: OptionalParams) => ReturnType,
-  hasId: (id: string, opts?: OptionalParams) => ReturnType,
-  hasAnyId: (opts?: OptionalParams) => ReturnType,
-  containsId: (id: string, opts?: OptionalParams) => ReturnType,
-  hasName: (name: string, opts?: OptionalParams) => ReturnType,
-  hasAnyName: (opts?: OptionalParams) => ReturnType,
-  containsName: (name: string, opts?: OptionalParams) => ReturnType,
-  hasLocation: (
-    coordinates: Partial<Workflo.ICoordinates>,
-    opts?: {tolerances?: Partial<Workflo.ICoordinates>} & OptionalParams
-  ) => ReturnType,
-  hasX: (x: number, opts?: {tolerance?: number} & OptionalParams) => ReturnType,
-  hasY: (y: number, opts?: {tolerance?: number} & OptionalParams) => ReturnType,
-  hasSize: (
-    size: Partial<Workflo.ISize>,
-    opts?: {tolerances?: Partial<Workflo.ISize>} & OptionalParams
-  ) => ReturnType,
-  hasWidth: (width: number, opts?: {tolerance?: number} & OptionalParams) => ReturnType,
-  hasHeight: (height: number, opts?: {tolerance?: number} & OptionalParams) => ReturnType
-}
-
-export interface IPageElementCheckState {
-  exists: () => boolean,
-  isVisible: () => boolean,
-  isEnabled: () => boolean,
-  isSelected: () => boolean,
-  isChecked: () => boolean,
-  hasText: (text: string) => boolean,
-  hasAnyText: () => boolean,
-  containsText: (text: string) => boolean,
-  hasHTML: (html: string) => boolean,
-  hasAnyHTML: () => boolean,
-  containsHTML: (html: string) => boolean,
-  hasAttribute: (attributeName: string, attributeValue: string) => boolean,
-  hasAnyAttribute: (attributeName: string) => boolean,
-  containsAttribute: (attributeName: string, attributeValue: string) => boolean,
-  hasClass: (className: string) => boolean,
-  hasAnyClass: () => boolean,
-  containsClass: (className: string) => boolean,
-  hasId: (id: string) => boolean,
-  hasAnyId: () => boolean,
-  containsId: (id: string) => boolean,
-  hasName: (name: string) => boolean,
-  hasAnyName: () => boolean,
-  containsName: (name: string) => boolean,
-  hasDirectText: (directText: string) => boolean,
-  hasAnyDirectText: () => boolean,
-  containsDirectText: (directText: string) => boolean,
-  hasLocation: (coordinates: Partial<Workflo.ICoordinates>, tolerances?: Partial<Workflo.ICoordinates>) => boolean,
-  hasX: (x: number, tolerance?: number) => boolean,
-  hasY: (y: number, tolerance?: number) => boolean,
-  hasSize: (size: Partial<Workflo.ISize>, tolerances?: Partial<Workflo.ISize>) => boolean,
-  hasWidth: (width: number, tolerance?: number) => boolean,
-  hasHeight: (height: number, tolerance?: number) => boolean,
-}
-
-export interface IPageElementGetState {
-  element: WdioElement,
-  getHTML: () => string
-  getText: () => string
-  getDirectText: () => string
-  getAttribute: (attributeName: string) => string
-  getClass: () => string
-  getId: () => string
-  getName: () => string
-  getLocation: () => Workflo.ICoordinates
-  getX: () => number
-  getY: () => number
-  getSize: () => Workflo.ISize
-  getWidth: () => number
-  getHeight: () => number
-}
-
-export interface IPageElementCurrently
-extends IPageElementCheckState, IPageElementGetState {
-  lastActualResult: string
-  not: IPageElementCheckState
-}
-
-export interface IPageElementWaitNot<
-  Store extends PageElementStore,
-  PageElementType extends IPageElement<Store>
-> extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>{}
-
-export interface IPageElementWait<
-  Store extends PageElementStore,
-  PageElementType extends IPageElement<Store>
-> extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptionalReverse, PageElementType>{
-  untilElement: (
-    description: string,
-    condition: (element: PageElementType) => boolean,
-    opts?: Workflo.IWDIOParamsOptional
-  ) => PageElementType,
-  not: IPageElementWaitNot<Store, PageElementType>
-}
-
-export interface IPageElementEventuallyNot
-extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean> {}
-
-export interface IPageElementEventually<
-  Store extends PageElementStore,
-  PageElementType extends IPageElement<Store>
-> extends IPageElementWaitEventuallyBase<Workflo.IWDIOParamsOptional, boolean> {
-  meetsCondition: (condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsOptional) => boolean
-  not: IPageElementEventuallyNot
-}
-
-export interface IPageElement<
-  Store extends PageElementStore,
-> extends IPageElementGetState, Workflo.PageNode.IGetText {
-  currently: IPageElementCurrently
-  wait: IPageElementWait<Store, this>
-  eventually: IPageElementEventually<Store, this>
-  element: WdioElement
-  $: Store
-  initialWait: () => this
-  click: (options?: {
-      postCondition?: () => boolean,
-      timeout?: number,
-      customScroll?: Workflo.IScrollParams
-  }) => this
-  scrollTo: (params: Workflo.IScrollParams) => this
-}
-
 export class PageElement<
   Store extends PageElementStore
-  > extends PageNode<Store>
-  implements IPageElement<Store> {
+  > extends PageNode<Store> {
 
   protected _waitType: Workflo.WaitType
   protected _timeout: number
   protected _$: Store
   protected _customScroll: Workflo.IScrollParams
 
-  readonly currently: IPageElementCurrently
-  readonly wait: IPageElementWait<Store, this>
-  readonly eventually: IPageElementEventually<Store, this>
+  readonly currently: PageElementCurrently<Store>
+  readonly wait: PageElementWait<Store, this>
+  readonly eventually: PageElementEventually<Store, this>
 
   constructor(
     selector: string,
@@ -496,7 +351,7 @@ export class PageElement<
 
 export class PageElementCurrently<
   Store extends PageElementStore,
-> implements IPageElementCurrently, IPageElementGetState {
+> {
 
   protected _pageElement: PageElement<Store>
   protected _lastActualResult: string
@@ -614,7 +469,7 @@ export class PageElementCurrently<
   hasName = (name: string) => this._compareHas(name, this.getName())
   hasAnyName = () => this._compareHasAny(this.getName())
   containsName = (name: string) => this._compareContains(name, this.getName())
-  hasLocation = (coordinates: Workflo.ICoordinates, tolerances: Workflo.ICoordinates = { x: 0, y: 0 }) => {
+  hasLocation = (coordinates: Workflo.ICoordinates, tolerances: Partial<Workflo.ICoordinates> = { x: 0, y: 0 }) => {
     const actualCoords = this.getLocation()
     this._lastActualResult = tolerancesToString(actualCoords)
 
@@ -633,7 +488,7 @@ export class PageElementCurrently<
 
     return this._hasAxisLocation(y, actual, tolerance)
   }
-  hasSize = (size: Workflo.ISize, tolerances: Workflo.ISize = {width: 0, height: 0}) => {
+  hasSize = (size: Workflo.ISize, tolerances: Partial<Workflo.ISize> = {width: 0, height: 0}) => {
     const actualSize = this.getSize()
     this._lastActualResult = tolerancesToString(actualSize)
 
@@ -694,7 +549,7 @@ export class PageElementCurrently<
 export class PageElementWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
-> implements IPageElementWait<Store, PageElementType> {
+> {
 
   protected _pageElement: PageElementType
 
@@ -1174,7 +1029,7 @@ export class PageElementWait<
 export class PageElementEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
-> implements IPageElementEventually<Store, PageElementType> {
+> {
 
   protected _pageElement: PageElementType
 

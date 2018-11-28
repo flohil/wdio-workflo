@@ -3,10 +3,8 @@ import {
   PageNode,
   IPageNodeOpts,
   PageElement,
-  IPageElementWait,
-  IPageElementEventually,
-  IPageElementWaitNot,
-  IPageElementEventuallyNot,
+  PageElementWait,
+  PageElementEventually
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
@@ -54,68 +52,12 @@ export interface IPageElementListOpts<
   identifier?: IPageElementListIdentifier<Store, PageElementType>
 }
 
-export interface IPageElementListRetrievalAPI<
-  Store extends PageElementStore,
-  PageElementType extends PageElement<Store>,
-> {
-  elements: WdioElements,
-  first: PageElementType,
-  at: (index: number) => PageElementType,
-  all: PageElementType[],
-  getLength: () => number
-}
-
-export interface IPageElementListWaitAPI<
-  Store extends PageElementStore,
-  PageElementType extends PageElement<Store>,
-  PageElementOptions
-> {
-  hasLength: ( length: number, opts?:  IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
-  isEmpty: ( opts?: IPageElementListWaitLengthReverseParams ) => PageElementList<Store, PageElementType, PageElementOptions>
-  any: Omit<IPageElementWait<Store, PageElementType>, 'not'>
-  none: IPageElementWaitNot<Store, PageElementType>
-  not: {
-    hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => PageElementList<Store, PageElementType, PageElementOptions>
-    isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => PageElementList<Store, PageElementType, PageElementOptions>
-  }
-}
-
-export interface IPageElementListEventuallyAPI<
-  Store extends PageElementStore,
-  PageElementType extends PageElement<Store>
-> {
-  hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
-  isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
-  any: Omit<IPageElementEventually<Store, PageElementType>, 'not'>
-  none: IPageElementEventuallyNot
-  not: {
-    hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
-    isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
-  }
-}
-
-export interface IPageElementListCurrentlyAPI<
-  Store extends PageElementStore,
-  PageElementType extends PageElement<Store>,
-  PageElementOptions,
-  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> extends IPageElementListRetrievalAPI<Store, PageElementType> {
-  lastActualResult: string
-  where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
-  isEmpty: () => boolean
-  hasLength: ( length: number, comparator?: Workflo.Comparator ) => boolean
-  not: {
-    isEmpty: () => boolean
-    hasLength: ( length: number, comparator?: Workflo.Comparator ) => boolean
-  }
-}
-
 // holds several PageElement instances of the same type
 export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions
-> extends PageNode<Store> implements IPageElementListRetrievalAPI<Store, PageElementType> {
+> extends PageNode<Store> {
   protected _waitType: Workflo.WaitType
   protected _timeout: number
   protected _interval: number
@@ -128,9 +70,9 @@ export class PageElementList<
   protected _cloneFunc: (subSelector: string) => this
   protected _lastActualResult: string
 
-  readonly currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this>
-  readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>
-  readonly eventually: IPageElementListEventuallyAPI<Store, PageElementType>
+  readonly currently: PageElementListCurrently<Store, PageElementType, PageElementOptions, this>
+  readonly wait: PageElementListWait<Store, PageElementType, PageElementOptions, this>
+  readonly eventually: PageElementListEventually<Store, PageElementType, PageElementOptions, this>
 
   constructor(
     protected _selector: string,
@@ -353,7 +295,7 @@ class PageElementListCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> implements IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, ListType> {
+> {
 
   protected _selector: string
   protected _store: Store
@@ -486,7 +428,7 @@ class PageElementListWait<
   PageElementType extends PageElement<Store>,
   PageElementOptions,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> implements IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>{
+> {
 
   protected _list: ListType
 
@@ -532,7 +474,7 @@ class PageElementListWait<
     return this._list
   }
 
-  get any() : Omit<IPageElementWait<Store, PageElementType>, 'not'> {
+  get any() : Omit<PageElementWait<Store, PageElementType>, 'not'> {
     const element = this._list.currently.first
     const wait = Object.assign({}, element.wait)
 
@@ -541,7 +483,7 @@ class PageElementListWait<
     return wait
   }
 
-  get none() : IPageElementWaitNot<Store, PageElementType> {
+  get none() : PageElementWait<Store, PageElementType>['not'] {
     return this._list.currently.first.wait.not
   }
 
@@ -562,7 +504,7 @@ class PageElementListEventually<
   PageElementType extends PageElement<Store>,
   PageElementOptions,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> implements IPageElementListEventuallyAPI<Store, PageElementType>{
+> {
 
   protected _list: ListType
 
@@ -596,7 +538,7 @@ class PageElementListEventually<
     return this._eventually( () => this._list.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  get any(): Omit<IPageElementEventually<Store, PageElementType>, 'not'> {
+  get any(): Omit<PageElementEventually<Store, PageElementType>, 'not'> {
     const element = this._list.currently.first
     const eventually = Object.assign({}, element.eventually)
 
@@ -605,7 +547,7 @@ class PageElementListEventually<
     return eventually
   }
 
-  get none(): IPageElementEventuallyNot {
+  get none(): PageElementEventually<Store, PageElementType>['not'] {
     return this._list.currently.first.eventually.not
   }
 
