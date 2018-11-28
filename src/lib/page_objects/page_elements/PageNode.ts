@@ -33,23 +33,4 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   getSelector() {
     return this._selector
   }
-
-  protected _eventually(func: () => void) : boolean {
-    try {
-      func();
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  protected _wait(func: () => void, errorMessage: string) : this {
-    try {
-      func();
-    } catch (error) {
-      throw new Error(`${this.constructor.name}${errorMessage}.\n( ${this._selector} )`)
-    }
-
-    return this
-  }
 }
