@@ -4,7 +4,6 @@ import {
   IPageNodeOpts,
   PageElement,
   IPageElementWait,
-  IPageElementWaitEventuallyBase,
   IPageElementEventually,
   IPageElementWaitNot,
   IPageElementEventuallyNot,
@@ -88,7 +87,7 @@ export interface IPageElementListEventuallyAPI<
   hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
   isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
   any: Omit<IPageElementEventually<Store, PageElementType>, 'not'>
-  none: IPageElementEventuallyNot<Store>
+  none: IPageElementEventuallyNot
   not: {
     hasLength: ( length: number, opts?:  IPageElementListWaitLengthParams ) => boolean
     isEmpty: ( opts?: IPageElementListWaitEmptyParams ) => boolean
@@ -165,9 +164,9 @@ export class PageElementList<
       getAllFunc: list => list.all
     })
 
-    this.currently = new Currently<Store, PageElementType, PageElementOptions, this>(this, opts, cloneFunc)
-    this.wait = new Wait<Store, PageElementType, PageElementOptions, this>(this)
-    this.eventually = new Eventually<Store, PageElementType, PageElementOptions, this>(this, this._eventually)
+    this.currently = new PageElementListCurrently<Store, PageElementType, PageElementOptions, this>(this, opts, cloneFunc)
+    this.wait = new PageElementListWait<Store, PageElementType, PageElementOptions, this>(this)
+    this.eventually = new PageElementListEventually<Store, PageElementType, PageElementOptions, this>(this)
   }
 
   /**
@@ -349,7 +348,7 @@ export class PageElementList<
   }
 }
 
-class Currently<
+class PageElementListCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions,
@@ -482,7 +481,7 @@ class Currently<
   }
 }
 
-class Wait<
+class PageElementListWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions,
@@ -558,7 +557,7 @@ class Wait<
   }
 }
 
-class Eventually<
+class PageElementListEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions,
@@ -566,11 +565,18 @@ class Eventually<
 > implements IPageElementListEventuallyAPI<Store, PageElementType>{
 
   protected _list: ListType
-  protected _eventually: (func: () => void) => boolean
 
-  constructor(list: ListType, eventually: (func: () => void) => boolean) {
+  constructor(list: ListType) {
     this._list = list
-    this._eventually = eventually
+  }
+
+  protected _eventually(func: () => void) : boolean {
+    try {
+      func();
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   hasLength = ( length: number, {
@@ -599,7 +605,7 @@ class Eventually<
     return eventually
   }
 
-  get none(): IPageElementEventuallyNot<Store> {
+  get none(): IPageElementEventuallyNot {
     return this._list.currently.first.eventually.not
   }
 
