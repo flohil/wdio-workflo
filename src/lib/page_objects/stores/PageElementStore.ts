@@ -2,6 +2,7 @@ import * as _ from 'lodash'
 
 import {
   PageElement, IPageElementOpts,
+  ValuePageElement, IValuePageElementOpts,
   PageElementList, IPageElementListOpts,
   PageElementMap, IPageElementMapOpts, IPageElementMapIdentifier,
   PageElementGroup, IPageElementGroupOpts,
@@ -152,6 +153,33 @@ export class PageElementStore {
     options?: Pick<IPageElementOpts<this>, "timeout" | "customScroll">
   ) {
     return this.Element(
+      selector,
+      {
+        waitType: Workflo.WaitType.exist,
+        ...options
+      }
+    )
+  }
+
+  ValueElement(
+    selector: Workflo.XPath,
+    options?: Pick<IPageElementOpts<this>, Workflo.PageElementOptions>
+  ) {
+    return this._get<ValuePageElement<this>, IValuePageElementOpts<this>>(
+      selector,
+      ValuePageElement,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
+
+  ExistValueElement(
+    selector: Workflo.XPath,
+    options?: Pick<IValuePageElementOpts<this>, "timeout" | "customScroll">
+  ) {
+    return this.ValueElement(
       selector,
       {
         waitType: Workflo.WaitType.exist,

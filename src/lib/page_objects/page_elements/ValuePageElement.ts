@@ -14,6 +14,10 @@ import {
 } from './PageElement'
 import { PageElementStore } from '../stores'
 
+export interface IValuePageElementOpts<
+  Store extends PageElementStore
+> extends IPageElementOpts<Store> {}
+
 export interface IValuePageElementWaitEventuallyBase<OptionalParams, ReturnType>
 extends IPageElementWaitEventuallyBase<OptionalParams, ReturnType> {
   hasValue: (value: string, opts?: OptionalParams) => ReturnType,
@@ -59,7 +63,7 @@ export interface IValuePageElementCurrently extends
   not: IValuePageElementCheckState
 }
 
-interface IValuePageElement<Store extends PageElementStore> extends
+export interface IValuePageElement<Store extends PageElementStore> extends
   IPageElement<Store>, IValuePageElementGetState
 {
   currently: IValuePageElementCurrently
@@ -67,7 +71,7 @@ interface IValuePageElement<Store extends PageElementStore> extends
   eventually: IPageElementEventually<Store, this> & IValuePageElementEventually<Store, this>
 }
 
-class ValuePageElement<
+export class ValuePageElement<
   Store extends PageElementStore
 > extends PageElement<Store> implements IValuePageElement<Store> {
 
@@ -93,7 +97,7 @@ class ValuePageElement<
 
   getValue() { return getValue(this.element) }
 
-  wait = Object.assign(super.wait, {
+  wait: IPageElementWait<Store, this> & IValuePageElementWait<Store, this> = Object.assign(super.wait, {
     hasValue: (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
       'value', value, () => this.currently.hasValue(value), opts
     ),
