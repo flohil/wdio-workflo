@@ -44,7 +44,7 @@ export interface IPageElementListWaitLengthReverseParams extends IPageElementLis
 export interface IPageElementListOpts<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends IPageElementOpts<Store>
+  PageElementOptions extends Partial<IPageElementOpts<Store>>
 > extends IPageNodeOpts<Store> {
   waitType?: Workflo.WaitType
   timeout?: number
@@ -59,7 +59,7 @@ export interface IPageElementListOpts<
 export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends IPageElementOpts<Store>,
+  PageElementOptions extends Partial<IPageElementOpts<Store>>,
   PageElementTypeWait extends PageElementWait<Store, PageElementType>,
   PageElementTypeEventually extends PageElementEventually<Store, PageElementType>
 > extends PageNode<Store> {
@@ -311,7 +311,7 @@ export class PageElementList<
 class PageElementListCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends IPageElementOpts<Store>,
+  PageElementOptions extends Partial<IPageElementOpts<Store>>,
   PageElementTypeWait extends PageElementWait<Store, PageElementType>,
   PageElementTypeEventually extends PageElementEventually<Store, PageElementType>,
   ListType extends PageElementList<
@@ -448,7 +448,7 @@ class PageElementListCurrently<
 class PageElementListWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends IPageElementOpts<Store>,
+  PageElementOptions extends Partial<IPageElementOpts<Store>>,
   PageElementTypeWait extends PageElementWait<Store, PageElementType>,
   PageElementTypeEventually extends PageElementEventually<Store, PageElementType>,
   ListType extends PageElementList<
@@ -530,7 +530,7 @@ class PageElementListWait<
 class PageElementListEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends IPageElementOpts<Store>,
+  PageElementOptions extends Partial<IPageElementOpts<Store>>,
   PageElementTypeWait extends PageElementWait<Store, PageElementType>,
   PageElementTypeEventually extends PageElementEventually<Store, PageElementType>,
   ListType extends PageElementList<

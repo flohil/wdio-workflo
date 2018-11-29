@@ -122,22 +122,67 @@ export class PageElement<
 
 // Public GETTER FUNCTIONS (return state after initial wait)
 
-  getHTML() {
+  /**
+   * Executes func after initial wait and, if an error occurs during execution of func,
+   * throws a custom error message that the page element could not be located on the page.
+   * @param func
+   */
+  protected _execute<ResultType>(func: () => ResultType) {
     this.initialWait()
-    return getHTML(this)
+    return func()
   }
-  getText() { return getText(this.element) }
-  getDirectText() { return getDirectText(this.getHTML(), this) }
-  getAttribute(attributeName: string) { return getAttribute(this.element, attributeName) }
-  getClass() { return getAttribute(this.element, 'class') }
-  getId() { return getAttribute(this.element, 'id') }
-  getName() { return getAttribute(this.element, 'name') }
-  getLocation() { return getLocation(this.element) }
-  getX() { return getLocation(this.element).x }
-  getY() { return getLocation(this.element).y }
-  getSize() { return getSize(this.element) }
-  getWidth() { return getSize(this.element).width }
-  getHeight() { return getSize(this.element).height }
+
+  getHTML() {
+    return this._execute( this.currently.getHTML )
+  }
+
+  getDirectText() {
+    return this._execute( this.currently.getDirectText )
+  }
+
+  getText() {
+    return this._execute( this.currently.getText )
+  }
+
+  getAttribute(attributeName: string) {
+    return this._execute( () => this.currently.getAttribute(attributeName) )
+  }
+
+  getClass() {
+    return this._execute( () => this.currently.getAttribute('class') )
+  }
+
+  getId() {
+    return this._execute( () => this.currently.getAttribute('id') )
+  }
+
+  getName() {
+    return this._execute( () => this.currently.getAttribute('name') )
+  }
+
+  getLocation() {
+    return this._execute( () => this.currently.getLocation() )
+  }
+
+  getX() {
+    return this._execute( () => this.currently.getX() )
+  }
+
+  getY() {
+    return this._execute( () => this.currently.getY() )
+  }
+
+  getSize() {
+    return this._execute( () => this.currently.getSize() )
+  }
+
+  getWidth() {
+    return this._execute( () => this.currently.getWidth() )
+  }
+
+  getHeight() {
+    return this._execute( () => this.currently.getHeight() )
+  }
 
   getTimeout() { return this._timeout }
 
@@ -350,7 +395,7 @@ export class PageElement<
 }
 
 export class PageElementCurrently<
-  Store extends PageElementStore,
+  Store extends PageElementStore
 > {
 
   protected _pageElement: PageElement<Store>
@@ -378,20 +423,238 @@ export class PageElementCurrently<
     return browser.element(this._pageElement.getSelector())
   }
 
-  // GET STATE
-  getHTML() { return getHTML(this._pageElement) }
-  getText() { return getText(this.element, this._pageElement) }
-  getDirectText() { return getDirectText(this.getHTML(), this._pageElement) }
-  getAttribute(attributeName: string) { return getAttribute(this.element, attributeName, this._pageElement) }
-  getClass() { return getAttribute(this.element, 'class', this._pageElement) }
-  getId() { return getAttribute(this.element, 'id', this._pageElement) }
-  getName() { return getAttribute(this.element, 'name', this._pageElement) }
-  getLocation() { return getLocation(this.element, this._pageElement) }
-  getX() { return getLocation(this.element, this._pageElement).x }
-  getY() { return getLocation(this.element, this._pageElement).y }
-  getSize() { return getSize(this.element, this._pageElement) }
-  getWidth() { return getSize(this.element, this._pageElement).width }
-  getHeight() { return getSize(this.element, this._pageElement).height }
+// GET STATE
+
+  /**
+   * Executes func and, if an error occurs during execution of func,
+   * throws a custom error message that the page element could not be located on the page.
+   * @param func
+   */
+  protected _execute<ResultType>(func: () => ResultType) {
+    try {
+      return func()
+    } catch ( error ) {
+      const errorMsg =
+      `${this._pageElement.constructor.name} could not be located on the page.\n` +
+      `( ${this._pageElement.getSelector()} )`
+
+      throw new Error(errorMsg)
+    }
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * exists in PageElement base class and its currently, wait and eventually containers.
+   */
+  exists() {
+    return this.element.isExisting()
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isVisible in PageElement base class and its currently, wait and eventually containers.
+   */
+  isVisible() {
+    return this.element.isVisible()
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isEnabled in PageElement base class and its currently, wait and eventually containers.
+   */
+  isEnabled(): boolean {
+    return this._execute(() => this.element.isEnabled())
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isSelected in PageElement base class and its currently, wait and eventually containers.
+   */
+  isSelected(): boolean {
+    return this._execute(() => this.element.isSelected())
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isChecked in PageElement base class and its currently, wait and eventually containers.
+   */
+  isChecked(): boolean {
+    return this.hasAnyAttribute('checked')
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getHTML, hasHTML, containsHTML and hasAnyHTML in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getHTML() {
+    const result: Workflo.IJSError | string = browser.selectorExecute(
+      [this._pageElement.getSelector()], function (elems: HTMLElement[], elementSelector: string
+    ) {
+        var error: Workflo.IJSError = {
+          notFound: []
+        };
+
+        if (elems.length === 0) {
+          error.notFound.push(elementSelector);
+        };
+
+        if (error.notFound.length > 0) {
+          return error;
+        }
+
+        var elem: HTMLElement = elems[0];
+
+        return elem.innerHTML;
+    }, this._pageElement.getSelector())
+
+    if (isJsError(result)) {
+      throw new Error(
+        `${this._pageElement.constructor.name} could not be located on the page.\n( ${this._pageElement.getSelector()} )`
+        )
+    } else {
+      return result || ''
+    }
+  }
+
+/**
+   * Gets text that resides on the level directly below the selected page element.
+   * Does not include text of the page element's nested children elements.
+   *
+   * Overwriting this function will affect the behaviour of the functions
+   * getDirectText, hasDirectText, containsDirectText and hasDirectAnyText in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getDirectText(): string {
+    const html = this.getHTML()
+
+    if (html.length === 0) {
+      return ''
+    }
+
+    let text = ""
+    const constructorName = this._pageElement.constructor.name
+
+    const handler = new htmlParser.DomHandler(function (error, dom) {
+      if (error) {
+        throw new Error(`Error creating dom for direct text in ${constructorName}: ${error}\n( ${this._pageElement.getSelector()} )`)
+      } else {
+        dom.forEach(node => {
+          if (node.type === 'text') {
+              text += node.data
+          }
+        });
+      }
+    });
+
+    const parser = new htmlParser.Parser(handler);
+    parser.write(html);
+    parser.end();
+
+    return text
+  }
+
+  /**
+   * Returns text of this.element including all texts of nested children.
+   * Be aware that only text visible within the viewport will be returned.
+   *
+   * Overwriting this function will affect the behaviour of the functions
+   * getText, hasText, containsText and hasAnyText in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getText(): string {
+    return this._execute(() => this.element.getText())
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getAttribute, hasAttribute, containsAttribute and hasAnyAttribute in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getAttribute(attrName: string): string {
+    return this._execute(() => this.element.getAttribute(attrName))
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getClass, hasClass, containsClass and hasAnyClass in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getClass() {
+    return this.getAttribute('class')
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getId, hasId, containsId and hasAnyId in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getId() {
+    return this.getAttribute('id')
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getName, hasName, containsName and hasAnyName in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getName() {
+    return this.getAttribute('name')
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getLocation, hasLocation, containsLocation and hasAnyLocation in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getLocation() {
+    return <Workflo.ICoordinates> (<any> this._execute(() => this.element.getLocation()))
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getX, hasX, containsX and hasAnyX in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getX() {
+    return this.getLocation().x
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getY, hasY, containsY and hasAnyY in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getY() {
+    return this.getLocation().y
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getSize, hasSize, containsSize and hasAnySize in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getSize() {
+    return <Workflo.ISize> (<any> this._execute(() => this.element.getElementSize()))
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getWidth, hasWidth, containsWidth and hasAnyWidth in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getWidth() {
+    return this.getSize().width
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the functions
+   * getHeight, hasHeight, containsHeight and hasAnyHeight in PageElement base class and its
+   * currently, wait and eventually containers.
+   */
+  getHeight() {
+    return this.getSize().height
+  }
 
 // CHECK STATE
 
@@ -439,11 +702,6 @@ export class PageElementCurrently<
     return result
   }
 
-  exists = () => this.element.isExisting()
-  isVisible = () => this.element.isVisible()
-  isEnabled = () => isEnabled(this.element, this._pageElement)
-  isSelected = () => isSelected(this.element, this._pageElement)
-  isChecked = () => this.hasAnyAttribute('checked')
   hasText = (text: string) => this._compareHas(text, this.getText())
   hasAnyText = () => this._compareHasAny(this.getText())
   containsText = (text: string) => this._compareContains(text, this.getText())
@@ -1276,112 +1534,25 @@ export class PageElementEventually<
   }
 }
 
-// UTILITY FUNCTIONS
-
 /**
- * Gets text that resides on the level directly below the selected page element.
- * Does not include text of the page element's nested children elements.
- */
-function getDirectText<Store extends PageElementStore>(html: string, pageElement?: PageElement<Store>): string {
-  if (html.length === 0) {
-    return ''
-  }
-
-  let text = ""
-  const constructorName = pageElement.constructor.name
-  const selector = pageElement.getSelector()
-
-  const handler = new htmlParser.DomHandler(function (error, dom) {
-    if (error) {
-      throw new Error(`Error creating dom for direct text in ${constructorName}: ${error}\n( ${selector} )`)
-    } else {
-      dom.forEach(node => {
-        if (node.type === 'text') {
-            text += node.data
-        }
-      });
-    }
-  });
-
-  const parser = new htmlParser.Parser(handler);
-  parser.write(html);
-  parser.end();
-
-  return text
-}
-
-function getHTML<Store extends PageElementStore>(pageElement: PageElement<Store>) {
-
-  const result: Workflo.IJSError | string = browser.selectorExecute(
-    [pageElement.getSelector()], function (elems: HTMLElement[], elementSelector: string
-  ) {
-      var error: Workflo.IJSError = {
-        notFound: []
-      };
-
-      if (elems.length === 0) {
-        error.notFound.push(elementSelector);
-      };
-
-      if (error.notFound.length > 0) {
-        return error;
-      }
-
-      var elem: HTMLElement = elems[0];
-
-      return elem.innerHTML;
-  }, pageElement.getSelector())
-
-  if (isJsError(result)) {
-    throw new Error(`${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`)
-  } else {
-    return result || ''
-  }
-}
-
-// returns text of this.element including
-// all texts of nested children
-function getText<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
-  return elementExecute(() => element.getText(), pageElement)
-}
-
-function getAttribute<Store extends PageElementStore>(element: WdioElement, attrName: string, pageElement?: PageElement<Store>): string {
-  return elementExecute(() => element.getAttribute(attrName), pageElement)
-}
-
-function getLocation<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>) {
-  return <Workflo.ICoordinates> (<any> elementExecute(() => element.getLocation(), pageElement))
-}
-
-function getSize<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>) {
-  return <Workflo.ISize> (<any> elementExecute(() => element.getElementSize(), pageElement))
-}
-
-function isEnabled<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): boolean {
-  return elementExecute(() => element.isEnabled(), pageElement)
-}
-
-function isSelected<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): boolean {
-  return elementExecute(() => element.isSelected(), pageElement)
-}
-
-/**
- * Executes func and, if pageElement is defined and an error occurs during execution of func,
+ * Executes func and, if an error occurs during execution of func,
  * throws a custom error message that the page element could not be located on the page.
  * @param func
  * @param pageElement
  */
-export function elementExecute<Store extends PageElementStore, ResultType>(func: () => ResultType, pageElement?: PageElement<Store>) {
-  if (pageElement) {
-    try {
-      return func()
-    } catch ( error ) {
-      const errorMsg = `${pageElement.constructor.name} could not be located on the page.\n( ${pageElement.getSelector()} )`
-
-      throw new Error(errorMsg)
-    }
-  } else {
+export function elementExecute<
+  Store extends PageElementStore,
+  PageElementType extends PageElement<Store>,
+  ResultType
+>(func: () => ResultType, pageElement: PageElementType) {
+  try {
     return func()
+  } catch ( error ) {
+    const errorMsg =
+    `${pageElement.constructor.name} could not be located on the page.\n` +
+    `( ${pageElement.getSelector()} )`
+
+    throw new Error(errorMsg)
   }
 }
 

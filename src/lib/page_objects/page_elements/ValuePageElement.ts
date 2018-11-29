@@ -2,10 +2,9 @@ import {
   PageElement,
   IPageElementOpts,
   WdioElement,
-  elementExecute,
   PageElementCurrently,
   PageElementWait,
-  PageElementEventually
+  PageElementEventually,
 } from './PageElement'
 import { PageElementStore } from '../stores'
 
@@ -41,12 +40,17 @@ export class ValuePageElement<
     }
   }
 
-  getValue() { return getValue(this.element) }
+  getValue() {
+    return this._execute( () => this.currently.getValue() )
+  }
 }
 
 export class ValuePageElementCurrently<Store extends PageElementStore>
 extends PageElementCurrently<Store> {
-  getValue() { return getValue(this.element, this._pageElement) }
+
+  getValue(): string {
+    return this.element.getValue()
+  }
 
   hasValue = (value: string) => this._compareHas(value, this.getValue())
   hasAnyValue = () => this._compareHasAny(this.getValue())
@@ -111,8 +115,4 @@ export class ValuePageElementEventually<
       return this._eventually(() => this._pageElement.wait.not.containsValue(value, opts))
     }
   })
-}
-
-function getValue<Store extends PageElementStore>(element: WdioElement, pageElement?: PageElement<Store>): string {
-  return elementExecute(() => element.getValue(), pageElement)
 }
