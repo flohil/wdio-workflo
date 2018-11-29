@@ -193,8 +193,6 @@ export class PageElementStore {
   protected List<
     PageElementType extends PageElement<this>,
     PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'waitType'>,
-    PageElementTypeWait extends PageElementWait<this, PageElementType>,
-    PageElementTypeEventually extends PageElementEventually<this, PageElementType>
   > (
     selector: Workflo.XPath,
     options: Pick<
@@ -203,7 +201,7 @@ export class PageElementStore {
     >
   ) {
     return this._get<
-      PageElementList<this, PageElementType, PageElementOpts, PageElementTypeWait, PageElementTypeEventually>,
+      PageElementList<this, PageElementType, PageElementOpts>,
       IPageElementListOpts<this, PageElementType, PageElementOpts>
     > (
       selector,

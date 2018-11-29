@@ -5,9 +5,7 @@ import {
   PageNode,
   IPageNodeOpts,
   PageElement,
-  IPageElementOpts,
-  PageElementWait,
-  PageElementEventually
+  IPageElementOpts
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
@@ -60,9 +58,8 @@ export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  PageElementTypeWait extends PageElementWait<Store, PageElementType>,
-  PageElementTypeEventually extends PageElementEventually<Store, PageElementType>
 > extends PageNode<Store> {
+
   protected _waitType: Workflo.WaitType
   protected _timeout: number
   protected _interval: number
@@ -76,13 +73,13 @@ export class PageElementList<
   protected _lastActualResult: string
 
   readonly currently: PageElementListCurrently<
-    Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually, this
+    Store, PageElementType, PageElementOptions, this
   >
   readonly wait: PageElementListWait<
-    Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually, this
+    Store, PageElementType, PageElementOptions, this
   >
   readonly eventually: PageElementListEventually<
-    Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually, this
+    Store, PageElementType, PageElementOptions, this
   >
 
   constructor(
@@ -91,9 +88,7 @@ export class PageElementList<
     cloneFunc: <T extends PageElementList<
       Store,
       PageElementType,
-      PageElementOptions,
-      PageElementTypeWait,
-      PageElementTypeEventually
+      PageElementOptions
     >>(selector: Workflo.XPath) => T
   ) {
     super(_selector, opts)
@@ -120,13 +115,13 @@ export class PageElementList<
     })
 
     this.currently = new PageElementListCurrently<
-      Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually, this
+      Store, PageElementType, PageElementOptions, this
     >(this, opts, cloneFunc)
     this.wait = new PageElementListWait<
-      Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually, this
+      Store, PageElementType, PageElementOptions, this
     >(this)
     this.eventually = new PageElementListEventually<
-      Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually, this
+      Store, PageElementType, PageElementOptions, this
     >(this)
   }
 
@@ -312,11 +307,7 @@ class PageElementListCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  PageElementTypeWait extends PageElementWait<Store, PageElementType>,
-  PageElementTypeEventually extends PageElementEventually<Store, PageElementType>,
-  ListType extends PageElementList<
-    Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually
-  >
+  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
   protected _selector: string
@@ -449,11 +440,7 @@ class PageElementListWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  PageElementTypeWait extends PageElementWait<Store, PageElementType>,
-  PageElementTypeEventually extends PageElementEventually<Store, PageElementType>,
-  ListType extends PageElementList<
-    Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually
-  >
+  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
   protected _list: ListType
@@ -501,7 +488,7 @@ class PageElementListWait<
   }
 
   get any() {
-    return this._list.currently.first.wait as PageElementTypeWait
+    return this._list.currently.first.wait as any as PageElementType['wait']
   }
 
   // Typescript has a bug that prevents Omit from working with generic extended types:
@@ -511,7 +498,7 @@ class PageElementListWait<
   //   return _.omit(this._list.currently.first.wait, 'not') as any as Omit<PageElementTypeWait, 'not'>
   // }
 
-  get none(): PageElementTypeWait['not'] {
+  get none(): PageElementType['wait']['not'] {
     return this._list.currently.first.wait.not
   }
 
@@ -531,11 +518,7 @@ class PageElementListEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  PageElementTypeWait extends PageElementWait<Store, PageElementType>,
-  PageElementTypeEventually extends PageElementEventually<Store, PageElementType>,
-  ListType extends PageElementList<
-    Store, PageElementType, PageElementOptions, PageElementTypeWait, PageElementTypeEventually
-  >
+  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
   protected _list: ListType
@@ -578,10 +561,10 @@ class PageElementListEventually<
   // }
 
   get any() {
-    return this._list.currently.first.eventually as PageElementTypeEventually
+    return this._list.currently.first.eventually as any as PageElementType['eventually']
   }
 
-  get none(): PageElementTypeEventually['not'] {
+  get none(): PageElementType['eventually']['not'] {
     return this._list.currently.first.eventually.not
   }
 
