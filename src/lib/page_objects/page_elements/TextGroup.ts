@@ -28,8 +28,8 @@ export class TextGroup<
 
   /**
    * If using filter, only those element text will be returned which are defined and truthy in filter.
-   * 
-   * @param param0 
+   *
+   * @param param0
    */
   GetText( {filter, options} : {
     filter?: Workflo.IRecObj<boolean>,

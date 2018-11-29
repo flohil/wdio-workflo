@@ -1,7 +1,6 @@
 import {
   PageElement,
   IPageElementOpts,
-  WdioElement,
   PageElementCurrently,
   PageElementWait,
   PageElementEventually,
@@ -14,7 +13,7 @@ export interface IValuePageElementOpts<
 
 export class ValuePageElement<
   Store extends PageElementStore
-> extends PageElement<Store> {
+> extends PageElement<Store> implements Workflo.PageNode.IGetValue, Workflo.PageNode.ISetValue<string> {
 
   readonly currently: ValuePageElementCurrently<Store>
   readonly wait: ValuePageElementWait<Store, this>
@@ -42,6 +41,12 @@ export class ValuePageElement<
 
   getValue() {
     return this._execute( () => this.currently.getValue() )
+  }
+
+  setValue(value: string) {
+    this.element.setValue(value)
+
+    return this
   }
 }
 

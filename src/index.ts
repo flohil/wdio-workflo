@@ -225,11 +225,11 @@ declare global {
       }
 
       interface IGetValue extends INode {
-        __getValue(): string
+        getValue(): string
       }
 
       interface ISetValue<T> extends INode {
-        __setValue(value: T): this
+        setValue(value: T): this
       }
     }
 
