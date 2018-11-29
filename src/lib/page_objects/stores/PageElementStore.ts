@@ -251,6 +251,43 @@ export class PageElementStore {
     )
   }
 
+  ValueElementList(
+    selector: Workflo.XPath,
+    options?: PickPartial<
+      IPageElementListOpts<this, ValuePageElement<this>, Pick<IValuePageElementOpts<this>, "timeout" | "waitType">>,
+      "waitType" | "timeout" | "disableCache" | "identifier",
+      "elementOptions"
+    >
+  ) {
+    return this.List(
+      selector,
+      {
+        elementOptions: {},
+        elementStoreFunc: this.ValueElement,
+        ...options
+      }
+    )
+  }
+
+  ExistValueElementList(
+    selector: Workflo.XPath,
+    options?: PickPartial<
+      IPageElementListOpts<this, ValuePageElement<this>, Pick<IValuePageElementOpts<this>, "timeout">>,
+      "timeout" | "disableCache" | "identifier",
+      "elementOptions"
+    >
+  ) {
+    return this.List(
+      selector,
+      {
+        elementOptions: {},
+        elementStoreFunc: this.ExistValueElement,
+        waitType: Workflo.WaitType.exist,
+        ...options
+      }
+    )
+  }
+
 // MAPS
 
   protected Map<
