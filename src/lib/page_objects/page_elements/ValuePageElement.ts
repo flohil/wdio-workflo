@@ -44,7 +44,7 @@ export class ValuePageElement<
   getValue() { return getValue(this.element) }
 }
 
-class ValuePageElementCurrently<Store extends PageElementStore>
+export class ValuePageElementCurrently<Store extends PageElementStore>
 extends PageElementCurrently<Store> {
   getValue() { return getValue(this.element, this._pageElement) }
 
@@ -59,7 +59,7 @@ extends PageElementCurrently<Store> {
   })
 }
 
-class ValuePageElementWait<
+export class ValuePageElementWait<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store>
 > extends PageElementWait<Store, PageElementType> {
@@ -86,7 +86,7 @@ class ValuePageElementWait<
   })
 }
 
-class ValuePageElementEventually<
+export class ValuePageElementEventually<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store>
 > extends PageElementEventually<Store, PageElementType> {
