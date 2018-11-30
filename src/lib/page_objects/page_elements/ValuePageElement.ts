@@ -57,9 +57,15 @@ extends PageElementCurrently<Store> {
     return this.element.getValue()
   }
 
-  hasValue = (value: string) => this._compareHas(value, this.getValue())
-  hasAnyValue = () => this._compareHasAny(this.getValue())
-  containsValue = (value: string) => this._compareContains(value, this.getValue())
+  hasValue(value: string) {
+    return this._compareHas(value, this.getValue())
+  }
+  hasAnyValue() {
+    return this._compareHasAny(this.getValue())
+  }
+  containsValue(value: string) {
+    return this._compareContains(value, this.getValue())
+  }
 
   not = Object.assign(super.not, {
     hasValue: (value: string) => !this.hasValue(value),
@@ -72,15 +78,21 @@ export class ValuePageElementWait<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store>
 > extends PageElementWait<Store, PageElementType> {
-  hasValue = (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitHasProperty(
-    'value', value, () => this._pageElement.currently.hasValue(value), opts
-  )
-  hasAnyValue = (opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitWdioCheckFunc(
-    'had any value', opts => this._pageElement.currently.element.waitForValue(opts.timeout, opts.reverse), opts
-  )
-  containsValue = (value: string, opts?: Workflo.IWDIOParamsOptionalReverse) => this._waitContainsProperty(
-    'value', value, () => this._pageElement.currently.containsValue(value), opts
-  )
+  hasValue(value: string, opts?: Workflo.IWDIOParamsOptionalReverse) {
+    return this._waitHasProperty(
+      'value', value, () => this._pageElement.currently.hasValue(value), opts
+    )
+  }
+  hasAnyValue(opts?: Workflo.IWDIOParamsOptionalReverse) {
+    return this._waitWdioCheckFunc(
+      'had any value', opts => this._pageElement.currently.element.waitForValue(opts.timeout, opts.reverse), opts
+    )
+  }
+  containsValue(value: string, opts?: Workflo.IWDIOParamsOptionalReverse) {
+    return this._waitContainsProperty(
+      'value', value, () => this._pageElement.currently.containsValue(value), opts
+    )
+  }
 
   not = Object.assign(super.not, {
     hasValue: (value: string, opts?: Workflo.IWDIOParamsOptional) => {
@@ -99,13 +111,13 @@ export class ValuePageElementEventually<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store>
 > extends PageElementEventually<Store, PageElementType> {
-  hasValue = (value: string, opts?: Workflo.IWDIOParamsOptional) => {
+  hasValue(value: string, opts?: Workflo.IWDIOParamsOptional) {
     return this._eventually(() => this._pageElement.wait.hasValue(value, opts))
   }
-  hasAnyValue = (opts?: Workflo.IWDIOParamsOptional) => {
+  hasAnyValue(opts?: Workflo.IWDIOParamsOptional) {
     return this._eventually(() => this._pageElement.wait.hasAnyValue(opts))
   }
-  containsValue = (value: string, opts?: Workflo.IWDIOParamsOptional) => {
+  containsValue(value: string, opts?: Workflo.IWDIOParamsOptional) {
     return this._eventually(() => this._pageElement.wait.containsValue(value, opts))
   }
 

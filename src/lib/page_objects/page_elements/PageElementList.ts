@@ -179,7 +179,9 @@ export class PageElementList<
   /**
    * @param index starts at 0
    */
-  at = ( index: number ) => this.where.getAt( index )
+  at( index: number ) {
+    return this.where.getAt( index )
+  }
 
   /**
    * Returns all page elements found in the DOM that match the list selector after initial wait.
@@ -373,7 +375,9 @@ class PageElementListCurrently<
   /**
    * @param index starts at 0
    */
-  at = ( index: number ) => this.where.getAt( index )
+  at( index: number ) {
+    return this.where.getAt( index )
+  }
 
   /**
    * Returns all page elements found in the DOM that match the list selector after initial wait.
@@ -416,11 +420,13 @@ class PageElementListCurrently<
 
 // CHECK STATE FUNCTIONS
 
-  isEmpty = () => !browser.isExisting(this._selector)
+  isEmpty() {
+    return !browser.isExisting(this._selector)
+  }
 
-  hasLength = (
+  hasLength(
     length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
-  ) => {
+  ) {
     const actualLength = this.getLength()
 
     this._lastActualResult = actualLength.toString()
@@ -450,12 +456,12 @@ class PageElementListWait<
   }
 
   // waits until list has given length
-  hasLength = ( length: number, {
+  hasLength( length: number, {
     timeout = this._list.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
     interval = this._list.getInterval(),
     reverse
-  }: IPageElementListWaitLengthReverseParams = {}) => {
+  }: IPageElementListWaitLengthReverseParams = {}) {
     browser.waitUntil(
       () => {
         if (reverse) {
@@ -469,11 +475,11 @@ class PageElementListWait<
     return this._list
   }
 
-  isEmpty = ({
+  isEmpty({
     timeout = this._list.getTimeout(),
     interval = this._list.getInterval(),
     reverse
-  } : IPageElementListWaitEmptyReverseParams = {}) => {
+  } : IPageElementListWaitEmptyReverseParams = {}) {
     browser.waitUntil(
       () => {
         if (reverse) {
@@ -536,20 +542,20 @@ class PageElementListEventually<
     }
   }
 
-  hasLength = ( length: number, {
+  hasLength( length: number, {
     timeout = this._list.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
     interval = this._list.getInterval(),
     reverse
-  }: IPageElementListWaitLengthReverseParams = {} ) => {
+  }: IPageElementListWaitLengthReverseParams = {} ) {
     return this._eventually( () => this._list.wait.hasLength( length, { timeout, comparator, interval, reverse } ) )
   }
 
-  isEmpty = ({
+  isEmpty({
     timeout = this._list.getTimeout(),
     interval = this._list.getInterval(),
     reverse
-  }: IPageElementListWaitEmptyReverseParams = {}) => {
+  }: IPageElementListWaitEmptyReverseParams = {}) {
     return this._eventually( () => this._list.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
