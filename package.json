@@ -62,7 +62,7 @@
     "text-table": "^0.2.0",
     "ts-node": "3.2.0",
     "tsconfig-paths": "^2.2.0",
-    "typescript": "^3.1.5",
+    "typescript": "^3.2.1",
     "wdio-selenium-standalone-service": "0.0.9",
     "wdio-workflo-allure-reporter": "^0.1.1",
     "wdio-workflo-jasmine-framework": "^0.1.0",

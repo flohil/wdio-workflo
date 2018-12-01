@@ -1,5 +1,5 @@
 import { InstallOpts, StartOpts  } from 'selenium-standalone'
-import { DesiredCapabilities, Options, Suite, Test } from 'webdriverio'
+import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element } from 'webdriverio'
 
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli'
 import * as pageObjects from './lib/page_objects'
@@ -17,9 +17,6 @@ declare global {
     toHaveText(text: string): boolean
     toHaveAnyText(): boolean
     toContainText(text: string): boolean
-    toHaveValue(value: string): boolean
-    toHaveAnyValue(): boolean
-    toContainValue(value: string): boolean
     toHaveHTML(html: string): boolean
     toHaveAnyHTML(): boolean
     toContainHTML(html: string): boolean
@@ -59,9 +56,6 @@ declare global {
     toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean
-    toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean
-    toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean
-    toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsOptional): boolean
     toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean
@@ -101,6 +95,16 @@ declare global {
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
   }
 
+  interface CustomValueElementMatchers {
+    toHaveValue(value: string): boolean
+    toHaveAnyValue(): boolean
+    toContainValue(value: string): boolean
+
+    toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean
+    toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean
+  }
+
   interface ElementMatchers extends CustomElementMatchers {
     not: CustomElementMatchers
   }
@@ -109,17 +113,24 @@ declare global {
     not: CustomListMatchers
   }
 
+  interface ValueElementMatchers extends CustomValueElementMatchers {
+    not: CustomValueElementMatchers
+  }
+
   function expectElement<
-    S extends pageObjects.stores.PageElementStore,
-    E extends pageObjects.elements.PageElement<S>
-  >(element: E): ElementMatchers
+    Store extends pageObjects.stores.PageElementStore,
+    PageElementType extends pageObjects.elements.PageElement<Store>,
+    ValueType
+  >(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
+    ValueElementMatchers :
+    ElementMatchers
 
   function expectList<
-    S extends pageObjects.stores.PageElementStore,
-    PageElementType extends pageObjects.elements.PageElement<S>,
+    Store extends pageObjects.stores.PageElementStore,
+    PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
-    L extends pageObjects.elements.PageElementList<S, PageElementType, PageElementOptions>
-  >(list: L): ListMatchers
+    PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>
+  >(list: PageElementListType): ListMatchers
 
   namespace WebdriverIO {
     interface Client<T> {
@@ -147,6 +158,13 @@ declare global {
   type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
   namespace Workflo {
+
+    type WdioElement = Client<RawResult<Element>> & RawResult<Element>
+
+    interface IJSError {
+      notFound: string[]
+    }
+
     interface ICoordinates {
       x: number,
       y: number
@@ -157,8 +175,9 @@ declare global {
       height: number
     }
 
-    interface IJSError {
-      notFound: string[]
+    interface ITolerance {
+      lower: number,
+      upper: number
     }
 
     interface IScrollResult {
@@ -224,12 +243,12 @@ declare global {
         getText(): string
       }
 
-      interface IGetValue extends INode {
-        getValue(): string
+      interface IGetValue<ValueType> extends INode {
+        getValue(): ValueType
       }
 
-      interface ISetValue<T> extends INode {
-        setValue(value: T): this
+      interface ISetValue<ValueType> extends INode {
+        setValue(value: ValueType): this
       }
     }
 
@@ -1278,3 +1297,239 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
   */
   onError?<T>(error: Error): Promise<T> | void
 }
+
+interface IGetValue<T> {
+  getValue: () => T
+}
+
+class ClassString implements IGetValue<string> {
+  getValue() {
+    return "asdf"
+  }
+}
+
+class ClassNumber implements IGetValue<number> {
+  getValue() {
+    return 4
+  }
+}
+
+const obj = {
+  str: new ClassString(),
+  nbr: new ClassNumber()
+}
+
+const res = Object.keys(obj).map(
+  key => obj[key].getValue()
+)
+
+import * as _ from 'lodash'
+import { ValuePageElement } from './lib/page_objects/page_elements';
+
+const res2 = _.mapValues(obj, function (v) { return v.getValue(); });
+
+
+
+
+
+// interface W<T> extends IGetValue {
+//   item: T;
+// }
+
+type GetValues<T> = {[key: string]: IGetValue<T>}
+
+// interface Before extends GetValues {
+//   a: ClassNumber;
+//   b: ClassString;
+// }
+
+// interface After {
+//   a: W<Before["a"]>;
+//   b: W<Before["b"]>
+// }
+
+// const before: Before = {
+//   a: new ClassNumber(),
+//   b: new ClassString()
+// };
+
+// // declare function wrap<T>(item: T): W<T>
+
+// // sample implementation
+// function wrap<T extends IGetValue>(item: T): W<T> {
+//   return { item };
+// }
+
+// // declare function mapValues(obj: Before): After
+
+// // sample implementation
+// function mapValues(obj: Before): After {
+//  const after = {};
+
+//  for (let key in obj) {
+//       after[key] = wrap(obj[key]);
+//   }
+
+//   return after as After;
+// }
+
+// const after = mapValues(before);
+
+// declare function typeCheck<T>(arg: T): void
+
+
+// Solution works if using only string values and sticking to 1 level of depth/no nesting
+type ObjMap<O extends {}, T> = { [K in keyof O]: T };
+
+const bla = {
+  a: 2,
+  b: "string"
+}
+
+const bla2: ObjMap<typeof bla, string> = {
+  a: "jodel",
+  b: "schmiere"
+}
+
+// function getValue<T extends {[key: string]: IGetValue}>(obj: T, key: keyof T): T['a']['getValue'] {
+//   return obj['a'].getValue() as any as T['a']['getValue']
+// }
+
+// const test = getValue(before, 'getValue')
+
+// let blas: string = 'a'
+
+
+type GetReturnType<original extends Function> =
+  original extends (...x: any[]) => infer returnType ? returnType : never
+
+const someRandomStuff = <fn extends Function>(originalFn: fn) => {
+  const result: GetReturnType<fn> = originalFn(12345);
+
+  return result;
+}
+
+
+const innerFn = (item: number) => item.toString();
+const innerFn2 = (item: number) => item + 1;
+
+const getValueFn = <T>(elem: IGetValue<T>) => elem.getValue()
+
+const output = someRandomStuff(innerFn);
+const output2 = someRandomStuff(innerFn2);
+
+const output3 = getValueFn(new ClassString());
+const output4 = getValueFn(new ClassNumber());
+
+const output5 = getValueFn(obj.nbr)
+
+
+// merging objects and excluding single properties from object (not working with generics :-( )
+
+
+const obj1 = {
+  a: "bla",
+  not: 2
+}
+
+const obj2 = {
+  c: "jodel"
+}
+
+function excludeNot<T extends { not: number }>(obj: T) {
+  let { not, ...rest } = obj;
+  return rest;  // Pick<T, Exclude<keyof T, "tag">>
+}
+
+const obj3 = {...obj1, ...obj2}
+const obj4 = excludeNot(obj1)
+
+// index types
+
+function pluck<T, K extends keyof T>(o: T, names: K[]): T[K][] {
+  return names.map(n => o[n]);
+}
+
+interface Person {
+    name: string;
+    age: number;
+}
+let person: Person = {
+    name: 'Jarid',
+    age: 35
+};
+let strings = pluck(person, ['name']); // ok, string[]
+let numbers = pluck(person, ['age', 'name']); // ok, number[]
+
+function getProperty<T, K extends keyof T>(o: T, name: K): T[K] {
+  return o[name]; // o[name] is of type T[K]
+}
+
+let name = getProperty(person, 'name');
+let age = getProperty(person, 'age');
+
+// really cool stuff -> able to get type of result of getValue function
+
+function getValue2<T, O extends GetValues<T>, K extends keyof O>(o: O, name: K): ReturnType<O[K]['getValue']> {
+  return o[name].getValue() as ReturnType<O[K]['getValue']>
+}
+
+let str = getProperty(obj, 'str')
+
+let strResult = getValue2(obj, "str")
+let nbrResult = getValue2(obj, "nbr")
+
+const proxyObj = {
+  a: 1,
+  b: "asdf"
+}
+
+type Proxify<T> = {
+  [P in keyof T]: ProxyClass<T[P]>;
+}
+
+class ProxyClass<T> {
+
+  private _value: T
+
+  constructor(value: T) {
+    this._value = value
+  }
+
+  get(): T {
+    return this._value
+  }
+  set(value: T): void {
+    this._value = value
+  }
+}
+
+function proxify<T>(o: T): Proxify<T> {
+  const resObj: Proxify<T> = {} as Proxify<T>
+
+  for (const key in o) {
+    resObj[key] = new ProxyClass(o[key])
+  }
+
+  return resObj
+}
+
+let proxyProps = proxify(proxyObj);
+
+const proxya = proxyProps.a.get()
+const proxyb = proxyProps.b.get()
+
+proxyProps.b.set('jodel')
+
+function unproxify<T>(t: Proxify<T>): T {
+  let result = {} as T;
+  for (const k in t) {
+      result[k] = t[k].get();
+  }
+  return result;
+}
+
+let originalProps = unproxify(proxyProps);
+
+
+

@@ -1,5 +1,5 @@
 import { InstallOpts, StartOpts } from 'selenium-standalone';
-import { DesiredCapabilities, Options, Suite, Test } from 'webdriverio';
+import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element } from 'webdriverio';
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli';
 import * as pageObjects from './lib/page_objects';
 import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList';
@@ -13,9 +13,6 @@ declare global {
         toHaveText(text: string): boolean;
         toHaveAnyText(): boolean;
         toContainText(text: string): boolean;
-        toHaveValue(value: string): boolean;
-        toHaveAnyValue(): boolean;
-        toContainValue(value: string): boolean;
         toHaveHTML(html: string): boolean;
         toHaveAnyHTML(): boolean;
         toContainHTML(html: string): boolean;
@@ -60,9 +57,6 @@ declare global {
         toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsOptional): boolean;
         toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean;
@@ -108,14 +102,25 @@ declare global {
         toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean;
         toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
     }
+    interface CustomValueElementMatchers {
+        toHaveValue(value: string): boolean;
+        toHaveAnyValue(): boolean;
+        toContainValue(value: string): boolean;
+        toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean;
+        toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean;
+        toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean;
+    }
     interface ElementMatchers extends CustomElementMatchers {
         not: CustomElementMatchers;
     }
     interface ListMatchers extends CustomListMatchers {
         not: CustomListMatchers;
     }
-    function expectElement<S extends pageObjects.stores.PageElementStore, E extends pageObjects.elements.PageElement<S>>(element: E): ElementMatchers;
-    function expectList<S extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<S>, PageElementOptions, L extends pageObjects.elements.PageElementList<S, PageElementType, PageElementOptions>>(list: L): ListMatchers;
+    interface ValueElementMatchers extends CustomValueElementMatchers {
+        not: CustomValueElementMatchers;
+    }
+    function expectElement<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>>(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store> ? ValueElementMatchers : ElementMatchers;
+    function expectList<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): ListMatchers;
     namespace WebdriverIO {
         interface Client<T> {
             /**
@@ -138,6 +143,10 @@ declare global {
     type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>;
     type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
     namespace Workflo {
+        type WdioElement = Client<RawResult<Element>> & RawResult<Element>;
+        interface IJSError {
+            notFound: string[];
+        }
         interface ICoordinates {
             x: number;
             y: number;
@@ -146,8 +155,9 @@ declare global {
             width: number;
             height: number;
         }
-        interface IJSError {
-            notFound: string[];
+        interface ITolerance {
+            lower: number;
+            upper: number;
         }
         interface IScrollResult {
             elemTop: number;
@@ -202,10 +212,10 @@ declare global {
                 getText(): string;
             }
             interface IGetValue extends INode {
-                getValue(): string;
+                getValue<T>(): T;
             }
-            interface ISetValue<T> extends INode {
-                setValue(value: T): this;
+            interface ISetValue extends INode {
+                setValue<T>(value: T): this;
             }
         }
         interface IProblem<ValueType, ResultType> {
@@ -224,8 +234,8 @@ declare global {
         const enum WaitType {
             exist = "exist",
             visible = "visible",
-            value = "value",
-            text = "text"
+            text = "text",
+            value = "value"
         }
         const enum Comparator {
             equalTo = "==",

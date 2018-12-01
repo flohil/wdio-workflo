@@ -3,10 +3,12 @@ import { comparatorStr } from './utility_functions/util'
 import { elements, stores } from './page_objects'
 import * as _ from 'lodash'
 import { tolerancesToString } from './helpers'
-import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams } from './page_objects/page_elements';
+import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams, IPageElementOpts } from './page_objects/page_elements';
 
-type ElementOrList<Store extends stores.PageElementStore> =
-  elements.PageElement<Store> | elements.PageElementList<Store, elements.PageElement<Store>, elements.IPageElementOpts<Store>>
+type ElementOrList<
+  Store extends stores.PageElementStore,
+> = elements.PageElement<Store> |
+    elements.PageElementList<Store, elements.PageElement<Store>, Partial<elements.IPageElementOpts<Store>>>
 
 interface IResultFuncArgs<
   Store extends stores.PageElementStore,
@@ -30,14 +32,14 @@ interface IResultFuncNoArgs<
 
 type ResultFunctionResult = () => boolean
 
-type ResultFunction<
+export type ResultFunction<
   Store extends stores.PageElementStore,
   NodeType extends ElementOrList<Store>,
   OptsType,
   ExpectedType
 > = (args: IResultFuncArgs<Store, NodeType, OptsType & {timeout?: number}, ExpectedType>) => ResultFunctionResult[]
 
-type ResultNoArgsFunction<
+export type ResultNoArgsFunction<
   Store extends stores.PageElementStore,
   NodeType extends ElementOrList<Store>,
   OptsType
@@ -54,11 +56,11 @@ interface ErrorFuncNoArgs<OptsType> {
   opts?: OptsType
 }
 
-type ErrorTextFunction<OptsType, ExpectedType> = (args: ErrorFuncArgs<OptsType & {timeout?: number}, ExpectedType>) => string | string[]
+export type ErrorTextFunction<OptsType, ExpectedType> = (args: ErrorFuncArgs<OptsType & {timeout?: number}, ExpectedType>) => string | string[]
 
-type ErrorTextNoArgsFunction<OptsType> = (args: ErrorFuncNoArgs<OptsType & {timeout?: number}>) => string | string[]
+export type ErrorTextNoArgsFunction<OptsType> = (args: ErrorFuncNoArgs<OptsType & {timeout?: number}>) => string | string[]
 
-function matcherFunction<
+export function matcherFunction<
   Store extends stores.PageElementStore,
   NodeType extends ElementOrList<Store>,
   OptsType extends Object = {timeout?: number},
@@ -141,6 +143,20 @@ function matcherFunction<
   }
 }
 
+export function createLongErrorMessage(property: string, comparison: string, actual: string, expected: string) {
+  return [
+    `'s ${property} "${actual}" to ${comparison} "${expected}"`,
+    `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
+  ]
+}
+
+export function createEventuallyErrorMessage(property: string, comparison: string, actual: string, expected: string, timeout: number) {
+  return [
+    `'s ${property} "${actual}" to eventually ${comparison} "${expected}" within ${timeout} ms`,
+    `'s ${property} "${actual}" not to eventually ${comparison} "${expected}" within ${timeout} ms`,
+  ]
+}
+
 function elementMatcherFunction<
   ExpectedType = string,
   OptsType extends Object = {timeout?: number}
@@ -175,7 +191,11 @@ function listMatcherFunction<
 >(
   resultFunction: ResultFunction<
     stores.PageElementStore,
-    elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>,
+    elements.PageElementList<
+      stores.PageElementStore,
+      elements.PageElement<stores.PageElementStore>,
+      IPageElementOpts<stores.PageElementStore>
+    >,
     OptsType,
     ExpectedType
   >,
@@ -195,20 +215,6 @@ function listMatcherNoArgsFunction<
   errorTextFunction: ErrorTextNoArgsFunction<OptsType>
 ) {
   return matcherFunction(resultFunction, errorTextFunction, true)
-}
-
-function createLongErrorMessage(property: string, comparison: string, actual: string, expected: string) {
-  return [
-    `'s ${property} "${actual}" to ${comparison} "${expected}"`,
-    `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
-  ]
-}
-
-function createEventuallyErrorMessage(property: string, comparison: string, actual: string, expected: string, timeout: number) {
-  return [
-    `'s ${property} "${actual}" to eventually ${comparison} "${expected}" within ${timeout} ms`,
-    `'s ${property} "${actual}" not to eventually ${comparison} "${expected}" within ${timeout} ms`,
-  ]
 }
 
 export const elementMatchers: jasmine.CustomMatcherFactories = {
@@ -247,22 +253,6 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
     ],
     ({actual, expected}) => createLongErrorMessage('text', 'contain', actual, expected)
-  ),
-  toHaveValue: elementMatcherFunction(
-    ({node, expected}) => [
-      () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
-    ],
-    ({actual, expected}) => createLongErrorMessage('value', 'be', actual, expected)
-  ),
-  toHaveAnyValue: elementMatcherFunction(
-    ({node}) => [() => node.currently.hasAnyValue(), () => node.currently.not.hasAnyValue()],
-    () => " to have any value"
-  ),
-  toContainValue: elementMatcherFunction(
-    ({node, expected}) => [
-      () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
-    ],
-    ({actual, expected}) => createLongErrorMessage('value', 'contain', actual, expected)
   ),
   toHaveHTML: elementMatcherFunction(
     ({node, expected}) => [
@@ -498,27 +488,6 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ],
     ({actual, expected, opts}) => createEventuallyErrorMessage('text', 'contain', actual, expected, opts.timeout)
   ),
-  toEventuallyHaveValue: elementMatcherFunction(
-    ({node, expected, opts}) => [
-      () => node.eventually.hasValue(expected, opts),
-      () => node.eventually.not.hasValue(expected, opts)
-    ],
-    ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'be', actual, expected, opts.timeout)
-  ),
-  toEventuallyHaveAnyValue: elementMatcherNoArgsFunction(
-    ({node, opts}) => [
-      () => node.eventually.hasAnyValue(opts),
-      () => node.eventually.not.hasAnyValue(opts)
-    ],
-    ({opts}) => ` to eventually have any value within ${opts.timeout} ms`
-  ),
-  toEventuallyContainValue: elementMatcherFunction(
-    ({node, expected, opts}) => [
-      () => node.eventually.containsValue(expected, opts),
-      () => node.eventually.not.containsValue(expected, opts)
-    ],
-    ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'contain', actual, expected, opts.timeout)
-  ),
   toEventuallyHaveHTML: elementMatcherFunction(
     ({node, expected, opts}) => [
       () => node.eventually.hasHTML(expected, opts),
@@ -742,18 +711,74 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
   ),
 }
 
+function valueElementMatcherFunction<
+  ExpectedType = string,
+  OptsType extends Object = {timeout?: number}
+>(
+  resultFunction: ResultFunction<
+    stores.PageElementStore,
+    elements.ValuePageElement<stores.PageElementStore>,
+    OptsType,
+    ExpectedType
+  >,
+  errorTextFunction: ErrorTextFunction<OptsType, ExpectedType>
+) {
+  return matcherFunction(resultFunction, errorTextFunction)
+}
+
+export const valueElementMatchers: jasmine.CustomMatcherFactories = {
+  toHaveValue: valueElementMatcherFunction(
+    ({node, expected}) => [
+      () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
+    ],
+    ({actual, expected}) => createLongErrorMessage('value', 'be', actual, expected)
+  ),
+  toHaveAnyValue: valueElementMatcherFunction(
+    ({node}) => [() => node.currently.hasAnyValue(), () => node.currently.not.hasAnyValue()],
+    () => " to have any value"
+  ),
+  toContainValue: valueElementMatcherFunction(
+    ({node, expected}) => [
+      () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
+    ],
+    ({actual, expected}) => createLongErrorMessage('value', 'contain', actual, expected)
+  ),
+
+  toEventuallyHaveValue: valueElementMatcherFunction(
+    ({node, expected, opts}) => [
+      () => node.eventually.hasValue(expected, opts),
+      () => node.eventually.not.hasValue(expected, opts)
+    ],
+    ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'be', actual, expected, opts.timeout)
+  ),
+  toEventuallyHaveAnyValue: valueElementMatcherFunction(
+    ({node, opts}) => [
+      () => node.eventually.hasAnyValue(opts),
+      () => node.eventually.not.hasAnyValue(opts)
+    ],
+    ({opts}) => ` to eventually have any value within ${opts.timeout} ms`
+  ),
+  toEventuallyContainValue: valueElementMatcherFunction(
+    ({node, expected, opts}) => [
+      () => node.eventually.containsValue(expected, opts),
+      () => node.eventually.not.containsValue(expected, opts)
+    ],
+    ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'contain', actual, expected, opts.timeout)
+  ),
+}
+
 export function expectElement<
-  S extends stores.PageElementStore,
-  E extends elements.PageElement<S>
->(element: E) {
+  Store extends stores.PageElementStore,
+  PageElementType extends elements.PageElement<Store>
+>(element: PageElementType) {
   return expect(element)
 }
 
 export function expectList<
-  S extends stores.PageElementStore,
-  PageElementType extends elements.PageElement<S>,
+  Store extends stores.PageElementStore,
+  PageElementType extends elements.PageElement<Store>,
   PageElementOptions,
-  L extends elements.PageElementList<S, PageElementType, PageElementOptions>
->(list: L) {
+  PageElemnetListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>
+>(list: PageElemnetListType) {
   return expect(list)
 }

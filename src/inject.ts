@@ -1,13 +1,12 @@
 //import functions from './functions'
 //import registerSteps from './registerSteps'
 import * as Functions from './lib/api'
-import * as wf from '.'
 import * as objectFunctions from './lib/utility_functions/object'
 import * as arrayFunctions from './lib/utility_functions/array'
 import * as classFunctions from './lib/utility_functions/class'
 import * as stringFunctions from './lib/utility_functions/string'
 import * as utilFunctions from './lib/utility_functions/util'
-import {elementMatchers, listMatchers, expectElement, expectList} from './lib/matchers'
+import {elementMatchers, listMatchers, expectElement, expectList, valueElementMatchers} from './lib/matchers'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {
@@ -58,6 +57,7 @@ inject({})
 beforeAll(() => {
   jasmine.addMatchers(elementMatchers)
   jasmine.addMatchers(listMatchers)
+  jasmine.addMatchers(valueElementMatchers)
 })
 
 export { inject }

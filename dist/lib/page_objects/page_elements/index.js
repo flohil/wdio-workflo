@@ -4,7 +4,9 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./PageNode"));
+__export(require("./PageElementBase"));
 __export(require("./PageElement"));
+__export(require("./ValuePageElement"));
 __export(require("./PageElementMap"));
 __export(require("./PageElementList"));
 __export(require("./PageElementGroup"));

@@ -35,7 +35,7 @@ export class TextGroup<
     filter?: Workflo.IRecObj<boolean>,
     options?: Workflo.IWalkerOptions
   } = {} ) {
-    return this.Solve<any, string>({
+    return this.Solve<any, any>({
       values: Workflo.Object.stripMaskDeep(filter),
       solve: ( node ) => {
         if (isGetTextNode(node)) {

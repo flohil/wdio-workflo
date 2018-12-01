@@ -3,8 +3,9 @@ import { PageElementStore } from '../stores'
 
 export class ValuePageElementList<
   Store extends PageElementStore,
-  PageElementType extends ValuePageElement<Store>,
+  PageElementType extends ValuePageElement<Store, ValueType>,
   PageElementOptions extends IValuePageElementOpts<Store>,
+  ValueType
 > extends PageElementList<Store, PageElementType, PageElementOptions> {
 
   initialWait() {

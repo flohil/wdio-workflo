@@ -1,4 +1,5 @@
 export * from './PageNode'
+export * from './PageElementBase'
 export * from './PageElement'
 export * from './ValuePageElement'
 export * from './PageElementMap'

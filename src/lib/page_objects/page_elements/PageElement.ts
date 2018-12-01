@@ -1,77 +1,60 @@
 import * as _ from 'lodash'
 
-import { PageNode, IPageNodeOpts } from '.'
-import { XPathBuilder } from '../builders'
+import {
+  PageElementBase,
+  IPageElementBaseOpts,
+  PageElementBaseCurrently,
+  PageElementBaseWait,
+  PageElementBaseEventually
+} from '.'
 import { PageElementStore } from '../stores'
 import * as htmlParser from 'htmlparser2'
 import { tolerancesToString } from '../../helpers'
-import { DEFAULT_TIMEOUT } from '../'
-
-export type WdioElement = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>
-
-export interface ITolerance {
-  lower: number,
-  upper: number
-}
+import { DEFAULT_TIMEOUT } from '..'
 
 export interface IPageElementOpts<
   Store extends PageElementStore
-  > extends IPageNodeOpts<Store> {
-  waitType?: Workflo.WaitType
-  timeout?: number
+  > extends IPageElementBaseOpts<Store> {
   customScroll?: Workflo.IScrollParams
 }
 
 export class PageElement<
   Store extends PageElementStore
-  > extends PageNode<Store> implements Workflo.PageNode.IGetText {
+> extends PageElementBase<Store> implements Workflo.PageNode.IGetText {
 
   protected _waitType: Workflo.WaitType
   protected _timeout: number
   protected _$: Store
   protected _customScroll: Workflo.IScrollParams
 
-  readonly currently: PageElementCurrently<Store>
+  readonly currently: PageElementCurrently<Store, this>
   readonly wait: PageElementWait<Store, this>
   readonly eventually: PageElementEventually<Store, this>
 
   constructor(
     selector: string,
     {
-      waitType = Workflo.WaitType.visible,
-      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
       customScroll = undefined,
       ...superOpts
     }: IPageElementOpts<Store>
   ) {
     super(selector, superOpts)
 
-    this._selector = selector
-    this._$ = Object.create(null)
-
-    for (const method of Workflo.Class.getAllMethods(this._store)) {
-      if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
-        this._$[method] = <Options extends IPageElementOpts<Store>>(_selector: Workflo.XPath, _options: Options) => {
-
-          if (_selector instanceof XPathBuilder) {
-            selector = XPathBuilder.getInstance().build()
-          }
-
-          // chain selectors
-          _selector = `${selector}${_selector}`
-
-          return this._store[method].apply(this._store, [_selector, _options])
-        }
-      }
-    }
-
-    this._waitType = waitType
-    this._timeout = timeout
     this._customScroll = customScroll
 
     this.currently = new PageElementCurrently(this)
     this.wait = new PageElementWait(this)
     this.eventually = new PageElementEventually(this)
+  }
+
+// ABSTRACT BASE CLASS IMPLEMENTATIONS
+
+  typeToString<T>(value: T) {
+    if (typeof value === 'string') {
+      return (value.length > 0) ? value : ''
+    } else {
+      throw new Error(`${this.constructor.name}.typeToString is missing an implementation for type of value: ${value}`)
+    }
   }
 
 // RETRIEVE ELEMENT FUNCTIONS
@@ -90,10 +73,6 @@ export class PageElement<
     this.initialWait()
 
     return this.__element
-  }
-
-  get $(): Store {
-    return this._$
   }
 
   initialWait() {
@@ -183,8 +162,6 @@ export class PageElement<
   getHeight() {
     return this._execute( () => this.currently.getHeight() )
   }
-
-  getTimeout() { return this._timeout }
 
 // INTERACTION FUNCTIONS (interact with state after initial wait)
 
@@ -395,52 +372,41 @@ export class PageElement<
 }
 
 export class PageElementCurrently<
-  Store extends PageElementStore
-> {
+  Store extends PageElementStore,
+  PageElementType extends PageElement<Store>
+> extends PageElementBaseCurrently<Store, PageElementType> {
 
-  protected _pageElement: PageElement<Store>
-  protected _lastActualResult: string
+// ABSTRACT BASE CLASS IMPLEMENTATIONS
 
-  constructor(pageElement: PageElement<Store>) {
-    this._pageElement = pageElement
+  protected _equals<T>(actual: T, expected: T): boolean {
+    if (typeof actual === 'string' && typeof expected === 'string') {
+      return actual === expected
+    } else {
+      throw new Error(
+        `${this.constructor.name}._equals is missing an implementation for type of values: ${actual}, ${expected}`
+      )
+    }
   }
-
-  /**
-   * Whenever a function that checks the state of the GUI
-   * by comparing an expected result to an actual result is called,
-   * the actual result will be stored in 'lastActualResult'.
-   *
-   * This can be useful to determine why the last invocation of such a function returned false.
-   *
-   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-   * defined in the .currently, .eventually and .wait API of PageElement.
-   */
-  get lastActualResult() {
-    return this._lastActualResult
+  protected _any<T>(actual: T): boolean {
+    if (typeof actual === 'string') {
+      return (actual) ? actual.length > 0 : false
+    } else {
+      throw new Error(
+        `${this.constructor.name}._any is missing an implementation for type of value: ${actual}`
+      )
+    }
   }
-
-  get element() {
-    return browser.element(this._pageElement.getSelector())
+  protected _contains<T>(actual: T, expected: T) {
+    if (typeof actual === 'string' && typeof expected === 'string') {
+      return (actual) ? actual.indexOf(expected) > -1 : false
+    } else {
+      throw new Error(
+        `${this.constructor.name}._contains is missing an implementation for type of values: ${actual}, ${expected}`
+      )
+    }
   }
 
 // GET STATE
-
-  /**
-   * Executes func and, if an error occurs during execution of func,
-   * throws a custom error message that the page element could not be located on the page.
-   * @param func
-   */
-  protected _execute<ResultType>(func: () => ResultType) {
-    try {
-      return func()
-    } catch ( error ) {
-      const errorMsg =
-      `${this._pageElement.constructor.name} could not be located on the page.\n` +
-      `( ${this._pageElement.getSelector()} )`
-
-      throw new Error(errorMsg)
-    }
-  }
 
   /**
    * Overwriting this function will affect the behaviour of the function
@@ -664,7 +630,7 @@ export class PageElementCurrently<
    * @param tolerance the tolerance in pixels or 0 if tolerance was smaller than 0
    */
   protected _withinTolerance(actual: number, expected: number, tolerance?: number) {
-    const tolerances: ITolerance = {
+    const tolerances: Workflo.ITolerance = {
       lower: actual,
       upper: actual
     }
@@ -683,23 +649,6 @@ export class PageElementCurrently<
 
   protected _hasSideSize(expected: number, actual: number, tolerance?: number): boolean {
     return this._withinTolerance(actual, expected, tolerance)
-  }
-
-  protected _compareHas(expected: string, actual: string) {
-    this._lastActualResult = actual || ''
-    return actual === expected
-  }
-
-  protected _compareHasAny(actual: string) {
-    const result = (actual) ? actual.length > 0 : false
-    this._lastActualResult = actual || ''
-    return result
-  }
-
-  protected _compareContains(expected: string, actual: string) {
-    const result = (actual) ? actual.indexOf(expected) > -1 : false
-    this._lastActualResult = actual || ''
-    return result
   }
 
   hasText(text: string) {
@@ -831,11 +780,11 @@ export class PageElementCurrently<
     hasName: (name: string) => !this.hasName(name),
     hasAnyName: () => !this.hasAnyName(),
     containsName: (name: string) => !this.containsName(name),
-    hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Workflo.ICoordinates) =>
+    hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Partial<Workflo.ICoordinates>) =>
       !this.hasLocation(coordinates, tolerances),
     hasX: (x: number, tolerance?: number) => !this.hasX(x, tolerance),
     hasY: (y: number, tolerance?: number) => !this.hasY(y, tolerance),
-    hasSize: (size: Workflo.ISize, tolerances?: Workflo.ISize) =>
+    hasSize: (size: Workflo.ISize, tolerances?: Partial<Workflo.ISize>) =>
       !this.hasSize(size, tolerances),
     hasWidth: (width: number, tolerance?: number) => !this.hasWidth(width, tolerance),
     hasHeight: (height: number, tolerance?: number) => !this.hasHeight(height, tolerance),
@@ -845,123 +794,7 @@ export class PageElementCurrently<
 export class PageElementWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
-> {
-
-  protected _pageElement: PageElementType
-
-  constructor(pageElement: PageElementType) {
-    this._pageElement = pageElement
-  }
-
-// HELPER FUNCTIONS
-
-  protected _wait(func: () => void, errorMessage: string) {
-    try {
-      func();
-    } catch (error) {
-      throw new Error(`${this._pageElement.constructor.name}${errorMessage}.\n( ${this._pageElement.getSelector()} )`)
-    }
-
-    return this._pageElement
-  }
-
-  protected _waitWdioCheckFunc(
-    checkTypeStr: string,
-    conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean,
-    { timeout = this._pageElement.getTimeout(), reverse }: Workflo.IWDIOParamsOptionalReverse = {}
-  ) {
-    const reverseStr = (reverse) ? ' not' : ''
-
-    return this._wait(
-      () => conditionFunc({timeout, reverse}),
-      ` never${reverseStr} ${checkTypeStr} within ${timeout} ms`
-    )
-  }
-
-  protected _waitProperty(
-    name: string,
-    conditionType: 'has' | 'contains' | 'any' | 'within',
-    conditionFunc: (value?: string) => boolean,
-    { timeout = this._pageElement.getTimeout(), reverse }: Workflo.IWDIOParamsOptionalReverse = {},
-    value?: string
-  ) {
-    const reverseStr = (reverse) ? ' not' : ''
-    let conditionStr = ''
-    let errorMessage = ''
-
-    if (conditionType === 'has') {
-      conditionStr = 'became'
-    } else if (conditionType === 'contains') {
-      conditionStr = 'contained'
-    } else if (conditionType === 'any') {
-      conditionStr = 'any'
-    } else if (conditionType === 'within') {
-      conditionStr = 'was in range'
-    }
-
-    try {
-      browser.waitUntil(() => {
-        if (reverse) {
-          return !conditionFunc(value)
-        } else {
-          return conditionFunc(value)
-        }
-      }, timeout)
-    } catch ( error ) {
-      if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
-        errorMessage =
-          `${this._pageElement.constructor.name}'s ${name} "${this._pageElement.currently.lastActualResult}" never` +
-          `${reverseStr} ${conditionStr} "${value}" within ${timeout} ms.\n( ${this._pageElement.getSelector()} )`
-      } else if (conditionType === 'any') {
-        errorMessage =
-          `${this._pageElement.constructor.name} never${reverseStr} ${conditionStr} any ${name}` +
-          ` within ${timeout} ms.\n( ${this._pageElement.getSelector()} )`
-      }
-
-      throw new Error(errorMessage)
-    }
-
-    return this._pageElement
-  }
-
-  protected _waitWithinProperty(
-    name: string,
-    value: string,
-    conditionFunc: (value: string) => boolean,
-    opts?: Workflo.IWDIOParamsOptionalReverse
-  ) {
-    return this._waitProperty(name, 'within', conditionFunc, opts, value)
-  }
-
-  protected _waitHasProperty(
-    name: string,
-    value: string,
-    conditionFunc: (value: string) => boolean,
-    opts?: Workflo.IWDIOParamsOptionalReverse
-  ) {
-    return this._waitProperty(name, 'has', conditionFunc, opts, value)
-  }
-
-  protected _waitHasAnyProperty(
-    name: string,
-    conditionFunc: (value: string) => boolean,
-    opts?: Workflo.IWDIOParamsOptionalReverse
-  ) {
-    return this._waitProperty(name, 'any', conditionFunc, opts)
-  }
-
-  protected _waitContainsProperty(
-    name: string,
-    value: string,
-    conditionFunc: (value: string) => boolean,
-    opts?: Workflo.IWDIOParamsOptionalReverse
-  ) {
-    return this._waitProperty(name, 'contains', conditionFunc, opts, value)
-  }
-
-  protected _makeReverseParams(opts: Workflo.IWDIOParamsOptional = {}): Workflo.IWDIOParamsOptionalReverse {
-    return {timeout: opts.timeout, reverse: true}
-  }
+> extends PageElementBaseWait<Store, PageElementType> {
 
   exists(opts?: Workflo.IWDIOParamsOptionalReverse) {
     return this._waitWdioCheckFunc(
@@ -1371,22 +1204,7 @@ export class PageElementWait<
 export class PageElementEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
-> {
-
-  protected _pageElement: PageElementType
-
-  constructor(pageElement: PageElementType) {
-    this._pageElement = pageElement
-  }
-
-  protected _eventually(func: () => void) : boolean {
-    try {
-      func();
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
+> extends PageElementBaseEventually<Store, PageElementType> {
 
   exists(opts?: Workflo.IWDIOParamsOptional) {
     return this._eventually(() => this._pageElement.wait.exists(opts))
@@ -1627,28 +1445,6 @@ export class PageElementEventually<
     ) => this._eventually(
       () => this._pageElement.wait.not.hasHeight(height, {tolerance: opts.tolerance, timeout: opts.timeout})
     ),
-  }
-}
-
-/**
- * Executes func and, if an error occurs during execution of func,
- * throws a custom error message that the page element could not be located on the page.
- * @param func
- * @param pageElement
- */
-export function elementExecute<
-  Store extends PageElementStore,
-  PageElementType extends PageElement<Store>,
-  ResultType
->(func: () => ResultType, pageElement: PageElementType) {
-  try {
-    return func()
-  } catch ( error ) {
-    const errorMsg =
-    `${pageElement.constructor.name} could not be located on the page.\n` +
-    `( ${pageElement.getSelector()} )`
-
-    throw new Error(errorMsg)
   }
 }
 

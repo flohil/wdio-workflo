@@ -9,10 +9,6 @@ class PageElementList extends _1.PageNode {
     constructor(_selector, opts, cloneFunc) {
         super(_selector, opts);
         this._selector = _selector;
-        /**
-         * @param index starts at 0
-         */
-        this.at = (index) => this.where.getAt(index);
         this._waitType = opts.waitType || "visible" /* visible */;
         this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         this._disableCache = opts.disableCache || false;
@@ -30,9 +26,9 @@ class PageElementList extends _1.PageNode {
             cloneFunc: this._cloneFunc,
             getAllFunc: list => list.all
         });
-        this.currently = new Currently(this, opts, cloneFunc);
-        this.wait = new Wait(this);
-        this.eventually = new Eventually(this, this._eventually);
+        this.currently = new PageElementListCurrently(this, opts, cloneFunc);
+        this.wait = new PageElementListWait(this);
+        this.eventually = new PageElementListEventually(this);
     }
     /**
      * Whenever a function that checks the state of the GUI
@@ -55,12 +51,11 @@ class PageElementList extends _1.PageNode {
             case "visible" /* visible */:
                 this.wait.any.isVisible();
                 break;
-            case "value" /* value */:
-                this.wait.any.hasAnyValue();
-                break;
             case "text" /* text */:
                 this.wait.any.hasAnyText();
                 break;
+            default:
+                throw Error(`${this.constructor.name}: Unknown initial wait type '${this._waitType}'`);
         }
     }
     // RETRIEVAL FUNCTIONS for wdio or list elements
@@ -77,6 +72,12 @@ class PageElementList extends _1.PageNode {
      */
     get first() {
         return this.where.getFirst();
+    }
+    /**
+     * @param index starts at 0
+     */
+    at(index) {
+        return this.where.getAt(index);
     }
     /**
      * Returns all page elements found in the DOM that match the list selector after initial wait.
@@ -178,19 +179,8 @@ class PageElementList extends _1.PageNode {
     }
 }
 exports.PageElementList = PageElementList;
-class Currently {
+class PageElementListCurrently {
     constructor(list, opts, cloneFunc) {
-        /**
-         * @param index starts at 0
-         */
-        this.at = (index) => this.where.getAt(index);
-        // CHECK STATE FUNCTIONS
-        this.isEmpty = () => !browser.isExisting(this._selector);
-        this.hasLength = (length, comparator = "==" /* equalTo */) => {
-            const actualLength = this.getLength();
-            this._lastActualResult = actualLength.toString();
-            return util_1.compare(actualLength, length, comparator);
-        };
         this.not = {
             isEmpty: () => !this.isEmpty(),
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator)
@@ -235,6 +225,12 @@ class Currently {
         return this.where.getFirst();
     }
     /**
+     * @param index starts at 0
+     */
+    at(index) {
+        return this.where.getAt(index);
+    }
+    /**
      * Returns all page elements found in the DOM that match the list selector after initial wait.
      */
     get all() {
@@ -267,32 +263,18 @@ class Currently {
             return 0;
         }
     }
+    // CHECK STATE FUNCTIONS
+    isEmpty() {
+        return !browser.isExisting(this._selector);
+    }
+    hasLength(length, comparator = "==" /* equalTo */) {
+        const actualLength = this.getLength();
+        this._lastActualResult = actualLength.toString();
+        return util_1.compare(actualLength, length, comparator);
+    }
 }
-class Wait {
+class PageElementListWait {
     constructor(list) {
-        // waits until list has given length
-        this.hasLength = (length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) => {
-            browser.waitUntil(() => {
-                if (reverse) {
-                    return !this._list.currently.hasLength(length, comparator);
-                }
-                else {
-                    return this._list.currently.hasLength(length, comparator);
-                }
-            }, timeout, `${this.constructor.name}: Length never became${util_1.comparatorStr(comparator)} ${length}.\n( ${this._list.getSelector()} )`, interval);
-            return this._list;
-        };
-        this.isEmpty = ({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) => {
-            browser.waitUntil(() => {
-                if (reverse) {
-                    return !this._list.currently.isEmpty();
-                }
-                else {
-                    return this._list.currently.isEmpty();
-                }
-            }, timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval);
-            return this._list;
-        };
         this.not = {
             isEmpty: (opts) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -303,24 +285,44 @@ class Wait {
         };
         this._list = list;
     }
-    get any() {
-        const element = this._list.currently.first;
-        const wait = Object.assign({}, element.wait);
-        delete wait.not;
-        return wait;
+    // waits until list has given length
+    hasLength(length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) {
+        browser.waitUntil(() => {
+            if (reverse) {
+                return !this._list.currently.hasLength(length, comparator);
+            }
+            else {
+                return this._list.currently.hasLength(length, comparator);
+            }
+        }, timeout, `${this.constructor.name}: Length never became${util_1.comparatorStr(comparator)} ${length}.\n( ${this._list.getSelector()} )`, interval);
+        return this._list;
     }
+    isEmpty({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) {
+        browser.waitUntil(() => {
+            if (reverse) {
+                return !this._list.currently.isEmpty();
+            }
+            else {
+                return this._list.currently.isEmpty();
+            }
+        }, timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval);
+        return this._list;
+    }
+    get any() {
+        return this._list.currently.first.wait;
+    }
+    // Typescript has a bug that prevents Omit from working with generic extended types:
+    // https://github.com/Microsoft/TypeScript/issues/24791
+    // Bug will be fixed in Typescript 3.2.1
+    // get any() {
+    //   return _.omit(this._list.currently.first.wait, 'not') as any as Omit<PageElementTypeWait, 'not'>
+    // }
     get none() {
         return this._list.currently.first.wait.not;
     }
 }
-class Eventually {
-    constructor(list, eventually) {
-        this.hasLength = (length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) => {
-            return this._eventually(() => this._list.wait.hasLength(length, { timeout, comparator, interval, reverse }));
-        };
-        this.isEmpty = ({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) => {
-            return this._eventually(() => this._list.wait.isEmpty({ timeout, interval, reverse }));
-        };
+class PageElementListEventually {
+    constructor(list) {
         this.not = {
             isEmpty: (opts) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -330,13 +332,30 @@ class Eventually {
             })
         };
         this._list = list;
-        this._eventually = eventually;
     }
+    _eventually(func) {
+        try {
+            func();
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    }
+    hasLength(length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) {
+        return this._eventually(() => this._list.wait.hasLength(length, { timeout, comparator, interval, reverse }));
+    }
+    isEmpty({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) {
+        return this._eventually(() => this._list.wait.isEmpty({ timeout, interval, reverse }));
+    }
+    // Typescript has a bug that prevents Omit from working with generic extended types:
+    // https://github.com/Microsoft/TypeScript/issues/24791
+    // Bug will be fixed in Typescript 3.2.1
+    // get any() {
+    //   return _.omit(this._list.currently.first.eventually, 'not') as Omit<PageElementTypeEventually, 'not'>
+    // }
     get any() {
-        const element = this._list.currently.first;
-        const eventually = Object.assign({}, element.eventually);
-        delete eventually.not;
-        return eventually;
+        return this._list.currently.first.eventually;
     }
     get none() {
         return this._list.currently.first.eventually.not;

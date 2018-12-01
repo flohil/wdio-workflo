@@ -1,13 +1,13 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageElement, IPageElementWaitAPI, IPageElementWaitNotAPI, IPageElementEventuallyAPI, IPageElementEventuallyNotAPI } from '.';
+import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
 export declare type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
-export interface IPageElementListIdentifier<Store extends PageElementStore, ElementType extends PageElement<Store>> {
+export interface IPageElementListIdentifier<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
     mappingObject: {
         [key: string]: string;
     };
-    func: (element: ElementType) => string;
+    func: (element: PageElementType) => string;
 }
 export interface IPageElementListWaitEmptyParams extends Workflo.IWDIOParamsOptional {
     interval?: number;
@@ -21,7 +21,7 @@ export interface IPageElementListWaitLengthParams extends IPageElementListWaitEm
 export interface IPageElementListWaitLengthReverseParams extends IPageElementListWaitLengthParams {
     reverse?: boolean;
 }
-export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
+export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store> {
     waitType?: Workflo.WaitType;
     timeout?: number;
     interval?: number;
@@ -30,44 +30,7 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     elementOptions: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
-export interface IPageElementListRetrievalAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
-    elements: WdioElements;
-    first: PageElementType;
-    at: (index: number) => PageElementType;
-    all: PageElementType[];
-    getLength: () => number;
-}
-export interface IPageElementListWaitAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> {
-    hasLength: (length: number, opts?: IPageElementListWaitLengthReverseParams) => PageElementList<Store, PageElementType, PageElementOptions>;
-    isEmpty: (opts?: IPageElementListWaitLengthReverseParams) => PageElementList<Store, PageElementType, PageElementOptions>;
-    any: Omit<IPageElementWaitAPI<Store>, 'not'>;
-    none: IPageElementWaitNotAPI<Store>;
-    not: {
-        hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => PageElementList<Store, PageElementType, PageElementOptions>;
-        isEmpty: (opts?: IPageElementListWaitEmptyParams) => PageElementList<Store, PageElementType, PageElementOptions>;
-    };
-}
-export interface IPageElementListEventuallyAPI<Store extends PageElementStore> {
-    hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
-    isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
-    any: Omit<IPageElementEventuallyAPI<Store>, 'not'>;
-    none: IPageElementEventuallyNotAPI<Store>;
-    not: {
-        hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
-        isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
-    };
-}
-export interface IPageElementListCurrentlyAPI<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends IPageElementListRetrievalAPI<Store, PageElementType> {
-    lastActualResult: string;
-    where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
-    isEmpty: () => boolean;
-    hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
-    not: {
-        isEmpty: () => boolean;
-        hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
-    };
-}
-export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> implements IPageElementListRetrievalAPI<Store, PageElementType> {
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> {
     protected _selector: string;
     protected _waitType: Workflo.WaitType;
     protected _timeout: number;
@@ -84,9 +47,9 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     protected _cloneFunc: (subSelector: string) => this;
     protected _lastActualResult: string;
-    readonly currently: IPageElementListCurrentlyAPI<Store, PageElementType, PageElementOptions, this>;
-    readonly wait: IPageElementListWaitAPI<Store, PageElementType, PageElementOptions>;
-    readonly eventually: IPageElementListEventuallyAPI<Store>;
+    readonly currently: PageElementListCurrently<Store, PageElementType, PageElementOptions, this>;
+    readonly wait: PageElementListWait<Store, PageElementType, PageElementOptions, this>;
+    readonly eventually: PageElementListEventually<Store, PageElementType, PageElementOptions, this>;
     constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: <T extends PageElementList<Store, PageElementType, PageElementOptions>>(selector: Workflo.XPath) => T);
     /**
      * Whenever a function that checks the state of the GUI
@@ -109,7 +72,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     /**
      * @param index starts at 0
      */
-    at: (index: number) => PageElementType;
+    at(index: number): PageElementType;
     /**
      * Returns all page elements found in the DOM that match the list selector after initial wait.
      */
@@ -143,3 +106,71 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getTimeout(): number;
     getInterval(): number;
 }
+declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+    protected _selector: string;
+    protected _store: Store;
+    protected _elementOptions: PageElementOptions;
+    protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
+    protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
+    protected _lastActualResult: string;
+    protected _list: ListType;
+    constructor(list: ListType, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: (selector: Workflo.XPath) => ListType);
+    /**
+     * Whenever a function that checks the state of the GUI
+     * by comparing an expected result to an actual result is called,
+     * the actual result will be stored in 'lastActualResult'.
+     *
+     * This can be useful to determine why the last invocation of such a function returned false.
+     *
+     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+     * defined in the .currently, .eventually and .wait API of PageElement.
+     */
+    readonly lastActualResult: string;
+    readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
+    readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
+    /**
+     * Returns the first page element found in the DOM that matches the list selector.
+     */
+    readonly first: PageElementType;
+    /**
+     * @param index starts at 0
+     */
+    at(index: number): PageElementType;
+    /**
+     * Returns all page elements found in the DOM that match the list selector after initial wait.
+     */
+    readonly all: PageElementType[];
+    getLength(): number;
+    isEmpty(): boolean;
+    hasLength(length: number, comparator?: Workflo.Comparator): boolean;
+    not: {
+        isEmpty: () => boolean;
+        hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
+    };
+}
+declare class PageElementListWait<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+    protected _list: ListType;
+    constructor(list: ListType);
+    hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): ListType;
+    isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
+    readonly any: PageElementType["wait"];
+    readonly none: PageElementType['wait']['not'];
+    not: {
+        isEmpty: (opts: IPageElementListWaitEmptyParams) => ListType;
+        hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
+    };
+}
+declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+    protected _list: ListType;
+    constructor(list: ListType);
+    protected _eventually(func: () => void): boolean;
+    hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
+    isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
+    readonly any: PageElementType["eventually"];
+    readonly none: PageElementType['eventually']['not'];
+    not: {
+        isEmpty: (opts: IPageElementListWaitEmptyParams) => boolean;
+        hasLength: (length: number, opts: IPageElementListWaitLengthParams) => boolean;
+    };
+}
+export {};

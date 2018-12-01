@@ -161,33 +161,6 @@ export class PageElementStore {
     )
   }
 
-  ValueElement(
-    selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, Workflo.PageElementOptions>
-  ) {
-    return this._get<ValuePageElement<this>, IValuePageElementOpts<this>>(
-      selector,
-      ValuePageElement,
-      {
-        store: this,
-        ...options
-      }
-    )
-  }
-
-  ExistValueElement(
-    selector: Workflo.XPath,
-    options?: Pick<IValuePageElementOpts<this>, "timeout" | "customScroll">
-  ) {
-    return this.ValueElement(
-      selector,
-      {
-        waitType: Workflo.WaitType.exist,
-        ...options
-      }
-    )
-  }
-
 // LISTS
 
   protected List<
@@ -251,43 +224,6 @@ export class PageElementStore {
     )
   }
 
-  ValueElementList(
-    selector: Workflo.XPath,
-    options?: PickPartial<
-      IPageElementListOpts<this, ValuePageElement<this>, Pick<IValuePageElementOpts<this>, "timeout" | "waitType">>,
-      "waitType" | "timeout" | "disableCache" | "identifier",
-      "elementOptions"
-    >
-  ) {
-    return this.List(
-      selector,
-      {
-        elementOptions: {},
-        elementStoreFunc: this.ValueElement,
-        ...options
-      }
-    )
-  }
-
-  ExistValueElementList(
-    selector: Workflo.XPath,
-    options?: PickPartial<
-      IPageElementListOpts<this, ValuePageElement<this>, Pick<IValuePageElementOpts<this>, "timeout">>,
-      "timeout" | "disableCache" | "identifier",
-      "elementOptions"
-    >
-  ) {
-    return this.List(
-      selector,
-      {
-        elementOptions: {},
-        elementStoreFunc: this.ExistValueElement,
-        waitType: Workflo.WaitType.exist,
-        ...options
-      }
-    )
-  }
-
 // MAPS
 
   protected Map<
@@ -345,42 +281,6 @@ export class PageElementStore {
       selector,
       {
         elementStoreFunc: this.ExistElement,
-        elementOptions: {},
-        ...options
-      }
-    )
-  }
-
-  ValueElementMap<K extends string>(
-    selector: Workflo.XPath,
-    options: PickPartial<
-      IPageElementMapOpts<this, K, ValuePageElement<this>, Pick<IValuePageElementOpts<this>, 'timeout' | 'waitType'>>,
-      "identifier",
-      "elementOptions"
-    >
-  ) {
-    return this.Map(
-      selector,
-      {
-        elementStoreFunc: this.ValueElement,
-        elementOptions: {},
-        ...options
-      }
-    )
-  }
-
-  ExistValueElementMap<K extends string>(
-    selector: Workflo.XPath,
-    options: PickPartial<
-      IPageElementMapOpts<this, K, ValuePageElement<this>, Pick<IValuePageElementOpts<this>, 'timeout'>>,
-      "identifier",
-      "elementOptions"
-    >
-  ) {
-    return this.Map(
-      selector,
-      {
-        elementStoreFunc: this.ExistValueElement,
         elementOptions: {},
         ...options
       }

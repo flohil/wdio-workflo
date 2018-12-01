@@ -11,7 +11,7 @@ class PageElementStore {
         this._instanceCache = Object.create(null);
         this._xPathBuilder = builders_1.XPathBuilder.getInstance();
     }
-    // DEFINE YOUR ELEMENT GROUPS HERE
+    // GROUPS
     // Encapsulates arbitrary page element types.
     // Returns all nodes passed in content as its own members,
     // so that they can be accessed via dot notation.
@@ -50,7 +50,7 @@ class PageElementStore {
             content: content
         });
     }
-    // DEFINE YOUR SINGLE ELEMENT TYPE ACCESSOR FUNCTIONS HERE
+    // ELEMENTS
     /**
      *
      * @param selector
@@ -62,7 +62,7 @@ class PageElementStore {
     ExistElement(selector, options) {
         return this.Element(selector, Object.assign({ waitType: "exist" /* exist */ }, options));
     }
-    // DEFINE YOUR ELEMENT LIST TYPE ACCESSOR FUNCTIONS HERE
+    // LISTS
     List(selector, options) {
         return this._get(selector, page_elements_1.PageElementList, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
     }
@@ -72,7 +72,7 @@ class PageElementStore {
     ExistElementList(selector, options) {
         return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.ExistElement, waitType: "exist" /* exist */ }, options));
     }
-    // Element Maps
+    // MAPS
     Map(selector, options) {
         return this._get(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
     }

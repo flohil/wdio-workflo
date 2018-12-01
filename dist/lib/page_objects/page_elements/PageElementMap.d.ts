@@ -1,4 +1,4 @@
-import { PageNode, IPageNodeOpts, PageElement } from '.';
+import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { XPathBuilder } from '../builders';
 /**
@@ -9,13 +9,13 @@ export interface IPageElementMapIdentifier<K extends string> {
     mappingObject: Record<K, string>;
     func: (mapSelector: string, mappingValue: string) => XPathBuilder | string;
 }
-export interface IPageElementMapOpts<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions> extends IPageNodeOpts<Store> {
+export interface IPageElementMapOpts<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store> {
     store: Store;
     identifier: IPageElementMapIdentifier<K>;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
 }
-export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions> extends PageNode<Store> {
+export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> {
     protected _selector: string;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _elementOptions: PageElementOptions;

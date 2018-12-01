@@ -497,11 +497,11 @@ class PageElementListWait<
     return this._list.currently.first.wait as any as PageElementType['wait']
   }
 
-  // Typescript has a bug that prevents Omit from working with generic extended types:
+  // Typescript has a bug that prevents Exclude from working with generic extended types:
   // https://github.com/Microsoft/TypeScript/issues/24791
-  // Bug will be fixed in Typescript 3.2.1
+  // Bug will be fixed in Typescript 3.3.0
   // get any() {
-  //   return _.omit(this._list.currently.first.wait, 'not') as any as Omit<PageElementTypeWait, 'not'>
+  //   return excludeNot(this._list.currently.first.wait)
   // }
 
   get none(): PageElementType['wait']['not'] {
@@ -559,11 +559,11 @@ class PageElementListEventually<
     return this._eventually( () => this._list.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  // Typescript has a bug that prevents Omit from working with generic extended types:
+  // Typescript has a bug that prevents Exclude from working with generic extended types:
   // https://github.com/Microsoft/TypeScript/issues/24791
-  // Bug will be fixed in Typescript 3.2.1
+  // Bug will be fixed in Typescript 3.3.0
   // get any() {
-  //   return _.omit(this._list.currently.first.eventually, 'not') as Omit<PageElementTypeEventually, 'not'>
+  //   return excludeNot(this._list.currently.first.eventually)
   // }
 
   get any() {
@@ -582,4 +582,9 @@ class PageElementListEventually<
       timeout: opts.timeout, interval: opts.interval, reverse: true
     })
   }
+}
+
+export function excludeNot<T extends { not: N }, N>(obj: T) {
+  let { not, ...rest } = obj;
+  return rest;
 }
