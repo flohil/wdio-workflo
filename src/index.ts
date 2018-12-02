@@ -1613,22 +1613,31 @@ const inputGroup = {
   b: new NumberInput('//div')
 }
 
+
+// if getvalue is not supported, will always return undefined
 const iGroup = pageObjects.stores.pageElement.ValueGroup({
   a: new Input('//asdf'),
   b: new NumberInput('//div'),
-  // c: pageObjects.stores.pageElement.Element('//span')
+  c: pageObjects.stores.pageElement.Element('//span')
 })
 
 const res4 = iGroup.GetValue()
 
-type UnzipInput<T extends {[key: string]: Workflo.PageNode.IGetValue<any>}> = {
-  [P in keyof T]: ReturnType<T[P]['getValue']>;
+type UnzipInput<T extends {[key: string]: Workflo.PageNode.INode}> = {
+  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValue<any> ? ReturnType<T[P]['getValue']> : undefined;
 }
 
-function getValueInput<T extends {[key: string]: Workflo.PageNode.IGetValue<any>}>(t: T): UnzipInput<T> {
+function instanceOfGetValue(object: any): object is Workflo.PageNode.IGetValue<any> {
+  return 'getValue' in object && typeof object['getValue'] === 'function';
+}
+
+function getValueInput<T extends {[key: string]: Workflo.PageNode.INode}>(t: T): UnzipInput<T> {
   let result = {} as UnzipInput<T>;
   for (const k in t) {
-      result[k] = t[k].getValue() as ReturnType<T[Extract<keyof T, any>]["getValue"]>;
+    if (instanceOfGetValue(t[k])) {
+      const elem = t[k] as any as Workflo.PageNode.IGetValue<any>
+      result[k] = elem.getValue()
+    }
   }
   return result;
 }
