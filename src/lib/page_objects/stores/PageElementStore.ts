@@ -1,13 +1,12 @@
 import * as _ from 'lodash'
 
 import {
-  PageElement, IPageElementOpts, PageElementWait, PageElementEventually,
-  ValuePageElement, IValuePageElementOpts,
+  PageElement, IPageElementOpts,
   PageElementList, IPageElementListOpts,
-  PageElementMap, IPageElementMapOpts, IPageElementMapIdentifier,
+  PageElementMap, IPageElementMapOpts,
   PageElementGroup, IPageElementGroupOpts,
   TextGroup, ITextGroupOpts,
-  ValueGroup, IValueGroupOpts
+  ValueGroup, IValueGroupOpts, ValuePageElement, IValuePageElementOpts, IValuePageElementListOpts, ValuePageElementList, IPageElementBaseOpts
 } from '../page_elements'
 
 import {
@@ -66,7 +65,7 @@ export class PageElementStore {
         Content,
         PageElementGroupWalker<this>,
         IPageElementGroupWalkerOpts
-      >, "content" | "walkerType" | "walkerOptions">
+      >, Workflo.Store.GroupPublicKeys>
     > (
       PageElementGroup,
       {
@@ -91,7 +90,7 @@ export class PageElementStore {
         Content,
         PageElementGroupWalker<this>,
         IPageElementGroupWalkerOpts
-      >, "content" | "walkerType" | "walkerOptions">
+      >, Workflo.Store.GroupPublicKeys>
     > (
       TextGroup,
       {
@@ -116,7 +115,7 @@ export class PageElementStore {
         Content,
         PageElementGroupWalker<this>,
         IPageElementGroupWalkerOpts
-      >, "content" | "walkerType" | "walkerOptions">
+      >, Workflo.Store.GroupPublicKeys>
     > (
       ValueGroup,
       {
@@ -136,9 +135,9 @@ export class PageElementStore {
    */
   Element(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, Workflo.PageElementOptions>
+    options?: Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>
   ) {
-    return this._get<PageElement<this>, IPageElementOpts<this>>(
+    return this._getElement<PageElement<this>, IPageElementOpts<this>>(
       selector,
       PageElement,
       {
@@ -150,7 +149,7 @@ export class PageElementStore {
 
   ExistElement(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, "timeout" | "customScroll">
+    options?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
   ) {
     return this.Element(
       selector,
@@ -165,15 +164,15 @@ export class PageElementStore {
 
   protected List<
     PageElementType extends PageElement<this>,
-    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'waitType'>,
+    PageElementOpts extends Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>,
   > (
     selector: Workflo.XPath,
     options: Pick<
       IPageElementListOpts<this, PageElementType, PageElementOpts>,
-      "waitType" | "timeout" | "elementStoreFunc" | "elementOptions" | "disableCache" | "identifier"
+      Workflo.Store.ListConstructorKeys
     >
   ) {
-    return this._get<
+    return this._getList<
       PageElementList<this, PageElementType, PageElementOpts>,
       IPageElementListOpts<this, PageElementType, PageElementOpts>
     > (
@@ -181,7 +180,29 @@ export class PageElementStore {
       PageElementList,
       {
         store: this,
-        elementStoreFunc: options.elementStoreFunc,
+        ...options
+      }
+    )
+  }
+
+  protected ValueList<
+    PageElementType extends ValuePageElement<this, ReturnType<PageElementType['getValue']>>,
+    PageElementOpts extends Pick<IValuePageElementOpts<this>, Workflo.Store.ElementPublicKeys>,
+  > (
+    selector: Workflo.XPath,
+    options: Pick<
+      IValuePageElementListOpts<this, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>,
+      Workflo.Store.ListConstructorKeys
+    >
+  ) {
+    return this._getList<
+      ValuePageElementList<this, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>,
+      IValuePageElementListOpts<this, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>
+    > (
+      selector,
+      ValuePageElementList,
+      {
+        store: this,
         ...options
       }
     )
@@ -190,9 +211,9 @@ export class PageElementStore {
   ElementList(
     selector: Workflo.XPath,
     options?: PickPartial<
-      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "waitType">>,
-      "waitType" | "timeout" | "disableCache" | "identifier",
-      "elementOptions"
+      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      Workflo.Store.ListPublicKeys,
+      Workflo.Store.ListPublicPartialKeys
     >
   ) {
     return this.List(
@@ -209,8 +230,8 @@ export class PageElementStore {
     selector: Workflo.XPath,
     options?: PickPartial<
       IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
-      "timeout" | "disableCache" | "identifier",
-      "elementOptions"
+      Exclude<Workflo.Store.ListPublicKeys, "waitType">,
+      Workflo.Store.ListPublicPartialKeys
     >
   ) {
     return this.List(
@@ -229,15 +250,16 @@ export class PageElementStore {
   protected Map<
     K extends string,
     PageElementType extends PageElement<this>,
-    PageElementOpts extends Pick<IPageElementOpts<this>, 'timeout' | 'waitType'>
+    PageElementOpts extends Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>
   >(
     selector: Workflo.XPath,
     options: Pick<
       IPageElementMapOpts<this, K, PageElementType, PageElementOpts>,
-      "elementOptions" | "identifier" | "elementStoreFunc"
+      Workflo.Store.MapConstructorKeys
     >
   ) {
-    return this._get<
+    return this._getMap<
+      K,
       PageElementMap<this, K, PageElementType, PageElementOpts>,
       IPageElementMapOpts<this, K, PageElementType, PageElementOpts>
     > (
@@ -254,9 +276,9 @@ export class PageElementStore {
   ElementMap<K extends string>(
     selector: Workflo.XPath,
     options: PickPartial<
-      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout' | 'waitType'>>,
-      "identifier",
-      "elementOptions"
+      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      Workflo.Store.MapPublicKeys,
+      Workflo.Store.MapPublicPartialKeys
     >
   ) {
     return this.Map(
@@ -272,9 +294,11 @@ export class PageElementStore {
   ExistElementMap<K extends string>(
     selector: Workflo.XPath,
     options: PickPartial<
-      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>,
-      "identifier",
-      "elementOptions"
+      IPageElementMapOpts<
+        this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
+      >,
+      Workflo.Store.MapPublicKeys,
+      Workflo.Store.MapPublicPartialKeys
     >
   ) {
     return this.Map(
@@ -299,10 +323,14 @@ export class PageElementStore {
    * @param type
    * @param options
    */
-  public _get<Type, Options>(
+  private _get<
+    Type,
+    Options
+  >(
     selector: Workflo.XPath,
-    type: { new(selector: string, options: Options, cloneFunc: CloneFunc<Type>): Type },
-    options: Exclude<Options, 'cloneFunc'> = Object.create(Object.prototype)
+    type: { new(selector: string, options: Options): Type },
+    options: Options = Object.create(Object.prototype),
+    afterConstruction?: (instance: Type) => void
   ) : Type {
     const _selector = (selector instanceof XPathBuilder) ? this._xPathBuilder.build() : selector
 
@@ -313,23 +341,64 @@ export class PageElementStore {
 
     const id = `${_selector}|||${type}|||${options.toString()}`
 
-    const cloneFunc: CloneFunc<Type> = cloneSelector => {
-      if ( !cloneSelector ) {
-        cloneSelector = selector
+    if(!(id in this._instanceCache)) {
+      const result = new type(_selector, options)
+
+      if (typeof afterConstruction !== 'undefined') {
+        afterConstruction(result)
       }
 
-      return this._get<Type, Options>(cloneSelector, type, options)
-    }
-
-    if(!(id in this._instanceCache)) {
-      const result = new type(_selector, options, cloneFunc)
       this._instanceCache[id] = result
     }
 
     return this._instanceCache[id]
   }
 
-  public _getGroup<
+  protected _getElement<
+    ElementType extends PageElement<this>,
+    ElementOptions,
+  >(
+    selector: Workflo.XPath,
+    type: { new(selector: string, options: ElementOptions): ElementType },
+    options: ElementOptions = Object.create(Object.prototype),
+  ) : ElementType {
+    return this._get(selector, type, options)
+  }
+
+  protected _getList<
+    ListType extends PageElementList<this, any, any>,
+    ListOptions,
+  >(
+    selector: Workflo.XPath,
+    type: { new(selector: string, options: ListOptions): ListType },
+    options: ListOptions = Object.create(Object.prototype),
+  ) : ListType {
+    return this._get(selector, type, options, instance => {
+      const cloneFunc: CloneFunc<ListType> = cloneSelector => {
+        if ( !cloneSelector ) {
+          cloneSelector = selector
+        }
+
+        return this._getList<ListType, ListOptions>(cloneSelector, type, options)
+      }
+
+      instance.init(cloneFunc)
+    })
+  }
+
+  protected _getMap<
+    K extends string,
+    MapType extends PageElementMap<this, K, any, any>,
+    MapOptions extends IPageElementMapOpts<this, K, any, any>
+  >(
+    selector: Workflo.XPath,
+    type: { new(selector: string, options: MapOptions): MapType },
+    options: MapOptions = Object.create(Object.prototype),
+  ) : MapType {
+    return this._get(selector, type, options)
+  }
+
+  protected _getGroup<
     Store extends PageElementStore,
     Content extends {[key: string] : Workflo.PageNode.INode},
     WalkerType extends PageElementGroupWalker<Store>,

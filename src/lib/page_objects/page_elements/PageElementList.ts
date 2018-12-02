@@ -44,12 +44,12 @@ export interface IPageElementListOpts<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>
 > extends IPageNodeOpts<Store> {
+  elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
+  elementOptions: PageElementOptions
   waitType?: Workflo.WaitType
   timeout?: number
   interval?: number
   disableCache?: boolean
-  elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  elementOptions: PageElementOptions
   identifier?: IPageElementListIdentifier<Store, PageElementType>
 }
 
@@ -69,7 +69,6 @@ export class PageElementList<
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
-  protected _cloneFunc: (subSelector: string) => this
   protected _lastActualResult: string
 
   readonly currently: PageElementListCurrently<
@@ -84,12 +83,7 @@ export class PageElementList<
 
   constructor(
     protected _selector: string,
-    opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>,
-    cloneFunc: <T extends PageElementList<
-      Store,
-      PageElementType,
-      PageElementOptions
-    >>(selector: Workflo.XPath) => T
+    opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>
   ) {
     super(_selector, opts)
 
@@ -104,25 +98,35 @@ export class PageElementList<
     this._identifiedObjCache = {}
     this._interval = opts.interval || 500
 
-    this._cloneFunc = cloneFunc
-
-    this._whereBuilder = new ListWhereBuilder(this._selector, {
-      store: this._store,
-      elementStoreFunc: this._elementStoreFunc,
-      elementOptions: this._elementOptions,
-      cloneFunc: this._cloneFunc,
-      getAllFunc: list => list.all
-    })
-
     this.currently = new PageElementListCurrently<
       Store, PageElementType, PageElementOptions, this
-    >(this, opts, cloneFunc)
+    >(this, opts)
     this.wait = new PageElementListWait<
       Store, PageElementType, PageElementOptions, this
     >(this)
     this.eventually = new PageElementListEventually<
       Store, PageElementType, PageElementOptions, this
     >(this)
+  }
+
+  /**
+   * Use this method to initialize properties that rely on the this type
+   * which is not available in the constructor.
+   *
+   * Make sure that this method is invoked immediatly after construction.
+   *
+   * @param cloneFunc
+   */
+  init(cloneFunc: (selector: Workflo.XPath) => this) {
+    this._whereBuilder = new ListWhereBuilder(this._selector, {
+      store: this._store,
+      elementStoreFunc: this._elementStoreFunc,
+      elementOptions: this._elementOptions,
+      cloneFunc: cloneFunc,
+      getAllFunc: list => list.all
+    })
+
+    this.currently.init(cloneFunc)
   }
 
   /**
@@ -235,7 +239,7 @@ export class PageElementList<
    * while its contents are still guaranteed to be refreshed on each access!
    *
    * Attention: this may take a long time, try to avoid: if only single elements of list
-   * are needed, use get() or| firstBy() instead.
+   * are needed, use get() or where instead.
    **/
   identify(
     {identifier = this._identifier, resetCache = false}:
@@ -323,22 +327,31 @@ class PageElementListCurrently<
   constructor(
     list: ListType,
     opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>,
-    cloneFunc: (selector: Workflo.XPath) => ListType
   ) {
     this._selector = list.getSelector()
     this._store = opts.store
     this._elementOptions = opts.elementOptions
     this._elementStoreFunc = opts.elementStoreFunc
 
+    this._list = list
+  }
+
+  /**
+   * Use this method to initialize properties that rely on the this type
+   * which is not available in the constructor.
+   *
+   * Make sure that this method is invoked immediatly after construction.
+   *
+   * @param cloneFunc
+   */
+  init(cloneFunc: (selector: Workflo.XPath) => ListType) {
     this._whereBuilder = new ListWhereBuilder(this._selector, {
       store: this._store,
       elementStoreFunc: this._elementStoreFunc,
       elementOptions: this._elementOptions,
       cloneFunc: cloneFunc,
-      getAllFunc: list => list.currently.all
+      getAllFunc: list => list.all
     })
-
-    this._list = list
   }
 
   /**

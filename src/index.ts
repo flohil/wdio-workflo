@@ -206,8 +206,6 @@ declare global {
       closestContainerIncludesHidden?: boolean
     }
 
-    type PageElementOptions = "timeout" | "waitType" | "customScroll"
-
     interface IRecObj<Type> {
       [key: string] : Type | IRecObj<Type>
     }
@@ -226,6 +224,18 @@ declare global {
 
     interface IAttributeArgs extends IAnyAttributeArgs {
       value: string
+    }
+
+    namespace Store {
+      type BaseKeys = "timeout" | "waitType"
+      type GroupPublicKeys = "content" | "walkerType" | "walkerOptions"
+      type ElementPublicKeys = BaseKeys | "customScroll"
+      type ListPublicKeys = BaseKeys | "disableCache" | "identifier"
+      type ListPublicPartialKeys = "elementOptions"
+      type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | "elementStoreFunc"
+      type MapPublicKeys = "identifier"
+      type MapPublicPartialKeys = "elementOptions"
+      type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc"
     }
 
     namespace PageNode {
@@ -1540,8 +1550,7 @@ interface IInputOpts<
 > extends pageObjects.elements.IValuePageElementOpts<Store> {}
 
 class Input<
-  Store extends pageObjects.stores.PageElementStore,
-  PageElementType extends Input<Store, PageElementType> = Input<Store, PageElementType>
+  Store extends pageObjects.stores.PageElementStore
 > extends pageObjects.elements.ValuePageElement<
   Store, string
 > {
@@ -1563,7 +1572,7 @@ class Input<
 
 class InputCurrently<
   Store extends pageObjects.stores.PageElementStore,
-  PageElementType extends Input<Store, PageElementType>
+  PageElementType extends Input<Store>
 > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
   getValue(): string {
     return this.element.getValue()
@@ -1572,7 +1581,6 @@ class InputCurrently<
 
 class NumberInput<
   Store extends pageObjects.stores.PageElementStore,
-  PageElementType extends NumberInput<Store, PageElementType> = NumberInput<Store, PageElementType>
 > extends pageObjects.elements.ValuePageElement<
   Store, number
 > {
@@ -1594,7 +1602,7 @@ class NumberInput<
 
 class NumberInputCurrently<
   Store extends pageObjects.stores.PageElementStore,
-  PageElementType extends NumberInput<Store, PageElementType>
+  PageElementType extends NumberInput<Store>
 > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, number> {
   getValue(): number {
     return parseInt(this.element.getValue())
@@ -1613,12 +1621,50 @@ const inputGroup = {
   b: new NumberInput('//div')
 }
 
+class InputStore extends pageObjects.stores.PageElementStore {
+  Input(
+    selector: Workflo.XPath,
+    options?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
+  ) {
+    return this._getElement<Input<this>, IInputOpts<this>>(
+      selector,
+      Input,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
+
+  InputList(
+    selector: Workflo.XPath,
+    options?: PickPartial<
+      pageObjects.elements.IValuePageElementListOpts<
+        this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
+      >,
+      "waitType" | "timeout" | "disableCache" | "identifier",
+      "elementOptions"
+    >
+  ) {
+    return this.ValueList(
+      selector,
+      {
+        elementOptions: {},
+        elementStoreFunc: this.Input,
+        ...options
+      }
+    )
+  }
+}
+
+const inputStore = new InputStore()
 
 // if getvalue is not supported, will always return undefined
 const iGroup = pageObjects.stores.pageElement.ValueGroup({
   a: new Input('//asdf'),
   b: new NumberInput('//div'),
-  c: pageObjects.stores.pageElement.Element('//span')
+  c: pageObjects.stores.pageElement.Element('//span'),
+  d: inputStore.InputList('//input')
 })
 
 const res4 = iGroup.GetValue()
