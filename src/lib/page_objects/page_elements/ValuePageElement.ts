@@ -40,7 +40,7 @@ export abstract class ValuePageElement<
     return this._execute( () => this.currently.getValue() )
   }
 
-  abstract setValue<ValueType>(value: ValueType): this
+  abstract setValue(value: ValueType): this
 }
 
 export abstract class ValuePageElementCurrently<

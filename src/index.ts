@@ -1479,6 +1479,8 @@ let str = getProperty(obj, 'str')
 let strResult = getValue2(obj, "str")
 let nbrResult = getValue2(obj, "nbr")
 
+// even cooler stuff -> proxy and unproxy types - could use GetValue as Proxy!
+
 const proxyObj = {
   a: 1,
   b: "asdf"
@@ -1531,5 +1533,96 @@ function unproxify<T>(t: Proxify<T>): T {
 
 let originalProps = unproxify(proxyProps);
 
+// test if proxying works with IGetValue
 
+interface IInputOpts<
+  Store extends pageObjects.stores.PageElementStore
+> extends pageObjects.elements.IValuePageElementOpts<Store> {}
 
+class Input<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends Input<Store, PageElementType> = Input<Store, PageElementType>
+> extends pageObjects.elements.ValuePageElement<
+  Store, string
+> {
+
+  currently: pageObjects.elements.ValuePageElementCurrently<Store, this, string>;
+
+  constructor(selector: string, opts?: IInputOpts<Store>) {
+    super(selector, opts)
+
+    this.currently = new InputCurrently(this)
+  }
+
+  setValue(value: string) {
+    this.element.setValue(value)
+
+    return this
+  }
+}
+
+class InputCurrently<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends Input<Store, PageElementType>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+  getValue(): string {
+    return this.element.getValue()
+  }
+}
+
+class NumberInput<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends NumberInput<Store, PageElementType> = NumberInput<Store, PageElementType>
+> extends pageObjects.elements.ValuePageElement<
+  Store, number
+> {
+
+  currently: pageObjects.elements.ValuePageElementCurrently<Store, this, number>;
+
+  constructor(selector: string, opts?: IInputOpts<Store>) {
+    super(selector, opts)
+
+    this.currently = new NumberInputCurrently(this)
+  }
+
+  setValue(value: number) {
+    this.element.setValue(value)
+
+    return this
+  }
+}
+
+class NumberInputCurrently<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends NumberInput<Store, PageElementType>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, number> {
+  getValue(): number {
+    return parseInt(this.element.getValue())
+  }
+}
+
+const valueProxyObj = {
+  a: "jodel",
+  b: "asdf"
+}
+
+// achieved mapping type to input value!!!
+
+const inputGroup = {
+  a: new Input('//asdf'),
+  b: new NumberInput('//div')
+}
+
+type UnzipInput<T extends {[key: string]: ValuePageElement<pageObjects.stores.PageElementStore, any>}> = {
+  [P in keyof T]: ReturnType<T[P]['getValue']>;
+}
+
+function getValueInput<T extends {[key: string]: ValuePageElement<pageObjects.stores.PageElementStore, any>}>(t: T): UnzipInput<T> {
+  let result = {} as UnzipInput<T>;
+  for (const k in t) {
+      result[k] = t[k].getValue() as ReturnType<T[Extract<keyof T, any>]["getValue"]>;
+  }
+  return result;
+}
+
+const valuesObj = getValueInput(inputGroup)
