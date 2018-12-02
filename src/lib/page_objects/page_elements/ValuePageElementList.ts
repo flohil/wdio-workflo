@@ -1,5 +1,6 @@
 import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts } from './'
 import { PageElementStore } from '../stores'
+import _ = require('lodash');
 
 export interface IValuePageElementListOpts<
   Store extends PageElementStore,
@@ -14,7 +15,7 @@ export class ValuePageElementList<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ValueType
 > extends PageElementList<Store, PageElementType, PageElementOptions>
-implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValue<ValueType[]> {
+implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValue<ValueType[] | ValueType> {
 
   constructor(
     selector: string,
@@ -31,20 +32,39 @@ implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValue<V
     }
   }
 
+  /**
+   * Returns values of all list elements in the order they were retrieved from the DOM.
+   */
   getValue(): ValueType[] {
     return this.all.map(valuePageElement => valuePageElement.getValue())
   }
 
-  setValue(values: ValueType[]) {
+  /**
+   * Sets values on all list elements.
+   *
+   * If values is an array, the number of list elements must match the number of passed values.
+   * The values will be assigned in the order that the list elements were retrieved from the DOM.
+   *
+   * If values is a single value, the same value will be set on all list elements.
+   *
+   * @param values
+   */
+  setValue(values: ValueType[] | ValueType) {
     const allElements = this.all
 
-    if (allElements.length !== values.length) {
-      throw new Error(
-        `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`
-      )
+    if (_.isArray(values)) {
+      if (allElements.length !== values.length) {
+        throw new Error(
+          `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`
+        )
+      } else {
+        for ( let i = 0; i < allElements.length; i++) {
+          allElements[i].setValue(values[i])
+        }
+      }
     } else {
-      for ( let i = 0; i < values.length; i++) {
-        allElements[i].setValue(values[i])
+      for ( let i = 0; i < allElements.length; i++) {
+        allElements[i].setValue(values)
       }
     }
 

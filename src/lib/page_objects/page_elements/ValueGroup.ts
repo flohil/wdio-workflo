@@ -2,6 +2,10 @@ import { TextGroup, ITextGroupOpts } from '.'
 import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
 import { PageElementStore } from '../stores'
 
+type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = {
+  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValue<any> ? ReturnType<T[P]['getValue']> : undefined;
+}
+
 export interface IValueGroupOpts<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
@@ -74,11 +78,23 @@ export class ValueGroup<
   }
 }
 
+export function getValueInput<T extends {[key: string]: Workflo.PageNode.INode}>(t: T): ExtractValue<T> {
+  let result = {} as ExtractValue<T>;
+  for (const k in t) {
+    if (isGetValueNode(t[k])) {
+      const elem = t[k] as any as Workflo.PageNode.IGetValue<any>
+      result[k] = elem.getValue()
+    }
+  }
+  return result;
+}
+
+
 // type guards
-function isGetValueNode(node: any): node is Workflo.PageNode.IGetValue {
-  return node.getValue !== undefined;
+function isGetValueNode(node: any): node is Workflo.PageNode.IGetValue<any> {
+  return typeof node['getValue'] === 'function';
 }
 
 function isSetValueNode(node: any): node is Workflo.PageNode.ISetValue<Workflo.Value> {
-  return node.setValue !== undefined;
+  return typeof node['setValue'] === 'function';
 }

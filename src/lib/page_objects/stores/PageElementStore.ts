@@ -16,6 +16,7 @@ import {
 import {
   XPathBuilder
 } from '../builders'
+import { IValuePageElementMapOpts, ValuePageElementMap } from '../page_elements/ValuePageElementMap';
 
 export type CloneFunc<Type> = (
   selector?: Workflo.XPath,
@@ -265,6 +266,32 @@ export class PageElementStore {
     > (
       selector,
       PageElementMap,
+      {
+        store: this,
+        elementStoreFunc: options.elementStoreFunc,
+        ...options
+      }
+    )
+  }
+
+  protected ValueMap<
+    K extends string,
+    PageElementType extends ValuePageElement<this, ReturnType<PageElementType["getValue"]>>,
+    PageElementOpts extends Pick<IValuePageElementOpts<this>, Workflo.Store.ElementPublicKeys>
+  >(
+    selector: Workflo.XPath,
+    options: Pick<
+      IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>,
+      Workflo.Store.MapConstructorKeys
+    >
+  ) {
+    return this._getMap<
+      K,
+      ValuePageElementMap<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>,
+      IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>
+    > (
+      selector,
+      ValuePageElementMap,
       {
         store: this,
         elementStoreFunc: options.elementStoreFunc,

@@ -1334,7 +1334,7 @@ const res = Object.keys(obj).map(
 )
 
 import * as _ from 'lodash'
-import { ValuePageElement } from './lib/page_objects/page_elements';
+import { ValuePageElement, IPageElementMapOpts } from './lib/page_objects/page_elements';
 
 const res2 = _.mapValues(obj, function (v) { return v.getValue(); });
 
@@ -1655,6 +1655,24 @@ class InputStore extends pageObjects.stores.PageElementStore {
       }
     )
   }
+
+  InputMap<K extends string>(
+    selector: Workflo.XPath,
+    options: PickPartial<
+      IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      Workflo.Store.MapPublicKeys,
+      Workflo.Store.MapPublicPartialKeys
+    >
+  ) {
+    return this.ValueMap(
+      selector,
+      {
+        elementStoreFunc: this.Input,
+        elementOptions: {},
+        ...options
+      }
+    )
+  }
 }
 
 const inputStore = new InputStore()
@@ -1664,29 +1682,19 @@ const iGroup = pageObjects.stores.pageElement.ValueGroup({
   a: new Input('//asdf'),
   b: new NumberInput('//div'),
   c: pageObjects.stores.pageElement.Element('//span'),
-  d: inputStore.InputList('//input')
+  d: inputStore.InputList('//input'),
+  e: inputStore.InputMap('//input', {identifier: {
+    mappingObject: {
+      name: "Name",
+      password: "Password"
+    },
+    func: (mapSelector: string, mappingValue: string) => xpath(mapSelector).text(mappingValue)
+  }})
 })
 
 const res4 = iGroup.GetValue()
 
-type UnzipInput<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValue<any> ? ReturnType<T[P]['getValue']> : undefined;
-}
-
-function instanceOfGetValue(object: any): object is Workflo.PageNode.IGetValue<any> {
-  return 'getValue' in object && typeof object['getValue'] === 'function';
-}
-
-function getValueInput<T extends {[key: string]: Workflo.PageNode.INode}>(t: T): UnzipInput<T> {
-  let result = {} as UnzipInput<T>;
-  for (const k in t) {
-    if (instanceOfGetValue(t[k])) {
-      const elem = t[k] as any as Workflo.PageNode.IGetValue<any>
-      result[k] = elem.getValue()
-    }
-  }
-  return result;
-}
+import {getValueInput} from './lib/page_objects/page_elements/ValueGroup'
 
 const valuesObj = getValueInput(iGroup.__content)
 
