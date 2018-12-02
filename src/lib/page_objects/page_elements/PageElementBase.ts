@@ -17,12 +17,13 @@ export abstract class PageElementBase<
 > extends PageNode<Store> {
 
   protected _waitType: Workflo.WaitType
-  protected _timeout: number
   protected _$: Store
 
-  readonly abstract currently: PageElementBaseCurrently<Store, this>
-  readonly abstract wait: PageElementBaseWait<Store, this>
-  readonly abstract eventually: PageElementBaseEventually<Store, this>
+  protected _timeout: number
+
+  abstract currently: PageElementBaseCurrently<Store, this>
+  abstract wait: PageElementBaseWait<Store, this>
+  abstract eventually: PageElementBaseEventually<Store, this>
 
   constructor(
     selector: string,
@@ -77,11 +78,12 @@ export abstract class PageElementBaseCurrently<
   PageElementType extends PageElementBase<Store>
 > {
 
-  protected _pageElement: PageElementType
+  protected _node: PageElementType
+
   protected _lastActualResult: string
 
-  constructor(pageElement: PageElementType) {
-    this._pageElement = pageElement
+  constructor(node: PageElementType) {
+    this._node = node
   }
 
   /**
@@ -99,7 +101,7 @@ export abstract class PageElementBaseCurrently<
   }
 
   get element() {
-    return browser.element(this._pageElement.getSelector())
+    return browser.element(this._node.getSelector())
   }
 
   /**
@@ -112,8 +114,8 @@ export abstract class PageElementBaseCurrently<
       return func()
     } catch ( error ) {
       const errorMsg =
-      `${this._pageElement.constructor.name} could not be located on the page.\n` +
-      `( ${this._pageElement.getSelector()} )`
+      `${this._node.constructor.name} could not be located on the page.\n` +
+      `( ${this._node.getSelector()} )`
 
       throw new Error(errorMsg)
     }
@@ -143,17 +145,17 @@ export abstract class PageElementBaseCurrently<
   }
 
   protected _compareHas<T>(expected: T, actual: T) {
-    this._lastActualResult = this._pageElement.typeToString(actual)
+    this._lastActualResult = this._node.typeToString(actual)
     return this._equals(actual, expected)
   }
 
   protected _compareHasAny<T>(actual: T) {
-    this._lastActualResult = this._pageElement.typeToString(actual)
+    this._lastActualResult = this._node.typeToString(actual)
     return this._any(actual)
   }
 
   protected _compareContains<T>(expected: T, actual: T) {
-    this._lastActualResult = this._pageElement.typeToString(actual)
+    this._lastActualResult = this._node.typeToString(actual)
     return this._contains(actual, expected)
   }
 }
@@ -163,26 +165,26 @@ export abstract class PageElementBaseWait<
   PageElementType extends PageElementBase<Store>,
 > {
 
-  protected _pageElement: PageElementType
+  protected _node: PageElementType
 
-  constructor(pageElement: PageElementType) {
-    this._pageElement = pageElement
+  constructor(node: PageElementType) {
+    this._node = node
   }
 
   protected _wait(func: () => void, errorMessage: string) {
     try {
       func();
     } catch (error) {
-      throw new Error(`${this._pageElement.constructor.name}${errorMessage}.\n( ${this._pageElement.getSelector()} )`)
+      throw new Error(`${this._node.constructor.name}${errorMessage}.\n( ${this._node.getSelector()} )`)
     }
 
-    return this._pageElement
+    return this._node
   }
 
   protected _waitWdioCheckFunc(
     checkTypeStr: string,
     conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean,
-    { timeout = this._pageElement.getTimeout(), reverse }: Workflo.IWDIOParamsOptionalReverse = {}
+    { timeout = this._node.getTimeout(), reverse }: Workflo.IWDIOParamsOptionalReverse = {}
   ) {
     const reverseStr = (reverse) ? ' not' : ''
 
@@ -196,7 +198,7 @@ export abstract class PageElementBaseWait<
     name: string,
     conditionType: 'has' | 'contains' | 'any' | 'within',
     conditionFunc: (value?: T) => boolean,
-    { timeout = this._pageElement.getTimeout(), reverse }: Workflo.IWDIOParamsOptionalReverse = {},
+    { timeout = this._node.getTimeout(), reverse }: Workflo.IWDIOParamsOptionalReverse = {},
     value?: T
   ) {
     const reverseStr = (reverse) ? ' not' : ''
@@ -224,19 +226,19 @@ export abstract class PageElementBaseWait<
     } catch ( error ) {
       if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
         errorMessage =
-          `${this._pageElement.constructor.name}'s ${name} "${this._pageElement.currently.lastActualResult}" never` +
-          `${reverseStr} ${conditionStr} "${this._pageElement.typeToString(value)}" within ${timeout} ms.\n` +
-          `( ${this._pageElement.getSelector()} )`
+          `${this._node.constructor.name}'s ${name} "${this._node.currently.lastActualResult}" never` +
+          `${reverseStr} ${conditionStr} "${this._node.typeToString(value)}" within ${timeout} ms.\n` +
+          `( ${this._node.getSelector()} )`
       } else if (conditionType === 'any') {
         errorMessage =
-          `${this._pageElement.constructor.name} never${reverseStr} ${conditionStr} any ${name}` +
-          ` within ${timeout} ms.\n( ${this._pageElement.getSelector()} )`
+          `${this._node.constructor.name} never${reverseStr} ${conditionStr} any ${name}` +
+          ` within ${timeout} ms.\n( ${this._node.getSelector()} )`
       }
 
       throw new Error(errorMessage)
     }
 
-    return this._pageElement
+    return this._node
   }
 
   protected _waitWithinProperty<T>(
@@ -283,10 +285,10 @@ export abstract class PageElementBaseEventually<
   Store extends PageElementStore,
   PageElementType extends PageElementBase<Store>
 > {
-  protected _pageElement: PageElementType
+  protected _node: PageElementType
 
-  constructor(pageElement: PageElementType) {
-    this._pageElement = pageElement
+  constructor(node: PageElementType) {
+    this._node = node
   }
 
   protected _eventually(func: () => void) : boolean {

@@ -33,11 +33,16 @@ export class PageElementMap<
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>
-> extends PageNode<Store> {
+> extends PageNode<Store>
+implements Workflo.PageNode.IGetTextNode<Record<K, string>> {
+
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _elementOptions: PageElementOptions
   protected _identifier: IPageElementMapIdentifier<K>
+
   protected _$: Record<K, PageElementType>
+
+  currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
 
   constructor(
     protected _selector: string,
@@ -84,5 +89,54 @@ export class PageElementMap<
         ]
       )
     )
+  }
+
+  // GETTER FUNCTIONS
+
+  /**
+   * Helper function to map element content nodes to a value by calling a node interface function on each node.
+   *
+   * @param context
+   * @param getFunc
+   */
+  __getInterfaceFunc<
+    Store extends PageElementStore,
+    K extends string,
+    PageElementType extends PageElement<Store>,
+    ResultType
+  >(context: Record<K, PageElementType>, getFunc: (node: PageElementType) => ResultType): Record<K, ResultType> {
+    let result = {} as Record<K, ResultType>;
+
+    for (const k in context) {
+      result[k] = getFunc(context[k])
+    }
+
+    return result;
+  }
+
+  /**
+   * Returns values of all list elements in the order they were retrieved from the DOM.
+   */
+  getText(): Record<K, string> {
+    return this.__getInterfaceFunc(this.$, node => node.getText())
+  }
+}
+
+class PageElementMapCurrently<
+  Store extends PageElementStore,
+  K extends string,
+  PageElementType extends PageElement<Store>,
+  PageElementOptions extends Partial<IPageElementOpts<Store>>,
+  MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
+> implements Workflo.PageNode.IGetText<Record<K, string>> {
+
+  protected _node: MapType
+
+  constructor(node: MapType) {
+    this._node = node
+  }
+
+  getText(): Record<K, string> {
+    return this._node.__getInterfaceFunc(this._node.$, node => node.getText())
   }
 }

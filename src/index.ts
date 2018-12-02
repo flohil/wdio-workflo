@@ -228,7 +228,7 @@ declare global {
 
     namespace Store {
       type BaseKeys = "timeout" | "waitType"
-      type GroupPublicKeys = "content" | "walkerType" | "walkerOptions"
+      type GroupPublicKeys = "content"
       type ElementPublicKeys = BaseKeys | "customScroll"
       type ListPublicKeys = BaseKeys | "disableCache" | "identifier"
       type ListPublicPartialKeys = "elementOptions"
@@ -245,20 +245,36 @@ declare global {
       }
 
       interface INode {
-        getNodeId(): string
-        toJSON(): IElementJSON
+        __getNodeId(): string
+        __toJSON(): IElementJSON
       }
 
-      interface IGetText<TextType> extends INode {
+      interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
+        currently: IGetText<TextType>
+      }
+
+      interface IGetValueNode<ValueType> extends INode, IGetValue<ValueType> {
+        currently: IGetValue<ValueType>
+      }
+
+      interface ISetValueNode<ValueType> extends INode, ISetValue<ValueType> {
+        currently: ISetValue<ValueType>
+      }
+
+      interface IGetText<TextType> {
         getText(): TextType
       }
 
-      interface IGetValue<ValueType> extends INode {
+      interface IGetValue<ValueType> {
         getValue(): ValueType
       }
 
-      interface ISetValue<ValueType> extends INode {
+      interface ISetValue<ValueType> {
         setValue(value: ValueType): this
+      }
+
+      interface ISetValueWithContext<ValueType, ContextType> {
+        setValue(value: ValueType): ContextType
       }
     }
 

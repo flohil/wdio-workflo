@@ -5,13 +5,8 @@ import {
   PageElementList, IPageElementListOpts,
   PageElementMap, IPageElementMapOpts,
   PageElementGroup, IPageElementGroupOpts,
-  TextGroup, ITextGroupOpts,
   ValueGroup, IValueGroupOpts, ValuePageElement, IValuePageElementOpts, IValuePageElementListOpts, ValuePageElementList, IPageElementBaseOpts
 } from '../page_elements'
-
-import {
-  PageElementGroupWalker, IPageElementGroupWalkerOpts
-} from '../walkers'
 
 import {
   XPathBuilder
@@ -58,45 +53,14 @@ export class PageElementStore {
     return this._getGroup<
       this,
       Content,
-      PageElementGroupWalker<this>,
-      IPageElementGroupWalkerOpts,
-      PageElementGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
+      PageElementGroup<this, Content>,
       Pick<IPageElementGroupOpts<
         this,
-        Content,
-        PageElementGroupWalker<this>,
-        IPageElementGroupWalkerOpts
+        Content
       >, Workflo.Store.GroupPublicKeys>
     > (
       PageElementGroup,
       {
-        walkerType: PageElementGroupWalker,
-        walkerOptions: {},
-        content: content
-      }
-    )
-  }
-
-  TextGroup<Content extends Record<string, Workflo.PageNode.INode>>(
-    content: Content
-  ) {
-    return this._getGroup<
-      this,
-      Content,
-      PageElementGroupWalker<this>,
-      IPageElementGroupWalkerOpts,
-      TextGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
-      Pick<ITextGroupOpts<
-        this,
-        Content,
-        PageElementGroupWalker<this>,
-        IPageElementGroupWalkerOpts
-      >, Workflo.Store.GroupPublicKeys>
-    > (
-      TextGroup,
-      {
-        walkerType: PageElementGroupWalker,
-        walkerOptions: {},
         content: content
       }
     )
@@ -108,9 +72,7 @@ export class PageElementStore {
     return this._getGroup<
       this,
       Content,
-      PageElementGroupWalker<this>,
-      IPageElementGroupWalkerOpts,
-      ValueGroup<this, Content, PageElementGroupWalker<this>, IPageElementGroupWalkerOpts>,
+      ValueGroup<this, Content>,
       Pick<IValueGroupOpts<
         this,
         Content,
@@ -428,22 +390,16 @@ export class PageElementStore {
   protected _getGroup<
     Store extends PageElementStore,
     Content extends {[key: string] : Workflo.PageNode.INode},
-    WalkerType extends PageElementGroupWalker<Store>,
-    WalkerOptions extends IPageElementGroupWalkerOpts,
     GroupType extends PageElementGroup<
       Store,
-      Content,
-      WalkerType,
-      WalkerOptions
+      Content
     >,
     GroupOptions extends Pick<IPageElementGroupOpts<
       Store,
-      Content,
-      WalkerType,
-      WalkerOptions
-    >, "content" | "walkerType" | "walkerOptions" >
+      Content
+    >, "content" >
   > (
-    groupType: { new(options: IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>): GroupType },
+    groupType: { new(options: IPageElementGroupOpts<Store, Content>): GroupType },
     groupOptions: GroupOptions
   ) : GroupType {
 
@@ -454,11 +410,11 @@ export class PageElementStore {
 
     for (const key in groupOptions.content) {
       if (groupOptions.content.hasOwnProperty(key)) {
-        idStr += `${groupOptions.content[key].getNodeId()};`
+        idStr += `${groupOptions.content[key].__getNodeId()};`
       }
     }
 
-    const key = `${groupType.name}:${groupOptions.walkerType.name}:${idStr}`
+    const key = `${groupType.name}:${idStr}`
 
     if (!(key in this._instanceCache)) {
 

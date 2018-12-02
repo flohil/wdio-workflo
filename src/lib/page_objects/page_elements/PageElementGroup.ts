@@ -1,16 +1,15 @@
 import { PageElementStore } from '../stores'
-import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
+
+type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
+  [P in keyof T]: T[P] extends Workflo.PageNode.IGetTextNode<any> ? ReturnType<T[P]['getText']> : undefined;
+}
 
 export interface IPageElementGroupOpts<
   Store extends PageElementStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends PageElementGroupWalker<Store>,
-  WalkerOptions extends IPageElementGroupWalkerOpts
+  Content extends {[key: string] : Workflo.PageNode.INode}
 > {
   id: string,
-  content: Content,
-  walkerType: { new(options: WalkerOptions): WalkerType }
-  walkerOptions: WalkerOptions
+  content: Content
 }
 
 // Encapsulates arbitrary page element types.
@@ -23,44 +22,81 @@ export interface IPageElementGroupOpts<
 // - all private members of group must start with _
 export class PageElementGroup<
   Store extends PageElementStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends PageElementGroupWalker<Store>,
-  WalkerOptions extends IPageElementGroupWalkerOpts
-> implements Workflo.PageNode.INode {
+  Content extends {[key: string] : Workflo.PageNode.INode}
+> implements Workflo.PageNode.IGetTextNode<ExtractText<Content>> {
   protected _id: string
-  protected _walker: WalkerType
-  protected readonly _$: Content
+  protected _$: Content
+
+  currently: PageElementGroupCurrently<Store, Content, this>
 
   constructor({
     id,
-    content,
-    walkerType,
-    walkerOptions
-  }: IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>) {
+    content
+  }: IPageElementGroupOpts<Store, Content>) {
     this._id = id
-    this._walker = new walkerType(walkerOptions)
     this._$ = content
+
+    this.currently = new PageElementGroupCurrently(this)
   }
 
   get $() {
     return this._$
   }
 
-  getNodeId() {
-    return this._id
-  }
-
-  toJSON(): Workflo.PageNode.IElementJSON {
+  __toJSON(): Workflo.PageNode.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
       nodeId: this._id
     }
   }
 
-  solve<ValueType, ResultType>(
-    problem: Workflo.IProblem<ValueType, ResultType>,
-    options: Workflo.IWalkerOptions = { throwUnmatchedKey: true, throwSolveError: true }
-  ) : Workflo.IRecObj<ResultType> {
-    return this._walker.walk( problem, this.$, options )
+  // GETTER FUNCTIONS
+
+  __getNodeId() {
+    return this._id
+  }
+
+  getText() {
+    let result = {} as ExtractText<Content>;
+
+    for (const k in this.$) {
+      if (isGetTextNode(this.$[k])) {
+        const elem = this.$[k] as any as Workflo.PageNode.IGetTextNode<any>
+        result[k] = elem.getText()
+      }
+    }
+
+    return result;
+  }
+}
+
+// type guards
+function isGetTextNode(node: any): node is Workflo.PageNode.IGetTextNode<any> {
+  return node.getText !== undefined;
+}
+
+class PageElementGroupCurrently<
+  Store extends PageElementStore,
+  Content extends {[key: string] : Workflo.PageNode.INode},
+  GroupType extends PageElementGroup<Store, Content>
+> implements Workflo.PageNode.IGetText<ExtractText<Content>> {
+
+  protected _node: GroupType
+
+  constructor(node: GroupType) {
+    this._node = node;
+  }
+
+  getText() {
+    let result = {} as ExtractText<Content>;
+
+    for (const k in this._node.$) {
+      if (isGetTextNode(this._node.$[k])) {
+        const elem = this._node.$[k] as any as Workflo.PageNode.IGetTextNode<any>
+        result[k] = elem.getText()
+      }
+    }
+
+    return result;
   }
 }

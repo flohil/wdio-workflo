@@ -16,7 +16,7 @@ export class ValuePageElementMap<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ValueType
 > extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-implements Workflo.PageNode.IGetValue<Record<K, ValueType>>, Workflo.PageNode.ISetValue<Record<K, ValueType>> {
+implements Workflo.PageNode.IGetValueNode<Record<K, ValueType>>, Workflo.PageNode.ISetValueNode<Record<K, ValueType>> {
 
   constructor(
     selector: string,

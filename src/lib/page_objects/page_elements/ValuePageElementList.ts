@@ -16,13 +16,15 @@ export class ValuePageElementList<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ValueType
 > extends PageElementList<Store, PageElementType, PageElementOptions>
-implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValue<ValueType[] | ValueType> {
+implements Workflo.PageNode.IGetValueNode<ValueType[]>, Workflo.PageNode.ISetValueNode<ValueType[] | ValueType> {
 
   constructor(
     selector: string,
     opts: IValuePageElementListOpts<Store, PageElementType, PageElementOptions, ValueType>
   ) {
     super(selector, opts)
+
+    this.currently = new ValuePageElementListCurrently(this, opts)
   }
 
   initialWait() {
@@ -33,15 +35,20 @@ implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValue<V
     }
   }
 
+// GETTER FUNCTIONS
+
   /**
-   * Returns values of all list elements in the order they were retrieved from the DOM.
+   * Returns values of all list elements in the order they were retrieved from the DOM
+   * after the initial wait was performed.
    */
   getValue(): ValueType[] {
     return this.all.map(valuePageElement => valuePageElement.getValue())
   }
 
+// SETTER FUNCTIONS
+
   /**
-   * Sets values on all list elements.
+   * Sets values on all list elements after the initial wait was performed.
    *
    * If values is an array, the number of list elements must match the number of passed values.
    * The values will be assigned in the order that the list elements were retrieved from the DOM.
@@ -79,12 +86,45 @@ class ValuePageElementListCurrently<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>,
   ValueType
-> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType> {
+> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType>
+implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValueWithContext<ValueType[] | ValueType, ListType> {
 
   /**
-   * Returns values of all list elements in the order they were retrieved from the DOM.
+   * Returns values of all list elements in the order they were retrieved from the DOM immediatly.
    */
-  getValue(): ValueType[] {
+  getValue() {
     return this.all.map(valuePageElement => valuePageElement.currently.getValue())
+  }
+
+  /**
+   * Sets values on all list elements immediatly.
+   *
+   * If values is an array, the number of list elements must match the number of passed values.
+   * The values will be assigned in the order that the list elements were retrieved from the DOM.
+   *
+   * If values is a single value, the same value will be set on all list elements.
+   *
+   * @param values
+   */
+  setValue(values: ValueType[] | ValueType) {
+    const allElements = this.all
+
+    if (_.isArray(values)) {
+      if (allElements.length !== values.length) {
+        throw new Error(
+          `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`
+        )
+      } else {
+        for ( let i = 0; i < allElements.length; i++) {
+          allElements[i].currently.setValue(values[i])
+        }
+      }
+    } else {
+      for ( let i = 0; i < allElements.length; i++) {
+        allElements[i].currently.setValue(values)
+      }
+    }
+
+    return this._node
   }
 }

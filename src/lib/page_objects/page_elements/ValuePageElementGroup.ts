@@ -1,34 +1,27 @@
-import { TextGroup, ITextGroupOpts } from '.'
-import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
 import { PageElementStore } from '../stores'
+import { PageElementGroup, IPageElementGroupOpts } from '.';
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValue<any> ? ReturnType<T[P]['getValue']> : undefined;
+  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
 }
 
 export interface IValueGroupOpts<
   Store extends PageElementStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends PageElementGroupWalker<Store>,
-  WalkerOptions extends IPageElementGroupWalkerOpts
-> extends ITextGroupOpts<
+  Content extends {[key: string] : Workflo.PageNode.INode}
+> extends IPageElementGroupOpts<
   Store,
-  Content,
-  WalkerType,
-  WalkerOptions
+  Content
 > { }
 
 export class ValueGroup<
   Store extends PageElementStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
-  WalkerType extends PageElementGroupWalker<Store>,
-  WalkerOptions extends IPageElementGroupWalkerOpts
-> extends TextGroup<Store, Content, WalkerType, WalkerOptions>
-implements Workflo.PageNode.IGetValue<ExtractValue<Content>> {
+  Content extends {[key: string] : Workflo.PageNode.INode}
+> extends PageElementGroup<Store, Content>
+implements Workflo.PageNode.IGetValueNode<ExtractValue<Content>> {
 
   constructor({
     ...superOpts
-  }: IValueGroupOpts<Store, Content, WalkerType, WalkerOptions>) {
+  }: IValueGroupOpts<Store, Content>) {
     super(superOpts)
   }
 
@@ -58,7 +51,7 @@ implements Workflo.PageNode.IGetValue<ExtractValue<Content>> {
 
     for (const k in this.$) {
       if (isGetValueNode(this.$[k])) {
-        const elem = this.$[k] as any as Workflo.PageNode.IGetValue<any>
+        const elem = this.$[k] as any as Workflo.PageNode.IGetValueNode<any>
         result[k] = elem.getValue()
       }
     }
@@ -68,10 +61,10 @@ implements Workflo.PageNode.IGetValue<ExtractValue<Content>> {
 }
 
 // type guards
-function isGetValueNode(node: any): node is Workflo.PageNode.IGetValue<any> {
+function isGetValueNode(node: any): node is Workflo.PageNode.IGetValueNode<any> {
   return typeof node['getValue'] === 'function';
 }
 
-function isSetValueNode(node: any): node is Workflo.PageNode.ISetValue<Workflo.Value> {
+function isSetValueNode(node: any): node is Workflo.PageNode.ISetValueNode<Workflo.Value> {
   return typeof node['setValue'] === 'function';
 }

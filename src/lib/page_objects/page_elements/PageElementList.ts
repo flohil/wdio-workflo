@@ -58,26 +58,28 @@ export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
-> extends PageNode<Store> {
+> extends PageNode<Store>
+implements Workflo.PageNode.IGetTextNode<string[]> {
 
+  protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
+  protected _elementOptions: PageElementOptions
   protected _waitType: Workflo.WaitType
+
   protected _timeout: number
   protected _interval: number
   protected _disableCache: boolean
-  protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  protected _elementOptions: PageElementOptions
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
   protected _lastActualResult: string
 
-  readonly currently: PageElementListCurrently<
+  currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
   >
-  readonly wait: PageElementListWait<
+  wait: PageElementListWait<
     Store, PageElementType, PageElementOptions, this
   >
-  readonly eventually: PageElementListEventually<
+  eventually: PageElementListEventually<
     Store, PageElementType, PageElementOptions, this
   >
 
@@ -285,6 +287,14 @@ export class PageElementList<
 
 // PUBLIC GETTER FUNCTIONS
 
+  getTimeout() {
+    return this._timeout
+  }
+
+  getInterval() {
+    return this._interval
+  }
+
   getLength() {
     try {
       const value = this.elements.value
@@ -300,12 +310,8 @@ export class PageElementList<
     }
   }
 
-  getTimeout() {
-    return this._timeout
-  }
-
-  getInterval() {
-    return this._interval
+  getText() {
+    return this.all.map(listElement => listElement.getText())
   }
 }
 
@@ -314,26 +320,26 @@ export class PageElementListCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> {
+> implements Workflo.PageNode.IGetText<string[]> {
 
   protected _selector: string
   protected _store: Store
   protected _elementOptions: PageElementOptions
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
+  protected _node: ListType
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
   protected _lastActualResult: string
-  protected _list: ListType
 
   constructor(
-    list: ListType,
+    node: ListType,
     opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>,
   ) {
-    this._selector = list.getSelector()
+    this._selector = node.getSelector()
     this._store = opts.store
     this._elementOptions = opts.elementOptions
     this._elementStoreFunc = opts.elementStoreFunc
 
-    this._list = list
+    this._node = node
   }
 
   /**
@@ -431,6 +437,10 @@ export class PageElementListCurrently<
     }
   }
 
+  getText() {
+    return this.all.map(listElement => listElement.currently.getText())
+  }
+
 // CHECK STATE FUNCTIONS
 
   isEmpty() {
@@ -462,52 +472,52 @@ export class PageElementListWait<
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
-  protected _list: ListType
+  protected _node: ListType
 
-  constructor(list: ListType) {
-    this._list = list
+  constructor(node: ListType) {
+    this._node = node
   }
 
   // waits until list has given length
   hasLength( length: number, {
-    timeout = this._list.getTimeout(),
+    timeout = this._node.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
-    interval = this._list.getInterval(),
+    interval = this._node.getInterval(),
     reverse
   }: IPageElementListWaitLengthReverseParams = {}) {
     browser.waitUntil(
       () => {
         if (reverse) {
-          return !this._list.currently.hasLength(length, comparator)
+          return !this._node.currently.hasLength(length, comparator)
         } else {
-          return this._list.currently.hasLength(length, comparator)
+          return this._node.currently.hasLength(length, comparator)
         }
       },
-    timeout, `${this.constructor.name}: Length never became${comparatorStr(comparator)} ${length}.\n( ${this._list.getSelector()} )`, interval )
+    timeout, `${this.constructor.name}: Length never became${comparatorStr(comparator)} ${length}.\n( ${this._node.getSelector()} )`, interval )
 
-    return this._list
+    return this._node
   }
 
   isEmpty({
-    timeout = this._list.getTimeout(),
-    interval = this._list.getInterval(),
+    timeout = this._node.getTimeout(),
+    interval = this._node.getInterval(),
     reverse
   } : IPageElementListWaitEmptyReverseParams = {}) {
     browser.waitUntil(
       () => {
         if (reverse) {
-          return !this._list.currently.isEmpty()
+          return !this._node.currently.isEmpty()
         } else {
-          return this._list.currently.isEmpty()
+          return this._node.currently.isEmpty()
         }
       },
-    timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval)
+    timeout, `${this.constructor.name} never became empty.\n( ${this._node.getSelector()} )`, interval)
 
-    return this._list
+    return this._node
   }
 
   get any() {
-    return this._list.currently.first.wait as any as PageElementType['wait']
+    return this._node.currently.first.wait as any as PageElementType['wait']
   }
 
   // Typescript has a bug that prevents Exclude from working with generic extended types:
@@ -518,7 +528,7 @@ export class PageElementListWait<
   // }
 
   get none(): PageElementType['wait']['not'] {
-    return this._list.currently.first.wait.not
+    return this._node.currently.first.wait.not
   }
 
   not = {
@@ -540,10 +550,10 @@ export class PageElementListEventually<
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
-  protected _list: ListType
+  protected _node: ListType
 
-  constructor(list: ListType) {
-    this._list = list
+  constructor(node: ListType) {
+    this._node = node
   }
 
   protected _eventually(func: () => void) : boolean {
@@ -556,20 +566,20 @@ export class PageElementListEventually<
   }
 
   hasLength( length: number, {
-    timeout = this._list.getTimeout(),
+    timeout = this._node.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
-    interval = this._list.getInterval(),
+    interval = this._node.getInterval(),
     reverse
   }: IPageElementListWaitLengthReverseParams = {} ) {
-    return this._eventually( () => this._list.wait.hasLength( length, { timeout, comparator, interval, reverse } ) )
+    return this._eventually( () => this._node.wait.hasLength( length, { timeout, comparator, interval, reverse } ) )
   }
 
   isEmpty({
-    timeout = this._list.getTimeout(),
-    interval = this._list.getInterval(),
+    timeout = this._node.getTimeout(),
+    interval = this._node.getInterval(),
     reverse
   }: IPageElementListWaitEmptyReverseParams = {}) {
-    return this._eventually( () => this._list.wait.isEmpty( { timeout, interval, reverse } ) )
+    return this._eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
   // Typescript has a bug that prevents Exclude from working with generic extended types:
@@ -580,11 +590,11 @@ export class PageElementListEventually<
   // }
 
   get any() {
-    return this._list.currently.first.eventually as any as PageElementType['eventually']
+    return this._node.currently.first.eventually as any as PageElementType['eventually']
   }
 
   get none(): PageElementType['eventually']['not'] {
-    return this._list.currently.first.eventually.not
+    return this._node.currently.first.eventually.not
   }
 
   not = {
