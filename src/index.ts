@@ -236,7 +236,7 @@ declare global {
 
       interface INode {
         __getNodeId(): string
-        toJSON(): IElementJSON
+        __toJSON(): IElementJSON
       }
 
       interface IGetText extends INode {
@@ -1613,11 +1613,19 @@ const inputGroup = {
   b: new NumberInput('//div')
 }
 
-type UnzipInput<T extends {[key: string]: ValuePageElement<pageObjects.stores.PageElementStore, any>}> = {
+const iGroup = pageObjects.stores.pageElement.ValueGroup({
+  a: new Input('//asdf'),
+  b: new NumberInput('//div'),
+  // c: pageObjects.stores.pageElement.Element('//span')
+})
+
+const res4 = iGroup.GetValue()
+
+type UnzipInput<T extends {[key: string]: Workflo.PageNode.IGetValue<any>}> = {
   [P in keyof T]: ReturnType<T[P]['getValue']>;
 }
 
-function getValueInput<T extends {[key: string]: ValuePageElement<pageObjects.stores.PageElementStore, any>}>(t: T): UnzipInput<T> {
+function getValueInput<T extends {[key: string]: Workflo.PageNode.IGetValue<any>}>(t: T): UnzipInput<T> {
   let result = {} as UnzipInput<T>;
   for (const k in t) {
       result[k] = t[k].getValue() as ReturnType<T[Extract<keyof T, any>]["getValue"]>;
@@ -1625,4 +1633,6 @@ function getValueInput<T extends {[key: string]: ValuePageElement<pageObjects.st
   return result;
 }
 
-const valuesObj = getValueInput(inputGroup)
+const valuesObj = getValueInput(iGroup.__content)
+
+const valuesObj2 = {...valuesObj}
