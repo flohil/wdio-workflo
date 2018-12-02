@@ -1,49 +1,31 @@
 import { PageElementStore } from '../stores'
-import { PageElementGroup, IPageElementGroupOpts } from '.';
+import { PageElementGroup, IPageElementGroupOpts, PageElementGroupCurrently } from '.';
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
 }
 
 export interface IValueGroupOpts<
-  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends IPageElementGroupOpts<
-  Store,
   Content
 > { }
 
-export class ValueGroup<
+export class ValuePageElementGroup<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends PageElementGroup<Store, Content>
-implements Workflo.PageNode.IGetValueNode<ExtractValue<Content>> {
+implements Workflo.PageNode.IGetValueNode<ExtractValue<Content>>,
+Workflo.PageNode.ISetValueNode<ExtractValue<Content>> {
+
+  readonly currently: ValuePageElementGroupCurrently<Store, Content, this>
 
   constructor({
     ...superOpts
-  }: IValueGroupOpts<Store, Content>) {
+  }: IValueGroupOpts<Content>) {
     super(superOpts)
-  }
 
-  SetValue( {values, options} : {
-    values: Workflo.IRecObj<Workflo.Value>
-    options?: Workflo.IWalkerOptions
-  } ) {
-    return this.solve<Workflo.Value, void>({
-      values: values,
-      solve: ( node, value ) => {
-        if (isSetValueNode(node)) {
-          node.setValue(value)
-          return {
-            nodeSupported: true
-          }
-        } else {
-          return {
-            nodeSupported: false
-          }
-        }
-      }
-    }, options)
+    this.currently = new ValuePageElementGroupCurrently(this)
   }
 
   getValue() {
@@ -57,6 +39,62 @@ implements Workflo.PageNode.IGetValueNode<ExtractValue<Content>> {
     }
 
     return result;
+  }
+
+  /**
+   * Sets values after performing the initial wait on all nodes that implement the setValue method.
+   * Nodes that do not implement the setValue method will be ignored.
+   *
+   * @param values
+   */
+  setValue(values: ExtractValue<Partial<Content>>) {
+    for (const k in values) {
+      if (isSetValueNode(this.$[k])) {
+        const node = this.$[k] as any as Workflo.PageNode.ISetValueNode<any>
+        node.setValue(values[k])
+      }
+    }
+
+    return this
+  }
+}
+
+class ValuePageElementGroupCurrently<
+  Store extends PageElementStore,
+  Content extends {[key: string] : Workflo.PageNode.INode},
+  GroupType extends PageElementGroup<Store, Content>
+> extends PageElementGroupCurrently<Store, Content, GroupType>
+implements Workflo.PageNode.IGetValue<ExtractValue<Content>>,
+  Workflo.PageNode.ISetValueWithContext<ExtractValue<Content>, GroupType> {
+
+  getValue() {
+    let result = {} as ExtractValue<Content>;
+
+    for (const k in this._node.$) {
+      if (isGetValueNode(this._node.$[k])) {
+        const node = this._node.$[k] as any as Workflo.PageNode.IGetValueNode<any>
+        result[k] = node.currently.getValue()
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Sets values immediately on all nodes that implement the setValue method.
+   * Nodes that do not implement the setValue method will be ignored.
+   *
+   * @param values
+   */
+  setValue(values: ExtractValue<Partial<Content>>) {
+    for (const k in values) {
+      if (isSetValueNode(this._node.$[k])) {
+        const node = this._node.$[k] as any as Workflo.PageNode.ISetValueNode<any>
+        node.setValue(values[k])
+      }
+    }
+
+    return this._node
   }
 }
 

@@ -1,11 +1,10 @@
 import { PageElementStore } from '../stores'
 
-type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
+export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]: T[P] extends Workflo.PageNode.IGetTextNode<any> ? ReturnType<T[P]['getText']> : undefined;
 }
 
 export interface IPageElementGroupOpts<
-  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > {
   id: string,
@@ -27,12 +26,12 @@ export class PageElementGroup<
   protected _id: string
   protected _$: Content
 
-  currently: PageElementGroupCurrently<Store, Content, this>
+  readonly currently: PageElementGroupCurrently<Store, Content, this>
 
   constructor({
     id,
     content
-  }: IPageElementGroupOpts<Store, Content>) {
+  }: IPageElementGroupOpts<Content>) {
     this._id = id
     this._$ = content
 
@@ -75,13 +74,13 @@ function isGetTextNode(node: any): node is Workflo.PageNode.IGetTextNode<any> {
   return node.getText !== undefined;
 }
 
-class PageElementGroupCurrently<
+export class PageElementGroupCurrently<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
 > implements Workflo.PageNode.IGetText<ExtractText<Content>> {
 
-  protected _node: GroupType
+  protected readonly _node: GroupType
 
   constructor(node: GroupType) {
     this._node = node;

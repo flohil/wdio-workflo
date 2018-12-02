@@ -21,9 +21,9 @@ export abstract class PageElementBase<
 
   protected _timeout: number
 
-  abstract currently: PageElementBaseCurrently<Store, this>
-  abstract wait: PageElementBaseWait<Store, this>
-  abstract eventually: PageElementBaseEventually<Store, this>
+  abstract readonly currently: PageElementBaseCurrently<Store, this>
+  abstract readonly wait: PageElementBaseWait<Store, this>
+  abstract readonly eventually: PageElementBaseEventually<Store, this>
 
   constructor(
     selector: string,
@@ -78,7 +78,7 @@ export abstract class PageElementBaseCurrently<
   PageElementType extends PageElementBase<Store>
 > {
 
-  protected _node: PageElementType
+  protected readonly _node: PageElementType
 
   protected _lastActualResult: string
 
@@ -165,7 +165,7 @@ export abstract class PageElementBaseWait<
   PageElementType extends PageElementBase<Store>,
 > {
 
-  protected _node: PageElementType
+  protected readonly _node: PageElementType
 
   constructor(node: PageElementType) {
     this._node = node
@@ -285,7 +285,7 @@ export abstract class PageElementBaseEventually<
   Store extends PageElementStore,
   PageElementType extends PageElementBase<Store>
 > {
-  protected _node: PageElementType
+  protected readonly _node: PageElementType
 
   constructor(node: PageElementType) {
     this._node = node

@@ -42,7 +42,7 @@ implements Workflo.PageNode.IGetTextNode<Record<K, string>> {
 
   protected _$: Record<K, PageElementType>
 
-  currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
+  readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
 
   constructor(
     protected _selector: string,
@@ -122,7 +122,7 @@ implements Workflo.PageNode.IGetTextNode<Record<K, string>> {
   }
 }
 
-class PageElementMapCurrently<
+export class PageElementMapCurrently<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
@@ -130,7 +130,7 @@ class PageElementMapCurrently<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
 > implements Workflo.PageNode.IGetText<Record<K, string>> {
 
-  protected _node: MapType
+  protected readonly _node: MapType
 
   constructor(node: MapType) {
     this._node = node

@@ -73,13 +73,13 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
   protected _lastActualResult: string
 
-  currently: PageElementListCurrently<
+  readonly currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
   >
-  wait: PageElementListWait<
+  readonly wait: PageElementListWait<
     Store, PageElementType, PageElementOptions, this
   >
-  eventually: PageElementListEventually<
+  readonly eventually: PageElementListEventually<
     Store, PageElementType, PageElementOptions, this
   >
 
@@ -322,11 +322,12 @@ export class PageElementListCurrently<
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > implements Workflo.PageNode.IGetText<string[]> {
 
+  protected readonly _node: ListType
+
   protected _selector: string
   protected _store: Store
   protected _elementOptions: PageElementOptions
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  protected _node: ListType
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
   protected _lastActualResult: string
 
@@ -472,7 +473,7 @@ export class PageElementListWait<
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
-  protected _node: ListType
+  protected readonly _node: ListType
 
   constructor(node: ListType) {
     this._node = node
@@ -550,7 +551,7 @@ export class PageElementListEventually<
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > {
 
-  protected _node: ListType
+  protected readonly _node: ListType
 
   constructor(node: ListType) {
     this._node = node

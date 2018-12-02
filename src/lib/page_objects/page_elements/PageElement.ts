@@ -27,9 +27,9 @@ export class PageElement<
   protected _timeout: number
   protected _customScroll: Workflo.IScrollParams
 
-  currently: PageElementCurrently<Store, this>
-  wait: PageElementWait<Store, this>
-  eventually: PageElementEventually<Store, this>
+  readonly currently: PageElementCurrently<Store, this>
+  readonly wait: PageElementWait<Store, this>
+  readonly eventually: PageElementEventually<Store, this>
 
   constructor(
     selector: string,

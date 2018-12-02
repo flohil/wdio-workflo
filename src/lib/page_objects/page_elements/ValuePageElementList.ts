@@ -18,6 +18,8 @@ export class ValuePageElementList<
 > extends PageElementList<Store, PageElementType, PageElementOptions>
 implements Workflo.PageNode.IGetValueNode<ValueType[]>, Workflo.PageNode.ISetValueNode<ValueType[] | ValueType> {
 
+  readonly currently: ValuePageElementListCurrently<Store, PageElementType, PageElementOptions, this, ValueType>
+
   constructor(
     selector: string,
     opts: IValuePageElementListOpts<Store, PageElementType, PageElementOptions, ValueType>

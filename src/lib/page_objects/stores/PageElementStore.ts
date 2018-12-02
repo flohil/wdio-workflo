@@ -5,7 +5,7 @@ import {
   PageElementList, IPageElementListOpts,
   PageElementMap, IPageElementMapOpts,
   PageElementGroup, IPageElementGroupOpts,
-  ValueGroup, IValueGroupOpts, ValuePageElement, IValuePageElementOpts, IValuePageElementListOpts, ValuePageElementList, IPageElementBaseOpts
+  ValuePageElementGroup, IValueGroupOpts, ValuePageElement, IValuePageElementOpts, IValuePageElementListOpts, ValuePageElementList, IPageElementBaseOpts
 } from '../page_elements'
 
 import {
@@ -55,7 +55,6 @@ export class PageElementStore {
       Content,
       PageElementGroup<this, Content>,
       Pick<IPageElementGroupOpts<
-        this,
         Content
       >, Workflo.Store.GroupPublicKeys>
     > (
@@ -72,18 +71,13 @@ export class PageElementStore {
     return this._getGroup<
       this,
       Content,
-      ValueGroup<this, Content>,
+      ValuePageElementGroup<this, Content>,
       Pick<IValueGroupOpts<
-        this,
-        Content,
-        PageElementGroupWalker<this>,
-        IPageElementGroupWalkerOpts
+        Content
       >, Workflo.Store.GroupPublicKeys>
     > (
-      ValueGroup,
+      ValuePageElementGroup,
       {
-        walkerType: PageElementGroupWalker,
-        walkerOptions: {},
         content: content
       }
     )
@@ -395,11 +389,10 @@ export class PageElementStore {
       Content
     >,
     GroupOptions extends Pick<IPageElementGroupOpts<
-      Store,
       Content
     >, "content" >
   > (
-    groupType: { new(options: IPageElementGroupOpts<Store, Content>): GroupType },
+    groupType: { new(options: IPageElementGroupOpts<Content>): GroupType },
     groupOptions: GroupOptions
   ) : GroupType {
 

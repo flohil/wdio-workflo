@@ -16,9 +16,9 @@ export abstract class ValuePageElement<
   ValueType
 > extends PageElement<Store> implements Workflo.PageNode.IGetValueNode<ValueType>, Workflo.PageNode.ISetValueNode<ValueType> {
 
-  abstract currently: ValuePageElementCurrently<Store, this, ValueType>
-  wait: ValuePageElementWait<Store, this, ValueType>
-  eventually: ValuePageElementEventually<Store, this, ValueType>
+  abstract readonly currently: ValuePageElementCurrently<Store, this, ValueType>
+  readonly wait: ValuePageElementWait<Store, this, ValueType>
+  readonly eventually: ValuePageElementEventually<Store, this, ValueType>
 
   constructor(selector: string, opts: IPageElementOpts<Store>) {
     super(selector, opts)
