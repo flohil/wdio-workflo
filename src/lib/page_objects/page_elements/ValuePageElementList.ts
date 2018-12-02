@@ -1,6 +1,7 @@
-import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts } from './'
+import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts, PageElementListCurrently } from './'
 import { PageElementStore } from '../stores'
 import _ = require('lodash');
+import { stores } from '..';
 
 export interface IValuePageElementListOpts<
   Store extends PageElementStore,
@@ -69,5 +70,21 @@ implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValue<V
     }
 
     return this
+  }
+}
+
+class ValuePageElementListCurrently<
+  Store extends PageElementStore,
+  PageElementType extends ValuePageElement<Store, ValueType>,
+  PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
+  ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>,
+  ValueType
+> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType> {
+
+  /**
+   * Returns values of all list elements in the order they were retrieved from the DOM.
+   */
+  getValue(): ValueType[] {
+    return this.all.map(valuePageElement => valuePageElement.currently.getValue())
   }
 }

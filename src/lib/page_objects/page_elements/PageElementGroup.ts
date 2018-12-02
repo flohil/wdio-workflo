@@ -27,9 +27,9 @@ export class PageElementGroup<
   WalkerType extends PageElementGroupWalker<Store>,
   WalkerOptions extends IPageElementGroupWalkerOpts
 > implements Workflo.PageNode.INode {
-  protected __id: string
-  protected __walker: WalkerType
-  public readonly __content: Content
+  protected _id: string
+  protected _walker: WalkerType
+  protected readonly _$: Content
 
   constructor({
     id,
@@ -37,42 +37,30 @@ export class PageElementGroup<
     walkerType,
     walkerOptions
   }: IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>) {
-    const self: any = this
-
-    // merge content directly into group object,
-    // so it can be accessed via dot notation
-    for ( const key in content ) {
-      if ( content.hasOwnProperty( key ) ) {
-        if (key.length >= 2 && key.substring(0, 2) === '__') {
-          throw new Error(`Content nodes must not start with '__': ${key}`)
-        } else if ( /^[A-Z]/.test( key ) ) {
-          throw new Error(`Content nodes must not start with capital letters: ${key}`)
-        } else {
-          self[ key ] = content[ key ]
-        }
-      }
-    }
-
-    this.__id = id
-    this.__walker = new walkerType(walkerOptions)
-    this.__content = content
+    this._id = id
+    this._walker = new walkerType(walkerOptions)
+    this._$ = content
   }
 
-  __getNodeId() {
-    return this.__id
+  get $() {
+    return this._$
   }
 
-  __toJSON(): Workflo.PageNode.IElementJSON {
+  getNodeId() {
+    return this._id
+  }
+
+  toJSON(): Workflo.PageNode.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
-      nodeId: this.__id
+      nodeId: this._id
     }
   }
 
-  Solve<ValueType, ResultType>(
+  solve<ValueType, ResultType>(
     problem: Workflo.IProblem<ValueType, ResultType>,
     options: Workflo.IWalkerOptions = { throwUnmatchedKey: true, throwSolveError: true }
   ) : Workflo.IRecObj<ResultType> {
-    return this.__walker.walk( problem, this.__content, options )
+    return this._walker.walk( problem, this.$, options )
   }
 }

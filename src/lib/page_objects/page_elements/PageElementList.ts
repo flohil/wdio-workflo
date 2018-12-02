@@ -309,7 +309,7 @@ export class PageElementList<
   }
 }
 
-class PageElementListCurrently<
+export class PageElementListCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
@@ -455,7 +455,7 @@ class PageElementListCurrently<
   }
 }
 
-class PageElementListWait<
+export class PageElementListWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
@@ -533,7 +533,7 @@ class PageElementListWait<
   }
 }
 
-class PageElementListEventually<
+export class PageElementListEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,

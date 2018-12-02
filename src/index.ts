@@ -245,12 +245,12 @@ declare global {
       }
 
       interface INode {
-        __getNodeId(): string
-        __toJSON(): IElementJSON
+        getNodeId(): string
+        toJSON(): IElementJSON
       }
 
-      interface IGetText extends INode {
-        getText(): string
+      interface IGetText<TextType> extends INode {
+        getText(): TextType
       }
 
       interface IGetValue<ValueType> extends INode {
@@ -1677,8 +1677,18 @@ class InputStore extends pageObjects.stores.PageElementStore {
 
 const inputStore = new InputStore()
 
+const innerGroup = pageObjects.stores.pageElement.ValueGroup({
+  x: new Input('//asdf'),
+  y: new NumberInput('//div'),
+})
+
+const textGroup = pageObjects.stores.pageElement.TextGroup({
+  x: new Input('//asdf'),
+  y: inputStore.Element('//div')
+})
+
 // if getvalue is not supported, will always return undefined
-const iGroup = pageObjects.stores.pageElement.ValueGroup({
+const group = pageObjects.stores.pageElement.ValueGroup({
   a: new Input('//asdf'),
   b: new NumberInput('//div'),
   c: pageObjects.stores.pageElement.Element('//span'),
@@ -1689,13 +1699,12 @@ const iGroup = pageObjects.stores.pageElement.ValueGroup({
       password: "Password"
     },
     func: (mapSelector: string, mappingValue: string) => xpath(mapSelector).text(mappingValue)
-  }})
+  }}),
+  f: innerGroup,
+  g: textGroup
 })
 
-const res4 = iGroup.GetValue()
 
-import {getValueInput} from './lib/page_objects/page_elements/ValueGroup'
-
-const valuesObj = getValueInput(iGroup.__content)
+const valuesObj = group.getValue()
 
 const valuesObj2 = {...valuesObj}

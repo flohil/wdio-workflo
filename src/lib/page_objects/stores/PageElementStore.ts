@@ -445,7 +445,7 @@ export class PageElementStore {
   > (
     groupType: { new(options: IPageElementGroupOpts<Store, Content, WalkerType, WalkerOptions>): GroupType },
     groupOptions: GroupOptions
-  ) : Content & GroupType {
+  ) : GroupType {
 
     // Build id from group's elements' ids.
     // If two groups have the same content,
@@ -454,7 +454,7 @@ export class PageElementStore {
 
     for (const key in groupOptions.content) {
       if (groupOptions.content.hasOwnProperty(key)) {
-        idStr += `${groupOptions.content[key].__getNodeId()};`
+        idStr += `${groupOptions.content[key].getNodeId()};`
       }
     }
 

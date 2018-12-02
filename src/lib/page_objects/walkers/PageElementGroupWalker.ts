@@ -159,7 +159,7 @@ export class PageElementGroupWalker<Store extends PageElementStore> {
     // change context of problem's values to match subgroup
     problem.values = values
 
-    return group.Solve( problem, options )
+    return group.solve( problem, options )
   }
 
   // Solves a problem for a list of page elements.

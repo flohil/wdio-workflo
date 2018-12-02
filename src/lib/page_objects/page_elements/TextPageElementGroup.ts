@@ -2,6 +2,10 @@ import { PageElementGroup, IPageElementGroupOpts } from '.'
 import { PageElementGroupWalker, IPageElementGroupWalkerOpts } from '../walkers'
 import { PageElementStore } from '../stores'
 
+type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
+  [P in keyof T]: T[P] extends Workflo.PageNode.IGetText<any> ? ReturnType<T[P]['getText']> : undefined;
+}
+
 export interface ITextGroupOpts<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
@@ -26,34 +30,21 @@ export class TextGroup<
     super(superOpts)
   }
 
-  /**
-   * If using filter, only those element text will be returned which are defined and truthy in filter.
-   *
-   * @param param0
-   */
-  GetText( {filter, options} : {
-    filter?: Workflo.IRecObj<boolean>,
-    options?: Workflo.IWalkerOptions
-  } = {} ) {
-    return this.Solve<any, any>({
-      values: Workflo.Object.stripMaskDeep(filter),
-      solve: ( node ) => {
-        if (isGetTextNode(node)) {
-          return {
-            nodeSupported: true,
-            result: node.getText()
-          }
-        } else {
-          return {
-            nodeSupported: false
-          }
-        }
+  getText() {
+    let result = {} as ExtractText<Content>;
+
+    for (const k in this.$) {
+      if (isGetTextNode(this.$[k])) {
+        const elem = this.$[k] as any as Workflo.PageNode.IGetText<any>
+        result[k] = elem.getText()
       }
-    }, options)
+    }
+
+    return result;
   }
 }
 
 // type guards
-function isGetTextNode(node: any): node is Workflo.PageNode.IGetText {
+function isGetTextNode(node: any): node is Workflo.PageNode.IGetText<any> {
   return node.getText !== undefined;
 }

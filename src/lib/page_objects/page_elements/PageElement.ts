@@ -10,7 +10,6 @@ import {
 import { PageElementStore } from '../stores'
 import * as htmlParser from 'htmlparser2'
 import { tolerancesToString } from '../../helpers'
-import { DEFAULT_TIMEOUT } from '..'
 
 export interface IPageElementOpts<
   Store extends PageElementStore
@@ -20,7 +19,7 @@ export interface IPageElementOpts<
 
 export class PageElement<
   Store extends PageElementStore
-> extends PageElementBase<Store> implements Workflo.PageNode.IGetText {
+> extends PageElementBase<Store> implements Workflo.PageNode.IGetText<string> {
 
   protected _waitType: Workflo.WaitType
   protected _timeout: number

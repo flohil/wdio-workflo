@@ -23,44 +23,20 @@ export class ValueGroup<
   Content extends {[key: string] : Workflo.PageNode.INode},
   WalkerType extends PageElementGroupWalker<Store>,
   WalkerOptions extends IPageElementGroupWalkerOpts
-> extends TextGroup<Store, Content, WalkerType, WalkerOptions> {
+> extends TextGroup<Store, Content, WalkerType, WalkerOptions>
+implements Workflo.PageNode.IGetValue<ExtractValue<Content>> {
+
   constructor({
     ...superOpts
   }: IValueGroupOpts<Store, Content, WalkerType, WalkerOptions>) {
     super(superOpts)
   }
 
-  /**
-   * Returns node value for nodes which implement Workflo.PageNode.IGetValue
-   * or undefined for those which don't.
-   * @param param
-   */
-  GetValue( {filter, options} : {
-    filter?: Workflo.IRecObj<boolean>,
-    options?: Workflo.IWalkerOptions
-  } = {} ) {
-    return this.Solve<any, Workflo.Value>({
-      values: Workflo.Object.stripMaskDeep(filter),
-      solve: ( node ) => {
-        if (isGetValueNode(node)) {
-          return {
-            nodeSupported: true,
-            result: node.getValue()
-          }
-        } else {
-          return {
-            nodeSupported: false
-          }
-        }
-      }
-    }, options)
-  }
-
   SetValue( {values, options} : {
     values: Workflo.IRecObj<Workflo.Value>
     options?: Workflo.IWalkerOptions
   } ) {
-    return this.Solve<Workflo.Value, void>({
+    return this.solve<Workflo.Value, void>({
       values: values,
       solve: ( node, value ) => {
         if (isSetValueNode(node)) {
@@ -76,19 +52,20 @@ export class ValueGroup<
       }
     }, options)
   }
-}
 
-export function getValueInput<T extends {[key: string]: Workflo.PageNode.INode}>(t: T): ExtractValue<T> {
-  let result = {} as ExtractValue<T>;
-  for (const k in t) {
-    if (isGetValueNode(t[k])) {
-      const elem = t[k] as any as Workflo.PageNode.IGetValue<any>
-      result[k] = elem.getValue()
+  getValue() {
+    let result = {} as ExtractValue<Content>;
+
+    for (const k in this.$) {
+      if (isGetValueNode(this.$[k])) {
+        const elem = this.$[k] as any as Workflo.PageNode.IGetValue<any>
+        result[k] = elem.getValue()
+      }
     }
-  }
-  return result;
-}
 
+    return result;
+  }
+}
 
 // type guards
 function isGetValueNode(node: any): node is Workflo.PageNode.IGetValue<any> {
