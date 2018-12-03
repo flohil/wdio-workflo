@@ -15,8 +15,8 @@ export class ValuePageElementGroup<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends PageElementGroup<Store, Content>
-implements Workflo.PageNode.IGetValueNode<ExtractValue<Content>>,
-Workflo.PageNode.ISetValueNode<ExtractValue<Content>> {
+implements Workflo.PageNode.IGetValueNode<ExtractValue<Partial<Content>>>,
+Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
 
   readonly currently: ValuePageElementGroupCurrently<Store, Content, this>
 
@@ -29,7 +29,7 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Content>> {
   }
 
   getValue() {
-    let result = {} as ExtractValue<Content>;
+    let result = {} as ExtractValue<Partial<Content>>;
 
     for (const k in this.$) {
       if (isGetValueNode(this.$[k])) {
@@ -64,11 +64,11 @@ class ValuePageElementGroupCurrently<
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageElementGroupCurrently<Store, Content, GroupType>
-implements Workflo.PageNode.IGetValue<ExtractValue<Content>>,
-  Workflo.PageNode.ISetValueWithContext<ExtractValue<Content>, GroupType> {
+implements Workflo.PageNode.IGetValue<ExtractValue<Partial<Content>>>,
+  Workflo.PageNode.ISetValueWithContext<ExtractValue<Partial<Content>>, GroupType> {
 
   getValue() {
-    let result = {} as ExtractValue<Content>;
+    let result = {} as ExtractValue<Partial<Content>>;
 
     for (const k in this._node.$) {
       if (isGetValueNode(this._node.$[k])) {

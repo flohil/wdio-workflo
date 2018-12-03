@@ -20,7 +20,7 @@ export class ValuePageElementMap<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ValueType
 > extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-implements Workflo.PageNode.IGetValueNode<Record<K, ValueType>>,
+implements Workflo.PageNode.IGetValueNode<Partial<Record<K, ValueType>>>,
 Workflo.PageNode.ISetValueNode<ExtractValue<Record<K, PageElementType>>> {
 
   readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this, ValueType>
@@ -37,7 +37,7 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Record<K, PageElementType>>> {
   /**
    * Returns values of all list elements in the order they were retrieved from the DOM.
    */
-  getValue(): Record<K, ValueType> {
+  getValue(): Partial<Record<K, ValueType>> {
     return this.__getInterfaceFunc(this.$, node => node.getValue())
   }
 
@@ -68,10 +68,10 @@ class ValuePageElementMapCurrently<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>,
   ValueType
 > extends PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, MapType>
-implements Workflo.PageNode.IGetValue<Record<K, ValueType>>,
+implements Workflo.PageNode.IGetValue<Partial<Record<K, ValueType>>>,
   Workflo.PageNode.ISetValueWithContext<ExtractValue<Record<K, PageElementType>>, MapType> {
 
-  getValue(): Record<K, ValueType> {
+  getValue(): Partial<Record<K, ValueType>> {
     return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getValue())
   }
 
