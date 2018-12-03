@@ -1368,9 +1368,77 @@ class InputCurrently<
   }
 }
 
-const input = new Input('//input')
-const elem = pageObjects.stores.pageElement.Element('//div')
+class InputStore extends pageObjects.stores.PageElementStore {
+  Input(
+    selector: Workflo.XPath,
+    options?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
+  ) {
+    return this._getElement<Input<this>, IInputOpts<this>>(
+      selector,
+      Input,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
+
+  InputList(
+    selector: Workflo.XPath,
+    options?: PickPartial<
+      pageObjects.elements.IValuePageElementListOpts<
+        this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
+      >,
+      "waitType" | "timeout" | "disableCache" | "identifier",
+      "elementOptions"
+    >
+  ) {
+    return this.ValueList(
+      selector,
+      {
+        elementOptions: {},
+        elementStoreFunc: this.Input,
+        ...options
+      }
+    )
+  }
+
+  InputMap<K extends string>(
+    selector: Workflo.XPath,
+    options: PickPartial<
+      pageObjects.elements.IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      Workflo.Store.MapPublicKeys,
+      Workflo.Store.MapPublicPartialKeys
+    >
+  ) {
+    return this.ValueMap(
+      selector,
+      {
+        elementStoreFunc: this.Input,
+        elementOptions: {},
+        ...options
+      }
+    )
+  }
+}
+
+// REMOVE THIS - just for testing
+
+const inputStore = new InputStore()
+
+const input = inputStore.Input('//input')
+const elem = inputStore.Element('//div')
+const map = inputStore.InputMap('//input', {identifier: {
+  mappingObject: {
+    name: "Name",
+    password: "Password"
+  },
+  func: (mapSelector: string, mappingValue: string) => xpath(mapSelector).text(mappingValue)
+}})
 
 
 expectElement(input).toEventuallyHaveValue('//asdf')
 expectElement(input).not.toEventuallyHaveAnyValue()
+
+const valueObj = map.getValue()
+const filteredObj = map.getValue({name: "asdf", password: true})

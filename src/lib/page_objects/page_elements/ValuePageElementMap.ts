@@ -35,10 +35,15 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Record<K, PageElementType>>> {
   }
 
   /**
-   * Returns values of all list elements in the order they were retrieved from the DOM.
+   * Returns values of all list elements after performing an initial wait in the order they were retrieved from the DOM.
+   *
+   * If passing filter, only values defined in this mask will be returned.
+   * By default (if no filter is passed), all values will be returned.
+   *
+   * @param filter a filter mask
    */
-  getValue(): Partial<Record<K, ValueType>> {
-    return this.__getInterfaceFunc(this.$, node => node.getValue())
+  getValue(filter?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>> {
+    return this.__getInterfaceFunc(this.$, node => node.getValue(), filter)
   }
 
   /**
@@ -71,8 +76,16 @@ class ValuePageElementMapCurrently<
 implements Workflo.PageNode.IGetValue<Partial<Record<K, ValueType>>>,
   Workflo.PageNode.ISetValueWithContext<ExtractValue<Record<K, PageElementType>>, MapType> {
 
-  getValue(): Partial<Record<K, ValueType>> {
-    return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getValue())
+  /**
+   * Returns values of all list elements immediatly in the order they were retrieved from the DOM.
+   *
+   * If passing filter, only values defined in this mask will be returned.
+   * By default (if no filter is passed), all values will be returned.
+   *
+   * @param filter a filter mask
+   */
+  getValue(filter?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>> {
+    return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getValue(), filter)
   }
 
   setValue(values: ExtractValue<Partial<Record<K, PageElementType>>>) {

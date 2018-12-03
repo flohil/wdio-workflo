@@ -34,7 +34,7 @@ export class PageElementMap<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>
 > extends PageNode<Store>
-implements Workflo.PageNode.IGetTextNode<Record<K, string>> {
+implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
 
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _elementOptions: PageElementOptions
@@ -96,19 +96,33 @@ implements Workflo.PageNode.IGetTextNode<Record<K, string>> {
   /**
    * Helper function to map element content nodes to a value by calling a node interface function on each node.
    *
+   * If passing filter, only values defined in this mask will be returned.
+   * By default (if no filter is passed), all values will be returned.
+   *
    * @param context
    * @param getFunc
+   * @param filter a filter mask
    */
   __getInterfaceFunc<
     Store extends PageElementStore,
     K extends string,
     PageElementType extends PageElement<Store>,
     ResultType
-  >(context: Record<K, PageElementType>, getFunc: (node: PageElementType) => ResultType): Record<K, ResultType> {
+  >(
+    context: Record<K, PageElementType>,
+    getFunc: (node: PageElementType) => ResultType,
+    filter?: Partial<Record<K, ResultType>>
+  ): Record<K, ResultType> {
     let result = {} as Record<K, ResultType>;
 
     for (const k in context) {
-      result[k] = getFunc(context[k])
+      if (filter) {
+        if (typeof filter[k] !== 'undefined') {
+          result[k] = getFunc(context[k])
+        }
+      } else {
+        result[k] = getFunc(context[k])
+      }
     }
 
     return result;
@@ -117,8 +131,8 @@ implements Workflo.PageNode.IGetTextNode<Record<K, string>> {
   /**
    * Returns values of all list elements in the order they were retrieved from the DOM.
    */
-  getText(): Record<K, string> {
-    return this.__getInterfaceFunc(this.$, node => node.getText())
+  getText(filter?: Partial<Record<K, string>>): Partial<Record<K, string>> {
+    return this.__getInterfaceFunc(this.$, node => node.getText(), filter)
   }
 }
 
@@ -128,7 +142,7 @@ export class PageElementMapCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-> implements Workflo.PageNode.IGetText<Record<K, string>> {
+> implements Workflo.PageNode.IGetText<Partial<Record<K, string>>> {
 
   protected readonly _node: MapType
 
@@ -136,7 +150,7 @@ export class PageElementMapCurrently<
     this._node = node
   }
 
-  getText(): Record<K, string> {
-    return this._node.__getInterfaceFunc(this._node.$, node => node.getText())
+  getText(filter?: Partial<Record<K, string>>): Partial<Record<K, string>> {
+    return this._node.__getInterfaceFunc(this._node.$, node => node.getText(), filter)
   }
 }
