@@ -64,13 +64,17 @@ export abstract class PageElementBase<
 
   getTimeout() { return this._timeout }
 
+  abstract __equals<T>(actual: T, expected: T): boolean
+  abstract __any<T>(actual: T): boolean
+  abstract __contains<T>(actual: T, expected: T)
+
   /**
    * This function is used to write a value of an arbitrary type
    * into error messages and log outputs.
    *
    * @param value: T the value to convert to a string
    */
-  abstract typeToString<T>(value: T): string
+  abstract __typeToString<T>(value: T): string
 }
 
 export abstract class PageElementBaseCurrently<
@@ -121,10 +125,6 @@ export abstract class PageElementBaseCurrently<
     }
   }
 
-  protected abstract _equals<T>(actual: T, expected: T): boolean
-  protected abstract _any<T>(actual: T): boolean
-  protected abstract _contains<T>(actual: T, expected: T)
-
   /**
    * @param actual the actual value from the browser
    * @param expected the expected value or 0 if expected was smaller than 0
@@ -145,18 +145,18 @@ export abstract class PageElementBaseCurrently<
   }
 
   protected _compareHas<T>(expected: T, actual: T) {
-    this._lastActualResult = this._node.typeToString(actual)
-    return this._equals(actual, expected)
+    this._lastActualResult = this._node.__typeToString(actual)
+    return this._node.__equals(actual, expected)
   }
 
   protected _compareHasAny<T>(actual: T) {
-    this._lastActualResult = this._node.typeToString(actual)
-    return this._any(actual)
+    this._lastActualResult = this._node.__typeToString(actual)
+    return this._node.__any(actual)
   }
 
   protected _compareContains<T>(expected: T, actual: T) {
-    this._lastActualResult = this._node.typeToString(actual)
-    return this._contains(actual, expected)
+    this._lastActualResult = this._node.__typeToString(actual)
+    return this._node.__contains(actual, expected)
   }
 }
 
@@ -227,7 +227,7 @@ export abstract class PageElementBaseWait<
       if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
         errorMessage =
           `${this._node.constructor.name}'s ${name} "${this._node.currently.lastActualResult}" never` +
-          `${reverseStr} ${conditionStr} "${this._node.typeToString(value)}" within ${timeout} ms.\n` +
+          `${reverseStr} ${conditionStr} "${this._node.__typeToString(value)}" within ${timeout} ms.\n` +
           `( ${this._node.getSelector()} )`
       } else if (conditionType === 'any') {
         errorMessage =

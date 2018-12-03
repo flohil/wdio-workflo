@@ -13,7 +13,10 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     readonly wait: PageElementWait<Store, this>;
     readonly eventually: PageElementEventually<Store, this>;
     constructor(selector: string, { customScroll, ...superOpts }: IPageElementOpts<Store>);
-    typeToString<T>(value: T): "" | (T & string);
+    __equals<T>(actual: T, expected: T): boolean;
+    __any<T>(actual: T): boolean;
+    __contains<T>(actual: T, expected: T): boolean;
+    __typeToString<T>(value: T): "" | (T & string);
     /**
      * Return WdioElement from current state, not performing an initial wait.
      */
@@ -58,9 +61,6 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     scrollTo(params: Workflo.IScrollParams): this;
 }
 export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> implements Workflo.PageNode.IGetText<string> {
-    protected _equals<T>(actual: T, expected: T): boolean;
-    protected _any<T>(actual: T): boolean;
-    protected _contains<T>(actual: T, expected: T): boolean;
     /**
      * Overwriting this function will affect the behaviour of the function
      * exists in PageElement base class and its currently, wait and eventually containers.

@@ -10,8 +10,16 @@ import {
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
 import { DEFAULT_TIMEOUT } from '../'
+import { isArray } from 'util';
 
 export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
+
+interface IDiff {
+  index: number,
+  actual: string,
+  expected: string,
+  selector: string
+}
 
 export interface IPageElementListIdentifier<
   Store extends PageElementStore,
@@ -72,6 +80,7 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
   protected _lastActualResult: string
+  protected _lastDiff: IDiff[]
 
   readonly currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
@@ -143,6 +152,10 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
    */
   get lastActualResult() {
     return this._lastActualResult
+  }
+
+  get lastDiff() {
+    return this._lastDiff
   }
 
   initialWait() {
@@ -313,6 +326,72 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   getText() {
     return this.all.map(listElement => listElement.getText())
   }
+
+  // HELPER FUNCTIONS
+
+  __compare<T>(
+    compareFunc: (element: PageElementType, actual: T, expected?: T | T[]) => boolean, actuals?: T[], expected?: T
+  ): boolean {
+    const diffs: IDiff[] = []
+
+    if (isArray(expected) && expected.length !== actuals.length) {
+      throw new Error(
+        `${this.constructor.name}: ` +
+        `Length of expected (${expected.length}) did not match length of actual (${actuals.length})!`
+      )
+    }
+
+    for (let i = 0; i < actuals.length; ++i) {
+      const _actual = actuals[i]
+      const _expected: T = isArray(expected) ? expected[i] : expected
+      const element = this.at(i)
+
+      if (compareFunc(element, _expected, _actual)) {
+        diffs.push({
+          index: i + 1,
+          actual: (typeof _actual !== 'undefined') ? element.__typeToString(_actual) : undefined,
+          expected: (typeof _expected !== 'undefined') ? element.__typeToString(_expected) : undefined,
+          selector: element.getSelector()
+        })
+      }
+    }
+
+    this._lastDiff = diffs
+
+    return diffs.length === 0
+  }
+
+  __equals<T>(actuals: T[], expected: T | T[]): boolean {
+    return this.__compare(
+      (element: PageElementType, actual: T, expected: T) => element.__equals(actual, expected), actuals, expected
+    )
+  }
+
+  __any<T>(actuals: T[]): boolean {
+    return this.__compare(
+      (element: PageElementType, actual: T) => element.__any(actual), actuals
+    )
+  }
+
+  __contains<T>(actuals: T[], expected: T | T[]) {
+    return this.__compare(
+      (element: PageElementType, actual: T, expected: T) => element.__contains(actual, expected), actuals, expected
+    )
+  }
+
+  // CHECK STATE functions
+
+  hasText(expected: string | string[]) {
+    return this.__equals(this.getText(), expected)
+  }
+
+  hasAnyText() {
+    return this.__any(this.getText())
+  }
+
+  containsText(expected: string | string[]) {
+    return this.__contains(this.getText(), expected)
+  }
 }
 
 export class PageElementListCurrently<
@@ -463,6 +542,18 @@ export class PageElementListCurrently<
     hasLength: (
       length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
     ) => !this.hasLength(length, comparator)
+  }
+
+  hasText(expected: string | string[]) {
+    return this._node.__equals(this.getText(), expected)
+  }
+
+  hasAnyText() {
+    return this._node.__any(this.getText())
+  }
+
+  containsText(expected: string | string[]) {
+    return this._node.__contains(this.getText(), expected)
   }
 }
 

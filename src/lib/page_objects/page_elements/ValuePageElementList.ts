@@ -65,6 +65,7 @@ implements Workflo.PageNode.IGetValueNode<ValueType[]>, Workflo.PageNode.ISetVal
     if (_.isArray(values)) {
       if (allElements.length !== values.length) {
         throw new Error(
+          `${this.constructor.name}: ` +
           `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`
         )
       } else {
@@ -79,6 +80,20 @@ implements Workflo.PageNode.IGetValueNode<ValueType[]>, Workflo.PageNode.ISetVal
     }
 
     return this
+  }
+
+  // CHECK STATE
+
+  hasValue(expected: ValueType | ValueType[]) {
+    return this.__equals(this.getValue(), expected)
+  }
+
+  hasAnyValue() {
+    return this.__any(this.getText())
+  }
+
+  containsValue(expected: ValueType | ValueType[]) {
+    return this.__contains(this.getValue(), expected)
   }
 }
 
@@ -128,5 +143,19 @@ implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValueWi
     }
 
     return this._node
+  }
+
+  // CHECK STATE
+
+  hasValue(expected: ValueType | ValueType[]) {
+    return this._node.__equals(this.getValue(), expected)
+  }
+
+  hasAnyValue() {
+    return this._node.__any(this.getText())
+  }
+
+  containsValue(expected: ValueType | ValueType[]) {
+    return this._node.__contains(this.getValue(), expected)
   }
 }

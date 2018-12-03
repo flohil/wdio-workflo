@@ -3,6 +3,12 @@ import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
 export declare type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
+interface IDiff {
+    index: number;
+    actual: string;
+    expected: string;
+    selector: string;
+}
 export interface IPageElementListIdentifier<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
     mappingObject: {
         [key: string]: string;
@@ -46,6 +52,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     };
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     protected _lastActualResult: string;
+    protected _lastDiff: IDiff[];
     readonly currently: PageElementListCurrently<Store, PageElementType, PageElementOptions, this>;
     readonly wait: PageElementListWait<Store, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementListEventually<Store, PageElementType, PageElementOptions, this>;
@@ -70,6 +77,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
     readonly lastActualResult: string;
+    readonly lastDiff: IDiff[];
     initialWait(): void;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
@@ -114,6 +122,13 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getInterval(): number;
     getLength(): number;
     getText(): string[];
+    __compare<T>(compareFunc: (element: PageElementType, actual: T, expected?: T | T[]) => boolean, actuals?: T[], expected?: T): boolean;
+    __equals<T>(actuals: T[], expected: T | T[]): boolean;
+    __any<T>(actuals: T[]): boolean;
+    __contains<T>(actuals: T[], expected: T | T[]): boolean;
+    hasText(expected: string | string[]): boolean;
+    hasAnyText(): boolean;
+    containsText(expected: string | string[]): boolean;
 }
 export declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> implements Workflo.PageNode.IGetText<string[]> {
     protected readonly _node: ListType;
@@ -166,6 +181,9 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
     };
+    hasText(expected: string | string[]): boolean;
+    hasAnyText(): boolean;
+    containsText(expected: string | string[]): boolean;
 }
 export declare class PageElementListWait<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
     protected readonly _node: ListType;
@@ -195,3 +213,4 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
 export declare function excludeNot<T extends {
     not: N;
 }, N>(obj: T): Pick<T, Exclude<keyof T, "not">>;
+export {};

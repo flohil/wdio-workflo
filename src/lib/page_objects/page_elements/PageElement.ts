@@ -49,7 +49,39 @@ export class PageElement<
 
 // ABSTRACT BASE CLASS IMPLEMENTATIONS
 
-  typeToString<T>(value: T) {
+// ABSTRACT BASE CLASS IMPLEMENTATIONS
+
+  __equals<T>(actual: T, expected: T): boolean {
+    if (typeof actual === 'string' && typeof expected === 'string') {
+      return actual === expected
+    } else {
+      throw new Error(
+        `${this.constructor.name}._equals is missing an implementation for type of values: ${actual}, ${expected}`
+      )
+    }
+  }
+
+  __any<T>(actual: T): boolean {
+    if (typeof actual === 'string') {
+      return (actual) ? actual.length > 0 : false
+    } else {
+      throw new Error(
+        `${this.constructor.name}._any is missing an implementation for type of value: ${actual}`
+      )
+    }
+  }
+
+  __contains<T>(actual: T, expected: T) {
+    if (typeof actual === 'string' && typeof expected === 'string') {
+      return (actual) ? actual.indexOf(expected) > -1 : false
+    } else {
+      throw new Error(
+        `${this.constructor.name}._contains is missing an implementation for type of values: ${actual}, ${expected}`
+      )
+    }
+  }
+
+  __typeToString<T>(value: T) {
     if (typeof value === 'string') {
       return (value.length > 0) ? value : ''
     } else {
@@ -376,36 +408,6 @@ export class PageElementCurrently<
   PageElementType extends PageElement<Store>
 > extends PageElementBaseCurrently<Store, PageElementType>
 implements Workflo.PageNode.IGetText<string> {
-
-// ABSTRACT BASE CLASS IMPLEMENTATIONS
-
-  protected _equals<T>(actual: T, expected: T): boolean {
-    if (typeof actual === 'string' && typeof expected === 'string') {
-      return actual === expected
-    } else {
-      throw new Error(
-        `${this.constructor.name}._equals is missing an implementation for type of values: ${actual}, ${expected}`
-      )
-    }
-  }
-  protected _any<T>(actual: T): boolean {
-    if (typeof actual === 'string') {
-      return (actual) ? actual.length > 0 : false
-    } else {
-      throw new Error(
-        `${this.constructor.name}._any is missing an implementation for type of value: ${actual}`
-      )
-    }
-  }
-  protected _contains<T>(actual: T, expected: T) {
-    if (typeof actual === 'string' && typeof expected === 'string') {
-      return (actual) ? actual.indexOf(expected) > -1 : false
-    } else {
-      throw new Error(
-        `${this.constructor.name}._contains is missing an implementation for type of values: ${actual}, ${expected}`
-      )
-    }
-  }
 
 // GET STATE
 

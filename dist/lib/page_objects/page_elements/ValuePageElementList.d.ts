@@ -22,6 +22,9 @@ export declare class ValuePageElementList<Store extends PageElementStore, PageEl
      * @param values
      */
     setValue(values: ValueType[] | ValueType): this;
+    hasValue(expected: ValueType | ValueType[]): boolean;
+    hasAnyValue(): boolean;
+    containsValue(expected: ValueType | ValueType[]): boolean;
 }
 declare class ValuePageElementListCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType> implements Workflo.PageNode.IGetValue<ValueType[]>, Workflo.PageNode.ISetValueWithContext<ValueType[] | ValueType, ListType> {
     /**
@@ -39,5 +42,8 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
      * @param values
      */
     setValue(values: ValueType[] | ValueType): ListType;
+    hasValue(expected: ValueType | ValueType[]): boolean;
+    hasAnyValue(): boolean;
+    containsValue(expected: ValueType | ValueType[]): boolean;
 }
 export {};

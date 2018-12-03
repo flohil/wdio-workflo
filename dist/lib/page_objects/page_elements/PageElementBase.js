@@ -91,16 +91,16 @@ class PageElementBaseCurrently {
         return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0);
     }
     _compareHas(expected, actual) {
-        this._lastActualResult = this._node.typeToString(actual);
-        return this._equals(actual, expected);
+        this._lastActualResult = this._node.__typeToString(actual);
+        return this._node.__equals(actual, expected);
     }
     _compareHasAny(actual) {
-        this._lastActualResult = this._node.typeToString(actual);
-        return this._any(actual);
+        this._lastActualResult = this._node.__typeToString(actual);
+        return this._node.__any(actual);
     }
     _compareContains(expected, actual) {
-        this._lastActualResult = this._node.typeToString(actual);
-        return this._contains(actual, expected);
+        this._lastActualResult = this._node.__typeToString(actual);
+        return this._node.__contains(actual, expected);
     }
 }
 exports.PageElementBaseCurrently = PageElementBaseCurrently;
@@ -151,7 +151,7 @@ class PageElementBaseWait {
             if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
                 errorMessage =
                     `${this._node.constructor.name}'s ${name} "${this._node.currently.lastActualResult}" never` +
-                        `${reverseStr} ${conditionStr} "${this._node.typeToString(value)}" within ${timeout} ms.\n` +
+                        `${reverseStr} ${conditionStr} "${this._node.__typeToString(value)}" within ${timeout} ms.\n` +
                         `( ${this._node.getSelector()} )`;
             }
             else if (conditionType === 'any') {

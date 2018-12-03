@@ -13,6 +13,7 @@ const util_1 = require("../../utility_functions/util");
 const _1 = require(".");
 const builders_1 = require("../builders");
 const __1 = require("../");
+const util_2 = require("util");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(_selector, opts) {
@@ -61,6 +62,9 @@ class PageElementList extends _1.PageNode {
      */
     get lastActualResult() {
         return this._lastActualResult;
+    }
+    get lastDiff() {
+        return this._lastDiff;
     }
     initialWait() {
         switch (this._waitType) {
@@ -199,6 +203,48 @@ class PageElementList extends _1.PageNode {
     getText() {
         return this.all.map(listElement => listElement.getText());
     }
+    // HELPER FUNCTIONS
+    __compare(compareFunc, actuals, expected) {
+        const diffs = [];
+        if (util_2.isArray(expected) && expected.length !== actuals.length) {
+            throw new Error(`${this.constructor.name}: ` +
+                `Length of expected (${expected.length}) did not match length of actual (${actuals.length})!`);
+        }
+        for (let i = 0; i < actuals.length; ++i) {
+            const _actual = actuals[i];
+            const _expected = util_2.isArray(expected) ? expected[i] : expected;
+            const element = this.at(i);
+            if (compareFunc(element, _expected, _actual)) {
+                diffs.push({
+                    index: i + 1,
+                    actual: (typeof _actual !== 'undefined') ? element.__typeToString(_actual) : undefined,
+                    expected: (typeof _expected !== 'undefined') ? element.__typeToString(_expected) : undefined,
+                    selector: element.getSelector()
+                });
+            }
+        }
+        this._lastDiff = diffs;
+        return diffs.length === 0;
+    }
+    __equals(actuals, expected) {
+        return this.__compare((element, actual, expected) => element.__equals(actual, expected), actuals, expected);
+    }
+    __any(actuals) {
+        return this.__compare((element, actual) => element.__any(actual), actuals);
+    }
+    __contains(actuals, expected) {
+        return this.__compare((element, actual, expected) => element.__contains(actual, expected), actuals, expected);
+    }
+    // CHECK STATE functions
+    hasText(expected) {
+        return this.__equals(this.getText(), expected);
+    }
+    hasAnyText() {
+        return this.__any(this.getText());
+    }
+    containsText(expected) {
+        return this.__contains(this.getText(), expected);
+    }
 }
 exports.PageElementList = PageElementList;
 class PageElementListCurrently {
@@ -306,6 +352,15 @@ class PageElementListCurrently {
         const actualLength = this.getLength();
         this._lastActualResult = actualLength.toString();
         return util_1.compare(actualLength, length, comparator);
+    }
+    hasText(expected) {
+        return this._node.__equals(this.getText(), expected);
+    }
+    hasAnyText() {
+        return this._node.__any(this.getText());
+    }
+    containsText(expected) {
+        return this._node.__contains(this.getText(), expected);
     }
 }
 exports.PageElementListCurrently = PageElementListCurrently;

@@ -3,7 +3,7 @@ import { comparatorStr } from './utility_functions/util'
 import { elements, stores } from './page_objects'
 import * as _ from 'lodash'
 import { tolerancesToString } from './helpers'
-import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams, IPageElementOpts } from './page_objects/page_elements';
+import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams, IPageElementOpts, PageElementBaseCurrently } from './page_objects/page_elements';
 
 type ElementOrList<
   Store extends stores.PageElementStore,
@@ -758,8 +758,60 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.not.hasLength(expected, opts)
     ],
     ({actual, expected, opts}) => `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`
-  )
+  ),
+
+  // toHaveText: listCheckFunction()
 }
+
+
+
+// export function listCheckFunction<
+//   Store extends stores.PageElementStore,
+//   NodeType extends elements.PageElementList<Store, elements.PageElement<Store>, elements.IPageElementOpts<Store>>,
+//   OptsType extends Object = {timeout?: number},
+//   ExpectedType = string
+// >() {
+//   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) {
+
+//     function baseCompareFunction(
+//       node: NodeType,
+//       negativeComparison: boolean,
+//       opts: OptsType = Object.create(null),
+//       expected: ExpectedType = undefined,
+//     ): jasmine.CustomMatcherResult {
+//       let result: jasmine.CustomMatcherResult = {
+//         pass: true,
+//         message: ''
+//       };
+
+      
+
+//       return undefined
+//     }
+
+//     return {
+//       compare: (node: NodeType, opts?: OptsType): jasmine.CustomMatcherResult => {
+//         return baseCompareFunction(node, false, opts);
+//       },
+//       negativeCompare: (node: NodeType, opts?: OptsType): jasmine.CustomMatcherResult => {
+//         return baseCompareFunction(node, true, opts);
+//       }
+//     }
+//   }
+// }
+
+
+
+// function listGetText<
+//   Store extends stores.PageElementStore,
+//   ListType extends elements.PageElementList<Store, elements.PageElement<Store>, elements.IPageElementOpts<Store>>
+// >(list: ListType) {
+
+
+
+// }
+
+
 
 function valueElementMatcherFunction<
   ExpectedType,
@@ -786,7 +838,7 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
     ({node, expected}) => [
       () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
     ],
-    ({actual, expected, node}) => createLongErrorMessage('value', 'be', actual, node.typeToString(expected))
+    ({actual, expected, node}) => createLongErrorMessage('value', 'be', actual, node.__typeToString(expected))
   ),
   toHaveAnyValue: valueElementMatcherFunction(
     ({node}) => [() => node.currently.hasAnyValue(), () => node.currently.not.hasAnyValue()],
@@ -796,7 +848,7 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
     ({node, expected}) => [
       () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
     ],
-    ({actual, expected, node}) => createLongErrorMessage('value', 'contain', actual, node.typeToString(expected))
+    ({actual, expected, node}) => createLongErrorMessage('value', 'contain', actual, node.__typeToString(expected))
   ),
 
   toEventuallyHaveValue: valueElementMatcherFunction(
@@ -805,7 +857,7 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.not.hasValue(expected, opts)
     ],
     ({actual, expected, node, opts}) => createEventuallyErrorMessage(
-      'value', 'be', actual, node.typeToString(expected), opts.timeout
+      'value', 'be', actual, node.__typeToString(expected), opts.timeout
     )
   ),
   toEventuallyHaveAnyValue: valueElementMatcherFunction(
@@ -821,7 +873,7 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.not.containsValue(expected, opts)
     ],
     ({actual, expected, node, opts}) => createEventuallyErrorMessage(
-      'value', 'contain', actual, node.typeToString(expected), opts.timeout
+      'value', 'contain', actual, node.__typeToString(expected), opts.timeout
     )
   ),
 }

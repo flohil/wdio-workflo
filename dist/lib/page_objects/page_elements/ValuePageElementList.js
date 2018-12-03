@@ -38,7 +38,8 @@ class ValuePageElementList extends _1.PageElementList {
         const allElements = this.all;
         if (_.isArray(values)) {
             if (allElements.length !== values.length) {
-                throw new Error(`Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`);
+                throw new Error(`${this.constructor.name}: ` +
+                    `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`);
             }
             else {
                 for (let i = 0; i < allElements.length; i++) {
@@ -52,6 +53,16 @@ class ValuePageElementList extends _1.PageElementList {
             }
         }
         return this;
+    }
+    // CHECK STATE
+    hasValue(expected) {
+        return this.__equals(this.getValue(), expected);
+    }
+    hasAnyValue() {
+        return this.__any(this.getText());
+    }
+    containsValue(expected) {
+        return this.__contains(this.getValue(), expected);
     }
 }
 exports.ValuePageElementList = ValuePageElementList;
@@ -90,6 +101,16 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
             }
         }
         return this._node;
+    }
+    // CHECK STATE
+    hasValue(expected) {
+        return this._node.__equals(this.getValue(), expected);
+    }
+    hasAnyValue() {
+        return this._node.__any(this.getText());
+    }
+    containsValue(expected) {
+        return this._node.__contains(this.getValue(), expected);
     }
 }
 //# sourceMappingURL=ValuePageElementList.js.map

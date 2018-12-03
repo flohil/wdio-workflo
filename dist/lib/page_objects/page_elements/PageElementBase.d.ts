@@ -15,13 +15,16 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
     constructor(selector: string, { waitType, timeout, ...superOpts }: IPageElementBaseOpts<Store>);
     readonly $: Store;
     getTimeout(): number;
+    abstract __equals<T>(actual: T, expected: T): boolean;
+    abstract __any<T>(actual: T): boolean;
+    abstract __contains<T>(actual: T, expected: T): any;
     /**
      * This function is used to write a value of an arbitrary type
      * into error messages and log outputs.
      *
      * @param value: T the value to convert to a string
      */
-    abstract typeToString<T>(value: T): string;
+    abstract __typeToString<T>(value: T): string;
 }
 export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> {
     protected readonly _node: PageElementType;
@@ -45,9 +48,6 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
      * @param func
      */
     protected _execute<ResultType>(func: () => ResultType): ResultType;
-    protected abstract _equals<T>(actual: T, expected: T): boolean;
-    protected abstract _any<T>(actual: T): boolean;
-    protected abstract _contains<T>(actual: T, expected: T): any;
     /**
      * @param actual the actual value from the browser
      * @param expected the expected value or 0 if expected was smaller than 0

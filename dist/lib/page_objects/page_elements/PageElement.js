@@ -22,7 +22,32 @@ class PageElement extends _1.PageElementBase {
         this.eventually = new PageElementEventually(this);
     }
     // ABSTRACT BASE CLASS IMPLEMENTATIONS
-    typeToString(value) {
+    // ABSTRACT BASE CLASS IMPLEMENTATIONS
+    __equals(actual, expected) {
+        if (typeof actual === 'string' && typeof expected === 'string') {
+            return actual === expected;
+        }
+        else {
+            throw new Error(`${this.constructor.name}._equals is missing an implementation for type of values: ${actual}, ${expected}`);
+        }
+    }
+    __any(actual) {
+        if (typeof actual === 'string') {
+            return (actual) ? actual.length > 0 : false;
+        }
+        else {
+            throw new Error(`${this.constructor.name}._any is missing an implementation for type of value: ${actual}`);
+        }
+    }
+    __contains(actual, expected) {
+        if (typeof actual === 'string' && typeof expected === 'string') {
+            return (actual) ? actual.indexOf(expected) > -1 : false;
+        }
+        else {
+            throw new Error(`${this.constructor.name}._contains is missing an implementation for type of values: ${actual}, ${expected}`);
+        }
+    }
+    __typeToString(value) {
         if (typeof value === 'string') {
             return (value.length > 0) ? value : '';
         }
@@ -297,7 +322,7 @@ class PageElement extends _1.PageElementBase {
 exports.PageElement = PageElement;
 class PageElementCurrently extends _1.PageElementBaseCurrently {
     constructor() {
-        // ABSTRACT BASE CLASS IMPLEMENTATIONS
+        // GET STATE
         super(...arguments);
         this.not = {
             exists: () => !this.exists(),
@@ -334,31 +359,6 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
             hasHeight: (height, tolerance) => !this.hasHeight(height, tolerance),
         };
     }
-    _equals(actual, expected) {
-        if (typeof actual === 'string' && typeof expected === 'string') {
-            return actual === expected;
-        }
-        else {
-            throw new Error(`${this.constructor.name}._equals is missing an implementation for type of values: ${actual}, ${expected}`);
-        }
-    }
-    _any(actual) {
-        if (typeof actual === 'string') {
-            return (actual) ? actual.length > 0 : false;
-        }
-        else {
-            throw new Error(`${this.constructor.name}._any is missing an implementation for type of value: ${actual}`);
-        }
-    }
-    _contains(actual, expected) {
-        if (typeof actual === 'string' && typeof expected === 'string') {
-            return (actual) ? actual.indexOf(expected) > -1 : false;
-        }
-        else {
-            throw new Error(`${this.constructor.name}._contains is missing an implementation for type of values: ${actual}, ${expected}`);
-        }
-    }
-    // GET STATE
     /**
      * Overwriting this function will affect the behaviour of the function
      * exists in PageElement base class and its currently, wait and eventually containers.
