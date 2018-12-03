@@ -27,12 +27,19 @@ class PageElementGroup {
     __getNodeId() {
         return this._id;
     }
-    getText() {
+    getText(filter) {
         let result = {};
         for (const k in this.$) {
             if (isGetTextNode(this.$[k])) {
                 const elem = this.$[k];
-                result[k] = elem.getText();
+                if (filter) {
+                    if (typeof filter[k] !== 'undefined') {
+                        result[k] = elem.getText();
+                    }
+                }
+                else {
+                    result[k] = elem.getText();
+                }
             }
         }
         return result;
@@ -47,12 +54,19 @@ class PageElementGroupCurrently {
     constructor(node) {
         this._node = node;
     }
-    getText() {
+    getText(filter) {
         let result = {};
         for (const k in this._node.$) {
             if (isGetTextNode(this._node.$[k])) {
                 const elem = this._node.$[k];
-                result[k] = elem.getText();
+                if (filter) {
+                    if (typeof filter[k] !== 'undefined') {
+                        result[k] = elem.currently.getText();
+                    }
+                }
+                else {
+                    result[k] = elem.currently.getText();
+                }
             }
         }
         return result;

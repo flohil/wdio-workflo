@@ -7,10 +7,15 @@ class ValuePageElementMap extends _1.PageElementMap {
         this.currently = new ValuePageElementMapCurrently(this);
     }
     /**
-     * Returns values of all list elements in the order they were retrieved from the DOM.
+     * Returns values of all list elements after performing an initial wait in the order they were retrieved from the DOM.
+     *
+     * If passing filter, only values defined in this mask will be returned.
+     * By default (if no filter is passed), all values will be returned.
+     *
+     * @param filter a filter mask
      */
-    getValue() {
-        return this.__getInterfaceFunc(this.$, node => node.getValue());
+    getValue(filter) {
+        return this.__getInterfaceFunc(this.$, node => node.getValue(), filter);
     }
     /**
      * Sets values on all list elements.
@@ -31,8 +36,16 @@ class ValuePageElementMap extends _1.PageElementMap {
 }
 exports.ValuePageElementMap = ValuePageElementMap;
 class ValuePageElementMapCurrently extends _1.PageElementMapCurrently {
-    getValue() {
-        return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getValue());
+    /**
+     * Returns values of all list elements immediatly in the order they were retrieved from the DOM.
+     *
+     * If passing filter, only values defined in this mask will be returned.
+     * By default (if no filter is passed), all values will be returned.
+     *
+     * @param filter a filter mask
+     */
+    getValue(filter) {
+        return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getValue(), filter);
     }
     setValue(values) {
         for (const k in values) {

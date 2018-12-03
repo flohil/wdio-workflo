@@ -1421,24 +1421,3 @@ class InputStore extends pageObjects.stores.PageElementStore {
     )
   }
 }
-
-// REMOVE THIS - just for testing
-
-const inputStore = new InputStore()
-
-const input = inputStore.Input('//input')
-const elem = inputStore.Element('//div')
-const map = inputStore.InputMap('//input', {identifier: {
-  mappingObject: {
-    name: "Name",
-    password: "Password"
-  },
-  func: (mapSelector: string, mappingValue: string) => xpath(mapSelector).text(mappingValue)
-}})
-
-
-expectElement(input).toEventuallyHaveValue('//asdf')
-expectElement(input).not.toEventuallyHaveAnyValue()
-
-const valueObj = map.getValue()
-const filteredObj = map.getValue({name: "asdf", password: true})

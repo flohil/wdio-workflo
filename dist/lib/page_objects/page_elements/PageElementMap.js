@@ -42,21 +42,32 @@ class PageElementMap extends _1.PageNode {
     /**
      * Helper function to map element content nodes to a value by calling a node interface function on each node.
      *
+     * If passing filter, only values defined in this mask will be returned.
+     * By default (if no filter is passed), all values will be returned.
+     *
      * @param context
      * @param getFunc
+     * @param filter a filter mask
      */
-    __getInterfaceFunc(context, getFunc) {
+    __getInterfaceFunc(context, getFunc, filter) {
         let result = {};
         for (const k in context) {
-            result[k] = getFunc(context[k]);
+            if (filter) {
+                if (typeof filter[k] !== 'undefined') {
+                    result[k] = getFunc(context[k]);
+                }
+            }
+            else {
+                result[k] = getFunc(context[k]);
+            }
         }
         return result;
     }
     /**
      * Returns values of all list elements in the order they were retrieved from the DOM.
      */
-    getText() {
-        return this.__getInterfaceFunc(this.$, node => node.getText());
+    getText(filter) {
+        return this.__getInterfaceFunc(this.$, node => node.getText(), filter);
     }
 }
 exports.PageElementMap = PageElementMap;
@@ -64,8 +75,8 @@ class PageElementMapCurrently {
     constructor(node) {
         this._node = node;
     }
-    getText() {
-        return this._node.__getInterfaceFunc(this._node.$, node => node.getText());
+    getText(filter) {
+        return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getText(), filter);
     }
 }
 exports.PageElementMapCurrently = PageElementMapCurrently;

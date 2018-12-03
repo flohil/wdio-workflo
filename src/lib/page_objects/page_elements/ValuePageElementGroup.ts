@@ -28,13 +28,20 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
     this.currently = new ValuePageElementGroupCurrently(this)
   }
 
-  getValue() {
+  getValue(filter?: ExtractValue<Partial<Content>>) {
     let result = {} as ExtractValue<Partial<Content>>;
 
     for (const k in this.$) {
       if (isGetValueNode(this.$[k])) {
         const elem = this.$[k] as any as Workflo.PageNode.IGetValueNode<any>
-        result[k] = elem.getValue()
+
+        if (filter) {
+          if (typeof filter[k] !== 'undefined') {
+            result[k] = elem.getValue()
+          }
+        } else {
+          result[k] = elem.getValue()
+        }
       }
     }
 
@@ -67,15 +74,23 @@ class ValuePageElementGroupCurrently<
 implements Workflo.PageNode.IGetValue<ExtractValue<Partial<Content>>>,
   Workflo.PageNode.ISetValueWithContext<ExtractValue<Partial<Content>>, GroupType> {
 
-  getValue() {
+  getValue(filter?: ExtractValue<Partial<Content>>) {
     let result = {} as ExtractValue<Partial<Content>>;
 
     for (const k in this._node.$) {
       if (isGetValueNode(this._node.$[k])) {
-        const node = this._node.$[k] as any as Workflo.PageNode.IGetValueNode<any>
-        result[k] = node.currently.getValue()
+        const elem = this._node.$[k] as any as Workflo.PageNode.IGetValueNode<any>
+
+        if (filter) {
+          if (typeof filter[k] !== 'undefined') {
+            result[k] = elem.currently.getValue()
+          }
+        } else {
+          result[k] = elem.currently.getValue()
+        }
       }
     }
+
 
     return result;
   }
@@ -90,7 +105,7 @@ implements Workflo.PageNode.IGetValue<ExtractValue<Partial<Content>>>,
     for (const k in values) {
       if (isSetValueNode(this._node.$[k])) {
         const node = this._node.$[k] as any as Workflo.PageNode.ISetValueNode<any>
-        node.setValue(values[k])
+        node.currently.setValue(values[k])
       }
     }
 

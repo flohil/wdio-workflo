@@ -22,7 +22,7 @@ export interface IPageElementGroupOpts<
 export class PageElementGroup<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
-> implements Workflo.PageNode.IGetTextNode<ExtractText<Content>> {
+> implements Workflo.PageNode.IGetTextNode<ExtractText<Partial<Content>>> {
   protected _id: string
   protected _$: Content
 
@@ -55,13 +55,20 @@ export class PageElementGroup<
     return this._id
   }
 
-  getText() {
-    let result = {} as ExtractText<Content>;
+  getText(filter?: ExtractText<Partial<Content>>) {
+    let result = {} as ExtractText<Partial<Content>>;
 
     for (const k in this.$) {
       if (isGetTextNode(this.$[k])) {
         const elem = this.$[k] as any as Workflo.PageNode.IGetTextNode<any>
-        result[k] = elem.getText()
+
+        if (filter) {
+          if (typeof filter[k] !== 'undefined') {
+            result[k] = elem.getText()
+          }
+        } else {
+          result[k] = elem.getText()
+        }
       }
     }
 
@@ -78,7 +85,7 @@ export class PageElementGroupCurrently<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
-> implements Workflo.PageNode.IGetText<ExtractText<Content>> {
+> implements Workflo.PageNode.IGetText<ExtractText<Partial<Content>>> {
 
   protected readonly _node: GroupType
 
@@ -86,13 +93,20 @@ export class PageElementGroupCurrently<
     this._node = node;
   }
 
-  getText() {
-    let result = {} as ExtractText<Content>;
+  getText(filter?: ExtractText<Partial<Content>>) {
+    let result = {} as ExtractText<Partial<Content>>;
 
     for (const k in this._node.$) {
       if (isGetTextNode(this._node.$[k])) {
         const elem = this._node.$[k] as any as Workflo.PageNode.IGetTextNode<any>
-        result[k] = elem.getText()
+
+        if (filter) {
+          if (typeof filter[k] !== 'undefined') {
+            result[k] = elem.currently.getText()
+          }
+        } else {
+          result[k] = elem.currently.getText()
+        }
       }
     }
 

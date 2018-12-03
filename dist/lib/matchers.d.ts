@@ -18,24 +18,26 @@ export declare type ResultFunction<Store extends stores.PageElementStore, NodeTy
 export declare type ResultNoArgsFunction<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType> = (args: IResultFuncNoArgs<Store, NodeType, OptsType & {
     timeout?: number;
 }>) => ResultFunctionResult[];
-interface ErrorFuncArgs<OptsType, ExpectedType> {
+interface ErrorFuncArgs<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType, ExpectedType> {
     actual: string;
     expected?: ExpectedType;
+    node?: NodeType;
     opts?: OptsType;
 }
-interface ErrorFuncNoArgs<OptsType> {
+interface ErrorFuncNoArgs<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType> {
     actual: string;
+    node?: NodeType;
     opts?: OptsType;
 }
-export declare type ErrorTextFunction<OptsType, ExpectedType> = (args: ErrorFuncArgs<OptsType & {
+export declare type ErrorTextFunction<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType, ExpectedType> = (args: ErrorFuncArgs<Store, NodeType, OptsType & {
     timeout?: number;
 }, ExpectedType>) => string | string[];
-export declare type ErrorTextNoArgsFunction<OptsType> = (args: ErrorFuncNoArgs<OptsType & {
+export declare type ErrorTextNoArgsFunction<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType> = (args: ErrorFuncNoArgs<Store, NodeType, OptsType & {
     timeout?: number;
 }>) => string | string[];
 export declare function matcherFunction<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType extends Object = {
     timeout?: number;
-}, ExpectedType = string>(resultFunction: ResultFunction<Store, NodeType, OptsType, ExpectedType>, errorTextFunction: ErrorTextFunction<OptsType, ExpectedType>, noArgs?: boolean): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+}, ExpectedType = string>(resultFunction: ResultFunction<Store, NodeType, OptsType, ExpectedType>, errorTextFunction: ErrorTextFunction<Store, NodeType, OptsType, ExpectedType>, noArgs?: boolean): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: NodeType, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: NodeType, opts?: OptsType) => jasmine.CustomMatcherResult;
 } | {

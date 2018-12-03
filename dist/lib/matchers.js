@@ -20,7 +20,7 @@ function matcherFunction(resultFunction, errorTextFunction, noArgs = false) {
                     optsWithTimeout.timeout = node.getTimeout();
                 }
                 const actual = node.currently.lastActualResult;
-                const errorTexts = errorTextFunction({ actual, expected, opts: optsWithTimeout });
+                const errorTexts = errorTextFunction({ actual, expected, node, opts: optsWithTimeout });
                 let errorText = undefined;
                 if (_.isArray(errorTexts)) {
                     if (negativeComparison && errorTexts.length > 1) {
@@ -309,7 +309,7 @@ exports.listMatchers = {
     toEventuallyHaveLength: listMatcherFunction(({ node, expected, opts }) => [
         () => node.eventually.hasLength(expected, opts),
         () => node.eventually.not.hasLength(expected, opts)
-    ], ({ actual, expected, opts }) => `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`),
+    ], ({ actual, expected, opts }) => `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`)
 };
 function valueElementMatcherFunction(resultFunction, errorTextFunction) {
     return matcherFunction(resultFunction, errorTextFunction);
@@ -317,15 +317,15 @@ function valueElementMatcherFunction(resultFunction, errorTextFunction) {
 exports.valueElementMatchers = {
     toHaveValue: valueElementMatcherFunction(({ node, expected }) => [
         () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
-    ], ({ actual, expected }) => createLongErrorMessage('value', 'be', actual, expected)),
+    ], ({ actual, expected, node }) => createLongErrorMessage('value', 'be', actual, node.typeToString(expected))),
     toHaveAnyValue: valueElementMatcherFunction(({ node }) => [() => node.currently.hasAnyValue(), () => node.currently.not.hasAnyValue()], () => " to have any value"),
     toContainValue: valueElementMatcherFunction(({ node, expected }) => [
         () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
-    ], ({ actual, expected }) => createLongErrorMessage('value', 'contain', actual, expected)),
+    ], ({ actual, expected, node }) => createLongErrorMessage('value', 'contain', actual, node.typeToString(expected))),
     toEventuallyHaveValue: valueElementMatcherFunction(({ node, expected, opts }) => [
         () => node.eventually.hasValue(expected, opts),
         () => node.eventually.not.hasValue(expected, opts)
-    ], ({ actual, expected, opts }) => createEventuallyErrorMessage('value', 'be', actual, expected, opts.timeout)),
+    ], ({ actual, expected, node, opts }) => createEventuallyErrorMessage('value', 'be', actual, node.typeToString(expected), opts.timeout)),
     toEventuallyHaveAnyValue: valueElementMatcherFunction(({ node, opts }) => [
         () => node.eventually.hasAnyValue(opts),
         () => node.eventually.not.hasAnyValue(opts)
@@ -333,7 +333,7 @@ exports.valueElementMatchers = {
     toEventuallyContainValue: valueElementMatcherFunction(({ node, expected, opts }) => [
         () => node.eventually.containsValue(expected, opts),
         () => node.eventually.not.containsValue(expected, opts)
-    ], ({ actual, expected, opts }) => createEventuallyErrorMessage('value', 'contain', actual, expected, opts.timeout)),
+    ], ({ actual, expected, node, opts }) => createEventuallyErrorMessage('value', 'contain', actual, node.typeToString(expected), opts.timeout)),
 };
 function expectElement(element) {
     return expect(element);

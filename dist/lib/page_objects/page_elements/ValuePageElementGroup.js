@@ -16,12 +16,19 @@ class ValuePageElementGroup extends _1.PageElementGroup {
         super(superOpts);
         this.currently = new ValuePageElementGroupCurrently(this);
     }
-    getValue() {
+    getValue(filter) {
         let result = {};
         for (const k in this.$) {
             if (isGetValueNode(this.$[k])) {
                 const elem = this.$[k];
-                result[k] = elem.getValue();
+                if (filter) {
+                    if (typeof filter[k] !== 'undefined') {
+                        result[k] = elem.getValue();
+                    }
+                }
+                else {
+                    result[k] = elem.getValue();
+                }
             }
         }
         return result;
@@ -44,12 +51,19 @@ class ValuePageElementGroup extends _1.PageElementGroup {
 }
 exports.ValuePageElementGroup = ValuePageElementGroup;
 class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
-    getValue() {
+    getValue(filter) {
         let result = {};
         for (const k in this._node.$) {
             if (isGetValueNode(this._node.$[k])) {
-                const node = this._node.$[k];
-                result[k] = node.currently.getValue();
+                const elem = this._node.$[k];
+                if (filter) {
+                    if (typeof filter[k] !== 'undefined') {
+                        result[k] = elem.currently.getValue();
+                    }
+                }
+                else {
+                    result[k] = elem.currently.getValue();
+                }
             }
         }
         return result;
@@ -64,7 +78,7 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
         for (const k in values) {
             if (isSetValueNode(this._node.$[k])) {
                 const node = this._node.$[k];
-                node.setValue(values[k]);
+                node.currently.setValue(values[k]);
             }
         }
         return this._node;

@@ -11,10 +11,10 @@ export interface IValueGroupOpts<Content extends {
 }
 export declare class ValuePageElementGroup<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
-}> extends PageElementGroup<Store, Content> implements Workflo.PageNode.IGetValueNode<ExtractValue<Content>>, Workflo.PageNode.ISetValueNode<ExtractValue<Content>> {
+}> extends PageElementGroup<Store, Content> implements Workflo.PageNode.IGetValueNode<ExtractValue<Partial<Content>>>, Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
     readonly currently: ValuePageElementGroupCurrently<Store, Content, this>;
     constructor({ ...superOpts }: IValueGroupOpts<Content>);
-    getValue(): ExtractValue<Content>;
+    getValue(filter?: ExtractValue<Partial<Content>>): ExtractValue<Partial<Content>>;
     /**
      * Sets values after performing the initial wait on all nodes that implement the setValue method.
      * Nodes that do not implement the setValue method will be ignored.
@@ -25,8 +25,8 @@ export declare class ValuePageElementGroup<Store extends PageElementStore, Conte
 }
 declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
-}, GroupType extends PageElementGroup<Store, Content>> extends PageElementGroupCurrently<Store, Content, GroupType> implements Workflo.PageNode.IGetValue<ExtractValue<Content>>, Workflo.PageNode.ISetValueWithContext<ExtractValue<Content>, GroupType> {
-    getValue(): ExtractValue<Content>;
+}, GroupType extends PageElementGroup<Store, Content>> extends PageElementGroupCurrently<Store, Content, GroupType> implements Workflo.PageNode.IGetValue<ExtractValue<Partial<Content>>>, Workflo.PageNode.ISetValueWithContext<ExtractValue<Partial<Content>>, GroupType> {
+    getValue(filter?: ExtractValue<Partial<Content>>): ExtractValue<Partial<Content>>;
     /**
      * Sets values immediately on all nodes that implement the setValue method.
      * Nodes that do not implement the setValue method will be ignored.

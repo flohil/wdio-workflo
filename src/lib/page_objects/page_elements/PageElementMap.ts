@@ -151,6 +151,6 @@ export class PageElementMapCurrently<
   }
 
   getText(filter?: Partial<Record<K, string>>): Partial<Record<K, string>> {
-    return this._node.__getInterfaceFunc(this._node.$, node => node.getText(), filter)
+    return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getText(), filter)
   }
 }

@@ -102,7 +102,7 @@ declare global {
         toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean;
         toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
     }
-    interface CustomValueElementMatchers {
+    interface CustomValueElementMatchers extends CustomElementMatchers {
         toHaveValue(value: string): boolean;
         toHaveAnyValue(): boolean;
         toContainValue(value: string): boolean;

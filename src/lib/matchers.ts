@@ -758,7 +758,7 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.not.hasLength(expected, opts)
     ],
     ({actual, expected, opts}) => `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`
-  ),
+  )
 }
 
 function valueElementMatcherFunction<
