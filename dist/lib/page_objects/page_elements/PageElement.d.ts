@@ -4,10 +4,10 @@ import { PageElementStore } from '../stores';
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageElementBaseOpts<Store> {
     customScroll?: Workflo.IScrollParams;
 }
-export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IGetText {
+export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IGetTextNode<string> {
     protected _waitType: Workflo.WaitType;
-    protected _timeout: number;
     protected _$: Store;
+    protected _timeout: number;
     protected _customScroll: Workflo.IScrollParams;
     readonly currently: PageElementCurrently<Store, this>;
     readonly wait: PageElementWait<Store, this>;
@@ -57,7 +57,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     protected _scrollTo(params: Workflo.IScrollParams): Workflo.IScrollResult;
     scrollTo(params: Workflo.IScrollParams): this;
 }
-export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> {
+export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> implements Workflo.PageNode.IGetText<string> {
     protected _equals<T>(actual: T, expected: T): boolean;
     protected _any<T>(actual: T): boolean;
     protected _contains<T>(actual: T, expected: T): boolean;

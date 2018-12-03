@@ -40,8 +40,8 @@ class PageElementBase extends _1.PageNode {
 }
 exports.PageElementBase = PageElementBase;
 class PageElementBaseCurrently {
-    constructor(pageElement) {
-        this._pageElement = pageElement;
+    constructor(node) {
+        this._node = node;
     }
     /**
      * Whenever a function that checks the state of the GUI
@@ -57,7 +57,7 @@ class PageElementBaseCurrently {
         return this._lastActualResult;
     }
     get element() {
-        return browser.element(this._pageElement.getSelector());
+        return browser.element(this._node.getSelector());
     }
     /**
      * Executes func and, if an error occurs during execution of func,
@@ -69,8 +69,8 @@ class PageElementBaseCurrently {
             return func();
         }
         catch (error) {
-            const errorMsg = `${this._pageElement.constructor.name} could not be located on the page.\n` +
-                `( ${this._pageElement.getSelector()} )`;
+            const errorMsg = `${this._node.constructor.name} could not be located on the page.\n` +
+                `( ${this._node.getSelector()} )`;
             throw new Error(errorMsg);
         }
     }
@@ -91,37 +91,37 @@ class PageElementBaseCurrently {
         return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0);
     }
     _compareHas(expected, actual) {
-        this._lastActualResult = this._pageElement.typeToString(actual);
+        this._lastActualResult = this._node.typeToString(actual);
         return this._equals(actual, expected);
     }
     _compareHasAny(actual) {
-        this._lastActualResult = this._pageElement.typeToString(actual);
+        this._lastActualResult = this._node.typeToString(actual);
         return this._any(actual);
     }
     _compareContains(expected, actual) {
-        this._lastActualResult = this._pageElement.typeToString(actual);
+        this._lastActualResult = this._node.typeToString(actual);
         return this._contains(actual, expected);
     }
 }
 exports.PageElementBaseCurrently = PageElementBaseCurrently;
 class PageElementBaseWait {
-    constructor(pageElement) {
-        this._pageElement = pageElement;
+    constructor(node) {
+        this._node = node;
     }
     _wait(func, errorMessage) {
         try {
             func();
         }
         catch (error) {
-            throw new Error(`${this._pageElement.constructor.name}${errorMessage}.\n( ${this._pageElement.getSelector()} )`);
+            throw new Error(`${this._node.constructor.name}${errorMessage}.\n( ${this._node.getSelector()} )`);
         }
-        return this._pageElement;
+        return this._node;
     }
-    _waitWdioCheckFunc(checkTypeStr, conditionFunc, { timeout = this._pageElement.getTimeout(), reverse } = {}) {
+    _waitWdioCheckFunc(checkTypeStr, conditionFunc, { timeout = this._node.getTimeout(), reverse } = {}) {
         const reverseStr = (reverse) ? ' not' : '';
         return this._wait(() => conditionFunc({ timeout, reverse }), ` never${reverseStr} ${checkTypeStr} within ${timeout} ms`);
     }
-    _waitProperty(name, conditionType, conditionFunc, { timeout = this._pageElement.getTimeout(), reverse } = {}, value) {
+    _waitProperty(name, conditionType, conditionFunc, { timeout = this._node.getTimeout(), reverse } = {}, value) {
         const reverseStr = (reverse) ? ' not' : '';
         let conditionStr = '';
         let errorMessage = '';
@@ -150,18 +150,18 @@ class PageElementBaseWait {
         catch (error) {
             if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
                 errorMessage =
-                    `${this._pageElement.constructor.name}'s ${name} "${this._pageElement.currently.lastActualResult}" never` +
-                        `${reverseStr} ${conditionStr} "${this._pageElement.typeToString(value)}" within ${timeout} ms.\n` +
-                        `( ${this._pageElement.getSelector()} )`;
+                    `${this._node.constructor.name}'s ${name} "${this._node.currently.lastActualResult}" never` +
+                        `${reverseStr} ${conditionStr} "${this._node.typeToString(value)}" within ${timeout} ms.\n` +
+                        `( ${this._node.getSelector()} )`;
             }
             else if (conditionType === 'any') {
                 errorMessage =
-                    `${this._pageElement.constructor.name} never${reverseStr} ${conditionStr} any ${name}` +
-                        ` within ${timeout} ms.\n( ${this._pageElement.getSelector()} )`;
+                    `${this._node.constructor.name} never${reverseStr} ${conditionStr} any ${name}` +
+                        ` within ${timeout} ms.\n( ${this._node.getSelector()} )`;
             }
             throw new Error(errorMessage);
         }
-        return this._pageElement;
+        return this._node;
     }
     _waitWithinProperty(name, value, conditionFunc, opts) {
         return this._waitProperty(name, 'within', conditionFunc, opts, value);
@@ -181,8 +181,8 @@ class PageElementBaseWait {
 }
 exports.PageElementBaseWait = PageElementBaseWait;
 class PageElementBaseEventually {
-    constructor(pageElement) {
-        this._pageElement = pageElement;
+    constructor(node) {
+        this._node = node;
     }
     _eventually(func) {
         try {

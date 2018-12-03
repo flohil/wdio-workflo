@@ -45,20 +45,40 @@ export type ResultNoArgsFunction<
   OptsType
 > = (args: IResultFuncNoArgs<Store, NodeType, OptsType & {timeout?: number}>) => ResultFunctionResult[]
 
-interface ErrorFuncArgs<OptsType, ExpectedType> {
+interface ErrorFuncArgs<
+  Store extends stores.PageElementStore,
+  NodeType extends ElementOrList<Store>,
+  OptsType,
+  ExpectedType,
+> {
   actual: string;
   expected?: ExpectedType;
-  opts?: OptsType
+  node?: NodeType;
+  opts?: OptsType;
 }
 
-interface ErrorFuncNoArgs<OptsType> {
+interface ErrorFuncNoArgs<
+  Store extends stores.PageElementStore,
+  NodeType extends ElementOrList<Store>,
+  OptsType
+> {
   actual: string;
-  opts?: OptsType
+  node?: NodeType;
+  opts?: OptsType;
 }
 
-export type ErrorTextFunction<OptsType, ExpectedType> = (args: ErrorFuncArgs<OptsType & {timeout?: number}, ExpectedType>) => string | string[]
+export type ErrorTextFunction<
+  Store extends stores.PageElementStore,
+  NodeType extends ElementOrList<Store>,
+  OptsType,
+  ExpectedType,
+> = (args: ErrorFuncArgs<Store, NodeType, OptsType & {timeout?: number}, ExpectedType>) => string | string[]
 
-export type ErrorTextNoArgsFunction<OptsType> = (args: ErrorFuncNoArgs<OptsType & {timeout?: number}>) => string | string[]
+export type ErrorTextNoArgsFunction<
+  Store extends stores.PageElementStore,
+  NodeType extends ElementOrList<Store>,
+  OptsType
+> = (args: ErrorFuncNoArgs<Store, NodeType, OptsType & {timeout?: number}>) => string | string[]
 
 export function matcherFunction<
   Store extends stores.PageElementStore,
@@ -67,7 +87,7 @@ export function matcherFunction<
   ExpectedType = string
 >(
   resultFunction: ResultFunction<Store, NodeType, OptsType, ExpectedType>,
-  errorTextFunction: ErrorTextFunction<OptsType, ExpectedType>,
+  errorTextFunction: ErrorTextFunction<Store, NodeType, OptsType, ExpectedType>,
   noArgs: boolean = false
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
@@ -97,7 +117,7 @@ export function matcherFunction<
         }
 
         const actual = node.currently.lastActualResult
-        const errorTexts = errorTextFunction({actual, expected, opts: optsWithTimeout})
+        const errorTexts = errorTextFunction({actual, expected, node, opts: optsWithTimeout})
         let errorText: string = undefined
 
         if ( _.isArray( errorTexts ) ) {
@@ -167,7 +187,12 @@ function elementMatcherFunction<
     OptsType,
     ExpectedType
   >,
-  errorTextFunction: ErrorTextFunction<OptsType, ExpectedType>
+  errorTextFunction: ErrorTextFunction<
+    stores.PageElementStore,
+    elements.PageElement<stores.PageElementStore>,
+    OptsType,
+    ExpectedType
+  >
 ) {
   return matcherFunction(resultFunction, errorTextFunction)
 }
@@ -180,7 +205,11 @@ function elementMatcherNoArgsFunction<
     elements.PageElement<stores.PageElementStore>,
     OptsType
   >,
-  errorTextFunction: ErrorTextNoArgsFunction<OptsType>
+  errorTextFunction: ErrorTextNoArgsFunction<
+    stores.PageElementStore,
+    elements.PageElement<stores.PageElementStore>,
+    OptsType
+  >
 ) {
   return matcherFunction(resultFunction, errorTextFunction, true)
 }
@@ -199,7 +228,16 @@ function listMatcherFunction<
     OptsType,
     ExpectedType
   >,
-  errorTextFunction: ErrorTextFunction<OptsType, ExpectedType>
+  errorTextFunction: ErrorTextFunction<
+    stores.PageElementStore,
+    elements.PageElementList<
+      stores.PageElementStore,
+      elements.PageElement<stores.PageElementStore>,
+      IPageElementOpts<stores.PageElementStore>
+    >,
+    OptsType,
+    ExpectedType
+  >
 ) {
   return matcherFunction(resultFunction, errorTextFunction)
 }
@@ -209,10 +247,22 @@ function listMatcherNoArgsFunction<
 >(
   resultFunction: ResultNoArgsFunction<
     stores.PageElementStore,
-    elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>,
+    elements.PageElementList<
+      stores.PageElementStore,
+      elements.PageElement<stores.PageElementStore>,
+      elements.IPageElementOpts<stores.PageElementStore>
+    >,
     OptsType
   >,
-  errorTextFunction: ErrorTextNoArgsFunction<OptsType>
+  errorTextFunction: ErrorTextNoArgsFunction<
+    stores.PageElementStore,
+    elements.PageElementList<
+      stores.PageElementStore,
+      elements.PageElement<stores.PageElementStore>,
+      elements.IPageElementOpts<stores.PageElementStore>
+    >,
+    OptsType
+  >
 ) {
   return matcherFunction(resultFunction, errorTextFunction, true)
 }
@@ -712,16 +762,21 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
 }
 
 function valueElementMatcherFunction<
-  ExpectedType = string,
+  ExpectedType,
   OptsType extends Object = {timeout?: number}
 >(
   resultFunction: ResultFunction<
     stores.PageElementStore,
-    elements.ValuePageElement<stores.PageElementStore>,
+    elements.ValuePageElement<stores.PageElementStore, ExpectedType>,
     OptsType,
     ExpectedType
   >,
-  errorTextFunction: ErrorTextFunction<OptsType, ExpectedType>
+  errorTextFunction: ErrorTextFunction<
+    stores.PageElementStore,
+    elements.ValuePageElement<stores.PageElementStore, ExpectedType>,
+    OptsType,
+    ExpectedType
+  >
 ) {
   return matcherFunction(resultFunction, errorTextFunction)
 }
@@ -731,7 +786,7 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
     ({node, expected}) => [
       () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
     ],
-    ({actual, expected}) => createLongErrorMessage('value', 'be', actual, expected)
+    ({actual, expected, node}) => createLongErrorMessage('value', 'be', actual, node.typeToString(expected))
   ),
   toHaveAnyValue: valueElementMatcherFunction(
     ({node}) => [() => node.currently.hasAnyValue(), () => node.currently.not.hasAnyValue()],
@@ -741,7 +796,7 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
     ({node, expected}) => [
       () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
     ],
-    ({actual, expected}) => createLongErrorMessage('value', 'contain', actual, expected)
+    ({actual, expected, node}) => createLongErrorMessage('value', 'contain', actual, node.typeToString(expected))
   ),
 
   toEventuallyHaveValue: valueElementMatcherFunction(
@@ -749,7 +804,9 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.hasValue(expected, opts),
       () => node.eventually.not.hasValue(expected, opts)
     ],
-    ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'be', actual, expected, opts.timeout)
+    ({actual, expected, node, opts}) => createEventuallyErrorMessage(
+      'value', 'be', actual, node.typeToString(expected), opts.timeout
+    )
   ),
   toEventuallyHaveAnyValue: valueElementMatcherFunction(
     ({node, opts}) => [
@@ -763,7 +820,9 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
       () => node.eventually.containsValue(expected, opts),
       () => node.eventually.not.containsValue(expected, opts)
     ],
-    ({actual, expected, opts}) => createEventuallyErrorMessage('value', 'contain', actual, expected, opts.timeout)
+    ({actual, expected, node, opts}) => createEventuallyErrorMessage(
+      'value', 'contain', actual, node.typeToString(expected), opts.timeout
+    )
   ),
 }
 

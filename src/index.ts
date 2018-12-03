@@ -95,7 +95,7 @@ declare global {
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
   }
 
-  interface CustomValueElementMatchers {
+  interface CustomValueElementMatchers extends CustomElementMatchers {
     toHaveValue(value: string): boolean
     toHaveAnyValue(): boolean
     toContainValue(value: string): boolean
@@ -1327,3 +1327,50 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
   */
   onError?<T>(error: Error): Promise<T> | void
 }
+
+interface IInputOpts<
+  Store extends pageObjects.stores.PageElementStore
+> extends pageObjects.elements.IValuePageElementOpts<Store> {}
+
+class Input<
+  Store extends pageObjects.stores.PageElementStore
+> extends pageObjects.elements.ValuePageElement<
+  Store, string
+> {
+
+  currently: pageObjects.elements.ValuePageElementCurrently<Store, this, string>;
+
+  constructor(selector: string, opts?: IInputOpts<Store>) {
+    super(selector, opts)
+
+    this.currently = new InputCurrently(this)
+  }
+
+  setValue(value: string) {
+    this.initialWait()
+
+    return this.currently.setValue(value)
+  }
+}
+
+class InputCurrently<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends Input<Store>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+  getValue(): string {
+    return this.element.getValue()
+  }
+
+  setValue(value: string) {
+    this.element.setValue(value)
+
+    return this._node
+  }
+}
+
+const input = new Input('//input')
+const elem = pageObjects.stores.pageElement.Element('//div')
+
+
+expectElement(input).toEventuallyHaveValue('//asdf')
+expectElement(input).not.toEventuallyHaveAnyValue()

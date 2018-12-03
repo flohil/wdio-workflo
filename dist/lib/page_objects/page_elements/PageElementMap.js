@@ -38,6 +38,35 @@ class PageElementMap extends _1.PageNode {
             this._elementOptions
         ]));
     }
+    // GETTER FUNCTIONS
+    /**
+     * Helper function to map element content nodes to a value by calling a node interface function on each node.
+     *
+     * @param context
+     * @param getFunc
+     */
+    __getInterfaceFunc(context, getFunc) {
+        let result = {};
+        for (const k in context) {
+            result[k] = getFunc(context[k]);
+        }
+        return result;
+    }
+    /**
+     * Returns values of all list elements in the order they were retrieved from the DOM.
+     */
+    getText() {
+        return this.__getInterfaceFunc(this.$, node => node.getText());
+    }
 }
 exports.PageElementMap = PageElementMap;
+class PageElementMapCurrently {
+    constructor(node) {
+        this._node = node;
+    }
+    getText() {
+        return this._node.__getInterfaceFunc(this._node.$, node => node.getText());
+    }
+}
+exports.PageElementMapCurrently = PageElementMapCurrently;
 //# sourceMappingURL=PageElementMap.js.map

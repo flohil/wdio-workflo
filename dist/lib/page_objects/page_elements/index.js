@@ -8,8 +8,9 @@ __export(require("./PageElementBase"));
 __export(require("./PageElement"));
 __export(require("./ValuePageElement"));
 __export(require("./PageElementMap"));
+__export(require("./ValuePageElementMap"));
 __export(require("./PageElementList"));
+__export(require("./ValuePageElementList"));
 __export(require("./PageElementGroup"));
-__export(require("./TextGroup"));
-__export(require("./ValueGroup"));
+__export(require("./ValuePageElementGroup"));
 //# sourceMappingURL=index.js.map

@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const elements = require("./page_elements");
 exports.elements = elements;
-const walkers = require("./walkers");
-exports.walkers = walkers;
 const pages = require("./pages");
 exports.pages = pages;
 const stores = require("./stores");

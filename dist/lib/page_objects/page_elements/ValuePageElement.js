@@ -19,6 +19,10 @@ class ValuePageElement extends PageElement_1.PageElement {
     getValue() {
         return this._execute(() => this.currently.getValue());
     }
+    setValue(value) {
+        this.initialWait();
+        return this.currently.setValue(value);
+    }
 }
 exports.ValuePageElement = ValuePageElement;
 class ValuePageElementCurrently extends PageElement_1.PageElementCurrently {
@@ -57,13 +61,13 @@ class ValuePageElementWait extends PageElement_1.PageElementWait {
         });
     }
     hasValue(value, opts) {
-        return this._waitHasProperty('value', value, () => this._pageElement.currently.hasValue(value), opts);
+        return this._waitHasProperty('value', value, () => this._node.currently.hasValue(value), opts);
     }
     hasAnyValue(opts) {
-        return this._waitWdioCheckFunc('had any value', opts => this._pageElement.currently.element.waitForValue(opts.timeout, opts.reverse), opts);
+        return this._waitWdioCheckFunc('had any value', opts => this._node.currently.element.waitForValue(opts.timeout, opts.reverse), opts);
     }
     containsValue(value, opts) {
-        return this._waitContainsProperty('value', value, () => this._pageElement.currently.containsValue(value), opts);
+        return this._waitContainsProperty('value', value, () => this._node.currently.containsValue(value), opts);
     }
 }
 exports.ValuePageElementWait = ValuePageElementWait;
@@ -72,24 +76,24 @@ class ValuePageElementEventually extends PageElement_1.PageElementEventually {
         super(...arguments);
         this.not = Object.assign(super.not, {
             hasValue: (value, opts) => {
-                return this._eventually(() => this._pageElement.wait.not.hasValue(value, opts));
+                return this._eventually(() => this._node.wait.not.hasValue(value, opts));
             },
             hasAnyValue: (opts) => {
-                return this._eventually(() => this._pageElement.wait.not.hasAnyValue(opts));
+                return this._eventually(() => this._node.wait.not.hasAnyValue(opts));
             },
             containsValue: (value, opts) => {
-                return this._eventually(() => this._pageElement.wait.not.containsValue(value, opts));
+                return this._eventually(() => this._node.wait.not.containsValue(value, opts));
             }
         });
     }
     hasValue(value, opts) {
-        return this._eventually(() => this._pageElement.wait.hasValue(value, opts));
+        return this._eventually(() => this._node.wait.hasValue(value, opts));
     }
     hasAnyValue(opts) {
-        return this._eventually(() => this._pageElement.wait.hasAnyValue(opts));
+        return this._eventually(() => this._node.wait.hasAnyValue(opts));
     }
     containsValue(value, opts) {
-        return this._eventually(() => this._pageElement.wait.containsValue(value, opts));
+        return this._eventually(() => this._node.wait.containsValue(value, opts));
     }
 }
 exports.ValuePageElementEventually = ValuePageElementEventually;

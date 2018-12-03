@@ -1,4 +1,13 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("../../utility_functions/util");
 const _1 = require(".");
@@ -6,7 +15,7 @@ const builders_1 = require("../builders");
 const __1 = require("../");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
-    constructor(_selector, opts, cloneFunc) {
+    constructor(_selector, opts) {
         super(_selector, opts);
         this._selector = _selector;
         this._waitType = opts.waitType || "visible" /* visible */;
@@ -18,17 +27,27 @@ class PageElementList extends _1.PageNode {
         this._identifier = opts.identifier;
         this._identifiedObjCache = {};
         this._interval = opts.interval || 500;
-        this._cloneFunc = cloneFunc;
+        this.currently = new PageElementListCurrently(this, opts);
+        this.wait = new PageElementListWait(this);
+        this.eventually = new PageElementListEventually(this);
+    }
+    /**
+     * Use this method to initialize properties that rely on the this type
+     * which is not available in the constructor.
+     *
+     * Make sure that this method is invoked immediatly after construction.
+     *
+     * @param cloneFunc
+     */
+    init(cloneFunc) {
         this._whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
             store: this._store,
             elementStoreFunc: this._elementStoreFunc,
             elementOptions: this._elementOptions,
-            cloneFunc: this._cloneFunc,
+            cloneFunc: cloneFunc,
             getAllFunc: list => list.all
         });
-        this.currently = new PageElementListCurrently(this, opts, cloneFunc);
-        this.wait = new PageElementListWait(this);
-        this.eventually = new PageElementListEventually(this);
+        this.currently.init(cloneFunc);
     }
     /**
      * Whenever a function that checks the state of the GUI
@@ -123,7 +142,7 @@ class PageElementList extends _1.PageNode {
      * while its contents are still guaranteed to be refreshed on each access!
      *
      * Attention: this may take a long time, try to avoid: if only single elements of list
-     * are needed, use get() or| firstBy() instead.
+     * are needed, use get() or where instead.
      **/
     identify({ identifier = this._identifier, resetCache = false } = {}) {
         const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index';
@@ -156,6 +175,12 @@ class PageElementList extends _1.PageNode {
         return this._identifiedObjCache[cacheKey];
     }
     // PUBLIC GETTER FUNCTIONS
+    getTimeout() {
+        return this._timeout;
+    }
+    getInterval() {
+        return this._interval;
+    }
     getLength() {
         try {
             const value = this.elements.value;
@@ -171,32 +196,39 @@ class PageElementList extends _1.PageNode {
             return 0;
         }
     }
-    getTimeout() {
-        return this._timeout;
-    }
-    getInterval() {
-        return this._interval;
+    getText() {
+        return this.all.map(listElement => listElement.getText());
     }
 }
 exports.PageElementList = PageElementList;
 class PageElementListCurrently {
-    constructor(list, opts, cloneFunc) {
+    constructor(node, opts) {
         this.not = {
             isEmpty: () => !this.isEmpty(),
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator)
         };
-        this._selector = list.getSelector();
+        this._selector = node.getSelector();
         this._store = opts.store;
         this._elementOptions = opts.elementOptions;
         this._elementStoreFunc = opts.elementStoreFunc;
+        this._node = node;
+    }
+    /**
+     * Use this method to initialize properties that rely on the this type
+     * which is not available in the constructor.
+     *
+     * Make sure that this method is invoked immediatly after construction.
+     *
+     * @param cloneFunc
+     */
+    init(cloneFunc) {
         this._whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
             store: this._store,
             elementStoreFunc: this._elementStoreFunc,
             elementOptions: this._elementOptions,
             cloneFunc: cloneFunc,
-            getAllFunc: list => list.currently.all
+            getAllFunc: list => list.all
         });
-        this._list = list;
     }
     /**
      * Whenever a function that checks the state of the GUI
@@ -263,6 +295,9 @@ class PageElementListCurrently {
             return 0;
         }
     }
+    getText() {
+        return this.all.map(listElement => listElement.currently.getText());
+    }
     // CHECK STATE FUNCTIONS
     isEmpty() {
         return !browser.isExisting(this._selector);
@@ -273,8 +308,9 @@ class PageElementListCurrently {
         return util_1.compare(actualLength, length, comparator);
     }
 }
+exports.PageElementListCurrently = PageElementListCurrently;
 class PageElementListWait {
-    constructor(list) {
+    constructor(node) {
         this.not = {
             isEmpty: (opts) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -283,46 +319,47 @@ class PageElementListWait {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             })
         };
-        this._list = list;
+        this._node = node;
     }
     // waits until list has given length
-    hasLength(length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) {
+    hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
         browser.waitUntil(() => {
             if (reverse) {
-                return !this._list.currently.hasLength(length, comparator);
+                return !this._node.currently.hasLength(length, comparator);
             }
             else {
-                return this._list.currently.hasLength(length, comparator);
+                return this._node.currently.hasLength(length, comparator);
             }
-        }, timeout, `${this.constructor.name}: Length never became${util_1.comparatorStr(comparator)} ${length}.\n( ${this._list.getSelector()} )`, interval);
-        return this._list;
+        }, timeout, `${this.constructor.name}: Length never became${util_1.comparatorStr(comparator)} ${length}.\n( ${this._node.getSelector()} )`, interval);
+        return this._node;
     }
-    isEmpty({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) {
+    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         browser.waitUntil(() => {
             if (reverse) {
-                return !this._list.currently.isEmpty();
+                return !this._node.currently.isEmpty();
             }
             else {
-                return this._list.currently.isEmpty();
+                return this._node.currently.isEmpty();
             }
-        }, timeout, `${this.constructor.name} never became empty.\n( ${this._list.getSelector()} )`, interval);
-        return this._list;
+        }, timeout, `${this.constructor.name} never became empty.\n( ${this._node.getSelector()} )`, interval);
+        return this._node;
     }
     get any() {
-        return this._list.currently.first.wait;
+        return this._node.currently.first.wait;
     }
-    // Typescript has a bug that prevents Omit from working with generic extended types:
+    // Typescript has a bug that prevents Exclude from working with generic extended types:
     // https://github.com/Microsoft/TypeScript/issues/24791
-    // Bug will be fixed in Typescript 3.2.1
+    // Bug will be fixed in Typescript 3.3.0
     // get any() {
-    //   return _.omit(this._list.currently.first.wait, 'not') as any as Omit<PageElementTypeWait, 'not'>
+    //   return excludeNot(this._list.currently.first.wait)
     // }
     get none() {
-        return this._list.currently.first.wait.not;
+        return this._node.currently.first.wait.not;
     }
 }
+exports.PageElementListWait = PageElementListWait;
 class PageElementListEventually {
-    constructor(list) {
+    constructor(node) {
         this.not = {
             isEmpty: (opts) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -331,7 +368,7 @@ class PageElementListEventually {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             })
         };
-        this._list = list;
+        this._node = node;
     }
     _eventually(func) {
         try {
@@ -342,23 +379,29 @@ class PageElementListEventually {
             return false;
         }
     }
-    hasLength(length, { timeout = this._list.getTimeout(), comparator = "==" /* equalTo */, interval = this._list.getInterval(), reverse } = {}) {
-        return this._eventually(() => this._list.wait.hasLength(length, { timeout, comparator, interval, reverse }));
+    hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
+        return this._eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
     }
-    isEmpty({ timeout = this._list.getTimeout(), interval = this._list.getInterval(), reverse } = {}) {
-        return this._eventually(() => this._list.wait.isEmpty({ timeout, interval, reverse }));
+    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
+        return this._eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
     }
-    // Typescript has a bug that prevents Omit from working with generic extended types:
+    // Typescript has a bug that prevents Exclude from working with generic extended types:
     // https://github.com/Microsoft/TypeScript/issues/24791
-    // Bug will be fixed in Typescript 3.2.1
+    // Bug will be fixed in Typescript 3.3.0
     // get any() {
-    //   return _.omit(this._list.currently.first.eventually, 'not') as Omit<PageElementTypeEventually, 'not'>
+    //   return excludeNot(this._list.currently.first.eventually)
     // }
     get any() {
-        return this._list.currently.first.eventually;
+        return this._node.currently.first.eventually;
     }
     get none() {
-        return this._list.currently.first.eventually.not;
+        return this._node.currently.first.eventually.not;
     }
 }
+exports.PageElementListEventually = PageElementListEventually;
+function excludeNot(obj) {
+    let { not } = obj, rest = __rest(obj, ["not"]);
+    return rest;
+}
+exports.excludeNot = excludeNot;
 //# sourceMappingURL=PageElementList.js.map

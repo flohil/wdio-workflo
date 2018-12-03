@@ -9,39 +9,54 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // - all group functions must start with upper case letter
 // - all private members of group must start with _
 class PageElementGroup {
-    constructor({ id, content, walkerType, walkerOptions }) {
-        const self = this;
-        // merge content directly into group object,
-        // so it can be accessed via dot notation
-        for (const key in content) {
-            if (content.hasOwnProperty(key)) {
-                if (key.length >= 2 && key.substring(0, 2) === '__') {
-                    throw new Error(`Content nodes must not start with '__': ${key}`);
-                }
-                else if (/^[A-Z]/.test(key)) {
-                    throw new Error(`Content nodes must not start with capital letters: ${key}`);
-                }
-                else {
-                    self[key] = content[key];
-                }
-            }
-        }
-        this.__id = id;
-        this.__walker = new walkerType(walkerOptions);
-        this.__content = content;
+    constructor({ id, content }) {
+        this._id = id;
+        this._$ = content;
+        this.currently = new PageElementGroupCurrently(this);
     }
-    __getNodeId() {
-        return this.__id;
+    get $() {
+        return this._$;
     }
-    toJSON() {
+    __toJSON() {
         return {
             pageNodeType: this.constructor.name,
-            nodeId: this.__id
+            nodeId: this._id
         };
     }
-    Solve(problem, options = { throwUnmatchedKey: true, throwSolveError: true }) {
-        return this.__walker.walk(problem, this.__content, options);
+    // GETTER FUNCTIONS
+    __getNodeId() {
+        return this._id;
+    }
+    getText() {
+        let result = {};
+        for (const k in this.$) {
+            if (isGetTextNode(this.$[k])) {
+                const elem = this.$[k];
+                result[k] = elem.getText();
+            }
+        }
+        return result;
     }
 }
 exports.PageElementGroup = PageElementGroup;
+// type guards
+function isGetTextNode(node) {
+    return node.getText !== undefined;
+}
+class PageElementGroupCurrently {
+    constructor(node) {
+        this._node = node;
+    }
+    getText() {
+        let result = {};
+        for (const k in this._node.$) {
+            if (isGetTextNode(this._node.$[k])) {
+                const elem = this._node.$[k];
+                result[k] = elem.getText();
+            }
+        }
+        return result;
+    }
+}
+exports.PageElementGroupCurrently = PageElementGroupCurrently;
 //# sourceMappingURL=PageElementGroup.js.map

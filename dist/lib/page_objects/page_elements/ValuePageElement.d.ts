@@ -2,20 +2,21 @@ import { PageElement, IPageElementOpts, PageElementCurrently, PageElementWait, P
 import { PageElementStore } from '../stores';
 export interface IValuePageElementOpts<Store extends PageElementStore> extends IPageElementOpts<Store> {
 }
-export declare abstract class ValuePageElement<Store extends PageElementStore> extends PageElement<Store> implements Workflo.PageNode.IGetValue, Workflo.PageNode.ISetValue {
-    abstract readonly currently: ValuePageElementCurrently<Store, this>;
-    readonly wait: ValuePageElementWait<Store, this>;
-    readonly eventually: ValuePageElementEventually<Store, this>;
+export declare abstract class ValuePageElement<Store extends PageElementStore, ValueType> extends PageElement<Store> implements Workflo.PageNode.IGetValueNode<ValueType>, Workflo.PageNode.ISetValueNode<ValueType> {
+    abstract readonly currently: ValuePageElementCurrently<Store, this, ValueType>;
+    readonly wait: ValuePageElementWait<Store, this, ValueType>;
+    readonly eventually: ValuePageElementEventually<Store, this, ValueType>;
     constructor(selector: string, opts: IPageElementOpts<Store>);
     initialWait(): this;
-    getValue<T>(): T;
-    abstract setValue<T>(value: T): this;
+    getValue(): ValueType;
+    setValue(value: ValueType): this;
 }
-export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store>> extends PageElementCurrently<Store, PageElementType> {
-    abstract getValue<T>(): T;
-    hasValue<T>(value: T): boolean;
+export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> implements Workflo.PageNode.IGetValue<ValueType>, Workflo.PageNode.ISetValueWithContext<ValueType, PageElementType> {
+    abstract getValue(): ValueType;
+    abstract setValue(value: ValueType): PageElementType;
+    hasValue(value: ValueType): boolean;
     hasAnyValue(): boolean;
-    containsValue<T>(value: T): any;
+    containsValue(value: ValueType): any;
     not: {
         exists: () => boolean;
         isVisible: () => boolean;
@@ -50,15 +51,15 @@ export declare abstract class ValuePageElementCurrently<Store extends PageElemen
         hasWidth: (width: number, tolerance?: number) => boolean;
         hasHeight: (height: number, tolerance?: number) => boolean;
     } & {
-        hasValue: <T>(value: T) => boolean;
+        hasValue: (value: ValueType) => boolean;
         hasAnyValue: () => boolean;
-        containsValue: <T>(value: T) => boolean;
+        containsValue: (value: ValueType) => boolean;
     };
 }
-export declare class ValuePageElementWait<Store extends PageElementStore, PageElementType extends ValuePageElement<Store>> extends PageElementWait<Store, PageElementType> {
-    hasValue<T>(value: T, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
+export declare class ValuePageElementWait<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementWait<Store, PageElementType> {
+    hasValue(value: ValueType, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
     hasAnyValue(opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
-    containsValue<T>(value: T, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
+    containsValue(value: ValueType, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
     not: {
         exists: (opts?: Workflo.IWDIOParamsOptional) => PageElementType;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => PageElementType;
@@ -105,15 +106,15 @@ export declare class ValuePageElementWait<Store extends PageElementStore, PageEl
             tolerance?: number;
         } & Workflo.IWDIOParamsOptional) => PageElementType;
     } & {
-        hasValue: <T>(value: T, opts?: Workflo.IWDIOParamsOptional) => PageElementType;
+        hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => PageElementType;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => PageElementType;
-        containsValue: <T>(value: T, opts?: Workflo.IWDIOParamsOptional) => PageElementType;
+        containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => PageElementType;
     };
 }
-export declare class ValuePageElementEventually<Store extends PageElementStore, PageElementType extends ValuePageElement<Store>> extends PageElementEventually<Store, PageElementType> {
-    hasValue<T>(value: T, opts?: Workflo.IWDIOParamsOptional): boolean;
+export declare class ValuePageElementEventually<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementEventually<Store, PageElementType> {
+    hasValue(value: ValueType, opts?: Workflo.IWDIOParamsOptional): boolean;
     hasAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean;
-    containsValue<T>(value: T, opts?: Workflo.IWDIOParamsOptional): boolean;
+    containsValue(value: ValueType, opts?: Workflo.IWDIOParamsOptional): boolean;
     not: {
         exists: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
@@ -160,8 +161,8 @@ export declare class ValuePageElementEventually<Store extends PageElementStore, 
             tolerance?: number;
         } & Workflo.IWDIOParamsOptional) => boolean;
     } & {
-        hasValue: <T>(value: T, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => boolean;
-        containsValue: <T>(value: T, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => boolean;
     };
 }

@@ -119,7 +119,7 @@ declare global {
     interface ValueElementMatchers extends CustomValueElementMatchers {
         not: CustomValueElementMatchers;
     }
-    function expectElement<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>>(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store> ? ValueElementMatchers : ElementMatchers;
+    function expectElement<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ? ValueElementMatchers : ElementMatchers;
     function expectList<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): ListMatchers;
     namespace WebdriverIO {
         interface Client<T> {
@@ -183,7 +183,6 @@ declare global {
             };
             closestContainerIncludesHidden?: boolean;
         }
-        type PageElementOptions = "timeout" | "waitType" | "customScroll";
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }
@@ -199,6 +198,17 @@ declare global {
         interface IAttributeArgs extends IAnyAttributeArgs {
             value: string;
         }
+        namespace Store {
+            type BaseKeys = "timeout" | "waitType";
+            type GroupPublicKeys = "content";
+            type ElementPublicKeys = BaseKeys | "customScroll";
+            type ListPublicKeys = BaseKeys | "disableCache" | "identifier";
+            type ListPublicPartialKeys = "elementOptions";
+            type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | "elementStoreFunc";
+            type MapPublicKeys = "identifier";
+            type MapPublicPartialKeys = "elementOptions";
+            type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc";
+        }
         namespace PageNode {
             interface IElementJSON {
                 pageNodeType: string;
@@ -206,17 +216,34 @@ declare global {
             }
             interface INode {
                 __getNodeId(): string;
-                toJSON(): IElementJSON;
+                __toJSON(): IElementJSON;
             }
-            interface IGetText extends INode {
-                getText(): string;
+            interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
+                currently: IGetText<TextType>;
             }
-            interface IGetValue extends INode {
-                getValue<T>(): T;
+            interface IGetValueNode<ValueType> extends INode, IGetValue<ValueType> {
+                currently: IGetValue<ValueType>;
             }
-            interface ISetValue extends INode {
-                setValue<T>(value: T): this;
+            interface ISetValueNode<ValueType> extends INode, ISetValue<ValueType> {
+                currently: ISetValue<ValueType>;
             }
+            interface IGetText<TextType> {
+                getText(): TextType;
+            }
+            interface IGetValue<ValueType> {
+                getValue(): ValueType;
+            }
+            interface ISetValue<ValueType> {
+                setValue(value: ValueType): this;
+            }
+            interface ISetValueWithContext<ValueType, ContextType> {
+                setValue(value: ValueType): ContextType;
+            }
+            type Values<T extends {
+                [key: string]: Workflo.PageNode.INode;
+            }> = Partial<{
+                [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
+            }>;
         }
         interface IProblem<ValueType, ResultType> {
             values: IRecObj<ValueType>;

@@ -22,22 +22,22 @@ export interface IPageElementListWaitLengthReverseParams extends IPageElementLis
     reverse?: boolean;
 }
 export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store> {
+    elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
+    elementOptions: PageElementOptions;
     waitType?: Workflo.WaitType;
     timeout?: number;
     interval?: number;
     disableCache?: boolean;
-    elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    elementOptions: PageElementOptions;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
-export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> {
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IGetTextNode<string[]> {
     protected _selector: string;
+    protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
+    protected _elementOptions: PageElementOptions;
     protected _waitType: Workflo.WaitType;
     protected _timeout: number;
     protected _interval: number;
     protected _disableCache: boolean;
-    protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    protected _elementOptions: PageElementOptions;
     protected _identifier: IPageElementListIdentifier<Store, PageElementType>;
     protected _identifiedObjCache: {
         [key: string]: {
@@ -45,12 +45,20 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
-    protected _cloneFunc: (subSelector: string) => this;
     protected _lastActualResult: string;
     readonly currently: PageElementListCurrently<Store, PageElementType, PageElementOptions, this>;
     readonly wait: PageElementListWait<Store, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementListEventually<Store, PageElementType, PageElementOptions, this>;
-    constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: <T extends PageElementList<Store, PageElementType, PageElementOptions>>(selector: Workflo.XPath) => T);
+    constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    /**
+     * Use this method to initialize properties that rely on the this type
+     * which is not available in the constructor.
+     *
+     * Make sure that this method is invoked immediatly after construction.
+     *
+     * @param cloneFunc
+     */
+    init(cloneFunc: (selector: Workflo.XPath) => this): void;
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
@@ -94,7 +102,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * while its contents are still guaranteed to be refreshed on each access!
      *
      * Attention: this may take a long time, try to avoid: if only single elements of list
-     * are needed, use get() or| firstBy() instead.
+     * are needed, use get() or where instead.
      **/
     identify({ identifier, resetCache }?: {
         identifier?: IPageElementListIdentifier<Store, PageElementType>;
@@ -102,19 +110,29 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     }): {
         [key: string]: PageElementType;
     };
-    getLength(): number;
     getTimeout(): number;
     getInterval(): number;
+    getLength(): number;
+    getText(): string[];
 }
-declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+export declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> implements Workflo.PageNode.IGetText<string[]> {
+    protected readonly _node: ListType;
     protected _selector: string;
     protected _store: Store;
     protected _elementOptions: PageElementOptions;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
     protected _lastActualResult: string;
-    protected _list: ListType;
-    constructor(list: ListType, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>, cloneFunc: (selector: Workflo.XPath) => ListType);
+    constructor(node: ListType, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    /**
+     * Use this method to initialize properties that rely on the this type
+     * which is not available in the constructor.
+     *
+     * Make sure that this method is invoked immediatly after construction.
+     *
+     * @param cloneFunc
+     */
+    init(cloneFunc: (selector: Workflo.XPath) => ListType): void;
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
@@ -141,6 +159,7 @@ declare class PageElementListCurrently<Store extends PageElementStore, PageEleme
      */
     readonly all: PageElementType[];
     getLength(): number;
+    getText(): string[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
     not: {
@@ -148,9 +167,9 @@ declare class PageElementListCurrently<Store extends PageElementStore, PageEleme
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
     };
 }
-declare class PageElementListWait<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
-    protected _list: ListType;
-    constructor(list: ListType);
+export declare class PageElementListWait<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+    protected readonly _node: ListType;
+    constructor(node: ListType);
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): ListType;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
     readonly any: PageElementType["wait"];
@@ -160,9 +179,9 @@ declare class PageElementListWait<Store extends PageElementStore, PageElementTyp
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
     };
 }
-declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
-    protected _list: ListType;
-    constructor(list: ListType);
+export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+    protected readonly _node: ListType;
+    constructor(node: ListType);
     protected _eventually(func: () => void): boolean;
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
@@ -173,4 +192,6 @@ declare class PageElementListEventually<Store extends PageElementStore, PageElem
         hasLength: (length: number, opts: IPageElementListWaitLengthParams) => boolean;
     };
 }
-export {};
+export declare function excludeNot<T extends {
+    not: N;
+}, N>(obj: T): Pick<T, Exclude<keyof T, "not">>;
