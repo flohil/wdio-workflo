@@ -330,26 +330,26 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   // HELPER FUNCTIONS
 
   __compare<T>(
-    compareFunc: (element: PageElementType, actual: T, expected?: T | T[]) => boolean, actuals?: T[], expected?: T
+    compareFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]
   ): boolean {
+    const all = this.all
     const diffs: IDiff[] = []
 
-    if (isArray(expected) && expected.length !== actuals.length) {
+    if (isArray(expected) && expected.length !== all.length) {
       throw new Error(
         `${this.constructor.name}: ` +
-        `Length of expected (${expected.length}) did not match length of actual (${actuals.length})!`
+        `Length of expected (${expected.length}) did not match length of list (${all.length})!`
       )
     }
 
-    for (let i = 0; i < actuals.length; ++i) {
-      const _actual = actuals[i]
+    for (let i = 0; i < all.length; ++i) {
       const _expected: T = isArray(expected) ? expected[i] : expected
-      const element = this.at(i)
+      const element = all[i]
 
-      if (compareFunc(element, _expected, _actual)) {
+      if (compareFunc(element, _expected)) {
         diffs.push({
           index: i + 1,
-          actual: (typeof _actual !== 'undefined') ? element.__typeToString(_actual) : undefined,
+          actual: element.currently.lastActualResult,
           expected: (typeof _expected !== 'undefined') ? element.__typeToString(_expected) : undefined,
           selector: element.getSelector()
         })
@@ -359,38 +359,6 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
     this._lastDiff = diffs
 
     return diffs.length === 0
-  }
-
-  __equals<T>(actuals: T[], expected: T | T[]): boolean {
-    return this.__compare(
-      (element: PageElementType, actual: T, expected: T) => element.__equals(actual, expected), actuals, expected
-    )
-  }
-
-  __any<T>(actuals: T[]): boolean {
-    return this.__compare(
-      (element: PageElementType, actual: T) => element.__any(actual), actuals
-    )
-  }
-
-  __contains<T>(actuals: T[], expected: T | T[]) {
-    return this.__compare(
-      (element: PageElementType, actual: T, expected: T) => element.__contains(actual, expected), actuals, expected
-    )
-  }
-
-  // CHECK STATE functions
-
-  hasText(expected: string | string[]) {
-    return this.__equals(this.getText(), expected)
-  }
-
-  hasAnyText() {
-    return this.__any(this.getText())
-  }
-
-  containsText(expected: string | string[]) {
-    return this.__contains(this.getText(), expected)
   }
 }
 
@@ -537,23 +505,32 @@ export class PageElementListCurrently<
     return compare(actualLength, length, comparator)
   }
 
+  hasText(text: string | string[]) {
+    return this._node.__compare((element, expected) => element.currently.hasText(expected), text)
+  }
+
+  hasAnyText() {
+    return this._node.__compare(element => element.currently.hasAnyText())
+  }
+
+  containsText(text: string | string[]) {
+    return this._node.__compare((element, expected) => element.currently.containsText(expected), text)
+  }
+
   not = {
     isEmpty: () => !this.isEmpty(),
     hasLength: (
       length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
-    ) => !this.hasLength(length, comparator)
-  }
-
-  hasText(expected: string | string[]) {
-    return this._node.__equals(this.getText(), expected)
-  }
-
-  hasAnyText() {
-    return this._node.__any(this.getText())
-  }
-
-  containsText(expected: string | string[]) {
-    return this._node.__contains(this.getText(), expected)
+    ) => !this.hasLength(length, comparator),
+    hasText: (text: string | string[]) => {
+      return this._node.__compare((element, expected) => element.currently.not.hasText(expected), text)
+    },
+    hasAnyText: () => {
+      return this._node.__compare(element => element.currently.not.hasAnyText())
+    },
+    containsText: (text: string | string[]) => {
+      return this._node.__compare((element, expected) => element.currently.not.containsText(expected), text)
+    }
   }
 }
 
@@ -657,6 +634,21 @@ export class PageElementListEventually<
     }
   }
 
+  // Typescript has a bug that prevents Exclude from working with generic extended types:
+  // https://github.com/Microsoft/TypeScript/issues/24791
+  // Bug will be fixed in Typescript 3.3.0
+  // get any() {
+  //   return excludeNot(this._list.currently.first.eventually)
+  // }
+
+  get any() {
+    return this._node.currently.first.eventually as any as PageElementType['eventually']
+  }
+
+  get none(): PageElementType['eventually']['not'] {
+    return this._node.currently.first.eventually.not
+  }
+
   hasLength( length: number, {
     timeout = this._node.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
@@ -674,19 +666,16 @@ export class PageElementListEventually<
     return this._eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  // Typescript has a bug that prevents Exclude from working with generic extended types:
-  // https://github.com/Microsoft/TypeScript/issues/24791
-  // Bug will be fixed in Typescript 3.3.0
-  // get any() {
-  //   return excludeNot(this._list.currently.first.eventually)
-  // }
-
-  get any() {
-    return this._node.currently.first.eventually as any as PageElementType['eventually']
+  hasText(text: string | string[]) {
+    return this._node.__compare((element, expected) => element.eventually.hasText(expected), text)
   }
 
-  get none(): PageElementType['eventually']['not'] {
-    return this._node.currently.first.eventually.not
+  hasAnyText() {
+    return this._node.__compare(element => element.eventually.hasAnyText())
+  }
+
+  containsText(text: string | string[]) {
+    return this._node.__compare((element, expected) => element.eventually.containsText(expected), text)
   }
 
   not = {
@@ -695,7 +684,16 @@ export class PageElementListEventually<
     }),
     hasLength: (length: number, opts: IPageElementListWaitLengthParams) => this.hasLength(length, {
       timeout: opts.timeout, interval: opts.interval, reverse: true
-    })
+    }),
+    hasText: (text: string | string[]) => {
+      return this._node.__compare((element, expected) => element.eventually.not.hasText(expected), text)
+    },
+    hasAnyText: () => {
+      return this._node.__compare(element => element.eventually.not.hasAnyText())
+    },
+    containsText: (text: string | string[]) => {
+      return this._node.__compare((element, expected) => element.eventually.not.containsText(expected), text)
+    }
   }
 }
 

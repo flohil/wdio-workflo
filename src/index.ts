@@ -250,7 +250,8 @@ declare global {
       }
 
       interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
-        currently: IGetText<TextType>
+        currently: IGetText<TextType> & ICheckTextCurrently<TextType>
+        eventually: ICheckTextEventually<TextType>
       }
 
       interface IGetValueNode<ValueType> extends INode, IGetValue<ValueType> {
@@ -263,6 +264,22 @@ declare global {
 
       interface IGetText<TextType> {
         getText(): TextType
+      }
+
+      interface ICheckTextCurrently<TextType> {
+        hasText(text: TextType): boolean
+        hasAnyText(): boolean
+        containsText(text: TextType): boolean
+
+        not: Omit<ICheckTextCurrently<TextType>, 'not'>
+      }
+
+      interface ICheckTextEventually<TextType> {
+        hasText(text: TextType, opts?: IWDIOParamsOptional): boolean
+        hasAnyText(opts?: IWDIOParamsOptional): boolean
+        containsText(text: TextType, opts?: IWDIOParamsOptional): boolean
+
+        not: Omit<ICheckTextEventually<TextType>, 'not'>
       }
 
       interface IGetValue<ValueType> {
@@ -1328,6 +1345,11 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
   onError?<T>(error: Error): Promise<T> | void
 }
 
+
+
+
+
+
 interface IInputOpts<
   Store extends pageObjects.stores.PageElementStore
 > extends pageObjects.elements.IValuePageElementOpts<Store> {}
@@ -1367,6 +1389,44 @@ class InputCurrently<
     return this._node
   }
 }
+
+class NumberInput<
+  Store extends pageObjects.stores.PageElementStore,
+> extends pageObjects.elements.ValuePageElement<
+  Store, number
+> {
+
+  currently: pageObjects.elements.ValuePageElementCurrently<Store, this, number>;
+
+  constructor(selector: string, opts?: IInputOpts<Store>) {
+    super(selector, opts)
+
+    this.currently = new NumberInputCurrently(this)
+  }
+
+  setValue(value: number) {
+    this.initialWait()
+
+    return this.currently.setValue(value)
+  }
+}
+
+class NumberInputCurrently<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends NumberInput<Store>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, number> {
+  getValue(): number {
+    return parseInt(this.element.getValue())
+  }
+
+  setValue(value: number) {
+    this.element.setValue(value)
+
+    return this._node
+  }
+}
+
+// achieved mapping type to input value!!!
 
 class InputStore extends pageObjects.stores.PageElementStore {
   Input(
@@ -1421,3 +1481,60 @@ class InputStore extends pageObjects.stores.PageElementStore {
     )
   }
 }
+
+const inputStore = new InputStore()
+
+const innerGroup = pageObjects.stores.pageElement.ValueGroup({
+  x: new Input('//asdf'),
+  y: new NumberInput('//div'),
+})
+
+const textGroup = pageObjects.stores.pageElement.ElementGroup({
+  x: new Input('//asdf'),
+  y: inputStore.Element('//div')
+})
+
+// if getvalue is not supported, will always return undefined
+const group = pageObjects.stores.pageElement.ValueGroup({
+  a: new Input('//asdf'),
+  b: new NumberInput('//div'),
+  c: pageObjects.stores.pageElement.Element('//span'),
+  d: inputStore.InputList('//input'),
+  e: inputStore.InputMap('//input', {identifier: {
+    mappingObject: {
+      name: "Name",
+      password: "Password"
+    },
+    func: (mapSelector: string, mappingValue: string) => xpath(mapSelector).text(mappingValue)
+  }}),
+  f: innerGroup,
+  g: textGroup
+})
+
+
+const valuesObj = group.getValue()
+const valuesObj2 = {...valuesObj}
+const valuesObj3 = group.currently.getValue()
+const valuesObj4 = group.currently.getText()
+const valuesObj5 = group.getText()
+const valuesObj6 = {...valuesObj5}
+const valuesObj7 = {...valuesObj3}
+
+const values: Workflo.PageNode.Values<typeof innerGroup.$> = {
+  x: 'jodel',
+  y: 3
+}
+
+const otherValues = {
+  a: 'asdf'
+}
+
+const mapValues: Workflo.PageNode.Values<typeof group.$.e.$> = {
+  name: 'asdf'
+}
+
+innerGroup.setValue(values)
+innerGroup.currently.setValue(values)
+
+group.$.e.setValue(mapValues)
+group.$.e.currently.setValue(mapValues)
