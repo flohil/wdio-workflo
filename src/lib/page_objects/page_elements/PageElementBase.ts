@@ -62,6 +62,20 @@ export abstract class PageElementBase<
     return this._$
   }
 
+  /**
+   * Whenever a function that checks the state of the GUI
+   * by comparing an expected result to an actual result is called,
+   * the actual and expected result and the selector will be stored in 'lastDiff'.
+   *
+   * This can be useful to determine why the last invocation of such a function returned false.
+   *
+   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
+   * defined in the .currently, .eventually and .wait API of PageElement.
+   */
+  get __lastDiff() {
+    return this.currently.__lastDiff
+  }
+
   getTimeout() { return this._timeout }
 
   abstract __equals<T>(actual: T, expected: T): boolean
@@ -84,7 +98,7 @@ export abstract class PageElementBaseCurrently<
 
   protected readonly _node: PageElementType
 
-  protected _lastActualResult: string
+  protected _lastDiff: Workflo.PageNode.IDiff
 
   constructor(node: PageElementType) {
     this._node = node
@@ -93,15 +107,15 @@ export abstract class PageElementBaseCurrently<
   /**
    * Whenever a function that checks the state of the GUI
    * by comparing an expected result to an actual result is called,
-   * the actual result will be stored in 'lastActualResult'.
+   * the actual and expected result and the selector will be stored in 'lastDiff'.
    *
    * This can be useful to determine why the last invocation of such a function returned false.
    *
    * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
    * defined in the .currently, .eventually and .wait API of PageElement.
    */
-  get lastActualResult() {
-    return this._lastActualResult
+  get __lastDiff(): Workflo.PageNode.IDiff {
+    return _.merge(this._lastDiff, {selector: this._node.getSelector()})
   }
 
   get element() {
@@ -125,6 +139,16 @@ export abstract class PageElementBaseCurrently<
     }
   }
 
+  protected _writeLastDiff<T>(actual: T, expected?: T) {
+    this._lastDiff = {
+      actual: this._node.__typeToString(actual),
+    }
+
+    if (typeof expected !== 'undefined') {
+      this._lastDiff.expected = this._node.__typeToString(expected)
+    }
+  }
+
   /**
    * @param actual the actual value from the browser
    * @param expected the expected value or 0 if expected was smaller than 0
@@ -145,17 +169,20 @@ export abstract class PageElementBaseCurrently<
   }
 
   protected _compareHas<T>(expected: T, actual: T) {
-    this._lastActualResult = this._node.__typeToString(actual)
+    this._writeLastDiff(actual, expected)
+
     return this._node.__equals(actual, expected)
   }
 
   protected _compareHasAny<T>(actual: T) {
-    this._lastActualResult = this._node.__typeToString(actual)
+    this._writeLastDiff(actual)
+
     return this._node.__any(actual)
   }
 
   protected _compareContains<T>(expected: T, actual: T) {
-    this._lastActualResult = this._node.__typeToString(actual)
+    this._writeLastDiff(actual, expected)
+
     return this._node.__contains(actual, expected)
   }
 }
@@ -226,7 +253,7 @@ export abstract class PageElementBaseWait<
     } catch ( error ) {
       if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
         errorMessage =
-          `${this._node.constructor.name}'s ${name} "${this._node.currently.lastActualResult}" never` +
+          `${this._node.constructor.name}'s ${name} "${this._node.__lastDiff.actual}" never` +
           `${reverseStr} ${conditionStr} "${this._node.__typeToString(value)}" within ${timeout} ms.\n` +
           `( ${this._node.getSelector()} )`
       } else if (conditionType === 'any') {

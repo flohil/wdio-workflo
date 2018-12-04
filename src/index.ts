@@ -244,9 +244,13 @@ declare global {
         nodeId: string
       }
 
-      interface INode {
+      interface INode extends ILastDiff {
         __getNodeId(): string
         __toJSON(): IElementJSON
+      }
+
+      interface ILastDiff {
+        __lastDiff: IDiff
       }
 
       interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
@@ -299,9 +303,10 @@ declare global {
       }
 
       interface IDiff {
-        actual: string,
-        expected: string,
-        selector: string
+        actual?: string,
+        expected?: string,
+        selector?: string,
+        tree?: IDiffTree
       }
 
       type Values<T extends {[key: string]: Workflo.PageNode.INode}> = Partial<{

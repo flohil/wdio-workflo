@@ -72,8 +72,7 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
-  protected _lastActualResult: string
-  protected _lastDiff: Workflo.PageNode.IDiffTree
+  protected _lastDiff: Workflo.PageNode.IDiff
 
   readonly currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
@@ -136,18 +135,14 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   /**
    * Whenever a function that checks the state of the GUI
    * by comparing an expected result to an actual result is called,
-   * the actual result will be stored in 'lastActualResult'.
+   * the actual and expected result and the selector will be stored in 'lastDiff'.
    *
    * This can be useful to determine why the last invocation of such a function returned false.
    *
    * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
    * defined in the .currently, .eventually and .wait API of PageElement.
    */
-  get lastActualResult() {
-    return this._lastActualResult
-  }
-
-  get lastDiff() {
+  get __lastDiff() {
     return this._lastDiff
   }
 
@@ -340,15 +335,13 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
       const element = all[i]
 
       if (!compareFunc(element, _expected)) {
-        diffs[`[${i + 1}]`] = {
-          actual: element.currently.lastActualResult,
-          expected: (typeof _expected !== 'undefined') ? element.__typeToString(_expected) : undefined,
-          selector: element.getSelector()
-        }
+        diffs[`[${i + 1}]`] = element.__lastDiff
       }
     }
 
-    this._lastDiff = diffs
+    this._lastDiff = {
+      tree: diffs
+    }
 
     return Object.keys(diffs).length === 0
   }
@@ -368,7 +361,7 @@ export class PageElementListCurrently<
   protected _elementOptions: PageElementOptions
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
-  protected _lastActualResult: string
+  protected _lastDiff: Workflo.PageNode.IDiff
 
   constructor(
     node: ListType,
@@ -403,15 +396,15 @@ export class PageElementListCurrently<
   /**
    * Whenever a function that checks the state of the GUI
    * by comparing an expected result to an actual result is called,
-   * the actual result will be stored in 'lastActualResult'.
+   * the actual and expected result and selector will be stored in 'lastDiff'.
    *
    * This can be useful to determine why the last invocation of such a function returned false.
    *
    * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
    * defined in the .currently, .eventually and .wait API of PageElement.
    */
-  get lastActualResult() {
-    return this._lastActualResult
+  get __lastDiff(): Workflo.PageNode.IDiff {
+    return _.merge(this._lastDiff, {selector: this._node.getSelector()})
   }
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
@@ -492,7 +485,9 @@ export class PageElementListCurrently<
   ) {
     const actualLength = this.getLength()
 
-    this._lastActualResult = actualLength.toString()
+    this._lastDiff = {
+      actual: actualLength.toString()
+    }
 
     return compare(actualLength, length, comparator)
   }

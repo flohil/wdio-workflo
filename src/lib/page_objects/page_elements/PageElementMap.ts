@@ -1,6 +1,7 @@
 import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.'
 import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
+import _ = require('lodash');
 
 // https://github.com/Microsoft/TypeScript/issues/14930
 
@@ -41,7 +42,7 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   protected _identifier: IPageElementMapIdentifier<K>
 
   protected _$: Record<K, PageElementType>
-  protected _lastDiff: Workflo.PageNode.IDiffTree
+  protected _lastDiff: Workflo.PageNode.IDiff
 
   readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
   readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOptions, this>
@@ -80,8 +81,8 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
     return this._$
   }
 
-  get lastDiff() {
-    return this._lastDiff
+  get __lastDiff() {
+    return _.merge(this._lastDiff, {selector: this.getSelector()})
   }
 
   /**
@@ -105,8 +106,8 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   /**
    * Returns values of all list elements in the order they were retrieved from the DOM.
    */
-  getText(filter?: Partial<Record<K, string>>): Partial<Record<K, string>> {
-    return this.__getInterfaceFunc(this.$, node => node.getText(), filter)
+  getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>> {
+    return this.__getInterfaceFunc(this.$, node => node.getText(), filterMask)
   }
 
   // HELPER FUNCTIONS
@@ -114,12 +115,12 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   /**
    * Helper function to map element content nodes to a value by calling a node interface function on each node.
    *
-   * If passing filter, only values defined in this mask will be returned.
-   * By default (if no filter is passed), all values will be returned.
+   * If passing filter mask, only values set to true in this mask will be returned.
+   * By default (if no filter mask is passed), all values will be returned.
    *
    * @param context
    * @param getFunc
-   * @param filter a filter mask
+   * @param filterMask a filter mask
    */
   __getInterfaceFunc<
     Store extends PageElementStore,
@@ -128,13 +129,13 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   >(
     context: Record<K, PageElementType>,
     getFunc: (node: PageElementType) => ResultType,
-    filter?: Partial<Record<K, ResultType>>
+    filterMask?: Partial<Record<K, ResultType | boolean>>
   ): Record<K, ResultType> {
     let result = {} as Record<K, ResultType>;
 
     for (const k in context) {
-      if (filter) {
-        if (typeof filter[k] !== 'undefined') {
+      if (filterMask) {
+        if (filterMask[k] === true) {
           result[k] = getFunc(context[k])
         }
       } else {
@@ -150,17 +151,15 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   ): boolean {
     const diffs: Workflo.PageNode.IDiffTree = {}
 
-    for (const key in this._$) {
+    for (const key in expected) {
       if (!compareFunc(this._$[key], expected[key] as any as T)) {
-        diffs[key] = {
-          actual: this._$[key].currently.lastActualResult,
-          expected: (typeof expected !== 'undefined') ? this._$[key].__typeToString(expected) : undefined,
-          selector: this._$[key].getSelector()
-        }
+        diffs[key] = this._$[key].__lastDiff
       }
     }
 
-    this._lastDiff = diffs
+    this._lastDiff = {
+      tree: diffs
+    }
 
     return Object.keys(diffs).length === 0
   }
@@ -181,8 +180,8 @@ export class PageElementMapCurrently<
     this._node = node
   }
 
-  getText(filter?: Partial<Record<K, string>>): Partial<Record<K, string>> {
-    return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getText(), filter)
+  getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>> {
+    return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getText(), filterMask)
   }
 
   hasText(text: Partial<Record<K, string>>) {

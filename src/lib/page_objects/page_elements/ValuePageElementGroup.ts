@@ -115,9 +115,9 @@ implements Workflo.PageNode.IGetValue<ExtractValue<Partial<Content>>>,
 
 // type guards
 function isGetValueNode(node: any): node is Workflo.PageNode.IGetValueNode<any> {
-  return typeof node['getValue'] === 'function';
+  return typeof node.getValue === 'function';
 }
 
 function isSetValueNode(node: any): node is Workflo.PageNode.ISetValueNode<Workflo.Value> {
-  return typeof node['setValue'] === 'function';
+  return typeof node.setValue === 'function';
 }

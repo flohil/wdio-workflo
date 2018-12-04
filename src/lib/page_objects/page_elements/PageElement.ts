@@ -719,39 +719,39 @@ implements Workflo.PageNode.IGetText<string> {
   }
   hasLocation(coordinates: Workflo.ICoordinates, tolerances: Partial<Workflo.ICoordinates> = { x: 0, y: 0 }) {
     const actualCoords = this.getLocation()
-    this._lastActualResult = tolerancesToString(actualCoords)
+    this._writeLastDiff(tolerancesToString(actualCoords))
 
     return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
       && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y)
   }
   hasX(x: number, tolerance?: number) {
     const actual = this.getX()
-    this._lastActualResult = actual.toString()
+    this._writeLastDiff(tolerancesToString(actual))
 
     return this._hasAxisLocation(x, actual, tolerance)
   }
   hasY(y: number, tolerance?: number) {
     const actual = this.getY()
-    this._lastActualResult = actual.toString()
+    this._writeLastDiff(tolerancesToString(actual))
 
     return this._hasAxisLocation(y, actual, tolerance)
   }
   hasSize(size: Workflo.ISize, tolerances: Partial<Workflo.ISize> = {width: 0, height: 0}) {
     const actualSize = this.getSize()
-    this._lastActualResult = tolerancesToString(actualSize)
+    this._writeLastDiff(tolerancesToString(actualSize))
 
     return this._hasSideSize(size.width, actualSize.width, tolerances.width)
       && this._hasSideSize(size.height, actualSize.height, tolerances.height)
   }
   hasWidth(width: number, tolerance?: number) {
     const actual = this.getWidth()
-    this._lastActualResult = actual.toString()
+    this._writeLastDiff(tolerancesToString(actual))
 
     return this._hasSideSize(width, actual, tolerance)
   }
   hasHeight(height: number, tolerance?: number) {
     const actual = this.getHeight()
-    this._lastActualResult = actual.toString()
+    this._writeLastDiff(tolerancesToString(actual))
 
     return this._hasSideSize(height, actual, tolerance)
   }

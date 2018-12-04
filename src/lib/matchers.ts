@@ -116,7 +116,7 @@ export function matcherFunction<
           optsWithTimeout.timeout = node.getTimeout()
         }
 
-        const actual = node.currently.lastActualResult
+        const actual = node.__lastDiff.actual
         const errorTexts = errorTextFunction({actual, expected, node, opts: optsWithTimeout})
         let errorText: string = undefined
 
