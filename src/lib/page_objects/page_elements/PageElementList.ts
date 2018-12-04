@@ -14,13 +14,6 @@ import { isArray } from 'util';
 
 export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
 
-interface IDiff {
-  index: number,
-  actual: string,
-  expected: string,
-  selector: string
-}
-
 export interface IPageElementListIdentifier<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
@@ -80,7 +73,7 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
   protected _lastActualResult: string
-  protected _lastDiff: IDiff[]
+  protected _lastDiff: Workflo.PageNode.IDiffTree
 
   readonly currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
@@ -333,7 +326,7 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
     compareFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]
   ): boolean {
     const all = this.all
-    const diffs: IDiff[] = []
+    const diffs: Workflo.PageNode.IDiffTree = {}
 
     if (isArray(expected) && expected.length !== all.length) {
       throw new Error(
@@ -346,19 +339,18 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
       const _expected: T = isArray(expected) ? expected[i] : expected
       const element = all[i]
 
-      if (compareFunc(element, _expected)) {
-        diffs.push({
-          index: i + 1,
+      if (!compareFunc(element, _expected)) {
+        diffs[`[${i + 1}]`] = {
           actual: element.currently.lastActualResult,
           expected: (typeof _expected !== 'undefined') ? element.__typeToString(_expected) : undefined,
           selector: element.getSelector()
-        })
+        }
       }
     }
 
     this._lastDiff = diffs
 
-    return diffs.length === 0
+    return Object.keys(diffs).length === 0
   }
 }
 
@@ -367,7 +359,7 @@ export class PageElementListCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> implements Workflo.PageNode.IGetText<string[]> {
+> implements Workflo.PageNode.IGetText<string[]>, Workflo.PageNode.ICheckTextCurrently<string | string[]> {
 
   protected readonly _node: ListType
 
@@ -617,7 +609,7 @@ export class PageElementListEventually<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> {
+> implements Workflo.PageNode.ICheckTextEventually<string | string[]> {
 
   protected readonly _node: ListType
 
@@ -666,16 +658,16 @@ export class PageElementListEventually<
     return this._eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  hasText(text: string | string[]) {
-    return this._node.__compare((element, expected) => element.eventually.hasText(expected), text)
+  hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.__compare((element, expected) => element.eventually.hasText(expected, opts), text)
   }
 
-  hasAnyText() {
-    return this._node.__compare(element => element.eventually.hasAnyText())
+  hasAnyText(opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.__compare(element => element.eventually.hasAnyText(opts))
   }
 
-  containsText(text: string | string[]) {
-    return this._node.__compare((element, expected) => element.eventually.containsText(expected), text)
+  containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.__compare((element, expected) => element.eventually.containsText(expected, opts), text)
   }
 
   not = {
@@ -685,14 +677,14 @@ export class PageElementListEventually<
     hasLength: (length: number, opts: IPageElementListWaitLengthParams) => this.hasLength(length, {
       timeout: opts.timeout, interval: opts.interval, reverse: true
     }),
-    hasText: (text: string | string[]) => {
-      return this._node.__compare((element, expected) => element.eventually.not.hasText(expected), text)
+    hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.__compare((element, expected) => element.eventually.not.hasText(expected, opts), text)
     },
-    hasAnyText: () => {
-      return this._node.__compare(element => element.eventually.not.hasAnyText())
+    hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.__compare(element => element.eventually.not.hasAnyText(opts))
     },
-    containsText: (text: string | string[]) => {
-      return this._node.__compare((element, expected) => element.eventually.not.containsText(expected), text)
+    containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.__compare((element, expected) => element.eventually.not.containsText(expected, opts), text)
     }
   }
 }

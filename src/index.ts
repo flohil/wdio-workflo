@@ -294,6 +294,16 @@ declare global {
         setValue(value: ValueType): ContextType
       }
 
+      interface IDiffTree {
+        [key: string]: IDiff
+      }
+
+      interface IDiff {
+        actual: string,
+        expected: string,
+        selector: string
+      }
+
       type Values<T extends {[key: string]: Workflo.PageNode.INode}> = Partial<{
         [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
       }>
