@@ -22,7 +22,6 @@ class PageElement extends _1.PageElementBase {
         this.eventually = new PageElementEventually(this);
     }
     // ABSTRACT BASE CLASS IMPLEMENTATIONS
-    // ABSTRACT BASE CLASS IMPLEMENTATIONS
     __equals(actual, expected) {
         if (typeof actual === 'string' && typeof expected === 'string') {
             return actual === expected;
@@ -632,34 +631,34 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
     }
     hasLocation(coordinates, tolerances = { x: 0, y: 0 }) {
         const actualCoords = this.getLocation();
-        this._lastActualResult = helpers_1.tolerancesToString(actualCoords);
+        this._writeLastDiff(helpers_1.tolerancesToString(actualCoords));
         return this._hasAxisLocation(coordinates.x, actualCoords.x, tolerances.x)
             && this._hasAxisLocation(coordinates.y, actualCoords.y, tolerances.y);
     }
     hasX(x, tolerance) {
         const actual = this.getX();
-        this._lastActualResult = actual.toString();
+        this._writeLastDiff(helpers_1.tolerancesToString(actual));
         return this._hasAxisLocation(x, actual, tolerance);
     }
     hasY(y, tolerance) {
         const actual = this.getY();
-        this._lastActualResult = actual.toString();
+        this._writeLastDiff(helpers_1.tolerancesToString(actual));
         return this._hasAxisLocation(y, actual, tolerance);
     }
     hasSize(size, tolerances = { width: 0, height: 0 }) {
         const actualSize = this.getSize();
-        this._lastActualResult = helpers_1.tolerancesToString(actualSize);
+        this._writeLastDiff(helpers_1.tolerancesToString(actualSize));
         return this._hasSideSize(size.width, actualSize.width, tolerances.width)
             && this._hasSideSize(size.height, actualSize.height, tolerances.height);
     }
     hasWidth(width, tolerance) {
         const actual = this.getWidth();
-        this._lastActualResult = actual.toString();
+        this._writeLastDiff(helpers_1.tolerancesToString(actual));
         return this._hasSideSize(width, actual, tolerance);
     }
     hasHeight(height, tolerance) {
         const actual = this.getHeight();
-        this._lastActualResult = actual.toString();
+        this._writeLastDiff(helpers_1.tolerancesToString(actual));
         return this._hasSideSize(height, actual, tolerance);
     }
 }

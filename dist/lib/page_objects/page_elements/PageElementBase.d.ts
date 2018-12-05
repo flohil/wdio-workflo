@@ -28,19 +28,19 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
 }
 export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> {
     protected readonly _node: PageElementType;
-    protected _lastActualResult: string;
+    protected _lastDiff: Workflo.PageNode.IDiff;
     constructor(node: PageElementType);
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
-     * the actual result will be stored in 'lastActualResult'.
+     * the actual and expected result and the selector will be stored in 'lastDiff'.
      *
      * This can be useful to determine why the last invocation of such a function returned false.
      *
      * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
-    readonly lastActualResult: string;
+    readonly __lastDiff: Workflo.PageNode.IDiff;
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     /**
      * Executes func and, if an error occurs during execution of func,
@@ -48,6 +48,7 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
      * @param func
      */
     protected _execute<ResultType>(func: () => ResultType): ResultType;
+    protected _writeLastDiff<T>(actual: T, expected?: T): void;
     /**
      * @param actual the actual value from the browser
      * @param expected the expected value or 0 if expected was smaller than 0

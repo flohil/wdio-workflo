@@ -81,10 +81,6 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
     return this._$
   }
 
-  get __lastDiff() {
-    return _.merge(this._lastDiff, {selector: this.getSelector()})
-  }
-
   /**
    * In case of language changes, for example, change values of mappingObject while keys must stay the same.
    * @param mappingObject
@@ -171,8 +167,7 @@ export class PageElementMapCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-> implements Workflo.PageNode.IGetText<Partial<Record<K, string>>>,
-  Workflo.PageNode.ICheckTextCurrently<Partial<Record<K, string>>> {
+> {
 
   protected readonly _node: MapType
 
@@ -215,7 +210,7 @@ export class PageElementMapEventually<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
->  implements Workflo.PageNode.ICheckTextEventually<Partial<Record<K, string>>> {
+> {
 
   protected readonly _node: MapType
 

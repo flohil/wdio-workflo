@@ -1,5 +1,5 @@
 import { PageElementStore } from '../stores'
-import { PageElementGroup, IPageElementGroupOpts, PageElementGroupCurrently } from '.';
+import { PageElementGroup, IPageElementGroupOpts, PageElementGroupCurrently, PageElementGroupEventually } from '.';
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
@@ -19,6 +19,7 @@ implements Workflo.PageNode.IGetValueNode<ExtractValue<Partial<Content>>>,
 Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
 
   readonly currently: ValuePageElementGroupCurrently<Store, Content, this>
+  readonly eventually: ValuePageElementGroupEventually<Store, Content, this>
 
   constructor({
     ...superOpts
@@ -26,6 +27,7 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
     super(superOpts)
 
     this.currently = new ValuePageElementGroupCurrently(this)
+    this.eventually = new ValuePageElementGroupEventually(this)
   }
 
   getValue(filter?: ExtractValue<Partial<Content>>) {
@@ -64,15 +66,38 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
 
     return this
   }
+
+  // HELPER FUNCTIONS
+
+  __compareValue<K extends string>(
+    compareFunc: (node: Workflo.PageNode.IGetValueNode<any>, expected?: Content[K]) => boolean,
+    expected?: ExtractValue<Partial<Content>>,
+  ): boolean {
+    const diffs: Workflo.PageNode.IDiffTree = {}
+
+    for (const k in expected) {
+      if (isGetValueNode(this._$[k])) {
+        const elem = this._$[k] as any as Workflo.PageNode.IGetValueNode<any>
+
+        if (!compareFunc(elem, expected[k])) {
+          diffs[k] = elem.__lastDiff
+        }
+      }
+    }
+
+    this._lastDiff = {
+      tree: diffs
+    }
+
+    return Object.keys(diffs).length === 0
+  }
 }
 
 class ValuePageElementGroupCurrently<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
-  GroupType extends PageElementGroup<Store, Content>
-> extends PageElementGroupCurrently<Store, Content, GroupType>
-implements Workflo.PageNode.IGetValue<ExtractValue<Partial<Content>>>,
-  Workflo.PageNode.ISetValueWithContext<ExtractValue<Partial<Content>>, GroupType> {
+  GroupType extends ValuePageElementGroup<Store, Content>
+> extends PageElementGroupCurrently<Store, Content, GroupType> {
 
   getValue(filter?: ExtractValue<Partial<Content>>) {
     let result = {} as ExtractValue<Partial<Content>>;
@@ -110,6 +135,69 @@ implements Workflo.PageNode.IGetValue<ExtractValue<Partial<Content>>>,
     }
 
     return this._node
+  }
+
+  hasValue(value: ExtractValue<Partial<Content>>) {
+    return this._node.__compareValue((element, expected) => element.currently.hasValue(expected), value)
+  }
+
+  hasAnyValue() {
+    return this._node.__compareValue(element => element.currently.hasAnyValue())
+  }
+
+  containsValue(value: ExtractValue<Partial<Content>>) {
+    return this._node.__compareValue((element, expected) => element.currently.containsValue(expected), value)
+  }
+
+  not = {...super.not,
+    hasValue: (value: ExtractValue<Partial<Content>>) => {
+      return this._node.__compareValue((element, expected) => element.currently.not.hasValue(expected), value)
+    },
+    hasAnyValue: () => {
+      return this._node.__compareValue(element => element.currently.not.hasAnyValue())
+    },
+    containsValue: (value: ExtractValue<Partial<Content>>) => {
+      return this._node.__compareValue((element, expected) => element.currently.not.containsValue(expected), value)
+    }
+  }
+}
+
+class ValuePageElementGroupEventually<
+  Store extends PageElementStore,
+  Content extends {[key: string] : Workflo.PageNode.INode},
+  GroupType extends ValuePageElementGroup<Store, Content>
+> extends PageElementGroupEventually<Store, Content, GroupType> {
+
+  hasValue(value: ExtractValue<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.__compareValue(
+      (element, expected) => element.eventually.hasValue(expected, opts), value
+    )
+  }
+
+  hasAnyValue(opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.__compareValue(element => element.eventually.hasAnyValue(opts))
+  }
+
+  containsValue(value: ExtractValue<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.__compareValue(
+      (element, expected) => element.eventually.containsValue(expected, opts), value
+    )
+  }
+
+  not = {...super.not,
+    hasValue: (value: ExtractValue<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.__compareValue(
+        (element, expected) => element.eventually.not.hasValue(expected, opts), value
+      )
+    },
+    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.__compareValue(element => element.eventually.not.hasAnyValue())
+    },
+    containsValue: (value: ExtractValue<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.__compareValue(
+        (element, expected) => element.eventually.not.containsValue(expected, opts), value
+      )
+    }
   }
 }
 

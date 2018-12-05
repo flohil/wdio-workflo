@@ -9,6 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
 const util_1 = require("../../utility_functions/util");
 const _1 = require(".");
 const builders_1 = require("../builders");
@@ -49,22 +50,6 @@ class PageElementList extends _1.PageNode {
             getAllFunc: list => list.all
         });
         this.currently.init(cloneFunc);
-    }
-    /**
-     * Whenever a function that checks the state of the GUI
-     * by comparing an expected result to an actual result is called,
-     * the actual result will be stored in 'lastActualResult'.
-     *
-     * This can be useful to determine why the last invocation of such a function returned false.
-     *
-     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-     * defined in the .currently, .eventually and .wait API of PageElement.
-     */
-    get lastActualResult() {
-        return this._lastActualResult;
-    }
-    get lastDiff() {
-        return this._lastDiff;
     }
     initialWait() {
         switch (this._waitType) {
@@ -204,46 +189,24 @@ class PageElementList extends _1.PageNode {
         return this.all.map(listElement => listElement.getText());
     }
     // HELPER FUNCTIONS
-    __compare(compareFunc, actuals, expected) {
-        const diffs = [];
-        if (util_2.isArray(expected) && expected.length !== actuals.length) {
+    __compare(compareFunc, expected) {
+        const all = this.all;
+        const diffs = {};
+        if (util_2.isArray(expected) && expected.length !== all.length) {
             throw new Error(`${this.constructor.name}: ` +
-                `Length of expected (${expected.length}) did not match length of actual (${actuals.length})!`);
+                `Length of expected (${expected.length}) did not match length of list (${all.length})!`);
         }
-        for (let i = 0; i < actuals.length; ++i) {
-            const _actual = actuals[i];
+        for (let i = 0; i < all.length; ++i) {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
-            const element = this.at(i);
-            if (compareFunc(element, _expected, _actual)) {
-                diffs.push({
-                    index: i + 1,
-                    actual: (typeof _actual !== 'undefined') ? element.__typeToString(_actual) : undefined,
-                    expected: (typeof _expected !== 'undefined') ? element.__typeToString(_expected) : undefined,
-                    selector: element.getSelector()
-                });
+            const element = all[i];
+            if (!compareFunc(element, _expected)) {
+                diffs[`[${i + 1}]`] = element.__lastDiff;
             }
         }
-        this._lastDiff = diffs;
-        return diffs.length === 0;
-    }
-    __equals(actuals, expected) {
-        return this.__compare((element, actual, expected) => element.__equals(actual, expected), actuals, expected);
-    }
-    __any(actuals) {
-        return this.__compare((element, actual) => element.__any(actual), actuals);
-    }
-    __contains(actuals, expected) {
-        return this.__compare((element, actual, expected) => element.__contains(actual, expected), actuals, expected);
-    }
-    // CHECK STATE functions
-    hasText(expected) {
-        return this.__equals(this.getText(), expected);
-    }
-    hasAnyText() {
-        return this.__any(this.getText());
-    }
-    containsText(expected) {
-        return this.__contains(this.getText(), expected);
+        this._lastDiff = {
+            tree: diffs
+        };
+        return Object.keys(diffs).length === 0;
     }
 }
 exports.PageElementList = PageElementList;
@@ -251,7 +214,16 @@ class PageElementListCurrently {
     constructor(node, opts) {
         this.not = {
             isEmpty: () => !this.isEmpty(),
-            hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator)
+            hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
+            hasText: (text) => {
+                return this._node.__compare((element, expected) => element.currently.not.hasText(expected), text);
+            },
+            hasAnyText: () => {
+                return this._node.__compare(element => element.currently.not.hasAnyText());
+            },
+            containsText: (text) => {
+                return this._node.__compare((element, expected) => element.currently.not.containsText(expected), text);
+            }
         };
         this._selector = node.getSelector();
         this._store = opts.store;
@@ -279,15 +251,15 @@ class PageElementListCurrently {
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
-     * the actual result will be stored in 'lastActualResult'.
+     * the actual and expected result and selector will be stored in 'lastDiff'.
      *
      * This can be useful to determine why the last invocation of such a function returned false.
      *
      * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
-    get lastActualResult() {
-        return this._lastActualResult;
+    get __lastDiff() {
+        return _.merge(this._lastDiff, { selector: this._node.getSelector() });
     }
     // RETRIEVAL FUNCTIONS for wdio or list elements
     get elements() {
@@ -350,17 +322,19 @@ class PageElementListCurrently {
     }
     hasLength(length, comparator = "==" /* equalTo */) {
         const actualLength = this.getLength();
-        this._lastActualResult = actualLength.toString();
+        this._lastDiff = {
+            actual: actualLength.toString()
+        };
         return util_1.compare(actualLength, length, comparator);
     }
-    hasText(expected) {
-        return this._node.__equals(this.getText(), expected);
+    hasText(text) {
+        return this._node.__compare((element, expected) => element.currently.hasText(expected), text);
     }
     hasAnyText() {
-        return this._node.__any(this.getText());
+        return this._node.__compare(element => element.currently.hasAnyText());
     }
-    containsText(expected) {
-        return this._node.__contains(this.getText(), expected);
+    containsText(text) {
+        return this._node.__compare((element, expected) => element.currently.containsText(expected), text);
     }
 }
 exports.PageElementListCurrently = PageElementListCurrently;
@@ -421,7 +395,16 @@ class PageElementListEventually {
             }),
             hasLength: (length, opts) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
-            })
+            }),
+            hasText: (text, opts) => {
+                return this._node.__compare((element, expected) => element.eventually.not.hasText(expected, opts), text);
+            },
+            hasAnyText: (opts) => {
+                return this._node.__compare(element => element.eventually.not.hasAnyText(opts));
+            },
+            containsText: (text, opts) => {
+                return this._node.__compare((element, expected) => element.eventually.not.containsText(expected, opts), text);
+            }
         };
         this._node = node;
     }
@@ -434,12 +417,6 @@ class PageElementListEventually {
             return false;
         }
     }
-    hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
-        return this._eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
-    }
-    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
-        return this._eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
-    }
     // Typescript has a bug that prevents Exclude from working with generic extended types:
     // https://github.com/Microsoft/TypeScript/issues/24791
     // Bug will be fixed in Typescript 3.3.0
@@ -451,6 +428,21 @@ class PageElementListEventually {
     }
     get none() {
         return this._node.currently.first.eventually.not;
+    }
+    hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
+        return this._eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
+    }
+    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
+        return this._eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
+    }
+    hasText(text, opts) {
+        return this._node.__compare((element, expected) => element.eventually.hasText(expected, opts), text);
+    }
+    hasAnyText(opts) {
+        return this._node.__compare(element => element.eventually.hasAnyText(opts));
+    }
+    containsText(text, opts) {
+        return this._node.__compare((element, expected) => element.eventually.containsText(expected, opts), text);
     }
 }
 exports.PageElementListEventually = PageElementListEventually;

@@ -88,7 +88,7 @@ export class PageElementGroup<
 
   // HELPER FUNCTIONS
 
-  __compareText<T, K extends string>(
+  __compareText<K extends string>(
     compareFunc: (node: Workflo.PageNode.IGetTextNode<any>, expected?: Content[K]) => boolean,
     expected?: ExtractText<Partial<Content>>,
   ): boolean {

@@ -6,6 +6,7 @@ class ValuePageElementList extends _1.PageElementList {
     constructor(selector, opts) {
         super(selector, opts);
         this.currently = new ValuePageElementListCurrently(this, opts);
+        this.eventually = new ValuePageElementListEventually(this);
     }
     initialWait() {
         if (this._waitType === "value" /* value */) {
@@ -54,19 +55,19 @@ class ValuePageElementList extends _1.PageElementList {
         }
         return this;
     }
-    // CHECK STATE
-    hasValue(expected) {
-        return this.__equals(this.getValue(), expected);
-    }
-    hasAnyValue() {
-        return this.__any(this.getText());
-    }
-    containsValue(expected) {
-        return this.__contains(this.getValue(), expected);
-    }
 }
 exports.ValuePageElementList = ValuePageElementList;
 class ValuePageElementListCurrently extends _1.PageElementListCurrently {
+    constructor() {
+        super(...arguments);
+        this.not = Object.assign({}, super.not, { hasValue: (value) => {
+                return this._node.__compare((element, expected) => element.currently.not.hasValue(expected), value);
+            }, hasAnyValue: () => {
+                return this._node.__compare(element => element.currently.not.hasAnyValue());
+            }, containsValue: (value) => {
+                return this._node.__compare((element, expected) => element.currently.not.containsValue(expected), value);
+            } });
+    }
     /**
      * Returns values of all list elements in the order they were retrieved from the DOM immediatly.
      */
@@ -103,14 +104,36 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
         return this._node;
     }
     // CHECK STATE
-    hasValue(expected) {
-        return this._node.__equals(this.getValue(), expected);
+    hasValue(value) {
+        return this._node.__compare((element, expected) => element.currently.hasValue(expected), value);
     }
     hasAnyValue() {
-        return this._node.__any(this.getText());
+        return this._node.__compare(element => element.currently.hasAnyValue());
     }
-    containsValue(expected) {
-        return this._node.__contains(this.getValue(), expected);
+    containsValue(value) {
+        return this._node.__compare((element, expected) => element.currently.containsValue(expected), value);
+    }
+}
+class ValuePageElementListEventually extends _1.PageElementListEventually {
+    constructor() {
+        // CHECK STATE
+        super(...arguments);
+        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.__compare((element, expected) => element.eventually.not.hasValue(expected, opts), value);
+            }, hasAnyValue: (opts) => {
+                return this._node.__compare(element => element.eventually.not.hasAnyValue(opts));
+            }, containsValue: (value, opts) => {
+                return this._node.__compare((element, expected) => element.eventually.not.containsValue(expected, opts), value);
+            } });
+    }
+    hasValue(value, opts) {
+        return this._node.__compare((element, expected) => element.eventually.hasValue(expected, opts), value);
+    }
+    hasAnyValue(opts) {
+        return this._node.__compare(element => element.eventually.hasAnyValue(opts));
+    }
+    containsValue(value, opts) {
+        return this._node.__compare((element, expected) => element.eventually.containsValue(expected, opts), value);
     }
 }
 //# sourceMappingURL=ValuePageElementList.js.map

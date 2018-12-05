@@ -16,6 +16,11 @@ class PageNode {
             nodeId: this._selector
         };
     }
+    get __lastDiff() {
+        this._lastDiff = this._lastDiff || {};
+        this._lastDiff.selector = this.getSelector();
+        return this._lastDiff;
+    }
     getSelector() {
         return this._selector;
     }

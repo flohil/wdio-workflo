@@ -132,20 +132,6 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
     this.currently.init(cloneFunc)
   }
 
-  /**
-   * Whenever a function that checks the state of the GUI
-   * by comparing an expected result to an actual result is called,
-   * the actual and expected result and the selector will be stored in 'lastDiff'.
-   *
-   * This can be useful to determine why the last invocation of such a function returned false.
-   *
-   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-   * defined in the .currently, .eventually and .wait API of PageElement.
-   */
-  get __lastDiff() {
-    return this._lastDiff
-  }
-
   initialWait() {
     switch(this._waitType) {
       case Workflo.WaitType.exist:

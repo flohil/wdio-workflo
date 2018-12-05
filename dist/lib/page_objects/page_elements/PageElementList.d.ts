@@ -3,12 +3,6 @@ import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
 export declare type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
-interface IDiff {
-    index: number;
-    actual: string;
-    expected: string;
-    selector: string;
-}
 export interface IPageElementListIdentifier<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
     mappingObject: {
         [key: string]: string;
@@ -51,8 +45,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
-    protected _lastActualResult: string;
-    protected _lastDiff: IDiff[];
+    protected _lastDiff: Workflo.PageNode.IDiff;
     readonly currently: PageElementListCurrently<Store, PageElementType, PageElementOptions, this>;
     readonly wait: PageElementListWait<Store, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementListEventually<Store, PageElementType, PageElementOptions, this>;
@@ -66,18 +59,6 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * @param cloneFunc
      */
     init(cloneFunc: (selector: Workflo.XPath) => this): void;
-    /**
-     * Whenever a function that checks the state of the GUI
-     * by comparing an expected result to an actual result is called,
-     * the actual result will be stored in 'lastActualResult'.
-     *
-     * This can be useful to determine why the last invocation of such a function returned false.
-     *
-     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-     * defined in the .currently, .eventually and .wait API of PageElement.
-     */
-    readonly lastActualResult: string;
-    readonly lastDiff: IDiff[];
     initialWait(): void;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
@@ -122,22 +103,16 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getInterval(): number;
     getLength(): number;
     getText(): string[];
-    __compare<T>(compareFunc: (element: PageElementType, actual: T, expected?: T | T[]) => boolean, actuals?: T[], expected?: T): boolean;
-    __equals<T>(actuals: T[], expected: T | T[]): boolean;
-    __any<T>(actuals: T[]): boolean;
-    __contains<T>(actuals: T[], expected: T | T[]): boolean;
-    hasText(expected: string | string[]): boolean;
-    hasAnyText(): boolean;
-    containsText(expected: string | string[]): boolean;
+    __compare<T>(compareFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]): boolean;
 }
-export declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> implements Workflo.PageNode.IGetText<string[]> {
+export declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> implements Workflo.PageNode.IGetText<string[]>, Workflo.PageNode.ICheckTextCurrently<string | string[]> {
     protected readonly _node: ListType;
     protected _selector: string;
     protected _store: Store;
     protected _elementOptions: PageElementOptions;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
-    protected _lastActualResult: string;
+    protected _lastDiff: Workflo.PageNode.IDiff;
     constructor(node: ListType, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     /**
      * Use this method to initialize properties that rely on the this type
@@ -151,14 +126,14 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
-     * the actual result will be stored in 'lastActualResult'.
+     * the actual and expected result and selector will be stored in 'lastDiff'.
      *
      * This can be useful to determine why the last invocation of such a function returned false.
      *
      * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
-    readonly lastActualResult: string;
+    readonly __lastDiff: Workflo.PageNode.IDiff;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
     /**
@@ -177,13 +152,16 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     getText(): string[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
+    hasText(text: string | string[]): boolean;
+    hasAnyText(): boolean;
+    containsText(text: string | string[]): boolean;
     not: {
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
+        hasText: (text: string | string[]) => boolean;
+        hasAnyText: () => boolean;
+        containsText: (text: string | string[]) => boolean;
     };
-    hasText(expected: string | string[]): boolean;
-    hasAnyText(): boolean;
-    containsText(expected: string | string[]): boolean;
 }
 export declare class PageElementListWait<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
     protected readonly _node: ListType;
@@ -197,20 +175,25 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
     };
 }
-export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> implements Workflo.PageNode.ICheckTextEventually<string | string[]> {
     protected readonly _node: ListType;
     constructor(node: ListType);
     protected _eventually(func: () => void): boolean;
-    hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
-    isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
     readonly any: PageElementType["eventually"];
     readonly none: PageElementType['eventually']['not'];
+    hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
+    isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
+    hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
+    hasAnyText(opts?: Workflo.IWDIOParamsOptional): boolean;
+    containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
     not: {
         isEmpty: (opts: IPageElementListWaitEmptyParams) => boolean;
         hasLength: (length: number, opts: IPageElementListWaitLengthParams) => boolean;
+        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => boolean;
+        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
     };
 }
 export declare function excludeNot<T extends {
     not: N;
 }, N>(obj: T): Pick<T, Exclude<keyof T, "not">>;
-export {};

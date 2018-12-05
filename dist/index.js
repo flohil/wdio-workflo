@@ -16,34 +16,4 @@ const stringFunctions = require("./lib/utility_functions/string");
 exports.stringFunctions = stringFunctions;
 const Kiwi_1 = require("./lib/Kiwi");
 exports.Kiwi = Kiwi_1.default;
-class Input extends pageObjects.elements.ValuePageElement {
-    constructor(selector, opts) {
-        super(selector, opts);
-        this.currently = new InputCurrently(this);
-    }
-    setValue(value) {
-        this.initialWait();
-        return this.currently.setValue(value);
-    }
-}
-class InputCurrently extends pageObjects.elements.ValuePageElementCurrently {
-    getValue() {
-        return this.element.getValue();
-    }
-    setValue(value) {
-        this.element.setValue(value);
-        return this._node;
-    }
-}
-class InputStore extends pageObjects.stores.PageElementStore {
-    Input(selector, options) {
-        return this._getElement(selector, Input, Object.assign({ store: this }, options));
-    }
-    InputList(selector, options) {
-        return this.ValueList(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.Input }, options));
-    }
-    InputMap(selector, options) {
-        return this.ValueMap(selector, Object.assign({ elementStoreFunc: this.Input, elementOptions: {} }, options));
-    }
-}
 //# sourceMappingURL=index.js.map

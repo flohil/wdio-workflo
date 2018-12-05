@@ -52,7 +52,7 @@ export abstract class ValuePageElementCurrently<
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
 > extends PageElementCurrently<Store, PageElementType>
-implements Workflo.PageNode.IGetValue<ValueType>, Workflo.PageNode.ISetValueWithContext<ValueType, PageElementType> {
+implements Workflo.PageNode.IGetValue<ValueType> {
 
   abstract getValue(): ValueType
   abstract setValue(value: ValueType): PageElementType
@@ -67,11 +67,11 @@ implements Workflo.PageNode.IGetValue<ValueType>, Workflo.PageNode.ISetValueWith
     return this._compareContains(value, this.getValue())
   }
 
-  not = Object.assign(super.not, {
+  not = {...super.not,
     hasValue: (value: ValueType) => !this.hasValue(value),
     hasAnyValue: () => !this.hasAnyValue(),
     containsValue: (value: ValueType) => !this.containsValue(value),
-  })
+  }
 }
 
 export class ValuePageElementWait<
@@ -95,7 +95,7 @@ export class ValuePageElementWait<
     )
   }
 
-  not = Object.assign(super.not, {
+  not = {...super.not,
     hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
       return this.hasValue(value, this._makeReverseParams(opts))
     },
@@ -105,7 +105,7 @@ export class ValuePageElementWait<
     containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
       return this.containsValue(value, this._makeReverseParams(opts))
     }
-  })
+  }
 }
 
 export class ValuePageElementEventually<
@@ -123,7 +123,7 @@ export class ValuePageElementEventually<
     return this._eventually(() => this._node.wait.containsValue(value, opts))
   }
 
-  not = Object.assign(super.not, {
+  not = {...super.not,
     hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this._node.wait.not.hasValue(value, opts))
     },
@@ -133,5 +133,5 @@ export class ValuePageElementEventually<
     containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
       return this._eventually(() => this._node.wait.not.containsValue(value, opts))
     }
-  })
+  }
 }

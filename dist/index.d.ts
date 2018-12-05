@@ -214,15 +214,20 @@ declare global {
                 pageNodeType: string;
                 nodeId: string;
             }
-            interface INode {
+            interface INode extends ILastDiff {
                 __getNodeId(): string;
                 __toJSON(): IElementJSON;
             }
+            interface ILastDiff {
+                __lastDiff: IDiff;
+            }
             interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
-                currently: IGetText<TextType>;
+                currently: IGetText<TextType> & ICheckTextCurrently<TextType>;
+                eventually: ICheckTextEventually<TextType>;
             }
             interface IGetValueNode<ValueType> extends INode, IGetValue<ValueType> {
-                currently: IGetValue<ValueType>;
+                currently: IGetValue<ValueType> & ICheckValueCurrently<ValueType>;
+                eventually: ICheckValueEventually<ValueType>;
             }
             interface ISetValueNode<ValueType> extends INode, ISetValue<ValueType> {
                 currently: ISetValue<ValueType>;
@@ -230,14 +235,44 @@ declare global {
             interface IGetText<TextType> {
                 getText(): TextType;
             }
+            interface ICheckTextCurrently<TextType> {
+                hasText(text: TextType): boolean;
+                hasAnyText(): boolean;
+                containsText(text: TextType): boolean;
+                not: Omit<ICheckTextCurrently<TextType>, 'not'>;
+            }
+            interface ICheckTextEventually<TextType> {
+                hasText(text: TextType, opts?: IWDIOParamsOptional): boolean;
+                hasAnyText(opts?: IWDIOParamsOptional): boolean;
+                containsText(text: TextType, opts?: IWDIOParamsOptional): boolean;
+                not: Omit<ICheckTextEventually<TextType>, 'not'>;
+            }
+            interface ICheckValueCurrently<ValueType> {
+                hasValue(value: ValueType): boolean;
+                hasAnyValue(): boolean;
+                containsValue(value: ValueType): boolean;
+                not: Omit<ICheckValueCurrently<ValueType>, 'not'>;
+            }
+            interface ICheckValueEventually<ValueType> {
+                hasValue(value: ValueType, opts?: IWDIOParamsOptional): boolean;
+                hasAnyValue(opts?: IWDIOParamsOptional): boolean;
+                containsValue(value: ValueType, opts?: IWDIOParamsOptional): boolean;
+                not: Omit<ICheckValueEventually<ValueType>, 'not'>;
+            }
             interface IGetValue<ValueType> {
                 getValue(): ValueType;
             }
             interface ISetValue<ValueType> {
                 setValue(value: ValueType): this;
             }
-            interface ISetValueWithContext<ValueType, ContextType> {
-                setValue(value: ValueType): ContextType;
+            interface IDiffTree {
+                [key: string]: IDiff;
+            }
+            interface IDiff {
+                actual?: string;
+                expected?: string;
+                selector?: string;
+                tree?: IDiffTree;
             }
             type Values<T extends {
                 [key: string]: Workflo.PageNode.INode;

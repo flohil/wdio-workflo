@@ -19,7 +19,7 @@ function matcherFunction(resultFunction, errorTextFunction, noArgs = false) {
                 if (typeof opts === 'undefined' || !opts['timeout']) {
                     optsWithTimeout.timeout = node.getTimeout();
                 }
-                const actual = node.currently.lastActualResult;
+                const actual = node.__lastDiff.actual;
                 const errorTexts = errorTextFunction({ actual, expected, node, opts: optsWithTimeout });
                 let errorText = undefined;
                 if (_.isArray(errorTexts)) {

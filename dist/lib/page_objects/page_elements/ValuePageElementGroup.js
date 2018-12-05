@@ -15,6 +15,7 @@ class ValuePageElementGroup extends _1.PageElementGroup {
         var superOpts = __rest(_a, []);
         super(superOpts);
         this.currently = new ValuePageElementGroupCurrently(this);
+        this.eventually = new ValuePageElementGroupEventually(this);
     }
     getValue(filter) {
         let result = {};
@@ -48,9 +49,35 @@ class ValuePageElementGroup extends _1.PageElementGroup {
         }
         return this;
     }
+    // HELPER FUNCTIONS
+    __compareValue(compareFunc, expected) {
+        const diffs = {};
+        for (const k in expected) {
+            if (isGetValueNode(this._$[k])) {
+                const elem = this._$[k];
+                if (!compareFunc(elem, expected[k])) {
+                    diffs[k] = elem.__lastDiff;
+                }
+            }
+        }
+        this._lastDiff = {
+            tree: diffs
+        };
+        return Object.keys(diffs).length === 0;
+    }
 }
 exports.ValuePageElementGroup = ValuePageElementGroup;
 class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
+    constructor() {
+        super(...arguments);
+        this.not = Object.assign({}, super.not, { hasValue: (value) => {
+                return this._node.__compareValue((element, expected) => element.currently.not.hasValue(expected), value);
+            }, hasAnyValue: () => {
+                return this._node.__compareValue(element => element.currently.not.hasAnyValue());
+            }, containsValue: (value) => {
+                return this._node.__compareValue((element, expected) => element.currently.not.containsValue(expected), value);
+            } });
+    }
     getValue(filter) {
         let result = {};
         for (const k in this._node.$) {
@@ -83,12 +110,42 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
         }
         return this._node;
     }
+    hasValue(value) {
+        return this._node.__compareValue((element, expected) => element.currently.hasValue(expected), value);
+    }
+    hasAnyValue() {
+        return this._node.__compareValue(element => element.currently.hasAnyValue());
+    }
+    containsValue(value) {
+        return this._node.__compareValue((element, expected) => element.currently.containsValue(expected), value);
+    }
+}
+class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
+    constructor() {
+        super(...arguments);
+        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.__compareValue((element, expected) => element.eventually.not.hasValue(expected, opts), value);
+            }, hasAnyValue: (opts) => {
+                return this._node.__compareValue(element => element.eventually.not.hasAnyValue());
+            }, containsValue: (value, opts) => {
+                return this._node.__compareValue((element, expected) => element.eventually.not.containsValue(expected, opts), value);
+            } });
+    }
+    hasValue(value, opts) {
+        return this._node.__compareValue((element, expected) => element.eventually.hasValue(expected, opts), value);
+    }
+    hasAnyValue(opts) {
+        return this._node.__compareValue(element => element.eventually.hasAnyValue(opts));
+    }
+    containsValue(value, opts) {
+        return this._node.__compareValue((element, expected) => element.eventually.containsValue(expected, opts), value);
+    }
 }
 // type guards
 function isGetValueNode(node) {
-    return typeof node['getValue'] === 'function';
+    return typeof node.getValue === 'function';
 }
 function isSetValueNode(node) {
-    return typeof node['setValue'] === 'function';
+    return typeof node.setValue === 'function';
 }
 //# sourceMappingURL=ValuePageElementGroup.js.map

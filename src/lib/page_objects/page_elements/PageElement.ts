@@ -49,8 +49,6 @@ export class PageElement<
 
 // ABSTRACT BASE CLASS IMPLEMENTATIONS
 
-// ABSTRACT BASE CLASS IMPLEMENTATIONS
-
   __equals<T>(actual: T, expected: T): boolean {
     if (typeof actual === 'string' && typeof expected === 'string') {
       return actual === expected

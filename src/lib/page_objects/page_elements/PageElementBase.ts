@@ -62,20 +62,6 @@ export abstract class PageElementBase<
     return this._$
   }
 
-  /**
-   * Whenever a function that checks the state of the GUI
-   * by comparing an expected result to an actual result is called,
-   * the actual and expected result and the selector will be stored in 'lastDiff'.
-   *
-   * This can be useful to determine why the last invocation of such a function returned false.
-   *
-   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-   * defined in the .currently, .eventually and .wait API of PageElement.
-   */
-  get __lastDiff() {
-    return this.currently.__lastDiff
-  }
-
   getTimeout() { return this._timeout }
 
   abstract __equals<T>(actual: T, expected: T): boolean

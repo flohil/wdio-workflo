@@ -9,6 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
 const _1 = require(".");
 const builders_1 = require("../builders");
 const __1 = require("..");
@@ -46,15 +47,15 @@ class PageElementBaseCurrently {
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
-     * the actual result will be stored in 'lastActualResult'.
+     * the actual and expected result and the selector will be stored in 'lastDiff'.
      *
      * This can be useful to determine why the last invocation of such a function returned false.
      *
      * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
-    get lastActualResult() {
-        return this._lastActualResult;
+    get __lastDiff() {
+        return _.merge(this._lastDiff, { selector: this._node.getSelector() });
     }
     get element() {
         return browser.element(this._node.getSelector());
@@ -74,6 +75,14 @@ class PageElementBaseCurrently {
             throw new Error(errorMsg);
         }
     }
+    _writeLastDiff(actual, expected) {
+        this._lastDiff = {
+            actual: this._node.__typeToString(actual),
+        };
+        if (typeof expected !== 'undefined') {
+            this._lastDiff.expected = this._node.__typeToString(expected);
+        }
+    }
     /**
      * @param actual the actual value from the browser
      * @param expected the expected value or 0 if expected was smaller than 0
@@ -91,15 +100,15 @@ class PageElementBaseCurrently {
         return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0);
     }
     _compareHas(expected, actual) {
-        this._lastActualResult = this._node.__typeToString(actual);
+        this._writeLastDiff(actual, expected);
         return this._node.__equals(actual, expected);
     }
     _compareHasAny(actual) {
-        this._lastActualResult = this._node.__typeToString(actual);
+        this._writeLastDiff(actual);
         return this._node.__any(actual);
     }
     _compareContains(expected, actual) {
-        this._lastActualResult = this._node.__typeToString(actual);
+        this._writeLastDiff(actual, expected);
         return this._node.__contains(actual, expected);
     }
 }
@@ -150,7 +159,7 @@ class PageElementBaseWait {
         catch (error) {
             if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
                 errorMessage =
-                    `${this._node.constructor.name}'s ${name} "${this._node.currently.lastActualResult}" never` +
+                    `${this._node.constructor.name}'s ${name} "${this._node.__lastDiff.actual}" never` +
                         `${reverseStr} ${conditionStr} "${this._node.__typeToString(value)}" within ${timeout} ms.\n` +
                         `( ${this._node.getSelector()} )`;
             }

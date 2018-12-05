@@ -1,4 +1,5 @@
 import { PageElementStore } from '../stores'
+import _ = require('lodash');
 
 export interface IPageNodeOpts<Store extends PageElementStore> {
   store: Store
@@ -6,6 +7,7 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
 
 export class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
   protected _store: Store
+  protected _lastDiff: Workflo.PageNode.IDiff
 
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
@@ -27,6 +29,13 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
       pageNodeType: this.constructor.name,
       nodeId: this._selector
     }
+  }
+
+  get __lastDiff() {
+    this._lastDiff = this._lastDiff || {}
+    this._lastDiff.selector = this.getSelector()
+
+    return this._lastDiff
   }
 
   getSelector() {
