@@ -255,11 +255,13 @@ declare global {
 
       interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
         currently: IGetText<TextType> & ICheckTextCurrently<TextType>
+        wait: IWaitText<TextType>
         eventually: ICheckTextEventually<TextType>
       }
 
       interface IGetValueNode<ValueType> extends INode, IGetValue<ValueType> {
         currently: IGetValue<ValueType> & ICheckValueCurrently<ValueType>
+        wait: IWaitValue<ValueType>
         eventually: ICheckValueEventually<ValueType>
       }
 
@@ -271,9 +273,17 @@ declare global {
         getText(): TextType
       }
 
+      interface IWaitText<TextType, OptsType = IWDIOParamsOptionalReverse> {
+        hasText(text: TextType, opts?: OptsType): INode
+        hasAnyText?(opts?: OptsType): INode
+        containsText(text: TextType, opts?: OptsType): INode
+
+        not: Omit<IWaitText<TextType, IWDIOParamsOptional>, 'not'>
+      }
+
       interface ICheckTextCurrently<TextType> {
         hasText(text: TextType): boolean
-        hasAnyText(): boolean
+        hasAnyText?(): boolean
         containsText(text: TextType): boolean
 
         not: Omit<ICheckTextCurrently<TextType>, 'not'>
@@ -281,15 +291,27 @@ declare global {
 
       interface ICheckTextEventually<TextType> {
         hasText(text: TextType, opts?: IWDIOParamsOptional): boolean
-        hasAnyText(opts?: IWDIOParamsOptional): boolean
+        hasAnyText?(opts?: IWDIOParamsOptional): boolean
         containsText(text: TextType, opts?: IWDIOParamsOptional): boolean
 
         not: Omit<ICheckTextEventually<TextType>, 'not'>
       }
 
+      interface IGetValue<ValueType> {
+        getValue(): ValueType
+      }
+
+      interface IWaitValue<ValueType, OptsType = IWDIOParamsOptionalReverse> {
+        hasValue(text: ValueType, opts?: OptsType): INode
+        hasAnyValue?(opts?: OptsType): INode
+        containsValue(text: ValueType, opts?: OptsType): INode
+
+        not: Omit<IWaitValue<ValueType, IWDIOParamsOptional>, 'not'>
+      }
+
       interface ICheckValueCurrently<ValueType> {
         hasValue(value: ValueType): boolean
-        hasAnyValue(): boolean
+        hasAnyValue?(): boolean
         containsValue(value: ValueType): boolean
 
         not: Omit<ICheckValueCurrently<ValueType>, 'not'>
@@ -297,14 +319,10 @@ declare global {
 
       interface ICheckValueEventually<ValueType> {
         hasValue(value: ValueType, opts?: IWDIOParamsOptional): boolean
-        hasAnyValue(opts?: IWDIOParamsOptional): boolean
+        hasAnyValue?(opts?: IWDIOParamsOptional): boolean
         containsValue(value: ValueType, opts?: IWDIOParamsOptional): boolean
 
         not: Omit<ICheckValueEventually<ValueType>, 'not'>
-      }
-
-      interface IGetValue<ValueType> {
-        getValue(): ValueType
       }
 
       interface ISetValue<ValueType> {
@@ -1372,3 +1390,202 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
   */
   onError?<T>(error: Error): Promise<T> | void
 }
+
+
+
+
+
+
+
+// test if proxying works with IGetValue
+
+interface IInputOpts<
+  Store extends pageObjects.stores.PageElementStore
+> extends pageObjects.elements.IValuePageElementOpts<Store> {}
+
+class Input<
+  Store extends pageObjects.stores.PageElementStore
+> extends pageObjects.elements.ValuePageElement<
+  Store, string
+> {
+
+  currently: pageObjects.elements.ValuePageElementCurrently<Store, this, string>;
+
+  constructor(selector: string, opts?: IInputOpts<Store>) {
+    super(selector, opts)
+
+    this.currently = new InputCurrently(this)
+  }
+
+  setValue(value: string) {
+    this.initialWait()
+
+    return this.currently.setValue(value)
+  }
+}
+
+class InputCurrently<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends Input<Store>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+  getValue(): string {
+    return this.element.getValue()
+  }
+
+  setValue(value: string) {
+    this.element.setValue(value)
+
+    return this._node
+  }
+}
+
+class NumberInput<
+  Store extends pageObjects.stores.PageElementStore,
+> extends pageObjects.elements.ValuePageElement<
+  Store, number
+> {
+
+  currently: pageObjects.elements.ValuePageElementCurrently<Store, this, number>;
+
+  constructor(selector: string, opts?: IInputOpts<Store>) {
+    super(selector, opts)
+
+    this.currently = new NumberInputCurrently(this)
+  }
+
+  setValue(value: number) {
+    this.initialWait()
+
+    return this.currently.setValue(value)
+  }
+}
+
+class NumberInputCurrently<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends NumberInput<Store>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, number> {
+  getValue(): number {
+    return parseInt(this.element.getValue())
+  }
+
+  setValue(value: number) {
+    this.element.setValue(value)
+
+    return this._node
+  }
+}
+
+// achieved mapping type to input value!!!
+
+class InputStore extends pageObjects.stores.PageElementStore {
+  Input(
+    selector: Workflo.XPath,
+    options?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
+  ) {
+    return this._getElement<Input<this>, IInputOpts<this>>(
+      selector,
+      Input,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
+
+  InputList(
+    selector: Workflo.XPath,
+    options?: PickPartial<
+      pageObjects.elements.IValuePageElementListOpts<
+        this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
+      >,
+      "waitType" | "timeout" | "disableCache" | "identifier",
+      "elementOptions"
+    >
+  ) {
+    return this.ValueList(
+      selector,
+      {
+        elementOptions: {},
+        elementStoreFunc: this.Input,
+        ...options
+      }
+    )
+  }
+
+  InputMap<K extends string>(
+    selector: Workflo.XPath,
+    options: PickPartial<
+      pageObjects.elements.IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      Workflo.Store.MapPublicKeys,
+      Workflo.Store.MapPublicPartialKeys
+    >
+  ) {
+    return this.ValueMap(
+      selector,
+      {
+        elementStoreFunc: this.Input,
+        elementOptions: {},
+        ...options
+      }
+    )
+  }
+}
+
+// REMOVE THIS - just for testing
+
+const inputStore = new InputStore()
+
+const innerGroup = pageObjects.stores.pageElement.ValueGroup({
+  x: new Input('//asdf'),
+  y: new NumberInput('//div'),
+})
+
+const textGroup = pageObjects.stores.pageElement.ElementGroup({
+  x: new Input('//asdf'),
+  y: inputStore.Element('//div')
+})
+
+// if getvalue is not supported, will always return undefined
+const group = pageObjects.stores.pageElement.ValueGroup({
+  a: new Input('//asdf'),
+  b: new NumberInput('//div'),
+  c: pageObjects.stores.pageElement.Element('//span'),
+  d: inputStore.InputList('//input'),
+  e: inputStore.InputMap('//input', {identifier: {
+    mappingObject: {
+      name: "Name",
+      password: "Password"
+    },
+    func: (mapSelector: string, mappingValue: string) => xpath(mapSelector).text(mappingValue)
+  }}),
+  f: innerGroup,
+  g: textGroup
+})
+
+
+const valuesObj = group.getValue()
+const valuesObj2 = {...valuesObj}
+const valuesObj3 = group.currently.getValue()
+const valuesObj4 = group.currently.getText()
+const valuesObj5 = group.getText()
+const valuesObj6 = {...valuesObj5}
+const valuesObj7 = {...valuesObj3}
+
+const values: Workflo.PageNode.Values<typeof innerGroup.$> = {
+  x: 'jodel',
+  y: 3
+}
+
+const otherValues = {
+  a: 'asdf'
+}
+
+const mapValues: Workflo.PageNode.Values<typeof group.$.e.$> = {
+  name: 'asdf'
+}
+
+innerGroup.setValue(values)
+innerGroup.currently.setValue(values)
+
+group.$.e.setValue(mapValues)
+group.$.e.currently.setValue(mapValues)

@@ -1,4 +1,4 @@
-import { PageElementMap, ValuePageElement, IValuePageElementOpts, IPageElementMapOpts, PageElementMapCurrently, PageElementMapEventually } from './'
+import { PageElementMap, ValuePageElement, IValuePageElementOpts, IPageElementMapOpts, PageElementMapCurrently, PageElementMapEventually, PageElementMapWait } from './'
 import { PageElementStore } from '../stores'
 
 export interface IValuePageElementMapOpts<
@@ -24,6 +24,7 @@ implements Workflo.PageNode.IGetValueNode<Partial<Record<K, ValueType>>>,
 Workflo.PageNode.ISetValueNode<ExtractValue<Record<K, PageElementType>>> {
 
   readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this, ValueType>
+  readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOptions, this, ValueType>
   readonly eventually: ValuePageElementMapEventually<Store, K, PageElementType, PageElementOptions, this, ValueType>
 
   constructor(
@@ -33,6 +34,7 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Record<K, PageElementType>>> {
     super(selector, opts)
 
     this.currently = new ValuePageElementMapCurrently(this)
+    this.wait = new ValuePageElementMapWait(this)
     this.eventually = new ValuePageElementMapEventually(this)
   }
 
@@ -44,8 +46,8 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Record<K, PageElementType>>> {
    *
    * @param filter a filter mask
    */
-  getValue(filter?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>> {
-    return this.__getInterfaceFunc(this.$, node => node.getValue(), filter)
+  getValue(filter?: Partial<Record<K, ValueType>>) {
+    return this.eachGet(this._$, filter, node => node.getValue())
   }
 
   /**
@@ -85,7 +87,7 @@ class ValuePageElementMapCurrently<
    * @param filter a filter mask
    */
   getValue(filter?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>> {
-    return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getValue(), filter)
+    return this._node.eachGet(this._node.$, filter, node => node.currently.getValue())
   }
 
   setValue(values: ExtractValue<Partial<Record<K, PageElementType>>>) {
@@ -97,26 +99,62 @@ class ValuePageElementMapCurrently<
   }
 
   hasValue(value: Partial<Record<K, ValueType>>) {
-    return this._node.__compare((element, expected) => element.currently.hasValue(expected), value)
-  }
-
-  hasAnyValue() {
-    return this._node.__compare(element => element.currently.hasAnyValue())
+    return this._node.eachCheck(
+      this._node.$, value, (element, expected) => element.currently.hasValue(expected)
+    )
   }
 
   containsValue(value: Partial<Record<K, ValueType>>) {
-    return this._node.__compare((element, expected) => element.currently.containsValue(expected), value)
+    return this._node.eachCheck(
+      this._node.$, value, (element, expected) => element.currently.containsValue(expected)
+    )
   }
 
   not = {...super.not,
     hasValue: (value: Partial<Record<K, ValueType>>) => {
-      return this._node.__compare((element, expected) => element.currently.not.hasValue(expected), value)
-    },
-    hasAnyValue: () => {
-      return this._node.__compare(element => element.currently.not.hasAnyValue())
+      return this._node.eachCheck(
+        this._node.$, value, (element, expected) => element.currently.not.hasValue(expected)
+      )
     },
     containsValue: (value: Partial<Record<K, ValueType>>) => {
-      return this._node.__compare((element, expected) => element.currently.not.containsValue(expected), value)
+      return this._node.eachCheck(
+        this._node.$, value, (element, expected) => element.currently.not.containsValue(expected)
+      )
+    }
+  }
+}
+
+class ValuePageElementMapWait<
+  Store extends PageElementStore,
+  K extends string,
+  PageElementType extends ValuePageElement<Store, ValueType>,
+  PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
+  MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType>,
+  ValueType
+> extends PageElementMapWait<Store, K, PageElementType, PageElementOptions, MapType> {
+
+  hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.$, value, (element, expected) => element.wait.hasValue(expected, opts)
+    )
+  }
+
+  containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.$, value, (element, expected) => element.wait.containsValue(expected, opts)
+    )
+  }
+
+  not = {...super.not,
+    hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.$, value, (element, expected) => element.wait.not.hasValue(expected, opts)
+      )
+    },
+    containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.$, value, (element, expected) => element.wait.not.containsValue(expected, opts)
+      )
     }
   }
 }
@@ -131,26 +169,27 @@ class ValuePageElementMapEventually<
 > extends PageElementMapEventually<Store, K, PageElementType, PageElementOptions, MapType> {
 
   hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.hasValue(expected, opts), value)
-  }
-
-  hasAnyValue(opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare(element => element.eventually.hasAnyValue(opts))
+    return this._node.eachCheck(
+      this._node.$, value, (element, expected) => element.eventually.hasValue(expected, opts)
+    )
   }
 
   containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.containsValue(expected, opts), value)
+    return this._node.eachCheck(
+      this._node.$, value, (element, expected) => element.eventually.containsValue(expected, opts)
+    )
   }
 
   not = {...super.not,
     hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.hasValue(expected, opts), value)
-    },
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare(element => element.eventually.not.hasAnyValue(opts))
+      return this._node.eachCheck(
+        this._node.$, value, (element, expected) => element.eventually.not.hasValue(expected, opts)
+      )
     },
     containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.containsValue(expected, opts), value)
+      return this._node.eachCheck(
+        this._node.$, value, (element, expected) => element.eventually.not.containsValue(expected, opts)
+      )
     }
   }
 }

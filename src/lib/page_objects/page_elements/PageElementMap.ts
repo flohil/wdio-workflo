@@ -2,6 +2,7 @@ import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.'
 import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
 import _ = require('lodash');
+import { pageObjects } from '../../..';
 
 // https://github.com/Microsoft/TypeScript/issues/14930
 
@@ -45,6 +46,7 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   protected _lastDiff: Workflo.PageNode.IDiff
 
   readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
+  readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOptions, this>
   readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOptions, this>
 
   constructor(
@@ -74,6 +76,7 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
     )
 
     this.currently = new PageElementMapCurrently(this)
+    this.wait = new PageElementMapWait(this)
     this.eventually = new PageElementMapEventually(this)
   }
 
@@ -103,10 +106,30 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
    * Returns values of all list elements in the order they were retrieved from the DOM.
    */
   getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>> {
-    return this.__getInterfaceFunc(this.$, node => node.getText(), filterMask)
+    return this.eachGet(this._$, filterMask, node => node.getText())
   }
 
   // HELPER FUNCTIONS
+
+  eachCheck<T>(
+    context: Record<K, PageElementType>,
+    expected: Partial<Record<K, T>>,
+    compareFunc: (element: PageElementType, expected?: T) => boolean
+  ): boolean {
+    const diffs: Workflo.PageNode.IDiffTree = {}
+
+    for (const key in expected) {
+      if (!compareFunc(context[key], expected[key] as any as T)) {
+        diffs[key] = context[key].__lastDiff
+      }
+    }
+
+    this._lastDiff = {
+      tree: diffs
+    }
+
+    return Object.keys(diffs).length === 0
+  }
 
   /**
    * Helper function to map element content nodes to a value by calling a node interface function on each node.
@@ -114,18 +137,17 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
    * If passing filter mask, only values set to true in this mask will be returned.
    * By default (if no filter mask is passed), all values will be returned.
    *
-   * @param context
    * @param getFunc
    * @param filterMask a filter mask
    */
-  __getInterfaceFunc<
+  eachGet<
     Store extends PageElementStore,
     PageElementType extends PageElement<Store>,
     ResultType
   >(
     context: Record<K, PageElementType>,
+    filterMask: Partial<Record<K, ResultType | boolean>>,
     getFunc: (node: PageElementType) => ResultType,
-    filterMask?: Partial<Record<K, ResultType | boolean>>
   ): Record<K, ResultType> {
     let result = {} as Record<K, ResultType>;
 
@@ -142,22 +164,16 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
     return result;
   }
 
-  __compare<T>(
-    compareFunc: (element: PageElementType, expected?: T) => boolean, expected?: Partial<Record<K, T>>
-  ): boolean {
-    const diffs: Workflo.PageNode.IDiffTree = {}
-
+  eachWait<T>(
+    context: Record<K, PageElementType>,
+    expected: Partial<Record<K, T>>,
+    waitFunc: (element: PageElementType, expected?: T) => PageElementType,
+  ): this {
     for (const key in expected) {
-      if (!compareFunc(this._$[key], expected[key] as any as T)) {
-        diffs[key] = this._$[key].__lastDiff
-      }
+      waitFunc(context[key], expected[key] as any as T)
     }
 
-    this._lastDiff = {
-      tree: diffs
-    }
-
-    return Object.keys(diffs).length === 0
+    return this
   }
 }
 
@@ -176,30 +192,73 @@ export class PageElementMapCurrently<
   }
 
   getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>> {
-    return this._node.__getInterfaceFunc(this._node.$, node => node.currently.getText(), filterMask)
+    return this._node.eachGet(
+      this._node.$, filterMask, node => node.currently.getText()
+    )
   }
 
   hasText(text: Partial<Record<K, string>>) {
-    return this._node.__compare((element, expected) => element.currently.hasText(expected), text)
-  }
-
-  hasAnyText() {
-    return this._node.__compare(element => element.currently.hasAnyText())
+    return this._node.eachCheck(
+      this._node.$, text, (element, expected) => element.currently.hasText(expected)
+    )
   }
 
   containsText(text: Partial<Record<K, string>>) {
-    return this._node.__compare((element, expected) => element.currently.containsText(expected), text)
+    return this._node.eachCheck(
+      this._node.$, text, (element, expected) => element.currently.containsText(expected)
+    )
   }
 
   not = {
     hasText: (text: Partial<Record<K, string>>) => {
-      return this._node.__compare((element, expected) => element.currently.not.hasText(expected), text)
-    },
-    hasAnyText: () => {
-      return this._node.__compare(element => element.currently.not.hasAnyText())
+      return this._node.eachCheck(
+        this._node.$, text, (element, expected) => element.currently.not.hasText(expected)
+      )
     },
     containsText: (text: Partial<Record<K, string>>) => {
-      return this._node.__compare((element, expected) => element.currently.not.containsText(expected), text)
+      return this._node.eachCheck(
+        this._node.$, text, (element, expected) => element.currently.not.containsText(expected)
+      )
+    }
+  }
+}
+
+export class PageElementMapWait<
+  Store extends PageElementStore,
+  K extends string,
+  PageElementType extends PageElement<Store>,
+  PageElementOptions extends Partial<IPageElementOpts<Store>>,
+  MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
+> {
+
+  protected readonly _node: MapType
+
+  constructor(node: MapType) {
+    this._node = node
+  }
+
+  hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.$, text, (element, expected) => element.wait.hasText(expected, opts)
+    )
+  }
+
+  containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.$, text, (element, expected) => element.wait.containsText(expected, opts)
+    )
+  }
+
+  not = {
+    hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.$, text, (element, expected) => element.wait.not.hasText(expected, opts)
+      )
+    },
+    containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.$, text, (element, expected) => element.wait.not.containsText(expected, opts)
+      )
     }
   }
 }
@@ -219,26 +278,27 @@ export class PageElementMapEventually<
   }
 
   hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.hasText(expected, opts), text)
-  }
-
-  hasAnyText(opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare(element => element.eventually.hasAnyText(opts))
+    return this._node.eachCheck(
+      this._node.$, text, (element, expected) => element.eventually.hasText(expected, opts)
+    )
   }
 
   containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.containsText(expected, opts), text)
+    return this._node.eachCheck(
+      this._node.$, text, (element, expected) => element.eventually.containsText(expected, opts)
+    )
   }
 
   not = {
     hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.hasText(expected, opts), text)
-    },
-    hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare(element => element.eventually.not.hasAnyText(opts))
+      return this._node.eachCheck(
+        this._node.$, text, (element, expected) => element.eventually.not.hasText(expected, opts)
+      )
     },
     containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.containsText(expected, opts), text)
+      return this._node.eachCheck(
+        this._node.$, text, (element, expected) => element.eventually.not.containsText(expected, opts)
+      )
     }
   }
 }

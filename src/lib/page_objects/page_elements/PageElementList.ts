@@ -298,29 +298,31 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
   }
 
   getText() {
-    return this.all.map(listElement => listElement.getText())
+    return this.eachGet(this.all, element => element.getText())
   }
 
   // HELPER FUNCTIONS
 
-  __compare<T>(
-    compareFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]
+  // context
+  eachCheck<T>(
+    elements: PageElementType[],
+    expected: T | T[],
+    checkFunc: (element: PageElementType, expected?: T) => boolean,
   ): boolean {
-    const all = this.all
     const diffs: Workflo.PageNode.IDiffTree = {}
 
-    if (isArray(expected) && expected.length !== all.length) {
+    if (isArray(expected) && expected.length !== elements.length) {
       throw new Error(
         `${this.constructor.name}: ` +
-        `Length of expected (${expected.length}) did not match length of list (${all.length})!`
+        `Length of expected (${expected.length}) did not match length of list (${elements.length})!`
       )
     }
 
-    for (let i = 0; i < all.length; ++i) {
+    for (let i = 0; i < elements.length; ++i) {
       const _expected: T = isArray(expected) ? expected[i] : expected
-      const element = all[i]
+      const element = elements[i]
 
-      if (!compareFunc(element, _expected)) {
+      if (!checkFunc(element, _expected)) {
         diffs[`[${i + 1}]`] = element.__lastDiff
       }
     }
@@ -331,6 +333,36 @@ implements Workflo.PageNode.IGetTextNode<string[]> {
 
     return Object.keys(diffs).length === 0
   }
+
+  eachGet<T>(
+    elements: PageElementType[],
+    getFunc: (element: PageElementType) => T
+  ): T[] {
+    return elements.map(element => getFunc(element))
+  }
+
+  // perform initial wait to make sure list elements are loaded
+  eachWait<T>(
+    elements: PageElementType[],
+    expected: T | T[],
+    waitFunc: (element: PageElementType, expected: T) => PageElementType,
+  ): this {
+    if (isArray(expected) && expected.length !== elements.length) {
+      throw new Error(
+        `${this.constructor.name}: ` +
+        `Length of expected (${expected.length}) did not match length of list (${elements.length})!`
+      )
+    }
+
+    for (let i = 0; i < elements.length; ++i) {
+      const _expected: T = isArray(expected) ? expected[i] : expected
+      const element = elements[i]
+
+      waitFunc(element, _expected)
+    }
+
+    return this
+  }
 }
 
 export class PageElementListCurrently<
@@ -338,7 +370,7 @@ export class PageElementListCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> implements Workflo.PageNode.IGetText<string[]>, Workflo.PageNode.ICheckTextCurrently<string | string[]> {
+> {
 
   protected readonly _node: ListType
 
@@ -457,7 +489,7 @@ export class PageElementListCurrently<
   }
 
   getText() {
-    return this.all.map(listElement => listElement.currently.getText())
+    return this._node.eachGet(this.all, element => element.currently.getText())
   }
 
 // CHECK STATE FUNCTIONS
@@ -479,15 +511,11 @@ export class PageElementListCurrently<
   }
 
   hasText(text: string | string[]) {
-    return this._node.__compare((element, expected) => element.currently.hasText(expected), text)
-  }
-
-  hasAnyText() {
-    return this._node.__compare(element => element.currently.hasAnyText())
+    return this._node.eachCheck(this.all, text, (element, expected) => element.currently.hasText(expected))
   }
 
   containsText(text: string | string[]) {
-    return this._node.__compare((element, expected) => element.currently.containsText(expected), text)
+    return this._node.eachCheck(this.all, text, (element, expected) => element.currently.containsText(expected))
   }
 
   not = {
@@ -496,13 +524,10 @@ export class PageElementListCurrently<
       length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
     ) => !this.hasLength(length, comparator),
     hasText: (text: string | string[]) => {
-      return this._node.__compare((element, expected) => element.currently.not.hasText(expected), text)
-    },
-    hasAnyText: () => {
-      return this._node.__compare(element => element.currently.not.hasAnyText())
+      return this._node.eachCheck(this.all, text, (element, expected) => element.currently.not.hasText(expected))
     },
     containsText: (text: string | string[]) => {
-      return this._node.__compare((element, expected) => element.currently.not.containsText(expected), text)
+      return this._node.eachCheck(this.all, text, (element, expected) => element.currently.not.containsText(expected))
     }
   }
 }
@@ -573,6 +598,18 @@ export class PageElementListWait<
     return this._node.currently.first.wait.not
   }
 
+  hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.all, text, (element, expected) => element.wait.hasText(expected, opts),
+    )
+  }
+
+  containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.all, text, (element, expected) => element.wait.containsText(expected, opts)
+    )
+  }
+
   not = {
     isEmpty: (opts: IPageElementListWaitEmptyParams) => this.isEmpty({
       timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -581,7 +618,17 @@ export class PageElementListWait<
       length: number, opts?:  IPageElementListWaitLengthParams
     ) => this.hasLength(length, {
       timeout: opts.timeout, interval: opts.interval, reverse: true
-    })
+    }),
+    hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.all, text, (element, expected) => element.wait.not.hasText(expected, opts)
+      )
+    },
+    containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.all, text, (element, expected) => element.wait.not.containsText(expected, opts)
+      )
+    }
   }
 }
 
@@ -590,7 +637,7 @@ export class PageElementListEventually<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> implements Workflo.PageNode.ICheckTextEventually<string | string[]> {
+> {
 
   protected readonly _node: ListType
 
@@ -640,15 +687,15 @@ export class PageElementListEventually<
   }
 
   hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.hasText(expected, opts), text)
-  }
-
-  hasAnyText(opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare(element => element.eventually.hasAnyText(opts))
+    return this._node.eachCheck(
+      this._node.all, text, (element, expected) => element.eventually.hasText(expected, opts)
+    )
   }
 
   containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.containsText(expected, opts), text)
+    return this._node.eachCheck(
+      this._node.all, text, (element, expected) => element.eventually.containsText(expected, opts)
+    )
   }
 
   not = {
@@ -659,18 +706,14 @@ export class PageElementListEventually<
       timeout: opts.timeout, interval: opts.interval, reverse: true
     }),
     hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.hasText(expected, opts), text)
-    },
-    hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare(element => element.eventually.not.hasAnyText(opts))
+      return this._node.eachCheck(
+        this._node.all, text, (element, expected) => element.eventually.not.hasText(expected, opts)
+      )
     },
     containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.containsText(expected, opts), text)
+      return this._node.eachCheck(
+        this._node.all, text, (element, expected) => element.eventually.not.containsText(expected, opts)
+      )
     }
   }
-}
-
-export function excludeNot<T extends { not: N }, N>(obj: T) {
-  let { not, ...rest } = obj;
-  return rest;
 }

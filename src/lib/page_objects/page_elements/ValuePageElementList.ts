@@ -1,7 +1,6 @@
-import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts, PageElementListCurrently, PageElementListEventually } from './'
+import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts, PageElementListCurrently, PageElementListEventually, PageElementListWait } from './'
 import { PageElementStore } from '../stores'
 import _ = require('lodash');
-import { stores } from '..';
 
 export interface IValuePageElementListOpts<
   Store extends PageElementStore,
@@ -19,6 +18,7 @@ export class ValuePageElementList<
 implements Workflo.PageNode.IGetValueNode<ValueType[]>, Workflo.PageNode.ISetValueNode<ValueType[] | ValueType> {
 
   readonly currently: ValuePageElementListCurrently<Store, PageElementType, PageElementOptions, this, ValueType>
+  readonly wait: ValuePageElementListWait<Store, PageElementType, PageElementOptions, this, ValueType>
   readonly eventually: ValuePageElementListEventually<Store, PageElementType, PageElementOptions, this, ValueType>
 
   constructor(
@@ -28,6 +28,7 @@ implements Workflo.PageNode.IGetValueNode<ValueType[]>, Workflo.PageNode.ISetVal
     super(selector, opts)
 
     this.currently = new ValuePageElementListCurrently(this, opts)
+    this.wait = new ValuePageElementListWait(this)
     this.eventually = new ValuePageElementListEventually(this)
   }
 
@@ -45,8 +46,8 @@ implements Workflo.PageNode.IGetValueNode<ValueType[]>, Workflo.PageNode.ISetVal
    * Returns values of all list elements in the order they were retrieved from the DOM
    * after the initial wait was performed.
    */
-  getValue(): ValueType[] {
-    return this.all.map(valuePageElement => valuePageElement.getValue())
+  getValue() {
+    return this.eachGet(this.all, element => element.getValue())
   }
 
 // SETTER FUNCTIONS
@@ -91,14 +92,13 @@ class ValuePageElementListCurrently<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>,
   ValueType
-> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType>
-implements Workflo.PageNode.IGetValue<ValueType[]> {
+> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType> {
 
   /**
    * Returns values of all list elements in the order they were retrieved from the DOM immediatly.
    */
   getValue() {
-    return this.all.map(valuePageElement => valuePageElement.currently.getValue())
+    return this._node.eachGet(this.all, element => element.currently.getValue())
   }
 
   /**
@@ -136,26 +136,61 @@ implements Workflo.PageNode.IGetValue<ValueType[]> {
   // CHECK STATE
 
   hasValue(value: ValueType | ValueType[]) {
-    return this._node.__compare((element, expected) => element.currently.hasValue(expected), value)
-  }
-
-  hasAnyValue() {
-    return this._node.__compare(element => element.currently.hasAnyValue())
+    return this._node.eachCheck(
+      this.all, value, (element, expected) => element.currently.hasValue(expected)
+    )
   }
 
   containsValue(value: ValueType | ValueType[]) {
-    return this._node.__compare((element, expected) => element.currently.containsValue(expected), value)
+    return this._node.eachCheck(
+      this.all, value, (element, expected) => element.currently.containsValue(expected)
+    )
   }
 
   not = {...super.not,
     hasValue: (value: ValueType | ValueType[]) => {
-      return this._node.__compare((element, expected) => element.currently.not.hasValue(expected), value)
-    },
-    hasAnyValue: () => {
-      return this._node.__compare(element => element.currently.not.hasAnyValue())
+      return this._node.eachCheck(
+        this.all, value, (element, expected) => element.currently.not.hasValue(expected)
+      )
     },
     containsValue: (value: ValueType | ValueType[]) => {
-      return this._node.__compare((element, expected) => element.currently.not.containsValue(expected), value)
+      return this._node.eachCheck(
+        this.all, value, (element, expected) => element.currently.not.containsValue(expected)
+      )
+    }
+  }
+}
+
+class ValuePageElementListWait<
+  Store extends PageElementStore,
+  PageElementType extends ValuePageElement<Store, ValueType>,
+  PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
+  ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>,
+  ValueType
+> extends PageElementListWait<Store, PageElementType, PageElementOptions, ListType> {
+
+  hasValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.all, value, (element, expected) => element.wait.hasValue(expected, opts)
+    )
+  }
+
+  containsValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachWait(
+      this._node.all, value, (element, expected) => element.wait.containsValue(expected, opts)
+    )
+  }
+
+  not = {...super.not,
+    hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.all, value, (element, expected) => element.wait.not.hasValue(expected, opts)
+      )
+    },
+    containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachWait(
+        this._node.all, value, (element, expected) => element.wait.not.containsValue(expected, opts)
+      )
     }
   }
 }
@@ -171,26 +206,27 @@ class ValuePageElementListEventually<
   // CHECK STATE
 
   hasValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.hasValue(expected, opts), value)
-  }
-
-  hasAnyValue(opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare(element => element.eventually.hasAnyValue(opts))
+    return this._node.eachCheck(
+      this._node.all, value, (element, expected) => element.eventually.hasValue(expected, opts)
+    )
   }
 
   containsValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compare((element, expected) => element.eventually.containsValue(expected, opts), value)
+    return this._node.eachCheck(
+      this._node.all, value, (element, expected) => element.eventually.containsValue(expected, opts)
+    )
   }
 
   not = {...super.not,
     hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.hasValue(expected, opts), value)
-    },
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare(element => element.eventually.not.hasAnyValue(opts))
+      return this._node.eachCheck(
+        this._node.all, value, (element, expected) => element.eventually.not.hasValue(expected, opts)
+      )
     },
     containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compare((element, expected) => element.eventually.not.containsValue(expected, opts), value)
+      return this._node.eachCheck(
+        this._node.all, value, (element, expected) => element.eventually.not.containsValue(expected, opts)
+      )
     }
   }
 }

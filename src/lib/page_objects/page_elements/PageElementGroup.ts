@@ -1,7 +1,17 @@
-import { PageElementStore } from '../stores'
+import { PageElementStore, pageElement } from '../stores'
+
+import {PageElement} from './PageElement'
 
 export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]: T[P] extends Workflo.PageNode.IGetTextNode<any> ? ReturnType<T[P]['getText']> : undefined;
+}
+
+export type ExtractInterfaceFunc<
+  T extends {[key: string]: NodeInterface},
+  NodeInterface extends {[key: string]: (...args: any[]) => any},
+  InterfaceFuncKey extends keyof NodeInterface
+> = {
+  [P in keyof T]: T[P] extends NodeInterface ? ReturnType<T[P][InterfaceFuncKey]> : undefined;
 }
 
 export type FilterMaskText<T extends {[key: string]: Workflo.PageNode.INode}> = {
@@ -67,6 +77,7 @@ export class PageElementGroup<
   // GETTER FUNCTIONS
 
   getText(filterMask?: FilterMaskText<Partial<Content>>) {
+
     let result = {} as ExtractText<Partial<Content>>;
 
     for (const k in this.$) {
@@ -88,10 +99,51 @@ export class PageElementGroup<
 
   // HELPER FUNCTIONS
 
-  __compareText<K extends string>(
+  getText2() {
+    return this.eachGet<{getText: () => any}, Content>('getText')
+  }
+
+  eachGet<
+    NodeInterface extends {[key: string]: (...args: any[]) => any},
+    Content extends {[key: string]: any}
+  >(
+    funcName: keyof NodeInterface,
+    getFunc?: (node: NodeInterface) => any,
+  ): ExtractInterfaceFunc<Content, NodeInterface, keyof NodeInterface> {
+    let result = {} as ExtractInterfaceFunc<Content, NodeInterface, keyof NodeInterface>;
+
+    for (const k in this.$) {
+      const node = this.$[k] as any as NodeInterface
+
+      if (typeof node[funcName] !== 'undefined') {
+        result[k] = node[funcName]()
+      }
+    }
+
+    return result;
+  }
+
+  eachCheck<K extends string>(
     compareFunc: (node: Workflo.PageNode.IGetTextNode<any>, expected?: Content[K]) => boolean,
     expected?: ExtractText<Partial<Content>>,
   ): boolean {
+
+    const jd = {
+      a: pageElement.Element('//div'),
+      b: pageElement.ElementList('//div'),
+      c: pageElement.ElementGroup({
+        d: pageElement.Element('//div'),
+        e: pageElement.ElementList('//div'),
+      })
+    }
+
+    const jiji = jd.c.getText2()
+
+    const kkk = this.eachGet<{getText: () => any}, typeof jd>('getText')
+
+
+
+
     const diffs: Workflo.PageNode.IDiffTree = {}
 
     for (const k in expected) {
@@ -146,26 +198,26 @@ export class PageElementGroupCurrently<
   }
 
   hasText(text: ExtractText<Partial<Content>>) {
-    return this._node.__compareText((element, expected) => element.currently.hasText(expected), text)
+    return this._node.eachCheck((element, expected) => element.currently.hasText(expected), text)
   }
 
   hasAnyText() {
-    return this._node.__compareText(element => element.currently.hasAnyText())
+    return this._node.eachCheck(element => element.currently.hasAnyText())
   }
 
   containsText(text: ExtractText<Partial<Content>>) {
-    return this._node.__compareText((element, expected) => element.currently.containsText(expected), text)
+    return this._node.eachCheck((element, expected) => element.currently.containsText(expected), text)
   }
 
   not = {
     hasText: (text: ExtractText<Partial<Content>>) => {
-      return this._node.__compareText((element, expected) => element.currently.not.hasText(expected), text)
+      return this._node.eachCheck((element, expected) => element.currently.not.hasText(expected), text)
     },
     hasAnyText: () => {
-      return this._node.__compareText(element => element.currently.not.hasAnyText())
+      return this._node.eachCheck(element => element.currently.not.hasAnyText())
     },
     containsText: (text: ExtractText<Partial<Content>>) => {
-      return this._node.__compareText((element, expected) => element.currently.not.containsText(expected), text)
+      return this._node.eachCheck((element, expected) => element.currently.not.containsText(expected), text)
     }
   }
 }
@@ -183,26 +235,26 @@ export class PageElementGroupEventually<
   }
 
   hasText(text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compareText((element, expected) => element.eventually.hasText(expected, opts), text)
+    return this._node.eachCheck((element, expected) => element.eventually.hasText(expected, opts), text)
   }
 
   hasAnyText(opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compareText(element => element.eventually.hasAnyText(opts))
+    return this._node.eachCheck(element => element.eventually.hasAnyText(opts))
   }
 
   containsText(text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) {
-    return this._node.__compareText((element, expected) => element.eventually.containsText(expected, opts), text)
+    return this._node.eachCheck((element, expected) => element.eventually.containsText(expected, opts), text)
   }
 
   not = {
     hasText: (text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compareText((element, expected) => element.eventually.not.hasText(expected, opts), text)
+      return this._node.eachCheck((element, expected) => element.eventually.not.hasText(expected, opts), text)
     },
     hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compareText(element => element.eventually.not.hasAnyText(opts))
+      return this._node.eachCheck(element => element.eventually.not.hasAnyText(opts))
     },
     containsText: (text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__compareText((element, expected) => element.eventually.not.containsText(expected, opts), text)
+      return this._node.eachCheck((element, expected) => element.eventually.not.containsText(expected, opts), text)
     }
   }
 }
@@ -216,4 +268,16 @@ function isGetTextNode(node: any): node is Workflo.PageNode.IGetTextNode<any> {
   typeof node.eventually.hasText === 'function' &&
   typeof node.eventually.hasAnyText === 'function' &&
   typeof node.eventually.containsText === 'function'
+}
+
+
+const jd = {
+  a: {
+    getText: () => 'adsf',
+    adsf: 1
+  }
+}
+
+const jod: ExtractInterfaceFunc<typeof jd, {getText: () => string}, 'getText'> = {
+  a: 'asdf'
 }
