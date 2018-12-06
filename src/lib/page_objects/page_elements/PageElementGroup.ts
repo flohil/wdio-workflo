@@ -14,6 +14,13 @@ export type ExtractInterfaceFunc<
   [P in keyof T]: T[P] extends NodeInterface ? ReturnType<T[P][InterfaceFuncKey]> : undefined;
 }
 
+export type FilterMask<
+  T extends {[key: string]: NodeInterface | Workflo.PageNode.INode},
+  NodeInterface extends {[key: string]: (...args: any[]) => any},
+> = {
+  [P in keyof T]: T[P] extends NodeInterface ? boolean : undefined;
+}
+
 export type FilterMaskText<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]: T[P] extends Workflo.PageNode.IGetTextNode<any> ? boolean : undefined;
 }
@@ -110,14 +117,21 @@ export class PageElementGroup<
     context: _Content,
     funcName: keyof NodeInterface,
     getFunc: (node: NodeInterface) => ReturnType<NodeInterface[keyof NodeInterface]>,
-  ): ExtractInterfaceFunc<_Content, NodeInterface, keyof NodeInterface> {
-    let result = {} as ExtractInterfaceFunc<_Content, NodeInterface, keyof NodeInterface>;
+    filterMask?: FilterMask<Partial<_Content>, NodeInterface>
+  ): ExtractInterfaceFunc<Partial<_Content>, NodeInterface, keyof NodeInterface> {
+    let result = {} as ExtractInterfaceFunc<Partial<_Content>, NodeInterface, keyof NodeInterface>;
 
     for (const k in context) {
       const node = context[k]
 
       if (hasNodeInterface(node, funcName)) {
-        result[k] = getFunc(node) as any
+        if (filterMask) {
+          if (filterMask[k] === true) {
+            result[k] = getFunc(node) as any
+          }
+        } else {
+          result[k] = getFunc(node) as any
+        }
       }
     }
 
@@ -140,7 +154,9 @@ export class PageElementGroup<
 
     const jiji = jd.c.getText2()
 
-    const kkk = this.eachGet(jd, 'getText', node => node.getText())
+    const kkk = this.eachGet(jd, 'getText', node => node.getText(), {a: true})
+
+    kkk.
 
     const diffs: Workflo.PageNode.IDiffTree = {}
 
@@ -284,3 +300,20 @@ const jod: ExtractInterfaceFunc<typeof jd, {getText: () => string}, 'getText'> =
 function hasNodeInterface<NodeInterface>(node: Workflo.PageNode.INode | NodeInterface, funcName: keyof NodeInterface): node is NodeInterface {
   return (<NodeInterface>node)[funcName] !== undefined;
 }
+
+// function toFilterMask<
+//   Content extends { [key: string]: Workflo.PageNode.INode; },
+//   NodeInterface  extends {[P in keyof NodeInterface]: (...args: any[]) => ReturnType<NodeInterface[keyof NodeInterface]>},
+// >(context: Content, funcName: keyof NodeInterface): FilterMask<Content, NodeInterface> {
+//   const filterMask = {} as FilterMask<Content, NodeInterface>
+
+//   for (const k in context) {
+//     const node = context[k]
+
+//     if (hasNodeInterface(node, funcName)) {
+//       filterMask[k] = true as any
+//     }
+//   }
+
+//   return filterMask
+// }
