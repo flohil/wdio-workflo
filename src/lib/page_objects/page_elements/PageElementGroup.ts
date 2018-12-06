@@ -100,7 +100,7 @@ export class PageElementGroup<
   // HELPER FUNCTIONS
 
   getText2() {
-    return this.eachGet<{getText: () => any}, Content>(this.$, 'getText')
+    return this.eachGet(this.$, 'getText', node => node.getText())
   }
 
   eachGet<
@@ -109,7 +109,7 @@ export class PageElementGroup<
   >(
     context: _Content,
     funcName: keyof NodeInterface,
-    getFunc?: (node: NodeInterface) => ReturnType<NodeInterface[keyof NodeInterface]>,
+    getFunc: (node: NodeInterface) => ReturnType<NodeInterface[keyof NodeInterface]>,
   ): ExtractInterfaceFunc<_Content, NodeInterface, keyof NodeInterface> {
     let result = {} as ExtractInterfaceFunc<_Content, NodeInterface, keyof NodeInterface>;
 
@@ -117,7 +117,7 @@ export class PageElementGroup<
       const node = context[k]
 
       if (hasNodeInterface(node, funcName)) {
-        result[k] = node[funcName]() as any
+        result[k] = getFunc(node) as any
       }
     }
 
@@ -140,10 +140,7 @@ export class PageElementGroup<
 
     const jiji = jd.c.getText2()
 
-    const kkk = this.eachGet<{getText: () => any}, typeof jd>(jd, 'getText')
-
-    kkk.c.
-
+    const kkk = this.eachGet(jd, 'getText', node => node.getText())
 
     const diffs: Workflo.PageNode.IDiffTree = {}
 
