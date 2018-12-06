@@ -7,7 +7,7 @@ export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
 }
 
 export type ExtractInterfaceFunc<
-  T extends {[key: string]: NodeInterface},
+  T extends {[key: string]: NodeInterface | Workflo.PageNode.INode},
   NodeInterface extends {[key: string]: (...args: any[]) => any},
   InterfaceFuncKey extends keyof NodeInterface
 > = {
@@ -35,7 +35,7 @@ export interface IPageElementGroupOpts<
 // - all private members of group must start with _
 export class PageElementGroup<
   Store extends PageElementStore,
-  Content extends {[key: string] : Workflo.PageNode.INode}
+  Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 > implements Workflo.PageNode.IGetTextNode<ExtractText<Partial<Content>>> {
   protected _id: string
   protected _$: Content
@@ -100,23 +100,24 @@ export class PageElementGroup<
   // HELPER FUNCTIONS
 
   getText2() {
-    return this.eachGet<{getText: () => any}, Content>('getText')
+    return this.eachGet<{getText: () => any}, Content>(this.$, 'getText')
   }
 
   eachGet<
-    NodeInterface extends {[key: string]: (...args: any[]) => any},
-    Content extends {[key: string]: any}
+    NodeInterface extends {[P in keyof NodeInterface]: (...args: any[]) => ReturnType<NodeInterface[keyof NodeInterface]>},
+    _Content extends {[K in keyof _Content]: NodeInterface | Workflo.PageNode.INode},
   >(
+    context: _Content,
     funcName: keyof NodeInterface,
-    getFunc?: (node: NodeInterface) => any,
-  ): ExtractInterfaceFunc<Content, NodeInterface, keyof NodeInterface> {
-    let result = {} as ExtractInterfaceFunc<Content, NodeInterface, keyof NodeInterface>;
+    getFunc?: (node: NodeInterface) => ReturnType<NodeInterface[keyof NodeInterface]>,
+  ): ExtractInterfaceFunc<_Content, NodeInterface, keyof NodeInterface> {
+    let result = {} as ExtractInterfaceFunc<_Content, NodeInterface, keyof NodeInterface>;
 
-    for (const k in this.$) {
-      const node = this.$[k] as any as NodeInterface
+    for (const k in context) {
+      const node = context[k]
 
-      if (typeof node[funcName] !== 'undefined') {
-        result[k] = node[funcName]()
+      if (hasNodeInterface(node, funcName)) {
+        result[k] = node[funcName]() as any
       }
     }
 
@@ -139,9 +140,9 @@ export class PageElementGroup<
 
     const jiji = jd.c.getText2()
 
-    const kkk = this.eachGet<{getText: () => any}, typeof jd>('getText')
+    const kkk = this.eachGet<{getText: () => any}, typeof jd>(jd, 'getText')
 
-
+    kkk.c.
 
 
     const diffs: Workflo.PageNode.IDiffTree = {}
@@ -280,4 +281,9 @@ const jd = {
 
 const jod: ExtractInterfaceFunc<typeof jd, {getText: () => string}, 'getText'> = {
   a: 'asdf'
+}
+
+
+function hasNodeInterface<NodeInterface>(node: Workflo.PageNode.INode | NodeInterface, funcName: keyof NodeInterface): node is NodeInterface {
+  return (<NodeInterface>node)[funcName] !== undefined;
 }
