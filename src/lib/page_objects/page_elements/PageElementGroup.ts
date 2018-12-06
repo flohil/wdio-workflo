@@ -1,28 +1,7 @@
 import { PageElementStore, pageElement } from '../stores'
 
-import {PageElement} from './PageElement'
-
 export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]: T[P] extends Workflo.PageNode.IGetTextNode<any> ? ReturnType<T[P]['getText']> : undefined;
-}
-
-export type ExtractInterfaceFunc<
-  T extends {[key: string]: NodeInterface | Workflo.PageNode.INode},
-  NodeInterface extends {[key: string]: (...args: any[]) => any},
-  InterfaceFuncKey extends keyof NodeInterface
-> = {
-  [P in keyof T]: T[P] extends NodeInterface ? ReturnType<T[P][InterfaceFuncKey]> : undefined;
-}
-
-export type FilterMask<
-  T extends {[key: string]: NodeInterface | Workflo.PageNode.INode},
-  NodeInterface extends {[key: string]: (...args: any[]) => any},
-> = {
-  [P in keyof T]: T[P] extends NodeInterface ? boolean : undefined;
-}
-
-export type FilterMaskText<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]: T[P] extends Workflo.PageNode.IGetTextNode<any> ? boolean : undefined;
+  [P in keyof T]?: T[P] extends Workflo.PageNode.IGetTextNode<any> ? ReturnType<T[P]['getText']> : undefined;
 }
 
 export interface IPageElementGroupOpts<
@@ -83,7 +62,7 @@ export class PageElementGroup<
 
   // GETTER FUNCTIONS
 
-  getText(filterMask?: FilterMaskText<Partial<Content>>) {
+  getText2(filterMask?: ExtractText<Partial<Content>>) {
 
     let result = {} as ExtractText<Partial<Content>>;
 
@@ -106,31 +85,33 @@ export class PageElementGroup<
 
   // HELPER FUNCTIONS
 
-  getText2() {
-    return this.eachGet(this.$, 'getText', node => node.getText())
+  getText(filterMask?: ExtractText<Content>) {
+    return this.eachGet<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>>(
+      'getText', node => node.getText(), filterMask
+    )
   }
 
   eachGet<
-    NodeInterface extends {[P in keyof NodeInterface]: (...args: any[]) => ReturnType<NodeInterface[keyof NodeInterface]>},
-    _Content extends {[K in keyof _Content]: NodeInterface | Workflo.PageNode.INode},
+    NodeInterface,
+    ResultType extends Partial<Content>,
+    MaskType extends ResultType = ResultType
   >(
-    context: _Content,
     funcName: keyof NodeInterface,
-    getFunc: (node: NodeInterface) => ReturnType<NodeInterface[keyof NodeInterface]>,
-    filterMask?: FilterMask<Partial<_Content>, NodeInterface>
-  ): ExtractInterfaceFunc<Partial<_Content>, NodeInterface, keyof NodeInterface> {
-    let result = {} as ExtractInterfaceFunc<Partial<_Content>, NodeInterface, keyof NodeInterface>;
+    getFunc: (node: NodeInterface) => any,
+    filterMask: MaskType
+  ): ResultType {
+    let result = {} as ResultType;
 
-    for (const k in context) {
-      const node = context[k]
+    for (const k in this.$) {
+      const node = this.$[k] as any as NodeInterface
 
-      if (hasNodeInterface(node, funcName)) {
+      if (typeof node[funcName] === 'function') {
         if (filterMask) {
-          if (filterMask[k] === true) {
-            result[k] = getFunc(node) as any
+          if (typeof filterMask[k] !== 'undefined') {
+            this.$[k] = getFunc(node) as any
           }
         } else {
-          result[k] = getFunc(node) as any
+          this.$[k] = getFunc(node) as any
         }
       }
     }
@@ -154,7 +135,7 @@ export class PageElementGroup<
 
     const jiji = jd.c.getText2()
 
-    const kkk = this.eachGet(jd, 'getText', node => node.getText(), {a: true})
+    const kkk = this.eachGet('getText', node => node.getText(), {})
 
     kkk.
 
