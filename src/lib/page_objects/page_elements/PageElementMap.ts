@@ -36,7 +36,7 @@ export class PageElementMap<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>
 > extends PageNode<Store>
-implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
+implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
 
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _elementOptions: PageElementOptions
@@ -210,6 +210,12 @@ export class PageElementMapCurrently<
     )
   }
 
+  hasAnyText(filterMask?: Partial<Record<K, string>>) {
+    return this._node.eachCheck(
+      this._node.$, filterMask, (element) => element.currently.hasAnyText()
+    )
+  }
+
   containsText(text: Partial<Record<K, string>>) {
     return this._node.eachCheck(
       this._node.$, text, (element, expected) => element.currently.containsText(expected)
@@ -220,6 +226,11 @@ export class PageElementMapCurrently<
     hasText: (text: Partial<Record<K, string>>) => {
       return this._node.eachCheck(
         this._node.$, text, (element, expected) => element.currently.not.hasText(expected)
+      )
+    },
+    hasAnyText: (filterMask?: Partial<Record<K, string>>) => {
+      return this._node.eachCheck(
+        this._node.$, filterMask, (element) => element.currently.not.hasAnyText()
       )
     },
     containsText: (text: Partial<Record<K, string>>) => {
@@ -244,6 +255,12 @@ export class PageElementMapWait<
     )
   }
 
+  hasAnyText(opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) {
+    return this._node.eachWait(
+      this._node.$, opts.filterMask, (element) => element.wait.hasAnyText(opts)
+    )
+  }
+
   containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachWait(
       this._node.$, text, (element, expected) => element.wait.containsText(expected, opts)
@@ -254,6 +271,11 @@ export class PageElementMapWait<
     hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
       return this._node.eachWait(
         this._node.$, text, (element, expected) => element.wait.not.hasText(expected, opts)
+      )
+    },
+    hasAnyText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      return this._node.eachWait(
+        this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyText(opts)
       )
     },
     containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
@@ -278,6 +300,12 @@ export class PageElementMapEventually<
     )
   }
 
+  hasAnyText(opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) {
+    return this._node.eachCheck(
+      this._node.$, opts.filterMask, (element) => element.eventually.hasAnyText(opts)
+    )
+  }
+
   containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck(
       this._node.$, text, (element, expected) => element.eventually.containsText(expected, opts)
@@ -288,6 +316,11 @@ export class PageElementMapEventually<
     hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
       return this._node.eachCheck(
         this._node.$, text, (element, expected) => element.eventually.not.hasText(expected, opts)
+      )
+    },
+    hasAnyText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      return this._node.eachCheck(
+        this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyText(opts)
       )
     },
     containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {

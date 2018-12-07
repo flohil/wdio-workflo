@@ -19,7 +19,7 @@ export interface IPageElementOpts<
 
 export class PageElement<
   Store extends PageElementStore
-> extends PageElementBase<Store> implements Workflo.PageNode.IGetTextNode<string> {
+> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string> {
 
   protected _waitType: Workflo.WaitType
   protected _$: Store

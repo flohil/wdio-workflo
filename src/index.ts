@@ -259,19 +259,19 @@ declare global {
         __lastDiff: IDiff
       }
 
-      interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
+      interface IElementNode<TextType> extends INode, IGetText<TextType> {
         currently: IGetText<TextType> & ICheckTextCurrently<TextType>
         wait: IWaitText<TextType>
         eventually: ICheckTextEventually<TextType>
       }
 
-      interface IGetValueNode<ValueType> extends INode, IGetValue<ValueType> {
+      interface IGetValueElementNode<ValueType> extends INode, IGetValue<ValueType> {
         currently: IGetValue<ValueType> & ICheckValueCurrently<ValueType>
         wait: IWaitValue<ValueType>
         eventually: ICheckValueEventually<ValueType>
       }
 
-      interface ISetValueNode<ValueType> extends INode, ISetValue<ValueType> {
+      interface ISetValueElementNode<ValueType> extends INode, ISetValue<ValueType> {
         currently: ISetValue<ValueType>
       }
 
@@ -281,7 +281,7 @@ declare global {
 
       interface IWaitText<TextType, OptsType = IWDIOParamsOptionalReverse> {
         hasText(text: TextType, opts?: OptsType): INode
-        hasAnyText?(opts?: OptsType): INode
+        hasAnyText(opts?: OptsType): INode
         containsText(text: TextType, opts?: OptsType): INode
 
         not: Omit<IWaitText<TextType, IWDIOParamsOptional>, 'not'>
@@ -289,7 +289,7 @@ declare global {
 
       interface ICheckTextCurrently<TextType> {
         hasText(text: TextType): boolean
-        hasAnyText?(): boolean
+        hasAnyText(): boolean
         containsText(text: TextType): boolean
 
         not: Omit<ICheckTextCurrently<TextType>, 'not'>
@@ -297,7 +297,7 @@ declare global {
 
       interface ICheckTextEventually<TextType> {
         hasText(text: TextType, opts?: IWDIOParamsOptional): boolean
-        hasAnyText?(opts?: IWDIOParamsOptional): boolean
+        hasAnyText(opts?: IWDIOParamsOptional): boolean
         containsText(text: TextType, opts?: IWDIOParamsOptional): boolean
 
         not: Omit<ICheckTextEventually<TextType>, 'not'>
@@ -309,7 +309,7 @@ declare global {
 
       interface IWaitValue<ValueType, OptsType = IWDIOParamsOptionalReverse> {
         hasValue(text: ValueType, opts?: OptsType): INode
-        hasAnyValue?(opts?: OptsType): INode
+        hasAnyValue(opts?: OptsType): INode
         containsValue(text: ValueType, opts?: OptsType): INode
 
         not: Omit<IWaitValue<ValueType, IWDIOParamsOptional>, 'not'>
@@ -317,7 +317,7 @@ declare global {
 
       interface ICheckValueCurrently<ValueType> {
         hasValue(value: ValueType): boolean
-        hasAnyValue?(): boolean
+        hasAnyValue(): boolean
         containsValue(value: ValueType): boolean
 
         not: Omit<ICheckValueCurrently<ValueType>, 'not'>
@@ -325,7 +325,7 @@ declare global {
 
       interface ICheckValueEventually<ValueType> {
         hasValue(value: ValueType, opts?: IWDIOParamsOptional): boolean
-        hasAnyValue?(opts?: IWDIOParamsOptional): boolean
+        hasAnyValue(opts?: IWDIOParamsOptional): boolean
         containsValue(value: ValueType, opts?: IWDIOParamsOptional): boolean
 
         not: Omit<ICheckValueEventually<ValueType>, 'not'>
@@ -347,7 +347,7 @@ declare global {
       }
 
       type Values<T extends {[key: string]: Workflo.PageNode.INode}> = Partial<{
-        [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
+        [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
       }>
     }
 

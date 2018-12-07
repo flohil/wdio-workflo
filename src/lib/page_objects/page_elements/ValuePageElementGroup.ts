@@ -2,7 +2,7 @@ import { PageElementStore } from '../stores'
 import { PageElementGroup, IPageElementGroupOpts, PageElementGroupCurrently, PageElementGroupEventually, PageElementGroupWait } from '.';
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
+  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
 }
 
 export interface IValueGroupOpts<
@@ -16,8 +16,8 @@ export class ValuePageElementGroup<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends PageElementGroup<Store, Content>
-implements Workflo.PageNode.IGetValueNode<ExtractValue<Partial<Content>>>,
-Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
+implements Workflo.PageNode.IGetValueElementNode<ExtractValue<Partial<Content>>>,
+Workflo.PageNode.ISetValueElementNode<ExtractValue<Partial<Content>>> {
 
   readonly currently: ValuePageElementGroupCurrently<Store, Content, this>
   readonly wait: ValuePageElementGroupWait<Store, Content, this>
@@ -38,7 +38,7 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
 
     for (const k in this.$) {
       if (isGetValueNode(this.$[k])) {
-        const elem = this.$[k] as any as Workflo.PageNode.IGetValueNode<any>
+        const elem = this.$[k] as any as Workflo.PageNode.IGetValueElementNode<any>
 
         if (filter) {
           if (typeof filter[k] !== 'undefined') {
@@ -62,7 +62,7 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
   setValue(values: ExtractValue<Partial<Content>>) {
     for (const k in values) {
       if (isSetValueNode(this.$[k])) {
-        const node = this.$[k] as any as Workflo.PageNode.ISetValueNode<any>
+        const node = this.$[k] as any as Workflo.PageNode.ISetValueElementNode<any>
         node.setValue(values[k])
       }
     }
@@ -73,14 +73,14 @@ Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
   // HELPER FUNCTIONS
 
   __compareValue<K extends string>(
-    compareFunc: (node: Workflo.PageNode.IGetValueNode<any>, expected?: Content[K]) => boolean,
+    compareFunc: (node: Workflo.PageNode.IGetValueElementNode<any>, expected?: Content[K]) => boolean,
     expected?: ExtractValue<Partial<Content>>,
   ): boolean {
     const diffs: Workflo.PageNode.IDiffTree = {}
 
     for (const k in expected) {
       if (isGetValueNode(this._$[k])) {
-        const elem = this._$[k] as any as Workflo.PageNode.IGetValueNode<any>
+        const elem = this._$[k] as any as Workflo.PageNode.IGetValueElementNode<any>
 
         if (!compareFunc(elem, expected[k])) {
           diffs[k] = elem.__lastDiff
@@ -107,7 +107,7 @@ class ValuePageElementGroupCurrently<
 
     for (const k in this._node.$) {
       if (isGetValueNode(this._node.$[k])) {
-        const elem = this._node.$[k] as any as Workflo.PageNode.IGetValueNode<any>
+        const elem = this._node.$[k] as any as Workflo.PageNode.IGetValueElementNode<any>
 
         if (filter) {
           if (typeof filter[k] !== 'undefined') {
@@ -132,7 +132,7 @@ class ValuePageElementGroupCurrently<
   setValue(values: ExtractValue<Partial<Content>>) {
     for (const k in values) {
       if (isSetValueNode(this._node.$[k])) {
-        const node = this._node.$[k] as any as Workflo.PageNode.ISetValueNode<any>
+        const node = this._node.$[k] as any as Workflo.PageNode.ISetValueElementNode<any>
         node.currently.setValue(values[k])
       }
     }
@@ -214,10 +214,10 @@ class ValuePageElementGroupEventually<
 }
 
 // type guards
-function isGetValueNode(node: any): node is Workflo.PageNode.IGetValueNode<any> {
+function isGetValueNode(node: any): node is Workflo.PageNode.IGetValueElementNode<any> {
   return typeof node.getValue === 'function';
 }
 
-function isSetValueNode(node: any): node is Workflo.PageNode.ISetValueNode<Workflo.Value> {
+function isSetValueNode(node: any): node is Workflo.PageNode.ISetValueElementNode<Workflo.Value> {
   return typeof node.setValue === 'function';
 }

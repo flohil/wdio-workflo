@@ -4,7 +4,7 @@ import { PageNodeEventually, PageNodeWait } from './PageNode';
 import { stores } from '..';
 
 export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]?: T[P] extends Workflo.PageNode.IGetTextNode<any> ? ReturnType<T[P]['getText']> : undefined;
+  [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? ReturnType<T[P]['getText']> : undefined;
 }
 
 export interface IPageElementGroupOpts<
@@ -27,7 +27,7 @@ export class PageElementGroup<
   Store extends PageElementStore,
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 > extends PageNode<Store>
-implements Workflo.PageNode.IGetTextNode<ExtractText<Partial<Content>>> {
+implements Workflo.PageNode.IElementNode<ExtractText<Partial<Content>>> {
   protected _id: string
   protected _$: Content
   protected _lastDiff: Workflo.PageNode.IDiff
@@ -80,7 +80,7 @@ implements Workflo.PageNode.IGetTextNode<ExtractText<Partial<Content>>> {
    * @param filter a filter mask
    */
   getText(filterMask?: ExtractText<Content>) {
-    return this.eachGet<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>> (
+    return this.eachGet<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
       node => typeof node['getText'] === 'function',
       node => node.getText(),
       filterMask
@@ -175,7 +175,7 @@ implements Workflo.PageNode.IGetText<ExtractText<Partial<Content>>> {
    * @param filter a filter mask
    */
   getText(filterMask?: ExtractText<Partial<Content>>) {
-    return this._node.eachGet<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>> (
+    return this._node.eachGet<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
       node => typeof node.currently["getText"] === "function",
       node => node.currently.getText(),
       filterMask
@@ -185,7 +185,7 @@ implements Workflo.PageNode.IGetText<ExtractText<Partial<Content>>> {
   hasText(texts: ExtractText<Partial<Content>>) {
     // return this._node.eachCheck((element, expected) => element.currently.hasText(expected), text)
 
-    return this._node.eachCheck<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>> (
+    return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
       node => typeof node.currently["hasText"] === "function",
       (node, text) => node.currently.hasText(text),
       texts
@@ -254,7 +254,7 @@ export class PageElementGroupEventually<
 }
 
 // type guards
-function isGetTextNode(node: any): node is Workflo.PageNode.IGetTextNode<any> {
+function isGetTextNode(node: any): node is Workflo.PageNode.IElementNode<any> {
   return typeof node.getText === 'function' &&
   typeof node.currently.hasText === 'function' &&
   typeof node.currently.hasAnyText === 'function' &&
