@@ -1,13 +1,17 @@
 import { PageElementStore, pageElement } from '../stores'
+import { PageNodeCurrently, PageNode } from '.';
+import { PageNodeEventually, PageNodeWait } from './PageNode';
+import { stores } from '..';
 
 export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]?: T[P] extends Workflo.PageNode.IGetTextNode<any> ? ReturnType<T[P]['getText']> : undefined;
 }
 
 export interface IPageElementGroupOpts<
+  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > {
-  id: string,
+  store: Store,
   content: Content
 }
 
@@ -22,22 +26,27 @@ export interface IPageElementGroupOpts<
 export class PageElementGroup<
   Store extends PageElementStore,
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
-> implements Workflo.PageNode.IGetTextNode<ExtractText<Partial<Content>>> {
+> extends PageNode<Store>
+implements Workflo.PageNode.IGetTextNode<ExtractText<Partial<Content>>> {
   protected _id: string
   protected _$: Content
   protected _lastDiff: Workflo.PageNode.IDiff
 
   readonly currently: PageElementGroupCurrently<Store, Content, this>
+  readonly wait: PageElementGroupWait<Store, Content, this>
   readonly eventually: PageElementGroupEventually<Store, Content, this>
 
-  constructor({
-    id,
+  constructor(id: string, {
+    store,
     content
-  }: IPageElementGroupOpts<Content>) {
+  }: IPageElementGroupOpts<Store, Content>) {
+    super(id, {store})
+
     this._id = id
     this._$ = content
 
     this.currently = new PageElementGroupCurrently(this)
+    this.wait = new PageElementGroupWait(this)
     this.eventually = new PageElementGroupEventually(this)
   }
 
@@ -62,56 +71,44 @@ export class PageElementGroup<
 
   // GETTER FUNCTIONS
 
-  getText2(filterMask?: ExtractText<Partial<Content>>) {
-
-    let result = {} as ExtractText<Partial<Content>>;
-
-    for (const k in this.$) {
-      if (isGetTextNode(this.$[k])) {
-        const elem = this.$[k] as any as Workflo.PageNode.IGetTextNode<any>
-
-        if (filterMask) {
-          if (filterMask[k] === true) {
-            result[k] = elem.getText()
-          }
-        } else {
-          result[k] = elem.getText()
-        }
-      }
-    }
-
-    return result;
+  /**
+   * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.
+   *
+   * If passing filter, only values defined in this mask will be returned.
+   * By default (if no filter is passed), all values will be returned.
+   *
+   * @param filter a filter mask
+   */
+  getText(filterMask?: ExtractText<Content>) {
+    return this.eachGet<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>> (
+      node => typeof node['getText'] === 'function',
+      node => node.getText(),
+      filterMask
+    )
   }
 
   // HELPER FUNCTIONS
 
-  getText(filterMask?: ExtractText<Content>) {
-    return this.eachGet<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>>(
-      'getText', node => node.getText(), filterMask
-    )
-  }
-
   eachGet<
     NodeInterface,
     ResultType extends Partial<Content>,
-    MaskType extends ResultType = ResultType
   >(
-    funcName: keyof NodeInterface,
+    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     getFunc: (node: NodeInterface) => any,
-    filterMask: MaskType
+    filterMask: ResultType
   ): ResultType {
     let result = {} as ResultType;
 
-    for (const k in this.$) {
-      const node = this.$[k] as any as NodeInterface
+    for (const key in this.$) {
+      if (supportsInterface(this.$[key])) {
+        const node = this.$[key] as any as NodeInterface
 
-      if (typeof node[funcName] === 'function') {
         if (filterMask) {
-          if (typeof filterMask[k] !== 'undefined') {
-            this.$[k] = getFunc(node) as any
+          if (typeof filterMask[key] !== 'undefined') {
+            this.$[key] = getFunc(node) as any
           }
         } else {
-          this.$[k] = getFunc(node) as any
+          this.$[key] = getFunc(node) as any
         }
       }
     }
@@ -119,34 +116,23 @@ export class PageElementGroup<
     return result;
   }
 
-  eachCheck<K extends string>(
-    compareFunc: (node: Workflo.PageNode.IGetTextNode<any>, expected?: Content[K]) => boolean,
-    expected?: ExtractText<Partial<Content>>,
+  eachCheck<
+    NodeInterface,
+    ResultType extends Partial<Content>,
+  >(
+    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    checkFunc: (node: NodeInterface, expected?: any) => any,
+    expected: ResultType
   ): boolean {
-
-    const jd = {
-      a: pageElement.Element('//div'),
-      b: pageElement.ElementList('//div'),
-      c: pageElement.ElementGroup({
-        d: pageElement.Element('//div'),
-        e: pageElement.ElementList('//div'),
-      })
-    }
-
-    const jiji = jd.c.getText2()
-
-    const kkk = this.eachGet('getText', node => node.getText(), {})
-
-    kkk.
-
     const diffs: Workflo.PageNode.IDiffTree = {}
+    const context = this._$ as any as ResultType
 
-    for (const k in expected) {
-      if (isGetTextNode(this._$[k])) {
-        const elem = this._$[k] as any as Workflo.PageNode.IGetTextNode<any>
+    for (const key in expected) {
+      const node = context[key] as any as NodeInterface
 
-        if (!compareFunc(elem, expected[k])) {
-          diffs[k] = elem.__lastDiff
+      if (supportsInterface(context[key])) {
+        if (!checkFunc(node, expected[key] as any)) {
+          diffs[key] = context[key].__lastDiff
         }
       }
     }
@@ -155,7 +141,21 @@ export class PageElementGroup<
       tree: diffs
     }
 
-    return Object.keys(diffs).length === 0
+    return Object.keys(diffs).length === 0;
+  }
+
+  eachWait<
+    NodeInterface,
+    ResultType extends Partial<Content>,
+  >(
+    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    waitFunc: (node: NodeInterface, expected?: any) => any,
+    expected: ResultType
+  ): this {
+
+    // TODO
+
+    return this
   }
 }
 
@@ -163,37 +163,33 @@ export class PageElementGroupCurrently<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
-> implements Workflo.PageNode.IGetText<ExtractText<Partial<Content>>>,
-  Workflo.PageNode.ICheckTextCurrently<ExtractText<Partial<Content>>> {
+> extends PageNodeCurrently<Store, GroupType>
+implements Workflo.PageNode.IGetText<ExtractText<Partial<Content>>> {
 
-  protected readonly _node: GroupType
-
-  constructor(node: GroupType) {
-    this._node = node;
+  /**
+   * Returns texts of all group elements immediatly in the order they were retrieved from the DOM.
+   *
+   * If passing filter, only values defined in this mask will be returned.
+   * By default (if no filter is passed), all values will be returned.
+   *
+   * @param filter a filter mask
+   */
+  getText(filterMask?: ExtractText<Partial<Content>>) {
+    return this._node.eachGet<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>> (
+      node => typeof node.currently["getText"] === "function",
+      node => node.currently.getText(),
+      filterMask
+    )
   }
 
-  getText(filterMask?: FilterMaskText<Partial<Content>>) {
-    let result = {} as ExtractText<Partial<Content>>;
+  hasText(texts: ExtractText<Partial<Content>>) {
+    // return this._node.eachCheck((element, expected) => element.currently.hasText(expected), text)
 
-    for (const k in this._node.$) {
-      if (isGetTextNode(this._node.$[k])) {
-        const elem = this._node.$[k] as any as Workflo.PageNode.IGetTextNode<any>
-
-        if (filterMask) {
-          if (filterMask[k] === true) {
-            result[k] = elem.currently.getText()
-          }
-        } else {
-          result[k] = elem.currently.getText()
-        }
-      }
-    }
-
-    return result;
-  }
-
-  hasText(text: ExtractText<Partial<Content>>) {
-    return this._node.eachCheck((element, expected) => element.currently.hasText(expected), text)
+    return this._node.eachCheck<Workflo.PageNode.IGetTextNode<ExtractText<Content>>, ExtractText<Content>> (
+      node => typeof node.currently["hasText"] === "function",
+      (node, text) => node.currently.hasText(text),
+      texts
+    )
   }
 
   hasAnyText() {
@@ -217,17 +213,20 @@ export class PageElementGroupCurrently<
   }
 }
 
+export class PageElementGroupWait<
+  Store extends PageElementStore,
+  Content extends {[key: string] : Workflo.PageNode.INode},
+  GroupType extends PageElementGroup<Store, Content>
+> extends PageNodeWait<Store, GroupType> {
+
+
+}
+
 export class PageElementGroupEventually<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
-> implements Workflo.PageNode.ICheckTextEventually<ExtractText<Partial<Content>>> {
-
-  protected readonly _node: GroupType
-
-  constructor(node: GroupType) {
-    this._node = node;
-  }
+> extends PageNodeEventually<Store, GroupType> {
 
   hasText(text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck((element, expected) => element.eventually.hasText(expected, opts), text)
@@ -264,37 +263,3 @@ function isGetTextNode(node: any): node is Workflo.PageNode.IGetTextNode<any> {
   typeof node.eventually.hasAnyText === 'function' &&
   typeof node.eventually.containsText === 'function'
 }
-
-
-const jd = {
-  a: {
-    getText: () => 'adsf',
-    adsf: 1
-  }
-}
-
-const jod: ExtractInterfaceFunc<typeof jd, {getText: () => string}, 'getText'> = {
-  a: 'asdf'
-}
-
-
-function hasNodeInterface<NodeInterface>(node: Workflo.PageNode.INode | NodeInterface, funcName: keyof NodeInterface): node is NodeInterface {
-  return (<NodeInterface>node)[funcName] !== undefined;
-}
-
-// function toFilterMask<
-//   Content extends { [key: string]: Workflo.PageNode.INode; },
-//   NodeInterface  extends {[P in keyof NodeInterface]: (...args: any[]) => ReturnType<NodeInterface[keyof NodeInterface]>},
-// >(context: Content, funcName: keyof NodeInterface): FilterMask<Content, NodeInterface> {
-//   const filterMask = {} as FilterMask<Content, NodeInterface>
-
-//   for (const k in context) {
-//     const node = context[k]
-
-//     if (hasNodeInterface(node, funcName)) {
-//       filterMask[k] = true as any
-//     }
-//   }
-
-//   return filterMask
-// }

@@ -1,14 +1,15 @@
 import { PageElementStore } from '../stores'
-import { PageElementGroup, IPageElementGroupOpts, PageElementGroupCurrently, PageElementGroupEventually } from '.';
+import { PageElementGroup, IPageElementGroupOpts, PageElementGroupCurrently, PageElementGroupEventually, PageElementGroupWait } from '.';
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
 }
 
 export interface IValueGroupOpts<
+  Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends IPageElementGroupOpts<
-  Content
+  Store, Content
 > { }
 
 export class ValuePageElementGroup<
@@ -19,14 +20,16 @@ implements Workflo.PageNode.IGetValueNode<ExtractValue<Partial<Content>>>,
 Workflo.PageNode.ISetValueNode<ExtractValue<Partial<Content>>> {
 
   readonly currently: ValuePageElementGroupCurrently<Store, Content, this>
+  readonly wait: ValuePageElementGroupWait<Store, Content, this>
   readonly eventually: ValuePageElementGroupEventually<Store, Content, this>
 
-  constructor({
+  constructor(id: string, {
     ...superOpts
-  }: IValueGroupOpts<Content>) {
-    super(superOpts)
+  }: IValueGroupOpts<Store, Content>) {
+    super(id, superOpts)
 
     this.currently = new ValuePageElementGroupCurrently(this)
+    this.wait = new ValuePageElementGroupWait(this)
     this.eventually = new ValuePageElementGroupEventually(this)
   }
 
@@ -160,6 +163,15 @@ class ValuePageElementGroupCurrently<
       return this._node.__compareValue((element, expected) => element.currently.not.containsValue(expected), value)
     }
   }
+}
+
+class ValuePageElementGroupWait<
+  Store extends PageElementStore,
+  Content extends {[key: string] : Workflo.PageNode.INode},
+  GroupType extends ValuePageElementGroup<Store, Content>
+> extends PageElementGroupWait<Store, Content, GroupType> {
+
+  
 }
 
 class ValuePageElementGroupEventually<

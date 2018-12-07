@@ -9,8 +9,9 @@ import {
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder } from '../builders'
-import { DEFAULT_TIMEOUT } from '../'
+import { DEFAULT_TIMEOUT, stores } from '../'
 import { isArray } from 'util';
+import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
 
 export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
 
@@ -370,7 +371,7 @@ export class PageElementListCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> {
+> extends PageNodeCurrently<Store, ListType> {
 
   protected readonly _node: ListType
 
@@ -385,6 +386,8 @@ export class PageElementListCurrently<
     node: ListType,
     opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>,
   ) {
+    super(node)
+
     this._selector = node.getSelector()
     this._store = opts.store
     this._elementOptions = opts.elementOptions
@@ -537,13 +540,7 @@ export class PageElementListWait<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> {
-
-  protected readonly _node: ListType
-
-  constructor(node: ListType) {
-    this._node = node
-  }
+> extends PageNodeWait<Store, ListType> {
 
   // waits until list has given length
   hasLength( length: number, {
@@ -637,13 +634,7 @@ export class PageElementListEventually<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
-> {
-
-  protected readonly _node: ListType
-
-  constructor(node: ListType) {
-    this._node = node
-  }
+> extends PageNodeEventually<Store, ListType> {
 
   protected _eventually(func: () => void) : boolean {
     try {

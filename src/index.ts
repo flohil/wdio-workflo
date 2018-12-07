@@ -228,7 +228,7 @@ declare global {
 
     namespace Store {
       type BaseKeys = "timeout" | "waitType"
-      type GroupPublicKeys = "content"
+      type GroupPublicKeys = "content" | "store"
       type ElementPublicKeys = BaseKeys | "customScroll"
       type ListPublicKeys = BaseKeys | "disableCache" | "identifier"
       type ListPublicPartialKeys = "elementOptions"
@@ -247,7 +247,13 @@ declare global {
       interface INode extends ILastDiff {
         __getNodeId(): string
         __toJSON(): IElementJSON
+
+        currently: INodeBase
+        wait: INodeBase
+        eventually: INodeBase
       }
+
+      interface INodeBase {}
 
       interface ILastDiff {
         __lastDiff: IDiff

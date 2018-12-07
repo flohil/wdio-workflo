@@ -9,6 +9,10 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   protected _store: Store
   protected _lastDiff: Workflo.PageNode.IDiff
 
+  readonly currently: PageNodeCurrently<Store, this>
+  readonly wait: PageNodeWait<Store, this>
+  readonly eventually: PageNodeEventually<Store, this>
+
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
   constructor(
@@ -18,6 +22,10 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
     } : IPageNodeOpts<Store>
   ) {
     this._store = store
+
+    this.currently = new PageNodeCurrently(this)
+    this.wait = new PageNodeWait(this)
+    this.eventually = new PageNodeEventually(this)
   }
 
   __getNodeId() {
@@ -40,5 +48,38 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
 
   getSelector() {
     return this._selector
+  }
+}
+
+export class PageNodeCurrently<
+  Store extends PageElementStore,
+  PageElementType extends PageNode<Store>
+> {
+  protected readonly _node: PageElementType
+
+  constructor(node: PageElementType) {
+    this._node = node
+  }
+}
+
+export class PageNodeWait<
+  Store extends PageElementStore,
+  PageElementType extends PageNode<Store>
+> {
+  protected readonly _node: PageElementType
+
+  constructor(node: PageElementType) {
+    this._node = node
+  }
+}
+
+export class PageNodeEventually<
+  Store extends PageElementStore,
+  PageElementType extends PageNode<Store>
+> {
+  protected readonly _node: PageElementType
+
+  constructor(node: PageElementType) {
+    this._node = node
   }
 }

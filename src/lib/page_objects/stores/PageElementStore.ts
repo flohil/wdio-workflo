@@ -55,11 +55,13 @@ export class PageElementStore {
       Content,
       PageElementGroup<this, Content>,
       Pick<IPageElementGroupOpts<
+        this,
         Content
       >, Workflo.Store.GroupPublicKeys>
     > (
       PageElementGroup,
       {
+        store: this,
         content: content
       }
     )
@@ -73,11 +75,12 @@ export class PageElementStore {
       Content,
       ValuePageElementGroup<this, Content>,
       Pick<IValueGroupOpts<
-        Content
+        this, Content
       >, Workflo.Store.GroupPublicKeys>
     > (
       ValuePageElementGroup,
       {
+        store: this,
         content: content
       }
     )
@@ -389,10 +392,11 @@ export class PageElementStore {
       Content
     >,
     GroupOptions extends Pick<IPageElementGroupOpts<
+      Store,
       Content
-    >, "content" >
+    >, Workflo.Store.GroupPublicKeys >
   > (
-    groupType: { new(options: IPageElementGroupOpts<Content>): GroupType },
+    groupType: { new(id: string, options: IPageElementGroupOpts<Store, Content>): GroupType },
     groupOptions: GroupOptions
   ) : GroupType {
 
@@ -410,12 +414,7 @@ export class PageElementStore {
     const key = `${groupType.name}:${idStr}`
 
     if (!(key in this._instanceCache)) {
-
-      const fullGroupOptions = _.merge({
-        id: idStr,
-      }, groupOptions)
-
-      this._instanceCache[key] = new groupType(fullGroupOptions)
+      this._instanceCache[key] = new groupType(idStr, groupOptions)
     }
 
     return this._instanceCache[key]

@@ -1,9 +1,9 @@
 import * as _ from 'lodash'
 
-import { PageNode, IPageNodeOpts } from '.'
+import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually } from '.'
 import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
-import { DEFAULT_TIMEOUT } from '..'
+import { DEFAULT_TIMEOUT, stores } from '..'
 
 export interface IPageElementBaseOpts<
   Store extends PageElementStore,
@@ -80,15 +80,9 @@ export abstract class PageElementBase<
 export abstract class PageElementBaseCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElementBase<Store>
-> {
-
-  protected readonly _node: PageElementType
+> extends PageNodeCurrently<Store, PageElementType> {
 
   protected _lastDiff: Workflo.PageNode.IDiff
-
-  constructor(node: PageElementType) {
-    this._node = node
-  }
 
   /**
    * Whenever a function that checks the state of the GUI
@@ -176,13 +170,7 @@ export abstract class PageElementBaseCurrently<
 export abstract class PageElementBaseWait<
   Store extends PageElementStore,
   PageElementType extends PageElementBase<Store>,
-> {
-
-  protected readonly _node: PageElementType
-
-  constructor(node: PageElementType) {
-    this._node = node
-  }
+> extends PageNodeWait<Store, PageElementType> {
 
   protected _wait(func: () => void, errorMessage: string) {
     try {
@@ -297,12 +285,7 @@ export abstract class PageElementBaseWait<
 export abstract class PageElementBaseEventually<
   Store extends PageElementStore,
   PageElementType extends PageElementBase<Store>
-> {
-  protected readonly _node: PageElementType
-
-  constructor(node: PageElementType) {
-    this._node = node
-  }
+> extends PageNodeEventually<Store, PageElementType> {
 
   protected _eventually(func: () => void) : boolean {
     try {

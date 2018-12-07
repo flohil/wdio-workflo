@@ -1,4 +1,4 @@
-import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.'
+import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageNodeEventually, PageNodeCurrently, PageNodeWait } from '.'
 import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
 import _ = require('lodash');
@@ -102,10 +102,15 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
 
   // GETTER FUNCTIONS
 
-  /**
-   * Returns values of all list elements in the order they were retrieved from the DOM.
+   /**
+   * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
+   *
+   * If passing filter, only values defined in this mask will be returned.
+   * By default (if no filter is passed), all values will be returned.
+   *
+   * @param filter a filter mask
    */
-  getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>> {
+  getText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>> {
     return this.eachGet(this._$, filterMask, node => node.getText())
   }
 
@@ -114,12 +119,12 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   eachCheck<T>(
     context: Record<K, PageElementType>,
     expected: Partial<Record<K, T>>,
-    compareFunc: (element: PageElementType, expected?: T) => boolean
+    checkFunc: (element: PageElementType, expected?: T) => boolean
   ): boolean {
     const diffs: Workflo.PageNode.IDiffTree = {}
 
     for (const key in expected) {
-      if (!compareFunc(context[key], expected[key] as any as T)) {
+      if (!checkFunc(context[key], expected[key] as any as T)) {
         diffs[key] = context[key].__lastDiff
       }
     }
@@ -134,7 +139,7 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
   /**
    * Helper function to map element content nodes to a value by calling a node interface function on each node.
    *
-   * If passing filter mask, only values set to true in this mask will be returned.
+   * If passing filter mask, only values defined in this mask will be returned.
    * By default (if no filter mask is passed), all values will be returned.
    *
    * @param getFunc
@@ -146,14 +151,14 @@ implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
     ResultType
   >(
     context: Record<K, PageElementType>,
-    filterMask: Partial<Record<K, ResultType | boolean>>,
+    filterMask: Partial<Record<K, ResultType>>,
     getFunc: (node: PageElementType) => ResultType,
   ): Record<K, ResultType> {
     let result = {} as Record<K, ResultType>;
 
     for (const k in context) {
       if (filterMask) {
-        if (filterMask[k] === true) {
+        if (typeof filterMask[k] !== 'undefined') {
           result[k] = getFunc(context[k])
         }
       } else {
@@ -183,15 +188,17 @@ export class PageElementMapCurrently<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-> {
+> extends PageNodeCurrently<Store, MapType> {
 
-  protected readonly _node: MapType
-
-  constructor(node: MapType) {
-    this._node = node
-  }
-
-  getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>> {
+  /**
+   * Returns texts of all list elements immediatly in the order they were retrieved from the DOM.
+   *
+   * If passing filter, only values defined in this mask will be returned.
+   * By default (if no filter is passed), all values will be returned.
+   *
+   * @param filter a filter mask
+   */
+  getText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>> {
     return this._node.eachGet(
       this._node.$, filterMask, node => node.currently.getText()
     )
@@ -229,13 +236,7 @@ export class PageElementMapWait<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-> {
-
-  protected readonly _node: MapType
-
-  constructor(node: MapType) {
-    this._node = node
-  }
+> extends PageNodeWait<Store, MapType> {
 
   hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachWait(
@@ -269,13 +270,7 @@ export class PageElementMapEventually<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-> {
-
-  protected readonly _node: MapType
-
-  constructor(node: MapType) {
-    this._node = node
-  }
+> extends PageNodeEventually<Store, MapType> {
 
   hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck(
