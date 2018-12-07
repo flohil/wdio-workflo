@@ -105,10 +105,10 @@ implements Workflo.PageNode.IElementNode<ExtractText<Partial<Content>>> {
 
         if (filterMask) {
           if (typeof filterMask[key] !== 'undefined') {
-            this.$[key] = getFunc(node) as any
+            this.$[key] = getFunc(node)
           }
         } else {
-          this.$[key] = getFunc(node) as any
+          this.$[key] = getFunc(node)
         }
       }
     }
@@ -121,18 +121,24 @@ implements Workflo.PageNode.IElementNode<ExtractText<Partial<Content>>> {
     ResultType extends Partial<Content>,
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
-    checkFunc: (node: NodeInterface, expected?: any) => any,
+    checkFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => boolean,
     expected: ResultType
   ): boolean {
     const diffs: Workflo.PageNode.IDiffTree = {}
     const context = this._$ as any as ResultType
 
-    for (const key in expected) {
+    for (const key in context) {
       const node = context[key] as any as NodeInterface
 
       if (supportsInterface(context[key])) {
-        if (!checkFunc(node, expected[key] as any)) {
-          diffs[key] = context[key].__lastDiff
+        if (expected) {
+          if (!checkFunc(node, expected[key])) {
+            diffs[key] = context[key].__lastDiff
+          }
+        } else {
+          if (!checkFunc(node)) {
+            diffs[key] = context[key].__lastDiff
+          }
         }
       }
     }
@@ -149,11 +155,22 @@ implements Workflo.PageNode.IElementNode<ExtractText<Partial<Content>>> {
     ResultType extends Partial<Content>,
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
-    waitFunc: (node: NodeInterface, expected?: any) => any,
+    waitFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => NodeInterface,
     expected: ResultType
   ): this {
+    const context = this._$ as any as ResultType
 
-    // TODO
+    for (const key in context) {
+      const node = context[key] as any as NodeInterface
+
+      if (supportsInterface(context[key])) {
+        if (expected) {
+          waitFunc(node, expected[key])
+        } else {
+          waitFunc(node)
+        }
+      }
+    }
 
     return this
   }
@@ -182,13 +199,13 @@ implements Workflo.PageNode.IGetText<ExtractText<Partial<Content>>> {
     )
   }
 
-  hasText(texts: ExtractText<Partial<Content>>) {
+  hasText(text: ExtractText<Partial<Content>>) {
     // return this._node.eachCheck((element, expected) => element.currently.hasText(expected), text)
 
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
       node => typeof node.currently["hasText"] === "function",
       (node, text) => node.currently.hasText(text),
-      texts
+      text
     )
   }
 
@@ -219,7 +236,34 @@ export class PageElementGroupWait<
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeWait<Store, GroupType> {
 
+  hasText(text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) {
 
+    return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
+      node => typeof node.wait["hasText"] === "function",
+      (node, text) => node.wait.hasText(text, opts),
+      text
+    )
+  }
+
+  hasAnyText(opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachCheck(element => element.eventually.hasAnyText(opts))
+  }
+
+  containsText(text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) {
+    return this._node.eachCheck((element, expected) => element.eventually.containsText(expected, opts), text)
+  }
+
+  not = {
+    hasText: (text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachCheck((element, expected) => element.eventually.not.hasText(expected, opts), text)
+    },
+    hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachCheck(element => element.eventually.not.hasAnyText(opts))
+    },
+    containsText: (text: ExtractText<Partial<Content>>, opts?: Workflo.IWDIOParamsOptional) => {
+      return this._node.eachCheck((element, expected) => element.eventually.not.containsText(expected, opts), text)
+    }
+  }
 }
 
 export class PageElementGroupEventually<

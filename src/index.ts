@@ -276,13 +276,13 @@ declare global {
       }
 
       interface IGetText<TextType> {
-        getText(): TextType
+        getText(filterMask?: TextType): TextType
       }
 
       interface IWaitText<TextType, OptsType = IWDIOParamsOptionalReverse> {
-        hasText(text: TextType, opts?: OptsType): INode
-        hasAnyText(opts?: OptsType): INode
-        containsText(text: TextType, opts?: OptsType): INode
+        hasText(text: TextType, opts?: OptsType): IElementNode<TextType>
+        hasAnyText(opts?: OptsType): IElementNode<TextType>
+        containsText(text: TextType, opts?: OptsType): IElementNode<TextType>
 
         not: Omit<IWaitText<TextType, IWDIOParamsOptional>, 'not'>
       }
@@ -308,9 +308,9 @@ declare global {
       }
 
       interface IWaitValue<ValueType, OptsType = IWDIOParamsOptionalReverse> {
-        hasValue(text: ValueType, opts?: OptsType): INode
-        hasAnyValue(opts?: OptsType): INode
-        containsValue(text: ValueType, opts?: OptsType): INode
+        hasValue(text: ValueType, opts?: OptsType): IGetValueElementNode<ValueType>
+        hasAnyValue(opts?: OptsType): IGetValueElementNode<ValueType>
+        containsValue(text: ValueType, opts?: OptsType): IGetValueElementNode<ValueType>
 
         not: Omit<IWaitValue<ValueType, IWDIOParamsOptional>, 'not'>
       }

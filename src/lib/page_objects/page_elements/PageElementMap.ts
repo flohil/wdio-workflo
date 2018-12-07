@@ -2,7 +2,6 @@ import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageNodeEventua
 import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
 import _ = require('lodash');
-import { pageObjects } from '../../..';
 
 // https://github.com/Microsoft/TypeScript/issues/14930
 
@@ -123,9 +122,15 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
   ): boolean {
     const diffs: Workflo.PageNode.IDiffTree = {}
 
-    for (const key in expected) {
-      if (!checkFunc(context[key], expected[key] as any as T)) {
-        diffs[key] = context[key].__lastDiff
+    for (const key in context) {
+      if (expected && typeof expected[key] !== 'undefined') {
+        if (!checkFunc(context[key], expected[key] as any as T)) {
+          diffs[key] = context[key].__lastDiff
+        }
+      } else {
+        if (!checkFunc(context[key])) {
+          diffs[key] = context[key].__lastDiff
+        }
       }
     }
 
@@ -174,8 +179,12 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     expected: Partial<Record<K, T>>,
     waitFunc: (element: PageElementType, expected?: T) => PageElementType,
   ): this {
-    for (const key in expected) {
-      waitFunc(context[key], expected[key] as any as T)
+    for (const key in context) {
+      if (expected && typeof expected[key] !== 'undefined') {
+        waitFunc(context[key], expected[key] as any as T)
+      } else {
+        waitFunc(context[key], expected[key] as any as T)
+      }
     }
 
     return this
