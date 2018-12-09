@@ -201,7 +201,7 @@ implements Workflo.PageNode.IElementNode<ExtractText<Partial<Content>>> {
   }
 
   eachSet<
-    NodeInterface,
+    NodeInterface extends Workflo.PageNode.INode,
     ValuesType extends Partial<Content>,
     ReturnType extends this
   >(
