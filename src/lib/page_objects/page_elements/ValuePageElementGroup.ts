@@ -223,6 +223,9 @@ function isIGetValueElementNode<TextType>(
   typeof node.currently['hasValue'] === 'function' &&
   typeof node.currently['hasAnyValue'] === 'function' &&
   typeof node.currently['containsValue'] === 'function' &&
+  typeof node.wait['hasValue'] === 'function' &&
+  typeof node.wait['hasAnyValue'] === 'function' &&
+  typeof node.wait['containsValue'] === 'function' &&
   typeof node.eventually['hasValue'] === 'function' &&
   typeof node.eventually['hasAnyValue'] === 'function' &&
   typeof node.eventually['containsValue'] === 'function'
@@ -232,5 +235,6 @@ function isIGetValueElementNode<TextType>(
 function isISetValueElementNode<TextType>(
   node: Workflo.PageNode.INode | Workflo.PageNode.ISetValueElementNode<TextType>
 ): node is Workflo.PageNode.IElementNode<TextType> {
-  return typeof node['setValue'] === 'function'
+  return typeof node['setValue'] === 'function' &&
+  typeof node.currently['setValue'] === 'function'
 }

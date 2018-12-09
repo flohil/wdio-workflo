@@ -259,51 +259,67 @@ declare global {
         __lastDiff: IDiff
       }
 
-      interface IElementNode<TextType> extends INode, IGetText<TextType> {
-        currently: IGetText<TextType> & ICheckTextCurrently<TextType>
-        wait: IWaitText<TextType>
-        eventually: ICheckTextEventually<TextType>
+      interface IElementNode<TextType> extends INode, IGetElement<TextType> {
+        currently: IGetElement<TextType> & ICheckElementCurrently<TextType>
+        wait: IWaitElement<TextType>
+        eventually: ICheckElementEventually<TextType>
       }
 
-      interface IGetValueElementNode<ValueType> extends INode, IGetValue<ValueType> {
-        currently: IGetValue<ValueType> & ICheckValueCurrently<ValueType>
+      interface IGetValueElementNode<ValueType> extends INode, IGetValueElement<ValueType> {
+        currently: IGetValueElement<ValueType> & ICheckValueCurrently<ValueType>
         wait: IWaitValue<ValueType>
         eventually: ICheckValueEventually<ValueType>
       }
 
-      interface ISetValueElementNode<ValueType> extends INode, ISetValue<ValueType> {
-        currently: ISetValue<ValueType>
+      interface ISetValueElementNode<ValueType> extends INode, ISetValueElement<ValueType> {
+        currently: ISetValueElement<ValueType>
       }
 
-      interface IGetText<TextType> {
+      interface IGetElement<TextType> {
         getText(filterMask?: TextType): TextType
+        getDirectText(filterMask?: TextType): TextType
       }
 
-      interface IWaitText<TextType, OptsType = IWDIOParamsOptionalReverse> {
+      interface IWaitElement<TextType, OptsType = IWDIOParamsOptionalReverse> {
+        isVisible(opts?: OptsType): IElementNode<TextType>
+        isEnabled(opts?: OptsType): IElementNode<TextType>
         hasText(text: TextType, opts?: OptsType): IElementNode<TextType>
         hasAnyText(opts?: OptsType): IElementNode<TextType>
         containsText(text: TextType, opts?: OptsType): IElementNode<TextType>
+        hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>
+        hasAnyDirectText(opts?: OptsType): IElementNode<TextType>
+        containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>
 
-        not: Omit<IWaitText<TextType, IWDIOParamsOptional>, 'not'>
+        not: Omit<IWaitElement<TextType, IWDIOParamsOptional>, 'not'>
       }
 
-      interface ICheckTextCurrently<TextType> {
+      interface ICheckElementCurrently<TextType> {
+        isVisible(): boolean
+        isEnabled(): boolean
         hasText(text: TextType): boolean
         hasAnyText(): boolean
         containsText(text: TextType): boolean
+        hasDirectText(directText: TextType): boolean
+        hasAnyDirectText(): boolean
+        containsDirectText(directText: TextType): boolean
 
-        not: Omit<ICheckTextCurrently<TextType>, 'not'>
+        not: Omit<ICheckElementCurrently<TextType>, 'not'>
       }
 
-      interface ICheckTextEventually<TextType> {
+      interface ICheckElementEventually<TextType> {
+        isVisible(opts?: IWDIOParamsOptional): boolean
+        isEnabled(opts?: IWDIOParamsOptional): boolean
         hasText(text: TextType, opts?: IWDIOParamsOptional): boolean
         hasAnyText(opts?: IWDIOParamsOptional): boolean
         containsText(text: TextType, opts?: IWDIOParamsOptional): boolean
+        hasDirectText(text: TextType, opts?: IWDIOParamsOptional): boolean
+        hasAnyDirectText(opts?: IWDIOParamsOptional): boolean
+        containsDirectText(text: TextType, opts?: IWDIOParamsOptional): boolean
 
-        not: Omit<ICheckTextEventually<TextType>, 'not'>
+        not: Omit<ICheckElementEventually<TextType>, 'not'>
       }
 
-      interface IGetValue<ValueType> {
+      interface IGetValueElement<ValueType> {
         getValue(): ValueType
       }
 
@@ -331,7 +347,7 @@ declare global {
         not: Omit<ICheckValueEventually<ValueType>, 'not'>
       }
 
-      interface ISetValue<ValueType> {
+      interface ISetValueElement<ValueType> {
         setValue(value: ValueType): ISetValueElementNode<ValueType>
       }
 

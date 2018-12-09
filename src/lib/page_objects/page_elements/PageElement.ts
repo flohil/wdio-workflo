@@ -405,7 +405,7 @@ export class PageElementCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
 > extends PageElementBaseCurrently<Store, PageElementType>
-implements Workflo.PageNode.IGetText<string> {
+implements Workflo.PageNode.IGetElement<string> {
 
 // GET STATE
 
@@ -413,7 +413,7 @@ implements Workflo.PageNode.IGetText<string> {
    * Overwriting this function will affect the behaviour of the function
    * exists in PageElement base class and its currently, wait and eventually containers.
    */
-  exists() {
+  exists(): boolean {
     return this.element.isExisting()
   }
 
@@ -421,7 +421,7 @@ implements Workflo.PageNode.IGetText<string> {
    * Overwriting this function will affect the behaviour of the function
    * isVisible in PageElement base class and its currently, wait and eventually containers.
    */
-  isVisible() {
+  isVisible(): boolean {
     return this.element.isVisible()
   }
 

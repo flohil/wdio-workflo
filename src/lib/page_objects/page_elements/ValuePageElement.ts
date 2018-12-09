@@ -52,7 +52,7 @@ export abstract class ValuePageElementCurrently<
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
 > extends PageElementCurrently<Store, PageElementType>
-implements Workflo.PageNode.IGetValue<ValueType> {
+implements Workflo.PageNode.IGetValueElement<ValueType> {
 
   abstract getValue(): ValueType
   abstract setValue(value: ValueType): PageElementType
