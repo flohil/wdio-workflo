@@ -4,7 +4,7 @@ import { PageElementStore } from '../stores';
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageElementBaseOpts<Store> {
     customScroll?: Workflo.IScrollParams;
 }
-export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IGetTextNode<string> {
+export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string> {
     protected _waitType: Workflo.WaitType;
     protected _$: Store;
     protected _timeout: number;
@@ -60,17 +60,17 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     protected _scrollTo(params: Workflo.IScrollParams): Workflo.IScrollResult;
     scrollTo(params: Workflo.IScrollParams): this;
 }
-export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> implements Workflo.PageNode.IGetText<string> {
+export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> implements Workflo.PageNode.IGetElement<string> {
     /**
      * Overwriting this function will affect the behaviour of the function
      * exists in PageElement base class and its currently, wait and eventually containers.
      */
-    exists(): (WebdriverIO.Client<boolean> & false) | (WebdriverIO.Client<boolean> & true);
+    exists(): boolean;
     /**
      * Overwriting this function will affect the behaviour of the function
      * isVisible in PageElement base class and its currently, wait and eventually containers.
      */
-    isVisible(): (WebdriverIO.Client<boolean> & false) | (WebdriverIO.Client<boolean> & true);
+    isVisible(): boolean;
     /**
      * Overwriting this function will affect the behaviour of the function
      * isEnabled in PageElement base class and its currently, wait and eventually containers.

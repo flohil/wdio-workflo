@@ -2,6 +2,7 @@
 import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
+import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
 export declare type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
 export interface IPageElementListIdentifier<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
     mappingObject: {
@@ -30,7 +31,7 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     disableCache?: boolean;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
-export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IGetTextNode<string[]> {
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<string[]> {
     protected _selector: string;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _elementOptions: PageElementOptions;
@@ -103,9 +104,14 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getInterval(): number;
     getLength(): number;
     getText(): string[];
-    __compare<T>(compareFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]): boolean;
+    getDirectText(): string[];
+    eachCheck<T>(elements: PageElementType[], checkFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]): boolean;
+    eachGet<T>(elements: PageElementType[], getFunc: (element: PageElementType) => T): T[];
+    eachWait<T>(elements: PageElementType[], waitFunc: (element: PageElementType, expected: T) => PageElementType, expected?: T | T[]): this;
+    eachDo(elements: PageElementType[], doFunc: (element: PageElementType) => PageElementType): PageElementType[];
+    eachSet<T>(elements: PageElementType[], setFunc: (element: PageElementType, value: T) => PageElementType, values?: T | T[]): this;
 }
-export declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> implements Workflo.PageNode.IGetText<string[]>, Workflo.PageNode.ICheckTextCurrently<string | string[]> {
+export declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeCurrently<Store, ListType> {
     protected readonly _node: ListType;
     protected _selector: string;
     protected _store: Store;
@@ -150,50 +156,80 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     readonly all: PageElementType[];
     getLength(): number;
     getText(): string[];
+    getDirectText(): string[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
+    isVisible(): boolean;
+    isEnabled(): boolean;
     hasText(text: string | string[]): boolean;
     hasAnyText(): boolean;
     containsText(text: string | string[]): boolean;
+    hasDirectText(directText: string | string[]): boolean;
+    hasAnyDirectText(): boolean;
+    containsDirectText(directText: string | string[]): boolean;
     not: {
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
+        isVisible: () => boolean;
+        isEnabled: () => boolean;
         hasText: (text: string | string[]) => boolean;
         hasAnyText: () => boolean;
         containsText: (text: string | string[]) => boolean;
+        hasDirectText: (directText: string | string[]) => boolean;
+        hasAnyDirectText: () => boolean;
+        containsDirectText: (directText: string | string[]) => boolean;
     };
 }
-export declare class PageElementListWait<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
-    protected readonly _node: ListType;
-    constructor(node: ListType);
+export declare class PageElementListWait<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeWait<Store, ListType> {
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): ListType;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
     readonly any: PageElementType["wait"];
     readonly none: PageElementType['wait']['not'];
+    isVisible(opts?: Workflo.IWDIOParamsOptional): ListType;
+    isEnabled(opts?: Workflo.IWDIOParamsOptional): ListType;
+    hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
+    hasAnyText(opts?: Workflo.IWDIOParamsOptional): ListType;
+    containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
+    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional): ListType;
+    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
     not: {
-        isEmpty: (opts: IPageElementListWaitEmptyParams) => ListType;
+        isEmpty: (opts?: IPageElementListWaitEmptyParams) => ListType;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
+        isVisible: (opts?: Workflo.IWDIOParamsOptional) => ListType;
+        isEnabled: (opts?: Workflo.IWDIOParamsOptional) => ListType;
+        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
+        hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => ListType;
+        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
+        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => ListType;
+        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
     };
 }
-export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> implements Workflo.PageNode.ICheckTextEventually<string | string[]> {
-    protected readonly _node: ListType;
-    constructor(node: ListType);
+export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeEventually<Store, ListType> {
     protected _eventually(func: () => void): boolean;
     readonly any: PageElementType["eventually"];
     readonly none: PageElementType['eventually']['not'];
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
+    isVisible(opts?: Workflo.IWDIOParamsOptional): boolean;
+    isEnabled(opts?: Workflo.IWDIOParamsOptional): boolean;
     hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
     hasAnyText(opts?: Workflo.IWDIOParamsOptional): boolean;
     containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
+    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional): boolean;
+    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
     not: {
         isEmpty: (opts: IPageElementListWaitEmptyParams) => boolean;
         hasLength: (length: number, opts: IPageElementListWaitLengthParams) => boolean;
+        isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
+        isEnabled: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => boolean;
+        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
     };
 }
-export declare function excludeNot<T extends {
-    not: N;
-}, N>(obj: T): Pick<T, Exclude<keyof T, "not">>;

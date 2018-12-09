@@ -200,7 +200,7 @@ declare global {
         }
         namespace Store {
             type BaseKeys = "timeout" | "waitType";
-            type GroupPublicKeys = "content";
+            type GroupPublicKeys = "content" | "store";
             type ElementPublicKeys = BaseKeys | "customScroll";
             type ListPublicKeys = BaseKeys | "disableCache" | "identifier";
             type ListPublicPartialKeys = "elementOptions";
@@ -217,35 +217,73 @@ declare global {
             interface INode extends ILastDiff {
                 __getNodeId(): string;
                 __toJSON(): IElementJSON;
+                currently: INodeBase;
+                wait: INodeBase;
+                eventually: INodeBase;
+            }
+            interface INodeBase {
             }
             interface ILastDiff {
                 __lastDiff: IDiff;
             }
-            interface IGetTextNode<TextType> extends INode, IGetText<TextType> {
-                currently: IGetText<TextType> & ICheckTextCurrently<TextType>;
-                eventually: ICheckTextEventually<TextType>;
+            interface IElementNode<TextType> extends INode, IGetElement<TextType> {
+                currently: IGetElement<TextType> & ICheckElementCurrently<TextType>;
+                wait: IWaitElement<TextType>;
+                eventually: ICheckElementEventually<TextType>;
             }
-            interface IGetValueNode<ValueType> extends INode, IGetValue<ValueType> {
-                currently: IGetValue<ValueType> & ICheckValueCurrently<ValueType>;
+            interface IGetValueElementNode<ValueType> extends INode, IGetValueElement<ValueType> {
+                currently: IGetValueElement<ValueType> & ICheckValueCurrently<ValueType>;
+                wait: IWaitValue<ValueType>;
                 eventually: ICheckValueEventually<ValueType>;
             }
-            interface ISetValueNode<ValueType> extends INode, ISetValue<ValueType> {
-                currently: ISetValue<ValueType>;
+            interface ISetValueElementNode<ValueType> extends INode, ISetValueElement<ValueType> {
+                currently: ISetValueElement<ValueType>;
             }
-            interface IGetText<TextType> {
-                getText(): TextType;
+            interface IGetElement<TextType> {
+                getText(filterMask?: TextType): TextType;
+                getDirectText(filterMask?: TextType): TextType;
             }
-            interface ICheckTextCurrently<TextType> {
+            interface IWaitElement<TextType, OptsType = IWDIOParamsOptionalReverse> {
+                isVisible(opts?: OptsType): IElementNode<TextType>;
+                isEnabled(opts?: OptsType): IElementNode<TextType>;
+                hasText(text: TextType, opts?: OptsType): IElementNode<TextType>;
+                hasAnyText(opts?: OptsType): IElementNode<TextType>;
+                containsText(text: TextType, opts?: OptsType): IElementNode<TextType>;
+                hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>;
+                hasAnyDirectText(opts?: OptsType): IElementNode<TextType>;
+                containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>;
+                not: Omit<IWaitElement<TextType, IWDIOParamsOptional>, 'not'>;
+            }
+            interface ICheckElementCurrently<TextType> {
+                isVisible(): boolean;
+                isEnabled(): boolean;
                 hasText(text: TextType): boolean;
                 hasAnyText(): boolean;
                 containsText(text: TextType): boolean;
-                not: Omit<ICheckTextCurrently<TextType>, 'not'>;
+                hasDirectText(directText: TextType): boolean;
+                hasAnyDirectText(): boolean;
+                containsDirectText(directText: TextType): boolean;
+                not: Omit<ICheckElementCurrently<TextType>, 'not'>;
             }
-            interface ICheckTextEventually<TextType> {
+            interface ICheckElementEventually<TextType> {
+                isVisible(opts?: IWDIOParamsOptional): boolean;
+                isEnabled(opts?: IWDIOParamsOptional): boolean;
                 hasText(text: TextType, opts?: IWDIOParamsOptional): boolean;
                 hasAnyText(opts?: IWDIOParamsOptional): boolean;
                 containsText(text: TextType, opts?: IWDIOParamsOptional): boolean;
-                not: Omit<ICheckTextEventually<TextType>, 'not'>;
+                hasDirectText(text: TextType, opts?: IWDIOParamsOptional): boolean;
+                hasAnyDirectText(opts?: IWDIOParamsOptional): boolean;
+                containsDirectText(text: TextType, opts?: IWDIOParamsOptional): boolean;
+                not: Omit<ICheckElementEventually<TextType>, 'not'>;
+            }
+            interface IGetValueElement<ValueType> {
+                getValue(): ValueType;
+            }
+            interface IWaitValue<ValueType, OptsType = IWDIOParamsOptionalReverse> {
+                hasValue(text: ValueType, opts?: OptsType): IGetValueElementNode<ValueType>;
+                hasAnyValue(opts?: OptsType): IGetValueElementNode<ValueType>;
+                containsValue(text: ValueType, opts?: OptsType): IGetValueElementNode<ValueType>;
+                not: Omit<IWaitValue<ValueType, IWDIOParamsOptional>, 'not'>;
             }
             interface ICheckValueCurrently<ValueType> {
                 hasValue(value: ValueType): boolean;
@@ -259,11 +297,8 @@ declare global {
                 containsValue(value: ValueType, opts?: IWDIOParamsOptional): boolean;
                 not: Omit<ICheckValueEventually<ValueType>, 'not'>;
             }
-            interface IGetValue<ValueType> {
-                getValue(): ValueType;
-            }
-            interface ISetValue<ValueType> {
-                setValue(value: ValueType): this;
+            interface ISetValueElement<ValueType> {
+                setValue(value: ValueType): ISetValueElementNode<ValueType>;
             }
             interface IDiffTree {
                 [key: string]: IDiff;
@@ -277,7 +312,7 @@ declare global {
             type Values<T extends {
                 [key: string]: Workflo.PageNode.INode;
             }> = Partial<{
-                [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueNode<any> ? ReturnType<T[P]['getValue']> : undefined;
+                [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
             }>;
         }
         interface IProblem<ValueType, ResultType> {

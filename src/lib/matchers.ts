@@ -759,59 +759,7 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
     ],
     ({actual, expected, opts}) => `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`
   ),
-
-  // toHaveText: listCheckFunction()
 }
-
-
-
-// export function listCheckFunction<
-//   Store extends stores.PageElementStore,
-//   NodeType extends elements.PageElementList<Store, elements.PageElement<Store>, elements.IPageElementOpts<Store>>,
-//   OptsType extends Object = {timeout?: number},
-//   ExpectedType = string
-// >() {
-//   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) {
-
-//     function baseCompareFunction(
-//       node: NodeType,
-//       negativeComparison: boolean,
-//       opts: OptsType = Object.create(null),
-//       expected: ExpectedType = undefined,
-//     ): jasmine.CustomMatcherResult {
-//       let result: jasmine.CustomMatcherResult = {
-//         pass: true,
-//         message: ''
-//       };
-
-      
-
-//       return undefined
-//     }
-
-//     return {
-//       compare: (node: NodeType, opts?: OptsType): jasmine.CustomMatcherResult => {
-//         return baseCompareFunction(node, false, opts);
-//       },
-//       negativeCompare: (node: NodeType, opts?: OptsType): jasmine.CustomMatcherResult => {
-//         return baseCompareFunction(node, true, opts);
-//       }
-//     }
-//   }
-// }
-
-
-
-// function listGetText<
-//   Store extends stores.PageElementStore,
-//   ListType extends elements.PageElementList<Store, elements.PageElement<Store>, elements.IPageElementOpts<Store>>
-// >(list: ListType) {
-
-
-
-// }
-
-
 
 function valueElementMatcherFunction<
   ExpectedType,

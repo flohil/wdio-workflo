@@ -1,4 +1,4 @@
-import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
+import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageNodeEventually, PageNodeCurrently, PageNodeWait } from '.';
 import { PageElementStore } from '../stores';
 import { XPathBuilder } from '../builders';
 /**
@@ -15,7 +15,7 @@ export interface IPageElementMapOpts<Store extends PageElementStore, K extends s
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
 }
-export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IGetTextNode<Partial<Record<K, string>>> {
+export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     protected _selector: string;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _elementOptions: PageElementOptions;
@@ -23,6 +23,7 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
     protected _$: Record<K, PageElementType>;
     protected _lastDiff: Workflo.PageNode.IDiff;
     readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>;
+    readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOptions, this>;
     constructor(_selector: string, { identifier, elementStoreFunc, elementOptions, ...superOpts }: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
     readonly $: Record<K, PageElementType>;
@@ -32,44 +33,129 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
      */
     changeMappingObject(mappingObject: Record<K, string>): void;
     /**
-     * Returns values of all list elements in the order they were retrieved from the DOM.
-     */
-    getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>>;
+    * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
+    *
+    * If passing filter, only values defined in this mask will be returned.
+    * By default (if no filter is passed), all values will be returned.
+    *
+    * @param filter a filter mask
+    */
+    getText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>>;
+    getDirectText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>>;
+    eachCheck<T>(context: Record<K, PageElementType>, expected: Partial<Record<K, T>>, checkFunc: (element: PageElementType, expected?: T) => boolean): boolean;
     /**
      * Helper function to map element content nodes to a value by calling a node interface function on each node.
      *
-     * If passing filter mask, only values set to true in this mask will be returned.
+     * If passing filter mask, only values defined in this mask will be returned.
      * By default (if no filter mask is passed), all values will be returned.
      *
-     * @param context
      * @param getFunc
      * @param filterMask a filter mask
      */
-    __getInterfaceFunc<Store extends PageElementStore, PageElementType extends PageElement<Store>, ResultType>(context: Record<K, PageElementType>, getFunc: (node: PageElementType) => ResultType, filterMask?: Partial<Record<K, ResultType | boolean>>): Record<K, ResultType>;
-    __compare<T>(compareFunc: (element: PageElementType, expected?: T) => boolean, expected?: Partial<Record<K, T>>): boolean;
+    eachGet<Store extends PageElementStore, PageElementType extends PageElement<Store>, ResultType>(context: Record<K, PageElementType>, filterMask: Partial<Record<K, ResultType>>, getFunc: (node: PageElementType) => ResultType): Record<K, ResultType>;
+    eachWait<T>(context: Record<K, PageElementType>, expected: Partial<Record<K, T>>, waitFunc: (element: PageElementType, expected?: T) => PageElementType): this;
+    eachDo(context: Record<K, PageElementType>, filterMask: Partial<Record<K, true>>, doFunc: (element: PageElementType) => PageElementType): this;
+    eachSet<T>(context: Record<K, PageElementType>, values: Partial<Record<K, T>>, setFunc: (element: PageElementType, value: T) => PageElementType): this;
 }
-export declare class PageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> {
-    protected readonly _node: MapType;
-    constructor(node: MapType);
-    getText(filterMask?: Partial<Record<K, boolean>>): Partial<Record<K, string>>;
+export declare class PageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeCurrently<Store, MapType> {
+    /**
+     * Returns texts of all list elements immediatly in the order they were retrieved from the DOM.
+     *
+     * If passing filter, only values defined in this mask will be returned.
+     * By default (if no filter is passed), all values will be returned.
+     *
+     * @param filter a filter mask
+     */
+    getText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>>;
+    getDirectText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>>;
+    isVisible(filterMask?: Partial<Record<K, true>>): boolean;
+    isEnabled(filterMask?: Partial<Record<K, true>>): boolean;
     hasText(text: Partial<Record<K, string>>): boolean;
-    hasAnyText(): boolean;
+    hasAnyText(filterMask?: Partial<Record<K, string>>): boolean;
     containsText(text: Partial<Record<K, string>>): boolean;
+    hasDirectText(directText: Partial<Record<K, string>>): boolean;
+    hasAnyDirectText(filterMask?: Partial<Record<K, string>>): boolean;
+    containsDirectText(directText: Partial<Record<K, string>>): boolean;
     not: {
+        isVisible: (filterMask?: Partial<Record<K, true>>) => boolean;
+        isEnabled: (filterMask?: Partial<Record<K, true>>) => boolean;
         hasText: (text: Partial<Record<K, string>>) => boolean;
-        hasAnyText: () => boolean;
+        hasAnyText: (filterMask?: Partial<Record<K, string>>) => boolean;
         containsText: (text: Partial<Record<K, string>>) => boolean;
+        hasDirectText: (directText: Partial<Record<K, string>>) => boolean;
+        hasAnyDirectText: (filterMask?: Partial<Record<K, string>>) => boolean;
+        containsDirectText: (directText: Partial<Record<K, string>>) => boolean;
     };
 }
-export declare class PageElementMapEventually<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> {
-    protected readonly _node: MapType;
-    constructor(node: MapType);
-    hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): boolean;
-    hasAnyText(opts?: Workflo.IWDIOParamsOptional): boolean;
-    containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): boolean;
+export declare class PageElementMapWait<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeWait<Store, MapType> {
+    isVisible(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, true>>;
+    }): MapType;
+    isEnabled(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, true>>;
+    }): MapType;
+    hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): MapType;
+    hasAnyText(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, string>>;
+    }): MapType;
+    containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): MapType;
+    hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): MapType;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, string>>;
+    }): MapType;
+    containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): MapType;
     not: {
+        isVisible: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, true>>;
+        }) => MapType;
+        isEnabled: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, true>>;
+        }) => MapType;
+        hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => MapType;
+        hasAnyText: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, string>>;
+        }) => MapType;
+        containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => MapType;
+        hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => MapType;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, string>>;
+        }) => MapType;
+        containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => MapType;
+    };
+}
+export declare class PageElementMapEventually<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeEventually<Store, MapType> {
+    isVisible(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, true>>;
+    }): boolean;
+    isEnabled(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, true>>;
+    }): boolean;
+    hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): boolean;
+    hasAnyText(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, string>>;
+    }): boolean;
+    containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): boolean;
+    hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): boolean;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional & {
+        filterMask?: Partial<Record<K, string>>;
+    }): boolean;
+    containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): boolean;
+    not: {
+        isVisible: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, true>>;
+        }) => boolean;
+        isEnabled: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, true>>;
+        }) => boolean;
         hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => boolean;
-        hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasAnyText: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, string>>;
+        }) => boolean;
         containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Partial<Record<K, string>>;
+        }) => boolean;
+        containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => boolean;
     };
 }

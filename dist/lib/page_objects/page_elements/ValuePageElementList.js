@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require("./");
-const _ = require("lodash");
 class ValuePageElementList extends _1.PageElementList {
     constructor(selector, opts) {
         super(selector, opts);
         this.currently = new ValuePageElementListCurrently(this, opts);
+        this.wait = new ValuePageElementListWait(this);
         this.eventually = new ValuePageElementListEventually(this);
     }
     initialWait() {
@@ -22,7 +22,7 @@ class ValuePageElementList extends _1.PageElementList {
      * after the initial wait was performed.
      */
     getValue() {
-        return this.all.map(valuePageElement => valuePageElement.getValue());
+        return this.eachGet(this.all, element => element.getValue());
     }
     // SETTER FUNCTIONS
     /**
@@ -36,24 +36,7 @@ class ValuePageElementList extends _1.PageElementList {
      * @param values
      */
     setValue(values) {
-        const allElements = this.all;
-        if (_.isArray(values)) {
-            if (allElements.length !== values.length) {
-                throw new Error(`${this.constructor.name}: ` +
-                    `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`);
-            }
-            else {
-                for (let i = 0; i < allElements.length; i++) {
-                    allElements[i].setValue(values[i]);
-                }
-            }
-        }
-        else {
-            for (let i = 0; i < allElements.length; i++) {
-                allElements[i].setValue(values);
-            }
-        }
-        return this;
+        return this.eachSet(this.all, (element, value) => element.currently.setValue(value), values);
     }
 }
 exports.ValuePageElementList = ValuePageElementList;
@@ -61,18 +44,18 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
     constructor() {
         super(...arguments);
         this.not = Object.assign({}, super.not, { hasValue: (value) => {
-                return this._node.__compare((element, expected) => element.currently.not.hasValue(expected), value);
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasValue(expected), value);
             }, hasAnyValue: () => {
-                return this._node.__compare(element => element.currently.not.hasAnyValue());
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue());
             }, containsValue: (value) => {
-                return this._node.__compare((element, expected) => element.currently.not.containsValue(expected), value);
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsValue(expected), value);
             } });
     }
     /**
      * Returns values of all list elements in the order they were retrieved from the DOM immediatly.
      */
     getValue() {
-        return this.all.map(valuePageElement => valuePageElement.currently.getValue());
+        return this._node.eachGet(this.all, element => element.currently.getValue());
     }
     /**
      * Sets values on all list elements immediatly.
@@ -85,33 +68,38 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * @param values
      */
     setValue(values) {
-        const allElements = this.all;
-        if (_.isArray(values)) {
-            if (allElements.length !== values.length) {
-                throw new Error(`Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`);
-            }
-            else {
-                for (let i = 0; i < allElements.length; i++) {
-                    allElements[i].currently.setValue(values[i]);
-                }
-            }
-        }
-        else {
-            for (let i = 0; i < allElements.length; i++) {
-                allElements[i].currently.setValue(values);
-            }
-        }
-        return this._node;
+        return this._node.eachSet(this.all, (element, value) => element.currently.setValue(value), values);
     }
     // CHECK STATE
     hasValue(value) {
-        return this._node.__compare((element, expected) => element.currently.hasValue(expected), value);
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.hasValue(expected), value);
     }
     hasAnyValue() {
-        return this._node.__compare(element => element.currently.hasAnyValue());
+        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue());
     }
     containsValue(value) {
-        return this._node.__compare((element, expected) => element.currently.containsValue(expected), value);
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.containsValue(expected), value);
+    }
+}
+class ValuePageElementListWait extends _1.PageElementListWait {
+    constructor() {
+        super(...arguments);
+        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasValue(expected, opts), value);
+            }, hasAnyValue: (opts) => {
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyValue(opts));
+            }, containsValue: (value, opts) => {
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsValue(expected, opts), value);
+            } });
+    }
+    hasValue(value, opts) {
+        return this._node.eachWait(this._node.all, (element, expected) => element.wait.hasValue(expected, opts), value);
+    }
+    hasAnyValue(opts) {
+        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyValue(opts));
+    }
+    containsValue(value, opts) {
+        return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsValue(expected, opts), value);
     }
 }
 class ValuePageElementListEventually extends _1.PageElementListEventually {
@@ -119,21 +107,21 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
         // CHECK STATE
         super(...arguments);
         this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
-                return this._node.__compare((element, expected) => element.eventually.not.hasValue(expected, opts), value);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value);
             }, hasAnyValue: (opts) => {
-                return this._node.__compare(element => element.eventually.not.hasAnyValue(opts));
+                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyValue(opts));
             }, containsValue: (value, opts) => {
-                return this._node.__compare((element, expected) => element.eventually.not.containsValue(expected, opts), value);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value);
             } });
     }
     hasValue(value, opts) {
-        return this._node.__compare((element, expected) => element.eventually.hasValue(expected, opts), value);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasValue(expected, opts), value);
     }
     hasAnyValue(opts) {
-        return this._node.__compare(element => element.eventually.hasAnyValue(opts));
+        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyValue(opts));
     }
     containsValue(value, opts) {
-        return this._node.__compare((element, expected) => element.eventually.containsValue(expected, opts), value);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsValue(expected, opts), value);
     }
 }
 //# sourceMappingURL=ValuePageElementList.js.map

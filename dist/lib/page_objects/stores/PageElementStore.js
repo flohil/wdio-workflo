@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _ = require("lodash");
 const page_elements_1 = require("../page_elements");
 const builders_1 = require("../builders");
 const ValuePageElementMap_1 = require("../page_elements/ValuePageElementMap");
@@ -31,11 +30,13 @@ class PageElementStore {
     // by a concatenated string of its node key names and types.
     ElementGroup(content) {
         return this._getGroup(page_elements_1.PageElementGroup, {
+            store: this,
             content: content
         });
     }
     ValueGroup(content) {
         return this._getGroup(page_elements_1.ValuePageElementGroup, {
+            store: this,
             content: content
         });
     }
@@ -133,10 +134,7 @@ class PageElementStore {
         }
         const key = `${groupType.name}:${idStr}`;
         if (!(key in this._instanceCache)) {
-            const fullGroupOptions = _.merge({
-                id: idStr,
-            }, groupOptions);
-            this._instanceCache[key] = new groupType(fullGroupOptions);
+            this._instanceCache[key] = new groupType(idStr, groupOptions);
         }
         return this._instanceCache[key];
     }

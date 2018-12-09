@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts } from '.';
+import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually } from '.';
 import { PageElementStore } from '../stores';
 export interface IPageElementBaseOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     waitType?: Workflo.WaitType;
@@ -26,10 +26,8 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
      */
     abstract __typeToString<T>(value: T): string;
 }
-export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> {
-    protected readonly _node: PageElementType;
+export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeCurrently<Store, PageElementType> {
     protected _lastDiff: Workflo.PageNode.IDiff;
-    constructor(node: PageElementType);
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
@@ -59,9 +57,7 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
     protected _compareHasAny<T>(actual: T): boolean;
     protected _compareContains<T>(expected: T, actual: T): any;
 }
-export declare abstract class PageElementBaseWait<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> {
-    protected readonly _node: PageElementType;
-    constructor(node: PageElementType);
+export declare abstract class PageElementBaseWait<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
     protected _wait(func: () => void, errorMessage: string): PageElementType;
     protected _waitWdioCheckFunc(checkTypeStr: string, conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean, { timeout, reverse }?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
     protected _waitProperty<T>(name: string, conditionType: 'has' | 'contains' | 'any' | 'within', conditionFunc: (value?: T) => boolean, { timeout, reverse }?: Workflo.IWDIOParamsOptionalReverse, value?: T): PageElementType;
@@ -71,8 +67,6 @@ export declare abstract class PageElementBaseWait<Store extends PageElementStore
     protected _waitContainsProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
     protected _makeReverseParams(opts?: Workflo.IWDIOParamsOptional): Workflo.IWDIOParamsOptionalReverse;
 }
-export declare abstract class PageElementBaseEventually<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> {
-    protected readonly _node: PageElementType;
-    constructor(node: PageElementType);
+export declare abstract class PageElementBaseEventually<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeEventually<Store, PageElementType> {
     protected _eventually(func: () => void): boolean;
 }

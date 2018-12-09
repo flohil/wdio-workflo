@@ -47,7 +47,7 @@ export declare class PageElementStore {
     }, options?: MapOptions): MapType;
     protected _getGroup<Store extends PageElementStore, Content extends {
         [key: string]: Workflo.PageNode.INode;
-    }, GroupType extends PageElementGroup<Store, Content>, GroupOptions extends Pick<IPageElementGroupOpts<Content>, "content">>(groupType: {
-        new (options: IPageElementGroupOpts<Content>): GroupType;
+    }, GroupType extends PageElementGroup<Store, Content>, GroupOptions extends Pick<IPageElementGroupOpts<Store, Content>, Workflo.Store.GroupPublicKeys>>(groupType: {
+        new (id: string, options: IPageElementGroupOpts<Store, Content>): GroupType;
     }, groupOptions: GroupOptions): GroupType;
 }

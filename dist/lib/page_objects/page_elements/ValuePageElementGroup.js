@@ -11,28 +11,15 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 class ValuePageElementGroup extends _1.PageElementGroup {
-    constructor(_a) {
+    constructor(id, _a) {
         var superOpts = __rest(_a, []);
-        super(superOpts);
+        super(id, superOpts);
         this.currently = new ValuePageElementGroupCurrently(this);
+        this.wait = new ValuePageElementGroupWait(this);
         this.eventually = new ValuePageElementGroupEventually(this);
     }
-    getValue(filter) {
-        let result = {};
-        for (const k in this.$) {
-            if (isGetValueNode(this.$[k])) {
-                const elem = this.$[k];
-                if (filter) {
-                    if (typeof filter[k] !== 'undefined') {
-                        result[k] = elem.getValue();
-                    }
-                }
-                else {
-                    result[k] = elem.getValue();
-                }
-            }
-        }
-        return result;
+    getValue(filterMask) {
+        return this.eachGet(isIGetValueElementNode, filterMask, node => node.getValue());
     }
     /**
      * Sets values after performing the initial wait on all nodes that implement the setValue method.
@@ -41,29 +28,7 @@ class ValuePageElementGroup extends _1.PageElementGroup {
      * @param values
      */
     setValue(values) {
-        for (const k in values) {
-            if (isSetValueNode(this.$[k])) {
-                const node = this.$[k];
-                node.setValue(values[k]);
-            }
-        }
-        return this;
-    }
-    // HELPER FUNCTIONS
-    __compareValue(compareFunc, expected) {
-        const diffs = {};
-        for (const k in expected) {
-            if (isGetValueNode(this._$[k])) {
-                const elem = this._$[k];
-                if (!compareFunc(elem, expected[k])) {
-                    diffs[k] = elem.__lastDiff;
-                }
-            }
-        }
-        this._lastDiff = {
-            tree: diffs
-        };
-        return Object.keys(diffs).length === 0;
+        return this.eachSet(isISetValueElementNode, values, (node, value) => node.setValue(value));
     }
 }
 exports.ValuePageElementGroup = ValuePageElementGroup;
@@ -71,29 +36,15 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
     constructor() {
         super(...arguments);
         this.not = Object.assign({}, super.not, { hasValue: (value) => {
-                return this._node.__compareValue((element, expected) => element.currently.not.hasValue(expected), value);
-            }, hasAnyValue: () => {
-                return this._node.__compareValue(element => element.currently.not.hasAnyValue());
+                return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.currently.not.hasValue(value));
+            }, hasAnyValue: (filterMask) => {
+                return this._node.eachCheck(isIGetValueElementNode, filterMask, node => node.currently.not.hasAnyValue());
             }, containsValue: (value) => {
-                return this._node.__compareValue((element, expected) => element.currently.not.containsValue(expected), value);
+                return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.currently.not.containsValue(value));
             } });
     }
-    getValue(filter) {
-        let result = {};
-        for (const k in this._node.$) {
-            if (isGetValueNode(this._node.$[k])) {
-                const elem = this._node.$[k];
-                if (filter) {
-                    if (typeof filter[k] !== 'undefined') {
-                        result[k] = elem.currently.getValue();
-                    }
-                }
-                else {
-                    result[k] = elem.currently.getValue();
-                }
-            }
-        }
-        return result;
+    getValue(filterMask) {
+        return this._node.eachGet(isIGetValueElementNode, filterMask, node => node.currently.getValue());
     }
     /**
      * Sets values immediately on all nodes that implement the setValue method.
@@ -102,50 +53,75 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
      * @param values
      */
     setValue(values) {
-        for (const k in values) {
-            if (isSetValueNode(this._node.$[k])) {
-                const node = this._node.$[k];
-                node.currently.setValue(values[k]);
-            }
-        }
-        return this._node;
+        return this._node.eachSet(isISetValueElementNode, values, (node, value) => node.currently.setValue(value));
     }
     hasValue(value) {
-        return this._node.__compareValue((element, expected) => element.currently.hasValue(expected), value);
+        return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.currently.hasValue(value));
     }
-    hasAnyValue() {
-        return this._node.__compareValue(element => element.currently.hasAnyValue());
+    hasAnyValue(filterMask) {
+        return this._node.eachCheck(isIGetValueElementNode, filterMask, node => node.currently.hasAnyValue());
     }
     containsValue(value) {
-        return this._node.__compareValue((element, expected) => element.currently.containsValue(expected), value);
+        return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.currently.containsValue(value));
+    }
+}
+class ValuePageElementGroupWait extends _1.PageElementGroupWait {
+    constructor() {
+        super(...arguments);
+        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.eachWait(isIGetValueElementNode, value, (node, value) => node.wait.hasValue(value, opts));
+            }, hasAnyValue: (opts = {}) => {
+                return this._node.eachWait(isIGetValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts));
+            }, containsValue: (value, opts) => {
+                return this._node.eachWait(isIGetValueElementNode, value, (node, value) => node.wait.containsValue(value, opts));
+            } });
+    }
+    hasValue(value, opts) {
+        return this._node.eachWait(isIGetValueElementNode, value, (node, value) => node.wait.hasValue(value, opts));
+    }
+    hasAnyValue(opts = {}) {
+        return this._node.eachWait(isIGetValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts));
+    }
+    containsValue(value, opts) {
+        return this._node.eachWait(isIGetValueElementNode, value, (node, value) => node.wait.containsValue(value, opts));
     }
 }
 class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
     constructor() {
         super(...arguments);
         this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
-                return this._node.__compareValue((element, expected) => element.eventually.not.hasValue(expected, opts), value);
-            }, hasAnyValue: (opts) => {
-                return this._node.__compareValue(element => element.eventually.not.hasAnyValue());
+                return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.eventually.not.hasValue(value, opts));
+            }, hasAnyValue: (opts = {}) => {
+                return this._node.eachCheck(isIGetValueElementNode, opts.filterMask, node => node.eventually.not.hasAnyValue(opts));
             }, containsValue: (value, opts) => {
-                return this._node.__compareValue((element, expected) => element.eventually.not.containsValue(expected, opts), value);
+                return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.eventually.not.containsValue(value, opts));
             } });
     }
     hasValue(value, opts) {
-        return this._node.__compareValue((element, expected) => element.eventually.hasValue(expected, opts), value);
+        return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.eventually.hasValue(value, opts));
     }
-    hasAnyValue(opts) {
-        return this._node.__compareValue(element => element.eventually.hasAnyValue(opts));
+    hasAnyValue(opts = {}) {
+        return this._node.eachCheck(isIGetValueElementNode, opts.filterMask, node => node.eventually.hasAnyValue(opts));
     }
     containsValue(value, opts) {
-        return this._node.__compareValue((element, expected) => element.eventually.containsValue(expected, opts), value);
+        return this._node.eachCheck(isIGetValueElementNode, value, (node, value) => node.eventually.containsValue(value, opts));
     }
 }
 // type guards
-function isGetValueNode(node) {
-    return typeof node.getValue === 'function';
+function isIGetValueElementNode(node) {
+    return typeof node['getValue'] === 'function' &&
+        typeof node.currently['hasValue'] === 'function' &&
+        typeof node.currently['hasAnyValue'] === 'function' &&
+        typeof node.currently['containsValue'] === 'function' &&
+        typeof node.wait['hasValue'] === 'function' &&
+        typeof node.wait['hasAnyValue'] === 'function' &&
+        typeof node.wait['containsValue'] === 'function' &&
+        typeof node.eventually['hasValue'] === 'function' &&
+        typeof node.eventually['hasAnyValue'] === 'function' &&
+        typeof node.eventually['containsValue'] === 'function';
 }
-function isSetValueNode(node) {
-    return typeof node.setValue === 'function';
+function isISetValueElementNode(node) {
+    return typeof node['setValue'] === 'function' &&
+        typeof node.currently['setValue'] === 'function';
 }
 //# sourceMappingURL=ValuePageElementGroup.js.map

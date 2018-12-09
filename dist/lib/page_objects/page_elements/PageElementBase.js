@@ -40,10 +40,7 @@ class PageElementBase extends _1.PageNode {
     getTimeout() { return this._timeout; }
 }
 exports.PageElementBase = PageElementBase;
-class PageElementBaseCurrently {
-    constructor(node) {
-        this._node = node;
-    }
+class PageElementBaseCurrently extends _1.PageNodeCurrently {
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
@@ -113,10 +110,7 @@ class PageElementBaseCurrently {
     }
 }
 exports.PageElementBaseCurrently = PageElementBaseCurrently;
-class PageElementBaseWait {
-    constructor(node) {
-        this._node = node;
-    }
+class PageElementBaseWait extends _1.PageNodeWait {
     _wait(func, errorMessage) {
         try {
             func();
@@ -189,10 +183,7 @@ class PageElementBaseWait {
     }
 }
 exports.PageElementBaseWait = PageElementBaseWait;
-class PageElementBaseEventually {
-    constructor(node) {
-        this._node = node;
-    }
+class PageElementBaseEventually extends _1.PageNodeEventually {
     _eventually(func) {
         try {
             func();

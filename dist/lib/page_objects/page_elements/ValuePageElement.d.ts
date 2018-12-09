@@ -2,7 +2,7 @@ import { PageElement, IPageElementOpts, PageElementCurrently, PageElementWait, P
 import { PageElementStore } from '../stores';
 export interface IValuePageElementOpts<Store extends PageElementStore> extends IPageElementOpts<Store> {
 }
-export declare abstract class ValuePageElement<Store extends PageElementStore, ValueType> extends PageElement<Store> implements Workflo.PageNode.IGetValueNode<ValueType>, Workflo.PageNode.ISetValueNode<ValueType> {
+export declare abstract class ValuePageElement<Store extends PageElementStore, ValueType> extends PageElement<Store> implements Workflo.PageNode.IGetValueElementNode<ValueType>, Workflo.PageNode.ISetValueElementNode<ValueType> {
     abstract readonly currently: ValuePageElementCurrently<Store, this, ValueType>;
     readonly wait: ValuePageElementWait<Store, this, ValueType>;
     readonly eventually: ValuePageElementEventually<Store, this, ValueType>;
@@ -11,7 +11,7 @@ export declare abstract class ValuePageElement<Store extends PageElementStore, V
     getValue(): ValueType;
     setValue(value: ValueType): this;
 }
-export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> implements Workflo.PageNode.IGetValue<ValueType> {
+export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> implements Workflo.PageNode.IGetValueElement<ValueType> {
     abstract getValue(): ValueType;
     abstract setValue(value: ValueType): PageElementType;
     hasValue(value: ValueType): boolean;

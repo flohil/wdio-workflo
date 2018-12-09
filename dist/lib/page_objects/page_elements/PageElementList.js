@@ -1,13 +1,4 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const util_1 = require("../../utility_functions/util");
@@ -15,6 +6,7 @@ const _1 = require(".");
 const builders_1 = require("../builders");
 const __1 = require("../");
 const util_2 = require("util");
+const PageNode_1 = require("./PageNode");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(_selector, opts) {
@@ -186,20 +178,22 @@ class PageElementList extends _1.PageNode {
         }
     }
     getText() {
-        return this.all.map(listElement => listElement.getText());
+        return this.eachGet(this.all, element => element.getText());
+    }
+    getDirectText() {
+        return this.eachGet(this.all, element => element.getDirectText());
     }
     // HELPER FUNCTIONS
-    __compare(compareFunc, expected) {
-        const all = this.all;
+    eachCheck(elements, checkFunc, expected) {
         const diffs = {};
-        if (util_2.isArray(expected) && expected.length !== all.length) {
+        if (util_2.isArray(expected) && expected.length !== elements.length) {
             throw new Error(`${this.constructor.name}: ` +
-                `Length of expected (${expected.length}) did not match length of list (${all.length})!`);
+                `Length of expected (${expected.length}) did not match length of list (${elements.length})!`);
         }
-        for (let i = 0; i < all.length; ++i) {
+        for (let i = 0; i < elements.length; ++i) {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
-            const element = all[i];
-            if (!compareFunc(element, _expected)) {
+            const element = elements[i];
+            if (!checkFunc(element, _expected)) {
                 diffs[`[${i + 1}]`] = element.__lastDiff;
             }
         }
@@ -208,21 +202,74 @@ class PageElementList extends _1.PageNode {
         };
         return Object.keys(diffs).length === 0;
     }
+    eachGet(elements, getFunc) {
+        return elements.map(element => getFunc(element));
+    }
+    // perform initial wait to make sure list elements are loaded
+    eachWait(elements, waitFunc, expected) {
+        if (util_2.isArray(expected) && expected.length !== elements.length) {
+            throw new Error(`${this.constructor.name}: ` +
+                `Length of expected (${expected.length}) did not match length of list (${elements.length})!`);
+        }
+        for (let i = 0; i < elements.length; ++i) {
+            const _expected = util_2.isArray(expected) ? expected[i] : expected;
+            const element = elements[i];
+            waitFunc(element, _expected);
+        }
+        return this;
+    }
+    eachDo(elements, doFunc) {
+        return elements.map(element => doFunc(element));
+    }
+    eachSet(elements, setFunc, values) {
+        if (_.isArray(values)) {
+            if (elements.length !== values.length) {
+                throw new Error(`Length of values array (${values.length}) did not match length of list page elements (${elements.length})!`);
+            }
+            else {
+                for (let i = 0; i < elements.length; i++) {
+                    setFunc(elements[i], values[i]);
+                }
+            }
+        }
+        else {
+            for (let i = 0; i < elements.length; i++) {
+                setFunc(elements[i], values);
+            }
+        }
+        return this;
+    }
 }
 exports.PageElementList = PageElementList;
-class PageElementListCurrently {
+class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     constructor(node, opts) {
+        super(node);
         this.not = {
             isEmpty: () => !this.isEmpty(),
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
+            isVisible: () => {
+                return this._node.eachCheck(this.all, element => element.currently.not.isVisible());
+            },
+            isEnabled: () => {
+                return this._node.eachCheck(this.all, element => element.currently.not.isEnabled());
+            },
             hasText: (text) => {
-                return this._node.__compare((element, expected) => element.currently.not.hasText(expected), text);
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
             },
             hasAnyText: () => {
-                return this._node.__compare(element => element.currently.not.hasAnyText());
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText());
             },
             containsText: (text) => {
-                return this._node.__compare((element, expected) => element.currently.not.containsText(expected), text);
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text);
+            },
+            hasDirectText: (directText) => {
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText);
+            },
+            hasAnyDirectText: () => {
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText());
+            },
+            containsDirectText: (directText) => {
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText);
             }
         };
         this._selector = node.getSelector();
@@ -314,7 +361,10 @@ class PageElementListCurrently {
         }
     }
     getText() {
-        return this.all.map(listElement => listElement.currently.getText());
+        return this._node.eachGet(this.all, element => element.currently.getText());
+    }
+    getDirectText() {
+        return this._node.eachGet(this.all, element => element.currently.getDirectText());
     }
     // CHECK STATE FUNCTIONS
     isEmpty() {
@@ -327,28 +377,67 @@ class PageElementListCurrently {
         };
         return util_1.compare(actualLength, length, comparator);
     }
+    isVisible() {
+        return this._node.eachCheck(this.all, element => element.currently.isVisible());
+    }
+    isEnabled() {
+        return this._node.eachCheck(this.all, element => element.currently.isEnabled());
+    }
     hasText(text) {
-        return this._node.__compare((element, expected) => element.currently.hasText(expected), text);
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.hasText(expected), text);
     }
     hasAnyText() {
-        return this._node.__compare(element => element.currently.hasAnyText());
+        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText());
     }
     containsText(text) {
-        return this._node.__compare((element, expected) => element.currently.containsText(expected), text);
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.containsText(expected), text);
+    }
+    hasDirectText(directText) {
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.hasDirectText(expected), directText);
+    }
+    hasAnyDirectText() {
+        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText());
+    }
+    containsDirectText(directText) {
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
 }
 exports.PageElementListCurrently = PageElementListCurrently;
-class PageElementListWait {
-    constructor(node) {
+class PageElementListWait extends PageNode_1.PageNodeWait {
+    constructor() {
+        super(...arguments);
         this.not = {
             isEmpty: (opts) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
             hasLength: (length, opts) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
-            })
+            }),
+            isVisible: (opts) => {
+                return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts));
+            },
+            isEnabled: (opts) => {
+                return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(opts));
+            },
+            hasText: (text, opts) => {
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text);
+            },
+            hasAnyText: (opts) => {
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyText(opts));
+            },
+            containsText: (text, opts) => {
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsText(expected, opts), text);
+            },
+            hasDirectText: (directText, opts) => {
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText);
+            },
+            hasAnyDirectText: (opts) => {
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyDirectText(opts));
+            },
+            containsDirectText: (directText, opts) => {
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText);
+            }
         };
-        this._node = node;
     }
     // waits until list has given length
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
@@ -385,10 +474,35 @@ class PageElementListWait {
     get none() {
         return this._node.currently.first.wait.not;
     }
+    isVisible(opts) {
+        return this._node.eachWait(this._node.all, element => element.wait.isVisible(opts));
+    }
+    isEnabled(opts) {
+        return this._node.eachWait(this._node.all, element => element.wait.isEnabled(opts));
+    }
+    hasText(text, opts) {
+        return this._node.eachWait(this._node.all, (element, expected) => element.wait.hasText(expected, opts), text);
+    }
+    hasAnyText(opts) {
+        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyText(opts));
+    }
+    containsText(text, opts) {
+        return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsText(expected, opts), text);
+    }
+    hasDirectText(directText, opts) {
+        return this._node.eachWait(this._node.all, (element, expected) => element.wait.hasDirectText(expected, opts), directText);
+    }
+    hasAnyDirectText(opts) {
+        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyDirectText(opts));
+    }
+    containsDirectText(directText, opts) {
+        return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsDirectText(expected, opts), directText);
+    }
 }
 exports.PageElementListWait = PageElementListWait;
-class PageElementListEventually {
-    constructor(node) {
+class PageElementListEventually extends PageNode_1.PageNodeEventually {
+    constructor() {
+        super(...arguments);
         this.not = {
             isEmpty: (opts) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -396,17 +510,31 @@ class PageElementListEventually {
             hasLength: (length, opts) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
+            isVisible: (opts) => {
+                return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts));
+            },
+            isEnabled: (opts) => {
+                return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts));
+            },
             hasText: (text, opts) => {
-                return this._node.__compare((element, expected) => element.eventually.not.hasText(expected, opts), text);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text);
             },
             hasAnyText: (opts) => {
-                return this._node.__compare(element => element.eventually.not.hasAnyText(opts));
+                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyText(opts));
             },
             containsText: (text, opts) => {
-                return this._node.__compare((element, expected) => element.eventually.not.containsText(expected, opts), text);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text);
+            },
+            hasDirectText: (directText, opts) => {
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText);
+            },
+            hasAnyDirectText: (opts) => {
+                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyDirectText(opts));
+            },
+            containsDirectText: (directText, opts) => {
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText);
             }
         };
-        this._node = node;
     }
     _eventually(func) {
         try {
@@ -435,20 +563,30 @@ class PageElementListEventually {
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         return this._eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
     }
+    isVisible(opts) {
+        return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(opts));
+    }
+    isEnabled(opts) {
+        return this._node.eachCheck(this._node.all, element => element.eventually.isEnabled(opts));
+    }
     hasText(text, opts) {
-        return this._node.__compare((element, expected) => element.eventually.hasText(expected, opts), text);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasText(expected, opts), text);
     }
     hasAnyText(opts) {
-        return this._node.__compare(element => element.eventually.hasAnyText(opts));
+        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyText(opts));
     }
     containsText(text, opts) {
-        return this._node.__compare((element, expected) => element.eventually.containsText(expected, opts), text);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsText(expected, opts), text);
+    }
+    hasDirectText(directText, opts) {
+        return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasDirectText(expected, opts), directText);
+    }
+    hasAnyDirectText(opts) {
+        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyDirectText(opts));
+    }
+    containsDirectText(directText, opts) {
+        return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsDirectText(expected, opts), directText);
     }
 }
 exports.PageElementListEventually = PageElementListEventually;
-function excludeNot(obj) {
-    let { not } = obj, rest = __rest(obj, ["not"]);
-    return rest;
-}
-exports.excludeNot = excludeNot;
 //# sourceMappingURL=PageElementList.js.map

@@ -6,6 +6,9 @@ class PageNode {
     constructor(_selector, { store }) {
         this._selector = _selector;
         this._store = store;
+        this.currently = new PageNodeCurrently(this);
+        this.wait = new PageNodeWait(this);
+        this.eventually = new PageNodeEventually(this);
     }
     __getNodeId() {
         return this._selector;
@@ -26,4 +29,22 @@ class PageNode {
     }
 }
 exports.PageNode = PageNode;
+class PageNodeCurrently {
+    constructor(node) {
+        this._node = node;
+    }
+}
+exports.PageNodeCurrently = PageNodeCurrently;
+class PageNodeWait {
+    constructor(node) {
+        this._node = node;
+    }
+}
+exports.PageNodeWait = PageNodeWait;
+class PageNodeEventually {
+    constructor(node) {
+        this._node = node;
+    }
+}
+exports.PageNodeEventually = PageNodeEventually;
 //# sourceMappingURL=PageNode.js.map
