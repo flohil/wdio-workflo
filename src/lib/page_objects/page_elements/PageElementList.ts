@@ -364,6 +364,37 @@ implements Workflo.PageNode.IElementNode<string[]> {
 
     return this
   }
+
+  eachDo(
+    elements: PageElementType[],
+    doFunc: (element: PageElementType) => PageElementType,
+  ) {
+    return elements.map(element => doFunc(element))
+  }
+
+  eachSet<T>(
+    elements: PageElementType[],
+    setFunc: (element: PageElementType, value: T) => PageElementType,
+    values?: T | T[],
+  ) {
+    if (_.isArray(values)) {
+      if (elements.length !== values.length) {
+        throw new Error(
+          `Length of values array (${values.length}) did not match length of list page elements (${elements.length})!`
+        )
+      } else {
+        for ( let i = 0; i < elements.length; i++) {
+          setFunc(elements[i], values[i])
+        }
+      }
+    } else {
+      for ( let i = 0; i < elements.length; i++) {
+        setFunc(elements[i], values)
+      }
+    }
+
+    return this
+  }
 }
 
 export class PageElementListCurrently<

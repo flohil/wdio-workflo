@@ -63,26 +63,9 @@ implements Workflo.PageNode.IGetValueElementNode<ValueType[]>, Workflo.PageNode.
    * @param values
    */
   setValue(values: ValueType[] | ValueType) {
-    const allElements = this.all
-
-    if (_.isArray(values)) {
-      if (allElements.length !== values.length) {
-        throw new Error(
-          `${this.constructor.name}: ` +
-          `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`
-        )
-      } else {
-        for ( let i = 0; i < allElements.length; i++) {
-          allElements[i].setValue(values[i])
-        }
-      }
-    } else {
-      for ( let i = 0; i < allElements.length; i++) {
-        allElements[i].setValue(values)
-      }
-    }
-
-    return this
+    return this.eachSet<ValueType>(
+      this.all, (element, value) => element.currently.setValue(value), values
+    )
   }
 }
 
@@ -112,25 +95,9 @@ class ValuePageElementListCurrently<
    * @param values
    */
   setValue(values: ValueType[] | ValueType) {
-    const allElements = this.all
-
-    if (_.isArray(values)) {
-      if (allElements.length !== values.length) {
-        throw new Error(
-          `Length of values array (${allElements.length}) did not match length of list page elements (${values.length})!`
-        )
-      } else {
-        for ( let i = 0; i < allElements.length; i++) {
-          allElements[i].currently.setValue(values[i])
-        }
-      }
-    } else {
-      for ( let i = 0; i < allElements.length; i++) {
-        allElements[i].currently.setValue(values)
-      }
-    }
-
-    return this._node
+    return this._node.eachSet<ValueType>(
+      this.all, (element, value) => element.currently.setValue(value), values
+    )
   }
 
   // CHECK STATE

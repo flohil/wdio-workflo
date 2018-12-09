@@ -10,7 +10,7 @@ export interface IValuePageElementMapOpts<
 > extends IPageElementMapOpts<Store, K, PageElementType, PageElementOptions> {}
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
+  [P in keyof T]?: T[P] extends Workflo.PageNode.IGetValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
 }
 
 export class ValuePageElementMap<
@@ -60,12 +60,8 @@ Workflo.PageNode.ISetValueElementNode<ExtractValue<Record<K, PageElementType>>> 
    *
    * @param values
    */
-  setValue(values: ExtractValue<Partial<Record<K, PageElementType>>>) {
-    for (const k in values) {
-      this.$[k].setValue(values[k])
-    }
-
-    return this
+  setValue(values: ExtractValue<Record<K, PageElementType>>) {
+    return this.eachSet(this._$, values, (element, value) => element.setValue(value))
   }
 }
 
@@ -90,12 +86,8 @@ class ValuePageElementMapCurrently<
     return this._node.eachGet(this._node.$, filter, node => node.currently.getValue())
   }
 
-  setValue(values: ExtractValue<Partial<Record<K, PageElementType>>>) {
-    for (const k in values) {
-      this._node.$[k].currently.setValue(values[k])
-    }
-
-    return this._node
+  setValue(values: ExtractValue<Record<K, PageElementType>>) {
+    return this._node.eachSet(this._node.$, values, (element, value) => element.setValue(value))
   }
 
   hasValue(value: Partial<Record<K, ValueType>>) {

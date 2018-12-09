@@ -189,6 +189,38 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
 
     return this
   }
+
+  eachDo(
+    context: Record<K, PageElementType>,
+    filterMask: Partial<Record<K, true>>,
+    doFunc: (element: PageElementType) => PageElementType,
+  ): this {
+    for (const key in context) {
+      if (filterMask && typeof filterMask[key] !== 'undefined') {
+        doFunc(context[key])
+      } else {
+        doFunc(context[key])
+      }
+    }
+
+    return this
+  }
+
+  eachSet<T>(
+    context: Record<K, PageElementType>,
+    values: Partial<Record<K, T>>,
+    setFunc: (element: PageElementType, value: T) => PageElementType,
+  ): this {
+    for (const key in context) {
+      if (values && typeof values[key] !== 'undefined') {
+        setFunc(context[key], values[key] as any as T)
+      } else {
+        setFunc(context[key], values[key] as any as T)
+      }
+    }
+
+    return this
+  }
 }
 
 export class PageElementMapCurrently<

@@ -1,10 +1,13 @@
 import { PageElementStore, pageElement } from '../stores'
 import { PageNodeCurrently, PageNode } from '.';
 import { PageNodeEventually, PageNodeWait } from './PageNode';
-import { stores } from '..';
 
 export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? ReturnType<T[P]['getText']> : undefined;
+}
+
+export type TrueFilterMask<T extends {[key: string]: Workflo.PageNode.INode}> = {
+  [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? true : undefined;
 }
 
 export interface IPageElementGroupOpts<
@@ -171,6 +174,56 @@ implements Workflo.PageNode.IElementNode<ExtractText<Partial<Content>>> {
     }
 
     return this
+  }
+
+  eachDo<
+    NodeInterface
+  >(
+    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    filterMask: TrueFilterMask<Content>,
+    doFunc: (node: NodeInterface) => NodeInterface
+  ): this {
+    const context = this._$
+
+    for (const key in context) {
+      const node = context[key] as any as NodeInterface
+
+      if (supportsInterface(context[key])) {
+        if (filterMask && typeof filterMask[key] !== 'undefined') {
+          doFunc(node)
+        } else {
+          doFunc(node)
+        }
+      }
+    }
+
+    return this
+  }
+
+  eachSet<
+    NodeInterface,
+    ValuesType extends Partial<Content>,
+    ReturnType extends this
+  >(
+    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    values: ValuesType,
+    setFunc: (node: NodeInterface, expected?: ValuesType[keyof ValuesType]) => NodeInterface
+  ): this {
+    const context = this._$
+
+    for (const key in context) {
+      const node = context[key] as any as NodeInterface
+
+      if (supportsInterface(context[key])) {
+        if (values && typeof values[key] !== 'undefined') {
+          setFunc(node, values[key])
+        } else {
+          setFunc(node, values[key])
+        }
+      }
+    }
+
+    return this as ReturnType
   }
 }
 

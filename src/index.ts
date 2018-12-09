@@ -332,7 +332,7 @@ declare global {
       }
 
       interface ISetValue<ValueType> {
-        setValue(value: ValueType): this
+        setValue(value: ValueType): any
       }
 
       interface IDiffTree {
