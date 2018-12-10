@@ -27,7 +27,7 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
     abstract __typeToString<T>(value: T): string;
 }
 export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeCurrently<Store, PageElementType> {
-    protected _lastDiff: Workflo.PageNode.IDiff;
+    protected _lastDiff: Workflo.IDiff;
     /**
      * Whenever a function that checks the state of the GUI
      * by comparing an expected result to an actual result is called,
@@ -38,7 +38,7 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
      * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
-    readonly __lastDiff: Workflo.PageNode.IDiff;
+    readonly __lastDiff: Workflo.IDiff;
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     /**
      * Executes func and, if an error occurs during execution of func,

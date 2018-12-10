@@ -2,12 +2,7 @@ import { PageElementMap, ValuePageElement, IValuePageElementOpts, IPageElementMa
 import { PageElementStore } from '../stores';
 export interface IValuePageElementMapOpts<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends IPageElementMapOpts<Store, K, PageElementType, PageElementOptions> {
 }
-declare type ExtractValue<T extends {
-    [key: string]: Workflo.PageNode.INode;
-}> = {
-    [P in keyof T]?: T[P] extends Workflo.PageNode.IGetValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
-};
-export declare class ValuePageElementMap<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementMap<Store, K, PageElementType, PageElementOptions> implements Workflo.PageNode.IGetValueElementNode<Partial<Record<K, ValueType>>>, Workflo.PageNode.ISetValueElementNode<ExtractValue<Record<K, PageElementType>>> {
+export declare class ValuePageElementMap<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementMap<Store, K, PageElementType, PageElementOptions> implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>> {
     readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this, ValueType>;
     readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOptions, this, ValueType>;
     readonly eventually: ValuePageElementMapEventually<Store, K, PageElementType, PageElementOptions, this, ValueType>;
@@ -31,7 +26,7 @@ export declare class ValuePageElementMap<Store extends PageElementStore, K exten
      *
      * @param values
      */
-    setValue(values: ExtractValue<Record<K, PageElementType>>): this;
+    setValue(values: Partial<Record<K, ValueType>>): this;
 }
 declare class ValuePageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, MapType> {
     /**
@@ -43,7 +38,7 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
      * @param filter a filter mask
      */
     getValue(filter?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>>;
-    setValue(values: ExtractValue<Record<K, PageElementType>>): MapType;
+    setValue(values: Partial<Record<K, ValueType>>): MapType;
     hasValue(value: Partial<Record<K, ValueType>>): boolean;
     hasAnyValue(filterMask?: Partial<Record<K, string>>): boolean;
     containsValue(value: Partial<Record<K, ValueType>>): boolean;

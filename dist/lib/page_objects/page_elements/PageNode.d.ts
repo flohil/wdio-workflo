@@ -5,14 +5,14 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
 export declare class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
     protected _selector: string;
     protected _store: Store;
-    protected _lastDiff: Workflo.PageNode.IDiff;
+    protected _lastDiff: Workflo.IDiff;
     readonly currently: PageNodeCurrently<Store, this>;
     readonly wait: PageNodeWait<Store, this>;
     readonly eventually: PageNodeEventually<Store, this>;
     constructor(_selector: string, { store }: IPageNodeOpts<Store>);
     __getNodeId(): string;
-    __toJSON(): Workflo.PageNode.IElementJSON;
-    readonly __lastDiff: Workflo.PageNode.IDiff;
+    __toJSON(): Workflo.IElementJSON;
+    readonly __lastDiff: Workflo.IDiff;
     getSelector(): string;
 }
 export declare class PageNodeCurrently<Store extends PageElementStore, PageElementType extends PageNode<Store>> {

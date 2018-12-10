@@ -15,7 +15,7 @@ export class ValuePageElementList<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ValueType
 > extends PageElementList<Store, PageElementType, PageElementOptions>
-implements Workflo.PageNode.IGetValueElementNode<ValueType[]>, Workflo.PageNode.ISetValueElementNode<ValueType[] | ValueType> {
+implements Workflo.PageNode.IValueElementNode<ValueType[], ValueType[] | ValueType> {
 
   readonly currently: ValuePageElementListCurrently<Store, PageElementType, PageElementOptions, this, ValueType>
   readonly wait: ValuePageElementListWait<Store, PageElementType, PageElementOptions, this, ValueType>

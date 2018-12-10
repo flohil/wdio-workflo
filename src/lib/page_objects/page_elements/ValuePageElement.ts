@@ -14,7 +14,7 @@ export interface IValuePageElementOpts<
 export abstract class ValuePageElement<
   Store extends PageElementStore,
   ValueType
-> extends PageElement<Store> implements Workflo.PageNode.IGetValueElementNode<ValueType>, Workflo.PageNode.ISetValueElementNode<ValueType> {
+> extends PageElement<Store> implements Workflo.PageNode.IValueElementNode<ValueType> {
 
   abstract readonly currently: ValuePageElementCurrently<Store, this, ValueType>
   readonly wait: ValuePageElementWait<Store, this, ValueType>
@@ -51,8 +51,7 @@ export abstract class ValuePageElementCurrently<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
-> extends PageElementCurrently<Store, PageElementType>
-implements Workflo.PageNode.IGetValueElement<ValueType> {
+> extends PageElementCurrently<Store, PageElementType> {
 
   abstract getValue(): ValueType
   abstract setValue(value: ValueType): PageElementType

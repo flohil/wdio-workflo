@@ -82,7 +82,7 @@ export abstract class PageElementBaseCurrently<
   PageElementType extends PageElementBase<Store>
 > extends PageNodeCurrently<Store, PageElementType> {
 
-  protected _lastDiff: Workflo.PageNode.IDiff
+  protected _lastDiff: Workflo.IDiff
 
   /**
    * Whenever a function that checks the state of the GUI
@@ -94,7 +94,7 @@ export abstract class PageElementBaseCurrently<
    * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
    * defined in the .currently, .eventually and .wait API of PageElement.
    */
-  get __lastDiff(): Workflo.PageNode.IDiff {
+  get __lastDiff(): Workflo.IDiff {
     return _.merge(this._lastDiff, {selector: this._node.getSelector(), constructorName: this.constructor.name})
   }
 

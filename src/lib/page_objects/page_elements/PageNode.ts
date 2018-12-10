@@ -7,7 +7,7 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
 
 export class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
   protected _store: Store
-  protected _lastDiff: Workflo.PageNode.IDiff
+  protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageNodeCurrently<Store, this>
   readonly wait: PageNodeWait<Store, this>
@@ -32,7 +32,7 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
     return this._selector
   }
 
-  __toJSON(): Workflo.PageNode.IElementJSON {
+  __toJSON(): Workflo.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
       nodeId: this._selector

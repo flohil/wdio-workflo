@@ -22,14 +22,14 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
 }> extends PageNode<Store> implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
     protected _id: string;
     protected _$: Content;
-    protected _lastDiff: Workflo.PageNode.IDiff;
+    protected _lastDiff: Workflo.IDiff;
     readonly currently: PageElementGroupCurrently<Store, Content, this>;
     readonly wait: PageElementGroupWait<Store, Content, this>;
     readonly eventually: PageElementGroupEventually<Store, Content, this>;
     constructor(id: string, { store, content }: IPageElementGroupOpts<Store, Content>);
     readonly $: Content;
-    readonly __lastDiff: Workflo.PageNode.IDiff;
-    __toJSON(): Workflo.PageNode.IElementJSON;
+    readonly __lastDiff: Workflo.IDiff;
+    __toJSON(): Workflo.IElementJSON;
     __getNodeId(): string;
     /**
      * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.

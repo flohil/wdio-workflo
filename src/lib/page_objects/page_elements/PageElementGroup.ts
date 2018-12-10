@@ -33,7 +33,7 @@ export class PageElementGroup<
 implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
   protected _id: string
   protected _$: Content
-  protected _lastDiff: Workflo.PageNode.IDiff
+  protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementGroupCurrently<Store, Content, this>
   readonly wait: PageElementGroupWait<Store, Content, this>
@@ -61,7 +61,7 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
     return this._lastDiff
   }
 
-  __toJSON(): Workflo.PageNode.IElementJSON {
+  __toJSON(): Workflo.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
       nodeId: this._id
@@ -131,7 +131,7 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
     expected: ResultType,
     checkFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => boolean
   ): boolean {
-    const diffs: Workflo.PageNode.IDiffTree = {}
+    const diffs: Workflo.IDiffTree = {}
     const context = this._$ as any as ResultType
 
     for (const key in context) {

@@ -73,7 +73,7 @@ implements Workflo.PageNode.IElementNode<string[]> {
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
-  protected _lastDiff: Workflo.PageNode.IDiff
+  protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
@@ -313,7 +313,7 @@ implements Workflo.PageNode.IElementNode<string[]> {
     checkFunc: (element: PageElementType, expected?: T) => boolean,
     expected?: T | T[],
   ): boolean {
-    const diffs: Workflo.PageNode.IDiffTree = {}
+    const diffs: Workflo.IDiffTree = {}
 
     if (isArray(expected) && expected.length !== elements.length) {
       throw new Error(
@@ -414,7 +414,7 @@ export class PageElementListCurrently<
   protected _elementOptions: PageElementOptions
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
-  protected _lastDiff: Workflo.PageNode.IDiff
+  protected _lastDiff: Workflo.IDiff
 
   constructor(
     node: ListType,
@@ -458,7 +458,7 @@ export class PageElementListCurrently<
    * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
    * defined in the .currently, .eventually and .wait API of PageElement.
    */
-  get __lastDiff(): Workflo.PageNode.IDiff {
+  get __lastDiff(): Workflo.IDiff {
     return _.merge(this._lastDiff, {selector: this._node.getSelector()})
   }
 

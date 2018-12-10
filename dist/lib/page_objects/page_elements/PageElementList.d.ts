@@ -46,7 +46,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         };
     };
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
-    protected _lastDiff: Workflo.PageNode.IDiff;
+    protected _lastDiff: Workflo.IDiff;
     readonly currently: PageElementListCurrently<Store, PageElementType, PageElementOptions, this>;
     readonly wait: PageElementListWait<Store, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementListEventually<Store, PageElementType, PageElementOptions, this>;
@@ -118,7 +118,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     protected _elementOptions: PageElementOptions;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
-    protected _lastDiff: Workflo.PageNode.IDiff;
+    protected _lastDiff: Workflo.IDiff;
     constructor(node: ListType, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     /**
      * Use this method to initialize properties that rely on the this type
@@ -139,7 +139,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
-    readonly __lastDiff: Workflo.PageNode.IDiff;
+    readonly __lastDiff: Workflo.IDiff;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>;
     /**

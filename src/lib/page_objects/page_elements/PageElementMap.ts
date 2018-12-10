@@ -42,7 +42,7 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
   protected _identifier: IPageElementMapIdentifier<K>
 
   protected _$: Record<K, PageElementType>
-  protected _lastDiff: Workflo.PageNode.IDiff
+  protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
   readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOptions, this>
@@ -124,7 +124,7 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     expected: Partial<Record<K, T>>,
     checkFunc: (element: PageElementType, expected?: T) => boolean
   ): boolean {
-    const diffs: Workflo.PageNode.IDiffTree = {}
+    const diffs: Workflo.IDiffTree = {}
 
     for (const key in context) {
       if (expected && typeof expected[key] !== 'undefined') {

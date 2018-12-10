@@ -198,6 +198,23 @@ declare global {
         interface IAttributeArgs extends IAnyAttributeArgs {
             value: string;
         }
+        interface IElementJSON {
+            pageNodeType: string;
+            nodeId: string;
+        }
+        interface ILastDiff {
+            __lastDiff: IDiff;
+        }
+        interface IDiffTree {
+            [key: string]: IDiff;
+        }
+        interface IDiff {
+            constructorName?: string;
+            actual?: string;
+            expected?: string;
+            selector?: string;
+            tree?: IDiffTree;
+        }
         namespace Store {
             type BaseKeys = "timeout" | "waitType";
             type GroupPublicKeys = "content" | "store";
@@ -210,34 +227,27 @@ declare global {
             type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc";
         }
         namespace PageNode {
-            interface IElementJSON {
-                pageNodeType: string;
-                nodeId: string;
-            }
             interface INode extends ILastDiff {
                 __getNodeId(): string;
                 __toJSON(): IElementJSON;
-                currently: INodeBase;
-                wait: INodeBase;
-                eventually: INodeBase;
+                currently: {};
+                wait: {};
+                eventually: {};
             }
-            interface INodeBase {
-            }
-            interface ILastDiff {
-                __lastDiff: IDiff;
-            }
+            type ExtractText<T extends {
+                [key: string]: INode;
+            }> = {
+                [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['getText']> : undefined;
+            };
+            type ExtractBoolean<T extends {
+                [key: string]: INode;
+            }> = {
+                [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> : undefined;
+            };
             interface IElementNode<TextType> extends INode, IGetElement<TextType> {
                 currently: IGetElement<TextType> & ICheckElementCurrently<TextType>;
                 wait: IWaitElement<TextType>;
                 eventually: ICheckElementEventually<TextType>;
-            }
-            interface IGetValueElementNode<ValueType> extends INode, IGetValueElement<ValueType> {
-                currently: IGetValueElement<ValueType> & ICheckValueCurrently<ValueType>;
-                wait: IWaitValue<ValueType>;
-                eventually: ICheckValueEventually<ValueType>;
-            }
-            interface ISetValueElementNode<ValueType> extends INode, ISetValueElement<ValueType> {
-                currently: ISetValueElement<ValueType>;
             }
             interface IGetElement<TextType> {
                 getText(filterMask?: TextType): TextType;
@@ -276,13 +286,24 @@ declare global {
                 containsDirectText(text: TextType, opts?: IWDIOParamsOptional): boolean;
                 not: Omit<ICheckElementEventually<TextType>, 'not'>;
             }
-            interface IGetValueElement<ValueType> {
-                getValue(): ValueType;
+            type ExtractValue<T extends {
+                [key: string]: INode;
+            }> = {
+                [P in keyof T]?: T[P] extends IValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
+            };
+            interface IValueElementNode<GetType, SetType = GetType> extends INode, IValueElement<GetType, SetType> {
+                currently: IValueElement<GetType, SetType> & ICheckValueCurrently<GetType>;
+                wait: IWaitValue<GetType>;
+                eventually: ICheckValueEventually<GetType>;
+            }
+            interface IValueElement<GetType, SetType> {
+                getValue(): GetType;
+                setValue(value: SetType): IValueElementNode<GetType, SetType>;
             }
             interface IWaitValue<ValueType, OptsType = IWDIOParamsOptionalReverse> {
-                hasValue(text: ValueType, opts?: OptsType): IGetValueElementNode<ValueType>;
-                hasAnyValue(opts?: OptsType): IGetValueElementNode<ValueType>;
-                containsValue(text: ValueType, opts?: OptsType): IGetValueElementNode<ValueType>;
+                hasValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType>;
+                hasAnyValue(opts?: OptsType): IValueElementNode<ValueType>;
+                containsValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType>;
                 not: Omit<IWaitValue<ValueType, IWDIOParamsOptional>, 'not'>;
             }
             interface ICheckValueCurrently<ValueType> {
@@ -296,19 +317,6 @@ declare global {
                 hasAnyValue(opts?: IWDIOParamsOptional): boolean;
                 containsValue(value: ValueType, opts?: IWDIOParamsOptional): boolean;
                 not: Omit<ICheckValueEventually<ValueType>, 'not'>;
-            }
-            interface ISetValueElement<ValueType> {
-                setValue(value: ValueType): ISetValueElementNode<ValueType>;
-            }
-            interface IDiffTree {
-                [key: string]: IDiff;
-            }
-            interface IDiff {
-                constructorName?: string;
-                actual?: string;
-                expected?: string;
-                selector?: string;
-                tree?: IDiffTree;
             }
         }
         interface IProblem<ValueType, ResultType> {

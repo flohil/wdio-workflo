@@ -21,7 +21,7 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
     protected _elementOptions: PageElementOptions;
     protected _identifier: IPageElementMapIdentifier<K>;
     protected _$: Record<K, PageElementType>;
-    protected _lastDiff: Workflo.PageNode.IDiff;
+    protected _lastDiff: Workflo.IDiff;
     readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>;
     readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOptions, this>;
