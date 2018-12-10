@@ -190,11 +190,32 @@ export function createEventuallyPropertyMessage(
   ])
 }
 
-export function createElementsErrorMessage(node: Workflo.PageNode.INode, expectation: string) {
+export function createEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]) {
+  let errorText = undefined
+  let notErrorText = undefined
+
+  if ( _.isArray(errorTexts) ) {
+    errorText = errorTexts[0]
+    notErrorText = errorTexts[1]
+  } else {
+    errorText = errorTexts
+    notErrorText = errorTexts
+  }
+
   return [
-    `'s elements to ${expectation}: `,
-    `'s elements not to ${expectation}: `,
+    `Expected each of ${node.constructor.name}'s elements ${errorText}:\n`,
+    `Expected each of ${node.constructor.name}'s elements not ${notErrorText}:\n`
   ]
+}
+
+export function createEventuallyEachMessage(
+  node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number
+) {
+  const within = _.isArray(errorTexts) ?
+    errorTexts.map(errorText => `${errorText} within ${timeout}ms`) :
+    `${errorTexts} within ${timeout}ms`
+
+  return createEachMessage(node, within)
 }
 
 function elementMatcherFunction<
