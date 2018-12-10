@@ -753,16 +753,16 @@ class PageElementWait extends _1.PageElementBaseWait {
             hasHeight: (height, opts = { tolerance: 0 }) => this.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true })
         };
     }
-    exists(opts) {
+    exists(opts = {}) {
         return this._waitWdioCheckFunc('existed', opts => this._node.currently.element.waitForExist(opts.timeout, opts.reverse), opts);
     }
-    isVisible(opts) {
+    isVisible(opts = {}) {
         return this._waitWdioCheckFunc('became visible', opts => this._node.currently.element.waitForVisible(opts.timeout, opts.reverse), opts);
     }
-    isEnabled(opts) {
+    isEnabled(opts = {}) {
         return this._waitWdioCheckFunc('became enabled', opts => this._node.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts);
     }
-    isSelected(opts) {
+    isSelected(opts = {}) {
         return this._waitWdioCheckFunc('became selected', opts => this._node.currently.element.waitForSelected(opts.timeout, opts.reverse), opts);
     }
     isChecked(opts = {}) {
@@ -782,7 +782,7 @@ class PageElementWait extends _1.PageElementBaseWait {
     hasText(text, opts) {
         return this._waitHasProperty('text', text, () => this._node.currently.hasText(text), opts);
     }
-    hasAnyText(opts) {
+    hasAnyText(opts = {}) {
         return this._waitWdioCheckFunc('had any text', opts => this._node.currently.element.waitForText(opts.timeout, opts.reverse), opts);
     }
     containsText(text, opts) {

@@ -43,7 +43,7 @@ export abstract class PageElementBase<
         this._$[method] = <Options extends IPageElementBaseOpts<Store>>(_selector: Workflo.XPath, _options: Options) => {
 
           if (_selector instanceof XPathBuilder) {
-            selector = XPathBuilder.getInstance().build()
+            _selector = XPathBuilder.getInstance().build()
           }
 
           // chain selectors

@@ -23,7 +23,7 @@ class PageElementBase extends _1.PageNode {
             if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
                 this._$[method] = (_selector, _options) => {
                     if (_selector instanceof builders_1.XPathBuilder) {
-                        selector = builders_1.XPathBuilder.getInstance().build();
+                        _selector = builders_1.XPathBuilder.getInstance().build();
                     }
                     // chain selectors
                     _selector = `${selector}${_selector}`;

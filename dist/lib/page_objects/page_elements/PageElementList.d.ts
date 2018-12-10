@@ -221,8 +221,8 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional): boolean;
     containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
     not: {
-        isEmpty: (opts: IPageElementListWaitEmptyParams) => boolean;
-        hasLength: (length: number, opts: IPageElementListWaitLengthParams) => boolean;
+        isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
+        hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;

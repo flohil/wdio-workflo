@@ -728,11 +728,11 @@ export class PageElementListWait<
   }
 
   not = {
-    isEmpty: (opts?: IPageElementListWaitEmptyParams) => this.isEmpty({
+    isEmpty: (opts: IPageElementListWaitEmptyParams = {}) => this.isEmpty({
       timeout: opts.timeout, interval: opts.interval, reverse: true
     }),
     hasLength: (
-      length: number, opts?:  IPageElementListWaitLengthParams
+      length: number, opts: IPageElementListWaitLengthParams = {}
     ) => this.hasLength(length, {
       timeout: opts.timeout, interval: opts.interval, reverse: true
     }),
@@ -868,10 +868,10 @@ export class PageElementListEventually<
   }
 
   not = {
-    isEmpty: (opts: IPageElementListWaitEmptyParams) => this.isEmpty({
+    isEmpty: (opts: IPageElementListWaitEmptyParams = {}) => this.isEmpty({
       timeout: opts.timeout, interval: opts.interval, reverse: true
     }),
-    hasLength: (length: number, opts: IPageElementListWaitLengthParams) => this.hasLength(length, {
+    hasLength: (length: number, opts: IPageElementListWaitLengthParams = {}) => this.hasLength(length, {
       timeout: opts.timeout, interval: opts.interval, reverse: true
     }),
     isVisible: (opts?: Workflo.IWDIOParamsOptional) => {

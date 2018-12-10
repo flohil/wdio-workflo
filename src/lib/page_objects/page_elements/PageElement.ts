@@ -797,22 +797,22 @@ export class PageElementWait<
   PageElementType extends PageElement<Store>
 > extends PageElementBaseWait<Store, PageElementType> {
 
-  exists(opts?: Workflo.IWDIOParamsOptionalReverse) {
+  exists(opts: Workflo.IWDIOParamsOptionalReverse = {}) {
     return this._waitWdioCheckFunc(
       'existed', opts => this._node.currently.element.waitForExist(opts.timeout, opts.reverse), opts
     )
   }
-  isVisible(opts?: Workflo.IWDIOParamsOptionalReverse) {
+  isVisible(opts: Workflo.IWDIOParamsOptionalReverse = {}) {
     return this._waitWdioCheckFunc(
       'became visible', opts => this._node.currently.element.waitForVisible(opts.timeout, opts.reverse), opts
     )
   }
-  isEnabled(opts?: Workflo.IWDIOParamsOptionalReverse) {
+  isEnabled(opts: Workflo.IWDIOParamsOptionalReverse = {}) {
     return this._waitWdioCheckFunc(
       'became enabled', opts => this._node.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts
     )
   }
-  isSelected(opts?: Workflo.IWDIOParamsOptionalReverse) {
+  isSelected(opts: Workflo.IWDIOParamsOptionalReverse = {}) {
     return this._waitWdioCheckFunc(
       'became selected', opts => this._node.currently.element.waitForSelected(opts.timeout, opts.reverse), opts
     )
@@ -841,7 +841,7 @@ export class PageElementWait<
       'text', text, () => this._node.currently.hasText(text), opts
     )
   }
-  hasAnyText(opts?: Workflo.IWDIOParamsOptionalReverse) {
+  hasAnyText(opts: Workflo.IWDIOParamsOptionalReverse = {}) {
     return this._waitWdioCheckFunc(
       'had any text', opts => this._node.currently.element.waitForText(opts.timeout, opts.reverse), opts
     )
@@ -947,7 +947,8 @@ export class PageElementWait<
   }
   hasLocation(
     coordinates: Workflo.ICoordinates,
-    opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsOptionalReverse = { tolerances: { x: 0, y: 0 } }
+    opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsOptionalReverse =
+      { tolerances: { x: 0, y: 0 } }
   ) {
     const { tolerances, ...otherOpts } = opts
 
@@ -1011,7 +1012,8 @@ export class PageElementWait<
   }
   hasSize(
     size: Workflo.ISize,
-    opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.IWDIOParamsOptionalReverse = { tolerances: { width: 0, height: 0 } }
+    opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.IWDIOParamsOptionalReverse =
+      { tolerances: { width: 0, height: 0 } }
   ) {
     const { tolerances, ...otherOpts } = opts
 

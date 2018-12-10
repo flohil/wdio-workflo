@@ -88,8 +88,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
         hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => boolean;
-        isEmpty: (opts: import("./PageElementList").IPageElementListWaitEmptyParams) => boolean;
-        hasLength: (length: number, opts: import("./PageElementList").IPageElementListWaitLengthParams) => boolean;
+        isEmpty: (opts?: import("./PageElementList").IPageElementListWaitEmptyParams) => boolean;
+        hasLength: (length: number, opts?: import("./PageElementList").IPageElementListWaitLengthParams) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;

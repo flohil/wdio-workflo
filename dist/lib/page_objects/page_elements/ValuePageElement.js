@@ -55,7 +55,7 @@ class ValuePageElementWait extends PageElement_1.PageElementWait {
     hasValue(value, opts) {
         return this._waitHasProperty('value', value, () => this._node.currently.hasValue(value), opts);
     }
-    hasAnyValue(opts) {
+    hasAnyValue(opts = {}) {
         return this._waitWdioCheckFunc('had any value', opts => this._node.currently.element.waitForValue(opts.timeout, opts.reverse), opts);
     }
     containsValue(value, opts) {

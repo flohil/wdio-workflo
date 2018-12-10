@@ -407,10 +407,10 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     constructor() {
         super(...arguments);
         this.not = {
-            isEmpty: (opts) => this.isEmpty({
+            isEmpty: (opts = {}) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
-            hasLength: (length, opts) => this.hasLength(length, {
+            hasLength: (length, opts = {}) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
             isVisible: (opts) => {
@@ -504,10 +504,10 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     constructor() {
         super(...arguments);
         this.not = {
-            isEmpty: (opts) => this.isEmpty({
+            isEmpty: (opts = {}) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
-            hasLength: (length, opts) => this.hasLength(length, {
+            hasLength: (length, opts = {}) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
             isVisible: (opts) => {
