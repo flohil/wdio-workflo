@@ -637,6 +637,8 @@ export class PageElementListWait<
     interval = this._node.getInterval(),
     reverse
   }: IPageElementListWaitLengthReverseParams = {}) {
+    const notStr = (reverse) ? 'not ' : ''
+
     browser.waitUntil(
       () => {
         if (reverse) {
@@ -645,7 +647,8 @@ export class PageElementListWait<
           return this._node.currently.hasLength(length, comparator)
         }
       },
-    timeout, `${this.constructor.name}: Length never became${comparatorStr(comparator)} ${length}.\n( ${this._node.getSelector()} )`, interval )
+    timeout, `${this.constructor.name}: Length never ${notStr}became${comparatorStr(comparator)} ${length}.`+
+    `\n( ${this._node.getSelector()} )`, interval )
 
     return this._node
   }
@@ -655,15 +658,17 @@ export class PageElementListWait<
     interval = this._node.getInterval(),
     reverse
   } : IPageElementListWaitEmptyReverseParams = {}) {
+    const notStr = (reverse) ? 'not ' : ''
+
     browser.waitUntil(
       () => {
         if (reverse) {
-          return !this._node.currently.isEmpty()
+          return this._node.currently.not.isEmpty()
         } else {
           return this._node.currently.isEmpty()
         }
       },
-    timeout, `${this.constructor.name} never became empty.\n( ${this._node.getSelector()} )`, interval)
+    timeout, `${this.constructor.name} never ${notStr}became empty.\n( ${this._node.getSelector()} )`, interval)
 
     return this._node
   }

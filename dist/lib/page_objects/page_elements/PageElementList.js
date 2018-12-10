@@ -441,6 +441,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     }
     // waits until list has given length
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
+        const notStr = (reverse) ? 'not ' : '';
         browser.waitUntil(() => {
             if (reverse) {
                 return !this._node.currently.hasLength(length, comparator);
@@ -448,18 +449,20 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
             else {
                 return this._node.currently.hasLength(length, comparator);
             }
-        }, timeout, `${this.constructor.name}: Length never became${util_1.comparatorStr(comparator)} ${length}.\n( ${this._node.getSelector()} )`, interval);
+        }, timeout, `${this.constructor.name}: Length never ${notStr}became${util_1.comparatorStr(comparator)} ${length}.` +
+            `\n( ${this._node.getSelector()} )`, interval);
         return this._node;
     }
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
+        const notStr = (reverse) ? 'not ' : '';
         browser.waitUntil(() => {
             if (reverse) {
-                return !this._node.currently.isEmpty();
+                return this._node.currently.not.isEmpty();
             }
             else {
                 return this._node.currently.isEmpty();
             }
-        }, timeout, `${this.constructor.name} never became empty.\n( ${this._node.getSelector()} )`, interval);
+        }, timeout, `${this.constructor.name} never ${notStr}became empty.\n( ${this._node.getSelector()} )`, interval);
         return this._node;
     }
     get any() {
