@@ -167,7 +167,7 @@ export function createBaseMessage(node: Workflo.PageNode.INode, errorTexts: stri
   }
 
   return [
-    `Expected ${node.constructor.name}${errorText}.\n( ${node.__getNodeId()} )`,
+    `Expected ${node.constructor.name} ${errorText}.\n( ${node.__getNodeId()} )`,
     `Expected ${node.constructor.name} not ${notErrorText}.\n( ${node.__getNodeId()} )`
   ]
 }
@@ -202,9 +202,20 @@ export function createEachMessage(node: Workflo.PageNode.INode, errorTexts: stri
     notErrorText = errorTexts
   }
 
+  const comparisonLines = Object.keys(node.__lastDiff.tree).map(
+    key => {
+      const diff = node.__lastDiff.tree[key]
+
+      return `[0] => ${diff.constructorName}\n` +
+      `{actual: "${diff.actual}", expected: "${diff.expected}"}\n` +
+      `( ${diff.selector} )`
+    }
+  )
+  const comparisonList = comparisonLines.join('\n')
+
   return [
-    `Expected each of ${node.constructor.name}'s elements ${errorText}:\n`,
-    `Expected each of ${node.constructor.name}'s elements not ${notErrorText}:\n`
+    `Expected each of ${node.constructor.name}'s elements ${errorText}:\n\n${comparisonList}`,
+    `Expected each of ${node.constructor.name}'s elements not ${notErrorText}:\n\n${comparisonList}`
   ]
 }
 
@@ -311,23 +322,23 @@ function listMatcherNoArgsFunction<
 export const elementMatchers: jasmine.CustomMatcherFactories = {
   toExist: elementMatcherFunction(
     ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
-    ({node}) => createBaseMessage(node, " to exist")
+    ({node}) => createBaseMessage(node, "to exist")
   ),
   toBeVisible: elementMatcherFunction(
     ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
-    ({node}) => createBaseMessage(node, " to be visible")
+    ({node}) => createBaseMessage(node, "to be visible")
   ),
   toBeSelected: elementMatcherFunction(
     ({node}) => [() => node.currently.isSelected(), () => node.currently.not.isSelected()],
-    ({node}) => createBaseMessage(node, " to be selected")
+    ({node}) => createBaseMessage(node, "to be selected")
   ),
   toBeEnabled: elementMatcherFunction(
     ({node}) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()],
-    ({node}) => createBaseMessage(node, " to be enabled")
+    ({node}) => createBaseMessage(node, "to be enabled")
   ),
   toBeChecked: elementMatcherFunction(
     ({node}) => [() => node.currently.isChecked(), () => node.currently.not.isChecked()],
-    ({node}) => createBaseMessage(node, " to be checked")
+    ({node}) => createBaseMessage(node, "to be checked")
   ),
   toHaveText: elementMatcherFunction(
     ({node, expected}) => [
@@ -337,7 +348,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
   ),
   toHaveAnyText: elementMatcherFunction(
     ({node}) => [() => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()],
-    ({node}) => createBaseMessage(node, " to have any text")
+    ({node}) => createBaseMessage(node, "to have any text")
   ),
   toContainText: elementMatcherFunction(
     ({node, expected}) => [
@@ -355,7 +366,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ({node}) => [
       () => node.currently.hasAnyHTML(), () => node.currently.not.hasAnyHTML()
     ],
-    ({node}) => createBaseMessage(node, " to have any HTML")
+    ({node}) => createBaseMessage(node, "to have any HTML")
   ),
   toContainHTML: elementMatcherFunction(
     ({node, expected}) => [
@@ -373,7 +384,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ({node}) => [
       () => node.currently.hasAnyDirectText(), () => node.currently.not.hasAnyDirectText()
     ],
-    ({node}) => createBaseMessage(node, " to have any direct text")
+    ({node}) => createBaseMessage(node, "to have any direct text")
   ),
   toContainDirectText: elementMatcherFunction(
     ({node, expected}) => [
@@ -430,7 +441,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ({node}) => [
       () => node.currently.hasAnyId(), () => node.currently.not.hasAnyId()
     ],
-    ({node}) => createBaseMessage(node, " to have any id")
+    ({node}) => createBaseMessage(node, "to have any id")
   ),
   toContainId: elementMatcherFunction(
     ({node, expected}) => [
@@ -448,7 +459,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
     ({node}) => [
       () => node.currently.hasAnyName(), () => node.currently.not.hasAnyName()
     ],
-    ({node}) => createBaseMessage(node, " to have any name")
+    ({node}) => createBaseMessage(node, "to have any name")
   ),
   toContainName: elementMatcherFunction(
     ({node, expected}) => [
@@ -824,7 +835,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
 export const listMatchers: jasmine.CustomMatcherFactories = {
   toBeEmpty: listMatcherFunction(
     ({node}) => [() => node.currently.isEmpty(), () => node.currently.not.isEmpty()],
-    ({node}) => createBaseMessage(node, " to be empty")
+    ({node}) => createBaseMessage(node, "to be empty")
   ),
   toHaveLength: listMatcherFunction<number, {comparator?: Workflo.Comparator}>(
     ({node, expected, opts}) => [
@@ -850,9 +861,14 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
       node, `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`
     )
   ),
+
   toBeVisible: listMatcherFunction(
     ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
-    ({node}) => createBaseMessage(node, " to be empty")
+    ({node}) => createEachMessage(node, "to be visible")
+  ),
+  toBeEnabled: listMatcherFunction(
+    ({node}) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()],
+    ({node}) => createEachMessage(node, "to be enabled")
   )
 }
 
@@ -887,7 +903,7 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
   ),
   toHaveAnyValue: valueElementMatcherFunction(
     ({node}) => [() => node.currently.hasAnyValue(), () => node.currently.not.hasAnyValue()],
-    ({node}) => createBaseMessage(node, " to have any value")
+    ({node}) => createBaseMessage(node, "to have any value")
   ),
   toContainValue: valueElementMatcherFunction(
     ({node, expected}) => [

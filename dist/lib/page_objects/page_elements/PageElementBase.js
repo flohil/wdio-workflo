@@ -52,7 +52,7 @@ class PageElementBaseCurrently extends _1.PageNodeCurrently {
      * defined in the .currently, .eventually and .wait API of PageElement.
      */
     get __lastDiff() {
-        return _.merge(this._lastDiff, { selector: this._node.getSelector() });
+        return _.merge(this._lastDiff, { selector: this._node.getSelector(), constructorName: this.constructor.name });
     }
     get element() {
         return browser.element(this._node.getSelector());

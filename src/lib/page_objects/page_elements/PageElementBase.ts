@@ -95,7 +95,7 @@ export abstract class PageElementBaseCurrently<
    * defined in the .currently, .eventually and .wait API of PageElement.
    */
   get __lastDiff(): Workflo.PageNode.IDiff {
-    return _.merge(this._lastDiff, {selector: this._node.getSelector()})
+    return _.merge(this._lastDiff, {selector: this._node.getSelector(), constructorName: this.constructor.name})
   }
 
   get element() {

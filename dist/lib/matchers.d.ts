@@ -31,10 +31,10 @@ interface ErrorFuncNoArgs<Store extends stores.PageElementStore, NodeType extend
 }
 export declare type ErrorTextFunction<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType, ExpectedType> = (args: ErrorFuncArgs<Store, NodeType, OptsType & {
     timeout?: number;
-}, ExpectedType>) => string | string[];
+}, ExpectedType>) => string[];
 export declare type ErrorTextNoArgsFunction<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType> = (args: ErrorFuncNoArgs<Store, NodeType, OptsType & {
     timeout?: number;
-}>) => string | string[];
+}>) => string[];
 export declare function matcherFunction<Store extends stores.PageElementStore, NodeType extends ElementOrList<Store>, OptsType extends Object = {
     timeout?: number;
 }, ExpectedType = string>(resultFunction: ResultFunction<Store, NodeType, OptsType, ExpectedType>, errorTextFunction: ErrorTextFunction<Store, NodeType, OptsType, ExpectedType>, noArgs?: boolean): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
@@ -44,8 +44,11 @@ export declare function matcherFunction<Store extends stores.PageElementStore, N
     compare: (node: NodeType, expected: ExpectedType, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: NodeType, expected: ExpectedType, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createLongErrorMessage(property: string, comparison: string, actual: string, expected: string): string[];
-export declare function createEventuallyErrorMessage(property: string, comparison: string, actual: string, expected: string, timeout: number): string[];
+export declare function createBaseMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
+export declare function createPropertyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: string): string[];
+export declare function createEventuallyPropertyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: string, timeout: number): string[];
+export declare function createEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
+export declare function createEventuallyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
 export declare const elementMatchers: jasmine.CustomMatcherFactories;
 export declare const listMatchers: jasmine.CustomMatcherFactories;
 export declare const valueElementMatchers: jasmine.CustomMatcherFactories;

@@ -356,15 +356,12 @@ declare global {
       }
 
       interface IDiff {
+        constructorName?: string,
         actual?: string,
         expected?: string,
         selector?: string,
         tree?: IDiffTree
       }
-
-      type Values<T extends {[key: string]: Workflo.PageNode.INode}> = Partial<{
-        [P in keyof T]: T[P] extends Workflo.PageNode.IGetValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
-      }>
     }
 
     interface IProblem<ValueType, ResultType> {
