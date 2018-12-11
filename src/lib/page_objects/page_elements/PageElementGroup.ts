@@ -57,7 +57,7 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
     return this._$
   }
 
-  get __lastDiff() {
+  get __getLastDiff() {
     return this._lastDiff
   }
 

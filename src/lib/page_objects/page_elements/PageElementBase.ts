@@ -82,22 +82,6 @@ export abstract class PageElementBaseCurrently<
   PageElementType extends PageElementBase<Store>
 > extends PageNodeCurrently<Store, PageElementType> {
 
-  protected _lastDiff: Workflo.IDiff
-
-  /**
-   * Whenever a function that checks the state of the GUI
-   * by comparing an expected result to an actual result is called,
-   * the actual and expected result and the selector will be stored in 'lastDiff'.
-   *
-   * This can be useful to determine why the last invocation of such a function returned false.
-   *
-   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-   * defined in the .currently, .eventually and .wait API of PageElement.
-   */
-  get __lastDiff(): Workflo.IDiff {
-    return _.merge(this._lastDiff, {selector: this._node.getSelector(), constructorName: this.constructor.name})
-  }
-
   get element() {
     return browser.element(this._node.getSelector())
   }
@@ -120,13 +104,15 @@ export abstract class PageElementBaseCurrently<
   }
 
   protected _writeLastDiff<T>(actual: T, expected?: T) {
-    this._lastDiff = {
-      actual: this._node.__typeToString(actual),
+    const diff: Workflo.IDiff = {
+      actual: this._node.__typeToString(actual)
     }
 
     if (typeof expected !== 'undefined') {
-      this._lastDiff.expected = this._node.__typeToString(expected)
+      diff.expected = this._node.__typeToString(expected)
     }
+
+    this._node.__setLastDiff(diff)
   }
 
   /**
@@ -172,16 +158,6 @@ export abstract class PageElementBaseWait<
   PageElementType extends PageElementBase<Store>,
 > extends PageNodeWait<Store, PageElementType> {
 
-  protected _wait(func: () => void, errorMessage: string) {
-    try {
-      func();
-    } catch (error) {
-      throw new Error(`${this._node.constructor.name}${errorMessage}.\n( ${this._node.getSelector()} )`)
-    }
-
-    return this._node
-  }
-
   protected _waitWdioCheckFunc(
     checkTypeStr: string,
     conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean,
@@ -190,56 +166,44 @@ export abstract class PageElementBaseWait<
     const reverseStr = (reverse) ? ' not' : ''
 
     return this._wait(
-      () => conditionFunc({timeout, reverse}),
-      ` never${reverseStr} ${checkTypeStr} within ${timeout} ms`
+      () => conditionFunc({timeout, reverse}), ` never${reverseStr} ${checkTypeStr}`, timeout
     )
   }
 
   protected _waitProperty<T>(
     name: string,
     conditionType: 'has' | 'contains' | 'any' | 'within',
-    conditionFunc: (value?: T) => boolean,
+    conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse, value?: T) => boolean,
     { timeout = this._node.getTimeout(), reverse }: Workflo.IWDIOParamsOptionalReverse = {},
     value?: T
   ) {
     const reverseStr = (reverse) ? ' not' : ''
     let conditionStr = ''
-    let errorMessage = ''
 
     if (conditionType === 'has') {
       conditionStr = 'became'
     } else if (conditionType === 'contains') {
       conditionStr = 'contained'
     } else if (conditionType === 'any') {
-      conditionStr = 'any'
+      conditionStr = 'had any'
     } else if (conditionType === 'within') {
       conditionStr = 'was in range'
     }
 
-    try {
-      browser.waitUntil(() => {
-        if (reverse) {
-          return !conditionFunc(value)
+    return this._waitUntil(
+      () => (reverse) ? !conditionFunc(value) : conditionFunc(value),
+      () => {
+        if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
+          return `'s ${name} "${this._node.__lastDiff.actual}" never` +
+            `${reverseStr} ${conditionStr} "${this._node.__typeToString(value)}"`
+        } else if (conditionType === 'any') {
+          return ` never${reverseStr} ${conditionStr} ${name}`
         } else {
-          return conditionFunc(value)
+          return ''
         }
-      }, timeout)
-    } catch ( error ) {
-      if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
-        errorMessage =
-          `${this._node.constructor.name}'s ${name} "${this._node.__lastDiff.actual}" never` +
-          `${reverseStr} ${conditionStr} "${this._node.__typeToString(value)}" within ${timeout} ms.\n` +
-          `( ${this._node.getSelector()} )`
-      } else if (conditionType === 'any') {
-        errorMessage =
-          `${this._node.constructor.name} never${reverseStr} ${conditionStr} any ${name}` +
-          ` within ${timeout} ms.\n( ${this._node.getSelector()} )`
-      }
-
-      throw new Error(errorMessage)
-    }
-
-    return this._node
+      },
+      timeout
+    )
   }
 
   protected _waitWithinProperty<T>(

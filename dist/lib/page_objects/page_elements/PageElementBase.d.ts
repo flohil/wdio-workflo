@@ -27,18 +27,6 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
     abstract __typeToString<T>(value: T): string;
 }
 export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeCurrently<Store, PageElementType> {
-    protected _lastDiff: Workflo.IDiff;
-    /**
-     * Whenever a function that checks the state of the GUI
-     * by comparing an expected result to an actual result is called,
-     * the actual and expected result and the selector will be stored in 'lastDiff'.
-     *
-     * This can be useful to determine why the last invocation of such a function returned false.
-     *
-     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-     * defined in the .currently, .eventually and .wait API of PageElement.
-     */
-    readonly __lastDiff: Workflo.IDiff;
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     /**
      * Executes func and, if an error occurs during execution of func,
@@ -58,9 +46,8 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
     protected _compareContains<T>(expected: T, actual: T): any;
 }
 export declare abstract class PageElementBaseWait<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
-    protected _wait(func: () => void, errorMessage: string): PageElementType;
     protected _waitWdioCheckFunc(checkTypeStr: string, conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean, { timeout, reverse }?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
-    protected _waitProperty<T>(name: string, conditionType: 'has' | 'contains' | 'any' | 'within', conditionFunc: (value?: T) => boolean, { timeout, reverse }?: Workflo.IWDIOParamsOptionalReverse, value?: T): PageElementType;
+    protected _waitProperty<T>(name: string, conditionType: 'has' | 'contains' | 'any' | 'within', conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse, value?: T) => boolean, { timeout, reverse }?: Workflo.IWDIOParamsOptionalReverse, value?: T): PageElementType;
     protected _waitWithinProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
     protected _waitHasProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
     protected _waitHasAnyProperty<T>(name: string, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;

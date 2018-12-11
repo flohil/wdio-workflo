@@ -768,15 +768,14 @@ class PageElementWait extends _1.PageElementBaseWait {
     isChecked(opts = {}) {
         const timeout = opts.timeout || this._node.getTimeout();
         const reverseStr = (opts.reverse) ? ' not' : '';
-        browser.waitUntil(() => {
+        this._wait(() => browser.waitUntil(() => {
             if (opts.reverse) {
                 return this._node.currently.not.isChecked();
             }
             else {
                 return this._node.currently.isChecked();
             }
-        }, timeout, `${this.constructor.name} never${reverseStr} became checked within ${timeout} ms.\n` +
-            `( ${this._node.getSelector()} )`);
+        }, timeout), ` never${reverseStr} became checked`, timeout);
         return this._node;
     }
     hasText(text, opts) {
@@ -897,8 +896,7 @@ class PageElementWait extends _1.PageElementBaseWait {
         }
     }
     untilElement(description, condition, { timeout = this._node.getTimeout() } = {}) {
-        browser.waitUntil(() => condition(this._node), timeout, `${this._node.constructor.name}: Wait until element ${description} failed.\n` +
-            `( ${this._node.getSelector()} )`);
+        this._wait(() => browser.waitUntil(() => condition(this._node), timeout), `: Wait until element ${description} failed`, timeout);
         return this._node;
     }
 }

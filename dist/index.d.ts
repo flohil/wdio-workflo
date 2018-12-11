@@ -101,6 +101,8 @@ declare global {
         }): boolean;
         toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean;
         toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
+        toBeVisible(): boolean;
+        toBeEnabled(): boolean;
     }
     interface CustomValueElementMatchers extends CustomElementMatchers {
         toHaveValue(value: string): boolean;
@@ -204,6 +206,7 @@ declare global {
         }
         interface ILastDiff {
             __lastDiff: IDiff;
+            __setLastDiff: (diff: IDiff) => void;
         }
         interface IDiffTree {
             [key: string]: IDiff;

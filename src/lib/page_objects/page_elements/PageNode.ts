@@ -40,10 +40,15 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   }
 
   get __lastDiff() {
-    this._lastDiff = this._lastDiff || {}
-    this._lastDiff.selector = this.getSelector()
+    const lastDiff = this._lastDiff || {}
+    lastDiff.selector = this.getSelector()
+    lastDiff.constructorName = this.constructor.name
 
-    return this._lastDiff
+    return lastDiff
+  }
+
+  __setLastDiff(diff: Workflo.IDiff) {
+    this._lastDiff = diff
   }
 
   getSelector() {
@@ -70,6 +75,61 @@ export class PageNodeWait<
 
   constructor(node: PageElementType) {
     this._node = node
+  }
+
+  protected _wait(func: () => boolean, errorMessage: string, timeout: number) {
+    try {
+      func();
+    } catch (error) {
+      if (error.message.includes('could not be located on the page')) {
+        throw new Error(
+          `${this._node.constructor.name} could not be located on the page within ${timeout}ms.\n` +
+          `( ${this._node.getSelector()} )`
+        )
+      } else {
+        throw new Error(
+          `${this._node.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this._node.getSelector()} )`
+        )
+      }
+    }
+
+    return this._node
+  }
+
+  protected _waitUntil(
+    waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number
+  ) {
+
+    let error: any
+
+    try {
+      browser.waitUntil(() => {
+        try {
+          const result = waitFunc()
+
+          error = undefined
+
+          return result
+        } catch( funcError ) {
+          error = funcError
+        }
+      }, timeout)
+    } catch (untilError) {
+      error = error || untilError
+
+      if (error.message.includes('could not be located on the page')) {
+        throw new Error(
+          `${this._node.constructor.name} could not be located on the page within ${timeout}ms.\n` +
+          `( ${this._node.getSelector()} )`
+        )
+      } else {
+        throw new Error(
+          `${this._node.constructor.name}${errorMessageFunc()} within ${timeout}ms.\n( ${this._node.getSelector()} )`
+        )
+      }
+    }
+
+    return this._node
   }
 }
 

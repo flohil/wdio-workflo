@@ -295,19 +295,6 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
             getAllFunc: list => list.all
         });
     }
-    /**
-     * Whenever a function that checks the state of the GUI
-     * by comparing an expected result to an actual result is called,
-     * the actual and expected result and selector will be stored in 'lastDiff'.
-     *
-     * This can be useful to determine why the last invocation of such a function returned false.
-     *
-     * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-     * defined in the .currently, .eventually and .wait API of PageElement.
-     */
-    get __lastDiff() {
-        return _.merge(this._lastDiff, { selector: this._node.getSelector() });
-    }
     // RETRIEVAL FUNCTIONS for wdio or list elements
     get elements() {
         return browser.elements(this._selector);
@@ -372,9 +359,9 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     }
     hasLength(length, comparator = "==" /* equalTo */) {
         const actualLength = this.getLength();
-        this._lastDiff = {
+        this._node.__setLastDiff({
             actual: actualLength.toString()
-        };
+        });
         return util_1.compare(actualLength, length, comparator);
     }
     isVisible() {
@@ -442,27 +429,26 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     // waits until list has given length
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
-        browser.waitUntil(() => {
+        this._wait(() => browser.waitUntil(() => {
             if (reverse) {
                 return !this._node.currently.hasLength(length, comparator);
             }
             else {
                 return this._node.currently.hasLength(length, comparator);
             }
-        }, timeout, `${this.constructor.name}: Length never ${notStr}became${util_1.comparatorStr(comparator)} ${length}.` +
-            `\n( ${this._node.getSelector()} )`, interval);
+        }, timeout, '', interval), `: Length never ${notStr}became${util_1.comparatorStr(comparator)} ${length}`, timeout);
         return this._node;
     }
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
-        browser.waitUntil(() => {
+        this._wait(() => browser.waitUntil(() => {
             if (reverse) {
                 return this._node.currently.not.isEmpty();
             }
             else {
                 return this._node.currently.isEmpty();
             }
-        }, timeout, `${this.constructor.name} never ${notStr}became empty.\n( ${this._node.getSelector()} )`, interval);
+        }, timeout, '', interval), ` never ${notStr}became empty`, timeout);
         return this._node;
     }
     get any() {

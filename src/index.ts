@@ -93,6 +93,9 @@ declare global {
     toHaveLength(length: number, opts?: {comparator?: Workflo.Comparator}): boolean
     toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
+
+    toBeVisible(): boolean
+    toBeEnabled(): boolean
   }
 
   interface CustomValueElementMatchers extends CustomElementMatchers {
@@ -233,6 +236,7 @@ declare global {
 
     interface ILastDiff {
       __lastDiff: IDiff
+      __setLastDiff: (diff: IDiff) => void
     }
 
     interface IDiffTree {

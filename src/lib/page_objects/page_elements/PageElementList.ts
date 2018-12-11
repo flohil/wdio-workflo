@@ -73,7 +73,6 @@ implements Workflo.PageNode.IElementNode<string[]> {
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
-  protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
@@ -414,7 +413,6 @@ export class PageElementListCurrently<
   protected _elementOptions: PageElementOptions
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
-  protected _lastDiff: Workflo.IDiff
 
   constructor(
     node: ListType,
@@ -446,20 +444,6 @@ export class PageElementListCurrently<
       cloneFunc: cloneFunc,
       getAllFunc: list => list.all
     })
-  }
-
-  /**
-   * Whenever a function that checks the state of the GUI
-   * by comparing an expected result to an actual result is called,
-   * the actual and expected result and selector will be stored in 'lastDiff'.
-   *
-   * This can be useful to determine why the last invocation of such a function returned false.
-   *
-   * These "check-GUI-state functions" include all hasXXX, hasAnyXXX and containsXXX functions
-   * defined in the .currently, .eventually and .wait API of PageElement.
-   */
-  get __lastDiff(): Workflo.IDiff {
-    return _.merge(this._lastDiff, {selector: this._node.getSelector()})
   }
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
@@ -544,9 +528,9 @@ export class PageElementListCurrently<
   ) {
     const actualLength = this.getLength()
 
-    this._lastDiff = {
+    this._node.__setLastDiff({
       actual: actualLength.toString()
-    }
+    })
 
     return compare(actualLength, length, comparator)
   }
@@ -639,16 +623,17 @@ export class PageElementListWait<
   }: IPageElementListWaitLengthReverseParams = {}) {
     const notStr = (reverse) ? 'not ' : ''
 
-    browser.waitUntil(
-      () => {
-        if (reverse) {
-          return !this._node.currently.hasLength(length, comparator)
-        } else {
-          return this._node.currently.hasLength(length, comparator)
-        }
-      },
-    timeout, `${this.constructor.name}: Length never ${notStr}became${comparatorStr(comparator)} ${length}.`+
-    `\n( ${this._node.getSelector()} )`, interval )
+    this._wait(
+      () => browser.waitUntil(
+        () => {
+          if (reverse) {
+            return !this._node.currently.hasLength(length, comparator)
+          } else {
+            return this._node.currently.hasLength(length, comparator)
+          }
+        }, timeout, '', interval
+      ), `: Length never ${notStr}became${comparatorStr(comparator)} ${length}`, timeout
+    )
 
     return this._node
   }
@@ -660,15 +645,17 @@ export class PageElementListWait<
   } : IPageElementListWaitEmptyReverseParams = {}) {
     const notStr = (reverse) ? 'not ' : ''
 
-    browser.waitUntil(
-      () => {
-        if (reverse) {
-          return this._node.currently.not.isEmpty()
-        } else {
-          return this._node.currently.isEmpty()
-        }
-      },
-    timeout, `${this.constructor.name} never ${notStr}became empty.\n( ${this._node.getSelector()} )`, interval)
+    this._wait(
+      () => browser.waitUntil(
+        () => {
+          if (reverse) {
+            return this._node.currently.not.isEmpty()
+          } else {
+            return this._node.currently.isEmpty()
+          }
+        }, timeout, '', interval
+      ), ` never ${notStr}became empty`, timeout
+    )
 
     return this._node
   }

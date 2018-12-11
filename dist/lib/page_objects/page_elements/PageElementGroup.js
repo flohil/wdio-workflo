@@ -22,7 +22,7 @@ class PageElementGroup extends _1.PageNode {
     get $() {
         return this._$;
     }
-    get __lastDiff() {
+    get __getLastDiff() {
         return this._lastDiff;
     }
     __toJSON() {

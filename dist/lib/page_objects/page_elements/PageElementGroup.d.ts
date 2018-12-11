@@ -28,7 +28,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     readonly eventually: PageElementGroupEventually<Store, Content, this>;
     constructor(id: string, { store, content }: IPageElementGroupOpts<Store, Content>);
     readonly $: Content;
-    readonly __lastDiff: Workflo.IDiff;
+    readonly __getLastDiff: Workflo.IDiff;
     __toJSON(): Workflo.IElementJSON;
     __getNodeId(): string;
     /**
