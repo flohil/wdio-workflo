@@ -54,7 +54,7 @@ export class PageElement<
       return actual === expected
     } else {
       throw new Error(
-        `${this.constructor.name}._equals is missing an implementation for type of values: ${actual}, ${expected}`
+        `${this.constructor.name}.__equals is missing an implementation for type of values: ${actual}, ${expected}`
       )
     }
   }
@@ -64,7 +64,7 @@ export class PageElement<
       return (actual) ? actual.length > 0 : false
     } else {
       throw new Error(
-        `${this.constructor.name}._any is missing an implementation for type of value: ${actual}`
+        `${this.constructor.name}.__any is missing an implementation for type of value: ${actual}`
       )
     }
   }
@@ -74,7 +74,7 @@ export class PageElement<
       return (actual) ? actual.indexOf(expected) > -1 : false
     } else {
       throw new Error(
-        `${this.constructor.name}._contains is missing an implementation for type of values: ${actual}, ${expected}`
+        `${this.constructor.name}.__contains is missing an implementation for type of values: ${actual}, ${expected}`
       )
     }
   }
@@ -83,7 +83,7 @@ export class PageElement<
     if (typeof value === 'string') {
       return (value.length > 0) ? value : ''
     } else {
-      throw new Error(`${this.constructor.name}.typeToString is missing an implementation for type of value: ${value}`)
+      throw new Error(`${this.constructor.name}.__typeToString is missing an implementation for type of value: ${value}`)
     }
   }
 
@@ -821,16 +821,16 @@ export class PageElementWait<
     const timeout = opts.timeout || this._node.getTimeout()
     const reverseStr = (opts.reverse) ? ' not' : ''
 
-    this._wait(
-      () => browser.waitUntil(
-        () => {
-          if ( opts.reverse ) {
-            return this._node.currently.not.isChecked()
-          } else {
-            return this._node.currently.isChecked()
-          }
-        }, timeout
-      ), ` never${reverseStr} became checked`, timeout
+    this._waitUntil(
+      () => {
+        if ( opts.reverse ) {
+          return this._node.currently.not.isChecked()
+        } else {
+          return this._node.currently.isChecked()
+        }
+      },
+      () => ` never${reverseStr} became checked`,
+      timeout
     )
 
     return this._node
@@ -1079,10 +1079,10 @@ export class PageElementWait<
     condition: (element: PageElementType) => boolean,
     { timeout = this._node.getTimeout() }: Workflo.IWDIOParamsOptional = {}
   ) {
-    this._wait(
-      () => browser.waitUntil(
-        () => condition(this._node), timeout
-      ), `: Wait until element ${description} failed`, timeout
+    this._waitUntil(
+      () => condition(this._node),
+      () => `: Wait until element ${description} failed`,
+      timeout
     )
 
     return this._node

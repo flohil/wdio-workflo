@@ -24,7 +24,8 @@ export declare class PageNodeWait<Store extends PageElementStore, PageElementTyp
     protected readonly _node: PageElementType;
     constructor(node: PageElementType);
     protected _wait(func: () => boolean, errorMessage: string, timeout: number): PageElementType;
-    protected _waitUntil(waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number): PageElementType;
+    protected _waitUntil(waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number, interval?: number): PageElementType;
+    protected _handleWaitError(error: any, errorMessage: string, timeout: number): void;
 }
 export declare class PageNodeEventually<Store extends PageElementStore, PageElementType extends PageNode<Store>> {
     protected readonly _node: PageElementType;

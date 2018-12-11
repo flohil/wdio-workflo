@@ -623,19 +623,18 @@ export class PageElementListWait<
   }: IPageElementListWaitLengthReverseParams = {}) {
     const notStr = (reverse) ? 'not ' : ''
 
-    this._wait(
-      () => browser.waitUntil(
+    return this._waitUntil(
         () => {
           if (reverse) {
             return !this._node.currently.hasLength(length, comparator)
           } else {
             return this._node.currently.hasLength(length, comparator)
           }
-        }, timeout, '', interval
-      ), `: Length never ${notStr}became${comparatorStr(comparator)} ${length}`, timeout
+        },
+        () => `: Length never ${notStr}became${comparatorStr(comparator)} ${length}`,
+        timeout,
+        interval
     )
-
-    return this._node
   }
 
   isEmpty({
@@ -645,19 +644,18 @@ export class PageElementListWait<
   } : IPageElementListWaitEmptyReverseParams = {}) {
     const notStr = (reverse) ? 'not ' : ''
 
-    this._wait(
-      () => browser.waitUntil(
-        () => {
-          if (reverse) {
-            return this._node.currently.not.isEmpty()
-          } else {
-            return this._node.currently.isEmpty()
-          }
-        }, timeout, '', interval
-      ), ` never ${notStr}became empty`, timeout
+    return this._waitUntil(
+      () => {
+        if (reverse) {
+          return this._node.currently.not.isEmpty()
+        } else {
+          return this._node.currently.isEmpty()
+        }
+      },
+      () => ` never ${notStr}became empty`,
+      timeout,
+      interval
     )
-
-    return this._node
   }
 
   get any() {

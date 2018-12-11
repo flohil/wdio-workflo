@@ -27,7 +27,7 @@ class PageElement extends _1.PageElementBase {
             return actual === expected;
         }
         else {
-            throw new Error(`${this.constructor.name}._equals is missing an implementation for type of values: ${actual}, ${expected}`);
+            throw new Error(`${this.constructor.name}.__equals is missing an implementation for type of values: ${actual}, ${expected}`);
         }
     }
     __any(actual) {
@@ -35,7 +35,7 @@ class PageElement extends _1.PageElementBase {
             return (actual) ? actual.length > 0 : false;
         }
         else {
-            throw new Error(`${this.constructor.name}._any is missing an implementation for type of value: ${actual}`);
+            throw new Error(`${this.constructor.name}.__any is missing an implementation for type of value: ${actual}`);
         }
     }
     __contains(actual, expected) {
@@ -43,7 +43,7 @@ class PageElement extends _1.PageElementBase {
             return (actual) ? actual.indexOf(expected) > -1 : false;
         }
         else {
-            throw new Error(`${this.constructor.name}._contains is missing an implementation for type of values: ${actual}, ${expected}`);
+            throw new Error(`${this.constructor.name}.__contains is missing an implementation for type of values: ${actual}, ${expected}`);
         }
     }
     __typeToString(value) {
@@ -51,7 +51,7 @@ class PageElement extends _1.PageElementBase {
             return (value.length > 0) ? value : '';
         }
         else {
-            throw new Error(`${this.constructor.name}.typeToString is missing an implementation for type of value: ${value}`);
+            throw new Error(`${this.constructor.name}.__typeToString is missing an implementation for type of value: ${value}`);
         }
     }
     // RETRIEVE ELEMENT FUNCTIONS
@@ -768,14 +768,14 @@ class PageElementWait extends _1.PageElementBaseWait {
     isChecked(opts = {}) {
         const timeout = opts.timeout || this._node.getTimeout();
         const reverseStr = (opts.reverse) ? ' not' : '';
-        this._wait(() => browser.waitUntil(() => {
+        this._waitUntil(() => {
             if (opts.reverse) {
                 return this._node.currently.not.isChecked();
             }
             else {
                 return this._node.currently.isChecked();
             }
-        }, timeout), ` never${reverseStr} became checked`, timeout);
+        }, () => ` never${reverseStr} became checked`, timeout);
         return this._node;
     }
     hasText(text, opts) {
@@ -896,7 +896,7 @@ class PageElementWait extends _1.PageElementBaseWait {
         }
     }
     untilElement(description, condition, { timeout = this._node.getTimeout() } = {}) {
-        this._wait(() => browser.waitUntil(() => condition(this._node), timeout), `: Wait until element ${description} failed`, timeout);
+        this._waitUntil(() => condition(this._node), () => `: Wait until element ${description} failed`, timeout);
         return this._node;
     }
 }

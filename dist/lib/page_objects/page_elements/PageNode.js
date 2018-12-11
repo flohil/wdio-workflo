@@ -48,17 +48,11 @@ class PageNodeWait {
             func();
         }
         catch (error) {
-            if (error.message.includes('could not be located on the page')) {
-                throw new Error(`${this._node.constructor.name} could not be located on the page within ${timeout}ms.\n` +
-                    `( ${this._node.getSelector()} )`);
-            }
-            else {
-                throw new Error(`${this._node.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this._node.getSelector()} )`);
-            }
+            this._handleWaitError(error, errorMessage, timeout);
         }
         return this._node;
     }
-    _waitUntil(waitFunc, errorMessageFunc, timeout) {
+    _waitUntil(waitFunc, errorMessageFunc, timeout, interval) {
         let error;
         try {
             browser.waitUntil(() => {
@@ -70,19 +64,26 @@ class PageNodeWait {
                 catch (funcError) {
                     error = funcError;
                 }
-            }, timeout);
+            }, timeout, '', interval);
         }
         catch (untilError) {
             error = error || untilError;
-            if (error.message.includes('could not be located on the page')) {
-                throw new Error(`${this._node.constructor.name} could not be located on the page within ${timeout}ms.\n` +
-                    `( ${this._node.getSelector()} )`);
-            }
-            else {
-                throw new Error(`${this._node.constructor.name}${errorMessageFunc()} within ${timeout}ms.\n( ${this._node.getSelector()} )`);
-            }
+            console.log("error: ", error);
+            this._handleWaitError(error, errorMessageFunc(), timeout);
         }
         return this._node;
+    }
+    _handleWaitError(error, errorMessage, timeout) {
+        if (error.message.includes('could not be located on the page')) {
+            throw new Error(`${this._node.constructor.name} could not be located on the page within ${timeout}ms.\n` +
+                `( ${this._node.getSelector()} )`);
+        }
+        else if ('type' in error && error.type === 'WaitUntilTimeoutError') {
+            throw new Error(`${this._node.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this._node.getSelector()} )`);
+        }
+        else {
+            throw error;
+        }
     }
 }
 exports.PageNodeWait = PageNodeWait;

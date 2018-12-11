@@ -429,27 +429,25 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     // waits until list has given length
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
-        this._wait(() => browser.waitUntil(() => {
+        return this._waitUntil(() => {
             if (reverse) {
                 return !this._node.currently.hasLength(length, comparator);
             }
             else {
                 return this._node.currently.hasLength(length, comparator);
             }
-        }, timeout, '', interval), `: Length never ${notStr}became${util_1.comparatorStr(comparator)} ${length}`, timeout);
-        return this._node;
+        }, () => `: Length never ${notStr}became${util_1.comparatorStr(comparator)} ${length}`, timeout, interval);
     }
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
-        this._wait(() => browser.waitUntil(() => {
+        return this._waitUntil(() => {
             if (reverse) {
                 return this._node.currently.not.isEmpty();
             }
             else {
                 return this._node.currently.isEmpty();
             }
-        }, timeout, '', interval), ` never ${notStr}became empty`, timeout);
-        return this._node;
+        }, () => ` never ${notStr}became empty`, timeout, interval);
     }
     get any() {
         return this._node.currently.first.wait;
