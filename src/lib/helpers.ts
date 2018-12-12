@@ -33,3 +33,15 @@ export function tolerancesToString(values, tolerances?) {
 
   return str + '}';
 }
+
+export function isNullOrUndefined<T>(value: T) {
+  return value === null || typeof value === 'undefined'
+}
+
+export function isEmpty<T>(value: T) {
+  if (typeof value === 'string') {
+    return value.length === 0
+  }
+
+  return isNullOrUndefined(value)
+}

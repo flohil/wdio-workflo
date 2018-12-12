@@ -31,7 +31,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
      * throws a custom error message that the page element could not be located on the page.
      * @param func
      */
-    protected _execute<ResultType>(func: () => ResultType): ResultType;
+    protected _executeAfterInitialWait<ResultType>(func: () => ResultType): ResultType;
     getHTML(): string;
     getDirectText(): string;
     getText(): string;

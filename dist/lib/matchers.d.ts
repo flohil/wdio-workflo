@@ -51,7 +51,16 @@ export declare function createEachMessage(node: Workflo.PageNode.INode, errorTex
 export declare function createEventuallyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
 export declare const elementMatchers: jasmine.CustomMatcherFactories;
 export declare const listMatchers: jasmine.CustomMatcherFactories;
+export declare const mapMatchers: jasmine.CustomMatcherFactories;
+export declare const groupMatchers: jasmine.CustomMatcherFactories;
 export declare const valueElementMatchers: jasmine.CustomMatcherFactories;
+export declare const valueListMatchers: jasmine.CustomMatcherFactories;
+export declare const valueMapMatchers: jasmine.CustomMatcherFactories;
+export declare const valueGroupMatchers: jasmine.CustomMatcherFactories;
 export declare function expectElement<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>>(element: PageElementType): jasmine.Matchers<PageElementType>;
-export declare function expectList<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElemnetListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElemnetListType): jasmine.Matchers<PageElemnetListType>;
+export declare function expectList<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): jasmine.Matchers<PageElementListType>;
+export declare function expectMap<Store extends stores.PageElementStore, K extends string, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementMapType extends elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): jasmine.Matchers<PageElementMapType>;
+export declare function expectGroup<Store extends stores.PageElementStore, Content extends {
+    [K in keyof Content]: Workflo.PageNode.INode;
+}, PageElementGroupType extends elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): jasmine.Matchers<PageElementGroupType>;
 export {};

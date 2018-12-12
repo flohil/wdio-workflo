@@ -194,7 +194,6 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     };
 }
 export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeEventually<Store, ListType> {
-    protected _eventually(func: () => void): boolean;
     readonly any: PageElementType["eventually"];
     readonly none: PageElementType['eventually']['not'];
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;

@@ -43,21 +43,6 @@ class PageElementBaseCurrently extends _1.PageNodeCurrently {
     get element() {
         return browser.element(this._node.getSelector());
     }
-    /**
-     * Executes func and, if an error occurs during execution of func,
-     * throws a custom error message that the page element could not be located on the page.
-     * @param func
-     */
-    _execute(func) {
-        try {
-            return func();
-        }
-        catch (error) {
-            const errorMsg = `${this._node.constructor.name} could not be located on the page.\n` +
-                `( ${this._node.getSelector()} )`;
-            throw new Error(errorMsg);
-        }
-    }
     _writeLastDiff(actual, expected) {
         const diff = {
             actual: this._node.__typeToString(actual)
@@ -100,7 +85,7 @@ exports.PageElementBaseCurrently = PageElementBaseCurrently;
 class PageElementBaseWait extends _1.PageNodeWait {
     _waitWdioCheckFunc(checkTypeStr, conditionFunc, { timeout = this._node.getTimeout(), reverse } = {}) {
         const reverseStr = (reverse) ? ' not' : '';
-        return this._wait(() => conditionFunc({ timeout, reverse }), ` never${reverseStr} ${checkTypeStr}`, timeout);
+        return this._node.__wait(() => conditionFunc({ timeout, reverse }), ` never${reverseStr} ${checkTypeStr}`, timeout);
     }
     _waitProperty(name, conditionType, conditionFunc, { timeout = this._node.getTimeout(), reverse } = {}, value) {
         const reverseStr = (reverse) ? ' not' : '';
@@ -117,7 +102,7 @@ class PageElementBaseWait extends _1.PageNodeWait {
         else if (conditionType === 'within') {
             conditionStr = 'was in range';
         }
-        return this._waitUntil(() => (reverse) ? !conditionFunc(value) : conditionFunc(value), () => {
+        return this._node.__waitUntil(() => (reverse) ? !conditionFunc(value) : conditionFunc(value), () => {
             if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
                 return `'s ${name} "${this._node.__lastDiff.actual}" never` +
                     `${reverseStr} ${conditionStr} "${this._node.__typeToString(value)}"`;
@@ -148,15 +133,6 @@ class PageElementBaseWait extends _1.PageNodeWait {
 }
 exports.PageElementBaseWait = PageElementBaseWait;
 class PageElementBaseEventually extends _1.PageNodeEventually {
-    _eventually(func) {
-        try {
-            func();
-            return true;
-        }
-        catch (error) {
-            return false;
-        }
-    }
 }
 exports.PageElementBaseEventually = PageElementBaseEventually;
 //# sourceMappingURL=PageElementBase.js.map

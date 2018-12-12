@@ -350,7 +350,41 @@ exports.listMatchers = {
         () => node.eventually.not.hasLength(expected, opts)
     ], ({ actual, expected, opts, node }) => createBaseMessage(node, `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`)),
     toBeVisible: listMatcherFunction(({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()], ({ node }) => createEachMessage(node, "to be visible")),
-    toBeEnabled: listMatcherFunction(({ node }) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()], ({ node }) => createEachMessage(node, "to be enabled"))
+    toBeEnabled: listMatcherFunction(({ node }) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()], ({ node }) => createEachMessage(node, "to be enabled")),
+    toHaveText: elementMatcherFunction(({ node, expected }) => [() => node.currently.hasText(expected), () => node.currently.not.hasText(expected)], ({ node }) => createEachMessage(node, "to have text")),
+    toHaveAnyText: elementMatcherFunction(({ node }) => [() => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()], ({ node }) => createEachMessage(node, "to have any text")),
+    toContainText: elementMatcherFunction(({ node, expected }) => [
+        () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+    ], ({ node }) => createEachMessage(node, "to contain text")),
+    toEventuallyHaveText: elementMatcherFunction(({ node, expected, opts }) => [
+        () => node.eventually.hasText(expected, opts),
+        () => node.eventually.not.hasText(expected, opts)
+    ], ({ actual, expected, opts, node }) => createEventuallyPropertyMessage(node, 'text', 'be', actual, expected, opts.timeout)),
+    toEventuallyHaveAnyText: elementMatcherNoArgsFunction(({ node }) => [
+        () => node.eventually.hasAnyText(), () => node.eventually.not.hasAnyText()
+    ], ({ opts, node }) => createBaseMessage(node, ` to eventually have any text within ${opts.timeout} ms`)),
+    toEventuallyContainText: elementMatcherFunction(({ node, expected, opts }) => [
+        () => node.eventually.containsText(expected, opts),
+        () => node.eventually.not.containsText(expected, opts)
+    ], ({ actual, expected, opts, node }) => createEventuallyPropertyMessage(node, 'text', 'contain', actual, expected, opts.timeout)),
+};
+exports.mapMatchers = {
+    toBeVisible: listMatcherFunction(({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()], ({ node }) => createEachMessage(node, "to be visible")),
+    toBeEnabled: listMatcherFunction(({ node }) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()], ({ node }) => createEachMessage(node, "to be enabled")),
+    toHaveText: listMatcherFunction(({ node, expected }) => [() => node.currently.hasText(expected), () => node.currently.not.hasText(expected)], ({ node }) => createEachMessage(node, "to have text")),
+    toHaveAnyText: listMatcherFunction(({ node }) => [() => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()], ({ node }) => createEachMessage(node, "to have any text")),
+    toContainText: listMatcherFunction(({ node, expected }) => [
+        () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+    ], ({ node }) => createEachMessage(node, "to contain text"))
+};
+exports.groupMatchers = {
+    toBeVisible: listMatcherFunction(({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()], ({ node }) => createEachMessage(node, "to be visible")),
+    toBeEnabled: listMatcherFunction(({ node }) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()], ({ node }) => createEachMessage(node, "to be enabled")),
+    toHaveText: listMatcherFunction(({ node, expected }) => [() => node.currently.hasText(expected), () => node.currently.not.hasText(expected)], ({ node }) => createEachMessage(node, "to have text")),
+    toHaveAnyText: listMatcherFunction(({ node }) => [() => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()], ({ node }) => createEachMessage(node, "to have any text")),
+    toContainText: listMatcherFunction(({ node, expected }) => [
+        () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+    ], ({ node }) => createEachMessage(node, "to contain text"))
 };
 function valueElementMatcherFunction(resultFunction, errorTextFunction) {
     return matcherFunction(resultFunction, errorTextFunction);
@@ -376,6 +410,9 @@ exports.valueElementMatchers = {
         () => node.eventually.not.containsValue(expected, opts)
     ], ({ actual, expected, node, opts }) => createEventuallyPropertyMessage(node, 'value', 'contain', actual, node.__typeToString(expected), opts.timeout)),
 };
+exports.valueListMatchers = {};
+exports.valueMapMatchers = {};
+exports.valueGroupMatchers = {};
 function expectElement(element) {
     return expect(element);
 }
@@ -384,4 +421,12 @@ function expectList(list) {
     return expect(list);
 }
 exports.expectList = expectList;
+function expectMap(map) {
+    return expect(map);
+}
+exports.expectMap = expectMap;
+function expectGroup(group) {
+    return expect(group);
+}
+exports.expectGroup = expectGroup;
 //# sourceMappingURL=matchers.js.map

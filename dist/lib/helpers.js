@@ -30,4 +30,15 @@ function tolerancesToString(values, tolerances) {
     return str + '}';
 }
 exports.tolerancesToString = tolerancesToString;
+function isNullOrUndefined(value) {
+    return value === null || typeof value === 'undefined';
+}
+exports.isNullOrUndefined = isNullOrUndefined;
+function isEmpty(value) {
+    if (typeof value === 'string') {
+        return value.length === 0;
+    }
+    return isNullOrUndefined(value);
+}
+exports.isEmpty = isEmpty;
 //# sourceMappingURL=helpers.js.map

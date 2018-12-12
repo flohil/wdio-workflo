@@ -86,23 +86,6 @@ export abstract class PageElementBaseCurrently<
     return browser.element(this._node.getSelector())
   }
 
-  /**
-   * Executes func and, if an error occurs during execution of func,
-   * throws a custom error message that the page element could not be located on the page.
-   * @param func
-   */
-  protected _execute<ResultType>(func: () => ResultType) {
-    try {
-      return func()
-    } catch ( error ) {
-      const errorMsg =
-      `${this._node.constructor.name} could not be located on the page.\n` +
-      `( ${this._node.getSelector()} )`
-
-      throw new Error(errorMsg)
-    }
-  }
-
   protected _writeLastDiff<T>(actual: T, expected?: T) {
     const diff: Workflo.IDiff = {
       actual: this._node.__typeToString(actual)
@@ -165,7 +148,7 @@ export abstract class PageElementBaseWait<
   ) {
     const reverseStr = (reverse) ? ' not' : ''
 
-    return this._wait(
+    return this._node.__wait(
       () => conditionFunc({timeout, reverse}), ` never${reverseStr} ${checkTypeStr}`, timeout
     )
   }
@@ -190,7 +173,7 @@ export abstract class PageElementBaseWait<
       conditionStr = 'was in range'
     }
 
-    return this._waitUntil(
+    return this._node.__waitUntil(
       () => (reverse) ? !conditionFunc(value) : conditionFunc(value),
       () => {
         if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
@@ -249,14 +232,4 @@ export abstract class PageElementBaseWait<
 export abstract class PageElementBaseEventually<
   Store extends PageElementStore,
   PageElementType extends PageElementBase<Store>
-> extends PageNodeEventually<Store, PageElementType> {
-
-  protected _eventually(func: () => void) : boolean {
-    try {
-      func();
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-}
+> extends PageNodeEventually<Store, PageElementType> {}

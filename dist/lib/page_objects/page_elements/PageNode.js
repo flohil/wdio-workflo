@@ -31,28 +31,53 @@ class PageNode {
     getSelector() {
         return this._selector;
     }
-}
-exports.PageNode = PageNode;
-class PageNodeCurrently {
-    constructor(node) {
-        this._node = node;
+    /**
+     * Executes func and, if an error occurs during execution of func,
+     * throws a custom error message that the page element could not be located on the page.
+     * @param func
+     */
+    __execute(func) {
+        try {
+            return func();
+        }
+        catch (error) {
+            if (error.message.includes('could not be located on the page')) {
+                const errorMsg = `${this.constructor.name} could not be located on the page.\n` +
+                    `( ${this.getSelector()} )`;
+                throw new Error(errorMsg);
+            }
+            else {
+                throw error;
+            }
+        }
     }
-}
-exports.PageNodeCurrently = PageNodeCurrently;
-class PageNodeWait {
-    constructor(node) {
-        this._node = node;
+    __eventually(func) {
+        try {
+            func();
+            return true;
+        }
+        catch (error) {
+            if (error.message.includes('could not be located on the page')) {
+                throw error;
+            }
+            else if (error.type === 'WaitUntilTimeoutError') {
+                return false;
+            }
+            else {
+                throw error;
+            }
+        }
     }
-    _wait(func, errorMessage, timeout) {
+    __wait(func, errorMessage, timeout) {
         try {
             func();
         }
         catch (error) {
             this._handleWaitError(error, errorMessage, timeout);
         }
-        return this._node;
+        return this;
     }
-    _waitUntil(waitFunc, errorMessageFunc, timeout, interval) {
+    __waitUntil(waitFunc, errorMessageFunc, timeout, interval) {
         let error;
         try {
             browser.waitUntil(() => {
@@ -68,22 +93,35 @@ class PageNodeWait {
         }
         catch (untilError) {
             error = error || untilError;
-            console.log("error: ", error);
             this._handleWaitError(error, errorMessageFunc(), timeout);
         }
-        return this._node;
+        return this;
     }
     _handleWaitError(error, errorMessage, timeout) {
         if (error.message.includes('could not be located on the page')) {
-            throw new Error(`${this._node.constructor.name} could not be located on the page within ${timeout}ms.\n` +
-                `( ${this._node.getSelector()} )`);
+            throw new Error(`${this.constructor.name} could not be located on the page within ${timeout}ms.\n` +
+                `( ${this.getSelector()} )`);
         }
         else if ('type' in error && error.type === 'WaitUntilTimeoutError') {
-            throw new Error(`${this._node.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this._node.getSelector()} )`);
+            const waitError = new Error(`${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.getSelector()} )`);
+            waitError.type = 'WaitUntilTimeoutError';
+            throw waitError;
         }
         else {
             throw error;
         }
+    }
+}
+exports.PageNode = PageNode;
+class PageNodeCurrently {
+    constructor(node) {
+        this._node = node;
+    }
+}
+exports.PageNodeCurrently = PageNodeCurrently;
+class PageNodeWait {
+    constructor(node) {
+        this._node = node;
     }
 }
 exports.PageNodeWait = PageNodeWait;

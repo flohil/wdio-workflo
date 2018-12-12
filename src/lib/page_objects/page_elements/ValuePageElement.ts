@@ -37,7 +37,7 @@ export abstract class ValuePageElement<
   }
 
   getValue() {
-    return this._execute( () => this.currently.getValue() )
+    return this._executeAfterInitialWait( () => this.currently.getValue() )
   }
 
   setValue(value: ValueType) {
@@ -113,24 +113,24 @@ export class ValuePageElementEventually<
   ValueType
 > extends PageElementEventually<Store, PageElementType> {
   hasValue(value: ValueType, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasValue(value, opts))
+    return this._node.__eventually(() => this._node.wait.hasValue(value, opts))
   }
   hasAnyValue(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyValue(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyValue(opts))
   }
   containsValue(value: ValueType, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsValue(value, opts))
+    return this._node.__eventually(() => this._node.wait.containsValue(value, opts))
   }
 
   not = {...super.not,
     hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasValue(value, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasValue(value, opts))
     },
     hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyValue(opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyValue(opts))
     },
     containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsValue(value, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsValue(value, opts))
     }
   }
 }

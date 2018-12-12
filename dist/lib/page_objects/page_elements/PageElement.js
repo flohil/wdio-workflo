@@ -23,7 +23,10 @@ class PageElement extends _1.PageElementBase {
     }
     // ABSTRACT BASE CLASS IMPLEMENTATIONS
     __equals(actual, expected) {
-        if (typeof actual === 'string' && typeof expected === 'string') {
+        if (helpers_1.isEmpty(actual) && helpers_1.isEmpty(expected)) {
+            return true;
+        }
+        else if (typeof actual === 'string' || typeof expected === 'string') {
             return actual === expected;
         }
         else {
@@ -31,7 +34,10 @@ class PageElement extends _1.PageElementBase {
         }
     }
     __any(actual) {
-        if (typeof actual === 'string') {
+        if (helpers_1.isEmpty(actual)) {
+            return false;
+        }
+        else if (typeof actual === 'string') {
             return (actual) ? actual.length > 0 : false;
         }
         else {
@@ -39,15 +45,30 @@ class PageElement extends _1.PageElementBase {
         }
     }
     __contains(actual, expected) {
-        if (typeof actual === 'string' && typeof expected === 'string') {
-            return (actual) ? actual.indexOf(expected) > -1 : false;
+        if (helpers_1.isEmpty(actual) && helpers_1.isEmpty(expected)) {
+            return true;
+        }
+        else if (helpers_1.isEmpty(actual) && typeof expected === 'string' && expected.length > 0) {
+            return false;
+        }
+        else if (typeof actual === 'string') {
+            if (typeof expected === 'string') {
+                return (actual) ? actual.indexOf(expected) > -1 : false;
+            }
+            else {
+                // expected is null or undefined
+                return true;
+            }
         }
         else {
             throw new Error(`${this.constructor.name}.__contains is missing an implementation for type of values: ${actual}, ${expected}`);
         }
     }
     __typeToString(value) {
-        if (typeof value === 'string') {
+        if (helpers_1.isNullOrUndefined(value)) {
+            return '';
+        }
+        else if (typeof value === 'string') {
             return (value.length > 0) ? value : '';
         }
         else {
@@ -96,48 +117,48 @@ class PageElement extends _1.PageElementBase {
      * throws a custom error message that the page element could not be located on the page.
      * @param func
      */
-    _execute(func) {
+    _executeAfterInitialWait(func) {
         this.initialWait();
-        return func();
+        return this.__execute(func);
     }
     getHTML() {
-        return this._execute(this.currently.getHTML);
+        return this._executeAfterInitialWait(() => this.currently.getHTML());
     }
     getDirectText() {
-        return this._execute(this.currently.getDirectText);
+        return this._executeAfterInitialWait(() => this.currently.getDirectText());
     }
     getText() {
-        return this._execute(this.currently.getText);
+        return this._executeAfterInitialWait(() => this.currently.getText());
     }
     getAttribute(attributeName) {
-        return this._execute(() => this.currently.getAttribute(attributeName));
+        return this._executeAfterInitialWait(() => this.currently.getAttribute(attributeName));
     }
     getClass() {
-        return this._execute(() => this.currently.getAttribute('class'));
+        return this._executeAfterInitialWait(() => this.currently.getAttribute('class'));
     }
     getId() {
-        return this._execute(() => this.currently.getAttribute('id'));
+        return this._executeAfterInitialWait(() => this.currently.getAttribute('id'));
     }
     getName() {
-        return this._execute(() => this.currently.getAttribute('name'));
+        return this._executeAfterInitialWait(() => this.currently.getAttribute('name'));
     }
     getLocation() {
-        return this._execute(() => this.currently.getLocation());
+        return this._executeAfterInitialWait(() => this.currently.getLocation());
     }
     getX() {
-        return this._execute(() => this.currently.getX());
+        return this._executeAfterInitialWait(() => this.currently.getX());
     }
     getY() {
-        return this._execute(() => this.currently.getY());
+        return this._executeAfterInitialWait(() => this.currently.getY());
     }
     getSize() {
-        return this._execute(() => this.currently.getSize());
+        return this._executeAfterInitialWait(() => this.currently.getSize());
     }
     getWidth() {
-        return this._execute(() => this.currently.getWidth());
+        return this._executeAfterInitialWait(() => this.currently.getWidth());
     }
     getHeight() {
-        return this._execute(() => this.currently.getHeight());
+        return this._executeAfterInitialWait(() => this.currently.getHeight());
     }
     // INTERACTION FUNCTIONS (interact with state after initial wait)
     /**
@@ -192,6 +213,10 @@ class PageElement extends _1.PageElementBase {
                     if (error.message.indexOf("is not clickable at point") > -1) {
                         errorMessage = error.message;
                         return false;
+                    }
+                    else {
+                        error.message = error.message.replace('unknown error: ', '');
+                        throw error;
                     }
                 }
             }, this._timeout, `${this.constructor.name} did not become clickable after timeout.\n( ${this._selector} )`, interval);
@@ -377,14 +402,14 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
      * isEnabled in PageElement base class and its currently, wait and eventually containers.
      */
     isEnabled() {
-        return this._execute(() => this.element.isEnabled());
+        return this._node.__execute(() => this.element.isEnabled());
     }
     /**
      * Overwriting this function will affect the behaviour of the function
      * isSelected in PageElement base class and its currently, wait and eventually containers.
      */
     isSelected() {
-        return this._execute(() => this.element.isSelected());
+        return this._node.__execute(() => this.element.isSelected());
     }
     /**
      * Overwriting this function will affect the behaviour of the function
@@ -461,7 +486,7 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
      * currently, wait and eventually containers.
      */
     getText() {
-        return this._execute(() => this.element.getText());
+        return this._node.__execute(() => this.element.getText());
     }
     /**
      * Overwriting this function will affect the behaviour of the functions
@@ -469,7 +494,7 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
      * currently, wait and eventually containers.
      */
     getAttribute(attrName) {
-        return this._execute(() => this.element.getAttribute(attrName));
+        return this._node.__execute(() => this.element.getAttribute(attrName));
     }
     /**
      * Overwriting this function will affect the behaviour of the functions
@@ -501,7 +526,7 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
      * currently, wait and eventually containers.
      */
     getLocation() {
-        return this._execute(() => this.element.getLocation());
+        return this._node.__execute(() => this.element.getLocation());
     }
     /**
      * Overwriting this function will affect the behaviour of the functions
@@ -525,7 +550,7 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
      * currently, wait and eventually containers.
      */
     getSize() {
-        return this._execute(() => this.element.getElementSize());
+        return this._node.__execute(() => this.element.getElementSize());
     }
     /**
      * Overwriting this function will affect the behaviour of the functions
@@ -768,7 +793,7 @@ class PageElementWait extends _1.PageElementBaseWait {
     isChecked(opts = {}) {
         const timeout = opts.timeout || this._node.getTimeout();
         const reverseStr = (opts.reverse) ? ' not' : '';
-        this._waitUntil(() => {
+        this._node.__waitUntil(() => {
             if (opts.reverse) {
                 return this._node.currently.not.isChecked();
             }
@@ -896,7 +921,7 @@ class PageElementWait extends _1.PageElementBaseWait {
         }
     }
     untilElement(description, condition, { timeout = this._node.getTimeout() } = {}) {
-        this._waitUntil(() => condition(this._node), () => `: Wait until element ${description} failed`, timeout);
+        this._node.__waitUntil(() => condition(this._node), () => `: Wait until element ${description} failed`, timeout);
         return this._node;
     }
 }
@@ -906,189 +931,189 @@ class PageElementEventually extends _1.PageElementBaseEventually {
         super(...arguments);
         this.not = {
             exists: (opts) => {
-                return this._eventually(() => this._node.wait.not.exists(opts));
+                return this._node.__eventually(() => this._node.wait.not.exists(opts));
             },
             isVisible: (opts) => {
-                return this._eventually(() => this._node.wait.not.isVisible(opts));
+                return this._node.__eventually(() => this._node.wait.not.isVisible(opts));
             },
             isEnabled: (opts) => {
-                return this._eventually(() => this._node.wait.not.isEnabled(opts));
+                return this._node.__eventually(() => this._node.wait.not.isEnabled(opts));
             },
             isSelected: (opts) => {
-                return this._eventually(() => this._node.wait.not.isSelected(opts));
+                return this._node.__eventually(() => this._node.wait.not.isSelected(opts));
             },
             isChecked: (opts) => {
-                return this._eventually(() => this._node.wait.not.isChecked(opts));
+                return this._node.__eventually(() => this._node.wait.not.isChecked(opts));
             },
             hasText: (text, opts) => {
-                return this._eventually(() => this._node.wait.not.hasText(text, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasText(text, opts));
             },
             hasAnyText: (opts) => {
-                return this._eventually(() => this._node.wait.not.hasAnyText(opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAnyText(opts));
             },
             containsText: (text, opts) => {
-                return this._eventually(() => this._node.wait.not.containsText(text, opts));
+                return this._node.__eventually(() => this._node.wait.not.containsText(text, opts));
             },
             hasHTML: (html, opts) => {
-                return this._eventually(() => this._node.wait.not.hasHTML(html, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasHTML(html, opts));
             },
             hasAnyHTML: (opts) => {
-                return this._eventually(() => this._node.wait.not.hasAnyHTML(opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAnyHTML(opts));
             },
             containsHTML: (html, opts) => {
-                return this._eventually(() => this._node.wait.not.containsHTML(html, opts));
+                return this._node.__eventually(() => this._node.wait.not.containsHTML(html, opts));
             },
             hasDirectText: (directText, opts) => {
-                return this._eventually(() => this._node.wait.not.hasDirectText(directText, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasDirectText(directText, opts));
             },
             hasAnyDirectText: (opts) => {
-                return this._eventually(() => this._node.wait.not.hasAnyDirectText(opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAnyDirectText(opts));
             },
             containsDirectText: (directText, opts) => {
-                return this._eventually(() => this._node.wait.not.containsDirectText(directText, opts));
+                return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts));
             },
             hasAttribute: (attributeName, attributeValue, opts) => {
-                return this._eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts));
             },
             hasAnyAttribute: (attributeName, opts) => {
-                return this._eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts));
             },
             containsAttribute: (attributeName, attributeValue, opts) => {
-                return this._eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts));
+                return this._node.__eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts));
             },
             hasClass: (className, opts) => {
-                return this._eventually(() => this._node.wait.not.hasClass(className, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts));
             },
             hasAnyClass: (opts) => {
-                return this._eventually(() => this._node.wait.not.hasAnyClass(opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAnyClass(opts));
             },
             containsClass: (className, opts) => {
-                return this._eventually(() => this._node.wait.not.containsClass(className, opts));
+                return this._node.__eventually(() => this._node.wait.not.containsClass(className, opts));
             },
             hasId: (id, opts) => {
-                return this._eventually(() => this._node.wait.not.hasId(id, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasId(id, opts));
             },
             hasAnyId: (opts) => {
-                return this._eventually(() => this._node.wait.not.hasAnyId(opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAnyId(opts));
             },
             containsId: (id, opts) => {
-                return this._eventually(() => this._node.wait.not.containsId(id, opts));
+                return this._node.__eventually(() => this._node.wait.not.containsId(id, opts));
             },
             hasName: (name, opts) => {
-                return this._eventually(() => this._node.wait.not.hasName(name, opts));
+                return this._node.__eventually(() => this._node.wait.not.hasName(name, opts));
             },
             hasAnyName: (opts) => {
-                return this._eventually(() => this._node.wait.not.hasAnyName(opts));
+                return this._node.__eventually(() => this._node.wait.not.hasAnyName(opts));
             },
             containsName: (name, opts) => {
-                return this._eventually(() => this._node.wait.not.containsName(name, opts));
+                return this._node.__eventually(() => this._node.wait.not.containsName(name, opts));
             },
-            hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => this._eventually(() => this._node.wait.not.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout })),
-            hasX: (x, opts = { tolerance: 0 }) => this._eventually(() => this._node.wait.not.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout })),
-            hasY: (y, opts = { tolerance: 0 }) => this._eventually(() => this._node.wait.not.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout })),
-            hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => this._eventually(() => this._node.wait.not.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout })),
-            hasWidth: (width, opts = { tolerance: 0 }) => this._eventually(() => this._node.wait.not.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout })),
-            hasHeight: (height, opts = { tolerance: 0 }) => this._eventually(() => this._node.wait.not.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout })),
+            hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => this._node.__eventually(() => this._node.wait.not.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout })),
+            hasX: (x, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout })),
+            hasY: (y, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout })),
+            hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => this._node.__eventually(() => this._node.wait.not.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout })),
+            hasWidth: (width, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout })),
+            hasHeight: (height, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout })),
         };
     }
     exists(opts) {
-        return this._eventually(() => this._node.wait.exists(opts));
+        return this._node.__eventually(() => this._node.wait.exists(opts));
     }
     isVisible(opts) {
-        return this._eventually(() => this._node.wait.isVisible(opts));
+        return this._node.__eventually(() => this._node.wait.isVisible(opts));
     }
     isEnabled(opts) {
-        return this._eventually(() => this._node.wait.isEnabled(opts));
+        return this._node.__eventually(() => this._node.wait.isEnabled(opts));
     }
     isSelected(opts) {
-        return this._eventually(() => this._node.wait.isSelected(opts));
+        return this._node.__eventually(() => this._node.wait.isSelected(opts));
     }
     isChecked(opts) {
-        return this._eventually(() => this._node.wait.isChecked(opts));
+        return this._node.__eventually(() => this._node.wait.isChecked(opts));
     }
     hasText(text, opts) {
-        return this._eventually(() => this._node.wait.hasText(text, opts));
+        return this._node.__eventually(() => this._node.wait.hasText(text, opts));
     }
     hasAnyText(opts) {
-        return this._eventually(() => this._node.wait.hasAnyText(opts));
+        return this._node.__eventually(() => this._node.wait.hasAnyText(opts));
     }
     containsText(text, opts) {
-        return this._eventually(() => this._node.wait.containsText(text, opts));
+        return this._node.__eventually(() => this._node.wait.containsText(text, opts));
     }
     hasHTML(html, opts) {
-        return this._eventually(() => this._node.wait.hasHTML(html, opts));
+        return this._node.__eventually(() => this._node.wait.hasHTML(html, opts));
     }
     hasAnyHTML(opts) {
-        return this._eventually(() => this._node.wait.hasAnyHTML(opts));
+        return this._node.__eventually(() => this._node.wait.hasAnyHTML(opts));
     }
     containsHTML(html, opts) {
-        return this._eventually(() => this._node.wait.containsHTML(html, opts));
+        return this._node.__eventually(() => this._node.wait.containsHTML(html, opts));
     }
     hasDirectText(directText, opts) {
-        return this._eventually(() => this._node.wait.hasDirectText(directText, opts));
+        return this._node.__eventually(() => this._node.wait.hasDirectText(directText, opts));
     }
     hasAnyDirectText(opts) {
-        return this._eventually(() => this._node.wait.hasAnyDirectText(opts));
+        return this._node.__eventually(() => this._node.wait.hasAnyDirectText(opts));
     }
     containsDirectText(directText, opts) {
-        return this._eventually(() => this._node.wait.containsDirectText(directText, opts));
+        return this._node.__eventually(() => this._node.wait.containsDirectText(directText, opts));
     }
     hasAttribute(attributeName, attributeValue, opts) {
-        return this._eventually(() => this._node.wait.hasAttribute(attributeName, attributeValue, opts));
+        return this._node.__eventually(() => this._node.wait.hasAttribute(attributeName, attributeValue, opts));
     }
     hasAnyAttribute(attributeName, opts) {
-        return this._eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts));
+        return this._node.__eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts));
     }
     containsAttribute(attributeName, attributeValue, opts) {
-        return this._eventually(() => this._node.wait.containsAttribute(attributeName, attributeValue, opts));
+        return this._node.__eventually(() => this._node.wait.containsAttribute(attributeName, attributeValue, opts));
     }
     hasClass(className, opts) {
-        return this._eventually(() => this._node.wait.hasClass(className, opts));
+        return this._node.__eventually(() => this._node.wait.hasClass(className, opts));
     }
     hasAnyClass(opts) {
-        return this._eventually(() => this._node.wait.hasAnyClass(opts));
+        return this._node.__eventually(() => this._node.wait.hasAnyClass(opts));
     }
     containsClass(className, opts) {
-        return this._eventually(() => this._node.wait.containsClass(className, opts));
+        return this._node.__eventually(() => this._node.wait.containsClass(className, opts));
     }
     hasId(id, opts) {
-        return this._eventually(() => this._node.wait.hasId(id, opts));
+        return this._node.__eventually(() => this._node.wait.hasId(id, opts));
     }
     hasAnyId(opts) {
-        return this._eventually(() => this._node.wait.hasAnyId(opts));
+        return this._node.__eventually(() => this._node.wait.hasAnyId(opts));
     }
     containsId(id, opts) {
-        return this._eventually(() => this._node.wait.containsId(id, opts));
+        return this._node.__eventually(() => this._node.wait.containsId(id, opts));
     }
     hasName(name, opts) {
-        return this._eventually(() => this._node.wait.hasName(name, opts));
+        return this._node.__eventually(() => this._node.wait.hasName(name, opts));
     }
     hasAnyName(opts) {
-        return this._eventually(() => this._node.wait.hasAnyName(opts));
+        return this._node.__eventually(() => this._node.wait.hasAnyName(opts));
     }
     containsName(name, opts) {
-        return this._eventually(() => this._node.wait.containsName(name, opts));
+        return this._node.__eventually(() => this._node.wait.containsName(name, opts));
     }
     hasLocation(coordinates, opts = { tolerances: { x: 0, y: 0 } }) {
-        return this._eventually(() => this._node.wait.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout }));
+        return this._node.__eventually(() => this._node.wait.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout }));
     }
     hasX(x, opts = { tolerance: 0 }) {
-        return this._eventually(() => this._node.wait.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout }));
+        return this._node.__eventually(() => this._node.wait.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout }));
     }
     hasY(y, opts = { tolerance: 0 }) {
-        return this._eventually(() => this._node.wait.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout }));
+        return this._node.__eventually(() => this._node.wait.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout }));
     }
     hasSize(size, opts = { tolerances: { width: 0, height: 0 } }) {
-        return this._eventually(() => this._node.wait.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout }));
+        return this._node.__eventually(() => this._node.wait.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout }));
     }
     hasWidth(width, opts = { tolerance: 0 }) {
-        return this._eventually(() => this._node.wait.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout }));
+        return this._node.__eventually(() => this._node.wait.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout }));
     }
     hasHeight(height, opts = { tolerance: 0 }) {
-        return this._eventually(() => this._node.wait.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout }));
+        return this._node.__eventually(() => this._node.wait.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout }));
     }
     meetsCondition(condition, opts) {
-        return this._eventually(() => this._node.wait.untilElement(' meets condition', () => condition(this._node), opts));
+        return this._node.__eventually(() => this._node.wait.untilElement(' meets condition', () => condition(this._node), opts));
     }
 }
 exports.PageElementEventually = PageElementEventually;
@@ -1099,4 +1124,5 @@ function isJsError(result) {
     }
     return result.notFound !== undefined;
 }
+// HELPER FUNCTIONS
 //# sourceMappingURL=PageElement.js.map

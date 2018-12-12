@@ -9,7 +9,7 @@ import {
 } from '.'
 import { PageElementStore } from '../stores'
 import * as htmlParser from 'htmlparser2'
-import { tolerancesToString } from '../../helpers'
+import { tolerancesToString, isNullOrUndefined, isEmpty } from '../../helpers'
 
 export interface IPageElementOpts<
   Store extends PageElementStore
@@ -50,7 +50,9 @@ export class PageElement<
 // ABSTRACT BASE CLASS IMPLEMENTATIONS
 
   __equals<T>(actual: T, expected: T): boolean {
-    if (typeof actual === 'string' && typeof expected === 'string') {
+    if(isEmpty(actual) && isEmpty(expected)) {
+      return true
+    } else if (typeof actual === 'string' || typeof expected === 'string') {
       return actual === expected
     } else {
       throw new Error(
@@ -60,7 +62,9 @@ export class PageElement<
   }
 
   __any<T>(actual: T): boolean {
-    if (typeof actual === 'string') {
+    if (isEmpty(actual)) {
+      return false
+    } else if (typeof actual === 'string') {
       return (actual) ? actual.length > 0 : false
     } else {
       throw new Error(
@@ -70,8 +74,17 @@ export class PageElement<
   }
 
   __contains<T>(actual: T, expected: T) {
-    if (typeof actual === 'string' && typeof expected === 'string') {
-      return (actual) ? actual.indexOf(expected) > -1 : false
+    if(isEmpty(actual) && isEmpty(expected)) {
+      return true
+    } else if (isEmpty(actual) && typeof expected === 'string' && expected.length > 0) {
+      return false
+    } else if (typeof actual === 'string') {
+      if (typeof expected === 'string') {
+        return (actual) ? actual.indexOf(expected) > -1 : false
+      } else {
+        // expected is null or undefined
+        return true
+      }
     } else {
       throw new Error(
         `${this.constructor.name}.__contains is missing an implementation for type of values: ${actual}, ${expected}`
@@ -80,7 +93,9 @@ export class PageElement<
   }
 
   __typeToString<T>(value: T) {
-    if (typeof value === 'string') {
+    if (isNullOrUndefined(value)) {
+      return ''
+    } else if (typeof value === 'string') {
       return (value.length > 0) ? value : ''
     } else {
       throw new Error(`${this.constructor.name}.__typeToString is missing an implementation for type of value: ${value}`)
@@ -136,61 +151,61 @@ export class PageElement<
    * throws a custom error message that the page element could not be located on the page.
    * @param func
    */
-  protected _execute<ResultType>(func: () => ResultType) {
+  protected _executeAfterInitialWait<ResultType>(func: () => ResultType) {
     this.initialWait()
-    return func()
+    return this.__execute(func)
   }
 
   getHTML() {
-    return this._execute( this.currently.getHTML )
+    return this._executeAfterInitialWait( () => this.currently.getHTML() )
   }
 
   getDirectText() {
-    return this._execute( this.currently.getDirectText )
+    return this._executeAfterInitialWait( () => this.currently.getDirectText() )
   }
 
   getText() {
-    return this._execute( this.currently.getText )
+    return this._executeAfterInitialWait( () => this.currently.getText() )
   }
 
   getAttribute(attributeName: string) {
-    return this._execute( () => this.currently.getAttribute(attributeName) )
+    return this._executeAfterInitialWait( () => this.currently.getAttribute(attributeName) )
   }
 
   getClass() {
-    return this._execute( () => this.currently.getAttribute('class') )
+    return this._executeAfterInitialWait( () => this.currently.getAttribute('class') )
   }
 
   getId() {
-    return this._execute( () => this.currently.getAttribute('id') )
+    return this._executeAfterInitialWait( () => this.currently.getAttribute('id') )
   }
 
   getName() {
-    return this._execute( () => this.currently.getAttribute('name') )
+    return this._executeAfterInitialWait( () => this.currently.getAttribute('name') )
   }
 
   getLocation() {
-    return this._execute( () => this.currently.getLocation() )
+    return this._executeAfterInitialWait( () => this.currently.getLocation() )
   }
 
   getX() {
-    return this._execute( () => this.currently.getX() )
+    return this._executeAfterInitialWait( () => this.currently.getX() )
   }
 
   getY() {
-    return this._execute( () => this.currently.getY() )
+    return this._executeAfterInitialWait( () => this.currently.getY() )
   }
 
   getSize() {
-    return this._execute( () => this.currently.getSize() )
+    return this._executeAfterInitialWait( () => this.currently.getSize() )
   }
 
   getWidth() {
-    return this._execute( () => this.currently.getWidth() )
+    return this._executeAfterInitialWait( () => this.currently.getWidth() )
   }
 
   getHeight() {
-    return this._execute( () => this.currently.getHeight() )
+    return this._executeAfterInitialWait( () => this.currently.getHeight() )
   }
 
 // INTERACTION FUNCTIONS (interact with state after initial wait)
@@ -255,6 +270,9 @@ export class PageElement<
           if (error.message.indexOf("is not clickable at point") > -1) {
             errorMessage = error.message;
             return false;
+          } else {
+            error.message = error.message.replace('unknown error: ', '')
+            throw error
           }
         }
       }, this._timeout, `${this.constructor.name} did not become clickable after timeout.\n( ${this._selector} )`, interval);
@@ -430,7 +448,7 @@ implements Workflo.PageNode.IGetElement<string> {
    * isEnabled in PageElement base class and its currently, wait and eventually containers.
    */
   isEnabled(): boolean {
-    return this._execute(() => this.element.isEnabled())
+    return this._node.__execute(() => this.element.isEnabled())
   }
 
   /**
@@ -438,7 +456,7 @@ implements Workflo.PageNode.IGetElement<string> {
    * isSelected in PageElement base class and its currently, wait and eventually containers.
    */
   isSelected(): boolean {
-    return this._execute(() => this.element.isSelected())
+    return this._node.__execute(() => this.element.isSelected())
   }
 
   /**
@@ -530,7 +548,7 @@ implements Workflo.PageNode.IGetElement<string> {
    * currently, wait and eventually containers.
    */
   getText(): string {
-    return this._execute(() => this.element.getText())
+    return this._node.__execute(() => this.element.getText())
   }
 
   /**
@@ -539,7 +557,7 @@ implements Workflo.PageNode.IGetElement<string> {
    * currently, wait and eventually containers.
    */
   getAttribute(attrName: string): string {
-    return this._execute(() => this.element.getAttribute(attrName))
+    return this._node.__execute(() => this.element.getAttribute(attrName))
   }
 
   /**
@@ -575,7 +593,7 @@ implements Workflo.PageNode.IGetElement<string> {
    * currently, wait and eventually containers.
    */
   getLocation() {
-    return <Workflo.ICoordinates> (<any> this._execute(() => this.element.getLocation()))
+    return <Workflo.ICoordinates> (<any> this._node.__execute(() => this.element.getLocation()))
   }
 
   /**
@@ -602,7 +620,7 @@ implements Workflo.PageNode.IGetElement<string> {
    * currently, wait and eventually containers.
    */
   getSize() {
-    return <Workflo.ISize> (<any> this._execute(() => this.element.getElementSize()))
+    return <Workflo.ISize> (<any> this._node.__execute(() => this.element.getElementSize()))
   }
 
   /**
@@ -821,7 +839,7 @@ export class PageElementWait<
     const timeout = opts.timeout || this._node.getTimeout()
     const reverseStr = (opts.reverse) ? ' not' : ''
 
-    this._waitUntil(
+    this._node.__waitUntil(
       () => {
         if ( opts.reverse ) {
           return this._node.currently.not.isChecked()
@@ -1079,7 +1097,7 @@ export class PageElementWait<
     condition: (element: PageElementType) => boolean,
     { timeout = this._node.getTimeout() }: Workflo.IWDIOParamsOptional = {}
   ) {
-    this._waitUntil(
+    this._node.__waitUntil(
       () => condition(this._node),
       () => `: Wait until element ${description} failed`,
       timeout
@@ -1208,102 +1226,102 @@ export class PageElementEventually<
 > extends PageElementBaseEventually<Store, PageElementType> {
 
   exists(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.exists(opts))
+    return this._node.__eventually(() => this._node.wait.exists(opts))
   }
   isVisible(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.isVisible(opts))
+    return this._node.__eventually(() => this._node.wait.isVisible(opts))
   }
   isEnabled(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.isEnabled(opts))
+    return this._node.__eventually(() => this._node.wait.isEnabled(opts))
   }
   isSelected(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.isSelected(opts))
+    return this._node.__eventually(() => this._node.wait.isSelected(opts))
   }
   isChecked(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.isChecked(opts))
+    return this._node.__eventually(() => this._node.wait.isChecked(opts))
   }
   hasText(text: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasText(text, opts))
+    return this._node.__eventually(() => this._node.wait.hasText(text, opts))
   }
   hasAnyText(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyText(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyText(opts))
   }
   containsText(text: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsText(text, opts))
+    return this._node.__eventually(() => this._node.wait.containsText(text, opts))
   }
   hasHTML(html: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasHTML(html, opts))
+    return this._node.__eventually(() => this._node.wait.hasHTML(html, opts))
   }
   hasAnyHTML(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyHTML(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyHTML(opts))
   }
   containsHTML(html: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsHTML(html, opts))
+    return this._node.__eventually(() => this._node.wait.containsHTML(html, opts))
   }
   hasDirectText(directText: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasDirectText(directText, opts))
+    return this._node.__eventually(() => this._node.wait.hasDirectText(directText, opts))
   }
   hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyDirectText(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyDirectText(opts))
   }
   containsDirectText(directText: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsDirectText(directText, opts))
+    return this._node.__eventually(() => this._node.wait.containsDirectText(directText, opts))
   }
   hasAttribute(attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAttribute(attributeName, attributeValue, opts))
+    return this._node.__eventually(() => this._node.wait.hasAttribute(attributeName, attributeValue, opts))
   }
   hasAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts))
   }
   containsAttribute(attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsAttribute(attributeName, attributeValue, opts))
+    return this._node.__eventually(() => this._node.wait.containsAttribute(attributeName, attributeValue, opts))
   }
   hasClass(className: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasClass(className, opts))
+    return this._node.__eventually(() => this._node.wait.hasClass(className, opts))
   }
   hasAnyClass(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyClass(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyClass(opts))
   }
   containsClass(className: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsClass(className, opts))
+    return this._node.__eventually(() => this._node.wait.containsClass(className, opts))
   }
   hasId(id: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasId(id, opts))
+    return this._node.__eventually(() => this._node.wait.hasId(id, opts))
   }
   hasAnyId(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyId(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyId(opts))
   }
   containsId(id: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsId(id, opts))
+    return this._node.__eventually(() => this._node.wait.containsId(id, opts))
   }
   hasName(name: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasName(name, opts))
+    return this._node.__eventually(() => this._node.wait.hasName(name, opts))
   }
   hasAnyName(opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.hasAnyName(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyName(opts))
   }
   containsName(name: string, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(() => this._node.wait.containsName(name, opts))
+    return this._node.__eventually(() => this._node.wait.containsName(name, opts))
   }
   hasLocation(
     coordinates: Workflo.ICoordinates,
     opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsOptional = { tolerances: { x: 0, y: 0 } }
   ) {
-    return this._eventually(
+    return this._node.__eventually(
       () => this._node.wait.hasLocation(coordinates, {tolerances: opts.tolerances, timeout: opts.timeout})
     )
   }
   hasX(
     x: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
   ) {
-    return this._eventually(
+    return this._node.__eventually(
       () => this._node.wait.hasX(x, {tolerance: opts.tolerance, timeout: opts.timeout})
     )
   }
   hasY(
     y: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
   ) {
-    return this._eventually(
+    return this._node.__eventually(
       () => this._node.wait.hasY(y, {tolerance: opts.tolerance, timeout: opts.timeout})
     )
   }
@@ -1311,139 +1329,139 @@ export class PageElementEventually<
     size: Workflo.ISize,
     opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.IWDIOParamsOptional = { tolerances: { width: 0, height: 0 } }
   ) {
-    return this._eventually(
+    return this._node.__eventually(
       () => this._node.wait.hasSize(size, {tolerances: opts.tolerances, timeout: opts.timeout})
     )
   }
   hasWidth(
     width: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
   ) {
-    return this._eventually(
+    return this._node.__eventually(
       () => this._node.wait.hasWidth(width, {tolerance: opts.tolerance, timeout: opts.timeout})
     )
   }
   hasHeight(
     height: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
   ) {
-    return this._eventually(
+    return this._node.__eventually(
       () => this._node.wait.hasHeight(height, {tolerance: opts.tolerance, timeout: opts.timeout})
     )
   }
   meetsCondition(condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsOptional) {
-    return this._eventually(
+    return this._node.__eventually(
       () => this._node.wait.untilElement(' meets condition', () => condition(this._node), opts)
     )
   }
 
   not = {
     exists: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.exists(opts))
+      return this._node.__eventually(() => this._node.wait.not.exists(opts))
     },
     isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.isVisible(opts))
+      return this._node.__eventually(() => this._node.wait.not.isVisible(opts))
     },
     isEnabled: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.isEnabled(opts))
+      return this._node.__eventually(() => this._node.wait.not.isEnabled(opts))
     },
     isSelected: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.isSelected(opts))
+      return this._node.__eventually(() => this._node.wait.not.isSelected(opts))
     },
     isChecked: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.isChecked(opts))
+      return this._node.__eventually(() => this._node.wait.not.isChecked(opts))
     },
     hasText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasText(text, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasText(text, opts))
     },
     hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyText(opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyText(opts))
     },
     containsText: (text: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsText(text, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsText(text, opts))
     },
     hasHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasHTML(html, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasHTML(html, opts))
     },
     hasAnyHTML: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyHTML(opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyHTML(opts))
     },
     containsHTML: (html: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsHTML(html, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsHTML(html, opts))
     },
     hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasDirectText(directText, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasDirectText(directText, opts))
     },
     hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyDirectText(opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyDirectText(opts))
     },
     containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsDirectText(directText, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts))
     },
     hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts))
     },
     hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts))
     },
     containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts))
     },
     hasClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasClass(className, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts))
     },
     hasAnyClass: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyClass(opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyClass(opts))
     },
     containsClass: (className: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsClass(className, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsClass(className, opts))
     },
     hasId: (id: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasId(id, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasId(id, opts))
     },
     hasAnyId: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyId(opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyId(opts))
     },
     containsId: (id: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsId(id, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsId(id, opts))
     },
     hasName: (name: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasName(name, opts))
+      return this._node.__eventually(() => this._node.wait.not.hasName(name, opts))
     },
     hasAnyName: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.hasAnyName(opts))
+      return this._node.__eventually(() => this._node.wait.not.hasAnyName(opts))
     },
     containsName: (name: string, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._eventually(() => this._node.wait.not.containsName(name, opts))
+      return this._node.__eventually(() => this._node.wait.not.containsName(name, opts))
     },
     hasLocation: (
       coordinates: Workflo.ICoordinates,
       opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsOptional = { tolerances: { x: 0, y: 0 } }
-    ) => this._eventually(
+    ) => this._node.__eventually(
       () => this._node.wait.not.hasLocation(coordinates, {tolerances: opts.tolerances, timeout: opts.timeout})
     ),
     hasX: (
       x: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
-    ) => this._eventually(
+    ) => this._node.__eventually(
       () => this._node.wait.not.hasX(x, {tolerance: opts.tolerance, timeout: opts.timeout})
     ),
     hasY: (
       y: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
-    ) => this._eventually(
+    ) => this._node.__eventually(
       () => this._node.wait.not.hasY(y, {tolerance: opts.tolerance, timeout: opts.timeout})
     ),
     hasSize: (
       size: Workflo.ISize,
       opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.IWDIOParamsOptional = { tolerances: { width: 0, height: 0 } }
-    ) => this._eventually(
+    ) => this._node.__eventually(
       () => this._node.wait.not.hasSize(size, {tolerances: opts.tolerances, timeout: opts.timeout})
     ),
     hasWidth: (
       width: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
-    ) => this._eventually(
+    ) => this._node.__eventually(
       () => this._node.wait.not.hasWidth(width, {tolerance: opts.tolerance, timeout: opts.timeout})
     ),
     hasHeight: (
       height: number, opts: {tolerance?: number} & Workflo.IWDIOParamsOptional = { tolerance: 0 }
-    ) => this._eventually(
+    ) => this._node.__eventually(
       () => this._node.wait.not.hasHeight(height, {tolerance: opts.tolerance, timeout: opts.timeout})
     ),
   }
@@ -1458,3 +1476,5 @@ function isJsError(result: any): result is Workflo.IJSError {
 
   return result.notFound !== undefined;
 }
+
+// HELPER FUNCTIONS

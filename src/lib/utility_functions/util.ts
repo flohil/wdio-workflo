@@ -73,4 +73,3 @@ export function comparatorStr(comparator: Workflo.Comparator) {
     return ' '
   }
 }
-

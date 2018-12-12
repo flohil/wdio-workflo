@@ -623,7 +623,7 @@ export class PageElementListWait<
   }: IPageElementListWaitLengthReverseParams = {}) {
     const notStr = (reverse) ? 'not ' : ''
 
-    return this._waitUntil(
+    return this._node.__waitUntil(
         () => {
           if (reverse) {
             return !this._node.currently.hasLength(length, comparator)
@@ -644,7 +644,7 @@ export class PageElementListWait<
   } : IPageElementListWaitEmptyReverseParams = {}) {
     const notStr = (reverse) ? 'not ' : ''
 
-    return this._waitUntil(
+    return this._node.__waitUntil(
       () => {
         if (reverse) {
           return this._node.currently.not.isEmpty()
@@ -772,15 +772,6 @@ export class PageElementListEventually<
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > extends PageNodeEventually<Store, ListType> {
 
-  protected _eventually(func: () => void) : boolean {
-    try {
-      func();
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
   // Typescript has a bug that prevents Exclude from working with generic extended types:
   // https://github.com/Microsoft/TypeScript/issues/24791
   // Bug will be fixed in Typescript 3.3.0
@@ -802,7 +793,7 @@ export class PageElementListEventually<
     interval = this._node.getInterval(),
     reverse
   }: IPageElementListWaitLengthReverseParams = {} ) {
-    return this._eventually( () => this._node.wait.hasLength( length, { timeout, comparator, interval, reverse } ) )
+    return this._node.__eventually( () => this._node.wait.hasLength( length, { timeout, comparator, interval, reverse } ) )
   }
 
   isEmpty({
@@ -810,7 +801,7 @@ export class PageElementListEventually<
     interval = this._node.getInterval(),
     reverse
   }: IPageElementListWaitEmptyReverseParams = {}) {
-    return this._eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
+    return this._node.__eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
   isVisible(opts?: Workflo.IWDIOParamsOptional) {

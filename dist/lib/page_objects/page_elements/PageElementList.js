@@ -429,7 +429,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     // waits until list has given length
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
-        return this._waitUntil(() => {
+        return this._node.__waitUntil(() => {
             if (reverse) {
                 return !this._node.currently.hasLength(length, comparator);
             }
@@ -440,7 +440,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     }
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
-        return this._waitUntil(() => {
+        return this._node.__waitUntil(() => {
             if (reverse) {
                 return this._node.currently.not.isEmpty();
             }
@@ -489,6 +489,12 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
 exports.PageElementListWait = PageElementListWait;
 class PageElementListEventually extends PageNode_1.PageNodeEventually {
     constructor() {
+        // Typescript has a bug that prevents Exclude from working with generic extended types:
+        // https://github.com/Microsoft/TypeScript/issues/24791
+        // Bug will be fixed in Typescript 3.3.0
+        // get any() {
+        //   return excludeNot(this._list.currently.first.eventually)
+        // }
         super(...arguments);
         this.not = {
             isEmpty: (opts = {}) => this.isEmpty({
@@ -523,21 +529,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             }
         };
     }
-    _eventually(func) {
-        try {
-            func();
-            return true;
-        }
-        catch (error) {
-            return false;
-        }
-    }
-    // Typescript has a bug that prevents Exclude from working with generic extended types:
-    // https://github.com/Microsoft/TypeScript/issues/24791
-    // Bug will be fixed in Typescript 3.3.0
-    // get any() {
-    //   return excludeNot(this._list.currently.first.eventually)
-    // }
     get any() {
         return this._node.currently.first.eventually;
     }
@@ -545,10 +536,10 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
         return this._node.currently.first.eventually.not;
     }
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
-        return this._eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
+        return this._node.__eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
     }
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
-        return this._eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
+        return this._node.__eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
     }
     isVisible(opts) {
         return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(opts));

@@ -28,12 +28,6 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
 }
 export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeCurrently<Store, PageElementType> {
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
-    /**
-     * Executes func and, if an error occurs during execution of func,
-     * throws a custom error message that the page element could not be located on the page.
-     * @param func
-     */
-    protected _execute<ResultType>(func: () => ResultType): ResultType;
     protected _writeLastDiff<T>(actual: T, expected?: T): void;
     /**
      * @param actual the actual value from the browser
@@ -55,5 +49,4 @@ export declare abstract class PageElementBaseWait<Store extends PageElementStore
     protected _makeReverseParams(opts?: Workflo.IWDIOParamsOptional): Workflo.IWDIOParamsOptionalReverse;
 }
 export declare abstract class PageElementBaseEventually<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeEventually<Store, PageElementType> {
-    protected _eventually(func: () => void): boolean;
 }
