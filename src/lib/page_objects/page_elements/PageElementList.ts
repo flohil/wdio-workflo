@@ -307,6 +307,14 @@ implements Workflo.PageNode.IElementNode<string[]> {
 
   // HELPER FUNCTIONS
 
+  /**
+   * If the list is empty (no elements could be located matching the list selector),
+   * this function will always return true.
+   *
+   * @param elements
+   * @param checkFunc
+   * @param expected
+   */
   eachCheck<T>(
     elements: PageElementType[],
     checkFunc: (element: PageElementType, expected?: T) => boolean,
@@ -344,7 +352,6 @@ implements Workflo.PageNode.IElementNode<string[]> {
     return elements.map(element => getFunc(element))
   }
 
-  // perform initial wait to make sure list elements are loaded
   eachWait<T>(
     elements: PageElementType[],
     waitFunc: (element: PageElementType, expected: T) => PageElementType,

@@ -104,6 +104,14 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getLength(): number;
     getText(): string[];
     getDirectText(): string[];
+    /**
+     * If the list is empty (no elements could be located matching the list selector),
+     * this function will always return true.
+     *
+     * @param elements
+     * @param checkFunc
+     * @param expected
+     */
     eachCheck<T>(elements: PageElementType[], checkFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]): boolean;
     eachGet<T>(elements: PageElementType[], getFunc: (element: PageElementType) => T): T[];
     eachWait<T>(elements: PageElementType[], waitFunc: (element: PageElementType, expected: T) => PageElementType, expected?: T | T[]): this;

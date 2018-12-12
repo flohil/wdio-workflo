@@ -184,6 +184,14 @@ class PageElementList extends _1.PageNode {
         return this.eachGet(this.all, element => element.getDirectText());
     }
     // HELPER FUNCTIONS
+    /**
+     * If the list is empty (no elements could be located matching the list selector),
+     * this function will always return true.
+     *
+     * @param elements
+     * @param checkFunc
+     * @param expected
+     */
     eachCheck(elements, checkFunc, expected) {
         const diffs = {};
         if (util_2.isArray(expected) && expected.length !== elements.length) {
@@ -205,7 +213,6 @@ class PageElementList extends _1.PageNode {
     eachGet(elements, getFunc) {
         return elements.map(element => getFunc(element));
     }
-    // perform initial wait to make sure list elements are loaded
     eachWait(elements, waitFunc, expected) {
         if (util_2.isArray(expected) && expected.length !== elements.length) {
             throw new Error(`${this.constructor.name}: ` +
