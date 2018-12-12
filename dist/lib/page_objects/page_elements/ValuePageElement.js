@@ -4,6 +4,8 @@ const PageElement_1 = require("./PageElement");
 class ValuePageElement extends PageElement_1.PageElement {
     constructor(selector, opts) {
         super(selector, opts);
+        this.wait = new ValuePageElementWait(this);
+        this.eventually = new ValuePageElementEventually(this);
     }
     initialWait() {
         if (this._waitType === "value" /* value */) {

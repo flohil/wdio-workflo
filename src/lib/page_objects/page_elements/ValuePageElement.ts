@@ -22,6 +22,9 @@ export abstract class ValuePageElement<
 
   constructor(selector: string, opts: IPageElementOpts<Store>) {
     super(selector, opts)
+
+    this.wait = new ValuePageElementWait(this)
+    this.eventually = new ValuePageElementEventually(this)
   }
 
   initialWait() {
