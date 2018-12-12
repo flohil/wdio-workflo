@@ -869,6 +869,94 @@ export const listMatchers: jasmine.CustomMatcherFactories = {
   toBeEnabled: listMatcherFunction(
     ({node}) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()],
     ({node}) => createEachMessage(node, "to be enabled")
+  ),
+  toHaveText: elementMatcherFunction(
+    ({node, expected}) => [() => node.currently.hasText(expected), () => node.currently.not.hasText(expected)],
+    ({node}) => createEachMessage(node, "to have text")
+  ),
+  toHaveAnyText: elementMatcherFunction(
+    ({node}) => [() => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()],
+    ({node}) => createEachMessage(node, "to have any text")
+  ),
+  toContainText: elementMatcherFunction(
+    ({node, expected}) => [
+      () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+    ],
+    ({node}) => createEachMessage(node, "to contain text")
+  ),
+  toEventuallyHaveText: elementMatcherFunction(
+    ({node, expected, opts}) => [
+      () => node.eventually.hasText(expected, opts),
+      () => node.eventually.not.hasText(expected, opts)
+    ],
+    ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
+      node, 'text', 'be', actual, expected, opts.timeout
+    )
+  ),
+  toEventuallyHaveAnyText: elementMatcherNoArgsFunction(
+    ({node}) => [
+      () => node.eventually.hasAnyText(), () => node.eventually.not.hasAnyText()
+    ],
+    ({opts, node}) => createBaseMessage(node, ` to eventually have any text within ${opts.timeout} ms`)
+  ),
+  toEventuallyContainText: elementMatcherFunction(
+    ({node, expected, opts}) => [
+      () => node.eventually.containsText(expected, opts),
+      () => node.eventually.not.containsText(expected, opts)
+    ],
+    ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
+      node, 'text', 'contain', actual, expected, opts.timeout
+    )
+  ),
+}
+
+export const mapMatchers: jasmine.CustomMatcherFactories = {
+  toBeVisible: listMatcherFunction(
+    ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
+    ({node}) => createEachMessage(node, "to be visible")
+  ),
+  toBeEnabled: listMatcherFunction(
+    ({node}) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()],
+    ({node}) => createEachMessage(node, "to be enabled")
+  ),
+  toHaveText: listMatcherFunction(
+    ({node, expected}) => [() => node.currently.hasText(expected), () => node.currently.not.hasText(expected)],
+    ({node}) => createEachMessage(node, "to have text")
+  ),
+  toHaveAnyText: listMatcherFunction(
+    ({node}) => [() => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()],
+    ({node}) => createEachMessage(node, "to have any text")
+  ),
+  toContainText: listMatcherFunction(
+    ({node, expected}) => [
+      () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+    ],
+    ({node}) => createEachMessage(node, "to contain text")
+  )
+}
+
+export const groupMatchers: jasmine.CustomMatcherFactories = {
+  toBeVisible: listMatcherFunction(
+    ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
+    ({node}) => createEachMessage(node, "to be visible")
+  ),
+  toBeEnabled: listMatcherFunction(
+    ({node}) => [() => node.currently.isEnabled(), () => node.currently.not.isEnabled()],
+    ({node}) => createEachMessage(node, "to be enabled")
+  ),
+  toHaveText: listMatcherFunction(
+    ({node, expected}) => [() => node.currently.hasText(expected), () => node.currently.not.hasText(expected)],
+    ({node}) => createEachMessage(node, "to have text")
+  ),
+  toHaveAnyText: listMatcherFunction(
+    ({node}) => [() => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()],
+    ({node}) => createEachMessage(node, "to have any text")
+  ),
+  toContainText: listMatcherFunction(
+    ({node, expected}) => [
+      () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+    ],
+    ({node}) => createEachMessage(node, "to contain text")
   )
 }
 
@@ -943,6 +1031,18 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
   ),
 }
 
+export const valueListMatchers: jasmine.CustomMatcherFactories = {
+
+}
+
+export const valueMapMatchers: jasmine.CustomMatcherFactories = {
+
+}
+
+export const valueGroupMatchers: jasmine.CustomMatcherFactories = {
+
+}
+
 export function expectElement<
   Store extends stores.PageElementStore,
   PageElementType extends elements.PageElement<Store>
@@ -954,7 +1054,25 @@ export function expectList<
   Store extends stores.PageElementStore,
   PageElementType extends elements.PageElement<Store>,
   PageElementOptions,
-  PageElemnetListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>
->(list: PageElemnetListType) {
+  PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>
+>(list: PageElementListType) {
   return expect(list)
+}
+
+export function expectMap<
+  Store extends stores.PageElementStore,
+  K extends string,
+  PageElementType extends elements.PageElement<Store>,
+  PageElementOptions,
+  PageElementMapType extends elements.PageElementMap<Store, K, PageElementType, PageElementOptions>
+>(map: PageElementMapType) {
+  return expect(map)
+}
+
+export function expectGroup<
+  Store extends stores.PageElementStore,
+  Content extends {[K in keyof Content] : Workflo.PageNode.INode},
+  PageElementGroupType extends elements.PageElementGroup<Store, Content>
+>(group: PageElementGroupType) {
+  return expect(group)
 }
