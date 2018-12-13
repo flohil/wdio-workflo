@@ -232,7 +232,7 @@ declare global {
         namespace PageNode {
             interface INode extends ILastDiff {
                 __getNodeId(): string;
-                __toJSON(): IElementJSON;
+                toJSON(): IElementJSON;
                 currently: {};
                 wait: {};
                 eventually: {};

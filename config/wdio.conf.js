@@ -10,10 +10,7 @@ const path = require('path')
 const _ = require('lodash')
 const fs = require('fs')
 const workfloConf = require(process.env.WORKFLO_CONFIG).default
-const jsonfile = require('jsonfile')
 const copyFolderRecursiveSync = require('../dist/lib/io.js').copyFolderRecursiveSync
-
-const workfloMatcherNames = [ 'toExist' ]
 
 let errorType
 let finishedTestcases = false
@@ -109,17 +106,9 @@ exports.config = {
   jasmineNodeOpts: {
     defaultTimeoutInterval: 9999999,
     expectationResultHandler: function (passed, assertion) {
-      /**
-       * only take screenshot if assertion failed
-       */
 
       if (process.workflo && process.workflo.specObj) {
         assertion.specObj = process.workflo.specObj
-      }
-
-      if (assertion.matcherName && workfloMatcherNames.indexOf(assertion.matcherName) >= 0 ) {
-        delete assertion.actual
-        delete assertion.expected
       }
 
       if (passed) {

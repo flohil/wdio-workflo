@@ -61,7 +61,7 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
     return this._lastDiff
   }
 
-  __toJSON(): Workflo.IElementJSON {
+  toJSON(): Workflo.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
       nodeId: this._id

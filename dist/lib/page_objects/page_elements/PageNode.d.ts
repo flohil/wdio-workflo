@@ -11,7 +11,7 @@ export declare class PageNode<Store extends PageElementStore> implements Workflo
     readonly eventually: PageNodeEventually<Store, this>;
     constructor(_selector: string, { store }: IPageNodeOpts<Store>);
     __getNodeId(): string;
-    __toJSON(): Workflo.IElementJSON;
+    toJSON(): Workflo.IElementJSON;
     readonly __lastDiff: Workflo.IDiff;
     __setLastDiff(diff: Workflo.IDiff): void;
     getSelector(): string;

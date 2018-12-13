@@ -13,7 +13,7 @@ class PageNode {
     __getNodeId() {
         return this._selector;
     }
-    __toJSON() {
+    toJSON() {
         return {
             pageNodeType: this.constructor.name,
             nodeId: this._selector

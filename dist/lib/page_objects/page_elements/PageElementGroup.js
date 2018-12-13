@@ -25,7 +25,7 @@ class PageElementGroup extends _1.PageNode {
     get __getLastDiff() {
         return this._lastDiff;
     }
-    __toJSON() {
+    toJSON() {
         return {
             pageNodeType: this.constructor.name,
             nodeId: this._id

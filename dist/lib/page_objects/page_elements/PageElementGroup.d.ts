@@ -29,7 +29,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     constructor(id: string, { store, content }: IPageElementGroupOpts<Store, Content>);
     readonly $: Content;
     readonly __getLastDiff: Workflo.IDiff;
-    __toJSON(): Workflo.IElementJSON;
+    toJSON(): Workflo.IElementJSON;
     __getNodeId(): string;
     /**
      * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.
