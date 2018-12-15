@@ -8,8 +8,8 @@ export declare class PageElementStore {
     };
     protected _xPathBuilder: XPathBuilder;
     constructor();
-    ElementGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content): PageElementGroup<this, Content>;
-    ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content): ValuePageElementGroup<this, Content>;
+    ElementGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content, options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): PageElementGroup<this, Content>;
+    ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content, options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): ValuePageElementGroup<this, Content>;
     /**
      *
      * @param selector
@@ -47,7 +47,7 @@ export declare class PageElementStore {
     }, options?: MapOptions): MapType;
     protected _getGroup<Store extends PageElementStore, Content extends {
         [key: string]: Workflo.PageNode.INode;
-    }, GroupType extends PageElementGroup<Store, Content>, GroupOptions extends Pick<IPageElementGroupOpts<Store, Content>, Workflo.Store.GroupPublicKeys>>(groupType: {
+    }, GroupType extends PageElementGroup<Store, Content>, GroupOptions extends Pick<IPageElementGroupOpts<Store, Content>, Workflo.Store.GroupConstructorKeys>>(groupType: {
         new (id: string, options: IPageElementGroupOpts<Store, Content>): GroupType;
     }, groupOptions: GroupOptions): GroupType;
 }

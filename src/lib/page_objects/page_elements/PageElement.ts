@@ -24,7 +24,6 @@ export class PageElement<
   protected _waitType: Workflo.WaitType
   protected _$: Store
 
-  protected _timeout: number
   protected _customScroll: Workflo.IScrollParams
 
   readonly currently: PageElementCurrently<Store, this>
@@ -145,16 +144,6 @@ export class PageElement<
   }
 
 // Public GETTER FUNCTIONS (return state after initial wait)
-
-  /**
-   * Executes func after initial wait and, if an error occurs during execution of func,
-   * throws a custom error message that the page element could not be located on the page.
-   * @param func
-   */
-  protected _executeAfterInitialWait<ResultType>(func: () => ResultType) {
-    this.initialWait()
-    return this.__execute(func)
-  }
 
   getHTML() {
     return this._executeAfterInitialWait( () => this.currently.getHTML() )
@@ -416,6 +405,18 @@ export class PageElement<
     this._scrollTo(params)
 
     return this
+  }
+
+// HELPER FUNCTIONS
+
+  /**
+   * Executes func after initial wait and, if an error occurs during execution of func,
+   * throws a custom error message that the page element could not be located on the page.
+   * @param func
+   */
+  protected _executeAfterInitialWait<ResultType>(func: () => ResultType) {
+    this.initialWait()
+    return this.__execute(func)
   }
 }
 

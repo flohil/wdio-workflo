@@ -253,12 +253,13 @@ declare global {
 
     namespace Store {
       type BaseKeys = "timeout" | "waitType"
-      type GroupPublicKeys = "content" | "store"
+      type GroupPublicKeys = "timeout"
+      type GroupConstructorKeys = GroupPublicKeys | "content" | "store"
       type ElementPublicKeys = BaseKeys | "customScroll"
       type ListPublicKeys = BaseKeys | "disableCache" | "identifier"
       type ListPublicPartialKeys = "elementOptions"
       type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | "elementStoreFunc"
-      type MapPublicKeys = "identifier"
+      type MapPublicKeys = "identifier" | "timeout"
       type MapPublicPartialKeys = "elementOptions"
       type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc"
     }
@@ -267,6 +268,7 @@ declare global {
 
       interface INode extends ILastDiff {
         __getNodeId(): string
+        getTimeout(): number
         toJSON(): IElementJSON
 
         currently: {}

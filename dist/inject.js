@@ -52,12 +52,6 @@ exports.inject = inject;
 inject({});
 beforeAll(() => {
     jasmine.addMatchers(matchers_1.elementMatchers);
-    jasmine.addMatchers(matchers_1.listMatchers);
-    jasmine.addMatchers(matchers_1.mapMatchers);
-    jasmine.addMatchers(matchers_1.groupMatchers);
     jasmine.addMatchers(matchers_1.valueElementMatchers);
-    jasmine.addMatchers(matchers_1.valueListMatchers);
-    jasmine.addMatchers(matchers_1.valueMapMatchers);
-    jasmine.addMatchers(matchers_1.valueGroupMatchers);
 });
 //# sourceMappingURL=inject.js.map

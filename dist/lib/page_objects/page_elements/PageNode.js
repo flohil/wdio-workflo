@@ -1,36 +1,42 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const __1 = require("..");
 class PageNode {
     // available options:
     // - wait -> initial wait operation: exist, visible, text, value
-    constructor(_selector, { store }) {
-        this._selector = _selector;
-        this._store = store;
-        this.currently = new PageNodeCurrently(this);
+    constructor(selector, opts) {
+        this._selector = selector;
+        this._store = opts.store;
+        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT,
+            this.currently = new PageNodeCurrently(this);
         this.wait = new PageNodeWait(this);
         this.eventually = new PageNodeEventually(this);
     }
+    // INTERNAL GETTERS AND SETTERS
     __getNodeId() {
         return this._selector;
     }
-    toJSON() {
-        return {
-            pageNodeType: this.constructor.name,
-            nodeId: this._selector
-        };
-    }
     get __lastDiff() {
         const lastDiff = this._lastDiff || {};
-        lastDiff.selector = this.getSelector();
+        lastDiff.selector = this.__getNodeId();
         lastDiff.constructorName = this.constructor.name;
         return lastDiff;
     }
     __setLastDiff(diff) {
         this._lastDiff = diff;
     }
-    getSelector() {
-        return this._selector;
+    // PUBLIC GETTERS
+    getTimeout() {
+        return this._timeout;
     }
+    // PUBLIC ACTIONS
+    toJSON() {
+        return {
+            pageNodeType: this.constructor.name,
+            nodeId: this._selector
+        };
+    }
+    // COMMON HELPER FUNCTIONS
     /**
      * Executes func and, if an error occurs during execution of func,
      * throws a custom error message that the page element could not be located on the page.
@@ -43,7 +49,7 @@ class PageNode {
         catch (error) {
             if (error.message.includes('could not be located on the page')) {
                 const errorMsg = `${this.constructor.name} could not be located on the page.\n` +
-                    `( ${this.getSelector()} )`;
+                    `( ${this.__getNodeId()} )`;
                 throw new Error(errorMsg);
             }
             else {
@@ -100,10 +106,10 @@ class PageNode {
     _handleWaitError(error, errorMessage, timeout) {
         if (error.message.includes('could not be located on the page')) {
             throw new Error(`${this.constructor.name} could not be located on the page within ${timeout}ms.\n` +
-                `( ${this.getSelector()} )`);
+                `( ${this.__getNodeId()} )`);
         }
         else if ('type' in error && error.type === 'WaitUntilTimeoutError') {
-            const waitError = new Error(`${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.getSelector()} )`);
+            const waitError = new Error(`${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.__getNodeId()} )`);
             waitError.type = 'WaitUntilTimeoutError';
             throw waitError;
         }

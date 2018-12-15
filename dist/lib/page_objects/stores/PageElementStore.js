@@ -28,17 +28,11 @@ class PageElementStore {
     // id is a string to uniquely identify a group.
     // If id is not defined, the group instance will be identified
     // by a concatenated string of its node key names and types.
-    ElementGroup(content) {
-        return this._getGroup(page_elements_1.PageElementGroup, {
-            store: this,
-            content: content
-        });
+    ElementGroup(content, options) {
+        return this._getGroup(page_elements_1.PageElementGroup, Object.assign({ store: this, content: content }, options));
     }
-    ValueGroup(content) {
-        return this._getGroup(page_elements_1.ValuePageElementGroup, {
-            store: this,
-            content: content
-        });
+    ValueGroup(content, options) {
+        return this._getGroup(page_elements_1.ValuePageElementGroup, Object.assign({ store: this, content: content }, options));
     }
     // ELEMENTS
     /**

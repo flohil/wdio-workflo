@@ -1,13 +1,17 @@
 import { PageElementStore } from '../stores'
 import _ = require('lodash');
+import { DEFAULT_TIMEOUT } from '..'
 
 export interface IPageNodeOpts<Store extends PageElementStore> {
-  store: Store
+  store: Store,
+  timeout?: number
 }
 
 export class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
   protected _store: Store
   protected _lastDiff: Workflo.IDiff
+  protected _selector: string
+  protected _timeout: number
 
   readonly currently: PageNodeCurrently<Store, this>
   readonly wait: PageNodeWait<Store, this>
@@ -16,32 +20,27 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
   constructor(
-    protected _selector: string,
-    {
-      store
-    } : IPageNodeOpts<Store>
+    selector: string,
+    opts: IPageNodeOpts<Store>
   ) {
-    this._store = store
+    this._selector = selector
+    this._store = opts.store
+    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
 
     this.currently = new PageNodeCurrently(this)
     this.wait = new PageNodeWait(this)
     this.eventually = new PageNodeEventually(this)
   }
 
+  // INTERNAL GETTERS AND SETTERS
+
   __getNodeId() {
     return this._selector
   }
 
-  toJSON(): Workflo.IElementJSON {
-    return {
-      pageNodeType: this.constructor.name,
-      nodeId: this._selector
-    }
-  }
-
   get __lastDiff() {
     const lastDiff = this._lastDiff || {}
-    lastDiff.selector = this.getSelector()
+    lastDiff.selector = this.__getNodeId()
     lastDiff.constructorName = this.constructor.name
 
     return lastDiff
@@ -51,9 +50,22 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
     this._lastDiff = diff
   }
 
-  getSelector() {
-    return this._selector
+  // PUBLIC GETTERS
+
+  getTimeout() {
+    return this._timeout
   }
+
+  // PUBLIC ACTIONS
+
+  toJSON(): Workflo.IElementJSON {
+    return {
+      pageNodeType: this.constructor.name,
+      nodeId: this._selector
+    }
+  }
+
+  // COMMON HELPER FUNCTIONS
 
   /**
    * Executes func and, if an error occurs during execution of func,
@@ -67,7 +79,7 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
       if (error.message.includes('could not be located on the page')) {
         const errorMsg =
         `${this.constructor.name} could not be located on the page.\n` +
-        `( ${this.getSelector()} )`
+        `( ${this.__getNodeId()} )`
 
         throw new Error(errorMsg)
       } else {
@@ -132,11 +144,11 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
     if (error.message.includes('could not be located on the page')) {
       throw new Error(
         `${this.constructor.name} could not be located on the page within ${timeout}ms.\n` +
-        `( ${this.getSelector()} )`
+        `( ${this.__getNodeId()} )`
       )
     } else if ('type' in error && error.type === 'WaitUntilTimeoutError') {
       const waitError = new Error(
-        `${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.getSelector()} )`
+        `${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.__getNodeId()} )`
       ) as any
 
       waitError.type = 'WaitUntilTimeoutError'

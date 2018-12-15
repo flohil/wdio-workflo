@@ -1,6 +1,6 @@
 import { PageElementStore, pageElement } from '../stores'
 import { PageNodeCurrently, PageNode } from '.';
-import { PageNodeEventually, PageNodeWait } from './PageNode';
+import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
 
 export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
   [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? ReturnType<T[P]['getText']> : undefined;
@@ -13,8 +13,7 @@ export type ExtractBoolean<T extends {[key: string]: Workflo.PageNode.INode}> = 
 export interface IPageElementGroupOpts<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
-> {
-  store: Store,
+> extends IPageNodeOpts<Store> {
   content: Content
 }
 
@@ -41,9 +40,10 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
 
   constructor(id: string, {
     store,
+    timeout,
     content
   }: IPageElementGroupOpts<Store, Content>) {
-    super(id, {store})
+    super(id, {store, timeout})
 
     this._id = id
     this._$ = content

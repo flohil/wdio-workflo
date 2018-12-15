@@ -1,20 +1,22 @@
 import { PageElementStore } from '../stores';
 export interface IPageNodeOpts<Store extends PageElementStore> {
     store: Store;
+    timeout?: number;
 }
 export declare class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
-    protected _selector: string;
     protected _store: Store;
     protected _lastDiff: Workflo.IDiff;
+    protected _selector: string;
+    protected _timeout: number;
     readonly currently: PageNodeCurrently<Store, this>;
     readonly wait: PageNodeWait<Store, this>;
     readonly eventually: PageNodeEventually<Store, this>;
-    constructor(_selector: string, { store }: IPageNodeOpts<Store>);
+    constructor(selector: string, opts: IPageNodeOpts<Store>);
     __getNodeId(): string;
-    toJSON(): Workflo.IElementJSON;
     readonly __lastDiff: Workflo.IDiff;
     __setLastDiff(diff: Workflo.IDiff): void;
-    getSelector(): string;
+    getTimeout(): number;
+    toJSON(): Workflo.IElementJSON;
     /**
      * Executes func and, if an error occurs during execution of func,
      * throws a custom error message that the page element could not be located on the page.

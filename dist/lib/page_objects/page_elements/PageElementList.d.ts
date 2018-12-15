@@ -26,7 +26,6 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
     waitType?: Workflo.WaitType;
-    timeout?: number;
     interval?: number;
     disableCache?: boolean;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
@@ -99,6 +98,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     }): {
         [key: string]: PageElementType;
     };
+    getSelector(): string;
     getTimeout(): number;
     getInterval(): number;
     getLength(): number;

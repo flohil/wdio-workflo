@@ -7,7 +7,6 @@ export interface IPageElementOpts<Store extends PageElementStore> extends IPageE
 export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string> {
     protected _waitType: Workflo.WaitType;
     protected _$: Store;
-    protected _timeout: number;
     protected _customScroll: Workflo.IScrollParams;
     readonly currently: PageElementCurrently<Store, this>;
     readonly wait: PageElementWait<Store, this>;
@@ -26,12 +25,6 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
      */
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     initialWait(): this;
-    /**
-     * Executes func after initial wait and, if an error occurs during execution of func,
-     * throws a custom error message that the page element could not be located on the page.
-     * @param func
-     */
-    protected _executeAfterInitialWait<ResultType>(func: () => ResultType): ResultType;
     getHTML(): string;
     getDirectText(): string;
     getText(): string;
@@ -59,6 +52,12 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     }): this;
     protected _scrollTo(params: Workflo.IScrollParams): Workflo.IScrollResult;
     scrollTo(params: Workflo.IScrollParams): this;
+    /**
+     * Executes func after initial wait and, if an error occurs during execution of func,
+     * throws a custom error message that the page element could not be located on the page.
+     * @param func
+     */
+    protected _executeAfterInitialWait<ResultType>(func: () => ResultType): ResultType;
 }
 export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> implements Workflo.PageNode.IGetElement<string> {
     /**

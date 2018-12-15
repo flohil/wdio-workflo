@@ -49,7 +49,6 @@ export interface IPageElementListOpts<
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   elementOptions: PageElementOptions
   waitType?: Workflo.WaitType
-  timeout?: number
   interval?: number
   disableCache?: boolean
   identifier?: IPageElementListIdentifier<Store, PageElementType>
@@ -273,6 +272,10 @@ implements Workflo.PageNode.IElementNode<string[]> {
   }
 
 // PUBLIC GETTER FUNCTIONS
+
+  getSelector() {
+    return this._selector
+  }
 
   getTimeout() {
     return this._timeout

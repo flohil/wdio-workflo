@@ -1,6 +1,6 @@
 import { PageElementStore } from '../stores';
 import { PageNodeCurrently, PageNode } from '.';
-import { PageNodeEventually, PageNodeWait } from './PageNode';
+import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
 export declare type ExtractText<T extends {
     [key: string]: Workflo.PageNode.INode;
 }> = {
@@ -13,8 +13,7 @@ export declare type ExtractBoolean<T extends {
 };
 export interface IPageElementGroupOpts<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
-}> {
-    store: Store;
+}> extends IPageNodeOpts<Store> {
     content: Content;
 }
 export declare class PageElementGroup<Store extends PageElementStore, Content extends {
@@ -26,7 +25,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     readonly currently: PageElementGroupCurrently<Store, Content, this>;
     readonly wait: PageElementGroupWait<Store, Content, this>;
     readonly eventually: PageElementGroupEventually<Store, Content, this>;
-    constructor(id: string, { store, content }: IPageElementGroupOpts<Store, Content>);
+    constructor(id: string, { store, timeout, content }: IPageElementGroupOpts<Store, Content>);
     readonly $: Content;
     readonly __getLastDiff: Workflo.IDiff;
     toJSON(): Workflo.IElementJSON;

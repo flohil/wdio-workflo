@@ -3,7 +3,6 @@ import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEvent
 import { PageElementStore } from '../stores';
 export interface IPageElementBaseOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     waitType?: Workflo.WaitType;
-    timeout?: number;
 }
 export declare abstract class PageElementBase<Store extends PageElementStore> extends PageNode<Store> {
     protected _waitType: Workflo.WaitType;
@@ -12,8 +11,9 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
     abstract readonly currently: PageElementBaseCurrently<Store, this>;
     abstract readonly wait: PageElementBaseWait<Store, this>;
     abstract readonly eventually: PageElementBaseEventually<Store, this>;
-    constructor(selector: string, { waitType, timeout, ...superOpts }: IPageElementBaseOpts<Store>);
+    constructor(selector: string, { waitType, ...superOpts }: IPageElementBaseOpts<Store>);
     readonly $: Store;
+    getSelector(): string;
     getTimeout(): number;
     abstract __equals<T>(actual: T, expected: T): boolean;
     abstract __any<T>(actual: T): boolean;

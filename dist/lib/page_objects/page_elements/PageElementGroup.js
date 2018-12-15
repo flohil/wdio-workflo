@@ -11,8 +11,8 @@ const PageNode_1 = require("./PageNode");
 // - all group functions must start with upper case letter
 // - all private members of group must start with _
 class PageElementGroup extends _1.PageNode {
-    constructor(id, { store, content }) {
-        super(id, { store });
+    constructor(id, { store, timeout, content }) {
+        super(id, { store, timeout });
         this._id = id;
         this._$ = content;
         this.currently = new PageElementGroupCurrently(this);

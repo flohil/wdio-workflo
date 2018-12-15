@@ -112,15 +112,6 @@ class PageElement extends _1.PageElementBase {
         return this;
     }
     // Public GETTER FUNCTIONS (return state after initial wait)
-    /**
-     * Executes func after initial wait and, if an error occurs during execution of func,
-     * throws a custom error message that the page element could not be located on the page.
-     * @param func
-     */
-    _executeAfterInitialWait(func) {
-        this.initialWait();
-        return this.__execute(func);
-    }
     getHTML() {
         return this._executeAfterInitialWait(() => this.currently.getHTML());
     }
@@ -341,6 +332,16 @@ class PageElement extends _1.PageElementBase {
     scrollTo(params) {
         this._scrollTo(params);
         return this;
+    }
+    // HELPER FUNCTIONS
+    /**
+     * Executes func after initial wait and, if an error occurs during execution of func,
+     * throws a custom error message that the page element could not be located on the page.
+     * @param func
+     */
+    _executeAfterInitialWait(func) {
+        this.initialWait();
+        return this.__execute(func);
     }
 }
 exports.PageElement = PageElement;

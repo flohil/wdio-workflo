@@ -11,10 +11,9 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 const builders_1 = require("../builders");
-const __1 = require("..");
 class PageElementBase extends _1.PageNode {
     constructor(selector, _a) {
-        var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT } = _a, superOpts = __rest(_a, ["waitType", "timeout"]);
+        var { waitType = "visible" /* visible */ } = _a, superOpts = __rest(_a, ["waitType"]);
         super(selector, superOpts);
         this._selector = selector;
         this._$ = Object.create(null);
@@ -31,12 +30,16 @@ class PageElementBase extends _1.PageNode {
             }
         }
         this._waitType = waitType;
-        this._timeout = timeout;
     }
     get $() {
         return this._$;
     }
-    getTimeout() { return this._timeout; }
+    getSelector() {
+        return this._selector;
+    }
+    getTimeout() {
+        return this._timeout;
+    }
 }
 exports.PageElementBase = PageElementBase;
 class PageElementBaseCurrently extends _1.PageNodeCurrently {

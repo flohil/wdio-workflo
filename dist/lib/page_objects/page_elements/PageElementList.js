@@ -156,6 +156,9 @@ class PageElementList extends _1.PageNode {
         return this._identifiedObjCache[cacheKey];
     }
     // PUBLIC GETTER FUNCTIONS
+    getSelector() {
+        return this._selector;
+    }
     getTimeout() {
         return this._timeout;
     }

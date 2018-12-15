@@ -3,13 +3,11 @@ import * as _ from 'lodash'
 import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually } from '.'
 import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
-import { DEFAULT_TIMEOUT, stores } from '..'
 
 export interface IPageElementBaseOpts<
   Store extends PageElementStore,
 > extends IPageNodeOpts<Store> {
   waitType?: Workflo.WaitType
-  timeout?: number
 }
 
 export abstract class PageElementBase<
@@ -29,7 +27,6 @@ export abstract class PageElementBase<
     selector: string,
     {
       waitType = Workflo.WaitType.visible,
-      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
       ...superOpts
     }: IPageElementBaseOpts<Store>
   ) {
@@ -55,14 +52,20 @@ export abstract class PageElementBase<
     }
 
     this._waitType = waitType
-    this._timeout = timeout
   }
 
   get $(): Store {
     return this._$
   }
 
-  getTimeout() { return this._timeout }
+
+  getSelector() {
+    return this._selector
+  }
+
+  getTimeout() {
+    return this._timeout
+  }
 
   abstract __equals<T>(actual: T, expected: T): boolean
   abstract __any<T>(actual: T): boolean

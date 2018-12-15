@@ -48,7 +48,8 @@ export class PageElementStore {
   // If id is not defined, the group instance will be identified
   // by a concatenated string of its node key names and types.
   ElementGroup<Content extends Record<string, Workflo.PageNode.INode>> (
-    content: Content
+    content: Content,
+    options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
   ) {
     return this._getGroup<
       this,
@@ -57,18 +58,20 @@ export class PageElementStore {
       Pick<IPageElementGroupOpts<
         this,
         Content
-      >, Workflo.Store.GroupPublicKeys>
+      >, Workflo.Store.GroupConstructorKeys>
     > (
       PageElementGroup,
       {
         store: this,
-        content: content
+        content: content,
+        ...options
       }
     )
   }
 
   ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(
-    content: Content
+    content: Content,
+    options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
   ) {
     return this._getGroup<
       this,
@@ -76,12 +79,13 @@ export class PageElementStore {
       ValuePageElementGroup<this, Content>,
       Pick<IValueGroupOpts<
         this, Content
-      >, Workflo.Store.GroupPublicKeys>
+      >, Workflo.Store.GroupConstructorKeys>
     > (
       ValuePageElementGroup,
       {
         store: this,
-        content: content
+        content: content,
+        ...options
       }
     )
   }
@@ -394,7 +398,7 @@ export class PageElementStore {
     GroupOptions extends Pick<IPageElementGroupOpts<
       Store,
       Content
-    >, Workflo.Store.GroupPublicKeys >
+    >, Workflo.Store.GroupConstructorKeys >
   > (
     groupType: { new(id: string, options: IPageElementGroupOpts<Store, Content>): GroupType },
     groupOptions: GroupOptions
