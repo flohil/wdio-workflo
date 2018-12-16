@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually } from '.';
+import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually, PageElementGroup } from '.';
 import { PageElementStore } from '../stores';
 export interface IPageElementBaseOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     waitType?: Workflo.WaitType;
@@ -7,12 +7,11 @@ export interface IPageElementBaseOpts<Store extends PageElementStore> extends IP
 export declare abstract class PageElementBase<Store extends PageElementStore> extends PageNode<Store> {
     protected _waitType: Workflo.WaitType;
     protected _$: Store;
-    protected _timeout: number;
     abstract readonly currently: PageElementBaseCurrently<Store, this>;
     abstract readonly wait: PageElementBaseWait<Store, this>;
     abstract readonly eventually: PageElementBaseEventually<Store, this>;
     constructor(selector: string, { waitType, ...superOpts }: IPageElementBaseOpts<Store>);
-    readonly $: Store;
+    readonly $: Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>;
     getSelector(): string;
     getTimeout(): number;
     abstract __equals<T>(actual: T, expected: T): boolean;

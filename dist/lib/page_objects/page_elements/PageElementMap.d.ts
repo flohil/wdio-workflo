@@ -52,10 +52,10 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
      * @param getFunc
      * @param filterMask a filter mask
      */
-    eachGet<Store extends PageElementStore, PageElementType extends PageElement<Store>, ResultType>(context: Record<K, PageElementType>, filterMask: Partial<Record<K, ResultType>>, getFunc: (node: PageElementType) => ResultType): Record<K, ResultType>;
-    eachWait<T>(context: Record<K, PageElementType>, expected: Partial<Record<K, T>>, waitFunc: (element: PageElementType, expected?: T) => PageElementType): this;
+    eachGet<ResultType>(context: Record<K, PageElementType>, filterMask: Partial<Record<K, ResultType>>, getFunc: (node: PageElementType) => ResultType): Partial<Record<K, ResultType>>;
+    eachWait<ValueType>(context: Record<K, PageElementType>, expected: Partial<Record<K, ValueType>>, waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType): this;
     eachDo(context: Record<K, PageElementType>, filterMask: Partial<Record<K, true>>, doFunc: (element: PageElementType) => PageElementType): this;
-    eachSet<T>(context: Record<K, PageElementType>, values: Partial<Record<K, T>>, setFunc: (element: PageElementType, value: T) => PageElementType): this;
+    eachSet<ValueType>(context: Record<K, PageElementType>, values: Partial<Record<K, ValueType>>, setFunc: (element: PageElementType, value: ValueType) => PageElementType): this;
 }
 export declare class PageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeCurrently<Store, MapType> {
     /**

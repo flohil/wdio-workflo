@@ -21,6 +21,12 @@ class PageElement extends _1.PageElementBase {
         this.wait = new PageElementWait(this);
         this.eventually = new PageElementEventually(this);
     }
+    /**
+     * For internal use only in order to retrieve an Element's Store type!
+     */
+    get __$() {
+        return this._$;
+    }
     // ABSTRACT BASE CLASS IMPLEMENTATIONS
     __equals(actual, expected) {
         if (helpers_1.isEmpty(actual) && helpers_1.isEmpty(expected)) {

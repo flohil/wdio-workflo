@@ -1,14 +1,12 @@
-import { PageElementStore, pageElement } from '../stores'
+import { PageElementStore } from '../stores'
 import { PageNodeCurrently, PageNode } from '.';
 import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
 
-export type ExtractText<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? ReturnType<T[P]['getText']> : undefined;
-}
+export type ExtractText<Content extends {[key: string]: Workflo.PageNode.INode}> =
+  Workflo.PageNode.ExtractText<Content>
 
-export type ExtractBoolean<T extends {[key: string]: Workflo.PageNode.INode}> = {
-  [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> : undefined;
-}
+export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.INode}> =
+  Workflo.PageNode.ExtractBoolean<Content>
 
 export interface IPageElementGroupOpts<
   Store extends PageElementStore,

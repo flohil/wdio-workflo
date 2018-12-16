@@ -5,10 +5,12 @@ import {
   PageNode,
   IPageNodeOpts,
   PageElement,
-  IPageElementOpts
+  IPageElementOpts,
+  IPageElementBaseOpts,
+  PageElementGroup
 } from '.'
 import { PageElementStore } from '../stores'
-import { ListWhereBuilder } from '../builders'
+import { ListWhereBuilder, XPathBuilder } from '../builders'
 import { DEFAULT_TIMEOUT, stores } from '../'
 import { isArray } from 'util';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
@@ -62,11 +64,11 @@ export class PageElementList<
 > extends PageNode<Store>
 implements Workflo.PageNode.IElementNode<string[]> {
 
+  protected _$: Store
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _elementOptions: PageElementOptions
   protected _waitType: Workflo.WaitType
 
-  protected _timeout: number
   protected _interval: number
   protected _disableCache: boolean
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
@@ -84,16 +86,14 @@ implements Workflo.PageNode.IElementNode<string[]> {
   >
 
   constructor(
-    protected _selector: string,
+    protected selector: string,
     opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>
   ) {
-    super(_selector, opts)
+    super(selector, opts)
 
     this._waitType = opts.waitType || Workflo.WaitType.visible
-    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
     this._disableCache = opts.disableCache || false
 
-    this._selector = _selector
     this._elementOptions = opts.elementOptions
     this._elementStoreFunc = opts.elementStoreFunc
     this._identifier = opts.identifier
@@ -109,6 +109,24 @@ implements Workflo.PageNode.IElementNode<string[]> {
     this.eventually = new PageElementListEventually<
       Store, PageElementType, PageElementOptions, this
     >(this)
+
+    this._$ = Object.create(null)
+
+    for (const method of Workflo.Class.getAllMethods(this._store)) {
+      if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
+        this._$[method] = <Options extends IPageElementBaseOpts<Store>>(_selector: Workflo.XPath, _options: Options) => {
+
+          if (_selector instanceof XPathBuilder) {
+            _selector = XPathBuilder.getInstance().build()
+          }
+
+          // chain selectors
+          _selector = `${selector}${_selector}`
+
+          return this._store[method].apply(this._store, [_selector, _options])
+        }
+      }
+    }
   }
 
   /**
@@ -148,6 +166,10 @@ implements Workflo.PageNode.IElementNode<string[]> {
   }
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
+
+  get $(): Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
+    return this._$
+  }
 
   get elements() {
     this.initialWait()
@@ -275,10 +297,6 @@ implements Workflo.PageNode.IElementNode<string[]> {
 
   getSelector() {
     return this._selector
-  }
-
-  getTimeout() {
-    return this._timeout
   }
 
   getInterval() {

@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 
-import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually } from '.'
+import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually, PageElementGroup } from '.'
 import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
 
@@ -15,9 +15,11 @@ export abstract class PageElementBase<
 > extends PageNode<Store> {
 
   protected _waitType: Workflo.WaitType
-  protected _$: Store
 
-  protected _timeout: number
+  // return all element factory methods from store except for group factory methods,
+  // because groups have no selector and therefore cannot be selector-chained!
+  // protected _$: Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>
+  protected _$: Store
 
   abstract readonly currently: PageElementBaseCurrently<Store, this>
   abstract readonly wait: PageElementBaseWait<Store, this>
@@ -54,10 +56,9 @@ export abstract class PageElementBase<
     this._waitType = waitType
   }
 
-  get $(): Store {
+  get $(): Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
     return this._$
   }
-
 
   getSelector() {
     return this._selector

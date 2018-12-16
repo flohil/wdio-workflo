@@ -4,18 +4,15 @@ const _ = require("lodash");
 const util_1 = require("../../utility_functions/util");
 const _1 = require(".");
 const builders_1 = require("../builders");
-const __1 = require("../");
 const util_2 = require("util");
 const PageNode_1 = require("./PageNode");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
-    constructor(_selector, opts) {
-        super(_selector, opts);
-        this._selector = _selector;
+    constructor(selector, opts) {
+        super(selector, opts);
+        this.selector = selector;
         this._waitType = opts.waitType || "visible" /* visible */;
-        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         this._disableCache = opts.disableCache || false;
-        this._selector = _selector;
         this._elementOptions = opts.elementOptions;
         this._elementStoreFunc = opts.elementStoreFunc;
         this._identifier = opts.identifier;
@@ -24,6 +21,19 @@ class PageElementList extends _1.PageNode {
         this.currently = new PageElementListCurrently(this, opts);
         this.wait = new PageElementListWait(this);
         this.eventually = new PageElementListEventually(this);
+        this._$ = Object.create(null);
+        for (const method of Workflo.Class.getAllMethods(this._store)) {
+            if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
+                this._$[method] = (_selector, _options) => {
+                    if (_selector instanceof builders_1.XPathBuilder) {
+                        _selector = builders_1.XPathBuilder.getInstance().build();
+                    }
+                    // chain selectors
+                    _selector = `${selector}${_selector}`;
+                    return this._store[method].apply(this._store, [_selector, _options]);
+                };
+            }
+        }
     }
     /**
      * Use this method to initialize properties that rely on the this type
@@ -59,6 +69,9 @@ class PageElementList extends _1.PageNode {
         }
     }
     // RETRIEVAL FUNCTIONS for wdio or list elements
+    get $() {
+        return this._$;
+    }
     get elements() {
         this.initialWait();
         return browser.elements(this._selector);
@@ -158,9 +171,6 @@ class PageElementList extends _1.PageNode {
     // PUBLIC GETTER FUNCTIONS
     getSelector() {
         return this._selector;
-    }
-    getTimeout() {
-        return this._timeout;
     }
     getInterval() {
         return this._interval;

@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
+import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageElementGroup } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
@@ -31,11 +31,11 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
 export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<string[]> {
-    protected _selector: string;
+    protected selector: string;
+    protected _$: Store;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _elementOptions: PageElementOptions;
     protected _waitType: Workflo.WaitType;
-    protected _timeout: number;
     protected _interval: number;
     protected _disableCache: boolean;
     protected _identifier: IPageElementListIdentifier<Store, PageElementType>;
@@ -48,7 +48,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     readonly currently: PageElementListCurrently<Store, PageElementType, PageElementOptions, this>;
     readonly wait: PageElementListWait<Store, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementListEventually<Store, PageElementType, PageElementOptions, this>;
-    constructor(_selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
+    constructor(selector: string, opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>);
     /**
      * Use this method to initialize properties that rely on the this type
      * which is not available in the constructor.
@@ -59,6 +59,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     init(cloneFunc: (selector: Workflo.XPath) => this): void;
     initialWait(): void;
+    readonly $: Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     /**
@@ -99,7 +100,6 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
         [key: string]: PageElementType;
     };
     getSelector(): string;
-    getTimeout(): number;
     getInterval(): number;
     getLength(): number;
     getText(): string[];

@@ -104,6 +104,18 @@ declare global {
         toBeVisible(): boolean;
         toBeEnabled(): boolean;
     }
+    interface CustomMapMatchers {
+        toBeVisible(opts?: {
+            filterMask?: Partial<Record<string, true>>;
+        }): boolean;
+    }
+    interface CustomGroupMatchers<Content extends {
+        [key: string]: Workflo.PageNode.INode;
+    }> {
+        toBeVisible(opts?: {
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
+        }): boolean;
+    }
     interface CustomValueElementMatchers extends CustomElementMatchers {
         toHaveValue(value: string): boolean;
         toHaveAnyValue(): boolean;
@@ -118,11 +130,23 @@ declare global {
     interface ListMatchers extends CustomListMatchers {
         not: CustomListMatchers;
     }
+    interface MapMatchers extends CustomMapMatchers {
+        not: CustomMapMatchers;
+    }
+    interface GroupMatchers<Content extends {
+        [key: string]: Workflo.PageNode.INode;
+    }> extends CustomGroupMatchers<Content> {
+        not: CustomGroupMatchers<Content>;
+    }
     interface ValueElementMatchers extends CustomValueElementMatchers {
         not: CustomValueElementMatchers;
     }
     function expectElement<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ? ValueElementMatchers : ElementMatchers;
     function expectList<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): ListMatchers;
+    function expectMap<Store extends pageObjects.stores.PageElementStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): MapMatchers;
+    function expectGroup<Store extends pageObjects.stores.PageElementStore, Content extends {
+        [K in keyof Content]: Workflo.PageNode.INode;
+    }, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): GroupMatchers<Content>;
     namespace WebdriverIO {
         interface Client<T> {
             /**
@@ -144,6 +168,12 @@ declare global {
      */
     type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>;
     type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+    type FilteredKeys<T, U> = {
+        [P in keyof T]: T[P] extends U ? P : never;
+    }[keyof T];
+    type FilteredKeysByReturnType<T, U> = {
+        [P in keyof T]: T[P] extends (...args: any[]) => Workflo.PageNode.INode ? ReturnType<T[P]> extends U ? P : never : P;
+    }[keyof T];
     namespace Workflo {
         type WdioElement = Client<RawResult<Element>> & RawResult<Element>;
         interface IJSError {

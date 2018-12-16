@@ -3,12 +3,10 @@ import { comparatorStr } from './utility_functions/util'
 import { elements, stores } from './page_objects'
 import * as _ from 'lodash'
 import { tolerancesToString } from './helpers'
-import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams, IPageElementOpts, PageElementBaseCurrently, PageElement, PageElementList, PageElementMap, PageElementGroup, ValuePageElement } from './page_objects/page_elements';
-import { PageElementStore } from './page_objects/stores';
 
 // MATCHER FUNTCION INTERFACES
 
-/* export interface IMatcherArgs<
+export interface IMatcherArgs<
   NodeType extends Workflo.PageNode.INode,
   ExpectedType,
   OptsType extends {timeout?: number} = {timeout?: number}
@@ -87,90 +85,124 @@ export type ErrorTextWithoutExpectedFunction<
   OptsType
 > = (args: ErrorFuncWithoutExpected<NodeType, OptsType & {timeout?: number}>) => string[]
 
-export interface ICompareElementFuncs {
-  element?: <
-    Store extends PageElementStore,
-    PageElementType extends PageElement<Store>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementType, ExpectedType, OptsType>,
-  list?: <
-    Store extends stores.PageElementStore,
-    PageElementType extends PageElement<Store>,
-    PageElementOptions,
-    PageElementListType extends PageElementList<Store, PageElementType, PageElementOptions>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementListType, ExpectedType, OptsType>,
-  map?: <
-    Store extends stores.PageElementStore,
-    K extends string,
-    PageElementType extends PageElement<Store>,
-    PageElementOptions,
-    PageElementMapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementMapType, ExpectedType, OptsType>,
-  group?: <
-    Store extends stores.PageElementStore,
-    Content extends {[K in keyof Content] : Workflo.PageNode.INode},
-    PageElementGroupType extends PageElementGroup<Store, Content>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementGroupType, ExpectedType, OptsType>,
+export interface ICompareElementFuncs<
+  ElementExpectedType = undefined,
+  ListExpectedType = undefined,
+  MapExpectedType = undefined,
+  GroupExpectedType = undefined
+> {
+  element?: IMatcherArgs<
+    elements.PageElement<stores.PageElementStore>,
+    ElementExpectedType,
+    Workflo.IWDIOParamsOptional
+  >,
+  list?: IMatcherArgs<
+    elements.PageElementList<
+      stores.PageElementStore,
+      elements.PageElement<stores.PageElementStore>,
+      elements.IPageElementOpts<stores.PageElementStore>
+    >,
+    ListExpectedType,
+    Workflo.IWDIOParamsOptional
+  >,
+  map?: IMatcherArgs<
+    elements.PageElementMap<
+      stores.PageElementStore,
+      string,
+      elements.PageElement<stores.PageElementStore>,
+      elements.IPageElementOpts<stores.PageElementStore>
+    >,
+    MapExpectedType,
+    Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<string, true>>}
+  >,
+  group?: IMatcherArgs<
+    elements.PageElementGroup<stores.PageElementStore, {[key: string] : Workflo.PageNode.INode}>,
+    GroupExpectedType,
+    Workflo.IWDIOParamsOptional & {filterMask?: Workflo.PageNode.ExtractBoolean<{[key: string]: Workflo.PageNode.INode}>}
+  >
 }
 
-export interface ICompareValueElementFuncs {
-  element?: <
-    Store extends PageElementStore,
-    PageElementType extends ValuePageElement<Store, ExpectedType>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementType, ExpectedType, OptsType>,
-  list?: <
-    Store extends stores.PageElementStore,
-    PageElementType extends ValuePageElement<Store, ExpectedType>,
-    PageElementOptions,
-    PageElementListType extends ValuePageElementList<Store, PageElementType, PageElementOptions>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementListType, ExpectedType, OptsType>,
-  map?: <
-    Store extends stores.PageElementStore,
-    K extends string,
-    PageElementType extends ValuePageElement<Store, ExpectedType>,
-    PageElementOptions,
-    PageElementMapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementMapType, ExpectedType, OptsType>,
-  group?: <
-    Store extends stores.PageElementStore,
-    Content extends {[K in keyof Content] : Workflo.PageNode.INode},
-    PageElementGroupType extends ValuePageElementGroup<Store, Content>,
-    ExpectedType,
-    OptsType extends {timeout?: number}
-  >() => IMatcherArgs<PageElementGroupType, ExpectedType, OptsType>,
-}
+// export interface ICompareElementFuncs {
+//   element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, undefined, {timeout?: number}>,
+//   list?: <
+//     Store extends stores.PageElementStore,
+//     PageElementType extends PageElement<Store>,
+//     PageElementOptions,
+//     PageElementListType extends PageElementList<Store, PageElementType, PageElementOptions>,
+//     ExpectedType,
+//     OptsType extends {timeout?: number}
+//   >() => IMatcherArgs<PageElementListType, ExpectedType, OptsType>,
+//   map?: <
+//     Store extends stores.PageElementStore,
+//     K extends string,
+//     PageElementType extends PageElement<Store>,
+//     PageElementOptions,
+//     PageElementMapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>,
+//     ExpectedType,
+//     OptsType extends {timeout?: number}
+//   >() => IMatcherArgs<PageElementMapType, ExpectedType, OptsType>,
+//   group?: <
+//     Store extends stores.PageElementStore,
+//     Content extends {[K in keyof Content] : Workflo.PageNode.INode},
+//     PageElementGroupType extends PageElementGroup<Store, Content>,
+//     ExpectedType,
+//     OptsType extends {timeout?: number}
+//   >() => IMatcherArgs<PageElementGroupType, ExpectedType, OptsType>,
+// }
 
 // MATCHER FUNCS
 
-export function createMatcher<
-  NodeType extends Workflo.PageNode.INode,
-  OptsType extends Object = {timeout?: number},
-  ExpectedType = string,
-  CompareFuncType extends ICompareElementFuncs = ICompareElementFuncs
+// export function expectElement<
+//   Store extends stores.PageElementStore,
+//   PageElementType extends elements.PageElement<Store>
+// >(element: PageElementType) {
+//   return expect(element)
+// }
+
+// export function expectList<
+//   Store extends stores.PageElementStore,
+//   PageElementType extends elements.PageElement<Store>,
+//   PageElementOptions,
+//   PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>
+// >(list: PageElementListType) {
+//   return expect(list)
+// }
+
+// export function expectMap<
+//   Store extends stores.PageElementStore,
+//   K extends string,
+//   PageElementType extends elements.PageElement<Store>,
+//   PageElementOptions,
+//   PageElementMapType extends elements.PageElementMap<Store, K, PageElementType, PageElementOptions>
+// >(map: PageElementMapType) {
+//   return expect(map)
+// }
+
+// export function expectGroup<
+//   Store extends stores.PageElementStore,
+//   Content extends {[K in keyof Content] : Workflo.PageNode.INode},
+//   PageElementGroupType extends elements.PageElementGroup<Store, Content>
+// >(group: PageElementGroupType) {
+//   return expect(group)
+// }
+
+export function matcher<
+  OptsType extends Object = Workflo.IWDIOParamsOptional,
+  ElementExpectedType = undefined,
+  ListExpectedType = undefined,
+  MapExpectedType = undefined,
+  GroupExpectedType = undefined,
 >(
-  compareFuncs: CompareFuncType,
+  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
   withoutExpected: boolean = false
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
 
     function baseCompareFunction(
-      node: NodeType,
+      node: Workflo.PageNode.INode,
       negativeComparison: boolean,
       opts: OptsType = Object.create(null),
-      expected: ExpectedType = undefined,
+      expected: any = undefined,
     ): jasmine.CustomMatcherResult {
       let result: jasmine.CustomMatcherResult = {
         pass: true,
@@ -180,27 +212,27 @@ export function createMatcher<
       let resultFunc: ResultFunction<Workflo.PageNode.INode, any, {timeout?: number}>
       let errorTextFunc: ErrorTextFunction<Workflo.PageNode.INode, any, {timeout?: number}>
 
-      if (node instanceof PageElement) {
+      if (node instanceof elements.PageElement) {
         if (compareFuncs.element) {
-          ({resultFunc, errorTextFunc} = compareFuncs.element())
+          ({resultFunc, errorTextFunc} = compareFuncs.element)
         } else {
           throw new Error(`No PageElement matcher was implemented for node type ${node.constructor.name}`)
         }
-      } else if (node instanceof PageElementList) {
+      } else if (node instanceof elements.PageElementList) {
         if (compareFuncs.list) {
-          ({resultFunc, errorTextFunc} = compareFuncs.list())
+          ({resultFunc, errorTextFunc} = compareFuncs.list)
         } else {
           throw new Error(`No PageElementList matcher was implemented for node type ${node.constructor.name}`)
         }
-      } else if (node instanceof PageElementMap) {
+      } else if (node instanceof elements.PageElementMap) {
         if (compareFuncs.map) {
-          ({resultFunc, errorTextFunc} = compareFuncs.map())
+          ({resultFunc, errorTextFunc} = compareFuncs.map)
         } else {
           throw new Error(`No PageElementMap matcher was implemented for node type ${node.constructor.name}`)
         }
-      } else if (node instanceof PageElementGroup) {
+      } else if (node instanceof elements.PageElementGroup) {
         if (compareFuncs.group) {
-          ({resultFunc, errorTextFunc} = compareFuncs.group())
+          ({resultFunc, errorTextFunc} = compareFuncs.group)
         } else {
           throw new Error(`No PageElementGroup matcher was implemented for node type ${node.constructor.name}`)
         }
@@ -238,19 +270,23 @@ export function createMatcher<
 
     if (withoutExpected) {
       return {
-        compare: (node: NodeType, opts?: OptsType): jasmine.CustomMatcherResult => {
+        compare: (node: Workflo.PageNode.INode, opts?: OptsType): jasmine.CustomMatcherResult => {
           return baseCompareFunction(node, false, opts);
         },
-        negativeCompare: (node: NodeType, opts?: OptsType): jasmine.CustomMatcherResult => {
+        negativeCompare: (node: Workflo.PageNode.INode, opts?: OptsType): jasmine.CustomMatcherResult => {
           return baseCompareFunction(node, true, opts);
         }
       }
     } else {
       return {
-        compare: (node: NodeType, expected: ExpectedType, opts?: OptsType): jasmine.CustomMatcherResult => {
+        compare: (
+          node: Workflo.PageNode.INode, expected: any, opts?: OptsType
+        ): jasmine.CustomMatcherResult => {
           return baseCompareFunction(node, false, opts, expected);
         },
-        negativeCompare: (node: NodeType, expected: ExpectedType, opts?: OptsType): jasmine.CustomMatcherResult => {
+        negativeCompare: (
+          node: Workflo.PageNode.INode, expected: any, opts?: OptsType
+        ): jasmine.CustomMatcherResult => {
           return baseCompareFunction(node, true, opts, expected);
         }
       }
@@ -258,32 +294,43 @@ export function createMatcher<
   }
 }
 
-export function createMatcherWithoutExpected<
-  NodeType extends Workflo.PageNode.INode,
-  OptsType extends Object = {timeout?: number},
+export function matcherWithoutExpected<
+  OptsType extends Object = Workflo.IWDIOParamsOptional,
+  ElementExpectedType = undefined,
+  ListExpectedType = undefined,
+  MapExpectedType = undefined,
+  GroupExpectedType = undefined,
 >(
-  compareFuncs: ICompareElementFuncs,
+  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
 ) {
-  return createMatcher<NodeType, OptsType, undefined, ICompareElementFuncs>(compareFuncs, true)
+  return matcher<OptsType>(compareFuncs, true)
 }
 
-export function createValueMatcher<
-  NodeType extends Workflo.PageNode.INode,
-  OptsType extends Object = {timeout?: number},
+export function booleanMatcherWithoutExpected<
+  OptsType extends Object = Workflo.IWDIOParamsOptional,
 >(
-  compareFuncs: ICompareValueElementFuncs,
+  compareFuncs: ICompareElementFuncs<undefined, undefined, undefined, undefined>,
 ) {
-  return create<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
+  return matcher<OptsType>(compareFuncs, true)
 }
 
-export function createValueMatcherWithoutExpected<
-  NodeType extends Workflo.PageNode.INode,
-  OptsType extends Object = {timeout?: number},
->(
-  compareFuncs: ICompareValueElementFuncs,
-) {
-  return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
-}
+// export function createValueMatcher<
+//   NodeType extends Workflo.PageNode.INode,
+//   OptsType extends Object = {timeout?: number},
+// >(
+//   compareFuncs: ICompareValueElementFuncs,
+// ) {
+//   return create<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
+// }
+
+// export function createValueMatcherWithoutExpected<
+//   NodeType extends Workflo.PageNode.INode,
+//   OptsType extends Object = {timeout?: number},
+// >(
+//   compareFuncs: ICompareValueElementFuncs,
+// ) {
+//   return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
+// }
 
 
 // ERROR TEXT FUNCTIONS
@@ -361,12 +408,39 @@ export function createEventuallyEachMessage(
     `${errorTexts} within ${timeout}ms`
 
   return createEachMessage(node, within)
-} */
+}
 
 // MATCHERS
 
 export const elementMatchers: jasmine.CustomMatcherFactories = {
-  // toExist: createMatcherWithoutExpected(2)
+  toExist: booleanMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
+      errorTextFunc: ({node}) => createBaseMessage(node, "to exist")
+    }
+  }),
+  toBeVisible: booleanMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
+      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+    },
+    list: {
+      resultFunc: ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
+      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+    },
+    map: {
+      resultFunc: ({node, opts}) => [
+        () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+    },
+    group: {
+      resultFunc: ({node, opts}) => [
+        () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+    }
+  }),
 
   // toExist: elementMatcherFunction(
   //   ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],

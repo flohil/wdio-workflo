@@ -21,9 +21,6 @@ export class PageElement<
   Store extends PageElementStore
 > extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string> {
 
-  protected _waitType: Workflo.WaitType
-  protected _$: Store
-
   protected _customScroll: Workflo.IScrollParams
 
   readonly currently: PageElementCurrently<Store, this>
@@ -44,6 +41,13 @@ export class PageElement<
     this.currently = new PageElementCurrently(this)
     this.wait = new PageElementWait(this)
     this.eventually = new PageElementEventually(this)
+  }
+
+  /**
+   * For internal use only in order to retrieve an Element's Store type!
+   */
+  get __$(): Store {
+    return this._$
   }
 
 // ABSTRACT BASE CLASS IMPLEMENTATIONS

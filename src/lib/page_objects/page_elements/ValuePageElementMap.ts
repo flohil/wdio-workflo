@@ -39,10 +39,10 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>> {
    * If passing filter, only values defined in this mask will be returned.
    * By default (if no filter is passed), all values will be returned.
    *
-   * @param filter a filter mask
+   * @param filterMask a filter mask
    */
-  getValue(filter?: Partial<Record<K, ValueType>>) {
-    return this.eachGet(this._$, filter, node => node.getValue())
+  getValue(filterMask?: Partial<Record<K, ValueType>>) {
+    return this.eachGet(this._$, filterMask, node => node.getValue())
   }
 
   /**
@@ -75,10 +75,10 @@ class ValuePageElementMapCurrently<
    * If passing filter, only values defined in this mask will be returned.
    * By default (if no filter is passed), all values will be returned.
    *
-   * @param filter a filter mask
+   * @param filterMask a filter mask
    */
-  getValue(filter?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>> {
-    return this._node.eachGet(this._node.$, filter, node => node.currently.getValue())
+  getValue(filterMask?: Partial<Record<K, ValueType>>) {
+    return this._node.eachGet(this._node.$, filterMask, node => node.currently.getValue())
   }
 
   setValue(values: Partial<Record<K, ValueType>>) {

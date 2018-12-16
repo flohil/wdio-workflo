@@ -14,10 +14,10 @@ class ValuePageElementMap extends _1.PageElementMap {
      * If passing filter, only values defined in this mask will be returned.
      * By default (if no filter is passed), all values will be returned.
      *
-     * @param filter a filter mask
+     * @param filterMask a filter mask
      */
-    getValue(filter) {
-        return this.eachGet(this._$, filter, node => node.getValue());
+    getValue(filterMask) {
+        return this.eachGet(this._$, filterMask, node => node.getValue());
     }
     /**
      * Sets values on all list elements.
@@ -51,10 +51,10 @@ class ValuePageElementMapCurrently extends _1.PageElementMapCurrently {
      * If passing filter, only values defined in this mask will be returned.
      * By default (if no filter is passed), all values will be returned.
      *
-     * @param filter a filter mask
+     * @param filterMask a filter mask
      */
-    getValue(filter) {
-        return this._node.eachGet(this._node.$, filter, node => node.currently.getValue());
+    getValue(filterMask) {
+        return this._node.eachGet(this._node.$, filterMask, node => node.currently.getValue());
     }
     setValue(values) {
         return this._node.eachSet(this._node.$, values, (element, value) => element.setValue(value));

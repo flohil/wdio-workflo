@@ -109,11 +109,11 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
    *
    * @param filter a filter mask
    */
-  getText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>> {
+  getText(filterMask?: Partial<Record<K, string>>) {
     return this.eachGet(this._$, filterMask, node => node.getText())
   }
 
-  getDirectText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>> {
+  getDirectText(filterMask?: Partial<Record<K, string>>) {
     return this.eachGet(this._$, filterMask, node => node.getDirectText())
   }
 
@@ -155,14 +155,12 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
    * @param filterMask a filter mask
    */
   eachGet<
-    Store extends PageElementStore,
-    PageElementType extends PageElement<Store>,
     ResultType
   >(
     context: Record<K, PageElementType>,
     filterMask: Partial<Record<K, ResultType>>,
     getFunc: (node: PageElementType) => ResultType,
-  ): Record<K, ResultType> {
+  ): Partial<Record<K, ResultType>> {
     let result = {} as Record<K, ResultType>;
 
     for (const k in context) {
@@ -178,16 +176,16 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     return result;
   }
 
-  eachWait<T>(
+  eachWait<ValueType>(
     context: Record<K, PageElementType>,
-    expected: Partial<Record<K, T>>,
-    waitFunc: (element: PageElementType, expected?: T) => PageElementType,
+    expected: Partial<Record<K, ValueType>>,
+    waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType,
   ): this {
     for (const key in context) {
       if (expected && typeof expected[key] !== 'undefined') {
-        waitFunc(context[key], expected[key] as any as T)
+        waitFunc(context[key], expected[key] as any as ValueType)
       } else {
-        waitFunc(context[key], expected[key] as any as T)
+        waitFunc(context[key], expected[key] as any as ValueType)
       }
     }
 
@@ -210,16 +208,16 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     return this
   }
 
-  eachSet<T>(
+  eachSet<ValueType>(
     context: Record<K, PageElementType>,
-    values: Partial<Record<K, T>>,
-    setFunc: (element: PageElementType, value: T) => PageElementType,
+    values: Partial<Record<K, ValueType>>,
+    setFunc: (element: PageElementType, value: ValueType) => PageElementType,
   ): this {
     for (const key in context) {
       if (values && typeof values[key] !== 'undefined') {
-        setFunc(context[key], values[key] as any as T)
+        setFunc(context[key], values[key] as any as ValueType)
       } else {
-        setFunc(context[key], values[key] as any as T)
+        setFunc(context[key], values[key] as any as ValueType)
       }
     }
 

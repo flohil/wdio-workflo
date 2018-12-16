@@ -13,9 +13,9 @@ export declare class ValuePageElementMap<Store extends PageElementStore, K exten
      * If passing filter, only values defined in this mask will be returned.
      * By default (if no filter is passed), all values will be returned.
      *
-     * @param filter a filter mask
+     * @param filterMask a filter mask
      */
-    getValue(filter?: Partial<Record<K, ValueType>>): Record<K, ValueType>;
+    getValue(filterMask?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>>;
     /**
      * Sets values on all list elements.
      *
@@ -35,9 +35,9 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
      * If passing filter, only values defined in this mask will be returned.
      * By default (if no filter is passed), all values will be returned.
      *
-     * @param filter a filter mask
+     * @param filterMask a filter mask
      */
-    getValue(filter?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>>;
+    getValue(filterMask?: Partial<Record<K, ValueType>>): Partial<Record<K, ValueType>>;
     setValue(values: Partial<Record<K, ValueType>>): MapType;
     hasValue(value: Partial<Record<K, ValueType>>): boolean;
     hasAnyValue(filterMask?: Partial<Record<K, string>>): boolean;

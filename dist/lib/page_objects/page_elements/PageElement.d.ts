@@ -5,13 +5,15 @@ export interface IPageElementOpts<Store extends PageElementStore> extends IPageE
     customScroll?: Workflo.IScrollParams;
 }
 export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string> {
-    protected _waitType: Workflo.WaitType;
-    protected _$: Store;
     protected _customScroll: Workflo.IScrollParams;
     readonly currently: PageElementCurrently<Store, this>;
     readonly wait: PageElementWait<Store, this>;
     readonly eventually: PageElementEventually<Store, this>;
     constructor(selector: string, { customScroll, ...superOpts }: IPageElementOpts<Store>);
+    /**
+     * For internal use only in order to retrieve an Element's Store type!
+     */
+    readonly __$: Store;
     __equals<T>(actual: T, expected: T): boolean;
     __any<T>(actual: T): boolean;
     __contains<T>(actual: T, expected: T): boolean;

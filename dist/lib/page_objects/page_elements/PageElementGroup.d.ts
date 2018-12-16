@@ -1,16 +1,12 @@
 import { PageElementStore } from '../stores';
 import { PageNodeCurrently, PageNode } from '.';
 import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
-export declare type ExtractText<T extends {
+export declare type ExtractText<Content extends {
     [key: string]: Workflo.PageNode.INode;
-}> = {
-    [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? ReturnType<T[P]['getText']> : undefined;
-};
-export declare type ExtractBoolean<T extends {
+}> = Workflo.PageNode.ExtractText<Content>;
+export declare type ExtractBoolean<Content extends {
     [key: string]: Workflo.PageNode.INode;
-}> = {
-    [P in keyof T]?: T[P] extends Workflo.PageNode.IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> : undefined;
-};
+}> = Workflo.PageNode.ExtractBoolean<Content>;
 export interface IPageElementGroupOpts<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }> extends IPageNodeOpts<Store> {
@@ -38,8 +34,8 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
      *
      * @param filter a filter mask
      */
-    getText(filterMask?: ExtractText<Content>): ExtractText<Content>;
-    getDirectText(filterMask?: ExtractText<Content>): ExtractText<Content>;
+    getText(filterMask?: ExtractText<Content>): Workflo.PageNode.ExtractText<Content>;
+    getDirectText(filterMask?: ExtractText<Content>): Workflo.PageNode.ExtractText<Content>;
     eachGet<NodeInterface, ResultType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, filterMask: ResultType, getFunc: (node: NodeInterface) => any): ResultType;
     eachCheck<NodeInterface, ResultType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, expected: ResultType, checkFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => boolean): boolean;
     eachWait<NodeInterface, ResultType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, expected: ResultType, waitFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => NodeInterface): this;
@@ -57,8 +53,8 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
      *
      * @param filter a filter mask
      */
-    getText(filterMask?: ExtractText<Content>): ExtractText<Content>;
-    getDirectText(filterMask?: ExtractText<Content>): ExtractText<Content>;
+    getText(filterMask?: ExtractText<Content>): Workflo.PageNode.ExtractText<Content>;
+    getDirectText(filterMask?: ExtractText<Content>): Workflo.PageNode.ExtractText<Content>;
     isVisible(filterMask?: ExtractBoolean<Content>): boolean;
     isEnabled(filterMask?: ExtractBoolean<Content>): boolean;
     hasText(text: ExtractText<Content>): boolean;
@@ -68,14 +64,14 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
     hasAnyDirectText(filterMask?: ExtractText<Content>): boolean;
     containsDirectText(directText: ExtractText<Content>): boolean;
     not: {
-        isVisible: (filterMask?: ExtractBoolean<Content>) => boolean;
-        isEnabled: (filterMask?: ExtractBoolean<Content>) => boolean;
-        hasText: (text: ExtractText<Content>) => boolean;
-        hasAnyText: (filterMask?: ExtractText<Content>) => boolean;
-        containsText: (text: ExtractText<Content>) => boolean;
-        hasDirectText: (directText: ExtractText<Content>) => boolean;
-        hasAnyDirectText: (filterMask?: ExtractText<Content>) => boolean;
-        containsDirectText: (directText: ExtractText<Content>) => boolean;
+        isVisible: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasAnyText: (filterMask?: Workflo.PageNode.ExtractText<Content>) => boolean;
+        containsText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractText<Content>) => boolean;
+        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>) => boolean;
     };
 }
 export declare class PageElementGroupWait<Store extends PageElementStore, Content extends {
@@ -99,21 +95,21 @@ export declare class PageElementGroupWait<Store extends PageElementStore, Conten
     containsDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional): GroupType;
     not: {
         isVisible: (opts?: Workflo.IWDIOParamsOptional & {
-            filterMask?: ExtractBoolean<Content>;
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
         }) => GroupType;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional & {
-            filterMask?: ExtractBoolean<Content>;
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
         }) => GroupType;
-        hasText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
+        hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
         hasAnyText: (opts?: Workflo.IWDIOParamsOptional & {
-            filterMask?: ExtractText<Content>;
+            filterMask?: Workflo.PageNode.ExtractText<Content>;
         }) => GroupType;
-        containsText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
-        hasDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
+        containsText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
+        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
         hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional & {
-            filterMask?: ExtractText<Content>;
+            filterMask?: Workflo.PageNode.ExtractText<Content>;
         }) => GroupType;
-        containsDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
+        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
     };
 }
 export declare class PageElementGroupEventually<Store extends PageElementStore, Content extends {
@@ -128,13 +124,13 @@ export declare class PageElementGroupEventually<Store extends PageElementStore, 
     hasAnyDirectText(filterMask?: ExtractText<Content>): boolean;
     containsDirectText(directText: ExtractText<Content>): boolean;
     not: {
-        isVisible: (text: ExtractBoolean<Content>) => boolean;
-        isEnabled: (filterMask?: ExtractBoolean<Content>) => boolean;
-        hasText: (text: ExtractText<Content>) => boolean;
-        hasAnyText: (filterMask?: ExtractText<Content>) => boolean;
-        containsText: (text: ExtractText<Content>) => boolean;
-        hasDirectText: (directText: ExtractText<Content>) => boolean;
-        hasAnyDirectText: (filterMask?: ExtractText<Content>) => boolean;
-        containsDirectText: (directText: ExtractText<Content>) => boolean;
+        isVisible: (text: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasAnyText: (filterMask?: Workflo.PageNode.ExtractText<Content>) => boolean;
+        containsText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractText<Content>) => boolean;
+        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>) => boolean;
     };
 }
