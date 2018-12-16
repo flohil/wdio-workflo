@@ -101,11 +101,15 @@ declare global {
         }): boolean;
         toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean;
         toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
+        toExist(): boolean;
         toBeVisible(): boolean;
         toBeEnabled(): boolean;
         toHaveText(text: string | string[]): boolean;
     }
     interface CustomMapMatchers<K extends string | number | symbol> {
+        toExist(opts?: {
+            filterMask?: Partial<Record<K, true>>;
+        }): boolean;
         toBeVisible(opts?: {
             filterMask?: Partial<Record<K, true>>;
         }): boolean;
@@ -114,6 +118,9 @@ declare global {
     interface CustomGroupMatchers<Content extends {
         [key: string]: Workflo.PageNode.INode;
     }> {
+        toExist(opts?: {
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
+        }): boolean;
         toBeVisible(opts?: {
             filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
         }): boolean;
@@ -292,6 +299,7 @@ declare global {
                 getDirectText(filterMask?: TextType): TextType;
             }
             interface IWaitElement<TextType, OptsType = IWDIOParamsOptionalReverse> {
+                exists(opts?: OptsType): IElementNode<TextType>;
                 isVisible(opts?: OptsType): IElementNode<TextType>;
                 isEnabled(opts?: OptsType): IElementNode<TextType>;
                 hasText(text: TextType, opts?: OptsType): IElementNode<TextType>;
@@ -303,6 +311,7 @@ declare global {
                 not: Omit<IWaitElement<TextType, IWDIOParamsOptional>, 'not'>;
             }
             interface ICheckElementCurrently<TextType> {
+                exists(): boolean;
                 isVisible(): boolean;
                 isEnabled(): boolean;
                 hasText(text: TextType): boolean;
@@ -314,6 +323,7 @@ declare global {
                 not: Omit<ICheckElementCurrently<TextType>, 'not'>;
             }
             interface ICheckElementEventually<TextType> {
+                exists(opts?: IWDIOParamsOptional): boolean;
                 isVisible(opts?: IWDIOParamsOptional): boolean;
                 isEnabled(opts?: IWDIOParamsOptional): boolean;
                 hasText(text: TextType, opts?: IWDIOParamsOptional): boolean;

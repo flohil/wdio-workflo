@@ -41,6 +41,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Con
         hasValue: (value: Workflo.PageNode.ExtractValue<Content>) => boolean;
         hasAnyValue: (filterMask?: Workflo.PageNode.ExtractValue<Content>) => boolean;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>) => boolean;
+        exists: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         isVisible: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
@@ -65,6 +66,9 @@ declare class ValuePageElementGroupWait<Store extends PageElementStore, Content 
             filterMask?: Workflo.PageNode.ExtractValue<Content>;
         }) => GroupType;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
+        exists: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
+        }) => GroupType;
         isVisible: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
         }) => GroupType;
@@ -97,6 +101,9 @@ declare class ValuePageElementGroupEventually<Store extends PageElementStore, Co
             filterMask?: Workflo.PageNode.ExtractValue<Content>;
         }) => boolean;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        exists: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
+        }) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
         }) => boolean;

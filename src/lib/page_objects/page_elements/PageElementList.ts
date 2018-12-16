@@ -566,6 +566,10 @@ export class PageElementListCurrently<
     return compare(actualLength, length, comparator)
   }
 
+  exists() {
+    return this._node.eachCheck(this.all, element => element.currently.exists())
+  }
+
   isVisible() {
     return this._node.eachCheck(this.all, element => element.currently.isVisible())
   }
@@ -608,6 +612,9 @@ export class PageElementListCurrently<
       hasLength: (
         length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
       ) => !this.hasLength(length, comparator),
+      exists: () => {
+        return this._node.eachCheck(this.all, element => element.currently.not.exists())
+      },
       isVisible: () => {
         return this._node.eachCheck(this.all, element => element.currently.not.isVisible())
       },
@@ -706,6 +713,12 @@ export class PageElementListWait<
     return this._node.currently.first.wait.not
   }
 
+  exists(opts?: Workflo.IWDIOParamsOptional) {
+    this._node.currently.first.wait.exists()
+
+    return this.not.isEmpty(opts)
+  }
+
   isVisible(opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachWait(this._node.all, element => element.wait.isVisible(opts))
   }
@@ -760,6 +773,9 @@ export class PageElementListWait<
       ) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
+      exists: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.not.isEmpty(opts)
+      },
       isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
         return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts))
       },
@@ -839,6 +855,10 @@ export class PageElementListEventually<
     return this._node.__eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
+  exists(opts?: Workflo.IWDIOParamsOptional) {
+    return this.not.isEmpty(opts)
+  }
+
   isVisible(opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(opts))
   }
@@ -891,6 +911,9 @@ export class PageElementListEventually<
       hasLength: (length: number, opts: IPageElementListWaitLengthParams = {}) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
+      exists: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.isEmpty(opts)
+      },
       isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
         return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts))
       },

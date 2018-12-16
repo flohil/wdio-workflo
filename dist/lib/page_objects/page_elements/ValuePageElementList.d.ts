@@ -50,6 +50,7 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
         containsValue: (value: ValueType | ValueType[]) => boolean;
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
+        exists: () => boolean;
         isVisible: () => boolean;
         isEnabled: () => boolean;
         hasText: (text: string | string[]) => boolean;
@@ -70,6 +71,7 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => ListType;
         isEmpty: (opts?: import("./PageElementList").IPageElementListWaitEmptyParams) => ListType;
         hasLength: (length: number, opts?: import("./PageElementList").IPageElementListWaitLengthParams) => ListType;
+        exists: (opts?: Workflo.IWDIOParamsOptional) => ListType;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => ListType;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => ListType;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
@@ -90,6 +92,7 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => boolean;
         isEmpty: (opts?: import("./PageElementList").IPageElementListWaitEmptyParams) => boolean;
         hasLength: (length: number, opts?: import("./PageElementList").IPageElementListWaitLengthParams) => boolean;
+        exists: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;

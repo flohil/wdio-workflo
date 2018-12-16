@@ -94,19 +94,21 @@ declare global {
     toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
 
+    toExist(): boolean
     toBeVisible(): boolean
     toBeEnabled(): boolean
-
     toHaveText(text: string | string[]): boolean
   }
 
   interface CustomMapMatchers<K extends string | number | symbol> {
+    toExist(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
     toBeVisible(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
 
     toHaveText(text: Partial<Record<K, string>>): boolean
   }
 
   interface CustomGroupMatchers<Content extends {[key: string]: Workflo.PageNode.INode}> {
+    toExist(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
     toBeVisible(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
 
     toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
@@ -342,6 +344,7 @@ declare global {
       }
 
       interface IWaitElement<TextType, OptsType = IWDIOParamsOptionalReverse> {
+        exists(opts?: OptsType): IElementNode<TextType>
         isVisible(opts?: OptsType): IElementNode<TextType>
         isEnabled(opts?: OptsType): IElementNode<TextType>
         hasText(text: TextType, opts?: OptsType): IElementNode<TextType>
@@ -355,6 +358,7 @@ declare global {
       }
 
       interface ICheckElementCurrently<TextType> {
+        exists(): boolean
         isVisible(): boolean
         isEnabled(): boolean
         hasText(text: TextType): boolean
@@ -368,6 +372,7 @@ declare global {
       }
 
       interface ICheckElementEventually<TextType> {
+        exists(opts?: IWDIOParamsOptional): boolean
         isVisible(opts?: IWDIOParamsOptional): boolean
         isEnabled(opts?: IWDIOParamsOptional): boolean
         hasText(text: TextType, opts?: IWDIOParamsOptional): boolean

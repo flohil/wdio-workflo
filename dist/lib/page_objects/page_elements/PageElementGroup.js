@@ -160,6 +160,9 @@ class PageElementGroupCurrently extends _1.PageNodeCurrently {
     getDirectText(filterMask) {
         return this._node.eachGet(isIElementNode, filterMask, node => node.currently.getDirectText());
     }
+    exists(filterMask) {
+        return this._node.eachCheck(isIElementNode, filterMask, node => node.currently.exists());
+    }
     isVisible(filterMask) {
         return this._node.eachCheck(isIElementNode, filterMask, node => node.currently.isVisible());
     }
@@ -186,6 +189,9 @@ class PageElementGroupCurrently extends _1.PageNodeCurrently {
     }
     get not() {
         return {
+            exists: (filterMask) => {
+                return this._node.eachCheck(isIElementNode, filterMask, node => node.currently.not.exists());
+            },
             isVisible: (filterMask) => {
                 return this._node.eachCheck(isIElementNode, filterMask, node => node.currently.not.isVisible());
             },
@@ -215,6 +221,9 @@ class PageElementGroupCurrently extends _1.PageNodeCurrently {
 }
 exports.PageElementGroupCurrently = PageElementGroupCurrently;
 class PageElementGroupWait extends PageNode_1.PageNodeWait {
+    exists(opts = {}) {
+        return this._node.eachWait(isIElementNode, opts.filterMask, node => node.wait.exists(opts));
+    }
     isVisible(opts = {}) {
         return this._node.eachWait(isIElementNode, opts.filterMask, node => node.wait.isVisible(opts));
     }
@@ -241,6 +250,9 @@ class PageElementGroupWait extends PageNode_1.PageNodeWait {
     }
     get not() {
         return {
+            exists: (opts = {}) => {
+                return this._node.eachWait(isIElementNode, opts.filterMask, node => node.wait.not.exists(opts));
+            },
             isVisible: (opts = {}) => {
                 return this._node.eachWait(isIElementNode, opts.filterMask, node => node.wait.not.isVisible(opts));
             },
@@ -270,6 +282,9 @@ class PageElementGroupWait extends PageNode_1.PageNodeWait {
 }
 exports.PageElementGroupWait = PageElementGroupWait;
 class PageElementGroupEventually extends PageNode_1.PageNodeEventually {
+    exists(opts = {}) {
+        return this._node.eachCheck(isIElementNode, opts.filterMask, node => node.eventually.exists(opts));
+    }
     isVisible(opts = {}) {
         return this._node.eachCheck(isIElementNode, opts.filterMask, node => node.eventually.isVisible(opts));
     }
@@ -296,6 +311,9 @@ class PageElementGroupEventually extends PageNode_1.PageNodeEventually {
     }
     get not() {
         return {
+            exists: (opts = {}) => {
+                return this._node.eachCheck(isIElementNode, opts.filterMask, node => node.eventually.not.exists(opts));
+            },
             isVisible: (opts = {}) => {
                 return this._node.eachCheck(isIElementNode, opts.filterMask, node => node.eventually.not.isVisible(opts));
             },

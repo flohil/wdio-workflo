@@ -359,6 +359,9 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         });
         return util_1.compare(actualLength, length, comparator);
     }
+    exists() {
+        return this._node.eachCheck(this.all, element => element.currently.exists());
+    }
     isVisible() {
         return this._node.eachCheck(this.all, element => element.currently.isVisible());
     }
@@ -387,6 +390,9 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return {
             isEmpty: () => !this.isEmpty(),
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
+            exists: () => {
+                return this._node.eachCheck(this.all, element => element.currently.not.exists());
+            },
             isVisible: () => {
                 return this._node.eachCheck(this.all, element => element.currently.not.isVisible());
             },
@@ -451,6 +457,10 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     get none() {
         return this._node.currently.first.wait.not;
     }
+    exists(opts) {
+        this._node.currently.first.wait.exists();
+        return this.not.isEmpty(opts);
+    }
     isVisible(opts) {
         return this._node.eachWait(this._node.all, element => element.wait.isVisible(opts));
     }
@@ -483,6 +493,9 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
             hasLength: (length, opts = {}) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
+            exists: (opts) => {
+                return this.not.isEmpty(opts);
+            },
             isVisible: (opts) => {
                 return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts));
             },
@@ -530,6 +543,9 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         return this._node.__eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
     }
+    exists(opts) {
+        return this.not.isEmpty(opts);
+    }
     isVisible(opts) {
         return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(opts));
     }
@@ -562,6 +578,9 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             hasLength: (length, opts = {}) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
+            exists: (opts) => {
+                return this.isEmpty(opts);
+            },
             isVisible: (opts) => {
                 return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts));
             },

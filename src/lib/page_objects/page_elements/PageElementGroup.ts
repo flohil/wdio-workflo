@@ -267,6 +267,12 @@ implements Workflo.PageNode.IGetElement<ExtractText<Content>> {
     )
   }
 
+  exists(filterMask?: ExtractBoolean<Content>) {
+    return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
+      isIElementNode, filterMask, node => node.currently.exists()
+    )
+  }
+
   isVisible(filterMask?: ExtractBoolean<Content>) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
       isIElementNode, filterMask, node => node.currently.isVisible()
@@ -317,6 +323,11 @@ implements Workflo.PageNode.IGetElement<ExtractText<Content>> {
 
   get not() {
     return {
+      exists: (filterMask?: ExtractBoolean<Content>) => {
+        return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
+          isIElementNode, filterMask, node => node.currently.not.exists()
+        )
+      },
       isVisible: (filterMask?: ExtractBoolean<Content>) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
           isIElementNode, filterMask, node => node.currently.not.isVisible()
@@ -366,6 +377,12 @@ export class PageElementGroupWait<
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeWait<Store, GroupType> {
+
+  exists(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
+    return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
+      isIElementNode, opts.filterMask, node => node.wait.exists(opts)
+    )
+  }
 
   isVisible(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
     return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
@@ -417,6 +434,11 @@ export class PageElementGroupWait<
 
   get not() {
     return {
+      exists: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
+        return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
+          isIElementNode, opts.filterMask, node => node.wait.not.exists(opts)
+        )
+      },
       isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
         return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
           isIElementNode, opts.filterMask, node => node.wait.not.isVisible(opts)
@@ -466,6 +488,12 @@ export class PageElementGroupEventually<
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeEventually<Store, GroupType> {
+
+  exists(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
+    return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
+      isIElementNode, opts.filterMask, node => node.eventually.exists(opts)
+    )
+  }
 
   isVisible(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
@@ -517,6 +545,11 @@ export class PageElementGroupEventually<
 
   get not() {
     return {
+      exists: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
+        return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
+          isIElementNode, opts.filterMask, node => node.eventually.not.exists(opts)
+        )
+      },
       isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
           isIElementNode, opts.filterMask, node => node.eventually.not.isVisible(opts)

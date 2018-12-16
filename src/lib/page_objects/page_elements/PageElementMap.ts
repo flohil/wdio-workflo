@@ -261,6 +261,12 @@ export class PageElementMapCurrently<
     )
   }
 
+  exists(filterMask?: Partial<Record<K, true>>) {
+    return this._node.eachCheck(
+      this._node.$, filterMask, element => element.currently.exists()
+    )
+  }
+
   isVisible(filterMask?: Partial<Record<K, true>>) {
     return this._node.eachCheck(
       this._node.$, filterMask, element => element.currently.isVisible()
@@ -311,6 +317,11 @@ export class PageElementMapCurrently<
 
   get not() {
     return {
+      exists: (filterMask?: Partial<Record<K, true>>) => {
+        return this._node.eachCheck(
+          this._node.$, filterMask, element => element.currently.not.exists()
+        )
+      },
       isVisible: (filterMask?: Partial<Record<K, true>>) => {
         return this._node.eachCheck(
           this._node.$, filterMask, element => element.currently.not.isVisible()
@@ -363,6 +374,12 @@ export class PageElementMapWait<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
 > extends PageNodeWait<Store, MapType> {
 
+  exists(opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) {
+    return this._node.eachWait(
+      this._node.$, opts.filterMask, element => element.wait.exists()
+    )
+  }
+
   isVisible(opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachWait(
       this._node.$, opts.filterMask, element => element.wait.isVisible()
@@ -413,6 +430,11 @@ export class PageElementMapWait<
 
   get not() {
     return {
+      exists: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
+        return this._node.eachWait(
+          this._node.$, opts.filterMask, element => element.wait.not.exists()
+        )
+      },
       isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachWait(
           this._node.$, opts.filterMask, element => element.wait.not.isVisible()
@@ -465,6 +487,12 @@ export class PageElementMapEventually<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
 > extends PageNodeEventually<Store, MapType> {
 
+  exists(opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) {
+    return this._node.eachCheck(
+      this._node.$, opts.filterMask, element => element.eventually.exists()
+    )
+  }
+
   isVisible(opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachCheck(
       this._node.$, opts.filterMask, element => element.eventually.isVisible()
@@ -515,6 +543,11 @@ export class PageElementMapEventually<
 
   get not() {
     return {
+      exists: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
+        return this._node.eachCheck(
+          this._node.$, opts.filterMask, element => element.eventually.not.exists()
+        )
+      },
       isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachCheck(
           this._node.$, opts.filterMask, element => element.eventually.not.isVisible()

@@ -262,6 +262,22 @@ exports.elementMatchers = {
         element: {
             resultFunc: ({ node }) => [() => node.currently.exists(), () => node.currently.not.exists()],
             errorTextFunc: ({ node }) => createMessage(node, "exist")
+        },
+        list: {
+            resultFunc: ({ node }) => [() => node.currently.exists(), () => node.currently.not.exists()],
+            errorTextFunc: ({ node }) => createEachMessage(node, "exist")
+        },
+        map: {
+            resultFunc: ({ node, opts }) => [
+                () => node.currently.exists(opts.filterMask), () => node.currently.not.exists(opts.filterMask)
+            ],
+            errorTextFunc: ({ node }) => createEachMessage(node, "exist")
+        },
+        group: {
+            resultFunc: ({ node, opts }) => [
+                () => node.currently.exists(opts.filterMask), () => node.currently.not.exists(opts.filterMask)
+            ],
+            errorTextFunc: ({ node }) => createEachMessage(node, "exist")
         }
     }),
     toBeVisible: createBooleanMatcherWithoutExpected({

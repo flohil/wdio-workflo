@@ -157,6 +157,9 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
     getDirectText(filterMask) {
         return this._node.eachGet(this._node.$, filterMask, node => node.currently.getDirectText());
     }
+    exists(filterMask) {
+        return this._node.eachCheck(this._node.$, filterMask, element => element.currently.exists());
+    }
     isVisible(filterMask) {
         return this._node.eachCheck(this._node.$, filterMask, element => element.currently.isVisible());
     }
@@ -183,6 +186,9 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
     }
     get not() {
         return {
+            exists: (filterMask) => {
+                return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.exists());
+            },
             isVisible: (filterMask) => {
                 return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.isVisible());
             },
@@ -212,6 +218,9 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
 }
 exports.PageElementMapCurrently = PageElementMapCurrently;
 class PageElementMapWait extends _1.PageNodeWait {
+    exists(opts = {}) {
+        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.exists());
+    }
     isVisible(opts = {}) {
         return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isVisible());
     }
@@ -238,6 +247,9 @@ class PageElementMapWait extends _1.PageNodeWait {
     }
     get not() {
         return {
+            exists: (opts = {}) => {
+                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.exists());
+            },
             isVisible: (opts = {}) => {
                 return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.isVisible());
             },
@@ -267,6 +279,9 @@ class PageElementMapWait extends _1.PageNodeWait {
 }
 exports.PageElementMapWait = PageElementMapWait;
 class PageElementMapEventually extends _1.PageNodeEventually {
+    exists(opts = {}) {
+        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.exists());
+    }
     isVisible(opts = {}) {
         return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isVisible());
     }
@@ -293,6 +308,9 @@ class PageElementMapEventually extends _1.PageNodeEventually {
     }
     get not() {
         return {
+            exists: (opts = {}) => {
+                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.exists());
+            },
             isVisible: (opts = {}) => {
                 return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.isVisible());
             },

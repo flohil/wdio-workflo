@@ -154,6 +154,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     getDirectText(): string[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
+    exists(): boolean;
     isVisible(): boolean;
     isEnabled(): boolean;
     hasText(text: string | string[]): boolean;
@@ -165,6 +166,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     readonly not: {
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
+        exists: () => boolean;
         isVisible: () => boolean;
         isEnabled: () => boolean;
         hasText: (text: string | string[]) => boolean;
@@ -180,6 +182,7 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
     readonly any: PageElementType["wait"];
     readonly none: PageElementType['wait']['not'];
+    exists(opts?: Workflo.IWDIOParamsOptional): ListType;
     isVisible(opts?: Workflo.IWDIOParamsOptional): ListType;
     isEnabled(opts?: Workflo.IWDIOParamsOptional): ListType;
     hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
@@ -191,6 +194,7 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     readonly not: {
         isEmpty: (opts?: IPageElementListWaitEmptyParams) => ListType;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
+        exists: (opts?: Workflo.IWDIOParamsOptional) => ListType;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => ListType;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => ListType;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
@@ -206,6 +210,7 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     readonly none: PageElementType['eventually']['not'];
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
+    exists(opts?: Workflo.IWDIOParamsOptional): boolean;
     isVisible(opts?: Workflo.IWDIOParamsOptional): boolean;
     isEnabled(opts?: Workflo.IWDIOParamsOptional): boolean;
     hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
@@ -217,6 +222,7 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     readonly not: {
         isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
+        exists: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
