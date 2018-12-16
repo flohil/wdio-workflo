@@ -63,7 +63,7 @@ class PageElementMap extends _1.PageNode {
             if (expected) {
                 if (typeof expected[key] !== 'undefined') {
                     if (!checkFunc(context[key], expected[key])) {
-                        diffs[`${key}`] = context[key].__lastDiff;
+                        diffs[`.${key}`] = context[key].__lastDiff;
                     }
                 }
             }

@@ -209,7 +209,8 @@ class PageElementList extends _1.PageNode {
         const diffs = {};
         if (util_2.isArray(expected) && expected.length !== elements.length) {
             throw new Error(`${this.constructor.name}: ` +
-                `Length of expected (${expected.length}) did not match length of list (${elements.length})!`);
+                `Length of expected (${expected.length}) did not match length of list (${elements.length})!\n` +
+                `( ${this._selector} )`);
         }
         for (let i = 0; i < elements.length; ++i) {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
@@ -229,7 +230,8 @@ class PageElementList extends _1.PageNode {
     eachWait(elements, waitFunc, expected) {
         if (util_2.isArray(expected) && expected.length !== elements.length) {
             throw new Error(`${this.constructor.name}: ` +
-                `Length of expected (${expected.length}) did not match length of list (${elements.length})!`);
+                `Length of expected (${expected.length}) did not match length of list (${elements.length})!\n` +
+                `( ${this._selector} )`);
         }
         for (let i = 0; i < elements.length; ++i) {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
@@ -244,7 +246,8 @@ class PageElementList extends _1.PageNode {
     eachSet(elements, setFunc, values) {
         if (_.isArray(values)) {
             if (elements.length !== values.length) {
-                throw new Error(`Length of values array (${values.length}) did not match length of list page elements (${elements.length})!`);
+                throw new Error(`Length of values array (${values.length}) did not match length of list page elements (${elements.length})!\n` +
+                    `( ${this._selector} )`);
             }
             else {
                 for (let i = 0; i < elements.length; i++) {

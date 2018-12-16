@@ -130,7 +130,7 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
       if (expected) {
         if (typeof expected[key] !== 'undefined') {
           if (!checkFunc(context[key], expected[key] as any as T)) {
-            diffs[`${key}`] = context[key].__lastDiff
+            diffs[`.${key}`] = context[key].__lastDiff
           }
         }
       } else {

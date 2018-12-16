@@ -97,14 +97,22 @@ declare class ValuePageElementGroupEventually<Store extends PageElementStore, Co
             filterMask?: Workflo.PageNode.ExtractValue<Content>;
         }) => boolean;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsOptional) => boolean;
-        isVisible: (text: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
-        isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
-        hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasAnyText: (filterMask?: Workflo.PageNode.ExtractText<Content>) => boolean;
-        containsText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractText<Content>) => boolean;
-        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>) => boolean;
+        isVisible: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
+        }) => boolean;
+        isEnabled: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
+        }) => boolean;
+        hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasAnyText: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Workflo.PageNode.ExtractText<Content>;
+        }) => boolean;
+        containsText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => boolean;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional & {
+            filterMask?: Workflo.PageNode.ExtractText<Content>;
+        }) => boolean;
+        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => boolean;
     };
 }
 export {};

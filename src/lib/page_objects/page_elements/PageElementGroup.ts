@@ -110,10 +110,10 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
 
         if (filterMask) {
           if (typeof filterMask[key] !== 'undefined') {
-            this.$[key] = getFunc(node)
+            result[key] = getFunc(node)
           }
         } else {
-          this.$[key] = getFunc(node)
+          result[key] = getFunc(node)
         }
       }
     }
@@ -139,7 +139,7 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
         if (expected) {
           if (typeof expected[key] !== 'undefined') {
             if (!checkFunc(node, expected[key])) {
-              diffs[`${key}`] = context[key].__lastDiff
+              diffs[`.${key}`] = context[key].__lastDiff
             }
           }
         } else {
@@ -369,13 +369,13 @@ export class PageElementGroupWait<
 
   isVisible(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
     return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-      isIElementNode, opts.filterMask, node => node.wait.isVisible()
+      isIElementNode, opts.filterMask, node => node.wait.isVisible(opts)
     )
   }
 
   isEnabled(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
     return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-      isIElementNode, opts.filterMask, node => node.wait.isEnabled()
+      isIElementNode, opts.filterMask, node => node.wait.isEnabled(opts)
     )
   }
 
@@ -419,12 +419,12 @@ export class PageElementGroupWait<
     return {
       isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
         return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-          isIElementNode, opts.filterMask, node => node.wait.not.isVisible()
+          isIElementNode, opts.filterMask, node => node.wait.not.isVisible(opts)
         )
       },
       isEnabled: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
         return this._node.eachWait<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-          isIElementNode, opts.filterMask, node => node.wait.not.isEnabled()
+          isIElementNode, opts.filterMask, node => node.wait.not.isEnabled(opts)
         )
       },
       hasText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => {
@@ -467,94 +467,94 @@ export class PageElementGroupEventually<
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeEventually<Store, GroupType> {
 
-  isVisible(text: ExtractBoolean<Content>) {
+  isVisible(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-      isIElementNode, text, node => node.eventually.isVisible()
+      isIElementNode, opts.filterMask, node => node.eventually.isVisible(opts)
     )
   }
 
-  isEnabled(filterMask?: ExtractBoolean<Content>) {
+  isEnabled(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-      isIElementNode, filterMask, node => node.eventually.isEnabled()
+      isIElementNode, opts.filterMask, node => node.eventually.isEnabled(opts)
     )
   }
 
-  hasText(text: ExtractText<Content>) {
+  hasText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-      isIElementNode, text, (node, text) => node.eventually.hasText(text)
+      isIElementNode, text, (node, text) => node.eventually.hasText(text, opts)
     )
   }
 
-  hasAnyText(filterMask?: ExtractText<Content>) {
+  hasAnyText(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractText<Content>} = {}) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-      isIElementNode, filterMask, node => node.eventually.hasAnyText()
+      isIElementNode, opts.filterMask, node => node.eventually.hasAnyText(opts)
     )
   }
 
-  containsText(text: ExtractText<Content>) {
+  containsText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-      isIElementNode, text, (node, text) => node.eventually.containsText(text)
+      isIElementNode, text, (node, text) => node.eventually.containsText(text, opts)
     )
   }
 
-  hasDirectText(directText: ExtractText<Content>) {
+  hasDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-      isIElementNode, directText, (node, directText) => node.eventually.hasDirectText(directText)
+      isIElementNode, directText, (node, directText) => node.eventually.hasDirectText(directText, opts)
     )
   }
 
-  hasAnyDirectText(filterMask?: ExtractText<Content>) {
+  hasAnyDirectText(opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractText<Content>} = {}) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-      isIElementNode, filterMask, node => node.eventually.hasAnyDirectText()
+      isIElementNode, opts.filterMask, node => node.eventually.hasAnyDirectText(opts)
     )
   }
 
-  containsDirectText(directText: ExtractText<Content>) {
+  containsDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-      isIElementNode, directText, (node, directText) => node.eventually.containsDirectText(directText)
+      isIElementNode, directText, (node, directText) => node.eventually.containsDirectText(directText, opts)
     )
   }
 
   get not() {
     return {
-      isVisible: (text: ExtractBoolean<Content>) => {
+      isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-          isIElementNode, text, node => node.eventually.not.isVisible()
+          isIElementNode, opts.filterMask, node => node.eventually.not.isVisible(opts)
         )
       },
-      isEnabled: (filterMask?: ExtractBoolean<Content>) => {
+      isEnabled: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractBoolean<Content>} = {}) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
-          isIElementNode, filterMask, node => node.eventually.not.isEnabled()
+          isIElementNode, opts.filterMask, node => node.eventually.not.isEnabled(opts)
         )
       },
-      hasText: (text: ExtractText<Content>) => {
+      hasText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-          isIElementNode, text, (node, text) => node.eventually.not.hasText(text)
+          isIElementNode, text, (node, text) => node.eventually.not.hasText(text, opts)
         )
       },
-      hasAnyText: (filterMask?: ExtractText<Content>) => {
+      hasAnyText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractText<Content>} = {}) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-          isIElementNode, filterMask, node => node.eventually.not.hasAnyText()
+          isIElementNode, opts.filterMask, node => node.eventually.not.hasAnyText(opts)
         )
       },
-      containsText: (text: ExtractText<Content>) => {
+      containsText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-          isIElementNode, text, (node, text) => node.eventually.not.containsText(text)
+          isIElementNode, text, (node, text) => node.eventually.not.containsText(text, opts)
         )
       },
-      hasDirectText: (directText: ExtractText<Content>) => {
+      hasDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-          isIElementNode, directText, (node, directText) => node.eventually.not.hasDirectText(directText)
+          isIElementNode, directText, (node, directText) => node.eventually.not.hasDirectText(directText, opts)
         )
       },
-      hasAnyDirectText: (filterMask?: ExtractText<Content>) => {
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: ExtractText<Content>} = {}) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-          isIElementNode, filterMask, node => node.eventually.not.hasAnyDirectText()
+          isIElementNode, opts.filterMask, node => node.eventually.not.hasAnyDirectText(opts)
         )
       },
-      containsDirectText: (directText: ExtractText<Content>) => {
+      containsDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional) => {
         return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
-          isIElementNode, directText, (node, directText) => node.eventually.not.containsDirectText(directText)
+          isIElementNode, directText, (node, directText) => node.eventually.not.containsDirectText(directText, opts)
         )
       }
     }

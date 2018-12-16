@@ -346,7 +346,8 @@ implements Workflo.PageNode.IElementNode<string[]> {
     if (isArray(expected) && expected.length !== elements.length) {
       throw new Error(
         `${this.constructor.name}: ` +
-        `Length of expected (${expected.length}) did not match length of list (${elements.length})!`
+        `Length of expected (${expected.length}) did not match length of list (${elements.length})!\n` + 
+        `( ${this._selector} )`
       )
     }
 
@@ -381,7 +382,8 @@ implements Workflo.PageNode.IElementNode<string[]> {
     if (isArray(expected) && expected.length !== elements.length) {
       throw new Error(
         `${this.constructor.name}: ` +
-        `Length of expected (${expected.length}) did not match length of list (${elements.length})!`
+        `Length of expected (${expected.length}) did not match length of list (${elements.length})!\n` +
+        `( ${this._selector} )`
       )
     }
 
@@ -410,7 +412,8 @@ implements Workflo.PageNode.IElementNode<string[]> {
     if (_.isArray(values)) {
       if (elements.length !== values.length) {
         throw new Error(
-          `Length of values array (${values.length}) did not match length of list page elements (${elements.length})!`
+          `Length of values array (${values.length}) did not match length of list page elements (${elements.length})!\n` +
+          `( ${this._selector} )`
         )
       } else {
         for ( let i = 0; i < elements.length; i++) {
