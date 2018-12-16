@@ -60,9 +60,11 @@ class PageElementMap extends _1.PageNode {
     eachCheck(context, expected, checkFunc) {
         const diffs = {};
         for (const key in context) {
-            if (expected && typeof expected[key] !== 'undefined') {
-                if (!checkFunc(context[key], expected[key])) {
-                    diffs[`${key}`] = context[key].__lastDiff;
+            if (expected) {
+                if (typeof expected[key] !== 'undefined') {
+                    if (!checkFunc(context[key], expected[key])) {
+                        diffs[`${key}`] = context[key].__lastDiff;
+                    }
                 }
             }
             else {
@@ -101,8 +103,10 @@ class PageElementMap extends _1.PageNode {
     }
     eachWait(context, expected, waitFunc) {
         for (const key in context) {
-            if (expected && typeof expected[key] !== 'undefined') {
-                waitFunc(context[key], expected[key]);
+            if (expected) {
+                if (typeof expected[key] !== 'undefined') {
+                    waitFunc(context[key], expected[key]);
+                }
             }
             else {
                 waitFunc(context[key], expected[key]);
@@ -112,8 +116,10 @@ class PageElementMap extends _1.PageNode {
     }
     eachDo(context, filterMask, doFunc) {
         for (const key in context) {
-            if (filterMask && typeof filterMask[key] !== 'undefined') {
-                doFunc(context[key]);
+            if (filterMask) {
+                if (typeof filterMask[key] !== 'undefined') {
+                    doFunc(context[key]);
+                }
             }
             else {
                 doFunc(context[key]);
@@ -123,8 +129,10 @@ class PageElementMap extends _1.PageNode {
     }
     eachSet(context, values, setFunc) {
         for (const key in context) {
-            if (values && typeof values[key] !== 'undefined') {
-                setFunc(context[key], values[key]);
+            if (values) {
+                if (typeof values[key] !== 'undefined') {
+                    setFunc(context[key], values[key]);
+                }
             }
             else {
                 setFunc(context[key], values[key]);

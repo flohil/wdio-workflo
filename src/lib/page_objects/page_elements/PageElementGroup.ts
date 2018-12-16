@@ -137,8 +137,10 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
 
       if (supportsInterface(context[key])) {
         if (expected) {
-          if (!checkFunc(node, expected[key])) {
-            diffs[`${key}`] = context[key].__lastDiff
+          if (typeof expected[key] !== 'undefined') {
+            if (!checkFunc(node, expected[key])) {
+              diffs[`${key}`] = context[key].__lastDiff
+            }
           }
         } else {
           if (!checkFunc(node)) {
@@ -170,7 +172,9 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
 
       if (supportsInterface(context[key])) {
         if (expected) {
-          waitFunc(node, expected[key])
+          if (typeof expected[key] !== 'undefined') {
+            waitFunc(node, expected[key])
+          }
         } else {
           waitFunc(node)
         }
@@ -194,8 +198,10 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
       const node = context[key] as any as NodeInterface
 
       if (supportsInterface(context[key])) {
-        if (filterMask && typeof filterMask[key] !== 'undefined') {
-          doFunc(node)
+        if (filterMask) {
+          if (typeof filterMask[key] !== 'undefined') {
+            doFunc(node)
+          }
         } else {
           doFunc(node)
         }
@@ -220,8 +226,10 @@ implements Workflo.PageNode.IElementNode<ExtractText<Content>> {
       const node = context[key] as any as NodeInterface
 
       if (supportsInterface(context[key])) {
-        if (values && typeof values[key] !== 'undefined') {
-          setFunc(node, values[key])
+        if (values) {
+          if (typeof values[key] !== 'undefined') {
+            setFunc(node, values[key])
+          }
         } else {
           setFunc(node, values[key])
         }

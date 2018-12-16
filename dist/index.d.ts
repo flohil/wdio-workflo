@@ -103,11 +103,13 @@ declare global {
         toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
         toBeVisible(): boolean;
         toBeEnabled(): boolean;
+        toHaveText(text: string | string[]): boolean;
     }
-    interface CustomMapMatchers {
+    interface CustomMapMatchers<K extends string | number | symbol> {
         toBeVisible(opts?: {
-            filterMask?: Partial<Record<string, true>>;
+            filterMask?: Partial<Record<K, true>>;
         }): boolean;
+        toHaveText(text: Partial<Record<K, string>>): boolean;
     }
     interface CustomGroupMatchers<Content extends {
         [key: string]: Workflo.PageNode.INode;
@@ -115,6 +117,7 @@ declare global {
         toBeVisible(opts?: {
             filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
         }): boolean;
+        toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean;
     }
     interface CustomValueElementMatchers extends CustomElementMatchers {
         toHaveValue(value: string): boolean;
@@ -130,8 +133,8 @@ declare global {
     interface ListMatchers extends CustomListMatchers {
         not: CustomListMatchers;
     }
-    interface MapMatchers extends CustomMapMatchers {
-        not: CustomMapMatchers;
+    interface MapMatchers<K extends string | number | symbol> extends CustomMapMatchers<K> {
+        not: CustomMapMatchers<K>;
     }
     interface GroupMatchers<Content extends {
         [key: string]: Workflo.PageNode.INode;
@@ -143,10 +146,10 @@ declare global {
     }
     function expectElement<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ? ValueElementMatchers : ElementMatchers;
     function expectList<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): ListMatchers;
-    function expectMap<Store extends pageObjects.stores.PageElementStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): MapMatchers;
+    function expectMap<Store extends pageObjects.stores.PageElementStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): MapMatchers<keyof typeof map['$']>;
     function expectGroup<Store extends pageObjects.stores.PageElementStore, Content extends {
         [K in keyof Content]: Workflo.PageNode.INode;
-    }, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): GroupMatchers<Content>;
+    }, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): GroupMatchers<typeof group['$']>;
     namespace WebdriverIO {
         interface Client<T> {
             /**

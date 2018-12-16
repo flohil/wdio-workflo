@@ -74,8 +74,10 @@ class PageElementGroup extends _1.PageNode {
             const node = context[key];
             if (supportsInterface(context[key])) {
                 if (expected) {
-                    if (!checkFunc(node, expected[key])) {
-                        diffs[`${key}`] = context[key].__lastDiff;
+                    if (typeof expected[key] !== 'undefined') {
+                        if (!checkFunc(node, expected[key])) {
+                            diffs[`${key}`] = context[key].__lastDiff;
+                        }
                     }
                 }
                 else {
@@ -96,7 +98,9 @@ class PageElementGroup extends _1.PageNode {
             const node = context[key];
             if (supportsInterface(context[key])) {
                 if (expected) {
-                    waitFunc(node, expected[key]);
+                    if (typeof expected[key] !== 'undefined') {
+                        waitFunc(node, expected[key]);
+                    }
                 }
                 else {
                     waitFunc(node);
@@ -110,8 +114,10 @@ class PageElementGroup extends _1.PageNode {
         for (const key in context) {
             const node = context[key];
             if (supportsInterface(context[key])) {
-                if (filterMask && typeof filterMask[key] !== 'undefined') {
-                    doFunc(node);
+                if (filterMask) {
+                    if (typeof filterMask[key] !== 'undefined') {
+                        doFunc(node);
+                    }
                 }
                 else {
                     doFunc(node);
@@ -125,8 +131,10 @@ class PageElementGroup extends _1.PageNode {
         for (const key in context) {
             const node = context[key];
             if (supportsInterface(context[key])) {
-                if (values && typeof values[key] !== 'undefined') {
-                    setFunc(node, values[key]);
+                if (values) {
+                    if (typeof values[key] !== 'undefined') {
+                        setFunc(node, values[key]);
+                    }
                 }
                 else {
                     setFunc(node, values[key]);

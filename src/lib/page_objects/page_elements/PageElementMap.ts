@@ -127,9 +127,11 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     const diffs: Workflo.IDiffTree = {}
 
     for (const key in context) {
-      if (expected && typeof expected[key] !== 'undefined') {
-        if (!checkFunc(context[key], expected[key] as any as T)) {
-          diffs[`${key}`] = context[key].__lastDiff
+      if (expected) {
+        if (typeof expected[key] !== 'undefined') {
+          if (!checkFunc(context[key], expected[key] as any as T)) {
+            diffs[`${key}`] = context[key].__lastDiff
+          }
         }
       } else {
         if (!checkFunc(context[key])) {
@@ -182,8 +184,10 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType,
   ): this {
     for (const key in context) {
-      if (expected && typeof expected[key] !== 'undefined') {
-        waitFunc(context[key], expected[key] as any as ValueType)
+      if (expected) {
+        if (typeof expected[key] !== 'undefined') {
+          waitFunc(context[key], expected[key] as any as ValueType)
+        }
       } else {
         waitFunc(context[key], expected[key] as any as ValueType)
       }
@@ -198,8 +202,10 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     doFunc: (element: PageElementType) => PageElementType,
   ): this {
     for (const key in context) {
-      if (filterMask && typeof filterMask[key] !== 'undefined') {
-        doFunc(context[key])
+      if (filterMask) {
+        if (typeof filterMask[key] !== 'undefined') {
+          doFunc(context[key])
+        }
       } else {
         doFunc(context[key])
       }
@@ -214,8 +220,10 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     setFunc: (element: PageElementType, value: ValueType) => PageElementType,
   ): this {
     for (const key in context) {
-      if (values && typeof values[key] !== 'undefined') {
-        setFunc(context[key], values[key] as any as ValueType)
+      if (values) {
+        if (typeof values[key] !== 'undefined') {
+          setFunc(context[key], values[key] as any as ValueType)
+        }
       } else {
         setFunc(context[key], values[key] as any as ValueType)
       }

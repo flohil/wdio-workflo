@@ -152,41 +152,7 @@ export interface ICompareElementFuncs<
 
 // MATCHER FUNCS
 
-// export function expectElement<
-//   Store extends stores.PageElementStore,
-//   PageElementType extends elements.PageElement<Store>
-// >(element: PageElementType) {
-//   return expect(element)
-// }
-
-// export function expectList<
-//   Store extends stores.PageElementStore,
-//   PageElementType extends elements.PageElement<Store>,
-//   PageElementOptions,
-//   PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>
-// >(list: PageElementListType) {
-//   return expect(list)
-// }
-
-// export function expectMap<
-//   Store extends stores.PageElementStore,
-//   K extends string,
-//   PageElementType extends elements.PageElement<Store>,
-//   PageElementOptions,
-//   PageElementMapType extends elements.PageElementMap<Store, K, PageElementType, PageElementOptions>
-// >(map: PageElementMapType) {
-//   return expect(map)
-// }
-
-// export function expectGroup<
-//   Store extends stores.PageElementStore,
-//   Content extends {[K in keyof Content] : Workflo.PageNode.INode},
-//   PageElementGroupType extends elements.PageElementGroup<Store, Content>
-// >(group: PageElementGroupType) {
-//   return expect(group)
-// }
-
-export function matcher<
+export function createMatcher<
   OptsType extends Object = Workflo.IWDIOParamsOptional,
   ElementExpectedType = undefined,
   ListExpectedType = undefined,
@@ -294,24 +260,24 @@ export function matcher<
   }
 }
 
-export function matcherWithoutExpected<
+export function createMatcherWithoutExpected<
   OptsType extends Object = Workflo.IWDIOParamsOptional,
-  ElementExpectedType = undefined,
-  ListExpectedType = undefined,
-  MapExpectedType = undefined,
-  GroupExpectedType = undefined,
+  ElementExpectedType = string,
+  ListExpectedType = string | string[],
+  MapExpectedType = Record<string, string>,
+  GroupExpectedType = Workflo.PageNode.ExtractText<{[key: string]: Workflo.PageNode.INode}>,
 >(
   compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
 ) {
-  return matcher<OptsType>(compareFuncs, true)
+  return createMatcher<OptsType>(compareFuncs, true)
 }
 
-export function booleanMatcherWithoutExpected<
+export function createBooleanMatcherWithoutExpected<
   OptsType extends Object = Workflo.IWDIOParamsOptional,
 >(
   compareFuncs: ICompareElementFuncs<undefined, undefined, undefined, undefined>,
 ) {
-  return matcher<OptsType>(compareFuncs, true)
+  return createMatcher<OptsType>(compareFuncs, true)
 }
 
 // export function createValueMatcher<
@@ -335,7 +301,7 @@ export function booleanMatcherWithoutExpected<
 
 // ERROR TEXT FUNCTIONS
 
-function diffTreeToMessages(diff: Workflo.IDiff, comparisonLines: string[] = [], paths: string[] = []): string[] {
+function convertDiffToMessages(diff: Workflo.IDiff, comparisonLines: string[] = [], paths: string[] = []): string[] {
   if (diff.tree && Object.keys(diff.tree).length > 0) {
     const keys = Object.keys(diff.tree)
 
@@ -344,7 +310,7 @@ function diffTreeToMessages(diff: Workflo.IDiff, comparisonLines: string[] = [],
         const _paths = [...paths]
         _paths.push(key)
 
-        diffTreeToMessages(diff.tree[key], comparisonLines, _paths)
+        convertDiffToMessages(diff.tree[key], comparisonLines, _paths)
       }
     )
   } else {
@@ -379,8 +345,8 @@ export function createBaseMessage<
   }
 
   return [
-    `Expected ${node.constructor.name} ${errorText}.\n( ${node.__getNodeId()} )`,
-    `Expected ${node.constructor.name} ${notErrorText}.\n( ${node.__getNodeId()} )`
+    `Expected ${node.constructor.name}${errorText}.\n( ${node.__getNodeId()} )`,
+    `Expected ${node.constructor.name}${notErrorText}.\n( ${node.__getNodeId()} )`
   ]
 }
 
@@ -400,8 +366,8 @@ export function createMessage<
   }
 
   return createBaseMessage(node, [
-    `to ${errorText}`,
-    `not to ${notErrorText}`
+    ` to ${errorText}`,
+    ` not to ${notErrorText}`
   ])
 }
 
@@ -421,16 +387,17 @@ export function createEventuallyMessage<
   }
 
   return createBaseMessage(node, [
-    `to eventually ${errorText} within ${timeout} ms`,
-    `not to eventually ${notErrorText} within ${timeout} ms`
+    ` to eventually ${errorText} within ${timeout} ms`,
+    ` not to eventually ${notErrorText} within ${timeout} ms`
   ])
 }
 
 export function createPropertyMessage<
   Store extends stores.PageElementStore,
-  NodeType extends elements.PageElement<Store>
+  NodeType extends elements.PageElement<Store>,
+  ExpectedType = string
 >(
-  node: NodeType, property: string, comparison: string, actual: string, expected: string
+  node: NodeType, property: string, comparison: string, actual: string, expected: ExpectedType
 ) {
   return createBaseMessage(node, [
     `'s ${property} "${actual}" to ${comparison} "${expected}"`,
@@ -440,9 +407,10 @@ export function createPropertyMessage<
 
 export function createEventuallyPropertyMessage<
   Store extends stores.PageElementStore,
-  NodeType extends elements.PageElement<Store>
+  NodeType extends elements.PageElement<Store>,
+  ExpectedType = string
 >(
-  node: NodeType, property: string, comparison: string, actual: string, expected: string, timeout: number
+  node: NodeType, property: string, comparison: string, actual: string, expected: ExpectedType, timeout: number
 ) {
   return createBaseMessage(node, [
     `'s ${property} "${actual}" to eventually ${comparison} "${expected}" within ${timeout} ms`,
@@ -470,7 +438,7 @@ export function createEachMessage<
     notErrorText = errorTexts
   }
 
-  const comparisonLines = diffTreeToMessages(node.__lastDiff)
+  const comparisonLines = convertDiffToMessages(node.__lastDiff)
   const comparisonList = comparisonLines.join('\n\n')
   const hrLine = `\n------------------------------------------------------------------\n`
 
@@ -502,13 +470,13 @@ export function createEventuallyEachMessage<
 // MATCHERS
 
 export const elementMatchers: jasmine.CustomMatcherFactories = {
-  toExist: booleanMatcherWithoutExpected({
+  toExist: createBooleanMatcherWithoutExpected({
     element: {
       resultFunc: ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
       errorTextFunc: ({node}) => createMessage(node, "exist")
     }
   }),
-  toBeVisible: booleanMatcherWithoutExpected({
+  toBeVisible: createBooleanMatcherWithoutExpected({
     element: {
       resultFunc: ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
       errorTextFunc: ({node}) => createMessage(node, "be visible")
@@ -530,6 +498,32 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node}) => createEachMessage(node, "be visible")
     }
   }),
+  toHaveText: createMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'text', 'be', actual, expected)
+    },
+    list: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'have text')
+    },
+    map: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'have text')
+    },
+    group: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, "have text")
+    }
+  })
 
   // toExist: elementMatcherFunction(
   //   ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
