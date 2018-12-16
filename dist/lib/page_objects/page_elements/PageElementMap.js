@@ -62,12 +62,12 @@ class PageElementMap extends _1.PageNode {
         for (const key in context) {
             if (expected && typeof expected[key] !== 'undefined') {
                 if (!checkFunc(context[key], expected[key])) {
-                    diffs[key] = context[key].__lastDiff;
+                    diffs[`${key}`] = context[key].__lastDiff;
                 }
             }
             else {
                 if (!checkFunc(context[key])) {
-                    diffs[key] = context[key].__lastDiff;
+                    diffs[`.${key}`] = context[key].__lastDiff;
                 }
             }
         }
@@ -135,35 +135,6 @@ class PageElementMap extends _1.PageNode {
 }
 exports.PageElementMap = PageElementMap;
 class PageElementMapCurrently extends _1.PageNodeCurrently {
-    constructor() {
-        super(...arguments);
-        this.not = {
-            isVisible: (filterMask) => {
-                return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.isVisible());
-            },
-            isEnabled: (filterMask) => {
-                return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.isEnabled());
-            },
-            hasText: (text) => {
-                return this._node.eachCheck(this._node.$, text, (element, expected) => element.currently.not.hasText(expected));
-            },
-            hasAnyText: (filterMask) => {
-                return this._node.eachCheck(this._node.$, filterMask, (element) => element.currently.not.hasAnyText());
-            },
-            containsText: (text) => {
-                return this._node.eachCheck(this._node.$, text, (element, expected) => element.currently.not.containsText(expected));
-            },
-            hasDirectText: (directText) => {
-                return this._node.eachCheck(this._node.$, directText, (element, expected) => element.currently.not.hasDirectText(expected));
-            },
-            hasAnyDirectText: (filterMask) => {
-                return this._node.eachCheck(this._node.$, filterMask, (element) => element.currently.not.hasAnyDirectText());
-            },
-            containsDirectText: (directText) => {
-                return this._node.eachCheck(this._node.$, directText, (element, expected) => element.currently.not.containsDirectText(expected));
-            }
-        };
-    }
     /**
      * Returns texts of all list elements immediatly in the order they were retrieved from the DOM.
      *
@@ -202,12 +173,63 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
     containsDirectText(directText) {
         return this._node.eachCheck(this._node.$, directText, (element, expected) => element.currently.containsDirectText(expected));
     }
+    get not() {
+        return {
+            isVisible: (filterMask) => {
+                return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.isVisible());
+            },
+            isEnabled: (filterMask) => {
+                return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.isEnabled());
+            },
+            hasText: (text) => {
+                return this._node.eachCheck(this._node.$, text, (element, expected) => element.currently.not.hasText(expected));
+            },
+            hasAnyText: (filterMask) => {
+                return this._node.eachCheck(this._node.$, filterMask, (element) => element.currently.not.hasAnyText());
+            },
+            containsText: (text) => {
+                return this._node.eachCheck(this._node.$, text, (element, expected) => element.currently.not.containsText(expected));
+            },
+            hasDirectText: (directText) => {
+                return this._node.eachCheck(this._node.$, directText, (element, expected) => element.currently.not.hasDirectText(expected));
+            },
+            hasAnyDirectText: (filterMask) => {
+                return this._node.eachCheck(this._node.$, filterMask, (element) => element.currently.not.hasAnyDirectText());
+            },
+            containsDirectText: (directText) => {
+                return this._node.eachCheck(this._node.$, directText, (element, expected) => element.currently.not.containsDirectText(expected));
+            }
+        };
+    }
 }
 exports.PageElementMapCurrently = PageElementMapCurrently;
 class PageElementMapWait extends _1.PageNodeWait {
-    constructor() {
-        super(...arguments);
-        this.not = {
+    isVisible(opts = {}) {
+        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isVisible());
+    }
+    isEnabled(opts = {}) {
+        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isEnabled());
+    }
+    hasText(text, opts) {
+        return this._node.eachWait(this._node.$, text, (element, expected) => element.wait.hasText(expected, opts));
+    }
+    hasAnyText(opts = {}) {
+        return this._node.eachWait(this._node.$, opts.filterMask, (element) => element.wait.hasAnyText(opts));
+    }
+    containsText(text, opts) {
+        return this._node.eachWait(this._node.$, text, (element, expected) => element.wait.containsText(expected, opts));
+    }
+    hasDirectText(directText, opts) {
+        return this._node.eachWait(this._node.$, directText, (element, expected) => element.wait.hasDirectText(expected, opts));
+    }
+    hasAnyDirectText(opts = {}) {
+        return this._node.eachWait(this._node.$, opts.filterMask, (element) => element.wait.hasAnyDirectText(opts));
+    }
+    containsDirectText(directText, opts) {
+        return this._node.eachWait(this._node.$, directText, (element, expected) => element.wait.containsDirectText(expected, opts));
+    }
+    get not() {
+        return {
             isVisible: (opts = {}) => {
                 return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.isVisible());
             },
@@ -234,36 +256,35 @@ class PageElementMapWait extends _1.PageNodeWait {
             }
         };
     }
-    isVisible(opts = {}) {
-        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isVisible());
-    }
-    isEnabled(opts = {}) {
-        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isEnabled());
-    }
-    hasText(text, opts) {
-        return this._node.eachWait(this._node.$, text, (element, expected) => element.wait.hasText(expected, opts));
-    }
-    hasAnyText(opts = {}) {
-        return this._node.eachWait(this._node.$, opts.filterMask, (element) => element.wait.hasAnyText(opts));
-    }
-    containsText(text, opts) {
-        return this._node.eachWait(this._node.$, text, (element, expected) => element.wait.containsText(expected, opts));
-    }
-    hasDirectText(directText, opts) {
-        return this._node.eachWait(this._node.$, directText, (element, expected) => element.wait.hasDirectText(expected, opts));
-    }
-    hasAnyDirectText(opts = {}) {
-        return this._node.eachWait(this._node.$, opts.filterMask, (element) => element.wait.hasAnyDirectText(opts));
-    }
-    containsDirectText(directText, opts) {
-        return this._node.eachWait(this._node.$, directText, (element, expected) => element.wait.containsDirectText(expected, opts));
-    }
 }
 exports.PageElementMapWait = PageElementMapWait;
 class PageElementMapEventually extends _1.PageNodeEventually {
-    constructor() {
-        super(...arguments);
-        this.not = {
+    isVisible(opts = {}) {
+        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isVisible());
+    }
+    isEnabled(opts = {}) {
+        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isEnabled());
+    }
+    hasText(text, opts) {
+        return this._node.eachCheck(this._node.$, text, (element, expected) => element.eventually.hasText(expected, opts));
+    }
+    hasAnyText(opts = {}) {
+        return this._node.eachCheck(this._node.$, opts.filterMask, (element) => element.eventually.hasAnyText(opts));
+    }
+    containsText(text, opts) {
+        return this._node.eachCheck(this._node.$, text, (element, expected) => element.eventually.containsText(expected, opts));
+    }
+    hasDirectText(directText, opts) {
+        return this._node.eachCheck(this._node.$, directText, (element, expected) => element.eventually.hasDirectText(expected, opts));
+    }
+    hasAnyDirectText(opts = {}) {
+        return this._node.eachCheck(this._node.$, opts.filterMask, (element) => element.eventually.hasAnyDirectText(opts));
+    }
+    containsDirectText(directText, opts) {
+        return this._node.eachCheck(this._node.$, directText, (element, expected) => element.eventually.containsDirectText(expected, opts));
+    }
+    get not() {
+        return {
             isVisible: (opts = {}) => {
                 return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.isVisible());
             },
@@ -289,30 +310,6 @@ class PageElementMapEventually extends _1.PageNodeEventually {
                 return this._node.eachCheck(this._node.$, directText, (element, expected) => element.eventually.not.containsDirectText(expected, opts));
             }
         };
-    }
-    isVisible(opts = {}) {
-        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isVisible());
-    }
-    isEnabled(opts = {}) {
-        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isEnabled());
-    }
-    hasText(text, opts) {
-        return this._node.eachCheck(this._node.$, text, (element, expected) => element.eventually.hasText(expected, opts));
-    }
-    hasAnyText(opts = {}) {
-        return this._node.eachCheck(this._node.$, opts.filterMask, (element) => element.eventually.hasAnyText(opts));
-    }
-    containsText(text, opts) {
-        return this._node.eachCheck(this._node.$, text, (element, expected) => element.eventually.containsText(expected, opts));
-    }
-    hasDirectText(directText, opts) {
-        return this._node.eachCheck(this._node.$, directText, (element, expected) => element.eventually.hasDirectText(expected, opts));
-    }
-    hasAnyDirectText(opts = {}) {
-        return this._node.eachCheck(this._node.$, opts.filterMask, (element) => element.eventually.hasAnyDirectText(opts));
-    }
-    containsDirectText(directText, opts) {
-        return this._node.eachCheck(this._node.$, directText, (element, expected) => element.eventually.containsDirectText(expected, opts));
     }
 }
 exports.PageElementMapEventually = PageElementMapEventually;

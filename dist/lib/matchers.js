@@ -174,6 +174,26 @@ exports.booleanMatcherWithoutExpected = booleanMatcherWithoutExpected;
 //   return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
 // }
 // ERROR TEXT FUNCTIONS
+function diffTreeToMessages(diff, comparisonLines = [], paths = []) {
+    if (diff.tree && Object.keys(diff.tree).length > 0) {
+        const keys = Object.keys(diff.tree);
+        keys.forEach(key => {
+            const _paths = [...paths];
+            _paths.push(key);
+            diffTreeToMessages(diff.tree[key], comparisonLines, _paths);
+        });
+    }
+    else {
+        let _paths = paths.join('');
+        if (_paths.charAt(0) === '.') {
+            _paths = _paths.substring(1);
+        }
+        const compareStr = (typeof diff.actual === 'undefined' && typeof diff.expected === 'undefined') ?
+            '' : `{actual: "${diff.actual}", expected: "${diff.expected}"}\n`;
+        comparisonLines.push(`${diff.constructorName} at path '${_paths}'\n${compareStr}( ${diff.selector} )`);
+    }
+    return comparisonLines;
+}
 function createBaseMessage(node, errorTexts) {
     let errorText = undefined;
     let notErrorText = undefined;
@@ -187,10 +207,44 @@ function createBaseMessage(node, errorTexts) {
     }
     return [
         `Expected ${node.constructor.name} ${errorText}.\n( ${node.__getNodeId()} )`,
-        `Expected ${node.constructor.name} not ${notErrorText}.\n( ${node.__getNodeId()} )`
+        `Expected ${node.constructor.name} ${notErrorText}.\n( ${node.__getNodeId()} )`
     ];
 }
 exports.createBaseMessage = createBaseMessage;
+function createMessage(node, errorTexts) {
+    let errorText = undefined;
+    let notErrorText = undefined;
+    if (_.isArray(errorTexts)) {
+        errorText = errorTexts[0];
+        notErrorText = errorTexts[1];
+    }
+    else {
+        errorText = errorTexts;
+        notErrorText = errorTexts;
+    }
+    return createBaseMessage(node, [
+        `to ${errorText}`,
+        `not to ${notErrorText}`
+    ]);
+}
+exports.createMessage = createMessage;
+function createEventuallyMessage(node, errorTexts, timeout) {
+    let errorText = undefined;
+    let notErrorText = undefined;
+    if (_.isArray(errorTexts)) {
+        errorText = errorTexts[0];
+        notErrorText = errorTexts[1];
+    }
+    else {
+        errorText = errorTexts;
+        notErrorText = errorTexts;
+    }
+    return createBaseMessage(node, [
+        `to eventually ${errorText} within ${timeout} ms`,
+        `not to eventually ${notErrorText} within ${timeout} ms`
+    ]);
+}
+exports.createEventuallyMessage = createEventuallyMessage;
 function createPropertyMessage(node, property, comparison, actual, expected) {
     return createBaseMessage(node, [
         `'s ${property} "${actual}" to ${comparison} "${expected}"`,
@@ -216,16 +270,12 @@ function createEachMessage(node, errorTexts) {
         errorText = errorTexts;
         notErrorText = errorTexts;
     }
-    const comparisonLines = Object.keys(node.__lastDiff.tree).map(key => {
-        const diff = node.__lastDiff.tree[key];
-        return `[0] => ${diff.constructorName}\n` +
-            `{actual: "${diff.actual}", expected: "${diff.expected}"}\n` +
-            `( ${diff.selector} )`;
-    });
-    const comparisonList = comparisonLines.join('\n');
+    const comparisonLines = diffTreeToMessages(node.__lastDiff);
+    const comparisonList = comparisonLines.join('\n\n');
+    const hrLine = `\n------------------------------------------------------------------\n`;
     return [
-        `Expected each of ${node.constructor.name}'s elements ${errorText}:\n\n${comparisonList}`,
-        `Expected each of ${node.constructor.name}'s elements not ${notErrorText}:\n\n${comparisonList}`
+        `Expected each of ${node.constructor.name}'s elements to ${errorText}:${hrLine}${comparisonList}${hrLine}`,
+        `Expected none of ${node.constructor.name}'s elements to ${notErrorText}:${hrLine}${comparisonList}${hrLine}`
     ];
 }
 exports.createEachMessage = createEachMessage;
@@ -241,29 +291,29 @@ exports.elementMatchers = {
     toExist: booleanMatcherWithoutExpected({
         element: {
             resultFunc: ({ node }) => [() => node.currently.exists(), () => node.currently.not.exists()],
-            errorTextFunc: ({ node }) => createBaseMessage(node, "to exist")
+            errorTextFunc: ({ node }) => createMessage(node, "exist")
         }
     }),
     toBeVisible: booleanMatcherWithoutExpected({
         element: {
             resultFunc: ({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
-            errorTextFunc: ({ node }) => createEachMessage(node, "to be visible")
+            errorTextFunc: ({ node }) => createMessage(node, "be visible")
         },
         list: {
             resultFunc: ({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
-            errorTextFunc: ({ node }) => createEachMessage(node, "to be visible")
+            errorTextFunc: ({ node }) => createEachMessage(node, "be visible")
         },
         map: {
             resultFunc: ({ node, opts }) => [
                 () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
             ],
-            errorTextFunc: ({ node }) => createEachMessage(node, "to be visible")
+            errorTextFunc: ({ node }) => createEachMessage(node, "be visible")
         },
         group: {
             resultFunc: ({ node, opts }) => [
                 () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
             ],
-            errorTextFunc: ({ node }) => createEachMessage(node, "to be visible")
+            errorTextFunc: ({ node }) => createEachMessage(node, "be visible")
         }
     }),
 };

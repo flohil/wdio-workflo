@@ -118,19 +118,21 @@ class ValuePageElementListCurrently<
     )
   }
 
-  not = {...super.not,
-    hasValue: (value: ValueType | ValueType[]) => {
-      return this._node.eachCheck(
-        this.all, (element, expected) => element.currently.not.hasValue(expected), value
-      )
-    },
-    hasAnyValue: () => {
-      return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue())
-    },
-    containsValue: (value: ValueType | ValueType[]) => {
-      return this._node.eachCheck(
-        this.all, (element, expected) => element.currently.not.containsValue(expected), value
-      )
+  get not() {
+    return {...super.not,
+      hasValue: (value: ValueType | ValueType[]) => {
+        return this._node.eachCheck(
+          this.all, (element, expected) => element.currently.not.hasValue(expected), value
+        )
+      },
+      hasAnyValue: () => {
+        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue())
+      },
+      containsValue: (value: ValueType | ValueType[]) => {
+        return this._node.eachCheck(
+          this.all, (element, expected) => element.currently.not.containsValue(expected), value
+        )
+      }
     }
   }
 }
@@ -161,21 +163,23 @@ class ValuePageElementListWait<
     )
   }
 
-  not = {...super.not,
-    hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element, expected) => element.wait.not.hasValue(expected, opts), value
-      )
-    },
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element) => element.wait.not.hasAnyValue(opts)
-      )
-    },
-    containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element, expected) => element.wait.not.containsValue(expected, opts), value
-      )
+  get not() {
+    return {...super.not,
+      hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element, expected) => element.wait.not.hasValue(expected, opts), value
+        )
+      },
+      hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element) => element.wait.not.hasAnyValue(opts)
+        )
+      },
+      containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element, expected) => element.wait.not.containsValue(expected, opts), value
+        )
+      }
     }
   }
 }
@@ -208,21 +212,23 @@ class ValuePageElementListEventually<
     )
   }
 
-  not = {...super.not,
-    hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value
-      )
-    },
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, undefined, (element) => element.eventually.not.hasAnyValue(opts)
-      )
-    },
-    containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value
-      )
+  get not() {
+    return {...super.not,
+      hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value
+        )
+      },
+      hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, undefined, (element) => element.eventually.not.hasAnyValue(opts)
+        )
+      },
+      containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value
+        )
+      }
     }
   }
 }

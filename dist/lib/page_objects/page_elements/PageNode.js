@@ -7,10 +7,7 @@ class PageNode {
     constructor(selector, opts) {
         this._selector = selector;
         this._store = opts.store;
-        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT,
-            this.currently = new PageNodeCurrently(this);
-        this.wait = new PageNodeWait(this);
-        this.eventually = new PageNodeEventually(this);
+        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
     }
     // INTERNAL GETTERS AND SETTERS
     __getNodeId() {

@@ -42,7 +42,7 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
     hasValue(value: Partial<Record<K, ValueType>>): boolean;
     hasAnyValue(filterMask?: Partial<Record<K, string>>): boolean;
     containsValue(value: Partial<Record<K, ValueType>>): boolean;
-    not: {
+    readonly not: {
         hasValue: (value: Partial<Record<K, ValueType>>) => boolean;
         hasAnyValue: (filterMask?: Partial<Record<K, string>>) => boolean;
         containsValue: (value: Partial<Record<K, ValueType>>) => boolean;
@@ -62,7 +62,7 @@ declare class ValuePageElementMapWait<Store extends PageElementStore, K extends 
         filterMask?: Partial<Record<K, string>>;
     }): MapType;
     containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional): MapType;
-    not: {
+    readonly not: {
         hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => MapType;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Partial<Record<K, string>>;
@@ -92,7 +92,7 @@ declare class ValuePageElementMapEventually<Store extends PageElementStore, K ex
         filterMask?: Partial<Record<K, string>>;
     }): boolean;
     containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional): boolean;
-    not: {
+    readonly not: {
         hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Partial<Record<K, string>>;

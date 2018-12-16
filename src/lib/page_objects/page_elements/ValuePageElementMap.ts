@@ -103,21 +103,23 @@ class ValuePageElementMapCurrently<
     )
   }
 
-  not = {...super.not,
-    hasValue: (value: Partial<Record<K, ValueType>>) => {
-      return this._node.eachCheck(
-        this._node.$, value, (element, expected) => element.currently.not.hasValue(expected)
-      )
-    },
-    hasAnyValue: (filterMask?: Partial<Record<K, string>>) => {
-      return this._node.eachCheck(
-        this._node.$, filterMask, element => element.currently.not.hasAnyValue()
-      )
-    },
-    containsValue: (value: Partial<Record<K, ValueType>>) => {
-      return this._node.eachCheck(
-        this._node.$, value, (element, expected) => element.currently.not.containsValue(expected)
-      )
+  get not() {
+    return {...super.not,
+      hasValue: (value: Partial<Record<K, ValueType>>) => {
+        return this._node.eachCheck(
+          this._node.$, value, (element, expected) => element.currently.not.hasValue(expected)
+        )
+      },
+      hasAnyValue: (filterMask?: Partial<Record<K, string>>) => {
+        return this._node.eachCheck(
+          this._node.$, filterMask, element => element.currently.not.hasAnyValue()
+        )
+      },
+      containsValue: (value: Partial<Record<K, ValueType>>) => {
+        return this._node.eachCheck(
+          this._node.$, value, (element, expected) => element.currently.not.containsValue(expected)
+        )
+      }
     }
   }
 }
@@ -149,21 +151,23 @@ class ValuePageElementMapWait<
     )
   }
 
-  not = {...super.not,
-    hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.$, value, (element, expected) => element.wait.not.hasValue(expected, opts)
-      )
-    },
-    hasAnyValue: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
-      return this._node.eachWait(
-        this._node.$, opts.filterMask, element => element.wait.not.hasAnyValue(opts)
-      )
-    },
-    containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.$, value, (element, expected) => element.wait.not.containsValue(expected, opts)
-      )
+  get not() {
+    return {...super.not,
+      hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.$, value, (element, expected) => element.wait.not.hasValue(expected, opts)
+        )
+      },
+      hasAnyValue: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+        return this._node.eachWait(
+          this._node.$, opts.filterMask, element => element.wait.not.hasAnyValue(opts)
+        )
+      },
+      containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.$, value, (element, expected) => element.wait.not.containsValue(expected, opts)
+        )
+      }
     }
   }
 }
@@ -195,21 +199,23 @@ class ValuePageElementMapEventually<
     )
   }
 
-  not = {...super.not,
-    hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.$, value, (element, expected) => element.eventually.not.hasValue(expected, opts)
-      )
-    },
-    hasAnyValue: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
-      return this._node.eachCheck(
-        this._node.$, opts.filterMask, element => element.eventually.not.hasAnyValue(opts)
-      )
-    },
-    containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.$, value, (element, expected) => element.eventually.not.containsValue(expected, opts)
-      )
+  get not() {
+    return {...super.not,
+      hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.$, value, (element, expected) => element.eventually.not.hasValue(expected, opts)
+        )
+      },
+      hasAnyValue: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+        return this._node.eachCheck(
+          this._node.$, opts.filterMask, element => element.eventually.not.hasAnyValue(opts)
+        )
+      },
+      containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.$, value, (element, expected) => element.eventually.not.containsValue(expected, opts)
+        )
+      }
     }
   }
 }

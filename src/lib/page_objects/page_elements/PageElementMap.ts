@@ -129,11 +129,11 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     for (const key in context) {
       if (expected && typeof expected[key] !== 'undefined') {
         if (!checkFunc(context[key], expected[key] as any as T)) {
-          diffs[key] = context[key].__lastDiff
+          diffs[`${key}`] = context[key].__lastDiff
         }
       } else {
         if (!checkFunc(context[key])) {
-          diffs[key] = context[key].__lastDiff
+          diffs[`.${key}`] = context[key].__lastDiff
         }
       }
     }
@@ -301,46 +301,48 @@ export class PageElementMapCurrently<
     )
   }
 
-  not = {
-    isVisible: (filterMask?: Partial<Record<K, true>>) => {
-      return this._node.eachCheck(
-        this._node.$, filterMask, element => element.currently.not.isVisible()
-      )
-    },
-    isEnabled: (filterMask?: Partial<Record<K, true>>) => {
-      return this._node.eachCheck(
-        this._node.$, filterMask, element => element.currently.not.isEnabled()
-      )
-    },
-    hasText: (text: Partial<Record<K, string>>) => {
-      return this._node.eachCheck(
-        this._node.$, text, (element, expected) => element.currently.not.hasText(expected)
-      )
-    },
-    hasAnyText: (filterMask?: Partial<Record<K, string>>) => {
-      return this._node.eachCheck(
-        this._node.$, filterMask, (element) => element.currently.not.hasAnyText()
-      )
-    },
-    containsText: (text: Partial<Record<K, string>>) => {
-      return this._node.eachCheck(
-        this._node.$, text, (element, expected) => element.currently.not.containsText(expected)
-      )
-    },
-    hasDirectText: (directText: Partial<Record<K, string>>) => {
-      return this._node.eachCheck(
-        this._node.$, directText, (element, expected) => element.currently.not.hasDirectText(expected)
-      )
-    },
-    hasAnyDirectText: (filterMask?: Partial<Record<K, string>>) => {
-      return this._node.eachCheck(
-        this._node.$, filterMask, (element) => element.currently.not.hasAnyDirectText()
-      )
-    },
-    containsDirectText: (directText: Partial<Record<K, string>>) => {
-      return this._node.eachCheck(
-        this._node.$, directText, (element, expected) => element.currently.not.containsDirectText(expected)
-      )
+  get not() {
+    return {
+      isVisible: (filterMask?: Partial<Record<K, true>>) => {
+        return this._node.eachCheck(
+          this._node.$, filterMask, element => element.currently.not.isVisible()
+        )
+      },
+      isEnabled: (filterMask?: Partial<Record<K, true>>) => {
+        return this._node.eachCheck(
+          this._node.$, filterMask, element => element.currently.not.isEnabled()
+        )
+      },
+      hasText: (text: Partial<Record<K, string>>) => {
+        return this._node.eachCheck(
+          this._node.$, text, (element, expected) => element.currently.not.hasText(expected)
+        )
+      },
+      hasAnyText: (filterMask?: Partial<Record<K, string>>) => {
+        return this._node.eachCheck(
+          this._node.$, filterMask, (element) => element.currently.not.hasAnyText()
+        )
+      },
+      containsText: (text: Partial<Record<K, string>>) => {
+        return this._node.eachCheck(
+          this._node.$, text, (element, expected) => element.currently.not.containsText(expected)
+        )
+      },
+      hasDirectText: (directText: Partial<Record<K, string>>) => {
+        return this._node.eachCheck(
+          this._node.$, directText, (element, expected) => element.currently.not.hasDirectText(expected)
+        )
+      },
+      hasAnyDirectText: (filterMask?: Partial<Record<K, string>>) => {
+        return this._node.eachCheck(
+          this._node.$, filterMask, (element) => element.currently.not.hasAnyDirectText()
+        )
+      },
+      containsDirectText: (directText: Partial<Record<K, string>>) => {
+        return this._node.eachCheck(
+          this._node.$, directText, (element, expected) => element.currently.not.containsDirectText(expected)
+        )
+      }
     }
   }
 }
@@ -401,46 +403,48 @@ export class PageElementMapWait<
     )
   }
 
-  not = {
-    isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
-      return this._node.eachWait(
-        this._node.$, opts.filterMask, element => element.wait.not.isVisible()
-      )
-    },
-    isEnabled: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
-      return this._node.eachWait(
-        this._node.$, opts.filterMask, element => element.wait.not.isEnabled()
-      )
-    },
-    hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.$, text, (element, expected) => element.wait.not.hasText(expected, opts)
-      )
-    },
-    hasAnyText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
-      return this._node.eachWait(
-        this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyText(opts)
-      )
-    },
-    containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.$, text, (element, expected) => element.wait.not.containsText(expected, opts)
-      )
-    },
-    hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.$, directText, (element, expected) => element.wait.not.hasDirectText(expected, opts)
-      )
-    },
-    hasAnyDirectText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
-      return this._node.eachWait(
-        this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyDirectText(opts)
-      )
-    },
-    containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.$, directText, (element, expected) => element.wait.not.containsDirectText(expected, opts)
-      )
+  get not() {
+    return {
+      isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
+        return this._node.eachWait(
+          this._node.$, opts.filterMask, element => element.wait.not.isVisible()
+        )
+      },
+      isEnabled: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
+        return this._node.eachWait(
+          this._node.$, opts.filterMask, element => element.wait.not.isEnabled()
+        )
+      },
+      hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.$, text, (element, expected) => element.wait.not.hasText(expected, opts)
+        )
+      },
+      hasAnyText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+        return this._node.eachWait(
+          this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyText(opts)
+        )
+      },
+      containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.$, text, (element, expected) => element.wait.not.containsText(expected, opts)
+        )
+      },
+      hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.$, directText, (element, expected) => element.wait.not.hasDirectText(expected, opts)
+        )
+      },
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+        return this._node.eachWait(
+          this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyDirectText(opts)
+        )
+      },
+      containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.$, directText, (element, expected) => element.wait.not.containsDirectText(expected, opts)
+        )
+      }
     }
   }
 }
@@ -501,46 +505,48 @@ export class PageElementMapEventually<
     )
   }
 
-  not = {
-    isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
-      return this._node.eachCheck(
-        this._node.$, opts.filterMask, element => element.eventually.not.isVisible()
-      )
-    },
-    isEnabled: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
-      return this._node.eachCheck(
-        this._node.$, opts.filterMask, element => element.eventually.not.isEnabled()
-      )
-    },
-    hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.$, text, (element, expected) => element.eventually.not.hasText(expected, opts)
-      )
-    },
-    hasAnyText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
-      return this._node.eachCheck(
-        this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyText(opts)
-      )
-    },
-    containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.$, text, (element, expected) => element.eventually.not.containsText(expected, opts)
-      )
-    },
-    hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.$, directText, (element, expected) => element.eventually.not.hasDirectText(expected, opts)
-      )
-    },
-    hasAnyDirectText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
-      return this._node.eachCheck(
-        this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyDirectText(opts)
-      )
-    },
-    containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.$, directText, (element, expected) => element.eventually.not.containsDirectText(expected, opts)
-      )
+  get not() {
+    return {
+      isVisible: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
+        return this._node.eachCheck(
+          this._node.$, opts.filterMask, element => element.eventually.not.isVisible()
+        )
+      },
+      isEnabled: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, true>>} = {}) => {
+        return this._node.eachCheck(
+          this._node.$, opts.filterMask, element => element.eventually.not.isEnabled()
+        )
+      },
+      hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.$, text, (element, expected) => element.eventually.not.hasText(expected, opts)
+        )
+      },
+      hasAnyText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+        return this._node.eachCheck(
+          this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyText(opts)
+        )
+      },
+      containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.$, text, (element, expected) => element.eventually.not.containsText(expected, opts)
+        )
+      },
+      hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.$, directText, (element, expected) => element.eventually.not.hasDirectText(expected, opts)
+        )
+      },
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<K, string>>} = {}) => {
+        return this._node.eachCheck(
+          this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyDirectText(opts)
+        )
+      },
+      containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.$, directText, (element, expected) => element.eventually.not.containsDirectText(expected, opts)
+        )
+      }
     }
   }
 }

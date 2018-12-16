@@ -69,10 +69,12 @@ export abstract class ValuePageElementCurrently<
     return this._compareContains(value, this.getValue())
   }
 
-  not = {...super.not,
-    hasValue: (value: ValueType) => !this.hasValue(value),
-    hasAnyValue: () => !this.hasAnyValue(),
-    containsValue: (value: ValueType) => !this.containsValue(value),
+  get not() {
+    return {...super.not,
+      hasValue: (value: ValueType) => !this.hasValue(value),
+      hasAnyValue: () => !this.hasAnyValue(),
+      containsValue: (value: ValueType) => !this.containsValue(value),
+    }
   }
 }
 
@@ -97,15 +99,17 @@ export class ValuePageElementWait<
     )
   }
 
-  not = {...super.not,
-    hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
-      return this.hasValue(value, this._makeReverseParams(opts))
-    },
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this.hasAnyValue(this._makeReverseParams(opts))
-    },
-    containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
-      return this.containsValue(value, this._makeReverseParams(opts))
+  get not() {
+    return {...super.not,
+      hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
+        return this.hasValue(value, this._makeReverseParams(opts))
+      },
+      hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this.hasAnyValue(this._makeReverseParams(opts))
+      },
+      containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
+        return this.containsValue(value, this._makeReverseParams(opts))
+      }
     }
   }
 }
@@ -125,15 +129,17 @@ export class ValuePageElementEventually<
     return this._node.__eventually(() => this._node.wait.containsValue(value, opts))
   }
 
-  not = {...super.not,
-    hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__eventually(() => this._node.wait.not.hasValue(value, opts))
-    },
-    hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__eventually(() => this._node.wait.not.hasAnyValue(opts))
-    },
-    containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.__eventually(() => this._node.wait.not.containsValue(value, opts))
+  get not() {
+    return {...super.not,
+      hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.__eventually(() => this._node.wait.not.hasValue(value, opts))
+      },
+      hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.__eventually(() => this._node.wait.not.hasAnyValue(opts))
+      },
+      containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.__eventually(() => this._node.wait.not.containsValue(value, opts))
+      }
     }
   }
 }

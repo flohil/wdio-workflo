@@ -264,34 +264,6 @@ exports.PageElementList = PageElementList;
 class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     constructor(node, opts) {
         super(node);
-        this.not = {
-            isEmpty: () => !this.isEmpty(),
-            hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
-            isVisible: () => {
-                return this._node.eachCheck(this.all, element => element.currently.not.isVisible());
-            },
-            isEnabled: () => {
-                return this._node.eachCheck(this.all, element => element.currently.not.isEnabled());
-            },
-            hasText: (text) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
-            },
-            hasAnyText: () => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText());
-            },
-            containsText: (text) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text);
-            },
-            hasDirectText: (directText) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText);
-            },
-            hasAnyDirectText: () => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText());
-            },
-            containsDirectText: (directText) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText);
-            }
-        };
         this._selector = node.getSelector();
         this._store = opts.store;
         this._elementOptions = opts.elementOptions;
@@ -408,44 +380,39 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     containsDirectText(directText) {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
-}
-exports.PageElementListCurrently = PageElementListCurrently;
-class PageElementListWait extends PageNode_1.PageNodeWait {
-    constructor() {
-        super(...arguments);
-        this.not = {
-            isEmpty: (opts = {}) => this.isEmpty({
-                timeout: opts.timeout, interval: opts.interval, reverse: true
-            }),
-            hasLength: (length, opts = {}) => this.hasLength(length, {
-                timeout: opts.timeout, interval: opts.interval, reverse: true
-            }),
-            isVisible: (opts) => {
-                return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts));
+    get not() {
+        return {
+            isEmpty: () => !this.isEmpty(),
+            hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
+            isVisible: () => {
+                return this._node.eachCheck(this.all, element => element.currently.not.isVisible());
             },
-            isEnabled: (opts) => {
-                return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(opts));
+            isEnabled: () => {
+                return this._node.eachCheck(this.all, element => element.currently.not.isEnabled());
             },
-            hasText: (text, opts) => {
-                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text);
+            hasText: (text) => {
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
             },
-            hasAnyText: (opts) => {
-                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyText(opts));
+            hasAnyText: () => {
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText());
             },
-            containsText: (text, opts) => {
-                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsText(expected, opts), text);
+            containsText: (text) => {
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text);
             },
-            hasDirectText: (directText, opts) => {
-                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText);
+            hasDirectText: (directText) => {
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText);
             },
-            hasAnyDirectText: (opts) => {
-                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyDirectText(opts));
+            hasAnyDirectText: () => {
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText());
             },
-            containsDirectText: (directText, opts) => {
-                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText);
+            containsDirectText: (directText) => {
+                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText);
             }
         };
     }
+}
+exports.PageElementListCurrently = PageElementListCurrently;
+class PageElementListWait extends PageNode_1.PageNodeWait {
     // waits until list has given length
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
@@ -505,18 +472,8 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     containsDirectText(directText, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsDirectText(expected, opts), directText);
     }
-}
-exports.PageElementListWait = PageElementListWait;
-class PageElementListEventually extends PageNode_1.PageNodeEventually {
-    constructor() {
-        // Typescript has a bug that prevents Exclude from working with generic extended types:
-        // https://github.com/Microsoft/TypeScript/issues/24791
-        // Bug will be fixed in Typescript 3.3.0
-        // get any() {
-        //   return excludeNot(this._list.currently.first.eventually)
-        // }
-        super(...arguments);
-        this.not = {
+    get not() {
+        return {
             isEmpty: (opts = {}) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
@@ -524,31 +481,40 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
             isVisible: (opts) => {
-                return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts));
+                return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts));
             },
             isEnabled: (opts) => {
-                return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts));
+                return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(opts));
             },
             hasText: (text, opts) => {
-                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text);
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text);
             },
             hasAnyText: (opts) => {
-                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyText(opts));
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyText(opts));
             },
             containsText: (text, opts) => {
-                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text);
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsText(expected, opts), text);
             },
             hasDirectText: (directText, opts) => {
-                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText);
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText);
             },
             hasAnyDirectText: (opts) => {
-                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyDirectText(opts));
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyDirectText(opts));
             },
             containsDirectText: (directText, opts) => {
-                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText);
+                return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText);
             }
         };
     }
+}
+exports.PageElementListWait = PageElementListWait;
+class PageElementListEventually extends PageNode_1.PageNodeEventually {
+    // Typescript has a bug that prevents Exclude from working with generic extended types:
+    // https://github.com/Microsoft/TypeScript/issues/24791
+    // Bug will be fixed in Typescript 3.3.0
+    // get any() {
+    //   return excludeNot(this._list.currently.first.eventually)
+    // }
     get any() {
         return this._node.currently.first.eventually;
     }
@@ -584,6 +550,40 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     }
     containsDirectText(directText, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsDirectText(expected, opts), directText);
+    }
+    get not() {
+        return {
+            isEmpty: (opts = {}) => this.isEmpty({
+                timeout: opts.timeout, interval: opts.interval, reverse: true
+            }),
+            hasLength: (length, opts = {}) => this.hasLength(length, {
+                timeout: opts.timeout, interval: opts.interval, reverse: true
+            }),
+            isVisible: (opts) => {
+                return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts));
+            },
+            isEnabled: (opts) => {
+                return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts));
+            },
+            hasText: (text, opts) => {
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text);
+            },
+            hasAnyText: (opts) => {
+                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyText(opts));
+            },
+            containsText: (text, opts) => {
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text);
+            },
+            hasDirectText: (directText, opts) => {
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText);
+            },
+            hasAnyDirectText: (opts) => {
+                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyDirectText(opts));
+            },
+            containsDirectText: (directText, opts) => {
+                return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText);
+            }
+        };
     }
 }
 exports.PageElementListEventually = PageElementListEventually;

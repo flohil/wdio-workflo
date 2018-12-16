@@ -352,44 +352,7 @@ class PageElement extends _1.PageElementBase {
 }
 exports.PageElement = PageElement;
 class PageElementCurrently extends _1.PageElementBaseCurrently {
-    constructor() {
-        // GET STATE
-        super(...arguments);
-        this.not = {
-            exists: () => !this.exists(),
-            isVisible: () => !this.isVisible(),
-            isEnabled: () => !this.isEnabled(),
-            isSelected: () => !this.isSelected(),
-            isChecked: () => !this.isChecked(),
-            hasText: (text) => !this.hasText(text),
-            hasAnyText: () => !this.hasAnyText(),
-            containsText: (text) => !this.containsText(text),
-            hasDirectText: (directText) => !this.hasDirectText(directText),
-            hasAnyDirectText: () => !this.hasAnyDirectText(),
-            containsDirectText: (directText) => !this.containsDirectText(directText),
-            hasAttribute: (attributeName, attributeValue) => !this.hasAttribute(attributeName, attributeValue),
-            hasAnyAttribute: (attributeName) => !this.hasAnyAttribute(attributeName),
-            containsAttribute: (attributeName, attributeValue) => !this.containsAttribute(attributeName, attributeValue),
-            hasHTML: (html) => !this.hasHTML(html),
-            hasAnyHTML: () => !this.hasAnyHTML(),
-            containsHTML: (html) => !this.containsHTML(html),
-            hasClass: (className) => !this.hasClass(className),
-            hasAnyClass: () => !this.hasAnyClass(),
-            containsClass: (className) => !this.containsClass(className),
-            hasId: (id) => !this.hasId(id),
-            hasAnyId: () => !this.hasAnyId(),
-            containsId: (id) => !this.containsId(id),
-            hasName: (name) => !this.hasName(name),
-            hasAnyName: () => !this.hasAnyName(),
-            containsName: (name) => !this.containsName(name),
-            hasLocation: (coordinates, tolerances) => !this.hasLocation(coordinates, tolerances),
-            hasX: (x, tolerance) => !this.hasX(x, tolerance),
-            hasY: (y, tolerance) => !this.hasY(y, tolerance),
-            hasSize: (size, tolerances) => !this.hasSize(size, tolerances),
-            hasWidth: (width, tolerance) => !this.hasWidth(width, tolerance),
-            hasHeight: (height, tolerance) => !this.hasHeight(height, tolerance),
-        };
-    }
+    // GET STATE
     /**
      * Overwriting this function will affect the behaviour of the function
      * exists in PageElement base class and its currently, wait and eventually containers.
@@ -693,98 +656,45 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
         this._writeLastDiff(helpers_1.tolerancesToString(actual));
         return this._hasSideSize(height, actual, tolerance);
     }
+    get not() {
+        return {
+            exists: () => !this.exists(),
+            isVisible: () => !this.isVisible(),
+            isEnabled: () => !this.isEnabled(),
+            isSelected: () => !this.isSelected(),
+            isChecked: () => !this.isChecked(),
+            hasText: (text) => !this.hasText(text),
+            hasAnyText: () => !this.hasAnyText(),
+            containsText: (text) => !this.containsText(text),
+            hasDirectText: (directText) => !this.hasDirectText(directText),
+            hasAnyDirectText: () => !this.hasAnyDirectText(),
+            containsDirectText: (directText) => !this.containsDirectText(directText),
+            hasAttribute: (attributeName, attributeValue) => !this.hasAttribute(attributeName, attributeValue),
+            hasAnyAttribute: (attributeName) => !this.hasAnyAttribute(attributeName),
+            containsAttribute: (attributeName, attributeValue) => !this.containsAttribute(attributeName, attributeValue),
+            hasHTML: (html) => !this.hasHTML(html),
+            hasAnyHTML: () => !this.hasAnyHTML(),
+            containsHTML: (html) => !this.containsHTML(html),
+            hasClass: (className) => !this.hasClass(className),
+            hasAnyClass: () => !this.hasAnyClass(),
+            containsClass: (className) => !this.containsClass(className),
+            hasId: (id) => !this.hasId(id),
+            hasAnyId: () => !this.hasAnyId(),
+            containsId: (id) => !this.containsId(id),
+            hasName: (name) => !this.hasName(name),
+            hasAnyName: () => !this.hasAnyName(),
+            containsName: (name) => !this.containsName(name),
+            hasLocation: (coordinates, tolerances) => !this.hasLocation(coordinates, tolerances),
+            hasX: (x, tolerance) => !this.hasX(x, tolerance),
+            hasY: (y, tolerance) => !this.hasY(y, tolerance),
+            hasSize: (size, tolerances) => !this.hasSize(size, tolerances),
+            hasWidth: (width, tolerance) => !this.hasWidth(width, tolerance),
+            hasHeight: (height, tolerance) => !this.hasHeight(height, tolerance),
+        };
+    }
 }
 exports.PageElementCurrently = PageElementCurrently;
 class PageElementWait extends _1.PageElementBaseWait {
-    constructor() {
-        super(...arguments);
-        this.not = {
-            exists: (opts) => {
-                return this.exists(this._makeReverseParams(opts));
-            },
-            isVisible: (opts) => {
-                return this.isVisible(this._makeReverseParams(opts));
-            },
-            isEnabled: (opts) => {
-                return this.isEnabled(this._makeReverseParams(opts));
-            },
-            isSelected: (opts) => {
-                return this.isSelected(this._makeReverseParams(opts));
-            },
-            isChecked: (opts) => {
-                return this.isChecked(this._makeReverseParams(opts));
-            },
-            hasText: (text, opts) => {
-                return this.hasText(text, this._makeReverseParams(opts));
-            },
-            hasAnyText: (opts) => {
-                return this.hasAnyText(this._makeReverseParams(opts));
-            },
-            containsText: (text, opts) => {
-                return this.containsText(text, this._makeReverseParams(opts));
-            },
-            hasHTML: (html, opts) => {
-                return this.hasHTML(html, this._makeReverseParams(opts));
-            },
-            hasAnyHTML: (opts) => {
-                return this.hasAnyHTML(this._makeReverseParams(opts));
-            },
-            containsHTML: (html, opts) => {
-                return this.containsHTML(html, this._makeReverseParams(opts));
-            },
-            hasDirectText: (directText, opts) => {
-                return this.hasDirectText(directText, this._makeReverseParams(opts));
-            },
-            hasAnyDirectText: (opts) => {
-                return this.hasAnyDirectText(this._makeReverseParams(opts));
-            },
-            containsDirectText: (directText, opts) => {
-                return this.containsDirectText(directText, this._makeReverseParams(opts));
-            },
-            hasAttribute: (attributeName, attributeValue, opts) => {
-                return this.hasAttribute(attributeName, attributeValue, this._makeReverseParams(opts));
-            },
-            hasAnyAttribute: (attributeName, opts) => {
-                return this.hasAnyAttribute(attributeName, this._makeReverseParams(opts));
-            },
-            containsAttribute: (attributeName, attributeValue, opts) => {
-                return this.containsAttribute(attributeName, attributeValue, this._makeReverseParams(opts));
-            },
-            hasClass: (className, opts) => {
-                return this.hasClass(className, this._makeReverseParams(opts));
-            },
-            hasAnyClass: (opts) => {
-                return this.hasAnyClass(this._makeReverseParams(opts));
-            },
-            containsClass: (className, opts) => {
-                return this.containsClass(className, this._makeReverseParams(opts));
-            },
-            hasId: (id, opts) => {
-                return this.hasId(id, this._makeReverseParams(opts));
-            },
-            hasAnyId: (opts) => {
-                return this.hasAnyId(this._makeReverseParams(opts));
-            },
-            containsId: (id, opts) => {
-                return this.containsId(id, this._makeReverseParams(opts));
-            },
-            hasName: (name, opts) => {
-                return this.hasName(name, this._makeReverseParams(opts));
-            },
-            hasAnyName: (opts) => {
-                return this.hasAnyName(this._makeReverseParams(opts));
-            },
-            containsName: (name, opts) => {
-                return this.containsName(name, this._makeReverseParams(opts));
-            },
-            hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => this.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout, reverse: true }),
-            hasX: (x, opts = { tolerance: 0 }) => this.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true }),
-            hasY: (y, opts = { tolerance: 0 }) => this.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true }),
-            hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => this.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout, reverse: true }),
-            hasWidth: (width, opts = { tolerance: 0 }) => this.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true }),
-            hasHeight: (height, opts = { tolerance: 0 }) => this.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true })
-        };
-    }
     exists(opts = {}) {
         return this._waitWdioCheckFunc('existed', opts => this._node.currently.element.waitForExist(opts.timeout, opts.reverse), opts);
     }
@@ -931,98 +841,97 @@ class PageElementWait extends _1.PageElementBaseWait {
         this._node.__waitUntil(() => condition(this._node), () => `: Wait until element ${description} failed`, timeout);
         return this._node;
     }
+    get not() {
+        return {
+            exists: (opts) => {
+                return this.exists(this._makeReverseParams(opts));
+            },
+            isVisible: (opts) => {
+                return this.isVisible(this._makeReverseParams(opts));
+            },
+            isEnabled: (opts) => {
+                return this.isEnabled(this._makeReverseParams(opts));
+            },
+            isSelected: (opts) => {
+                return this.isSelected(this._makeReverseParams(opts));
+            },
+            isChecked: (opts) => {
+                return this.isChecked(this._makeReverseParams(opts));
+            },
+            hasText: (text, opts) => {
+                return this.hasText(text, this._makeReverseParams(opts));
+            },
+            hasAnyText: (opts) => {
+                return this.hasAnyText(this._makeReverseParams(opts));
+            },
+            containsText: (text, opts) => {
+                return this.containsText(text, this._makeReverseParams(opts));
+            },
+            hasHTML: (html, opts) => {
+                return this.hasHTML(html, this._makeReverseParams(opts));
+            },
+            hasAnyHTML: (opts) => {
+                return this.hasAnyHTML(this._makeReverseParams(opts));
+            },
+            containsHTML: (html, opts) => {
+                return this.containsHTML(html, this._makeReverseParams(opts));
+            },
+            hasDirectText: (directText, opts) => {
+                return this.hasDirectText(directText, this._makeReverseParams(opts));
+            },
+            hasAnyDirectText: (opts) => {
+                return this.hasAnyDirectText(this._makeReverseParams(opts));
+            },
+            containsDirectText: (directText, opts) => {
+                return this.containsDirectText(directText, this._makeReverseParams(opts));
+            },
+            hasAttribute: (attributeName, attributeValue, opts) => {
+                return this.hasAttribute(attributeName, attributeValue, this._makeReverseParams(opts));
+            },
+            hasAnyAttribute: (attributeName, opts) => {
+                return this.hasAnyAttribute(attributeName, this._makeReverseParams(opts));
+            },
+            containsAttribute: (attributeName, attributeValue, opts) => {
+                return this.containsAttribute(attributeName, attributeValue, this._makeReverseParams(opts));
+            },
+            hasClass: (className, opts) => {
+                return this.hasClass(className, this._makeReverseParams(opts));
+            },
+            hasAnyClass: (opts) => {
+                return this.hasAnyClass(this._makeReverseParams(opts));
+            },
+            containsClass: (className, opts) => {
+                return this.containsClass(className, this._makeReverseParams(opts));
+            },
+            hasId: (id, opts) => {
+                return this.hasId(id, this._makeReverseParams(opts));
+            },
+            hasAnyId: (opts) => {
+                return this.hasAnyId(this._makeReverseParams(opts));
+            },
+            containsId: (id, opts) => {
+                return this.containsId(id, this._makeReverseParams(opts));
+            },
+            hasName: (name, opts) => {
+                return this.hasName(name, this._makeReverseParams(opts));
+            },
+            hasAnyName: (opts) => {
+                return this.hasAnyName(this._makeReverseParams(opts));
+            },
+            containsName: (name, opts) => {
+                return this.containsName(name, this._makeReverseParams(opts));
+            },
+            hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => this.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout, reverse: true }),
+            hasX: (x, opts = { tolerance: 0 }) => this.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true }),
+            hasY: (y, opts = { tolerance: 0 }) => this.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true }),
+            hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => this.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout, reverse: true }),
+            hasWidth: (width, opts = { tolerance: 0 }) => this.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true }),
+            hasHeight: (height, opts = { tolerance: 0 }) => this.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true })
+        };
+    }
 }
 exports.PageElementWait = PageElementWait;
 class PageElementEventually extends _1.PageElementBaseEventually {
-    constructor() {
-        super(...arguments);
-        this.not = {
-            exists: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.exists(opts));
-            },
-            isVisible: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.isVisible(opts));
-            },
-            isEnabled: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.isEnabled(opts));
-            },
-            isSelected: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.isSelected(opts));
-            },
-            isChecked: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.isChecked(opts));
-            },
-            hasText: (text, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasText(text, opts));
-            },
-            hasAnyText: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAnyText(opts));
-            },
-            containsText: (text, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsText(text, opts));
-            },
-            hasHTML: (html, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasHTML(html, opts));
-            },
-            hasAnyHTML: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAnyHTML(opts));
-            },
-            containsHTML: (html, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsHTML(html, opts));
-            },
-            hasDirectText: (directText, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasDirectText(directText, opts));
-            },
-            hasAnyDirectText: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAnyDirectText(opts));
-            },
-            containsDirectText: (directText, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts));
-            },
-            hasAttribute: (attributeName, attributeValue, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts));
-            },
-            hasAnyAttribute: (attributeName, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts));
-            },
-            containsAttribute: (attributeName, attributeValue, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts));
-            },
-            hasClass: (className, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts));
-            },
-            hasAnyClass: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAnyClass(opts));
-            },
-            containsClass: (className, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsClass(className, opts));
-            },
-            hasId: (id, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasId(id, opts));
-            },
-            hasAnyId: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAnyId(opts));
-            },
-            containsId: (id, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsId(id, opts));
-            },
-            hasName: (name, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasName(name, opts));
-            },
-            hasAnyName: (opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAnyName(opts));
-            },
-            containsName: (name, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsName(name, opts));
-            },
-            hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => this._node.__eventually(() => this._node.wait.not.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout })),
-            hasX: (x, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout })),
-            hasY: (y, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout })),
-            hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => this._node.__eventually(() => this._node.wait.not.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout })),
-            hasWidth: (width, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout })),
-            hasHeight: (height, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout })),
-        };
-    }
     exists(opts) {
         return this._node.__eventually(() => this._node.wait.exists(opts));
     }
@@ -1121,6 +1030,94 @@ class PageElementEventually extends _1.PageElementBaseEventually {
     }
     meetsCondition(condition, opts) {
         return this._node.__eventually(() => this._node.wait.untilElement(' meets condition', () => condition(this._node), opts));
+    }
+    get not() {
+        return {
+            exists: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.exists(opts));
+            },
+            isVisible: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.isVisible(opts));
+            },
+            isEnabled: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.isEnabled(opts));
+            },
+            isSelected: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.isSelected(opts));
+            },
+            isChecked: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.isChecked(opts));
+            },
+            hasText: (text, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasText(text, opts));
+            },
+            hasAnyText: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAnyText(opts));
+            },
+            containsText: (text, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsText(text, opts));
+            },
+            hasHTML: (html, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasHTML(html, opts));
+            },
+            hasAnyHTML: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAnyHTML(opts));
+            },
+            containsHTML: (html, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsHTML(html, opts));
+            },
+            hasDirectText: (directText, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasDirectText(directText, opts));
+            },
+            hasAnyDirectText: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAnyDirectText(opts));
+            },
+            containsDirectText: (directText, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts));
+            },
+            hasAttribute: (attributeName, attributeValue, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts));
+            },
+            hasAnyAttribute: (attributeName, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts));
+            },
+            containsAttribute: (attributeName, attributeValue, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts));
+            },
+            hasClass: (className, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts));
+            },
+            hasAnyClass: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAnyClass(opts));
+            },
+            containsClass: (className, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsClass(className, opts));
+            },
+            hasId: (id, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasId(id, opts));
+            },
+            hasAnyId: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAnyId(opts));
+            },
+            containsId: (id, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsId(id, opts));
+            },
+            hasName: (name, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasName(name, opts));
+            },
+            hasAnyName: (opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAnyName(opts));
+            },
+            containsName: (name, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsName(name, opts));
+            },
+            hasLocation: (coordinates, opts = { tolerances: { x: 0, y: 0 } }) => this._node.__eventually(() => this._node.wait.not.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout })),
+            hasX: (x, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout })),
+            hasY: (y, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout })),
+            hasSize: (size, opts = { tolerances: { width: 0, height: 0 } }) => this._node.__eventually(() => this._node.wait.not.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout })),
+            hasWidth: (width, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout })),
+            hasHeight: (height, opts = { tolerance: 0 }) => this._node.__eventually(() => this._node.wait.not.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout })),
+        };
     }
 }
 exports.PageElementEventually = PageElementEventually;

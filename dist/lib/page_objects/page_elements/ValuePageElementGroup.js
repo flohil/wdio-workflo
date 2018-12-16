@@ -33,16 +33,6 @@ class ValuePageElementGroup extends _1.PageElementGroup {
 }
 exports.ValuePageElementGroup = ValuePageElementGroup;
 class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
-    constructor() {
-        super(...arguments);
-        this.not = Object.assign({}, super.not, { hasValue: (value) => {
-                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.currently.not.hasValue(value));
-            }, hasAnyValue: (filterMask) => {
-                return this._node.eachCheck(isIValueElementNode, filterMask, node => node.currently.not.hasAnyValue());
-            }, containsValue: (value) => {
-                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.currently.not.containsValue(value));
-            } });
-    }
     getValue(filterMask) {
         return this._node.eachGet(isIValueElementNode, filterMask, node => node.currently.getValue());
     }
@@ -64,18 +54,17 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
     containsValue(value) {
         return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.currently.containsValue(value));
     }
-}
-class ValuePageElementGroupWait extends _1.PageElementGroupWait {
-    constructor() {
-        super(...arguments);
-        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
-                return this._node.eachWait(isIValueElementNode, value, (node, value) => node.wait.hasValue(value, opts));
-            }, hasAnyValue: (opts = {}) => {
-                return this._node.eachWait(isIValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts));
-            }, containsValue: (value, opts) => {
-                return this._node.eachWait(isIValueElementNode, value, (node, value) => node.wait.containsValue(value, opts));
+    get not() {
+        return Object.assign({}, super.not, { hasValue: (value) => {
+                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.currently.not.hasValue(value));
+            }, hasAnyValue: (filterMask) => {
+                return this._node.eachCheck(isIValueElementNode, filterMask, node => node.currently.not.hasAnyValue());
+            }, containsValue: (value) => {
+                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.currently.not.containsValue(value));
             } });
     }
+}
+class ValuePageElementGroupWait extends _1.PageElementGroupWait {
     hasValue(value, opts) {
         return this._node.eachWait(isIValueElementNode, value, (node, value) => node.wait.hasValue(value, opts));
     }
@@ -85,18 +74,17 @@ class ValuePageElementGroupWait extends _1.PageElementGroupWait {
     containsValue(value, opts) {
         return this._node.eachWait(isIValueElementNode, value, (node, value) => node.wait.containsValue(value, opts));
     }
-}
-class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
-    constructor() {
-        super(...arguments);
-        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
-                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.eventually.not.hasValue(value, opts));
+    get not() {
+        return Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.eachWait(isIValueElementNode, value, (node, value) => node.wait.hasValue(value, opts));
             }, hasAnyValue: (opts = {}) => {
-                return this._node.eachCheck(isIValueElementNode, opts.filterMask, node => node.eventually.not.hasAnyValue(opts));
+                return this._node.eachWait(isIValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts));
             }, containsValue: (value, opts) => {
-                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.eventually.not.containsValue(value, opts));
+                return this._node.eachWait(isIValueElementNode, value, (node, value) => node.wait.containsValue(value, opts));
             } });
     }
+}
+class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
     hasValue(value, opts) {
         return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.eventually.hasValue(value, opts));
     }
@@ -105,6 +93,15 @@ class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
     }
     containsValue(value, opts) {
         return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.eventually.containsValue(value, opts));
+    }
+    get not() {
+        return Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.eventually.not.hasValue(value, opts));
+            }, hasAnyValue: (opts = {}) => {
+                return this._node.eachCheck(isIValueElementNode, opts.filterMask, node => node.eventually.not.hasAnyValue(opts));
+            }, containsValue: (value, opts) => {
+                return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.eventually.not.containsValue(value, opts));
+            } });
     }
 }
 // type guards

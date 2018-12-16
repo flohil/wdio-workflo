@@ -162,7 +162,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     hasDirectText(directText: string | string[]): boolean;
     hasAnyDirectText(): boolean;
     containsDirectText(directText: string | string[]): boolean;
-    not: {
+    readonly not: {
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
         isVisible: () => boolean;
@@ -188,7 +188,7 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
     hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional): ListType;
     containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
-    not: {
+    readonly not: {
         isEmpty: (opts?: IPageElementListWaitEmptyParams) => ListType;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => ListType;
@@ -214,7 +214,7 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
     hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional): boolean;
     containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
-    not: {
+    readonly not: {
         isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;

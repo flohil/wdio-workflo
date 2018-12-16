@@ -76,7 +76,7 @@ export declare class PageElementMapCurrently<Store extends PageElementStore, K e
     hasDirectText(directText: Partial<Record<K, string>>): boolean;
     hasAnyDirectText(filterMask?: Partial<Record<K, string>>): boolean;
     containsDirectText(directText: Partial<Record<K, string>>): boolean;
-    not: {
+    readonly not: {
         isVisible: (filterMask?: Partial<Record<K, true>>) => boolean;
         isEnabled: (filterMask?: Partial<Record<K, true>>) => boolean;
         hasText: (text: Partial<Record<K, string>>) => boolean;
@@ -104,7 +104,7 @@ export declare class PageElementMapWait<Store extends PageElementStore, K extend
         filterMask?: Partial<Record<K, string>>;
     }): MapType;
     containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): MapType;
-    not: {
+    readonly not: {
         isVisible: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Partial<Record<K, true>>;
         }) => MapType;
@@ -140,7 +140,7 @@ export declare class PageElementMapEventually<Store extends PageElementStore, K 
         filterMask?: Partial<Record<K, string>>;
     }): boolean;
     containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsOptional): boolean;
-    not: {
+    readonly not: {
         isVisible: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Partial<Record<K, true>>;
         }) => boolean;

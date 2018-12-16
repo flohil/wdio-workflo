@@ -63,7 +63,7 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
     hasDirectText(directText: ExtractText<Content>): boolean;
     hasAnyDirectText(filterMask?: ExtractText<Content>): boolean;
     containsDirectText(directText: ExtractText<Content>): boolean;
-    not: {
+    readonly not: {
         isVisible: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
@@ -93,7 +93,7 @@ export declare class PageElementGroupWait<Store extends PageElementStore, Conten
         filterMask?: ExtractText<Content>;
     }): GroupType;
     containsDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsOptional): GroupType;
-    not: {
+    readonly not: {
         isVisible: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
         }) => GroupType;
@@ -123,7 +123,7 @@ export declare class PageElementGroupEventually<Store extends PageElementStore, 
     hasDirectText(directText: ExtractText<Content>): boolean;
     hasAnyDirectText(filterMask?: ExtractText<Content>): boolean;
     containsDirectText(directText: ExtractText<Content>): boolean;
-    not: {
+    readonly not: {
         isVisible: (text: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;

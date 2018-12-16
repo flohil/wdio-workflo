@@ -37,7 +37,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Con
     hasValue(value: ExtractValue<Content>): boolean;
     hasAnyValue(filterMask?: ExtractValue<Content>): boolean;
     containsValue(value: ExtractValue<Content>): boolean;
-    not: {
+    readonly not: {
         hasValue: (value: Workflo.PageNode.ExtractValue<Content>) => boolean;
         hasAnyValue: (filterMask?: Workflo.PageNode.ExtractValue<Content>) => boolean;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>) => boolean;
@@ -59,7 +59,7 @@ declare class ValuePageElementGroupWait<Store extends PageElementStore, Content 
         filterMask?: ExtractValue<Content>;
     }): GroupType;
     containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsOptional): GroupType;
-    not: {
+    readonly not: {
         hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsOptional) => GroupType;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Workflo.PageNode.ExtractValue<Content>;
@@ -91,7 +91,7 @@ declare class ValuePageElementGroupEventually<Store extends PageElementStore, Co
         filterMask?: ExtractValue<Content>;
     }): boolean;
     containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsOptional): boolean;
-    not: {
+    readonly not: {
         hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional & {
             filterMask?: Workflo.PageNode.ExtractValue<Content>;

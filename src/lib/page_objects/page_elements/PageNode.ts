@@ -7,15 +7,15 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
   timeout?: number
 }
 
-export class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
+export abstract class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
   protected _store: Store
   protected _lastDiff: Workflo.IDiff
   protected _selector: string
   protected _timeout: number
 
-  readonly currently: PageNodeCurrently<Store, this>
-  readonly wait: PageNodeWait<Store, this>
-  readonly eventually: PageNodeEventually<Store, this>
+  abstract readonly currently: PageNodeCurrently<Store, this>
+  abstract readonly wait: PageNodeWait<Store, this>
+  abstract readonly eventually: PageNodeEventually<Store, this>
 
   // available options:
   // - wait -> initial wait operation: exist, visible, text, value
@@ -25,11 +25,7 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   ) {
     this._selector = selector
     this._store = opts.store
-    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
-
-    this.currently = new PageNodeCurrently(this)
-    this.wait = new PageNodeWait(this)
-    this.eventually = new PageNodeEventually(this)
+    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
   }
 
   // INTERNAL GETTERS AND SETTERS
@@ -160,7 +156,7 @@ export class PageNode<Store extends PageElementStore> implements Workflo.PageNod
   }
 }
 
-export class PageNodeCurrently<
+export abstract class PageNodeCurrently<
   Store extends PageElementStore,
   PageElementType extends PageNode<Store>
 > {
@@ -169,9 +165,11 @@ export class PageNodeCurrently<
   constructor(node: PageElementType) {
     this._node = node
   }
+
+  abstract get not(): {}
 }
 
-export class PageNodeWait<
+export abstract class PageNodeWait<
   Store extends PageElementStore,
   PageElementType extends PageNode<Store>
 > {
@@ -180,9 +178,11 @@ export class PageNodeWait<
   constructor(node: PageElementType) {
     this._node = node
   }
+
+  abstract get not(): {}
 }
 
-export class PageNodeEventually<
+export abstract class PageNodeEventually<
   Store extends PageElementStore,
   PageElementType extends PageNode<Store>
 > {
@@ -191,4 +191,6 @@ export class PageNodeEventually<
   constructor(node: PageElementType) {
     this._node = node
   }
+
+  abstract get not(): {}
 }

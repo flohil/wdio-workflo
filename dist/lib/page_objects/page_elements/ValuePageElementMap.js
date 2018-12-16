@@ -35,16 +35,6 @@ class ValuePageElementMap extends _1.PageElementMap {
 }
 exports.ValuePageElementMap = ValuePageElementMap;
 class ValuePageElementMapCurrently extends _1.PageElementMapCurrently {
-    constructor() {
-        super(...arguments);
-        this.not = Object.assign({}, super.not, { hasValue: (value) => {
-                return this._node.eachCheck(this._node.$, value, (element, expected) => element.currently.not.hasValue(expected));
-            }, hasAnyValue: (filterMask) => {
-                return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.hasAnyValue());
-            }, containsValue: (value) => {
-                return this._node.eachCheck(this._node.$, value, (element, expected) => element.currently.not.containsValue(expected));
-            } });
-    }
     /**
      * Returns values of all list elements immediatly in the order they were retrieved from the DOM.
      *
@@ -68,18 +58,17 @@ class ValuePageElementMapCurrently extends _1.PageElementMapCurrently {
     containsValue(value) {
         return this._node.eachCheck(this._node.$, value, (element, expected) => element.currently.containsValue(expected));
     }
-}
-class ValuePageElementMapWait extends _1.PageElementMapWait {
-    constructor() {
-        super(...arguments);
-        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
-                return this._node.eachWait(this._node.$, value, (element, expected) => element.wait.not.hasValue(expected, opts));
-            }, hasAnyValue: (opts = {}) => {
-                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.hasAnyValue(opts));
-            }, containsValue: (value, opts) => {
-                return this._node.eachWait(this._node.$, value, (element, expected) => element.wait.not.containsValue(expected, opts));
+    get not() {
+        return Object.assign({}, super.not, { hasValue: (value) => {
+                return this._node.eachCheck(this._node.$, value, (element, expected) => element.currently.not.hasValue(expected));
+            }, hasAnyValue: (filterMask) => {
+                return this._node.eachCheck(this._node.$, filterMask, element => element.currently.not.hasAnyValue());
+            }, containsValue: (value) => {
+                return this._node.eachCheck(this._node.$, value, (element, expected) => element.currently.not.containsValue(expected));
             } });
     }
+}
+class ValuePageElementMapWait extends _1.PageElementMapWait {
     hasValue(value, opts) {
         return this._node.eachWait(this._node.$, value, (element, expected) => element.wait.hasValue(expected, opts));
     }
@@ -89,18 +78,17 @@ class ValuePageElementMapWait extends _1.PageElementMapWait {
     containsValue(value, opts) {
         return this._node.eachWait(this._node.$, value, (element, expected) => element.wait.containsValue(expected, opts));
     }
-}
-class ValuePageElementMapEventually extends _1.PageElementMapEventually {
-    constructor() {
-        super(...arguments);
-        this.not = Object.assign({}, super.not, { hasValue: (value, opts) => {
-                return this._node.eachCheck(this._node.$, value, (element, expected) => element.eventually.not.hasValue(expected, opts));
+    get not() {
+        return Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.eachWait(this._node.$, value, (element, expected) => element.wait.not.hasValue(expected, opts));
             }, hasAnyValue: (opts = {}) => {
-                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.hasAnyValue(opts));
+                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.hasAnyValue(opts));
             }, containsValue: (value, opts) => {
-                return this._node.eachCheck(this._node.$, value, (element, expected) => element.eventually.not.containsValue(expected, opts));
+                return this._node.eachWait(this._node.$, value, (element, expected) => element.wait.not.containsValue(expected, opts));
             } });
     }
+}
+class ValuePageElementMapEventually extends _1.PageElementMapEventually {
     hasValue(value, opts) {
         return this._node.eachCheck(this._node.$, value, (element, expected) => element.eventually.hasValue(expected, opts));
     }
@@ -109,6 +97,15 @@ class ValuePageElementMapEventually extends _1.PageElementMapEventually {
     }
     containsValue(value, opts) {
         return this._node.eachCheck(this._node.$, value, (element, expected) => element.eventually.containsValue(expected, opts));
+    }
+    get not() {
+        return Object.assign({}, super.not, { hasValue: (value, opts) => {
+                return this._node.eachCheck(this._node.$, value, (element, expected) => element.eventually.not.hasValue(expected, opts));
+            }, hasAnyValue: (opts = {}) => {
+                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.hasAnyValue(opts));
+            }, containsValue: (value, opts) => {
+                return this._node.eachCheck(this._node.$, value, (element, expected) => element.eventually.not.containsValue(expected, opts));
+            } });
     }
 }
 //# sourceMappingURL=ValuePageElementMap.js.map

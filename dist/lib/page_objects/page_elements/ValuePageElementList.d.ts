@@ -44,7 +44,7 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
     hasValue(value: ValueType | ValueType[]): boolean;
     hasAnyValue(): boolean;
     containsValue(value: ValueType | ValueType[]): boolean;
-    not: {
+    readonly not: {
         hasValue: (value: ValueType | ValueType[]) => boolean;
         hasAnyValue: () => boolean;
         containsValue: (value: ValueType | ValueType[]) => boolean;
@@ -64,7 +64,7 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
     hasValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional): ListType;
     hasAnyValue(opts?: Workflo.IWDIOParamsOptional): ListType;
     containsValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional): ListType;
-    not: {
+    readonly not: {
         hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => ListType;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => ListType;
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => ListType;
@@ -84,7 +84,7 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
     hasValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional): boolean;
     hasAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean;
     containsValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional): boolean;
-    not: {
+    readonly not: {
         hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => boolean;
         hasAnyValue: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsOptional) => boolean;

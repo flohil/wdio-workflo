@@ -335,7 +335,38 @@ export function booleanMatcherWithoutExpected<
 
 // ERROR TEXT FUNCTIONS
 
-export function createBaseMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]) {
+function diffTreeToMessages(diff: Workflo.IDiff, comparisonLines: string[] = [], paths: string[] = []): string[] {
+  if (diff.tree && Object.keys(diff.tree).length > 0) {
+    const keys = Object.keys(diff.tree)
+
+    keys.forEach(
+      key => {
+        const _paths = [...paths]
+        _paths.push(key)
+
+        diffTreeToMessages(diff.tree[key], comparisonLines, _paths)
+      }
+    )
+  } else {
+    let _paths = paths.join('')
+
+    if (_paths.charAt(0) === '.') {
+      _paths = _paths.substring(1)
+    }
+
+    const compareStr = (typeof diff.actual === 'undefined' && typeof diff.expected === 'undefined') ?
+      '' :`{actual: "${diff.actual}", expected: "${diff.expected}"}\n`
+
+    comparisonLines.push(`${diff.constructorName} at path '${_paths}'\n${compareStr}( ${diff.selector} )`)
+  }
+
+  return comparisonLines
+}
+
+export function createBaseMessage<
+  Store extends stores.PageElementStore,
+  NodeType extends elements.PageElement<Store>
+>(node: NodeType, errorTexts: string | string[]) {
   let errorText = undefined
   let notErrorText = undefined
 
@@ -349,29 +380,14 @@ export function createBaseMessage(node: Workflo.PageNode.INode, errorTexts: stri
 
   return [
     `Expected ${node.constructor.name} ${errorText}.\n( ${node.__getNodeId()} )`,
-    `Expected ${node.constructor.name} not ${notErrorText}.\n( ${node.__getNodeId()} )`
+    `Expected ${node.constructor.name} ${notErrorText}.\n( ${node.__getNodeId()} )`
   ]
 }
 
-export function createPropertyMessage(
-  node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: string
-) {
-  return createBaseMessage(node, [
-    `'s ${property} "${actual}" to ${comparison} "${expected}"`,
-    `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
-  ])
-}
-
-export function createEventuallyPropertyMessage(
-  node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: string, timeout: number
-) {
-  return createBaseMessage(node, [
-    `'s ${property} "${actual}" to eventually ${comparison} "${expected}" within ${timeout} ms`,
-    `'s ${property} "${actual}" not to eventually ${comparison} "${expected}" within ${timeout} ms`
-  ])
-}
-
-export function createEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]) {
+export function createMessage<
+  Store extends stores.PageElementStore,
+  NodeType extends elements.PageElement<Store>
+>(node: NodeType, errorTexts: string | string[]) {
   let errorText = undefined
   let notErrorText = undefined
 
@@ -383,25 +399,98 @@ export function createEachMessage(node: Workflo.PageNode.INode, errorTexts: stri
     notErrorText = errorTexts
   }
 
-  const comparisonLines = Object.keys(node.__lastDiff.tree).map(
-    key => {
-      const diff = node.__lastDiff.tree[key]
+  return createBaseMessage(node, [
+    `to ${errorText}`,
+    `not to ${notErrorText}`
+  ])
+}
 
-      return `[0] => ${diff.constructorName}\n` +
-      `{actual: "${diff.actual}", expected: "${diff.expected}"}\n` +
-      `( ${diff.selector} )`
-    }
-  )
-  const comparisonList = comparisonLines.join('\n')
+export function createEventuallyMessage<
+  Store extends stores.PageElementStore,
+  NodeType extends elements.PageElement<Store>
+>(node: NodeType, errorTexts: string | string[], timeout: number) {
+  let errorText = undefined
+  let notErrorText = undefined
+
+  if ( _.isArray(errorTexts) ) {
+    errorText = errorTexts[0]
+    notErrorText = errorTexts[1]
+  } else {
+    errorText = errorTexts
+    notErrorText = errorTexts
+  }
+
+  return createBaseMessage(node, [
+    `to eventually ${errorText} within ${timeout} ms`,
+    `not to eventually ${notErrorText} within ${timeout} ms`
+  ])
+}
+
+export function createPropertyMessage<
+  Store extends stores.PageElementStore,
+  NodeType extends elements.PageElement<Store>
+>(
+  node: NodeType, property: string, comparison: string, actual: string, expected: string
+) {
+  return createBaseMessage(node, [
+    `'s ${property} "${actual}" to ${comparison} "${expected}"`,
+    `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
+  ])
+}
+
+export function createEventuallyPropertyMessage<
+  Store extends stores.PageElementStore,
+  NodeType extends elements.PageElement<Store>
+>(
+  node: NodeType, property: string, comparison: string, actual: string, expected: string, timeout: number
+) {
+  return createBaseMessage(node, [
+    `'s ${property} "${actual}" to eventually ${comparison} "${expected}" within ${timeout} ms`,
+    `'s ${property} "${actual}" not to eventually ${comparison} "${expected}" within ${timeout} ms`
+  ])
+}
+export function createEachMessage<
+  Store extends stores.PageElementStore,
+  PageElementType extends elements.PageElement<Store>,
+  PageElementOptions extends elements.IPageElementOpts<Store>,
+  K extends string,
+  Content extends {[key: string]: Workflo.PageNode.INode},
+  NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> |
+    elements.PageElementMap<Store, K, PageElementType, PageElementOptions> |
+    elements.PageElementGroup<Store, Content>
+>(node: NodeType, errorTexts: string | string[]) {
+  let errorText = undefined
+  let notErrorText = undefined
+
+  if ( _.isArray(errorTexts) ) {
+    errorText = errorTexts[0]
+    notErrorText = errorTexts[1]
+  } else {
+    errorText = errorTexts
+    notErrorText = errorTexts
+  }
+
+  const comparisonLines = diffTreeToMessages(node.__lastDiff)
+  const comparisonList = comparisonLines.join('\n\n')
+  const hrLine = `\n------------------------------------------------------------------\n`
 
   return [
-    `Expected each of ${node.constructor.name}'s elements ${errorText}:\n\n${comparisonList}`,
-    `Expected each of ${node.constructor.name}'s elements not ${notErrorText}:\n\n${comparisonList}`
+    `Expected each of ${node.constructor.name}'s elements to ${errorText}:${hrLine}${comparisonList}${hrLine}`,
+    `Expected none of ${node.constructor.name}'s elements to ${notErrorText}:${hrLine}${comparisonList}${hrLine}`
   ]
 }
 
-export function createEventuallyEachMessage(
-  node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number
+export function createEventuallyEachMessage<
+  Store extends stores.PageElementStore,
+  PageElementType extends elements.PageElement<Store>,
+  PageElementOptions extends elements.IPageElementOpts<Store>,
+  K extends string,
+  Content extends {[key: string]: Workflo.PageNode.INode},
+  NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> |
+    elements.PageElementMap<Store, K, PageElementType, PageElementOptions> |
+    elements.PageElementGroup<Store, Content>
+>(
+  node: NodeType, errorTexts: string | string[], timeout: number
 ) {
   const within = _.isArray(errorTexts) ?
     errorTexts.map(errorText => `${errorText} within ${timeout}ms`) :
@@ -416,29 +505,29 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
   toExist: booleanMatcherWithoutExpected({
     element: {
       resultFunc: ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
-      errorTextFunc: ({node}) => createBaseMessage(node, "to exist")
+      errorTextFunc: ({node}) => createMessage(node, "exist")
     }
   }),
   toBeVisible: booleanMatcherWithoutExpected({
     element: {
       resultFunc: ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
-      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+      errorTextFunc: ({node}) => createMessage(node, "be visible")
     },
     list: {
       resultFunc: ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
-      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+      errorTextFunc: ({node}) => createEachMessage(node, "be visible")
     },
     map: {
       resultFunc: ({node, opts}) => [
         () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
       ],
-      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+      errorTextFunc: ({node}) => createEachMessage(node, "be visible")
     },
     group: {
       resultFunc: ({node, opts}) => [
         () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
       ],
-      errorTextFunc: ({node}) => createEachMessage(node, "to be visible")
+      errorTextFunc: ({node}) => createEachMessage(node, "be visible")
     }
   }),
 

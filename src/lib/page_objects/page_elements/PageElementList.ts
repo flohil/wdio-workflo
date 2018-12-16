@@ -599,38 +599,40 @@ export class PageElementListCurrently<
     )
   }
 
-  not = {
-    isEmpty: () => !this.isEmpty(),
-    hasLength: (
-      length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
-    ) => !this.hasLength(length, comparator),
-    isVisible: () => {
-      return this._node.eachCheck(this.all, element => element.currently.not.isVisible())
-    },
-    isEnabled: () => {
-      return this._node.eachCheck(this.all, element => element.currently.not.isEnabled())
-    },
-    hasText: (text: string | string[]) => {
-      return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text)
-    },
-    hasAnyText: () => {
-      return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText())
-    },
-    containsText: (text: string | string[]) => {
-      return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text)
-    },
-    hasDirectText: (directText: string | string[]) => {
-      return this._node.eachCheck(
-        this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText
-      )
-    },
-    hasAnyDirectText: () => {
-      return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText())
-    },
-    containsDirectText: (directText: string | string[]) => {
-      return this._node.eachCheck(
-        this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText
-      )
+  get not() {
+    return {
+      isEmpty: () => !this.isEmpty(),
+      hasLength: (
+        length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
+      ) => !this.hasLength(length, comparator),
+      isVisible: () => {
+        return this._node.eachCheck(this.all, element => element.currently.not.isVisible())
+      },
+      isEnabled: () => {
+        return this._node.eachCheck(this.all, element => element.currently.not.isEnabled())
+      },
+      hasText: (text: string | string[]) => {
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text)
+      },
+      hasAnyText: () => {
+        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText())
+      },
+      containsText: (text: string | string[]) => {
+        return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text)
+      },
+      hasDirectText: (directText: string | string[]) => {
+        return this._node.eachCheck(
+          this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText
+        )
+      },
+      hasAnyDirectText: () => {
+        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText())
+      },
+      containsDirectText: (directText: string | string[]) => {
+        return this._node.eachCheck(
+          this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText
+        )
+      }
     }
   }
 }
@@ -745,50 +747,52 @@ export class PageElementListWait<
     )
   }
 
-  not = {
-    isEmpty: (opts: IPageElementListWaitEmptyParams = {}) => this.isEmpty({
-      timeout: opts.timeout, interval: opts.interval, reverse: true
-    }),
-    hasLength: (
-      length: number, opts: IPageElementListWaitLengthParams = {}
-    ) => this.hasLength(length, {
-      timeout: opts.timeout, interval: opts.interval, reverse: true
-    }),
-    isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts))
-    },
-    isEnabled: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(opts))
-    },
-    hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text
-      )
-    },
-    hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element) => element.wait.not.hasAnyText(opts)
-      )
-    },
-    containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element, expected) => element.wait.not.containsText(expected, opts), text
-      )
-    },
-    hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText
-      )
-    },
-    hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element) => element.wait.not.hasAnyDirectText(opts)
-      )
-    },
-    containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachWait(
-        this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText
-      )
+  get not() {
+    return {
+      isEmpty: (opts: IPageElementListWaitEmptyParams = {}) => this.isEmpty({
+        timeout: opts.timeout, interval: opts.interval, reverse: true
+      }),
+      hasLength: (
+        length: number, opts: IPageElementListWaitLengthParams = {}
+      ) => this.hasLength(length, {
+        timeout: opts.timeout, interval: opts.interval, reverse: true
+      }),
+      isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts))
+      },
+      isEnabled: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(opts))
+      },
+      hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text
+        )
+      },
+      hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element) => element.wait.not.hasAnyText(opts)
+        )
+      },
+      containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element, expected) => element.wait.not.containsText(expected, opts), text
+        )
+      },
+      hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText
+        )
+      },
+      hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element) => element.wait.not.hasAnyDirectText(opts)
+        )
+      },
+      containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachWait(
+          this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText
+        )
+      }
     }
   }
 }
@@ -876,48 +880,50 @@ export class PageElementListEventually<
     )
   }
 
-  not = {
-    isEmpty: (opts: IPageElementListWaitEmptyParams = {}) => this.isEmpty({
-      timeout: opts.timeout, interval: opts.interval, reverse: true
-    }),
-    hasLength: (length: number, opts: IPageElementListWaitLengthParams = {}) => this.hasLength(length, {
-      timeout: opts.timeout, interval: opts.interval, reverse: true
-    }),
-    isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts))
-    },
-    isEnabled: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts))
-    },
-    hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text
-      )
-    },
-    hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, undefined, (element) => element.eventually.not.hasAnyText(opts)
-      )
-    },
-    containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text
-      )
-    },
-    hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText
-      )
-    },
-    hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, undefined, (element) => element.eventually.not.hasAnyDirectText(opts)
-      )
-    },
-    containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
-      return this._node.eachCheck(
-        this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText
-      )
+  get not() {
+    return {
+      isEmpty: (opts: IPageElementListWaitEmptyParams = {}) => this.isEmpty({
+        timeout: opts.timeout, interval: opts.interval, reverse: true
+      }),
+      hasLength: (length: number, opts: IPageElementListWaitLengthParams = {}) => this.hasLength(length, {
+        timeout: opts.timeout, interval: opts.interval, reverse: true
+      }),
+      isVisible: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts))
+      },
+      isEnabled: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts))
+      },
+      hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text
+        )
+      },
+      hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, undefined, (element) => element.eventually.not.hasAnyText(opts)
+        )
+      },
+      containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text
+        )
+      },
+      hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText
+        )
+      },
+      hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, undefined, (element) => element.eventually.not.hasAnyDirectText(opts)
+        )
+      },
+      containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => {
+        return this._node.eachCheck(
+          this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText
+        )
+      }
     }
   }
 }

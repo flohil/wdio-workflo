@@ -3,14 +3,14 @@ export interface IPageNodeOpts<Store extends PageElementStore> {
     store: Store;
     timeout?: number;
 }
-export declare class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
+export declare abstract class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
     protected _store: Store;
     protected _lastDiff: Workflo.IDiff;
     protected _selector: string;
     protected _timeout: number;
-    readonly currently: PageNodeCurrently<Store, this>;
-    readonly wait: PageNodeWait<Store, this>;
-    readonly eventually: PageNodeEventually<Store, this>;
+    abstract readonly currently: PageNodeCurrently<Store, this>;
+    abstract readonly wait: PageNodeWait<Store, this>;
+    abstract readonly eventually: PageNodeEventually<Store, this>;
     constructor(selector: string, opts: IPageNodeOpts<Store>);
     __getNodeId(): string;
     readonly __lastDiff: Workflo.IDiff;
@@ -28,15 +28,18 @@ export declare class PageNode<Store extends PageElementStore> implements Workflo
     __waitUntil(waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number, interval?: number): this;
     protected _handleWaitError(error: any, errorMessage: string, timeout: number): void;
 }
-export declare class PageNodeCurrently<Store extends PageElementStore, PageElementType extends PageNode<Store>> {
+export declare abstract class PageNodeCurrently<Store extends PageElementStore, PageElementType extends PageNode<Store>> {
     protected readonly _node: PageElementType;
     constructor(node: PageElementType);
+    abstract readonly not: {};
 }
-export declare class PageNodeWait<Store extends PageElementStore, PageElementType extends PageNode<Store>> {
+export declare abstract class PageNodeWait<Store extends PageElementStore, PageElementType extends PageNode<Store>> {
     protected readonly _node: PageElementType;
     constructor(node: PageElementType);
+    abstract readonly not: {};
 }
-export declare class PageNodeEventually<Store extends PageElementStore, PageElementType extends PageNode<Store>> {
+export declare abstract class PageNodeEventually<Store extends PageElementStore, PageElementType extends PageNode<Store>> {
     protected readonly _node: PageElementType;
     constructor(node: PageElementType);
+    abstract readonly not: {};
 }

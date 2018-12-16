@@ -206,7 +206,7 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
     hasSize(size: Workflo.ISize, tolerances?: Partial<Workflo.ISize>): boolean;
     hasWidth(width: number, tolerance?: number): boolean;
     hasHeight(height: number, tolerance?: number): boolean;
-    not: {
+    readonly not: {
         exists: () => boolean;
         isVisible: () => boolean;
         isEnabled: () => boolean;
@@ -287,7 +287,7 @@ export declare class PageElementWait<Store extends PageElementStore, PageElement
         tolerance?: number;
     } & Workflo.IWDIOParamsOptionalReverse): PageElementType;
     untilElement(description: string, condition: (element: PageElementType) => boolean, { timeout }?: Workflo.IWDIOParamsOptional): PageElementType;
-    not: {
+    readonly not: {
         exists: (opts?: Workflo.IWDIOParamsOptional) => PageElementType;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => PageElementType;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => PageElementType;
@@ -380,7 +380,7 @@ export declare class PageElementEventually<Store extends PageElementStore, PageE
         tolerance?: number;
     } & Workflo.IWDIOParamsOptional): boolean;
     meetsCondition(condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsOptional): boolean;
-    not: {
+    readonly not: {
         exists: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParamsOptional) => boolean;
