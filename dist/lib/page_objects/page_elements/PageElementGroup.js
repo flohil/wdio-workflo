@@ -35,6 +35,12 @@ class PageElementGroup extends _1.PageNode {
         return this._id;
     }
     // GETTER FUNCTIONS
+    __getTrue(filterMask) {
+        return this.eachGet(isIElementNode, filterMask, node => node.__getTrue());
+    }
+    getIsEnabled(filterMask) {
+        return this.eachGet(isIElementNode, filterMask, node => node.getIsEnabled());
+    }
     /**
      * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.
      *
@@ -74,8 +80,9 @@ class PageElementGroup extends _1.PageNode {
             const node = context[key];
             if (supportsInterface(context[key])) {
                 if (expected) {
-                    if (typeof expected[key] !== 'undefined') {
-                        if (!checkFunc(node, expected[key])) {
+                    const expectedValue = expected[key];
+                    if (typeof expectedValue !== 'undefined') {
+                        if (!checkFunc(node, expectedValue)) {
                             diffs[`.${key}`] = context[key].__lastDiff;
                         }
                     }
@@ -98,8 +105,9 @@ class PageElementGroup extends _1.PageNode {
             const node = context[key];
             if (supportsInterface(context[key])) {
                 if (expected) {
-                    if (typeof expected[key] !== 'undefined') {
-                        waitFunc(node, expected[key]);
+                    const expectedValue = expected[key];
+                    if (typeof expectedValue !== 'undefined') {
+                        waitFunc(node, expectedValue);
                     }
                 }
                 else {
@@ -146,6 +154,15 @@ class PageElementGroup extends _1.PageNode {
 }
 exports.PageElementGroup = PageElementGroup;
 class PageElementGroupCurrently extends _1.PageNodeCurrently {
+    getExists(filterMask) {
+        return this._node.eachGet(isIElementNode, filterMask, node => node.currently.getExists());
+    }
+    getIsVisible(filterMask) {
+        return this._node.eachGet(isIElementNode, filterMask, node => node.currently.getIsVisible());
+    }
+    getIsEnabled(filterMask) {
+        return this._node.eachGet(isIElementNode, filterMask, node => node.currently.getIsEnabled());
+    }
     /**
      * Returns texts of all group elements immediatly in the order they were retrieved from the DOM.
      *

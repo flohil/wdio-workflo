@@ -118,6 +118,12 @@ class PageElement extends _1.PageElementBase {
         return this;
     }
     // Public GETTER FUNCTIONS (return state after initial wait)
+    __getTrue() {
+        return true;
+    }
+    getIsEnabled() {
+        return this._executeAfterInitialWait(() => this.currently.isEnabled());
+    }
     getHTML() {
         return this._executeAfterInitialWait(() => this.currently.getHTML());
     }
@@ -353,40 +359,14 @@ class PageElement extends _1.PageElementBase {
 exports.PageElement = PageElement;
 class PageElementCurrently extends _1.PageElementBaseCurrently {
     // GET STATE
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * exists in PageElement base class and its currently, wait and eventually containers.
-     */
-    exists() {
-        return this.element.isExisting();
+    getExists() {
+        return this.exists();
     }
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isVisible in PageElement base class and its currently, wait and eventually containers.
-     */
-    isVisible() {
-        return this.element.isVisible();
+    getIsVisible() {
+        return this.isVisible();
     }
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isEnabled in PageElement base class and its currently, wait and eventually containers.
-     */
-    isEnabled() {
-        return this._node.__execute(() => this.element.isEnabled());
-    }
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isSelected in PageElement base class and its currently, wait and eventually containers.
-     */
-    isSelected() {
-        return this._node.__execute(() => this.element.isSelected());
-    }
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isChecked in PageElement base class and its currently, wait and eventually containers.
-     */
-    isChecked() {
-        return this.hasAnyAttribute('checked');
+    getIsEnabled() {
+        return this.isEnabled();
     }
     /**
      * Overwriting this function will affect the behaviour of the functions
@@ -560,6 +540,41 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
     }
     _hasSideSize(expected, actual, tolerance) {
         return this._withinTolerance(actual, expected, tolerance);
+    }
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * exists in PageElement base class and its currently, wait and eventually containers.
+     */
+    exists() {
+        return this.element.isExisting();
+    }
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isVisible in PageElement base class and its currently, wait and eventually containers.
+     */
+    isVisible() {
+        return this.element.isVisible();
+    }
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isEnabled in PageElement base class and its currently, wait and eventually containers.
+     */
+    isEnabled() {
+        return this._node.__execute(() => this.element.isEnabled());
+    }
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isSelected in PageElement base class and its currently, wait and eventually containers.
+     */
+    isSelected() {
+        return this._node.__execute(() => this.element.isSelected());
+    }
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isChecked in PageElement base class and its currently, wait and eventually containers.
+     */
+    isChecked() {
+        return this.hasAnyAttribute('checked');
     }
     hasText(text) {
         return this._compareHas(text, this.getText());

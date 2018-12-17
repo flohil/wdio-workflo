@@ -289,94 +289,123 @@ declare global {
             type ExtractText<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['getText']> : undefined;
+                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getText']> : undefined;
             };
             type ExtractBoolean<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> : undefined;
+                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['currently']['getExists']> : undefined;
             };
             type ExtractTrue<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> extends boolean ? true : ReturnType<T[P]['currently']['isVisible']> : undefined;
+                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : undefined;
             };
-            interface IElementNode<TextType> extends INode, IGetElement<TextType> {
-                currently: IGetElement<TextType> & ICheckElementCurrently<TextType>;
-                wait: IWaitElement<TextType>;
-                eventually: ICheckElementEventually<TextType>;
+            interface IElementNode<TextType, BooleanType, FilterType> extends INode, IGetElement<TextType, BooleanType, FilterType> {
+                currently: IGetElement<TextType, BooleanType, FilterType> & ICheckElementCurrently<TextType, BooleanType, FilterType>;
+                wait: IWaitElement<TextType, BooleanType, FilterType>;
+                eventually: ICheckElementEventually<TextType, BooleanType, FilterType>;
+                __getTrue(filterMask?: FilterType): FilterType;
             }
-            interface IGetElement<TextType> {
-                getText(filterMask?: TextType): TextType;
-                getDirectText(filterMask?: TextType): TextType;
+            interface IGetElement<TextType, BooleanType, FilterType> {
+                getIsEnabled(filterMask?: FilterType): BooleanType;
+                getText(filterMask?: FilterType): TextType;
+                getDirectText(filterMask?: FilterType): TextType;
             }
-            interface IWaitElement<TextType, OptsType = IWDIOParamsReverseInterval> {
-                exists(opts?: OptsType): IElementNode<TextType>;
-                isVisible(opts?: OptsType): IElementNode<TextType>;
-                isEnabled(opts?: OptsType): IElementNode<TextType>;
-                hasText(text: TextType, opts?: OptsType): IElementNode<TextType>;
-                hasAnyText(opts?: OptsType): IElementNode<TextType>;
-                containsText(text: TextType, opts?: OptsType): IElementNode<TextType>;
-                hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>;
-                hasAnyDirectText(opts?: OptsType): IElementNode<TextType>;
-                containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>;
-                not: Omit<IWaitElement<TextType, IWDIOParamsInterval>, 'not'>;
+            interface IWaitElement<TextType, BooleanType, FilterType, OptsType = IWDIOParamsReverseInterval> {
+                exists(opts?: OptsType & {
+                    filterMask?: FilterType;
+                }): IElementNode<TextType, BooleanType, FilterType>;
+                isVisible(opts?: OptsType & {
+                    filterMask?: FilterType;
+                }): IElementNode<TextType, BooleanType, FilterType>;
+                isEnabled(opts?: OptsType & {
+                    filterMask?: FilterType;
+                }): IElementNode<TextType, BooleanType, FilterType>;
+                hasText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                hasAnyText(opts?: OptsType & {
+                    filterMask?: FilterType;
+                }): IElementNode<TextType, BooleanType, FilterType>;
+                containsText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                hasAnyDirectText(opts?: OptsType & {
+                    filterMask?: FilterType;
+                }): IElementNode<TextType, BooleanType, FilterType>;
+                containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                not: Omit<IWaitElement<TextType, BooleanType, FilterType, IWDIOParamsInterval>, 'not'>;
             }
-            interface ICheckElementCurrently<TextType> {
-                exists(): boolean;
-                isVisible(): boolean;
-                isEnabled(): boolean;
+            interface ICheckElementCurrently<TextType, BooleanType, FilterType> {
+                getExists(filterMask?: FilterType): BooleanType;
+                getIsVisible(filterMask?: FilterType): BooleanType;
+                getIsEnabled(filterMask?: FilterType): BooleanType;
+                exists(filterMask?: FilterType): boolean;
+                isVisible(filterMask?: FilterType): boolean;
+                isEnabled(filterMask?: FilterType): boolean;
                 hasText(text: TextType): boolean;
-                hasAnyText(): boolean;
+                hasAnyText(filterMask?: FilterType): boolean;
                 containsText(text: TextType): boolean;
                 hasDirectText(directText: TextType): boolean;
-                hasAnyDirectText(): boolean;
+                hasAnyDirectText(filterMask?: FilterType): boolean;
                 containsDirectText(directText: TextType): boolean;
-                not: Omit<ICheckElementCurrently<TextType>, 'not'>;
+                not: Omit<ICheckElementCurrently<TextType, BooleanType, FilterType>, 'not' | 'getExists' | 'getIsVisible' | 'getIsEnabled'>;
             }
-            interface ICheckElementEventually<TextType> {
-                exists(opts?: IWDIOParams): boolean;
-                isVisible(opts?: IWDIOParams): boolean;
-                isEnabled(opts?: IWDIOParams): boolean;
+            interface ICheckElementEventually<TextType, BooleanType, FilterType> {
+                exists(opts?: IWDIOParams & {
+                    filterMask?: FilterType;
+                }): boolean;
+                isVisible(opts?: IWDIOParams & {
+                    filterMask?: FilterType;
+                }): boolean;
+                isEnabled(opts?: IWDIOParams & {
+                    filterMask?: FilterType;
+                }): boolean;
                 hasText(text: TextType, opts?: IWDIOParamsInterval): boolean;
-                hasAnyText(opts?: IWDIOParamsInterval): boolean;
+                hasAnyText(opts?: IWDIOParamsInterval & {
+                    filterMask?: FilterType;
+                }): boolean;
                 containsText(text: TextType, opts?: IWDIOParamsInterval): boolean;
                 hasDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean;
-                hasAnyDirectText(opts?: IWDIOParamsInterval): boolean;
+                hasAnyDirectText(opts?: IWDIOParamsInterval & {
+                    filterMask?: FilterType;
+                }): boolean;
                 containsDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean;
-                not: Omit<ICheckElementEventually<TextType>, 'not'>;
+                not: Omit<ICheckElementEventually<TextType, BooleanType, FilterType>, 'not'>;
             }
             type ExtractValue<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IValueElementNode<any> ? ReturnType<T[P]['getValue']> : undefined;
+                [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getValue']> : undefined;
             };
-            interface IValueElementNode<GetType, SetType = GetType> extends INode, IValueElement<GetType, SetType> {
-                currently: IValueElement<GetType, SetType> & ICheckValueCurrently<GetType>;
-                wait: IWaitValue<GetType>;
-                eventually: ICheckValueEventually<GetType>;
+            interface IValueElementNode<GetType, FilterType, SetType = GetType> extends INode, IValueElement<GetType, FilterType, SetType> {
+                currently: IValueElement<GetType, FilterType, SetType> & ICheckValueCurrently<GetType, FilterType>;
+                wait: IWaitValue<GetType, FilterType>;
+                eventually: ICheckValueEventually<GetType, FilterType>;
             }
-            interface IValueElement<GetType, SetType> {
-                getValue(): GetType;
-                setValue(value: SetType): IValueElementNode<GetType, SetType>;
+            interface IValueElement<GetType, FilterType, SetType> {
+                getValue(filterMask?: FilterType): GetType;
+                setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>;
             }
-            interface IWaitValue<ValueType, OptsType = IWDIOParamsReverseInterval> {
-                hasValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType>;
-                hasAnyValue(opts?: OptsType): IValueElementNode<ValueType>;
-                containsValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType>;
-                not: Omit<IWaitValue<ValueType, IWDIOParamsInterval>, 'not'>;
+            interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {
+                hasValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
+                hasAnyValue(opts?: OptsType & {
+                    filterMask?: FilterType;
+                }): IValueElementNode<ValueType, FilterType>;
+                containsValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
+                not: Omit<IWaitValue<ValueType, FilterType, IWDIOParamsInterval>, 'not'>;
             }
-            interface ICheckValueCurrently<ValueType> {
+            interface ICheckValueCurrently<ValueType, FilterType> {
                 hasValue(value: ValueType): boolean;
-                hasAnyValue(): boolean;
+                hasAnyValue(filterMask?: FilterType): boolean;
                 containsValue(value: ValueType): boolean;
-                not: Omit<ICheckValueCurrently<ValueType>, 'not'>;
+                not: Omit<ICheckValueCurrently<ValueType, FilterType>, 'not'>;
             }
-            interface ICheckValueEventually<ValueType> {
+            interface ICheckValueEventually<ValueType, FilterType> {
                 hasValue(value: ValueType, opts?: IWDIOParamsInterval): boolean;
-                hasAnyValue(opts?: IWDIOParamsInterval): boolean;
+                hasAnyValue(opts?: IWDIOParamsInterval & {
+                    filterMask?: FilterType;
+                }): boolean;
                 containsValue(value: ValueType, opts?: IWDIOParamsInterval): boolean;
-                not: Omit<ICheckValueEventually<ValueType>, 'not'>;
+                not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>;
             }
         }
         interface IProblem<ValueType, ResultType> {

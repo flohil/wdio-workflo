@@ -4,7 +4,7 @@ import { PageElementStore } from '../stores';
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageElementBaseOpts<Store> {
     customScroll?: Workflo.IScrollParams;
 }
-export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string> {
+export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, true> {
     protected _customScroll: Workflo.IScrollParams;
     readonly currently: PageElementCurrently<Store, this>;
     readonly wait: PageElementWait<Store, this>;
@@ -27,6 +27,8 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
      */
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     initialWait(): this;
+    __getTrue(): true;
+    getIsEnabled(): boolean;
     getHTML(): string;
     getDirectText(): string;
     getText(): string;
@@ -60,32 +62,10 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
      */
     protected _executeAfterInitialWait<ResultType>(func: () => ResultType): ResultType;
 }
-export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> implements Workflo.PageNode.IGetElement<string> {
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * exists in PageElement base class and its currently, wait and eventually containers.
-     */
-    exists(): boolean;
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isVisible in PageElement base class and its currently, wait and eventually containers.
-     */
-    isVisible(): boolean;
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isEnabled in PageElement base class and its currently, wait and eventually containers.
-     */
-    isEnabled(): boolean;
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isSelected in PageElement base class and its currently, wait and eventually containers.
-     */
-    isSelected(): boolean;
-    /**
-     * Overwriting this function will affect the behaviour of the function
-     * isChecked in PageElement base class and its currently, wait and eventually containers.
-     */
-    isChecked(): boolean;
+export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> {
+    getExists(): boolean;
+    getIsVisible(): boolean;
+    getIsEnabled(): boolean;
     /**
      * Overwriting this function will affect the behaviour of the functions
      * getHTML, hasHTML, containsHTML and hasAnyHTML in PageElement base class and its
@@ -178,6 +158,31 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
     protected _withinTolerance(actual: number, expected: number, tolerance?: number): boolean;
     protected _hasAxisLocation(expected: number, actual: number, tolerance?: number): boolean;
     protected _hasSideSize(expected: number, actual: number, tolerance?: number): boolean;
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * exists in PageElement base class and its currently, wait and eventually containers.
+     */
+    exists(): boolean;
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isVisible in PageElement base class and its currently, wait and eventually containers.
+     */
+    isVisible(): boolean;
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isEnabled in PageElement base class and its currently, wait and eventually containers.
+     */
+    isEnabled(): boolean;
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isSelected in PageElement base class and its currently, wait and eventually containers.
+     */
+    isSelected(): boolean;
+    /**
+     * Overwriting this function will affect the behaviour of the function
+     * isChecked in PageElement base class and its currently, wait and eventually containers.
+     */
+    isChecked(): boolean;
     hasText(text: string): boolean;
     hasAnyText(): boolean;
     containsText(text: string): any;

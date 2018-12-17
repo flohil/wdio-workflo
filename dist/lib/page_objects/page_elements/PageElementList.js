@@ -191,11 +191,20 @@ class PageElementList extends _1.PageNode {
             return 0;
         }
     }
+    __getTrue() {
+        return true;
+    }
     getText() {
         return this.eachGet(this.all, element => element.getText());
     }
     getDirectText() {
         return this.eachGet(this.all, element => element.getDirectText());
+    }
+    getIsEnabled() {
+        return this.eachGet(this.all, element => {
+            element.initialWait();
+            return element.currently.isEnabled();
+        });
     }
     // HELPER FUNCTIONS
     /**
@@ -355,6 +364,15 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     }
     getDirectText() {
         return this._node.eachGet(this.all, element => element.currently.getDirectText());
+    }
+    getExists() {
+        return this._node.eachGet(this.all, element => element.currently.exists());
+    }
+    getIsVisible() {
+        return this._node.eachGet(this.all, element => element.currently.isVisible());
+    }
+    getIsEnabled() {
+        return this._node.eachGet(this.all, element => element.currently.isEnabled());
     }
     // CHECK STATE FUNCTIONS
     isEmpty() {

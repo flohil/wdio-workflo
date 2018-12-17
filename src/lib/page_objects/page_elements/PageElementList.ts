@@ -57,7 +57,7 @@ export class PageElementList<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
 > extends PageNode<Store>
-implements Workflo.PageNode.IElementNode<string[], boolean[], true[]> {
+implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
 
   protected _$: Store
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
@@ -311,6 +311,10 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true[]> {
       // this.elements will throw error if no elements were found
       return 0
     }
+  }
+
+  __getTrue(): true {
+    return true
   }
 
   getText() {

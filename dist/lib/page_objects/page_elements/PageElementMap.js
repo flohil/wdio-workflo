@@ -45,6 +45,9 @@ class PageElementMap extends _1.PageNode {
     getSelector() {
         return this._selector;
     }
+    __getTrue(filterMask) {
+        return this.eachGet(this._$, filterMask, node => node.__getTrue());
+    }
     /**
     * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
     *
@@ -58,6 +61,12 @@ class PageElementMap extends _1.PageNode {
     }
     getDirectText(filterMask) {
         return this.eachGet(this._$, filterMask, node => node.getDirectText());
+    }
+    getIsEnabled(filterMask) {
+        return this.eachGet(this.$, filterMask, node => {
+            node.wait.isEnabled();
+            return node.currently.isEnabled();
+        });
     }
     // HELPER FUNCTIONS
     eachCheck(context, expected, checkFunc) {
@@ -159,6 +168,15 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
     }
     getDirectText(filterMask) {
         return this._node.eachGet(this._node.$, filterMask, node => node.currently.getDirectText());
+    }
+    getExists(filterMask) {
+        return this._node.eachGet(this._node.$, filterMask, node => node.currently.exists());
+    }
+    getIsVisible(filterMask) {
+        return this._node.eachGet(this._node.$, filterMask, node => node.currently.isVisible());
+    }
+    getIsEnabled(filterMask) {
+        return this._node.eachGet(this._node.$, filterMask, node => node.currently.isEnabled());
     }
     exists(filterMask) {
         return this._node.eachCheck(this._node.$, filterMask, element => element.currently.exists());

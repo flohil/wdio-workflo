@@ -4,10 +4,14 @@ import {
   IPageElementGroupOpts,
   PageElementGroupCurrently,
   PageElementGroupEventually,
-  PageElementGroupWait
+  PageElementGroupWait,
+  ExtractTrue
 } from '.';
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<T>
+
+type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> =
+Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.ExtractTrue<Content>>
 
 export interface IValueGroupOpts<
   Store extends PageElementStore,
@@ -20,7 +24,7 @@ export class ValuePageElementGroup<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends PageElementGroup<Store, Content>
-implements Workflo.PageNode.IValueElementNode<ExtractValue<Content>> {
+implements ValueElementNode<Content> {
 
   readonly currently: ValuePageElementGroupCurrently<Store, Content, this>
   readonly wait: ValuePageElementGroupWait<Store, Content, this>
@@ -36,8 +40,8 @@ implements Workflo.PageNode.IValueElementNode<ExtractValue<Content>> {
     this.eventually = new ValuePageElementGroupEventually(this)
   }
 
-  getValue(filterMask?: ExtractValue<Content>) {
-    return this.eachGet<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+  getValue(filterMask?: ExtractTrue<Content>) {
+    return this.eachGet<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, filterMask, node => node.getValue()
     )
   }
@@ -49,7 +53,7 @@ implements Workflo.PageNode.IValueElementNode<ExtractValue<Content>> {
    * @param values
    */
   setValue(values: ExtractValue<Content>) {
-    return this.eachSet<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>, this> (
+    return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>, this> (
       isIValueElementNode, values, (node, value) => node.setValue(value)
     )
   }
@@ -61,8 +65,8 @@ class ValuePageElementGroupCurrently<
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupCurrently<Store, Content, GroupType> {
 
-  getValue(filterMask?: ExtractValue<Content>) {
-    return this._node.eachGet<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+  getValue(filterMask?: ExtractTrue<Content>) {
+    return this._node.eachGet<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, filterMask, node => node.currently.getValue()
     )
   }
@@ -75,26 +79,26 @@ class ValuePageElementGroupCurrently<
    */
   setValue(values: ExtractValue<Content>) {
     return this._node.eachSet<
-      Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>, GroupType
+      ValueElementNode<Content>, ExtractValue<Content>, GroupType
     > (
       isIValueElementNode, values, (node, value) => node.currently.setValue(value)
     )
   }
 
   hasValue(value: ExtractValue<Content>) {
-    return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
       isIValueElementNode, value, (node, value) => node.currently.hasValue(value)
     )
   }
 
-  hasAnyValue(filterMask?: ExtractValue<Content>) {
-    return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+  hasAnyValue(filterMask?: ExtractTrue<Content>) {
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, filterMask, node => node.currently.hasAnyValue()
     )
   }
 
   containsValue(value: ExtractValue<Content>) {
-    return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
       isIValueElementNode, value, (node, value) => node.currently.containsValue(value)
     )
   }
@@ -102,17 +106,17 @@ class ValuePageElementGroupCurrently<
   get not() {
     return {...super.not,
       hasValue: (value: ExtractValue<Content>) => {
-        return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
           isIValueElementNode, value, (node, value) => node.currently.not.hasValue(value)
         )
       },
-      hasAnyValue: (filterMask?: ExtractValue<Content>) => {
-        return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+      hasAnyValue: (filterMask?: ExtractTrue<Content>) => {
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
           isIValueElementNode, filterMask, node => node.currently.not.hasAnyValue()
         )
       },
       containsValue: (value: ExtractValue<Content>) => {
-        return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
           isIValueElementNode, value, (node, value) => node.currently.not.containsValue(value)
         )
       }
@@ -127,25 +131,19 @@ class ValuePageElementGroupWait<
 > extends PageElementGroupWait<Store, Content, GroupType> {
 
   hasValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
-    return this._node.eachWait<
-      Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>
-    > (
+    return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
       isIValueElementNode, value, (node, value) => node.wait.hasValue(value, opts)
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractValue<Content>} = {}) {
-    return this._node.eachWait<
-      Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>
-    > (
+  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractTrue<Content>} = {}) {
+    return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts)
     )
   }
 
   containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
-    return this._node.eachWait<
-      Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>
-    > (
+    return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
       isIValueElementNode, value, (node, value) => node.wait.containsValue(value, opts)
     )
   }
@@ -153,23 +151,17 @@ class ValuePageElementGroupWait<
   get not() {
     return {...super.not,
       hasValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
-        return this._node.eachWait<
-          Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>
-        > (
+        return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
           isIValueElementNode, value, (node, value) => node.wait.hasValue(value, opts)
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractValue<Content>} = {}) => {
-        return this._node.eachWait<
-          Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>
-        > (
+      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractTrue<Content>} = {}) => {
+        return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
           isIValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts)
         )
       },
       containsValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
-        return this._node.eachWait<
-          Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>
-        > (
+        return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
           isIValueElementNode, value, (node, value) => node.wait.containsValue(value, opts)
         )
       }
@@ -184,19 +176,19 @@ class ValuePageElementGroupEventually<
 > extends PageElementGroupEventually<Store, Content, GroupType> {
 
   hasValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
-    return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
       isIValueElementNode, value, (node, value) => node.eventually.hasValue(value, opts)
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractValue<Content>} = {}) {
-    return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractTrue<Content>} = {}) {
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, opts.filterMask, node => node.eventually.hasAnyValue(opts)
     )
   }
 
   containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
-    return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
       isIValueElementNode, value, (node, value) => node.eventually.containsValue(value, opts)
     )
   }
@@ -204,17 +196,17 @@ class ValuePageElementGroupEventually<
   get not() {
     return {...super.not,
       hasValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
-        return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
           isIValueElementNode, value, (node, value) => node.eventually.not.hasValue(value, opts)
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractValue<Content>} = {}) => {
-        return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: ExtractTrue<Content>} = {}) => {
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
           isIValueElementNode, opts.filterMask, node => node.eventually.not.hasAnyValue(opts)
         )
       },
       containsValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
-        return this._node.eachCheck<Workflo.PageNode.IValueElementNode<ExtractValue<Content>>, ExtractValue<Content>> (
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
           isIValueElementNode, value, (node, value) => node.eventually.not.containsValue(value, opts)
         )
       }
@@ -223,9 +215,10 @@ class ValuePageElementGroupEventually<
 }
 
 // type guards
-function isIValueElementNode<TextType>(
-  node: Workflo.PageNode.INode | Workflo.PageNode.IValueElementNode<TextType>
-): node is Workflo.PageNode.IElementNode<TextType> {
+
+function isIValueElementNode<
+  Content extends {[K in keyof Content] : Workflo.PageNode.INode}
+>(node: Workflo.PageNode.INode | ValueElementNode<Content>): node is ValueElementNode<Content> {
   return typeof node['getValue'] === 'function' &&
   typeof node['setValue'] === 'function' &&
   typeof node.currently['getValue'] === 'function' &&

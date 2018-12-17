@@ -26,7 +26,7 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     disableCache?: boolean;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
-export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<string[]> {
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
     protected selector: string;
     protected _$: Store;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
@@ -98,8 +98,10 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getSelector(): string;
     getInterval(): number;
     getLength(): number;
+    __getTrue(): true;
     getText(): string[];
     getDirectText(): string[];
+    getIsEnabled(): boolean[];
     /**
      * If the list is empty (no elements could be located matching the list selector),
      * this function will always return true.
@@ -155,6 +157,9 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     getLength(): number;
     getText(): string[];
     getDirectText(): string[];
+    getExists(): boolean[];
+    getIsVisible(): boolean[];
+    getIsEnabled(): boolean[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
     exists(): boolean;

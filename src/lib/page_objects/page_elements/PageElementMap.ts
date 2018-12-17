@@ -107,6 +107,10 @@ implements Workflo.PageNode.IElementNode<
     return this._selector
   }
 
+  __getTrue(filterMask?: Partial<Record<K, true>>) {
+    return this.eachGet(this._$, filterMask, node => node.__getTrue())
+  }
+
    /**
    * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
    *
