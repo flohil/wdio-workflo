@@ -7,6 +7,6 @@ export declare abstract class Page<Store extends PageElementStore> {
     protected elementStore: Store;
     protected timeout: number;
     constructor(args: IPageArgs<Store>);
-    abstract isOpened(): any;
-    eventuallyIsOpened(timeout?: number): boolean;
+    abstract isOpen(): boolean;
+    eventuallyIsOpen(timeout?: number): boolean;
 }

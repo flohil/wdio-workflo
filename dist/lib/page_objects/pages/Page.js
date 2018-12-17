@@ -11,9 +11,9 @@ class Page {
             this.timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         }
     }
-    eventuallyIsOpened(timeout = this.timeout) {
+    eventuallyIsOpen(timeout = this.timeout) {
         try {
-            browser.waitUntil(() => this.isOpened(), timeout);
+            browser.waitUntil(() => this.isOpen(), timeout);
             return true;
         }
         catch (error) {

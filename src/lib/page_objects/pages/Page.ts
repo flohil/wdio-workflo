@@ -20,11 +20,11 @@ export abstract class Page<Store extends PageElementStore> {
     }
   }
 
-  abstract isOpened()
+  abstract isOpen(): boolean
 
-  eventuallyIsOpened( timeout: number = this.timeout ) {
+  eventuallyIsOpen( timeout: number = this.timeout ) {
     try {
-      browser.waitUntil( () => this.isOpened(), timeout )
+      browser.waitUntil( () => this.isOpen(), timeout )
       return true
     } catch( error ) {
       return false
