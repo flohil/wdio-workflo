@@ -332,6 +332,12 @@ declare global {
         [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> : undefined;
       }
 
+      type ExtractTrue<T extends {[key: string]: INode}> = {
+        [P in keyof T]?: T[P] extends IElementNode<any> ?
+        ReturnType<T[P]['currently']['isVisible']> extends boolean ? true : ReturnType<T[P]['currently']['isVisible']> :
+        undefined;
+      }
+
       interface IElementNode<TextType> extends INode, IGetElement<TextType> {
         currently: IGetElement<TextType> & ICheckElementCurrently<TextType>
         wait: IWaitElement<TextType>

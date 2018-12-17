@@ -8,6 +8,9 @@ export type ExtractText<Content extends {[key: string]: Workflo.PageNode.INode}>
 export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.INode}> =
   Workflo.PageNode.ExtractBoolean<Content>
 
+export type ExtractTrue<Content extends {[key: string]: Workflo.PageNode.INode}> =
+  Workflo.PageNode.ExtractTrue<Content>
+
 export interface IPageElementGroupOpts<
   Store extends PageElementStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
