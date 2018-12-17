@@ -4,6 +4,7 @@ const _ = require("lodash");
 const util_1 = require("../../utility_functions/util");
 const _1 = require(".");
 const builders_1 = require("../builders");
+const __1 = require("../");
 const util_2 = require("util");
 const PageNode_1 = require("./PageNode");
 // holds several PageElement instances of the same type
@@ -17,7 +18,7 @@ class PageElementList extends _1.PageNode {
         this._elementStoreFunc = opts.elementStoreFunc;
         this._identifier = opts.identifier;
         this._identifiedObjCache = {};
-        this._interval = opts.interval || 500;
+        this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
         this.currently = new PageElementListCurrently(this, opts);
         this.wait = new PageElementListWait(this);
         this.eventually = new PageElementListEventually(this);
@@ -227,6 +228,13 @@ class PageElementList extends _1.PageNode {
     eachGet(elements, getFunc) {
         return elements.map(element => getFunc(element));
     }
+    /**
+     * Uses default interval and default timeout of each element contained in this list.
+     *
+     * @param elements
+     * @param waitFunc
+     * @param expected
+     */
     eachWait(elements, waitFunc, expected) {
         if (util_2.isArray(expected) && expected.length !== elements.length) {
             throw new Error(`${this.constructor.name}: ` +

@@ -2,7 +2,7 @@ import { InstallOpts, StartOpts } from 'selenium-standalone';
 import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element } from 'webdriverio';
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli';
 import * as pageObjects from './lib/page_objects';
-import { IPageElementListWaitEmptyParams, IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList';
+import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList';
 declare global {
     interface CustomElementMatchers {
         toExist(): boolean;
@@ -49,57 +49,57 @@ declare global {
         toHaveHeight(height: number, opts?: {
             tolerance?: number;
         }): boolean;
-        toEventuallyExist(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyBeVisible(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyBeEnabled(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyBeSelected(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyBeChecked(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveDirectText(directText: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveId(id: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyId(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainId(id: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveName(name: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyName(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainName(name: string, opts?: Workflo.IWDIOParamsOptional): boolean;
+        toEventuallyExist(opts?: Workflo.IWDIOParams): boolean;
+        toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean;
+        toEventuallyBeEnabled(opts?: Workflo.IWDIOParams): boolean;
+        toEventuallyBeSelected(opts?: Workflo.IWDIOParams): boolean;
+        toEventuallyBeChecked(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyId(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyName(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean;
         toEventuallyHaveLocation(coordinates: Workflo.ICoordinates, opts?: {
             tolerances?: Partial<Workflo.ICoordinates>;
-        } & Workflo.IWDIOParamsOptional): boolean;
+        } & Workflo.IWDIOParamsInterval): boolean;
         toEventuallyHaveX(x: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsOptional): boolean;
+        } & Workflo.IWDIOParamsInterval): boolean;
         toEventuallyHaveY(y: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsOptional): boolean;
+        } & Workflo.IWDIOParamsInterval): boolean;
         toEventuallyHaveSize(size: Workflo.ISize, opts?: {
             tolerances?: Partial<Workflo.ISize>;
-        } & Workflo.IWDIOParamsOptional): boolean;
+        } & Workflo.IWDIOParamsInterval): boolean;
         toEventuallyHaveWidth(width: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsOptional): boolean;
+        } & Workflo.IWDIOParamsInterval): boolean;
         toEventuallyHaveHeight(height: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsOptional): boolean;
+        } & Workflo.IWDIOParamsInterval): boolean;
     }
     interface CustomListMatchers {
         toBeEmpty(): boolean;
         toHaveLength(length: number, opts?: {
             comparator?: Workflo.Comparator;
         }): boolean;
-        toEventuallyBeEmpty(opts?: IPageElementListWaitEmptyParams): boolean;
+        toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean;
         toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
         toExist(): boolean;
         toBeVisible(): boolean;
@@ -130,9 +130,9 @@ declare global {
         toHaveValue(value: string): boolean;
         toHaveAnyValue(): boolean;
         toContainValue(value: string): boolean;
-        toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsOptional): boolean;
-        toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsOptional): boolean;
+        toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval): boolean;
+        toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsInterval): boolean;
     }
     interface ElementMatchers extends CustomElementMatchers {
         not: CustomElementMatchers;
@@ -228,10 +228,17 @@ declare global {
         interface IRecObj<Type> {
             [key: string]: Type | IRecObj<Type>;
         }
-        interface IWDIOParamsOptional {
+        interface IWDIOParams {
             timeout?: number;
         }
-        interface IWDIOParamsOptionalReverse extends IWDIOParamsOptional {
+        interface IWDIOParamsInterval {
+            timeout?: number;
+            interval?: number;
+        }
+        interface IWDIOParamsReverse extends IWDIOParams {
+            reverse?: boolean;
+        }
+        interface IWDIOParamsReverseInterval extends IWDIOParamsInterval {
             reverse?: boolean;
         }
         interface IAnyAttributeArgs {
@@ -289,6 +296,11 @@ declare global {
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> : undefined;
             };
+            type ExtractTrue<T extends {
+                [key: string]: INode;
+            }> = {
+                [P in keyof T]?: T[P] extends IElementNode<any> ? ReturnType<T[P]['currently']['isVisible']> extends boolean ? true : ReturnType<T[P]['currently']['isVisible']> : undefined;
+            };
             interface IElementNode<TextType> extends INode, IGetElement<TextType> {
                 currently: IGetElement<TextType> & ICheckElementCurrently<TextType>;
                 wait: IWaitElement<TextType>;
@@ -298,7 +310,7 @@ declare global {
                 getText(filterMask?: TextType): TextType;
                 getDirectText(filterMask?: TextType): TextType;
             }
-            interface IWaitElement<TextType, OptsType = IWDIOParamsOptionalReverse> {
+            interface IWaitElement<TextType, OptsType = IWDIOParamsReverseInterval> {
                 exists(opts?: OptsType): IElementNode<TextType>;
                 isVisible(opts?: OptsType): IElementNode<TextType>;
                 isEnabled(opts?: OptsType): IElementNode<TextType>;
@@ -308,7 +320,7 @@ declare global {
                 hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>;
                 hasAnyDirectText(opts?: OptsType): IElementNode<TextType>;
                 containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType>;
-                not: Omit<IWaitElement<TextType, IWDIOParamsOptional>, 'not'>;
+                not: Omit<IWaitElement<TextType, IWDIOParamsInterval>, 'not'>;
             }
             interface ICheckElementCurrently<TextType> {
                 exists(): boolean;
@@ -323,15 +335,15 @@ declare global {
                 not: Omit<ICheckElementCurrently<TextType>, 'not'>;
             }
             interface ICheckElementEventually<TextType> {
-                exists(opts?: IWDIOParamsOptional): boolean;
-                isVisible(opts?: IWDIOParamsOptional): boolean;
-                isEnabled(opts?: IWDIOParamsOptional): boolean;
-                hasText(text: TextType, opts?: IWDIOParamsOptional): boolean;
-                hasAnyText(opts?: IWDIOParamsOptional): boolean;
-                containsText(text: TextType, opts?: IWDIOParamsOptional): boolean;
-                hasDirectText(text: TextType, opts?: IWDIOParamsOptional): boolean;
-                hasAnyDirectText(opts?: IWDIOParamsOptional): boolean;
-                containsDirectText(text: TextType, opts?: IWDIOParamsOptional): boolean;
+                exists(opts?: IWDIOParams): boolean;
+                isVisible(opts?: IWDIOParams): boolean;
+                isEnabled(opts?: IWDIOParams): boolean;
+                hasText(text: TextType, opts?: IWDIOParamsInterval): boolean;
+                hasAnyText(opts?: IWDIOParamsInterval): boolean;
+                containsText(text: TextType, opts?: IWDIOParamsInterval): boolean;
+                hasDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean;
+                hasAnyDirectText(opts?: IWDIOParamsInterval): boolean;
+                containsDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean;
                 not: Omit<ICheckElementEventually<TextType>, 'not'>;
             }
             type ExtractValue<T extends {
@@ -348,11 +360,11 @@ declare global {
                 getValue(): GetType;
                 setValue(value: SetType): IValueElementNode<GetType, SetType>;
             }
-            interface IWaitValue<ValueType, OptsType = IWDIOParamsOptionalReverse> {
+            interface IWaitValue<ValueType, OptsType = IWDIOParamsReverseInterval> {
                 hasValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType>;
                 hasAnyValue(opts?: OptsType): IValueElementNode<ValueType>;
                 containsValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType>;
-                not: Omit<IWaitValue<ValueType, IWDIOParamsOptional>, 'not'>;
+                not: Omit<IWaitValue<ValueType, IWDIOParamsInterval>, 'not'>;
             }
             interface ICheckValueCurrently<ValueType> {
                 hasValue(value: ValueType): boolean;
@@ -361,9 +373,9 @@ declare global {
                 not: Omit<ICheckValueCurrently<ValueType>, 'not'>;
             }
             interface ICheckValueEventually<ValueType> {
-                hasValue(value: ValueType, opts?: IWDIOParamsOptional): boolean;
-                hasAnyValue(opts?: IWDIOParamsOptional): boolean;
-                containsValue(value: ValueType, opts?: IWDIOParamsOptional): boolean;
+                hasValue(value: ValueType, opts?: IWDIOParamsInterval): boolean;
+                hasAnyValue(opts?: IWDIOParamsInterval): boolean;
+                containsValue(value: ValueType, opts?: IWDIOParamsInterval): boolean;
                 not: Omit<ICheckValueEventually<ValueType>, 'not'>;
             }
         }

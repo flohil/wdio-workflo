@@ -168,7 +168,7 @@ class PageElement extends _1.PageElementBase {
     click(options) {
         this.initialWait();
         let errorMessage = '';
-        const interval = 250;
+        const interval = options.interval || this._interval;
         const viewPortSize = browser.getViewportSize();
         let y = viewPortSize.height / 2;
         let x = viewPortSize.width / 2;
@@ -709,6 +709,7 @@ class PageElementWait extends _1.PageElementBaseWait {
     }
     isChecked(opts = {}) {
         const timeout = opts.timeout || this._node.getTimeout();
+        const interval = opts.interval || this._node.getInterval();
         const reverseStr = (opts.reverse) ? ' not' : '';
         this._node.__waitUntil(() => {
             if (opts.reverse) {
@@ -717,13 +718,13 @@ class PageElementWait extends _1.PageElementBaseWait {
             else {
                 return this._node.currently.isChecked();
             }
-        }, () => ` never${reverseStr} became checked`, timeout);
+        }, () => ` never${reverseStr} became checked`, timeout, interval);
         return this._node;
     }
     hasText(text, opts) {
         return this._waitHasProperty('text', text, () => this._node.currently.hasText(text), opts);
     }
-    hasAnyText(opts = {}) {
+    hasAnyText(opts) {
         return this._waitWdioCheckFunc('had any text', opts => this._node.currently.element.waitForText(opts.timeout, opts.reverse), opts);
     }
     containsText(text, opts) {
@@ -837,8 +838,8 @@ class PageElementWait extends _1.PageElementBaseWait {
             return this._waitHasProperty(`height`, height.toString(), () => this._node.currently.hasHeight(height), otherOpts);
         }
     }
-    untilElement(description, condition, { timeout = this._node.getTimeout() } = {}) {
-        this._node.__waitUntil(() => condition(this._node), () => `: Wait until element ${description} failed`, timeout);
+    untilElement(description, condition, { timeout = this._node.getTimeout(), interval = this._node.getInterval() } = {}) {
+        this._node.__waitUntil(() => condition(this._node), () => `: Wait until element ${description} failed`, timeout, interval);
         return this._node;
     }
     get not() {

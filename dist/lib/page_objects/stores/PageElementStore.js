@@ -134,4 +134,35 @@ class PageElementStore {
     }
 }
 exports.PageElementStore = PageElementStore;
+const store = new PageElementStore();
+const innerGroup = store.ElementGroup({
+    get removeButton() {
+        return store.Element(xpath('//button').text('Remove'));
+    },
+    get enableButton() {
+        return store.Element(xpath('//button').text('Enable'));
+    }
+});
+const outerGroup = store.ElementGroup({
+    get div() {
+        return store.Element('//div');
+    },
+    get divList() {
+        return store.ElementList('//div');
+    },
+    get mapList() {
+        return store.ElementMap('//div', {
+            identifier: {
+                mappingObject: {
+                    remove: 'Remove',
+                    enable: 'Enable'
+                },
+                func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
+            }
+        });
+    },
+    get innerGroup() {
+        return innerGroup;
+    }
+});
 //# sourceMappingURL=PageElementStore.js.map

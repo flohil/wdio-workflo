@@ -11,11 +11,12 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 const builders_1 = require("../builders");
+const __1 = require("..");
 class PageElementBase extends _1.PageNode {
     constructor(selector, _a) {
-        var { waitType = "visible" /* visible */ } = _a, superOpts = __rest(_a, ["waitType"]);
+        var { interval, waitType = "visible" /* visible */ } = _a, superOpts = __rest(_a, ["interval", "waitType"]);
         super(selector, superOpts);
-        this._selector = selector;
+        this._interval = interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
         this._$ = Object.create(null);
         for (const method of Workflo.Class.getAllMethods(this._store)) {
             if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
@@ -39,6 +40,9 @@ class PageElementBase extends _1.PageNode {
     }
     getTimeout() {
         return this._timeout;
+    }
+    getInterval() {
+        return this._interval;
     }
 }
 exports.PageElementBase = PageElementBase;
@@ -86,11 +90,11 @@ class PageElementBaseCurrently extends _1.PageNodeCurrently {
 }
 exports.PageElementBaseCurrently = PageElementBaseCurrently;
 class PageElementBaseWait extends _1.PageNodeWait {
-    _waitWdioCheckFunc(checkTypeStr, conditionFunc, { timeout = this._node.getTimeout(), reverse } = {}) {
+    _waitWdioCheckFunc(checkTypeStr, conditionFunc, { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() } = {}) {
         const reverseStr = (reverse) ? ' not' : '';
-        return this._node.__wait(() => conditionFunc({ timeout, reverse }), ` never${reverseStr} ${checkTypeStr}`, timeout);
+        return this._node.__wait(() => conditionFunc({ timeout, reverse, interval }), ` never${reverseStr} ${checkTypeStr}`, timeout);
     }
-    _waitProperty(name, conditionType, conditionFunc, { timeout = this._node.getTimeout(), reverse } = {}, value) {
+    _waitProperty(name, conditionType, conditionFunc, { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() } = {}, value) {
         const reverseStr = (reverse) ? ' not' : '';
         let conditionStr = '';
         if (conditionType === 'has') {
@@ -116,7 +120,7 @@ class PageElementBaseWait extends _1.PageNodeWait {
             else {
                 return '';
             }
-        }, timeout);
+        }, timeout, interval);
     }
     _waitWithinProperty(name, value, conditionFunc, opts) {
         return this._waitProperty(name, 'within', conditionFunc, opts, value);
@@ -131,7 +135,7 @@ class PageElementBaseWait extends _1.PageNodeWait {
         return this._waitProperty(name, 'contains', conditionFunc, opts, value);
     }
     _makeReverseParams(opts = {}) {
-        return { timeout: opts.timeout, reverse: true };
+        return { timeout: opts.timeout, reverse: true, interval: opts.interval };
     }
 }
 exports.PageElementBaseWait = PageElementBaseWait;

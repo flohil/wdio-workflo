@@ -459,6 +459,3 @@ const outerGroup = store.ElementGroup({
   }
 })
 
-outerGroup.eachDo(() => true, {
-  
-})

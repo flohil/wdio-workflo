@@ -222,13 +222,13 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
 exports.PageElementMapCurrently = PageElementMapCurrently;
 class PageElementMapWait extends _1.PageNodeWait {
     exists(opts = {}) {
-        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.exists());
+        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.exists(opts));
     }
     isVisible(opts = {}) {
-        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isVisible());
+        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isVisible(opts));
     }
     isEnabled(opts = {}) {
-        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isEnabled());
+        return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.isEnabled(opts));
     }
     hasText(text, opts) {
         return this._node.eachWait(this._node.$, text, (element, expected) => element.wait.hasText(expected, opts));
@@ -251,13 +251,13 @@ class PageElementMapWait extends _1.PageNodeWait {
     get not() {
         return {
             exists: (opts = {}) => {
-                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.exists());
+                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.exists(opts));
             },
             isVisible: (opts = {}) => {
-                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.isVisible());
+                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.isVisible(opts));
             },
             isEnabled: (opts = {}) => {
-                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.isEnabled());
+                return this._node.eachWait(this._node.$, opts.filterMask, element => element.wait.not.isEnabled(opts));
             },
             hasText: (text, opts) => {
                 return this._node.eachWait(this._node.$, text, (element, expected) => element.wait.not.hasText(expected, opts));
@@ -283,13 +283,13 @@ class PageElementMapWait extends _1.PageNodeWait {
 exports.PageElementMapWait = PageElementMapWait;
 class PageElementMapEventually extends _1.PageNodeEventually {
     exists(opts = {}) {
-        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.exists());
+        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.exists(opts));
     }
     isVisible(opts = {}) {
-        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isVisible());
+        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isVisible(opts));
     }
     isEnabled(opts = {}) {
-        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isEnabled());
+        return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.isEnabled(opts));
     }
     hasText(text, opts) {
         return this._node.eachCheck(this._node.$, text, (element, expected) => element.eventually.hasText(expected, opts));
@@ -312,13 +312,13 @@ class PageElementMapEventually extends _1.PageNodeEventually {
     get not() {
         return {
             exists: (opts = {}) => {
-                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.exists());
+                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.exists(opts));
             },
             isVisible: (opts = {}) => {
-                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.isVisible());
+                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.isVisible(opts));
             },
             isEnabled: (opts = {}) => {
-                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.isEnabled());
+                return this._node.eachCheck(this._node.$, opts.filterMask, element => element.eventually.not.isEnabled(opts));
             },
             hasText: (text, opts) => {
                 return this._node.eachCheck(this._node.$, text, (element, expected) => element.eventually.not.hasText(expected, opts));

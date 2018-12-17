@@ -94,7 +94,7 @@ export interface ICompareElementFuncs<
   element?: IMatcherArgs<
     elements.PageElement<stores.PageElementStore>,
     ElementExpectedType,
-    Workflo.IWDIOParamsOptional
+    Workflo.IWDIOParamsInterval
   >,
   list?: IMatcherArgs<
     elements.PageElementList<
@@ -103,7 +103,7 @@ export interface ICompareElementFuncs<
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     ListExpectedType,
-    Workflo.IWDIOParamsOptional
+    Workflo.IWDIOParamsInterval
   >,
   map?: IMatcherArgs<
     elements.PageElementMap<
@@ -113,12 +113,12 @@ export interface ICompareElementFuncs<
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     MapExpectedType,
-    Workflo.IWDIOParamsOptional & {filterMask?: Partial<Record<string, true>>}
+    Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<string, true>>}
   >,
   group?: IMatcherArgs<
     elements.PageElementGroup<stores.PageElementStore, {[key: string] : Workflo.PageNode.INode}>,
     GroupExpectedType,
-    Workflo.IWDIOParamsOptional & {filterMask?: Workflo.PageNode.ExtractBoolean<{[key: string]: Workflo.PageNode.INode}>}
+    Workflo.IWDIOParamsInterval & {filterMask?: Workflo.PageNode.ExtractBoolean<{[key: string]: Workflo.PageNode.INode}>}
   >
 }
 
@@ -153,7 +153,7 @@ export interface ICompareElementFuncs<
 // MATCHER FUNCS
 
 export function createMatcher<
-  OptsType extends Object = Workflo.IWDIOParamsOptional,
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
   ElementExpectedType = undefined,
   ListExpectedType = undefined,
   MapExpectedType = undefined,
@@ -261,7 +261,7 @@ export function createMatcher<
 }
 
 export function createMatcherWithoutExpected<
-  OptsType extends Object = Workflo.IWDIOParamsOptional,
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
@@ -273,7 +273,7 @@ export function createMatcherWithoutExpected<
 }
 
 export function createBooleanMatcherWithoutExpected<
-  OptsType extends Object = Workflo.IWDIOParamsOptional,
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
 >(
   compareFuncs: ICompareElementFuncs<undefined, undefined, undefined, undefined>,
 ) {

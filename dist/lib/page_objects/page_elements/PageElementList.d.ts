@@ -10,23 +10,19 @@ export interface IPageElementListIdentifier<Store extends PageElementStore, Page
     };
     func: (element: PageElementType) => string;
 }
-export interface IPageElementListWaitEmptyParams extends Workflo.IWDIOParamsOptional {
-    interval?: number;
-}
-export interface IPageElementListWaitEmptyReverseParams extends IPageElementListWaitEmptyParams {
+export interface IPageElementListWaitEmptyReverseParams extends Workflo.IWDIOParamsInterval {
     reverse?: boolean;
 }
-export interface IPageElementListWaitLengthParams extends IPageElementListWaitEmptyParams {
+export interface IPageElementListWaitLengthParams extends Workflo.IWDIOParamsInterval {
     comparator?: Workflo.Comparator;
 }
 export interface IPageElementListWaitLengthReverseParams extends IPageElementListWaitLengthParams {
     reverse?: boolean;
 }
-export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store> {
+export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store>, Workflo.IWDIOParamsInterval {
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
     waitType?: Workflo.WaitType;
-    interval?: number;
     disableCache?: boolean;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
@@ -114,6 +110,13 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     eachCheck<T>(elements: PageElementType[], checkFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]): boolean;
     eachGet<T>(elements: PageElementType[], getFunc: (element: PageElementType) => T): T[];
+    /**
+     * Uses default interval and default timeout of each element contained in this list.
+     *
+     * @param elements
+     * @param waitFunc
+     * @param expected
+     */
     eachWait<T>(elements: PageElementType[], waitFunc: (element: PageElementType, expected: T) => PageElementType, expected?: T | T[]): this;
     eachDo(elements: PageElementType[], doFunc: (element: PageElementType) => PageElementType): PageElementType[];
     eachSet<T>(elements: PageElementType[], setFunc: (element: PageElementType, value: T) => PageElementType, values?: T | T[]): this;
@@ -182,27 +185,27 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
     readonly any: PageElementType["wait"];
     readonly none: PageElementType['wait']['not'];
-    exists(opts?: Workflo.IWDIOParamsOptional): ListType;
-    isVisible(opts?: Workflo.IWDIOParamsOptional): ListType;
-    isEnabled(opts?: Workflo.IWDIOParamsOptional): ListType;
-    hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
-    hasAnyText(opts?: Workflo.IWDIOParamsOptional): ListType;
-    containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
-    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional): ListType;
-    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): ListType;
+    exists(opts?: Workflo.IWDIOParams): ListType;
+    isVisible(opts?: Workflo.IWDIOParams): ListType;
+    isEnabled(opts?: Workflo.IWDIOParams): ListType;
+    hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
+    hasAnyText(opts?: Workflo.IWDIOParamsInterval): ListType;
+    containsText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
+    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval): ListType;
+    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
     readonly not: {
-        isEmpty: (opts?: IPageElementListWaitEmptyParams) => ListType;
+        isEmpty: (opts?: Workflo.IWDIOParamsInterval) => ListType;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
-        exists: (opts?: Workflo.IWDIOParamsOptional) => ListType;
-        isVisible: (opts?: Workflo.IWDIOParamsOptional) => ListType;
-        isEnabled: (opts?: Workflo.IWDIOParamsOptional) => ListType;
-        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
-        hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => ListType;
-        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
-        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => ListType;
-        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => ListType;
+        exists: (opts?: Workflo.IWDIOParams) => ListType;
+        isVisible: (opts?: Workflo.IWDIOParams) => ListType;
+        isEnabled: (opts?: Workflo.IWDIOParams) => ListType;
+        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
+        hasAnyText: (opts?: Workflo.IWDIOParamsInterval) => ListType;
+        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
+        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => ListType;
+        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
     };
 }
 export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeEventually<Store, ListType> {
@@ -210,26 +213,26 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     readonly none: PageElementType['eventually']['not'];
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
-    exists(opts?: Workflo.IWDIOParamsOptional): boolean;
-    isVisible(opts?: Workflo.IWDIOParamsOptional): boolean;
-    isEnabled(opts?: Workflo.IWDIOParamsOptional): boolean;
-    hasText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
-    hasAnyText(opts?: Workflo.IWDIOParamsOptional): boolean;
-    containsText(text: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
-    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsOptional): boolean;
-    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsOptional): boolean;
+    exists(opts?: Workflo.IWDIOParams): boolean;
+    isVisible(opts?: Workflo.IWDIOParams): boolean;
+    isEnabled(opts?: Workflo.IWDIOParams): boolean;
+    hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
+    hasAnyText(opts?: Workflo.IWDIOParamsInterval): boolean;
+    containsText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
+    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval): boolean;
+    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
     readonly not: {
-        isEmpty: (opts?: IPageElementListWaitEmptyParams) => boolean;
+        isEmpty: (opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
-        exists: (opts?: Workflo.IWDIOParamsOptional) => boolean;
-        isVisible: (opts?: Workflo.IWDIOParamsOptional) => boolean;
-        isEnabled: (opts?: Workflo.IWDIOParamsOptional) => boolean;
-        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
-        hasAnyText: (opts?: Workflo.IWDIOParamsOptional) => boolean;
-        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
-        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsOptional) => boolean;
-        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsOptional) => boolean;
+        exists: (opts?: Workflo.IWDIOParams) => boolean;
+        isVisible: (opts?: Workflo.IWDIOParams) => boolean;
+        isEnabled: (opts?: Workflo.IWDIOParams) => boolean;
+        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
+        hasAnyText: (opts?: Workflo.IWDIOParamsInterval) => boolean;
+        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
+        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => boolean;
+        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
     };
 }

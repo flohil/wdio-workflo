@@ -1,7 +1,6 @@
 import { PageElementStore } from '../stores';
-export interface IPageNodeOpts<Store extends PageElementStore> {
+export interface IPageNodeOpts<Store extends PageElementStore> extends Workflo.IWDIOParams {
     store: Store;
-    timeout?: number;
 }
 export declare abstract class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
     protected _store: Store;

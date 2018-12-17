@@ -1,19 +1,21 @@
 /// <reference types="webdriverio" />
 import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually, PageElementGroup } from '.';
 import { PageElementStore } from '../stores';
-export interface IPageElementBaseOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
+export interface IPageElementBaseOpts<Store extends PageElementStore> extends IPageNodeOpts<Store>, Workflo.IWDIOParamsInterval {
     waitType?: Workflo.WaitType;
 }
 export declare abstract class PageElementBase<Store extends PageElementStore> extends PageNode<Store> {
+    protected _interval: number;
     protected _waitType: Workflo.WaitType;
     protected _$: Store;
     abstract readonly currently: PageElementBaseCurrently<Store, this>;
     abstract readonly wait: PageElementBaseWait<Store, this>;
     abstract readonly eventually: PageElementBaseEventually<Store, this>;
-    constructor(selector: string, { waitType, ...superOpts }: IPageElementBaseOpts<Store>);
+    constructor(selector: string, { interval, waitType, ...superOpts }: IPageElementBaseOpts<Store>);
     readonly $: Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>;
     getSelector(): string;
     getTimeout(): number;
+    getInterval(): number;
     abstract __equals<T>(actual: T, expected: T): boolean;
     abstract __any<T>(actual: T): boolean;
     abstract __contains<T>(actual: T, expected: T): any;
@@ -39,13 +41,13 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
     protected _compareContains<T>(expected: T, actual: T): any;
 }
 export declare abstract class PageElementBaseWait<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
-    protected _waitWdioCheckFunc(checkTypeStr: string, conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse) => boolean, { timeout, reverse }?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
-    protected _waitProperty<T>(name: string, conditionType: 'has' | 'contains' | 'any' | 'within', conditionFunc: (opts: Workflo.IWDIOParamsOptionalReverse, value?: T) => boolean, { timeout, reverse }?: Workflo.IWDIOParamsOptionalReverse, value?: T): PageElementType;
-    protected _waitWithinProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
-    protected _waitHasProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
-    protected _waitHasAnyProperty<T>(name: string, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
-    protected _waitContainsProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsOptionalReverse): PageElementType;
-    protected _makeReverseParams(opts?: Workflo.IWDIOParamsOptional): Workflo.IWDIOParamsOptionalReverse;
+    protected _waitWdioCheckFunc(checkTypeStr: string, conditionFunc: (opts: Workflo.IWDIOParamsReverseInterval) => boolean, { timeout, reverse, interval }?: Workflo.IWDIOParamsReverseInterval): PageElementType;
+    protected _waitProperty<T>(name: string, conditionType: 'has' | 'contains' | 'any' | 'within', conditionFunc: (opts: Workflo.IWDIOParamsReverseInterval, value?: T) => boolean, { timeout, reverse, interval }?: Workflo.IWDIOParamsReverseInterval, value?: T): PageElementType;
+    protected _waitWithinProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
+    protected _waitHasProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
+    protected _waitHasAnyProperty<T>(name: string, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
+    protected _waitContainsProperty<T>(name: string, value: T, conditionFunc: (value: T) => boolean, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
+    protected _makeReverseParams(opts?: Workflo.IWDIOParamsInterval): Workflo.IWDIOParamsReverseInterval;
 }
 export declare abstract class PageElementBaseEventually<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeEventually<Store, PageElementType> {
 }
