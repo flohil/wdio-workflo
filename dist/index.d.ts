@@ -289,17 +289,17 @@ declare global {
             type ExtractText<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getText']> : undefined;
+                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getText']> : never;
             };
             type ExtractBoolean<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['currently']['getExists']> : undefined;
+                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['currently']['getExists']> : never;
             };
             type ExtractTrue<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : undefined;
+                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : never;
             };
             interface IElementNode<TextType, BooleanType, FilterType> extends INode, IGetElement<TextType, BooleanType, FilterType> {
                 currently: IGetElement<TextType, BooleanType, FilterType> & ICheckElementCurrently<TextType, BooleanType, FilterType>;
@@ -374,7 +374,7 @@ declare global {
             type ExtractValue<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getValue']> : undefined;
+                [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getValue']> : never;
             };
             interface IValueElementNode<GetType, FilterType, SetType = GetType> extends INode, IValueElement<GetType, FilterType, SetType> {
                 currently: IValueElement<GetType, FilterType, SetType> & ICheckValueCurrently<GetType, FilterType>;
