@@ -35,7 +35,9 @@ export class PageElementMap<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>
 > extends PageNode<Store>
-implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
+implements Workflo.PageNode.IElementNode<
+  Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, true>>
+> {
 
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   protected _elementOptions: PageElementOptions
@@ -113,12 +115,19 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
    *
    * @param filter a filter mask
    */
-  getText(filterMask?: Partial<Record<K, string>>) {
+  getText(filterMask?: Partial<Record<K, true>>) {
     return this.eachGet(this._$, filterMask, node => node.getText())
   }
 
-  getDirectText(filterMask?: Partial<Record<K, string>>) {
+  getDirectText(filterMask?: Partial<Record<K, true>>) {
     return this.eachGet(this._$, filterMask, node => node.getDirectText())
+  }
+
+  getIsEnabled(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
+    return this.eachGet(this.$, filterMask, node => {
+      node.wait.isEnabled()
+      return node.currently.isEnabled()
+    })
   }
 
   // HELPER FUNCTIONS
@@ -164,7 +173,7 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
     ResultType
   >(
     context: Record<K, PageElementType>,
-    filterMask: Partial<Record<K, ResultType>>,
+    filterMask: Partial<Record<K, true>>,
     getFunc: (node: PageElementType) => ResultType,
   ): Partial<Record<K, ResultType>> {
     let result = {} as Record<K, ResultType>;
@@ -253,16 +262,28 @@ export class PageElementMapCurrently<
    *
    * @param filter a filter mask
    */
-  getText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>> {
+  getText(filterMask?: Partial<Record<K, true>>) {
     return this._node.eachGet(
       this._node.$, filterMask, node => node.currently.getText()
     )
   }
 
-  getDirectText(filterMask?: Partial<Record<K, string>>): Partial<Record<K, string>> {
+  getDirectText(filterMask?: Partial<Record<K, true>>) {
     return this._node.eachGet(
       this._node.$, filterMask, node => node.currently.getDirectText()
     )
+  }
+
+  getExists(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
+    return this._node.eachGet(this._node.$, filterMask, node => node.currently.exists())
+  }
+
+  getIsVisible(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
+    return this._node.eachGet(this._node.$, filterMask, node => node.currently.isVisible())
+  }
+
+  getIsEnabled(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
+    return this._node.eachGet(this._node.$, filterMask, node => node.currently.isEnabled())
   }
 
   exists(filterMask?: Partial<Record<K, true>>) {
@@ -289,7 +310,7 @@ export class PageElementMapCurrently<
     )
   }
 
-  hasAnyText(filterMask?: Partial<Record<K, string>>) {
+  hasAnyText(filterMask?: Partial<Record<K, true>>) {
     return this._node.eachCheck(
       this._node.$, filterMask, (element) => element.currently.hasAnyText()
     )
@@ -307,7 +328,7 @@ export class PageElementMapCurrently<
     )
   }
 
-  hasAnyDirectText(filterMask?: Partial<Record<K, string>>) {
+  hasAnyDirectText(filterMask?: Partial<Record<K, true>>) {
     return this._node.eachCheck(
       this._node.$, filterMask, (element) => element.currently.hasAnyDirectText()
     )
@@ -341,7 +362,7 @@ export class PageElementMapCurrently<
           this._node.$, text, (element, expected) => element.currently.not.hasText(expected)
         )
       },
-      hasAnyText: (filterMask?: Partial<Record<K, string>>) => {
+      hasAnyText: (filterMask?: Partial<Record<K, true>>) => {
         return this._node.eachCheck(
           this._node.$, filterMask, (element) => element.currently.not.hasAnyText()
         )
@@ -356,7 +377,7 @@ export class PageElementMapCurrently<
           this._node.$, directText, (element, expected) => element.currently.not.hasDirectText(expected)
         )
       },
-      hasAnyDirectText: (filterMask?: Partial<Record<K, string>>) => {
+      hasAnyDirectText: (filterMask?: Partial<Record<K, true>>) => {
         return this._node.eachCheck(
           this._node.$, filterMask, (element) => element.currently.not.hasAnyDirectText()
         )
@@ -402,7 +423,7 @@ export class PageElementMapWait<
     )
   }
 
-  hasAnyText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) {
+  hasAnyText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachWait(
       this._node.$, opts.filterMask, (element) => element.wait.hasAnyText(opts)
     )
@@ -420,7 +441,7 @@ export class PageElementMapWait<
     )
   }
 
-  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) {
+  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachWait(
       this._node.$, opts.filterMask, (element) => element.wait.hasAnyDirectText(opts)
     )
@@ -454,7 +475,7 @@ export class PageElementMapWait<
           this._node.$, text, (element, expected) => element.wait.not.hasText(expected, opts)
         )
       },
-      hasAnyText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      hasAnyText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachWait(
           this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyText(opts)
         )
@@ -469,7 +490,7 @@ export class PageElementMapWait<
           this._node.$, directText, (element, expected) => element.wait.not.hasDirectText(expected, opts)
         )
       },
-      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachWait(
           this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyDirectText(opts)
         )
@@ -515,7 +536,7 @@ export class PageElementMapEventually<
     )
   }
 
-  hasAnyText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) {
+  hasAnyText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachCheck(
       this._node.$, opts.filterMask, (element) => element.eventually.hasAnyText(opts)
     )
@@ -533,7 +554,7 @@ export class PageElementMapEventually<
     )
   }
 
-  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) {
+  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachCheck(
       this._node.$, opts.filterMask, (element) => element.eventually.hasAnyDirectText(opts)
     )
@@ -567,7 +588,7 @@ export class PageElementMapEventually<
           this._node.$, text, (element, expected) => element.eventually.not.hasText(expected, opts)
         )
       },
-      hasAnyText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      hasAnyText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachCheck(
           this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyText(opts)
         )
@@ -582,7 +603,7 @@ export class PageElementMapEventually<
           this._node.$, directText, (element, expected) => element.eventually.not.hasDirectText(expected, opts)
         )
       },
-      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachCheck(
           this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyDirectText(opts)
         )

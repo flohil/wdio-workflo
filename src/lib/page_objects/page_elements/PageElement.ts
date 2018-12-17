@@ -19,7 +19,7 @@ export interface IPageElementOpts<
 
 export class PageElement<
   Store extends PageElementStore
-> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string> {
+> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, true> {
 
   protected _customScroll: Workflo.IScrollParams
 
@@ -148,6 +148,10 @@ export class PageElement<
   }
 
 // Public GETTER FUNCTIONS (return state after initial wait)
+
+  getIsEnabled() {
+    return this._executeAfterInitialWait( () => this.currently.isEnabled() )
+  }
 
   getHTML() {
     return this._executeAfterInitialWait( () => this.currently.getHTML() )
@@ -437,49 +441,20 @@ export class PageElement<
 export class PageElementCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
-> extends PageElementBaseCurrently<Store, PageElementType>
-implements Workflo.PageNode.IGetElement<string> {
+> extends PageElementBaseCurrently<Store, PageElementType> {
 
 // GET STATE
 
-  /**
-   * Overwriting this function will affect the behaviour of the function
-   * exists in PageElement base class and its currently, wait and eventually containers.
-   */
-  exists(): boolean {
-    return this.element.isExisting()
+  getExists() {
+    return this.exists()
   }
 
-  /**
-   * Overwriting this function will affect the behaviour of the function
-   * isVisible in PageElement base class and its currently, wait and eventually containers.
-   */
-  isVisible(): boolean {
-    return this.element.isVisible()
+  getIsVisible() {
+    return this.isVisible()
   }
 
-  /**
-   * Overwriting this function will affect the behaviour of the function
-   * isEnabled in PageElement base class and its currently, wait and eventually containers.
-   */
-  isEnabled(): boolean {
-    return this._node.__execute(() => this.element.isEnabled())
-  }
-
-  /**
-   * Overwriting this function will affect the behaviour of the function
-   * isSelected in PageElement base class and its currently, wait and eventually containers.
-   */
-  isSelected(): boolean {
-    return this._node.__execute(() => this.element.isSelected())
-  }
-
-  /**
-   * Overwriting this function will affect the behaviour of the function
-   * isChecked in PageElement base class and its currently, wait and eventually containers.
-   */
-  isChecked(): boolean {
-    return this.hasAnyAttribute('checked')
+  getIsEnabled() {
+    return this.isEnabled()
   }
 
   /**
@@ -683,6 +658,46 @@ implements Workflo.PageNode.IGetElement<string> {
 
   protected _hasSideSize(expected: number, actual: number, tolerance?: number): boolean {
     return this._withinTolerance(actual, expected, tolerance)
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * exists in PageElement base class and its currently, wait and eventually containers.
+   */
+  exists(): boolean {
+    return this.element.isExisting()
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isVisible in PageElement base class and its currently, wait and eventually containers.
+   */
+  isVisible(): boolean {
+    return this.element.isVisible()
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isEnabled in PageElement base class and its currently, wait and eventually containers.
+   */
+  isEnabled(): boolean {
+    return this._node.__execute(() => this.element.isEnabled())
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isSelected in PageElement base class and its currently, wait and eventually containers.
+   */
+  isSelected(): boolean {
+    return this._node.__execute(() => this.element.isSelected())
+  }
+
+  /**
+   * Overwriting this function will affect the behaviour of the function
+   * isChecked in PageElement base class and its currently, wait and eventually containers.
+   */
+  isChecked(): boolean {
+    return this.hasAnyAttribute('checked')
   }
 
   hasText(text: string) {

@@ -57,7 +57,7 @@ export class PageElementList<
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
 > extends PageNode<Store>
-implements Workflo.PageNode.IElementNode<string[]> {
+implements Workflo.PageNode.IElementNode<string[], boolean[], true[]> {
 
   protected _$: Store
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
@@ -321,6 +321,13 @@ implements Workflo.PageNode.IElementNode<string[]> {
     return this.eachGet(this.all, element => element.getDirectText())
   }
 
+  getIsEnabled() {
+    return this.eachGet(this.all, element => {
+      element.initialWait()
+      return element.currently.isEnabled()
+    })
+  }
+
   // HELPER FUNCTIONS
 
   /**
@@ -548,6 +555,18 @@ export class PageElementListCurrently<
 
   getDirectText() {
     return this._node.eachGet(this.all, element => element.currently.getDirectText())
+  }
+
+  getExists() {
+    return this._node.eachGet(this.all, element => element.currently.exists())
+  }
+
+  getIsVisible() {
+    return this._node.eachGet(this.all, element => element.currently.isVisible())
+  }
+
+  getIsEnabled() {
+    return this._node.eachGet(this.all, element => element.currently.isEnabled())
   }
 
 // CHECK STATE FUNCTIONS

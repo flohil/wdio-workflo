@@ -16,7 +16,7 @@ export class ValuePageElementMap<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ValueType
 > extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>> {
+implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, true>>> {
 
   readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this, ValueType>
   readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOptions, this, ValueType>
@@ -41,7 +41,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>> {
    *
    * @param filterMask a filter mask
    */
-  getValue(filterMask?: Partial<Record<K, ValueType>>) {
+  getValue(filterMask?: Partial<Record<K, true>>) {
     return this.eachGet(this._$, filterMask, node => node.getValue())
   }
 
@@ -77,7 +77,7 @@ class ValuePageElementMapCurrently<
    *
    * @param filterMask a filter mask
    */
-  getValue(filterMask?: Partial<Record<K, ValueType>>) {
+  getValue(filterMask?: Partial<Record<K, true>>) {
     return this._node.eachGet(this._node.$, filterMask, node => node.currently.getValue())
   }
 
@@ -91,7 +91,7 @@ class ValuePageElementMapCurrently<
     )
   }
 
-  hasAnyValue(filterMask?: Partial<Record<K, string>>) {
+  hasAnyValue(filterMask?: Partial<Record<K, true>>) {
     return this._node.eachCheck(
       this._node.$, filterMask, (element) => element.currently.hasAnyValue()
     )
@@ -110,7 +110,7 @@ class ValuePageElementMapCurrently<
           this._node.$, value, (element, expected) => element.currently.not.hasValue(expected)
         )
       },
-      hasAnyValue: (filterMask?: Partial<Record<K, string>>) => {
+      hasAnyValue: (filterMask?: Partial<Record<K, true>>) => {
         return this._node.eachCheck(
           this._node.$, filterMask, element => element.currently.not.hasAnyValue()
         )
@@ -139,7 +139,7 @@ class ValuePageElementMapWait<
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) {
+  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachWait(
       this._node.$, opts.filterMask, element => element.wait.hasAnyValue(opts)
     )
@@ -158,7 +158,7 @@ class ValuePageElementMapWait<
           this._node.$, value, (element, expected) => element.wait.not.hasValue(expected, opts)
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachWait(
           this._node.$, opts.filterMask, element => element.wait.not.hasAnyValue(opts)
         )
@@ -187,7 +187,7 @@ class ValuePageElementMapEventually<
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) {
+  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
     return this._node.eachCheck(
       this._node.$, opts.filterMask, element => element.eventually.hasAnyValue(opts)
     )
@@ -206,7 +206,7 @@ class ValuePageElementMapEventually<
           this._node.$, value, (element, expected) => element.eventually.not.hasValue(expected, opts)
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, string>>} = {}) => {
+      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
         return this._node.eachCheck(
           this._node.$, opts.filterMask, element => element.eventually.not.hasAnyValue(opts)
         )

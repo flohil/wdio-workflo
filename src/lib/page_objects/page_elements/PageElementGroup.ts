@@ -270,6 +270,24 @@ implements Workflo.PageNode.IGetElement<ExtractText<Content>> {
     )
   }
 
+  getExists(filterMask?: ExtractTrue<Content>) {
+    return this._node.eachGet<Workflo.PageNode.IElementNode<FilterMask<Content>>, FilterMask<Content>> (
+      isIElementNode, filterMask, node => node.currently.getDirectText()
+    )
+  }
+
+  getDirectText(filterMask?: ExtractText<Content>) {
+    return this._node.eachGet<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
+      isIElementNode, filterMask, node => node.currently.getDirectText()
+    )
+  }
+
+  getDirectText(filterMask?: ExtractText<Content>) {
+    return this._node.eachGet<Workflo.PageNode.IElementNode<ExtractText<Content>>, ExtractText<Content>> (
+      isIElementNode, filterMask, node => node.currently.getDirectText()
+    )
+  }
+
   exists(filterMask?: ExtractBoolean<Content>) {
     return this._node.eachCheck<Workflo.PageNode.IElementNode<ExtractBoolean<Content>>, ExtractBoolean<Content>> (
       isIElementNode, filterMask, node => node.currently.exists()

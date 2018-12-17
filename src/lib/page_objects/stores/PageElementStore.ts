@@ -459,3 +459,12 @@ const outerGroup = store.ElementGroup({
   }
 })
 
+outerGroup.eachDo(() => true, {
+
+})
+
+outerGroup.currently.getText({
+  innerGroup: {
+    
+  }
+})
