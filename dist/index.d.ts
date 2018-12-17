@@ -804,7 +804,7 @@ export interface IWorkfloCommonConfig {
      *
      * @default testcases
      */
-    consoleLogLevel?: 'results' | 'testcases' | 'specs';
+    consoleLogLevel?: 'results' | 'testcases' | 'steps';
     /**
      * If set to true, will output errors and validation failures immediatly.
      *
