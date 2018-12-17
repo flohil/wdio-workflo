@@ -42,6 +42,9 @@ class PageElementMap extends _1.PageNode {
         ]));
     }
     // GETTER FUNCTIONS
+    getSelector() {
+        return this._selector;
+    }
     /**
     * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
     *

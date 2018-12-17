@@ -32,6 +32,7 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
      * @param mappingObject
      */
     changeMappingObject(mappingObject: Record<K, string>): void;
+    getSelector(): string;
     /**
     * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
     *

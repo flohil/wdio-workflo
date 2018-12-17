@@ -101,6 +101,10 @@ implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>> {
 
   // GETTER FUNCTIONS
 
+  getSelector() {
+    return this._selector
+  }
+
    /**
    * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
    *
