@@ -5,7 +5,8 @@ import {
   PageElementGroupCurrently,
   PageElementGroupEventually,
   PageElementGroupWait,
-  ExtractTrue
+  ExtractTrue,
+  ExtractBoolean
 } from '.';
 
 type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<T>

@@ -342,11 +342,11 @@ declare global {
       }
 
       type ExtractBoolean<T extends {[key: string]: INode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['currently']['getExists']> : never;
+        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getIsEnabled']> : never;
       }
 
       type ExtractTrue<T extends {[key: string]: INode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : never;
+        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : true;
       }
 
       interface IElementNode<TextType, BooleanType, FilterType>
