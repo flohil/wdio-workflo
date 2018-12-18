@@ -531,28 +531,28 @@ const valGroup = store.ValueGroup({
   input: store.Input('//input'),
   divList: store.ElementList('//div'),
   inputList: store.InputList('//input'),
-  divMap: store.ElementMap('//div', {
-    identifier: {
-      mappingObject: {
-        a: 'A',
-        b: 'B'
-      },
-      func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-    },
-  }),
-  inputMap: store.InputMap('//input', {
-    identifier: {
-      mappingObject: {
-        a: 'A',
-        b: 'B'
-      },
-      func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-    },
-  })
+  // divMap: store.ElementMap('//div', {
+  //   identifier: {
+  //     mappingObject: {
+  //       a: 'A',
+  //       b: 'B'
+  //     },
+  //     func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
+  //   },
+  // }),
+  // inputMap: store.InputMap('//input', {
+  //   identifier: {
+  //     mappingObject: {
+  //       a: 'A',
+  //       b: 'B'
+  //     },
+  //     func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
+  //   },
+  // })
 })
 
 const values = valGroup.getValue({
-
+ 
 })
 
 valGroup.setValue({

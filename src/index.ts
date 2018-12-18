@@ -346,7 +346,7 @@ declare global {
       }
 
       type ExtractTrue<T extends {[key: string]: INode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : true;
+        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : never;
       }
 
       interface IElementNode<TextType, BooleanType, FilterType>
@@ -356,17 +356,17 @@ declare global {
           ICheckElementCurrently<TextType, BooleanType, FilterType>
         wait: IWaitElement<TextType, BooleanType, FilterType>
         eventually: ICheckElementEventually<TextType, BooleanType, FilterType>
-        __getTrue(filterMask?: StripNever<FilterType>): StripNever<FilterType>
+        __getTrue(filterMask?: StripNever<FilterType>): FilterType
       }
 
       interface IGetElement<TextType, BooleanType, FilterType> {
-        getIsEnabled(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
+        getIsEnabled(filterMask?: StripNever<FilterType>): BooleanType
         getText(filterMask?: StripNever<FilterType>): StripNever<TextType>
         getDirectText(filterMask?: StripNever<FilterType>): StripNever<TextType>
       }
 
       interface IWaitElement<TextType, BooleanType, FilterType, OptsType = IWDIOParamsReverseInterval> {
-        exists(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
+        exists(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
         isVisible(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
         isEnabled(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
         hasText(text: StripNever<TextType>, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
@@ -380,9 +380,9 @@ declare global {
       }
 
       interface ICheckElementCurrently<TextType, BooleanType, FilterType> {
-        getExists(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
-        getIsVisible(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
-        getIsEnabled(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
+        getExists(filterMask?: StripNever<FilterType>): BooleanType
+        getIsVisible(filterMask?: StripNever<FilterType>): BooleanType
+        getIsEnabled(filterMask?: StripNever<FilterType>): BooleanType
         exists(filterMask?: StripNever<FilterType>): boolean
         isVisible(filterMask?: StripNever<FilterType>): boolean
         isEnabled(filterMask?: StripNever<FilterType>): boolean
