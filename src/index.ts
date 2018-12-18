@@ -356,42 +356,42 @@ declare global {
           ICheckElementCurrently<TextType, BooleanType, FilterType>
         wait: IWaitElement<TextType, BooleanType, FilterType>
         eventually: ICheckElementEventually<TextType, BooleanType, FilterType>
-        __getTrue(filterMask?: FilterType): FilterType
+        __getTrue(filterMask?: StripNever<FilterType>): StripNever<FilterType>
       }
 
       interface IGetElement<TextType, BooleanType, FilterType> {
-        getIsEnabled(filterMask?: FilterType): StripNever<BooleanType>
-        getText(filterMask?: FilterType): StripNever<TextType>
-        getDirectText(filterMask?: FilterType): StripNever<TextType>
+        getIsEnabled(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
+        getText(filterMask?: StripNever<FilterType>): StripNever<TextType>
+        getDirectText(filterMask?: StripNever<FilterType>): StripNever<TextType>
       }
 
       interface IWaitElement<TextType, BooleanType, FilterType, OptsType = IWDIOParamsReverseInterval> {
-        exists(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
-        isVisible(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
-        isEnabled(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
-        hasText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
-        hasAnyText(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
-        containsText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
-        hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
-        hasAnyDirectText(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
-        containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        exists(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
+        isVisible(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
+        isEnabled(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
+        hasText(text: StripNever<TextType>, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        hasAnyText(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
+        containsText(text: StripNever<TextType>, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        hasDirectText(directText: StripNever<TextType>, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        hasAnyDirectText(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IElementNode<TextType, BooleanType, FilterType>
+        containsDirectText(directText: StripNever<TextType>, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
 
         not: Omit<IWaitElement<TextType, BooleanType, FilterType, IWDIOParamsInterval>, 'not'>
       }
 
       interface ICheckElementCurrently<TextType, BooleanType, FilterType> {
-        getExists(filterMask?: FilterType): StripNever<BooleanType>
-        getIsVisible(filterMask?: FilterType): StripNever<BooleanType>
-        getIsEnabled(filterMask?: FilterType): StripNever<BooleanType>
-        exists(filterMask?: FilterType): boolean
-        isVisible(filterMask?: FilterType): boolean
-        isEnabled(filterMask?: FilterType): boolean
-        hasText(text: TextType): boolean
-        hasAnyText(filterMask?: FilterType): boolean
-        containsText(text: TextType): boolean
-        hasDirectText(directText: TextType): boolean
-        hasAnyDirectText(filterMask?: FilterType): boolean
-        containsDirectText(directText: TextType): boolean
+        getExists(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
+        getIsVisible(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
+        getIsEnabled(filterMask?: StripNever<FilterType>): StripNever<BooleanType>
+        exists(filterMask?: StripNever<FilterType>): boolean
+        isVisible(filterMask?: StripNever<FilterType>): boolean
+        isEnabled(filterMask?: StripNever<FilterType>): boolean
+        hasText(text: StripNever<TextType>): boolean
+        hasAnyText(filterMask?: StripNever<FilterType>): boolean
+        containsText(text: StripNever<TextType>): boolean
+        hasDirectText(directText: StripNever<TextType>): boolean
+        hasAnyDirectText(filterMask?: StripNever<FilterType>): boolean
+        containsDirectText(directText: StripNever<TextType>): boolean
 
         not: Omit<
           ICheckElementCurrently<TextType, BooleanType, FilterType>,
@@ -400,15 +400,15 @@ declare global {
       }
 
       interface ICheckElementEventually<TextType, BooleanType, FilterType> {
-        exists(opts?: IWDIOParams & {filterMask?: FilterType}): boolean
-        isVisible(opts?: IWDIOParams & {filterMask?: FilterType}): boolean
-        isEnabled(opts?: IWDIOParams & {filterMask?: FilterType}): boolean
-        hasText(text: TextType, opts?: IWDIOParamsInterval): boolean
-        hasAnyText(opts?: IWDIOParamsInterval & {filterMask?: FilterType}): boolean
-        containsText(text: TextType, opts?: IWDIOParamsInterval): boolean
-        hasDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean
-        hasAnyDirectText(opts?: IWDIOParamsInterval & {filterMask?: FilterType}): boolean
-        containsDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean
+        exists(opts?: IWDIOParams & {filterMask?: StripNever<FilterType>}): boolean
+        isVisible(opts?: IWDIOParams & {filterMask?: StripNever<FilterType>}): boolean
+        isEnabled(opts?: IWDIOParams & {filterMask?: StripNever<FilterType>}): boolean
+        hasText(text: StripNever<TextType>, opts?: IWDIOParamsInterval): boolean
+        hasAnyText(opts?: IWDIOParamsInterval & {filterMask?: StripNever<FilterType>}): boolean
+        containsText(text: StripNever<TextType>, opts?: IWDIOParamsInterval): boolean
+        hasDirectText(text: StripNever<TextType>, opts?: IWDIOParamsInterval): boolean
+        hasAnyDirectText(opts?: IWDIOParamsInterval & {filterMask?: StripNever<FilterType>}): boolean
+        containsDirectText(text: StripNever<TextType>, opts?: IWDIOParamsInterval): boolean
 
         not: Omit<ICheckElementEventually<TextType, BooleanType, FilterType>, 'not'>
       }
@@ -426,30 +426,30 @@ declare global {
       }
 
       interface IValueElement<GetType, FilterType, SetType> {
-        getValue(filterMask?: FilterType): StripNever<GetType>
-        setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>
+        getValue(filterMask?: StripNever<FilterType>): StripNever<GetType>
+        setValue(value: StripNever<SetType>): IValueElementNode<GetType, FilterType, SetType>
       }
 
       interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {
-        hasValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>
-        hasAnyValue(opts?: OptsType & {filterMask?: FilterType}): IValueElementNode<ValueType, FilterType>
-        containsValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>
+        hasValue(text: StripNever<ValueType>, opts?: OptsType): IValueElementNode<ValueType, FilterType>
+        hasAnyValue(opts?: OptsType & {filterMask?: StripNever<FilterType>}): IValueElementNode<ValueType, FilterType>
+        containsValue(text: StripNever<ValueType>, opts?: OptsType): IValueElementNode<ValueType, FilterType>
 
         not: Omit<IWaitValue<ValueType, FilterType, IWDIOParamsInterval>, 'not'>
       }
 
       interface ICheckValueCurrently<ValueType, FilterType> {
-        hasValue(value: ValueType): boolean
-        hasAnyValue(filterMask?: FilterType): boolean
-        containsValue(value: ValueType): boolean
+        hasValue(value: StripNever<ValueType>): boolean
+        hasAnyValue(filterMask?: StripNever<FilterType>): boolean
+        containsValue(value: StripNever<ValueType>): boolean
 
         not: Omit<ICheckValueCurrently<ValueType, FilterType>, 'not'>
       }
 
       interface ICheckValueEventually<ValueType, FilterType> {
-        hasValue(value: ValueType, opts?: IWDIOParamsInterval): boolean
-        hasAnyValue(opts?: IWDIOParamsInterval & {filterMask?: FilterType}): boolean
-        containsValue(value: ValueType, opts?: IWDIOParamsInterval): boolean
+        hasValue(value: StripNever<ValueType>, opts?: IWDIOParamsInterval): boolean
+        hasAnyValue(opts?: IWDIOParamsInterval & {filterMask?: StripNever<FilterType>}): boolean
+        containsValue(value: StripNever<ValueType>, opts?: IWDIOParamsInterval): boolean
 
         not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>
       }

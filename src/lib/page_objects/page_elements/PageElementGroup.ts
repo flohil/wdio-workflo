@@ -78,7 +78,7 @@ implements ElementNode<Content> {
 
   // GETTER FUNCTIONS
 
-  __getTrue(filterMask?: ExtractTrue<Content>) {
+  __getTrue(filterMask?: StripNever<ExtractTrue<Content>>) {
     return this.eachGet<ElementNode<Content>, ExtractTrue<Content>> (
       isIElementNode, filterMask, node => node.__getTrue()
     )
@@ -117,7 +117,7 @@ implements ElementNode<Content> {
     ResultType extends Partial<Content>,
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
-    filterMask: ExtractTrue<Content>,
+    filterMask: StripNever<ExtractTrue<Content>>,
     getFunc: (node: NodeInterface) => any,
   ): StripNever<ResultType> {
     let result = {} as ResultType;
