@@ -40,7 +40,7 @@ implements ValueElementNode<Content> {
     this.eventually = new ValuePageElementGroupEventually(this)
   }
 
-  getValue(filterMask?: ExtractTrue<Content>) {
+  getValue(filterMask?: ExtractTrue<Content>): StripNever<ExtractValue<Content>> {
     return this.eachGet<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, filterMask, node => node.getValue()
     )

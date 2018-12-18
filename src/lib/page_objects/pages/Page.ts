@@ -1,5 +1,5 @@
 import { PageElementStore } from '../stores'
-import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL } from '../'
+import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL, stores } from '../'
 
 export interface IPageArgs<Store extends PageElementStore> extends Workflo.IWDIOParamsInterval {
   elementStore: Store

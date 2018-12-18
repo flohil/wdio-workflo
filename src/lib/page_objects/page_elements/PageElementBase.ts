@@ -166,7 +166,7 @@ export abstract class PageElementBaseWait<
     name: string,
     conditionType: 'has' | 'contains' | 'any' | 'within',
     conditionFunc: (opts: Workflo.IWDIOParamsReverseInterval, value?: T) => boolean,
-    { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() }: 
+    { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() }:
       Workflo.IWDIOParamsReverseInterval = {},
     value?: T
   ) {

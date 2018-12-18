@@ -12,6 +12,7 @@ import {
   XPathBuilder
 } from '../builders'
 import { IValuePageElementMapOpts, ValuePageElementMap } from '../page_elements/ValuePageElementMap';
+import { pageObjects } from '../../..';
 
 export type CloneFunc<Type> = (
   selector?: Workflo.XPath,
@@ -424,3 +425,116 @@ export class PageElementStore {
     return this._instanceCache[key]
   }
 }
+
+// TODO: remove this
+
+interface IInputOpts<Store extends PageElementStore> extends IValuePageElementOpts<Store> {
+
+}
+
+class Input<
+  Store extends pageObjects.stores.PageElementStore,
+> extends pageObjects.elements.ValuePageElement<
+  Store, string
+> {
+
+  currently: pageObjects.elements.ValuePageElementCurrently<Store, this, string>;
+
+  constructor(selector: string, opts?: IInputOpts<Store>) {
+    super(selector, opts)
+
+    this.currently = new InputCurrently(this)
+  }
+
+  setValue(value: string) {
+    this.initialWait()
+
+    return this.currently.setValue(value)
+  }
+}
+
+class InputCurrently<
+  Store extends pageObjects.stores.PageElementStore,
+  PageElementType extends Input<Store>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+  getValue(): string {
+    return this.element.getValue()
+  }
+
+  setValue(value: string) {
+    this.element.setValue(value)
+
+    return this._node
+  }
+}
+
+// achieved mapping type to input value!!!
+
+class InputStore extends pageObjects.stores.PageElementStore {
+  Input(
+    selector: Workflo.XPath,
+    options?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
+  ) {
+    return this._getElement<Input<this>, IInputOpts<this>>(
+      selector,
+      Input,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
+
+  InputList(
+    selector: Workflo.XPath,
+    options?: PickPartial<
+      pageObjects.elements.IValuePageElementListOpts<
+        this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
+      >,
+      "waitType" | "timeout" | "disableCache" | "identifier",
+      "elementOptions"
+    >
+  ) {
+    return this.ValueList(
+      selector,
+      {
+        elementOptions: {},
+        elementStoreFunc: this.Input,
+        ...options
+      }
+    )
+  }
+
+  InputMap<K extends string>(
+    selector: Workflo.XPath,
+    options: PickPartial<
+      pageObjects.elements.IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      Workflo.Store.MapPublicKeys,
+      Workflo.Store.MapPublicPartialKeys
+    >
+  ) {
+    return this.ValueMap(
+      selector,
+      {
+        elementStoreFunc: this.Input,
+        elementOptions: {},
+        ...options
+      }
+    )
+  }
+}
+
+const store = new InputStore()
+
+const valGroup = store.ValueGroup({
+  div: store.Element('//div'),
+  input: store.Input('//input')
+})
+
+const values = valGroup.getValue()
+
+type ValType = typeof values
+
+type BlaKeys = FilteredKeys<ValType, never>
+
+const bla: Omit<ValType, FilteredKeys<ValType, never>> = undefined

@@ -208,6 +208,10 @@ declare global {
     P
   }[keyof T];
 
+  type StripNever<T> = Omit<T, FilteredKeys<T, never>>
+
+  type StripNeverByReturnType<T> = Omit<T, FilteredKeysByReturnType<T, never>>
+
   namespace Workflo {
 
     type WdioElement = Client<RawResult<Element>> & RawResult<Element>
