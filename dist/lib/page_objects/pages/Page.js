@@ -6,6 +6,8 @@ class Page {
         this._elementStore = args.elementStore;
         this._timeout = args.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         this._interval = args.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
+        this.wait = new PageWait(this);
+        this.eventually = new PageEventually(this);
     }
     getTimeout() {
         return this._timeout;
@@ -13,45 +15,62 @@ class Page {
     getInterval() {
         return this._interval;
     }
-    waitIsOpen(opts = Object.create(null)) {
-        const timeout = opts.timeout || this._timeout;
-        let error;
-        try {
-            browser.waitUntil(() => {
-                try {
-                    const result = this.isOpen();
-                    error = undefined;
-                    return result;
-                }
-                catch (funcError) {
-                    error = funcError;
-                }
-            }, timeout, '', opts.interval || this._interval);
-        }
-        catch (untilError) {
-            error = error || untilError;
-            this._handleWaitError(error, timeout);
-        }
+}
+exports.Page = Page;
+class PageWait {
+    constructor(page) {
+        this._page = page;
     }
-    eventuallyIsOpen(opts = Object.create(null)) {
+    _wait(conditionFunc, conditionMessage, opts = Object.create(null)) {
+        const timeout = opts.timeout || this._page.getTimeout();
+        const interval = opts.interval || this._page.getInterval();
         try {
-            browser.waitUntil(() => this.isOpen(), opts.timeout || this._timeout, '', opts.interval || this._interval);
+            browser.waitUntil(() => conditionFunc(), timeout, '', interval);
+        }
+        catch (error) {
+            if (error.type === 'WaitUntilTimeoutError') {
+                const waitError = new Error(`Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed`);
+                waitError.type = 'WaitUntilTimeoutError';
+                throw waitError;
+            }
+            else {
+                throw error;
+            }
+        }
+        return this._page;
+    }
+    isOpen(opts = Object.create(null)) {
+        return this._wait(() => this._page.isOpen(opts), " to be open", opts);
+    }
+    isClosed(opts = Object.create(null)) {
+        return this._wait(() => this._page.isClosed(opts), " to be closed", opts);
+    }
+}
+class PageEventually {
+    constructor(page) {
+        this._page = page;
+    }
+    _eventually(conditionFunc, opts = Object.create(null)) {
+        const timeout = opts.timeout || this._page.getTimeout();
+        const interval = opts.interval || this._page.getInterval();
+        try {
+            browser.waitUntil(() => conditionFunc(), timeout, '', interval);
             return true;
         }
         catch (error) {
-            return false;
+            if (error.type === 'WaitUntilTimeoutError') {
+                return false;
+            }
+            else {
+                throw error;
+            }
         }
     }
-    _handleWaitError(error, timeout) {
-        if ('type' in error && error.type === 'WaitUntilTimeoutError') {
-            const waitError = new Error(`Waiting for page ${this.constructor.name} to be open within ${timeout}ms failed`);
-            waitError.type = 'WaitUntilTimeoutError';
-            throw waitError;
-        }
-        else {
-            throw error;
-        }
+    isOpen(opts = Object.create(null)) {
+        this._eventually(() => this._page.isOpen(opts), opts);
+    }
+    isClosed(opts = Object.create(null)) {
+        this._eventually(() => this._page.isClosed(opts), opts);
     }
 }
-exports.Page = Page;
 //# sourceMappingURL=Page.js.map

@@ -184,6 +184,8 @@ declare global {
     type FilteredKeysByReturnType<T, U> = {
         [P in keyof T]: T[P] extends (...args: any[]) => Workflo.PageNode.INode ? ReturnType<T[P]> extends U ? P : never : P;
     }[keyof T];
+    type StripNever<T> = Omit<T, FilteredKeys<T, never>>;
+    type StripNeverByReturnType<T> = Omit<T, FilteredKeysByReturnType<T, never>>;
     namespace Workflo {
         type WdioElement = Client<RawResult<Element>> & RawResult<Element>;
         interface IJSError {
@@ -308,9 +310,9 @@ declare global {
                 __getTrue(filterMask?: FilterType): FilterType;
             }
             interface IGetElement<TextType, BooleanType, FilterType> {
-                getIsEnabled(filterMask?: FilterType): BooleanType;
-                getText(filterMask?: FilterType): TextType;
-                getDirectText(filterMask?: FilterType): TextType;
+                getIsEnabled(filterMask?: FilterType): StripNever<BooleanType>;
+                getText(filterMask?: FilterType): StripNever<TextType>;
+                getDirectText(filterMask?: FilterType): StripNever<TextType>;
             }
             interface IWaitElement<TextType, BooleanType, FilterType, OptsType = IWDIOParamsReverseInterval> {
                 exists(opts?: OptsType & {
@@ -335,9 +337,9 @@ declare global {
                 not: Omit<IWaitElement<TextType, BooleanType, FilterType, IWDIOParamsInterval>, 'not'>;
             }
             interface ICheckElementCurrently<TextType, BooleanType, FilterType> {
-                getExists(filterMask?: FilterType): BooleanType;
-                getIsVisible(filterMask?: FilterType): BooleanType;
-                getIsEnabled(filterMask?: FilterType): BooleanType;
+                getExists(filterMask?: FilterType): StripNever<BooleanType>;
+                getIsVisible(filterMask?: FilterType): StripNever<BooleanType>;
+                getIsEnabled(filterMask?: FilterType): StripNever<BooleanType>;
                 exists(filterMask?: FilterType): boolean;
                 isVisible(filterMask?: FilterType): boolean;
                 isEnabled(filterMask?: FilterType): boolean;
@@ -382,7 +384,7 @@ declare global {
                 eventually: ICheckValueEventually<GetType, FilterType>;
             }
             interface IValueElement<GetType, FilterType, SetType> {
-                getValue(filterMask?: FilterType): GetType;
+                getValue(filterMask?: FilterType): StripNever<GetType>;
                 setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>;
             }
             interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {
