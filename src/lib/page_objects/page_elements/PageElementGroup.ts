@@ -119,7 +119,7 @@ implements ElementNode<Content> {
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     filterMask: ExtractTrue<Content>,
     getFunc: (node: NodeInterface) => any,
-  ): ResultType {
+  ): StripNever<ResultType> {
     let result = {} as ResultType;
 
     for (const key in this.$) {

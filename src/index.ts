@@ -356,13 +356,13 @@ declare global {
           ICheckElementCurrently<TextType, BooleanType, FilterType>
         wait: IWaitElement<TextType, BooleanType, FilterType>
         eventually: ICheckElementEventually<TextType, BooleanType, FilterType>
-        __getTrue(filterMask?: FilterType): FilterType
+        __getTrue(filterMask?: FilterType): StripNever<FilterType>
       }
 
       interface IGetElement<TextType, BooleanType, FilterType> {
-        getIsEnabled(filterMask?: FilterType): BooleanType
-        getText(filterMask?: FilterType): TextType
-        getDirectText(filterMask?: FilterType): TextType
+        getIsEnabled(filterMask?: FilterType): StripNever<BooleanType>
+        getText(filterMask?: FilterType): StripNever<TextType>
+        getDirectText(filterMask?: FilterType): StripNever<TextType>
       }
 
       interface IWaitElement<TextType, BooleanType, FilterType, OptsType = IWDIOParamsReverseInterval> {
@@ -380,9 +380,9 @@ declare global {
       }
 
       interface ICheckElementCurrently<TextType, BooleanType, FilterType> {
-        getExists(filterMask?: FilterType): BooleanType
-        getIsVisible(filterMask?: FilterType): BooleanType
-        getIsEnabled(filterMask?: FilterType): BooleanType
+        getExists(filterMask?: FilterType): StripNever<BooleanType>
+        getIsVisible(filterMask?: FilterType): StripNever<BooleanType>
+        getIsEnabled(filterMask?: FilterType): StripNever<BooleanType>
         exists(filterMask?: FilterType): boolean
         isVisible(filterMask?: FilterType): boolean
         isEnabled(filterMask?: FilterType): boolean
@@ -426,7 +426,7 @@ declare global {
       }
 
       interface IValueElement<GetType, FilterType, SetType> {
-        getValue(filterMask?: FilterType): GetType
+        getValue(filterMask?: FilterType): StripNever<GetType>
         setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>
       }
 
