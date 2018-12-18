@@ -35,7 +35,7 @@ export class PageElementGroup<
 > extends PageNode<Store>
 implements ElementNode<Content> {
   protected _id: string
-  protected _$: Content
+  protected _$: StripNever<Content>
   protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementGroupCurrently<Store, Content, this>
@@ -237,13 +237,12 @@ implements ElementNode<Content> {
   eachSet<
     NodeInterface extends Workflo.PageNode.INode,
     ValuesType extends Partial<Content>,
-    ReturnType extends this
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
-    values: ValuesType,
+    values: StripNever<ValuesType>,
     setFunc: (node: NodeInterface, expected?: ValuesType[keyof ValuesType]) => NodeInterface
   ): this {
-    const context = this._$
+    const context = this._$ as StripNever<Content>
 
     for (const key in context) {
       const node = context[key] as any as NodeInterface
@@ -259,7 +258,7 @@ implements ElementNode<Content> {
       }
     }
 
-    return this as ReturnType
+    return this
   }
 }
 

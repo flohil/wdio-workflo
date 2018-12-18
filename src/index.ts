@@ -356,7 +356,7 @@ declare global {
           ICheckElementCurrently<TextType, BooleanType, FilterType>
         wait: IWaitElement<TextType, BooleanType, FilterType>
         eventually: ICheckElementEventually<TextType, BooleanType, FilterType>
-        __getTrue(filterMask?: FilterType): StripNever<FilterType>
+        __getTrue(filterMask?: FilterType): FilterType
       }
 
       interface IGetElement<TextType, BooleanType, FilterType> {

@@ -52,8 +52,8 @@ implements ValueElementNode<Content> {
    *
    * @param values
    */
-  setValue(values: ExtractValue<Content>) {
-    return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>, this> (
+  setValue(values: StripNever<ExtractValue<Content>>) {
+    return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, values, (node, value) => node.setValue(value)
     )
   }
@@ -77,9 +77,9 @@ class ValuePageElementGroupCurrently<
    *
    * @param values
    */
-  setValue(values: ExtractValue<Content>) {
+  setValue(values: StripNever<ExtractValue<Content>>) {
     return this._node.eachSet<
-      ValueElementNode<Content>, ExtractValue<Content>, GroupType
+      ValueElementNode<Content>, ExtractValue<Content>
     > (
       isIValueElementNode, values, (node, value) => node.currently.setValue(value)
     )

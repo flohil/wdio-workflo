@@ -531,10 +531,14 @@ const valGroup = store.ValueGroup({
   input: store.Input('//input')
 })
 
-const values = valGroup.getValue()
+const values = valGroup.getValue({
 
-type ValType = typeof values
+})
 
-type BlaKeys = FilteredKeys<ValType, never>
+valGroup.setValue({
 
-const bla: Omit<ValType, FilteredKeys<ValType, never>> = undefined
+})
+
+valGroup.currently.setValue({
+
+})
