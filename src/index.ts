@@ -107,21 +107,36 @@ declare global {
     toHaveText(text: Partial<Record<K, string>>): boolean
   }
 
-  interface CustomGroupMatchers<Content extends {[key: string]: Workflo.PageNode.INode}> {
+  interface CustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
     toExist(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
     toBeVisible(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
 
     toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
   }
 
-  interface CustomValueElementMatchers extends CustomElementMatchers {
-    toHaveValue(value: string): boolean
+  interface CustomValueElementMatchers<ValueType> extends CustomElementMatchers {
+    toHaveValue(value: ValueType): boolean
     toHaveAnyValue(): boolean
-    toContainValue(value: string): boolean
+    toContainValue(value: ValueType): boolean
 
-    toEventuallyHaveValue(value: string, opts?: Workflo.IWDIOParamsInterval): boolean
+    toEventuallyHaveValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
     toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainValue(value: string, opts?: Workflo.IWDIOParamsInterval): boolean
+    toEventuallyContainValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
+  }
+
+  interface CustomValueListMatchers<ValueType> extends CustomElementMatchers {
+    toHaveValue(value: ValueType | ValueType[]): boolean
+  }
+
+  interface CustomValueMapMatchers<
+    K extends string | number | symbol,
+    ValueType
+  > extends CustomElementMatchers {
+    toHaveValue(value: Partial<Record<K, ValueType>>): boolean
+  }
+
+  interface CustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
+    toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
   }
 
   interface ElementMatchers extends CustomElementMatchers {
@@ -142,8 +157,22 @@ declare global {
     not: CustomGroupMatchers<Content>
   }
 
-  interface ValueElementMatchers extends CustomValueElementMatchers {
-    not: CustomValueElementMatchers
+  interface ValueElementMatchers<ValueType> extends CustomValueElementMatchers<ValueType> {
+    not: CustomValueElementMatchers<ValueType>
+  }
+
+  interface ValueListMatchers<ValueType> extends CustomValueListMatchers<ValueType> {
+    not: CustomValueListMatchers<ValueType>
+  }
+
+  interface ValueMapMatchers<K extends string | number | symbol, ValueType>
+  extends CustomValueMapMatchers<K, ValueType> {
+    not: CustomValueMapMatchers<K, ValueType>
+  }
+
+  interface ValueGroupMatchers<Content extends Workflo.PageNode.GroupContent>
+  extends CustomValueGroupMatchers<Content> {
+    not: CustomValueGroupMatchers<Content>
   }
 
   function expectElement<
@@ -151,29 +180,39 @@ declare global {
     PageElementType extends pageObjects.elements.PageElement<Store>,
     ValueType
   >(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
-    ValueElementMatchers :
+    ValueElementMatchers<ValueType> :
     ElementMatchers
 
   function expectList<
     Store extends pageObjects.stores.PageElementStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
-    PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>
-  >(list: PageElementListType): ListMatchers
+    PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>,
+    ValueType
+  >(list: PageElementListType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
+    PageElementListType extends pageObjects.elements.ValuePageElementList<
+      Store, PageElementType, PageElementOptions, ValueType
+    > ? ValueListMatchers<ValueType> : ListMatchers : ListMatchers
 
   function expectMap<
     Store extends pageObjects.stores.PageElementStore,
     K extends string,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
-    PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>
-  >(map: PageElementMapType): MapMatchers<keyof typeof map['$']>
+    PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>,
+    ValueType
+  >(map: PageElementMapType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
+    PageElementMapType extends pageObjects.elements.ValuePageElementMap<
+      Store, K, PageElementType, PageElementOptions, ValueType
+    > ? ValueMapMatchers<keyof typeof map['$'], ValueType> : MapMatchers<keyof typeof map['$']> : MapMatchers<keyof typeof map['$']>
 
   function expectGroup<
     Store extends pageObjects.stores.PageElementStore,
     Content extends {[K in keyof Content] : Workflo.PageNode.INode},
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
-  >(group: PageElementGroupType): GroupMatchers<typeof group['$']>
+  >(group: PageElementGroupType): PageElementGroupType extends
+    pageObjects.elements.ValuePageElementGroup<Store, Content> ?
+    ValueGroupMatchers<typeof group['$']> : GroupMatchers<typeof group['$']>
 
   namespace WebdriverIO {
     interface Client<T> {
@@ -208,9 +247,9 @@ declare global {
     P
   }[keyof T];
 
-  type StripNever<T> = Omit<T, FilteredKeys<T, never>>
+  type StripNever<T> = T // Omit<T, FilteredKeys<T, never>>
 
-  type StripNeverByReturnType<T> = Omit<T, FilteredKeysByReturnType<T, never>>
+  type StripNeverByReturnType<T> = T // Omit<T, FilteredKeysByReturnType<T, never>>
 
   namespace Workflo {
 
@@ -336,6 +375,8 @@ declare global {
         wait: {}
         eventually: {}
       }
+
+      type GroupContent = {[key: string] : Workflo.PageNode.INode}
 
       type ExtractText<T extends {[key: string]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getText']> : never;

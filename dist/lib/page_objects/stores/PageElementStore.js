@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const page_elements_1 = require("../page_elements");
 const builders_1 = require("../builders");
 const ValuePageElementMap_1 = require("../page_elements/ValuePageElementMap");
-const __1 = require("../../..");
 // Stores singleton instances of page elements to avoid creating new
 // elements on each invocation of a page element.
 class PageElementStore {
@@ -135,43 +134,117 @@ class PageElementStore {
     }
 }
 exports.PageElementStore = PageElementStore;
-class Input extends __1.pageObjects.elements.ValuePageElement {
-    constructor(selector, opts) {
-        super(selector, opts);
-        this.currently = new InputCurrently(this);
-    }
-    setValue(value) {
-        this.initialWait();
-        return this.currently.setValue(value);
-    }
-}
-class InputCurrently extends __1.pageObjects.elements.ValuePageElementCurrently {
-    getValue() {
-        return this.element.getValue();
-    }
-    setValue(value) {
-        this.element.setValue(value);
-        return this._node;
-    }
-}
-// achieved mapping type to input value!!!
-class InputStore extends __1.pageObjects.stores.PageElementStore {
-    Input(selector, options) {
-        return this._getElement(selector, Input, Object.assign({ store: this }, options));
-    }
-    InputList(selector, options) {
-        return this.ValueList(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.Input }, options));
-    }
-    InputMap(selector, options) {
-        return this.ValueMap(selector, Object.assign({ elementStoreFunc: this.Input, elementOptions: {} }, options));
-    }
-}
-const store = new InputStore();
-const valGroup = store.ValueGroup({
-    div: store.Element('//div'),
-    input: store.Input('//input')
-});
-const values = valGroup.getValue({});
-valGroup.setValue({});
-valGroup.currently.setValue({});
+// TODO: remove this
+// interface IInputOpts<Store extends PageElementStore> extends IValuePageElementOpts<Store> {
+// }
+// class Input<
+//   Store extends pageObjects.stores.PageElementStore,
+// > extends pageObjects.elements.ValuePageElement<
+//   Store, string
+// > {
+//   currently: pageObjects.elements.ValuePageElementCurrently<Store, this, string>;
+//   constructor(selector: string, opts?: IInputOpts<Store>) {
+//     super(selector, opts)
+//     this.currently = new InputCurrently(this)
+//   }
+//   setValue(value: string) {
+//     this.initialWait()
+//     return this.currently.setValue(value)
+//   }
+// }
+// class InputCurrently<
+//   Store extends pageObjects.stores.PageElementStore,
+//   PageElementType extends Input<Store>
+// > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+//   getValue(): string {
+//     return this.element.getValue()
+//   }
+//   setValue(value: string) {
+//     this.element.setValue(value)
+//     return this._node
+//   }
+// }
+// // achieved mapping type to input value!!!
+// class InputStore extends pageObjects.stores.PageElementStore {
+//   Input(
+//     selector: Workflo.XPath,
+//     options?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
+//   ) {
+//     return this._getElement<Input<this>, IInputOpts<this>>(
+//       selector,
+//       Input,
+//       {
+//         store: this,
+//         ...options
+//       }
+//     )
+//   }
+//   InputList(
+//     selector: Workflo.XPath,
+//     options?: PickPartial<
+//       pageObjects.elements.IValuePageElementListOpts<
+//         this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
+//       >,
+//       "waitType" | "timeout" | "disableCache" | "identifier",
+//       "elementOptions"
+//     >
+//   ) {
+//     return this.ValueList(
+//       selector,
+//       {
+//         elementOptions: {},
+//         elementStoreFunc: this.Input,
+//         ...options
+//       }
+//     )
+//   }
+//   InputMap<K extends string>(
+//     selector: Workflo.XPath,
+//     options: PickPartial<
+//       pageObjects.elements.IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>>,
+//       Workflo.Store.MapPublicKeys,
+//       Workflo.Store.MapPublicPartialKeys
+//     >
+//   ) {
+//     return this.ValueMap(
+//       selector,
+//       {
+//         elementStoreFunc: this.Input,
+//         elementOptions: {},
+//         ...options
+//       }
+//     )
+//   }
+// }
+// const store = new InputStore()
+// const valGroup = store.ValueGroup({
+//   div: store.Element('//div'),
+//   input: store.Input('//input'),
+//   divList: store.ElementList('//div'),
+//   inputList: store.InputList('//input'),
+//   // divMap: store.ElementMap('//div', {
+//   //   identifier: {
+//   //     mappingObject: {
+//   //       a: 'A',
+//   //       b: 'B'
+//   //     },
+//   //     func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
+//   //   },
+//   // }),
+//   // inputMap: store.InputMap('//input', {
+//   //   identifier: {
+//   //     mappingObject: {
+//   //       a: 'A',
+//   //       b: 'B'
+//   //     },
+//   //     func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
+//   //   },
+//   // })
+// })
+// const values = valGroup.getValue({
+// })
+// valGroup.setValue({
+// })
+// valGroup.currently.setValue({
+// })
 //# sourceMappingURL=PageElementStore.js.map

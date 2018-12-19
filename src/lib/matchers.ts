@@ -116,39 +116,50 @@ export interface ICompareElementFuncs<
     Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<string, true>>}
   >,
   group?: IMatcherArgs<
-    elements.PageElementGroup<stores.PageElementStore, {[key: string] : Workflo.PageNode.INode}>,
+    elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
     GroupExpectedType,
-    Workflo.IWDIOParamsInterval & {filterMask?: Workflo.PageNode.ExtractBoolean<{[key: string]: Workflo.PageNode.INode}>}
+    Workflo.IWDIOParamsInterval & {filterMask?: Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>}
   >
 }
 
-// export interface ICompareElementFuncs {
-//   element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, undefined, {timeout?: number}>,
-//   list?: <
-//     Store extends stores.PageElementStore,
-//     PageElementType extends PageElement<Store>,
-//     PageElementOptions,
-//     PageElementListType extends PageElementList<Store, PageElementType, PageElementOptions>,
-//     ExpectedType,
-//     OptsType extends {timeout?: number}
-//   >() => IMatcherArgs<PageElementListType, ExpectedType, OptsType>,
-//   map?: <
-//     Store extends stores.PageElementStore,
-//     K extends string,
-//     PageElementType extends PageElement<Store>,
-//     PageElementOptions,
-//     PageElementMapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>,
-//     ExpectedType,
-//     OptsType extends {timeout?: number}
-//   >() => IMatcherArgs<PageElementMapType, ExpectedType, OptsType>,
-//   group?: <
-//     Store extends stores.PageElementStore,
-//     Content extends {[K in keyof Content] : Workflo.PageNode.INode},
-//     PageElementGroupType extends PageElementGroup<Store, Content>,
-//     ExpectedType,
-//     OptsType extends {timeout?: number}
-//   >() => IMatcherArgs<PageElementGroupType, ExpectedType, OptsType>,
-// }
+export interface ICompareValueElementFuncs<
+  ElementValueType = any,
+  ListValueType = any | any[],
+  MapValueType = Partial<Record<string, any>>,
+  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+> {
+  element?: IMatcherArgs<
+    elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
+    ElementValueType,
+    Workflo.IWDIOParamsInterval
+  >,
+  list?: IMatcherArgs<
+    elements.ValuePageElementList<
+      stores.PageElementStore,
+      elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
+      elements.IValuePageElementOpts<stores.PageElementStore>,
+      ElementValueType
+    >,
+    ListValueType,
+    Workflo.IWDIOParamsInterval
+  >,
+  map?: IMatcherArgs<
+    elements.ValuePageElementMap<
+      stores.PageElementStore,
+      string,
+      elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
+      elements.IPageElementOpts<stores.PageElementStore>,
+      ElementValueType
+    >,
+    MapValueType,
+    Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<string, true>>}
+  >,
+  group?: IMatcherArgs<
+    elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
+    GroupValueType,
+    Workflo.IWDIOParamsInterval & {filterMask?: Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>}
+  >
+}
 
 // MATCHER FUNCS
 
@@ -280,14 +291,14 @@ export function createBooleanMatcherWithoutExpected<
   return createMatcher<OptsType>(compareFuncs, true)
 }
 
-// export function createValueMatcher<
-//   NodeType extends Workflo.PageNode.INode,
-//   OptsType extends Object = {timeout?: number},
-// >(
-//   compareFuncs: ICompareValueElementFuncs,
-// ) {
-//   return create<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
-// }
+export function createValueMatcher<
+  NodeType extends Workflo.PageNode.INode,
+  OptsType extends Object = {timeout?: number},
+>(
+  compareFuncs: ICompareValueElementFuncs,
+) {
+  return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
+}
 
 // export function createValueMatcherWithoutExpected<
 //   NodeType extends Workflo.PageNode.INode,
@@ -327,6 +338,16 @@ function convertDiffToMessages(diff: Workflo.IDiff, comparisonLines: string[] = 
   }
 
   return comparisonLines
+}
+
+function printValue(value: any) {
+  if (typeof value === 'undefined') {
+    return ''
+  } else if (value === null) {
+    return ''
+  }
+
+  return value.toString()
 }
 
 export function createBaseMessage<
@@ -399,9 +420,12 @@ export function createPropertyMessage<
 >(
   node: NodeType, property: string, comparison: string, actual: string, expected: ExpectedType
 ) {
+  const _actual = printValue(actual)
+  const _expected = printValue(expected)
+
   return createBaseMessage(node, [
-    `'s ${property} "${actual}" to ${comparison} "${expected}"`,
-    `'s ${property} "${actual}" not to ${comparison} "${expected}"`,
+    `'s ${property} "${_actual}" to ${comparison} "${_expected}"`,
+    `'s ${property} "${_actual}" not to ${comparison} "${_expected}"`,
   ])
 }
 
@@ -412,9 +436,12 @@ export function createEventuallyPropertyMessage<
 >(
   node: NodeType, property: string, comparison: string, actual: string, expected: ExpectedType, timeout: number
 ) {
+  const _actual = printValue(actual)
+  const _expected = printValue(expected)
+
   return createBaseMessage(node, [
-    `'s ${property} "${actual}" to eventually ${comparison} "${expected}" within ${timeout} ms`,
-    `'s ${property} "${actual}" not to eventually ${comparison} "${expected}" within ${timeout} ms`
+    `'s ${property} "${_actual}" to eventually ${comparison} "${_expected}" within ${timeout} ms`,
+    `'s ${property} "${_actual}" not to eventually ${comparison} "${_expected}" within ${timeout} ms`
   ])
 }
 export function createEachMessage<
@@ -539,7 +566,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       ],
       errorTextFunc: ({node}) => createEachMessage(node, "have text")
     }
-  })
+  }),
 
   // toExist: elementMatcherFunction(
   //   ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
@@ -1085,6 +1112,33 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
 // }
 
 export const valueElementMatchers: jasmine.CustomMatcherFactories = {
+  toHaveValue: createValueMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'value', 'be', actual, expected)
+    },
+    list: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'have value')
+    },
+    map: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'have value')
+    },
+    group: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, "have value")
+    }
+  }),
+
   // toHaveValue: valueElementMatcherFunction(
   //   ({node, expected}) => [
   //     () => node.currently.hasValue(expected), () => node.currently.not.hasValue(expected)

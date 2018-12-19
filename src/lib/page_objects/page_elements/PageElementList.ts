@@ -162,7 +162,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
 
-  get $(): Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
+  get $() { // Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
     return this._$
   }
 

@@ -2,7 +2,7 @@ import { PageElementStore } from '../stores'
 import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL, stores } from '../'
 
 export interface IPageArgs<Store extends PageElementStore> extends Workflo.IWDIOParamsInterval {
-  elementStore: Store
+  store: Store
 }
 
 export abstract class Page<
@@ -10,7 +10,7 @@ export abstract class Page<
   IsOpenOpts = {},
   IsClosedOpts = IsOpenOpts
 > {
-  protected _elementStore: Store
+  protected _store: Store
   protected _timeout: number
   protected _interval: number
 
@@ -18,13 +18,17 @@ export abstract class Page<
   eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>
 
   constructor(args: IPageArgs<Store>) {
-    this._elementStore = args.elementStore
+    this._store = args.store
 
     this._timeout = args.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
     this._interval = args.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL
 
     this.wait = new PageWait(this)
     this.eventually = new PageEventually(this)
+  }
+
+  getStore() {
+    return this._store
   }
 
   getTimeout() {

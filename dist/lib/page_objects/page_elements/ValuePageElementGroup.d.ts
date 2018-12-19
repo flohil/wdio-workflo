@@ -17,7 +17,7 @@ export declare class ValuePageElementGroup<Store extends PageElementStore, Conte
     readonly wait: ValuePageElementGroupWait<Store, Content, this>;
     readonly eventually: ValuePageElementGroupEventually<Store, Content, this>;
     constructor(id: string, { ...superOpts }: IValueGroupOpts<Store, Content>);
-    getValue(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractValue<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractValue<Content>]: Workflo.PageNode.ExtractValue<Content>[P] extends never ? P : never; }[keyof Content]>>;
+    getValue(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractValue<Content>;
     /**
      * Sets values after performing the initial wait on all nodes that implement the setValue method.
      * Nodes that do not implement the setValue method will be ignored.
@@ -29,7 +29,7 @@ export declare class ValuePageElementGroup<Store extends PageElementStore, Conte
 declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupCurrently<Store, Content, GroupType> {
-    getValue(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractValue<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractValue<Content>]: Workflo.PageNode.ExtractValue<Content>[P] extends never ? P : never; }[keyof Content]>>;
+    getValue(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractValue<Content>;
     /**
      * Sets values immediately on all nodes that implement the setValue method.
      * Nodes that do not implement the setValue method will be ignored.

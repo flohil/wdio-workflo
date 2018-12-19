@@ -56,7 +56,7 @@ export abstract class PageElementBase<
     this._waitType = waitType
   }
 
-  get $(): Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
+  get $() /*:  Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> */ {
     return this._$
   }
 

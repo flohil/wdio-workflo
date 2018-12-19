@@ -3,11 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("../");
 class Page {
     constructor(args) {
-        this._elementStore = args.elementStore;
+        this._store = args.store;
         this._timeout = args.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         this._interval = args.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
         this.wait = new PageWait(this);
         this.eventually = new PageEventually(this);
+    }
+    getStore() {
+        return this._store;
     }
     getTimeout() {
         return this._timeout;

@@ -28,12 +28,12 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     readonly wait: PageElementGroupWait<Store, Content, this>;
     readonly eventually: PageElementGroupEventually<Store, Content, this>;
     constructor(id: string, { store, timeout, content }: IPageElementGroupOpts<Store, Content>);
-    readonly $: Pick<Content, Exclude<keyof Content, { [P in keyof Content]: Content[P] extends never ? P : never; }[keyof Content]>>;
+    readonly $: Content;
     readonly __getLastDiff: Workflo.IDiff;
     toJSON(): Workflo.IElementJSON;
     __getNodeId(): string;
-    __getTrue(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractTrue<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractTrue<Content>]: Workflo.PageNode.ExtractTrue<Content>[P] extends never ? P : never; }[keyof Content]>>;
-    getIsEnabled(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractBoolean<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractBoolean<Content>]: Workflo.PageNode.ExtractBoolean<Content>[P] extends never ? P : never; }[keyof Content]>>;
+    __getTrue(filterMask?: StripNever<ExtractTrue<Content>>): Workflo.PageNode.ExtractTrue<Content>;
+    getIsEnabled(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.
      *
@@ -42,9 +42,9 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
      *
      * @param filter a filter mask
      */
-    getText(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractText<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractText<Content>]: Workflo.PageNode.ExtractText<Content>[P] extends never ? P : never; }[keyof Content]>>;
-    getDirectText(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractText<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractText<Content>]: Workflo.PageNode.ExtractText<Content>[P] extends never ? P : never; }[keyof Content]>>;
-    eachGet<NodeInterface, ResultType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, filterMask: ExtractTrue<Content>, getFunc: (node: NodeInterface) => any): StripNever<ResultType>;
+    getText(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractText<Content>;
+    getDirectText(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractText<Content>;
+    eachGet<NodeInterface, ResultType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, filterMask: StripNever<ExtractTrue<Content>>, getFunc: (node: NodeInterface) => any): StripNever<ResultType>;
     eachCheck<NodeInterface, ResultType extends Partial<Content>, ExpectedType extends Partial<Content> = ExtractTrue<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, expected: ExpectedType, checkFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => boolean): boolean;
     eachWait<NodeInterface, ResultType extends Partial<Content>, ExpectedType extends Partial<Content> = ExtractTrue<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, expected: ExpectedType, waitFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => NodeInterface): this;
     eachDo<NodeInterface>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, filterMask: ExtractTrue<Content>, doFunc: (node: NodeInterface) => NodeInterface): this;
@@ -53,9 +53,9 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
 export declare class PageElementGroupCurrently<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends PageElementGroup<Store, Content>> extends PageNodeCurrently<Store, GroupType> {
-    getExists(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractBoolean<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractBoolean<Content>]: Workflo.PageNode.ExtractBoolean<Content>[P] extends never ? P : never; }[keyof Content]>>;
-    getIsVisible(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractBoolean<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractBoolean<Content>]: Workflo.PageNode.ExtractBoolean<Content>[P] extends never ? P : never; }[keyof Content]>>;
-    getIsEnabled(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractBoolean<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractBoolean<Content>]: Workflo.PageNode.ExtractBoolean<Content>[P] extends never ? P : never; }[keyof Content]>>;
+    getExists(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getIsVisible(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getIsEnabled(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns texts of all group elements immediatly in the order they were retrieved from the DOM.
      *
@@ -64,8 +64,8 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
      *
      * @param filter a filter mask
      */
-    getText(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractText<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractText<Content>]: Workflo.PageNode.ExtractText<Content>[P] extends never ? P : never; }[keyof Content]>>;
-    getDirectText(filterMask?: ExtractTrue<Content>): Pick<Workflo.PageNode.ExtractText<Content>, Exclude<keyof Content, { [P in keyof Workflo.PageNode.ExtractText<Content>]: Workflo.PageNode.ExtractText<Content>[P] extends never ? P : never; }[keyof Content]>>;
+    getText(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractText<Content>;
+    getDirectText(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractText<Content>;
     exists(filterMask?: ExtractTrue<Content>): boolean;
     isVisible(filterMask?: ExtractTrue<Content>): boolean;
     isEnabled(filterMask?: ExtractTrue<Content>): boolean;

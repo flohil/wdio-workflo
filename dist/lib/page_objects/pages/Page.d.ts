@@ -1,14 +1,15 @@
 import { PageElementStore } from '../stores';
 export interface IPageArgs<Store extends PageElementStore> extends Workflo.IWDIOParamsInterval {
-    elementStore: Store;
+    store: Store;
 }
 export declare abstract class Page<Store extends PageElementStore, IsOpenOpts = {}, IsClosedOpts = IsOpenOpts> {
-    protected _elementStore: Store;
+    protected _store: Store;
     protected _timeout: number;
     protected _interval: number;
     wait: PageWait<Store, this, IsOpenOpts, IsClosedOpts>;
     eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>;
     constructor(args: IPageArgs<Store>);
+    getStore(): Store;
     getTimeout(): number;
     getInterval(): number;
     abstract isOpen(opts?: IsOpenOpts): boolean;
