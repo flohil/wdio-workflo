@@ -157,8 +157,8 @@ interface IGroupMatchers<Content extends {
 interface IValueElementMatchers<ValueType> extends ICustomValueElementMatchers<ValueType> {
     not: ICustomValueElementMatchers<ValueType>;
 }
-interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<ValueType> {
-    not: ICustomValueListMatchers<ValueType>;
+interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<Workflo.ArrayElement<ValueType>> {
+    not: ICustomValueListMatchers<Workflo.ArrayElement<ValueType>>;
 }
 interface IValueMapMatchers<K extends string | number | symbol, ValueType> extends ICustomValueMapMatchers<K, ValueType> {
     not: ICustomValueMapMatchers<K, ValueType>;
@@ -168,7 +168,7 @@ interface IValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> ext
 }
 declare global {
     function expectElement<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ? IValueElementMatchers<ValueType> : IElementMatchers;
-    function expectList<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>, ValueType>(list: PageElementListType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ? PageElementListType extends pageObjects.elements.ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType> ? IValueListMatchers<ValueType> : IListMatchers : IListMatchers;
+    function expectList<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): (typeof list) extends (infer ListType) ? ListType extends pageObjects.elements.ValuePageElementList<Store, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any> ? IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
     function expectMap<Store extends pageObjects.stores.PageElementStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>, ValueType>(map: PageElementMapType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ? PageElementMapType extends pageObjects.elements.ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType> ? IValueMapMatchers<keyof typeof map['$'], ValueType> : IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>;
     function expectGroup<Store extends pageObjects.stores.PageElementStore, Content extends Workflo.PageNode.GroupContent, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): PageElementGroupType extends pageObjects.elements.ValuePageElementGroup<Store, Content> ? IValueGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
     namespace WebdriverIO {

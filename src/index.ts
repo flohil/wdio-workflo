@@ -158,8 +158,8 @@ interface IValueElementMatchers<ValueType> extends ICustomValueElementMatchers<V
   not: ICustomValueElementMatchers<ValueType>
 }
 
-interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<ValueType> {
-  not: ICustomValueListMatchers<ValueType>
+interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<Workflo.ArrayElement<ValueType>> {
+  not: ICustomValueListMatchers<Workflo.ArrayElement<ValueType>>
 }
 
 interface IValueMapMatchers<K extends string | number | symbol, ValueType>
@@ -188,11 +188,10 @@ declare global {
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
     PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>,
-    ValueType
-  >(list: PageElementListType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
-    PageElementListType extends pageObjects.elements.ValuePageElementList<
-      Store, PageElementType, PageElementOptions, ValueType
-    > ? IValueListMatchers<ValueType> : IListMatchers : IListMatchers
+  >(list: PageElementListType): (typeof list) extends (infer ListType) ?
+    ListType extends pageObjects.elements.ValuePageElementList<
+      Store, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
+    > ? IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
 
   function expectMap<
     Store extends pageObjects.stores.PageElementStore,
