@@ -297,7 +297,7 @@ export function createValueMatcher<
 >(
   compareFuncs: ICompareValueElementFuncs,
 ) {
-  return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
+  return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs)
 }
 
 // export function createValueMatcherWithoutExpected<
@@ -331,8 +331,11 @@ function convertDiffToMessages(diff: Workflo.IDiff, comparisonLines: string[] = 
       _paths = _paths.substring(1)
     }
 
+    const _actual = printValue(diff.actual)
+    const _expected = printValue(diff.expected)
+
     const compareStr = (typeof diff.actual === 'undefined' && typeof diff.expected === 'undefined') ?
-      '' :`{actual: "${diff.actual}", expected: "${diff.expected}"}\n`
+      '' :`{actual: "${_actual}", expected: "${_expected}"}\n`
 
     comparisonLines.push(`${diff.constructorName} at path '${_paths}'\n${compareStr}( ${diff.selector} )`)
   }

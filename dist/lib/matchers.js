@@ -101,7 +101,7 @@ function createBooleanMatcherWithoutExpected(compareFuncs) {
 }
 exports.createBooleanMatcherWithoutExpected = createBooleanMatcherWithoutExpected;
 function createValueMatcher(compareFuncs) {
-    return createMatcher(compareFuncs, true);
+    return createMatcher(compareFuncs);
 }
 exports.createValueMatcher = createValueMatcher;
 // export function createValueMatcherWithoutExpected<
@@ -127,8 +127,10 @@ function convertDiffToMessages(diff, comparisonLines = [], paths = []) {
         if (_paths.charAt(0) === '.') {
             _paths = _paths.substring(1);
         }
+        const _actual = printValue(diff.actual);
+        const _expected = printValue(diff.expected);
         const compareStr = (typeof diff.actual === 'undefined' && typeof diff.expected === 'undefined') ?
-            '' : `{actual: "${diff.actual}", expected: "${diff.expected}"}\n`;
+            '' : `{actual: "${_actual}", expected: "${_expected}"}\n`;
         comparisonLines.push(`${diff.constructorName} at path '${_paths}'\n${compareStr}( ${diff.selector} )`);
     }
     return comparisonLines;
