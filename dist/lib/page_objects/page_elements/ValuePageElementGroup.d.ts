@@ -24,7 +24,7 @@ export declare class ValuePageElementGroup<Store extends PageElementStore, Conte
      *
      * @param values
      */
-    setValue(values: StripNever<ExtractValue<Content>>): this;
+    setValue(values: Workflo.StripNever<ExtractValue<Content>>): this;
 }
 declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
@@ -36,7 +36,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Con
      *
      * @param values
      */
-    setValue(values: StripNever<ExtractValue<Content>>): GroupType;
+    setValue(values: Workflo.StripNever<ExtractValue<Content>>): GroupType;
     hasValue(value: ExtractValue<Content>): boolean;
     hasAnyValue(filterMask?: ExtractTrue<Content>): boolean;
     containsValue(value: ExtractValue<Content>): boolean;

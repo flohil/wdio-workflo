@@ -5,183 +5,183 @@ import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from 
 import * as pageObjects from './lib/page_objects'
 import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList'
 
+interface ICustomElementMatchers {
+  toExist(): boolean
+  toBeVisible(): boolean
+  toBeEnabled(): boolean
+  toBeSelected(): boolean
+  toBeChecked(): boolean
+  toHaveText(text: string): boolean
+  toHaveAnyText(): boolean
+  toContainText(text: string): boolean
+  toHaveHTML(html: string): boolean
+  toHaveAnyHTML(): boolean
+  toContainHTML(html: string): boolean
+  toHaveDirectText(directText: string): boolean
+  toHaveAnyDirectText(): boolean
+  toContainDirectText(directText: string): boolean
+  toHaveAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
+  toHaveAnyAttribute(attributeName: string): boolean
+  toContainAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
+  toHaveClass(className: string): boolean
+  toHaveAnyClass(): boolean
+  toContainClass(className: string): boolean
+  toHaveId(id: string): boolean
+  toHaveAnyId(): boolean
+  toContainId(id: string): boolean
+  toHaveName(name: string): boolean
+  toHaveAnyName(): boolean
+  toContainName(name: string): boolean
+  toHaveLocation(
+    coordinates: Workflo.ICoordinates,
+    opts?: {tolerances?: Partial<Workflo.ICoordinates>}
+  ): boolean
+  toHaveX(x: number, opts?: {tolerance?: number}): boolean
+  toHaveY(y: number, opts?: {tolerance?: number}): boolean
+  toHaveSize(
+    size: Workflo.ISize,
+    opts?: { tolerances?: Partial<Workflo.ISize> }
+  ): boolean
+  toHaveWidth(width: number, opts?: {tolerance?: number}): boolean,
+  toHaveHeight(height: number, opts?: {tolerance?: number}): boolean,
+
+  toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyBeEnabled(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyBeSelected(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyBeChecked(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyId(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyName(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveLocation(
+    coordinates: Workflo.ICoordinates,
+    opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsInterval
+  ): boolean
+  toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveSize(
+    size: Workflo.ISize,
+    opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.IWDIOParamsInterval
+  ): boolean
+  toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean,
+  toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
+}
+
+interface ICustomListMatchers {
+  toBeEmpty(): boolean
+  toHaveLength(length: number, opts?: {comparator?: Workflo.Comparator}): boolean
+  toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
+
+  toExist(): boolean
+  toBeVisible(): boolean
+  toBeEnabled(): boolean
+  toHaveText(text: string | string[]): boolean
+}
+
+interface ICustomMapMatchers<K extends string | number | symbol> {
+  toExist(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
+  toBeVisible(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
+
+  toHaveText(text: Partial<Record<K, string>>): boolean
+}
+
+interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
+  toExist(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
+  toBeVisible(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
+
+  toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
+}
+
+interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers {
+  toHaveValue(value: ValueType): boolean
+  toHaveAnyValue(): boolean
+  toContainValue(value: ValueType): boolean
+
+  toEventuallyHaveValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
+}
+
+interface ICustomValueListMatchers<ValueType> extends ICustomElementMatchers {
+  toHaveValue(value: ValueType | ValueType[]): boolean
+}
+
+interface ICustomValueMapMatchers<
+  K extends string | number | symbol,
+  ValueType
+> extends ICustomElementMatchers {
+  toHaveValue(value: Partial<Record<K, ValueType>>): boolean
+}
+
+interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
+  toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
+}
+
+interface IElementMatchers extends ICustomElementMatchers {
+  not: ICustomElementMatchers
+}
+
+interface IListMatchers extends ICustomListMatchers {
+  not: ICustomListMatchers
+}
+
+interface IMapMatchers<K extends string | number | symbol> extends ICustomMapMatchers<K> {
+  not: ICustomMapMatchers<K>
+}
+
+interface IGroupMatchers<
+  Content extends {[key: string]: Workflo.PageNode.INode}
+> extends ICustomGroupMatchers<Content> {
+  not: ICustomGroupMatchers<Content>
+}
+
+interface IValueElementMatchers<ValueType> extends ICustomValueElementMatchers<ValueType> {
+  not: ICustomValueElementMatchers<ValueType>
+}
+
+interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<ValueType> {
+  not: ICustomValueListMatchers<ValueType>
+}
+
+interface IValueMapMatchers<K extends string | number | symbol, ValueType>
+extends ICustomValueMapMatchers<K, ValueType> {
+  not: ICustomValueMapMatchers<K, ValueType>
+}
+
+interface IValueGroupMatchers<Content extends Workflo.PageNode.GroupContent>
+extends ICustomValueGroupMatchers<Content> {
+  not: ICustomValueGroupMatchers<Content>
+}
+
 // global should be replaced with declare ... at some point...
 declare global {
-
-  interface CustomElementMatchers {
-    toExist(): boolean
-    toBeVisible(): boolean
-    toBeEnabled(): boolean
-    toBeSelected(): boolean
-    toBeChecked(): boolean
-    toHaveText(text: string): boolean
-    toHaveAnyText(): boolean
-    toContainText(text: string): boolean
-    toHaveHTML(html: string): boolean
-    toHaveAnyHTML(): boolean
-    toContainHTML(html: string): boolean
-    toHaveDirectText(directText: string): boolean
-    toHaveAnyDirectText(): boolean
-    toContainDirectText(directText: string): boolean
-    toHaveAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
-    toHaveAnyAttribute(attributeName: string): boolean
-    toContainAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
-    toHaveClass(className: string): boolean
-    toHaveAnyClass(): boolean
-    toContainClass(className: string): boolean
-    toHaveId(id: string): boolean
-    toHaveAnyId(): boolean
-    toContainId(id: string): boolean
-    toHaveName(name: string): boolean
-    toHaveAnyName(): boolean
-    toContainName(name: string): boolean
-    toHaveLocation(
-      coordinates: Workflo.ICoordinates,
-      opts?: {tolerances?: Partial<Workflo.ICoordinates>}
-    ): boolean
-    toHaveX(x: number, opts?: {tolerance?: number}): boolean
-    toHaveY(y: number, opts?: {tolerance?: number}): boolean
-    toHaveSize(
-      size: Workflo.ISize,
-      opts?: { tolerances?: Partial<Workflo.ISize> }
-    ): boolean
-    toHaveWidth(width: number, opts?: {tolerance?: number}): boolean,
-    toHaveHeight(height: number, opts?: {tolerance?: number}): boolean,
-
-    toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
-    toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
-    toEventuallyBeEnabled(opts?: Workflo.IWDIOParams): boolean
-    toEventuallyBeSelected(opts?: Workflo.IWDIOParams): boolean
-    toEventuallyBeChecked(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyId(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyName(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveLocation(
-      coordinates: Workflo.ICoordinates,
-      opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsInterval
-    ): boolean
-    toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveSize(
-      size: Workflo.ISize,
-      opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.IWDIOParamsInterval
-    ): boolean
-    toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean,
-    toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
-  }
-
-  interface CustomListMatchers {
-    toBeEmpty(): boolean
-    toHaveLength(length: number, opts?: {comparator?: Workflo.Comparator}): boolean
-    toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
-
-    toExist(): boolean
-    toBeVisible(): boolean
-    toBeEnabled(): boolean
-    toHaveText(text: string | string[]): boolean
-  }
-
-  interface CustomMapMatchers<K extends string | number | symbol> {
-    toExist(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
-    toBeVisible(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
-
-    toHaveText(text: Partial<Record<K, string>>): boolean
-  }
-
-  interface CustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
-    toExist(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
-    toBeVisible(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
-
-    toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
-  }
-
-  interface CustomValueElementMatchers<ValueType> extends CustomElementMatchers {
-    toHaveValue(value: ValueType): boolean
-    toHaveAnyValue(): boolean
-    toContainValue(value: ValueType): boolean
-
-    toEventuallyHaveValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval): boolean
-    toEventuallyContainValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
-  }
-
-  interface CustomValueListMatchers<ValueType> extends CustomElementMatchers {
-    toHaveValue(value: ValueType | ValueType[]): boolean
-  }
-
-  interface CustomValueMapMatchers<
-    K extends string | number | symbol,
-    ValueType
-  > extends CustomElementMatchers {
-    toHaveValue(value: Partial<Record<K, ValueType>>): boolean
-  }
-
-  interface CustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
-    toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
-  }
-
-  interface ElementMatchers extends CustomElementMatchers {
-    not: CustomElementMatchers
-  }
-
-  interface ListMatchers extends CustomListMatchers {
-    not: CustomListMatchers
-  }
-
-  interface MapMatchers<K extends string | number | symbol> extends CustomMapMatchers<K> {
-    not: CustomMapMatchers<K>
-  }
-
-  interface GroupMatchers<
-    Content extends {[key: string]: Workflo.PageNode.INode}
-  > extends CustomGroupMatchers<Content> {
-    not: CustomGroupMatchers<Content>
-  }
-
-  interface ValueElementMatchers<ValueType> extends CustomValueElementMatchers<ValueType> {
-    not: CustomValueElementMatchers<ValueType>
-  }
-
-  interface ValueListMatchers<ValueType> extends CustomValueListMatchers<ValueType> {
-    not: CustomValueListMatchers<ValueType>
-  }
-
-  interface ValueMapMatchers<K extends string | number | symbol, ValueType>
-  extends CustomValueMapMatchers<K, ValueType> {
-    not: CustomValueMapMatchers<K, ValueType>
-  }
-
-  interface ValueGroupMatchers<Content extends Workflo.PageNode.GroupContent>
-  extends CustomValueGroupMatchers<Content> {
-    not: CustomValueGroupMatchers<Content>
-  }
 
   function expectElement<
     Store extends pageObjects.stores.PageElementStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     ValueType
   >(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
-    ValueElementMatchers<ValueType> :
-    ElementMatchers
+    IValueElementMatchers<ValueType> :
+    IElementMatchers
 
   function expectList<
     Store extends pageObjects.stores.PageElementStore,
@@ -192,7 +192,7 @@ declare global {
   >(list: PageElementListType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
     PageElementListType extends pageObjects.elements.ValuePageElementList<
       Store, PageElementType, PageElementOptions, ValueType
-    > ? ValueListMatchers<ValueType> : ListMatchers : ListMatchers
+    > ? IValueListMatchers<ValueType> : IListMatchers : IListMatchers
 
   function expectMap<
     Store extends pageObjects.stores.PageElementStore,
@@ -204,15 +204,15 @@ declare global {
   >(map: PageElementMapType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
     PageElementMapType extends pageObjects.elements.ValuePageElementMap<
       Store, K, PageElementType, PageElementOptions, ValueType
-    > ? ValueMapMatchers<keyof typeof map['$'], ValueType> : MapMatchers<keyof typeof map['$']> : MapMatchers<keyof typeof map['$']>
+    > ? IValueMapMatchers<keyof typeof map['$'], ValueType> : IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
 
   function expectGroup<
     Store extends pageObjects.stores.PageElementStore,
-    Content extends {[K in keyof Content] : Workflo.PageNode.INode},
+    Content extends Workflo.PageNode.GroupContent,
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
   >(group: PageElementGroupType): PageElementGroupType extends
     pageObjects.elements.ValuePageElementGroup<Store, Content> ?
-    ValueGroupMatchers<typeof group['$']> : GroupMatchers<typeof group['$']>
+    IValueGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>
 
   namespace WebdriverIO {
     interface Client<T> {
@@ -223,35 +223,37 @@ declare global {
     }
   }
 
-  /**
-   * Makes all properties of Type optional, except for those whose keys are passed as K.
-   */
-  type PartialRequire<Type, K extends keyof Type> = Partial<Type> & Pick<Type, K>
-
-  /**
-   * Type is the original object.
-   *
-   * K represents the original object's property keys to be picked from the original object unaltered.
-   *
-   * KPartial represents the original object's property keys to be picked from the original object and turned into optional properties.
-   */
-  type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>
-
-  type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
-  type FilteredKeys<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];
-
-  type FilteredKeysByReturnType<T, U> = {
-    [P in keyof T]: T[P] extends (...args) => Workflo.PageNode.INode ?
-    ReturnType<T[P]> extends U ? P : never :
-    P
-  }[keyof T];
-
-  type StripNever<T> = T // Omit<T, FilteredKeys<T, never>>
-
-  type StripNeverByReturnType<T> = T // Omit<T, FilteredKeysByReturnType<T, never>>
-
   namespace Workflo {
+
+    /**
+     * Makes all properties of Type optional, except for those whose keys are passed as K.
+     */
+    type PartialRequire<Type, K extends keyof Type> = Partial<Type> & Pick<Type, K>
+
+    /**
+     * Type is the original object.
+     *
+     * K represents the original object's property keys to be picked from the original object unaltered.
+     *
+     * KPartial represents the original object's property keys to be picked from the original object and turned into optional properties.
+     */
+    type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>
+
+    type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+    type FilteredKeys<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];
+
+    type FilteredKeysByReturnType<T, U> = {
+      [P in keyof T]: T[P] extends (...args) => Workflo.PageNode.INode ?
+      ReturnType<T[P]> extends U ? P : never :
+      P
+    }[keyof T];
+
+    type StripNever<T> = T // Omit<T, FilteredKeys<T, never>>
+
+    type StripNeverByReturnType<T> = T // Omit<T, FilteredKeysByReturnType<T, never>>
+
+    type ArrayElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType : never;
 
     type WdioElement = Client<RawResult<Element>> & RawResult<Element>
 

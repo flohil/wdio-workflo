@@ -35,7 +35,7 @@ export class PageElementGroup<
 > extends PageNode<Store>
 implements ElementNode<Content> {
   protected _id: string
-  protected _$: StripNever<Content>
+  protected _$: Workflo.StripNever<Content>
   protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementGroupCurrently<Store, Content, this>
@@ -78,7 +78,7 @@ implements ElementNode<Content> {
 
   // GETTER FUNCTIONS
 
-  __getTrue(filterMask?: StripNever<ExtractTrue<Content>>) {
+  __getTrue(filterMask?: Workflo.StripNever<ExtractTrue<Content>>) {
     return this.eachGet<ElementNode<Content>, ExtractTrue<Content>> (
       isIElementNode, filterMask, node => node.__getTrue()
     )
@@ -117,9 +117,9 @@ implements ElementNode<Content> {
     ResultType extends Partial<Content>,
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
-    filterMask: StripNever<ExtractTrue<Content>>,
+    filterMask: Workflo.StripNever<ExtractTrue<Content>>,
     getFunc: (node: NodeInterface) => any,
-  ): StripNever<ResultType> {
+  ): Workflo.StripNever<ResultType> {
     let result = {} as ResultType;
 
     for (const key in this.$) {
@@ -239,10 +239,10 @@ implements ElementNode<Content> {
     ValuesType extends Partial<Content>,
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
-    values: StripNever<ValuesType>,
+    values: Workflo.StripNever<ValuesType>,
     setFunc: (node: NodeInterface, expected?: ValuesType[keyof ValuesType]) => NodeInterface
   ): this {
-    const context = this._$ as StripNever<Content>
+    const context = this._$ as Workflo.StripNever<Content>
 
     for (const key in context) {
       const node = context[key] as any as NodeInterface

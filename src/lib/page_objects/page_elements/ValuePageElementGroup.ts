@@ -53,7 +53,7 @@ implements ValueElementNode<Content> {
    *
    * @param values
    */
-  setValue(values: StripNever<ExtractValue<Content>>) {
+  setValue(values: Workflo.StripNever<ExtractValue<Content>>) {
     return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, values, (node, value) => node.setValue(value)
     )
@@ -78,7 +78,7 @@ class ValuePageElementGroupCurrently<
    *
    * @param values
    */
-  setValue(values: StripNever<ExtractValue<Content>>) {
+  setValue(values: Workflo.StripNever<ExtractValue<Content>>) {
     return this._node.eachSet<
       ValueElementNode<Content>, ExtractValue<Content>
     > (

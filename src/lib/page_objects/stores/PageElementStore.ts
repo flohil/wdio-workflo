@@ -175,7 +175,7 @@ export class PageElementStore {
 
   ElementList(
     selector: Workflo.XPath,
-    options?: PickPartial<
+    options?: Workflo.PickPartial<
       IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
       Workflo.Store.ListPublicKeys,
       Workflo.Store.ListPublicPartialKeys
@@ -193,7 +193,7 @@ export class PageElementStore {
 
   ExistElementList(
     selector: Workflo.XPath,
-    options?: PickPartial<
+    options?: Workflo.PickPartial<
       IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
       Exclude<Workflo.Store.ListPublicKeys, "waitType">,
       Workflo.Store.ListPublicPartialKeys
@@ -266,7 +266,7 @@ export class PageElementStore {
 
   ElementMap<K extends string>(
     selector: Workflo.XPath,
-    options: PickPartial<
+    options: Workflo.PickPartial<
       IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
       Workflo.Store.MapPublicKeys,
       Workflo.Store.MapPublicPartialKeys
@@ -284,7 +284,7 @@ export class PageElementStore {
 
   ExistElementMap<K extends string>(
     selector: Workflo.XPath,
-    options: PickPartial<
+    options: Workflo.PickPartial<
       IPageElementMapOpts<
         this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
       >,
