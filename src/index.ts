@@ -121,18 +121,18 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
   toEventuallyContainValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
-interface ICustomValueListMatchers<ValueType> extends ICustomElementMatchers {
+interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
   toHaveValue(value: ValueType | ValueType[]): boolean
 }
 
 interface ICustomValueMapMatchers<
   K extends string | number | symbol,
   ValueType
-> extends ICustomElementMatchers {
+> extends ICustomMapMatchers<K> {
   toHaveValue(value: Partial<Record<K, ValueType>>): boolean
 }
 
-interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
+interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> extends ICustomGroupMatchers<Content> {
   toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
 }
 
@@ -199,11 +199,11 @@ declare global {
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
     PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>,
-    ValueType
-  >(map: PageElementMapType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
-    PageElementMapType extends pageObjects.elements.ValuePageElementMap<
-      Store, K, PageElementType, PageElementOptions, ValueType
-    > ? IValueMapMatchers<keyof typeof map['$'], ValueType> : IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
+  >(map: PageElementMapType): (typeof map) extends (infer MapType) ?
+  MapType extends pageObjects.elements.ValuePageElementMap<
+    Store, K, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
+  > ? IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
+  IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
 
   function expectGroup<
     Store extends pageObjects.stores.PageElementStore,
