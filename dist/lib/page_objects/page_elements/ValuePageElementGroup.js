@@ -36,15 +36,6 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
     getValue(filterMask) {
         return this._node.eachGet(isIValueElementNode, filterMask, node => node.currently.getValue());
     }
-    /**
-     * Sets values immediately on all nodes that implement the setValue method.
-     * Nodes that do not implement the setValue method will be ignored.
-     *
-     * @param values
-     */
-    setValue(values) {
-        return this._node.eachSet(isIValueElementNode, values, (node, value) => node.currently.setValue(value));
-    }
     hasValue(value) {
         return this._node.eachCheck(isIValueElementNode, value, (node, value) => node.currently.hasValue(value));
     }

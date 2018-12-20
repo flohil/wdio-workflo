@@ -36,7 +36,7 @@ class ValuePageElementList extends _1.PageElementList {
      * @param values
      */
     setValue(values) {
-        return this.eachSet(this.all, (element, value) => element.currently.setValue(value), values);
+        return this.eachSet(this.all, (element, value) => element.setValue(value), values);
     }
 }
 exports.ValuePageElementList = ValuePageElementList;
@@ -46,19 +46,6 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      */
     getValue() {
         return this._node.eachGet(this.all, element => element.currently.getValue());
-    }
-    /**
-     * Sets values on all list elements immediatly.
-     *
-     * If values is an array, the number of list elements must match the number of passed values.
-     * The values will be assigned in the order that the list elements were retrieved from the DOM.
-     *
-     * If values is a single value, the same value will be set on all list elements.
-     *
-     * @param values
-     */
-    setValue(values) {
-        return this._node.eachSet(this.all, (element, value) => element.currently.setValue(value), values);
     }
     // CHECK STATE
     hasValue(value) {

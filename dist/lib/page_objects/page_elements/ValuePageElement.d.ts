@@ -3,17 +3,21 @@ import { PageElementStore } from '../stores';
 export interface IValuePageElementOpts<Store extends PageElementStore> extends IPageElementOpts<Store> {
 }
 export declare abstract class ValuePageElement<Store extends PageElementStore, ValueType> extends PageElement<Store> implements Workflo.PageNode.IValueElementNode<ValueType, true> {
-    abstract readonly currently: ValuePageElementCurrently<Store, this, ValueType>;
+    readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>;
     readonly wait: ValuePageElementWait<Store, this, ValueType>;
     readonly eventually: ValuePageElementEventually<Store, this, ValueType>;
     constructor(selector: string, opts: IPageElementOpts<Store>);
+    /**
+     * Sets the value of this PageElement.
+     *
+     * @param value
+     */
+    abstract setValue(value: ValueType): this;
     initialWait(): this;
     getValue(): ValueType;
-    setValue(value: ValueType): this;
 }
 export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> {
     abstract getValue(): ValueType;
-    abstract setValue(value: ValueType): PageElementType;
     hasValue(value: ValueType): boolean;
     hasAnyValue(): boolean;
     containsValue(value: ValueType): any;

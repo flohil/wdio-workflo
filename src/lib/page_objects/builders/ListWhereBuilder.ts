@@ -66,7 +66,8 @@ export class ListWhereBuilder<
    * @param childSelector
    */
   child(childSelector: string) {
-    return this._xPathBuilder.append(childSelector)
+    this._xPathBuilder.append(childSelector)
+    return this
   }
 
   /**

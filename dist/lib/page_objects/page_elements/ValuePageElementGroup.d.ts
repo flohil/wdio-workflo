@@ -30,13 +30,6 @@ declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Con
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupCurrently<Store, Content, GroupType> {
     getValue(filterMask?: ExtractTrue<Content>): Workflo.PageNode.ExtractValue<Content>;
-    /**
-     * Sets values immediately on all nodes that implement the setValue method.
-     * Nodes that do not implement the setValue method will be ignored.
-     *
-     * @param values
-     */
-    setValue(values: Workflo.StripNever<ExtractValue<Content>>): GroupType;
     hasValue(value: ExtractValue<Content>): boolean;
     hasAnyValue(filterMask?: ExtractTrue<Content>): boolean;
     containsValue(value: ExtractValue<Content>): boolean;

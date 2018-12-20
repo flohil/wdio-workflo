@@ -64,7 +64,7 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], true[], ValueType[] |
    */
   setValue(values: ValueType[] | ValueType) {
     return this.eachSet<ValueType>(
-      this.all, (element, value) => element.currently.setValue(value), values
+      this.all, (element, value) => element.setValue(value), values
     )
   }
 }
@@ -82,22 +82,6 @@ class ValuePageElementListCurrently<
    */
   getValue() {
     return this._node.eachGet(this.all, element => element.currently.getValue())
-  }
-
-  /**
-   * Sets values on all list elements immediatly.
-   *
-   * If values is an array, the number of list elements must match the number of passed values.
-   * The values will be assigned in the order that the list elements were retrieved from the DOM.
-   *
-   * If values is a single value, the same value will be set on all list elements.
-   *
-   * @param values
-   */
-  setValue(values: ValueType[] | ValueType) {
-    return this._node.eachSet<ValueType>(
-      this.all, (element, value) => element.currently.setValue(value), values
-    )
   }
 
   // CHECK STATE

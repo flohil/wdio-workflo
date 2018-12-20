@@ -30,17 +30,6 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
      * Returns values of all list elements in the order they were retrieved from the DOM immediatly.
      */
     getValue(): ValueType[];
-    /**
-     * Sets values on all list elements immediatly.
-     *
-     * If values is an array, the number of list elements must match the number of passed values.
-     * The values will be assigned in the order that the list elements were retrieved from the DOM.
-     *
-     * If values is a single value, the same value will be set on all list elements.
-     *
-     * @param values
-     */
-    setValue(values: ValueType[] | ValueType): ListType;
     hasValue(value: ValueType | ValueType[]): boolean;
     hasAnyValue(): boolean;
     containsValue(value: ValueType | ValueType[]): boolean;

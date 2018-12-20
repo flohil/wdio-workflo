@@ -72,20 +72,6 @@ class ValuePageElementGroupCurrently<
     )
   }
 
-  /**
-   * Sets values immediately on all nodes that implement the setValue method.
-   * Nodes that do not implement the setValue method will be ignored.
-   *
-   * @param values
-   */
-  setValue(values: Workflo.StripNever<ExtractValue<Content>>) {
-    return this._node.eachSet<
-      ValueElementNode<Content>, ExtractValue<Content>
-    > (
-      isIValueElementNode, values, (node, value) => node.currently.setValue(value)
-    )
-  }
-
   hasValue(value: ExtractValue<Content>) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
       isIValueElementNode, value, (node, value) => node.currently.hasValue(value)

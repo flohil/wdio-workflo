@@ -32,7 +32,8 @@ class ListWhereBuilder {
      * @param childSelector
      */
     child(childSelector) {
-        return this._xPathBuilder.append(childSelector);
+        this._xPathBuilder.append(childSelector);
+        return this;
     }
     /**
      * Adds plain xPath constraint to current selector.

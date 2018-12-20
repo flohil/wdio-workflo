@@ -460,16 +460,17 @@ declare global {
       }
 
       interface IValueElementNode<GetType, FilterType, SetType = GetType>
-        extends INode, IValueElement<GetType, FilterType, SetType>
+        extends INode, IValueElement<GetType, FilterType>
       {
-        currently: IValueElement<GetType, FilterType, SetType> & ICheckValueCurrently<GetType, FilterType>
+        currently: IValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>
         wait: IWaitValue<GetType, FilterType>
         eventually: ICheckValueEventually<GetType, FilterType>
+
+        setValue(value: StripNever<SetType>): IValueElementNode<GetType, FilterType, SetType>
       }
 
-      interface IValueElement<GetType, FilterType, SetType> {
+      interface IValueElement<GetType, FilterType> {
         getValue(filterMask?: StripNever<FilterType>): StripNever<GetType>
-        setValue(value: StripNever<SetType>): IValueElementNode<GetType, FilterType, SetType>
       }
 
       interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {

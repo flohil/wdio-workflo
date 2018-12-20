@@ -46,9 +46,6 @@ class ValuePageElementMapCurrently extends _1.PageElementMapCurrently {
     getValue(filterMask) {
         return this._node.eachGet(this._node.$, filterMask, node => node.currently.getValue());
     }
-    setValue(values) {
-        return this._node.eachSet(this._node.$, values, (element, value) => element.setValue(value));
-    }
     hasValue(value) {
         return this._node.eachCheck(this._node.$, value, (element, expected) => element.currently.hasValue(expected));
     }

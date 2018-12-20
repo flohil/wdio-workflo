@@ -16,7 +16,7 @@ export abstract class ValuePageElement<
   ValueType
 > extends PageElement<Store> implements Workflo.PageNode.IValueElementNode<ValueType, true> {
 
-  abstract readonly currently: ValuePageElementCurrently<Store, this, ValueType>
+  readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>
   readonly wait: ValuePageElementWait<Store, this, ValueType>
   readonly eventually: ValuePageElementEventually<Store, this, ValueType>
 
@@ -26,6 +26,13 @@ export abstract class ValuePageElement<
     this.wait = new ValuePageElementWait(this)
     this.eventually = new ValuePageElementEventually(this)
   }
+
+  /**
+   * Sets the value of this PageElement.
+   *
+   * @param value
+   */
+  abstract setValue(value: ValueType): this
 
   initialWait() {
     if (this._waitType === Workflo.WaitType.value) {
@@ -42,12 +49,6 @@ export abstract class ValuePageElement<
   getValue() {
     return this._executeAfterInitialWait( () => this.currently.getValue() )
   }
-
-  setValue(value: ValueType) {
-    this.initialWait()
-
-    return this.currently.setValue(value)
-  }
 }
 
 export abstract class ValuePageElementCurrently<
@@ -57,14 +58,15 @@ export abstract class ValuePageElementCurrently<
 > extends PageElementCurrently<Store, PageElementType> {
 
   abstract getValue(): ValueType
-  abstract setValue(value: ValueType): PageElementType
 
   hasValue(value: ValueType) {
     return this._compareHas(value, this.getValue())
   }
+
   hasAnyValue() {
     return this._compareHasAny(this.getValue())
   }
+
   containsValue(value: ValueType) {
     return this._compareContains(value, this.getValue())
   }
@@ -83,16 +85,19 @@ export class ValuePageElementWait<
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
 > extends PageElementWait<Store, PageElementType> {
+
   hasValue(value: ValueType, opts?: Workflo.IWDIOParamsReverseInterval) {
     return this._waitHasProperty(
       'value', value, () => this._node.currently.hasValue(value), opts
     )
   }
+
   hasAnyValue(opts: Workflo.IWDIOParamsReverseInterval = {}) {
     return this._waitWdioCheckFunc(
       'had any value', opts => this._node.currently.element.waitForValue(opts.timeout, opts.reverse), opts
     )
   }
+
   containsValue(value: ValueType, opts?: Workflo.IWDIOParamsReverseInterval) {
     return this._waitContainsProperty(
       'value', value, () => this._node.currently.containsValue(value), opts
@@ -120,11 +125,14 @@ export class ValuePageElementEventually<
   ValueType
 > extends PageElementEventually<Store, PageElementType> {
   hasValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval) {
+
     return this._node.__eventually(() => this._node.wait.hasValue(value, opts))
   }
+
   hasAnyValue(opts?: Workflo.IWDIOParamsInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyValue(opts))
   }
+
   containsValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.__eventually(() => this._node.wait.containsValue(value, opts))
   }

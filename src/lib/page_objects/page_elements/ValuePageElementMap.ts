@@ -81,10 +81,6 @@ class ValuePageElementMapCurrently<
     return this._node.eachGet(this._node.$, filterMask, node => node.currently.getValue())
   }
 
-  setValue(values: Partial<Record<K, ValueType>>) {
-    return this._node.eachSet(this._node.$, values, (element, value) => element.setValue(value))
-  }
-
   hasValue(value: Partial<Record<K, ValueType>>) {
     return this._node.eachCheck(
       this._node.$, value, (element, expected) => element.currently.hasValue(expected)

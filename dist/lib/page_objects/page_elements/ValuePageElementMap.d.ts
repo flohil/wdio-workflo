@@ -38,7 +38,6 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
      * @param filterMask a filter mask
      */
     getValue(filterMask?: Partial<Record<K, true>>): Partial<Record<K, ValueType>>;
-    setValue(values: Partial<Record<K, ValueType>>): MapType;
     hasValue(value: Partial<Record<K, ValueType>>): boolean;
     hasAnyValue(filterMask?: Partial<Record<K, true>>): boolean;
     containsValue(value: Partial<Record<K, ValueType>>): boolean;

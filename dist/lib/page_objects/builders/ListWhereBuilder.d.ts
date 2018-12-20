@@ -30,7 +30,7 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
      * "target" for all other xpath modifier functions like .id, .class ...
      * @param childSelector
      */
-    child(childSelector: string): XPathBuilder;
+    child(childSelector: string): this;
     /**
      * Adds plain xPath constraint to current selector.
      * @param constraintSelector

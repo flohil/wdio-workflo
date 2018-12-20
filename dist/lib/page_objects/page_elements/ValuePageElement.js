@@ -21,10 +21,6 @@ class ValuePageElement extends PageElement_1.PageElement {
     getValue() {
         return this._executeAfterInitialWait(() => this.currently.getValue());
     }
-    setValue(value) {
-        this.initialWait();
-        return this.currently.setValue(value);
-    }
 }
 exports.ValuePageElement = ValuePageElement;
 class ValuePageElementCurrently extends PageElement_1.PageElementCurrently {
