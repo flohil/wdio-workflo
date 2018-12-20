@@ -209,9 +209,9 @@ declare global {
     Store extends pageObjects.stores.PageElementStore,
     Content extends Workflo.PageNode.GroupContent,
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
-  >(group: PageElementGroupType): PageElementGroupType extends
-    pageObjects.elements.ValuePageElementGroup<Store, Content> ?
-    IValueGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>
+  >(group: PageElementGroupType): (typeof group) extends (infer GroupType) ?
+    GroupType extends pageObjects.elements.ValuePageElementGroup<Store, Content> ?
+    IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>
 
   namespace WebdriverIO {
     interface Client<T> {
