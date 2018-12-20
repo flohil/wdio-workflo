@@ -521,11 +521,11 @@ class InputStore extends pageObjects.stores.PageElementStore {
 
 const store = new InputStore()
 
-const valGroup = store.ValueGroup({
-  div: store.Element('//div'),
-  input: store.Input('//input'),
-  divList: store.ElementList('//div'),
-  inputList: store.InputList('//input'),
+// const valGroup = store.ValueGroup({
+//   div: store.Element('//div'),
+//   input: store.Input('//input'),
+//   divList: store.ElementList('//div'),
+//   inputList: store.InputList('//input'),
   // divMap: store.ElementMap('//div', {
   //   identifier: {
   //     mappingObject: {
@@ -544,16 +544,30 @@ const valGroup = store.ValueGroup({
   //     func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
   //   },
   // })
+// })
+
+// const values = valGroup.getValue({
+
+// })
+
+// valGroup.setValue({
+
+// })
+
+// valGroup.setValue({
+
+// })
+
+const valGroup = store.ValueGroup({
+  input: store.Input('//input'),
+  inputList: store.InputList('//input'),
 })
 
-const values = valGroup.getValue({
-  
-})
+expectElement(valGroup.$.input).toHaveValue('')
 
-valGroup.setValue({
+expectList(valGroup.$.inputList).toHaveValue('asdf')
 
-})
-
-valGroup.setValue({
-  
+expectGroup(valGroup).toHaveValue({
+  input: 'asdf',
+  inputList: ['jodel', 'asdf']
 })
