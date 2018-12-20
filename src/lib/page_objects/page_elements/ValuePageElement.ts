@@ -124,8 +124,8 @@ export class ValuePageElementEventually<
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
 > extends PageElementEventually<Store, PageElementType> {
-  hasValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval) {
 
+  hasValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.__eventually(() => this._node.wait.hasValue(value, opts))
   }
 

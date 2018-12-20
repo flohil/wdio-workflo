@@ -179,9 +179,10 @@ declare global {
     Store extends pageObjects.stores.PageElementStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     ValueType
-  >(element: PageElementType): PageElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
-    IValueElementMatchers<ValueType> :
-    IElementMatchers
+  >(element: PageElementType): (typeof element) extends (infer ElementType) ?
+    ElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
+    IValueElementMatchers<ReturnType<ElementType['getValue']>> :
+    IElementMatchers : IElementMatchers
 
   function expectList<
     Store extends pageObjects.stores.PageElementStore,
