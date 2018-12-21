@@ -1,8 +1,5 @@
-
-import { comparatorStr } from './utility_functions/util'
 import { elements, stores } from './page_objects'
 import * as _ from 'lodash'
-import { tolerancesToString } from './helpers'
 
 // MATCHER FUNTCION INTERFACES
 
@@ -520,6 +517,28 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
         () => node.currently.exists(opts.filterMask), () => node.currently.not.exists(opts.filterMask)
       ],
       errorTextFunc: ({node}) => createEachMessage(node, "exist")
+    }
+  }),
+  toEventuallyExist: createBooleanMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node, opts}) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
+      errorTextFunc: ({node, opts}) => createEventuallyMessage(node, "exist", opts.timeout)
+    },
+    list: {
+      resultFunc: ({node, opts}) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist", opts.timeout)
+    },
+    map: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.exists(opts), () => node.eventually.not.exists(opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist", opts.timeout)
+    },
+    group: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.exists(opts), () => node.eventually.not.exists(opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist", opts.timeout)
     }
   }),
   toBeVisible: createBooleanMatcherWithoutExpected({

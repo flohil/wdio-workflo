@@ -104,6 +104,7 @@ interface ICustomListMatchers {
     toBeVisible(): boolean;
     toBeEnabled(): boolean;
     toHaveText(text: string | string[]): boolean;
+    toEventuallyExist(opts?: Workflo.IWDIOParams): boolean;
 }
 interface ICustomMapMatchers<K extends string | number | symbol> {
     toExist(opts?: {
@@ -113,6 +114,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
         filterMask?: Partial<Record<K, true>>;
     }): boolean;
     toHaveText(text: Partial<Record<K, string>>): boolean;
+    toEventuallyExist(opts?: Workflo.IWDIOParams): boolean;
 }
 interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
     toExist(opts?: {
@@ -122,6 +124,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
         filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
     }): boolean;
     toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean;
+    toEventuallyExist(opts?: Workflo.IWDIOParams): boolean;
 }
 interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers {
     toHaveValue(value: ValueType): boolean;

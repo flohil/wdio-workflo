@@ -264,6 +264,28 @@ exports.elementMatchers = {
             errorTextFunc: ({ node }) => createEachMessage(node, "exist")
         }
     }),
+    toEventuallyExist: createBooleanMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node, opts }) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
+            errorTextFunc: ({ node, opts }) => createEventuallyMessage(node, "exist", opts.timeout)
+        },
+        list: {
+            resultFunc: ({ node, opts }) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "exist", opts.timeout)
+        },
+        map: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.exists(opts), () => node.eventually.not.exists(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "exist", opts.timeout)
+        },
+        group: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.exists(opts), () => node.eventually.not.exists(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "exist", opts.timeout)
+        }
+    }),
     toBeVisible: createBooleanMatcherWithoutExpected({
         element: {
             resultFunc: ({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
