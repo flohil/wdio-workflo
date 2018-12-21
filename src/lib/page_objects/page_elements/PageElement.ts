@@ -424,6 +424,7 @@ export class PageElement<
   scrollTo(
     params: Workflo.IScrollParams
   ) {
+    this.initialWait()
     this._scrollTo(params)
 
     return this

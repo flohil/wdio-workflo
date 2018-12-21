@@ -342,6 +342,7 @@ class PageElement extends _1.PageElementBase {
         }
     }
     scrollTo(params) {
+        this.initialWait();
         this._scrollTo(params);
         return this;
     }
