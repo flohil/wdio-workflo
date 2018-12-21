@@ -60,7 +60,7 @@
     "supports-color": "^5.4.0",
     "tcp-port-used": "^0.1.2",
     "text-table": "^0.2.0",
-    "ts-node": "3.2.0",
+    "ts-node": "^7.0.1",
     "tsconfig-paths": "^2.2.0",
     "typescript": "^3.2.1",
     "wdio-selenium-standalone-service": "0.0.9",

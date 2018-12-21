@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const page_elements_1 = require("../page_elements");
 const builders_1 = require("../builders");
 const ValuePageElementMap_1 = require("../page_elements/ValuePageElementMap");
-const __1 = require("../../..");
 // Stores singleton instances of page elements to avoid creating new
 // elements on each invocation of a page element.
 class PageElementStore {
@@ -135,73 +134,4 @@ class PageElementStore {
     }
 }
 exports.PageElementStore = PageElementStore;
-class Input extends __1.pageObjects.elements.ValuePageElement {
-    constructor(selector, opts) {
-        super(selector, opts);
-        this.currently = new InputCurrently(this);
-    }
-    setValue(value) {
-        this.initialWait();
-        this.element.setValue(value);
-        return this;
-    }
-}
-class InputCurrently extends __1.pageObjects.elements.ValuePageElementCurrently {
-    getValue() {
-        return this.element.getValue();
-    }
-}
-// achieved mapping type to input value!!!
-class InputStore extends __1.pageObjects.stores.PageElementStore {
-    Input(selector, options) {
-        return this._getElement(selector, Input, Object.assign({ store: this }, options));
-    }
-    InputList(selector, options) {
-        return this.ValueList(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.Input }, options));
-    }
-    InputMap(selector, options) {
-        return this.ValueMap(selector, Object.assign({ elementStoreFunc: this.Input, elementOptions: {} }, options));
-    }
-}
-const store = new InputStore();
-// const valGroup = store.ValueGroup({
-//   div: store.Element('//div'),
-//   input: store.Input('//input'),
-//   divList: store.ElementList('//div'),
-//   inputList: store.InputList('//input'),
-// divMap: store.ElementMap('//div', {
-//   identifier: {
-//     mappingObject: {
-//       a: 'A',
-//       b: 'B'
-//     },
-//     func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//   },
-// }),
-// inputMap: store.InputMap('//input', {
-//   identifier: {
-//     mappingObject: {
-//       a: 'A',
-//       b: 'B'
-//     },
-//     func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//   },
-// })
-// })
-// const values = valGroup.getValue({
-// })
-// valGroup.setValue({
-// })
-// valGroup.setValue({
-// })
-const valGroup = store.ValueGroup({
-    input: store.Input('//input'),
-    inputList: store.InputList('//input'),
-});
-expectElement(valGroup.$.input).toHaveValue('');
-expectList(valGroup.$.inputList).toHaveValue('asdf');
-expectGroup(valGroup).toHaveValue({
-    input: 'asdf',
-    inputList: ['jodel', 'asdf']
-});
 //# sourceMappingURL=PageElementStore.js.map
