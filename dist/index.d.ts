@@ -202,6 +202,9 @@ declare global {
         type StripNever<T> = T;
         type StripNeverByReturnType<T> = T;
         type ArrayElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType : never;
+        type ArrayOrElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType | ElementType[] : never;
+        type TryArrayElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType : ArrayType;
+        type TryArrayOrElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType | ElementType[] : ArrayType;
         type WdioElement = Client<RawResult<Element>> & RawResult<Element>;
         interface IJSError {
             notFound: string[];
@@ -394,7 +397,7 @@ declare global {
             type ExtractValue<T extends {
                 [key: string]: INode;
             }> = {
-                [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getValue']> : never;
+                [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
             };
             interface IValueElementNode<GetType, FilterType, SetType = GetType> extends INode, IValueElement<GetType, FilterType> {
                 currently: IValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>;
