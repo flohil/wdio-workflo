@@ -97,6 +97,7 @@ interface ICustomListMatchers {
   toHaveText(text: string | string[]): boolean
 
   toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
 }
 
 interface ICustomMapMatchers<K extends string | number | symbol> {
@@ -106,6 +107,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
   toHaveText(text: Partial<Record<K, string>>): boolean
 
   toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
 }
 
 interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
@@ -114,7 +116,8 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
 
   toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyExist(opts?: Workflo.IWDIOParams & {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
+  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
 }
 
 interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers {
@@ -509,6 +512,14 @@ declare global {
         containsValue(value: StripNever<ValueType>, opts?: IWDIOParamsInterval): boolean
 
         not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>
+      }
+
+      interface IMapFilterMask<K extends string> {
+        filterMask?: {filterMask?: Partial<Record<K, true>>}
+      }
+
+      interface IGroupFilterMask<Content extends GroupContent> {
+        filterMask?: Workflo.PageNode.ExtractBoolean<Content>
       }
     }
 
