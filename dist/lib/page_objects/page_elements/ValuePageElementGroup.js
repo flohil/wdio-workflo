@@ -100,7 +100,6 @@ function isIValueElementNode(node) {
     return typeof node['getValue'] === 'function' &&
         typeof node['setValue'] === 'function' &&
         typeof node.currently['getValue'] === 'function' &&
-        typeof node.currently['setValue'] === 'function' &&
         typeof node.currently['hasValue'] === 'function' &&
         typeof node.currently['hasAnyValue'] === 'function' &&
         typeof node.currently['containsValue'] === 'function' &&
