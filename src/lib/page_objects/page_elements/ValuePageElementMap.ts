@@ -41,8 +41,8 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    *
    * @param filterMask a filter mask
    */
-  getValue(filterMask?: Partial<Record<K, true>>) {
-    return this.eachGet(this._$, filterMask, node => node.getValue())
+  getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this.eachGet(this._$, node => node.getValue(), filterMask)
   }
 
   /**
@@ -56,7 +56,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    * @param values
    */
   setValue(values: Partial<Record<K, ValueType>>) {
-    return this.eachSet(this._$, values, (element, value) => element.setValue(value))
+    return this.eachSet(this._$, (element, value) => element.setValue(value), values)
   }
 }
 
@@ -77,25 +77,25 @@ class ValuePageElementMapCurrently<
    *
    * @param filterMask a filter mask
    */
-  getValue(filterMask?: Partial<Record<K, true>>) {
-    return this._node.eachGet(this._node.$, filterMask, node => node.currently.getValue())
+  getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this._node.eachGet(this._node.$, node => node.currently.getValue(), filterMask)
   }
 
   hasValue(value: Partial<Record<K, ValueType>>) {
     return this._node.eachCheck(
-      this._node.$, value, (element, expected) => element.currently.hasValue(expected)
+      this._node.$, (element, expected) => element.currently.hasValue(expected), value
     )
   }
 
-  hasAnyValue(filterMask?: Partial<Record<K, true>>) {
+  hasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, filterMask, (element) => element.currently.hasAnyValue()
+      this._node.$, (element) => element.currently.hasAnyValue(), filterMask, true
     )
   }
 
   containsValue(value: Partial<Record<K, ValueType>>) {
     return this._node.eachCheck(
-      this._node.$, value, (element, expected) => element.currently.containsValue(expected)
+      this._node.$, (element, expected) => element.currently.containsValue(expected), value
     )
   }
 
@@ -103,17 +103,17 @@ class ValuePageElementMapCurrently<
     return {...super.not,
       hasValue: (value: Partial<Record<K, ValueType>>) => {
         return this._node.eachCheck(
-          this._node.$, value, (element, expected) => element.currently.not.hasValue(expected)
+          this._node.$, (element, expected) => element.currently.not.hasValue(expected), value
         )
       },
-      hasAnyValue: (filterMask?: Partial<Record<K, true>>) => {
+      hasAnyValue: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, filterMask, element => element.currently.not.hasAnyValue()
+          this._node.$, element => element.currently.not.hasAnyValue(), filterMask, true
         )
       },
       containsValue: (value: Partial<Record<K, ValueType>>) => {
         return this._node.eachCheck(
-          this._node.$, value, (element, expected) => element.currently.not.containsValue(expected)
+          this._node.$, (element, expected) => element.currently.not.containsValue(expected), value
         )
       }
     }
@@ -131,19 +131,21 @@ class ValuePageElementMapWait<
 
   hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait(
-      this._node.$, value, (element, expected) => element.wait.hasValue(expected, opts)
+      this._node.$, (element, expected) => element.wait.hasValue(expected, opts), value
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
+  hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.$, opts.filterMask, element => element.wait.hasAnyValue(opts)
+      this._node.$, element => element.wait.hasAnyValue(otherOpts), filterMask,  true
     )
   }
 
   containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait(
-      this._node.$, value, (element, expected) => element.wait.containsValue(expected, opts)
+      this._node.$, (element, expected) => element.wait.containsValue(expected, opts), value
     )
   }
 
@@ -151,17 +153,19 @@ class ValuePageElementMapWait<
     return {...super.not,
       hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait(
-          this._node.$, value, (element, expected) => element.wait.not.hasValue(expected, opts)
+          this._node.$, (element, expected) => element.wait.not.hasValue(expected, opts), value
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.$, opts.filterMask, element => element.wait.not.hasAnyValue(opts)
+          this._node.$, element => element.wait.not.hasAnyValue(otherOpts), filterMask,  true
         )
       },
       containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait(
-          this._node.$, value, (element, expected) => element.wait.not.containsValue(expected, opts)
+          this._node.$, (element, expected) => element.wait.not.containsValue(expected, opts), value
         )
       }
     }
@@ -179,19 +183,21 @@ class ValuePageElementMapEventually<
 
   hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck(
-      this._node.$, value, (element, expected) => element.eventually.hasValue(expected, opts)
+      this._node.$, (element, expected) => element.eventually.hasValue(expected, opts), value
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
+  hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.$, opts.filterMask, element => element.eventually.hasAnyValue(opts)
+      this._node.$, element => element.eventually.hasAnyValue(otherOpts), filterMask,  true
     )
   }
 
   containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck(
-      this._node.$, value, (element, expected) => element.eventually.containsValue(expected, opts)
+      this._node.$, (element, expected) => element.eventually.containsValue(expected, opts), value
     )
   }
 
@@ -199,17 +205,19 @@ class ValuePageElementMapEventually<
     return {...super.not,
       hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck(
-          this._node.$, value, (element, expected) => element.eventually.not.hasValue(expected, opts)
+          this._node.$, (element, expected) => element.eventually.not.hasValue(expected, opts), value
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.$, opts.filterMask, element => element.eventually.not.hasAnyValue(opts)
+          this._node.$, element => element.eventually.not.hasAnyValue(otherOpts), filterMask,  true
         )
       },
       containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck(
-          this._node.$, value, (element, expected) => element.eventually.not.containsValue(expected, opts)
+          this._node.$, (element, expected) => element.eventually.not.containsValue(expected, opts), value
         )
       }
     }

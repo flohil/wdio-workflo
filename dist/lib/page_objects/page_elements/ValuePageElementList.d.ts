@@ -39,7 +39,7 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
         containsValue: (value: ValueType | ValueType[]) => boolean;
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
-        exists: () => boolean;
+        exists: (filterMask?: boolean | boolean[]) => boolean;
         isVisible: () => boolean;
         isEnabled: () => boolean;
         hasText: (text: string | string[]) => boolean;

@@ -317,19 +317,19 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
     return true
   }
 
-  getText() {
-    return this.eachGet(this.all, element => element.getText())
+  getText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this.eachGet(this.all, element => element.getText(), filterMask)
   }
 
-  getDirectText() {
-    return this.eachGet(this.all, element => element.getDirectText())
+  getDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this.eachGet(this.all, element => element.getDirectText(), filterMask)
   }
 
-  getIsEnabled() {
+  getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this.eachGet(this.all, element => {
       element.initialWait()
       return element.currently.isEnabled()
-    })
+    }, filterMask)
   }
 
   // HELPER FUNCTIONS
@@ -346,6 +346,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
     elements: PageElementType[],
     checkFunc: (element: PageElementType, expected?: T) => boolean,
     expected?: T | T[],
+    isFilterMask: boolean = false
   ): boolean {
     const diffs: Workflo.IDiffTree = {}
 
@@ -361,8 +362,16 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
       const _expected: T = isArray(expected) ? expected[i] : expected
       const element = elements[i]
 
-      if (!checkFunc(element, _expected)) {
-        diffs[`[${i + 1}]`] = element.__lastDiff
+      if (isFilterMask) {
+        if (typeof _expected === 'boolean' && _expected === true) {
+          if (!checkFunc(element)) {
+            diffs[`[${i + 1}]`] = element.__lastDiff
+          }
+        }
+      } else {
+        if (!checkFunc(element, _expected)) {
+          diffs[`[${i + 1}]`] = element.__lastDiff
+        }
       }
     }
 
@@ -375,9 +384,33 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
 
   eachGet<T>(
     elements: PageElementType[],
-    getFunc: (element: PageElementType) => T
+    getFunc: (element: PageElementType) => T,
+    filterMask?: Workflo.PageNode.ListFilterMask,
   ): T[] {
-    return elements.map(element => getFunc(element))
+    if (filterMask) {
+      return elements.map(element => getFunc(element))
+    } else {
+      const result: T[] = []
+
+      if (isArray(filterMask) && filterMask.length !== elements.length) {
+        throw new Error(
+          `${this.constructor.name}: ` +
+          `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
+          `( ${this._selector} )`
+        )
+      }
+
+      for (let i = 0; i < elements.length; ++i) {
+        const _filterMask: boolean = isArray(filterMask) ? filterMask[i] : filterMask
+        const element = elements[i]
+
+        if (_filterMask === true) {
+          result.push(getFunc(element))
+        }
+      }
+
+      return result
+    }
   }
 
   /**
@@ -389,8 +422,9 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
    */
   eachWait<T>(
     elements: PageElementType[],
-    waitFunc: (element: PageElementType, expected: T) => PageElementType,
+    waitFunc: (element: PageElementType, expected?: T) => PageElementType,
     expected?: T | T[],
+    isFilterMask: boolean = false
   ): this {
     if (isArray(expected) && expected.length !== elements.length) {
       throw new Error(
@@ -404,7 +438,13 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
       const _expected: T = isArray(expected) ? expected[i] : expected
       const element = elements[i]
 
-      waitFunc(element, _expected)
+      if (isFilterMask) {
+        if (typeof _expected === 'boolean' && _expected === true) {
+          waitFunc(element)
+        }
+      } else {
+        waitFunc(element, _expected)
+      }
     }
 
     return this
@@ -413,8 +453,30 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
   eachDo(
     elements: PageElementType[],
     doFunc: (element: PageElementType) => PageElementType,
+    filterMask?: Workflo.PageNode.ListFilterMask
   ) {
-    return elements.map(element => doFunc(element))
+    if (filterMask) {
+      elements.map(element => doFunc(element))
+    } else {
+      if (isArray(filterMask) && filterMask.length !== elements.length) {
+        throw new Error(
+          `${this.constructor.name}: ` +
+          `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
+          `( ${this._selector} )`
+        )
+      }
+
+      for (let i = 0; i < elements.length; ++i) {
+        const _filterMask: boolean = isArray(filterMask) ? filterMask[i] : filterMask
+        const element = elements[i]
+
+        if (_filterMask === true) {
+          doFunc(element)
+        }
+      }
+    }
+
+    return this
   }
 
   eachSet<T>(
@@ -553,24 +615,24 @@ export class PageElementListCurrently<
     }
   }
 
-  getText() {
-    return this._node.eachGet(this.all, element => element.currently.getText())
+  getText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachGet(this.all, element => element.currently.getText(), filterMask)
   }
 
-  getDirectText() {
-    return this._node.eachGet(this.all, element => element.currently.getDirectText())
+  getDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachGet(this.all, element => element.currently.getDirectText(), filterMask)
   }
 
-  getExists() {
-    return this._node.eachGet(this.all, element => element.currently.exists())
+  getExists(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachGet(this.all, element => element.currently.exists(), filterMask)
   }
 
-  getIsVisible() {
-    return this._node.eachGet(this.all, element => element.currently.isVisible())
+  getIsVisible(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachGet(this.all, element => element.currently.isVisible(), filterMask)
   }
 
-  getIsEnabled() {
-    return this._node.eachGet(this.all, element => element.currently.isEnabled())
+  getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachGet(this.all, element => element.currently.isEnabled(), filterMask)
   }
 
 // CHECK STATE FUNCTIONS
@@ -591,24 +653,37 @@ export class PageElementListCurrently<
     return compare(actualLength, length, comparator)
   }
 
-  exists() {
-    return this._node.eachCheck(this.all, element => element.currently.exists())
+  exists(filterMask?: Workflo.PageNode.ListFilterMask) {
+    if (filterMask) {
+      if (filterMask === false) {
+        // no element should be checked because filter mask is false
+        return true
+      } else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
+        // no element should be checked because all array elements in filter mask are false
+        return true
+      } else {
+        return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true)
+      }
+    } else {
+      // if no filterMask is set, all elements in list exist if list is not empty
+      return this.not.isEmpty()
+    }
   }
 
-  isVisible() {
-    return this._node.eachCheck(this.all, element => element.currently.isVisible())
+  isVisible(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachCheck(this.all, element => element.currently.isVisible(), filterMask, true)
   }
 
-  isEnabled() {
-    return this._node.eachCheck(this.all, element => element.currently.isEnabled())
+  isEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachCheck(this.all, element => element.currently.isEnabled(), filterMask, true)
   }
 
   hasText(text: string | string[]) {
     return this._node.eachCheck(this.all, (element, expected) => element.currently.hasText(expected), text)
   }
 
-  hasAnyText() {
-    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText())
+  hasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText(), filterMask, true)
   }
 
   containsText(text: string | string[]) {
@@ -621,8 +696,8 @@ export class PageElementListCurrently<
     )
   }
 
-  hasAnyDirectText() {
-    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText())
+  hasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true)
   }
 
   containsDirectText(directText: string | string[]) {
@@ -637,20 +712,33 @@ export class PageElementListCurrently<
       hasLength: (
         length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
       ) => !this.hasLength(length, comparator),
-      exists: () => {
-        return this._node.eachCheck(this.all, element => element.currently.not.exists())
+      exists: (filterMask?: Workflo.PageNode.ListFilterMask) => {
+        if (filterMask) {
+          if (filterMask === false) {
+            // no element should be checked because filter mask is false
+            return true
+          } else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
+            // no element should be checked because all array elements in filter mask are false
+            return true
+          } else {
+            return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true)
+          }
+        } else {
+          // if no filterMask is set, all elements in list exist if list is not empty
+          return this.isEmpty()
+        }
       },
-      isVisible: () => {
-        return this._node.eachCheck(this.all, element => element.currently.not.isVisible())
+      isVisible: (filterMask?: Workflo.PageNode.ListFilterMask) => {
+        return this._node.eachCheck(this.all, element => element.currently.not.isVisible(), filterMask, true)
       },
-      isEnabled: () => {
-        return this._node.eachCheck(this.all, element => element.currently.not.isEnabled())
+      isEnabled: (filterMask?: Workflo.PageNode.ListFilterMask) => {
+        return this._node.eachCheck(this.all, element => element.currently.not.isEnabled(), filterMask, true)
       },
       hasText: (text: string | string[]) => {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text)
       },
-      hasAnyText: () => {
-        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText())
+      hasAnyText: (filterMask?: Workflo.PageNode.ListFilterMask) => {
+        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText(), filterMask, true)
       },
       containsText: (text: string | string[]) => {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text)
@@ -660,8 +748,8 @@ export class PageElementListCurrently<
           this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText
         )
       },
-      hasAnyDirectText: () => {
-        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText())
+      hasAnyDirectText: (filterMask?: Workflo.PageNode.ListFilterMask) => {
+        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true)
       },
       containsDirectText: (directText: string | string[]) => {
         return this._node.eachCheck(
@@ -738,18 +826,38 @@ export class PageElementListWait<
     return this._node.currently.first.wait.not
   }
 
-  exists(opts?: Workflo.IWDIOParams) {
-    this._node.currently.first.wait.exists()
+  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
 
-    return this.not.isEmpty(opts)
+    if (opts.filterMask) {
+      if (opts.filterMask === false) {
+        // no element should be checked because filter mask is false
+      } else if (
+        _.isArray(opts.filterMask) &&
+        opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length
+      ) {
+        // no element should be checked because all array elements in filter mask are false
+      } else {
+        this._node.eachWait(this._node.all, element => element.wait.exists(otherOpts), filterMask, true)
+      }
+    } else {
+      // if no filterMask is set, ell elements in list exist if list is not empty
+      this.not.isEmpty(otherOpts)
+    }
+
+    return this._node
   }
 
-  isVisible(opts?: Workflo.IWDIOParams) {
-    return this._node.eachWait(this._node.all, element => element.wait.isVisible(opts))
+  isVisible(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
+    return this._node.eachWait(this._node.all, element => element.wait.isVisible(otherOpts), filterMask, true)
   }
 
-  isEnabled(opts?: Workflo.IWDIOParams) {
-    return this._node.eachWait(this._node.all, element => element.wait.isEnabled(opts))
+  isEnabled(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
+    return this._node.eachWait(this._node.all, element => element.wait.isEnabled(otherOpts), filterMask, true)
   }
 
   hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval) {
@@ -758,9 +866,11 @@ export class PageElementListWait<
     )
   }
 
-  hasAnyText(opts?: Workflo.IWDIOParamsInterval) {
+  hasAnyText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.all, (element) => element.wait.hasAnyText(opts),
+      this._node.all, (element) => element.wait.hasAnyText(otherOpts), filterMask, true
     )
   }
 
@@ -776,9 +886,11 @@ export class PageElementListWait<
     )
   }
 
-  hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval) {
+  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.all, (element) => element.wait.hasAnyDirectText(opts),
+      this._node.all, (element) => element.wait.hasAnyDirectText(otherOpts), filterMask, true
     )
   }
 
@@ -798,23 +910,47 @@ export class PageElementListWait<
       ) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
-      exists: (opts?: Workflo.IWDIOParams) => {
-        return this.not.isEmpty(opts)
+      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
+        if (opts.filterMask) {
+          if (opts.filterMask === false) {
+            // no element should be checked because filter mask is false
+          } else if (
+            _.isArray(opts.filterMask) &&
+            opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length
+          ) {
+            // no element should be checked because all array elements in filter mask are false
+          } else {
+            this._node.eachWait(this._node.all, element => element.wait.not.exists(otherOpts), filterMask, true)
+          }
+        } else {
+          // if no filterMask is set, ell elements in list exist if list is not empty
+          this.isEmpty(otherOpts)
+        }
+
+        return this._node
       },
-      isVisible: (opts?: Workflo.IWDIOParams) => {
-        return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts))
+      isVisible: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
+        return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(otherOpts), filterMask, true)
       },
-      isEnabled: (opts?: Workflo.IWDIOParams) => {
-        return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(opts))
+      isEnabled: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
+        return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(otherOpts), filterMask, true)
       },
       hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait(
           this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text
         )
       },
-      hasAnyText: (opts?: Workflo.IWDIOParamsInterval) => {
+      hasAnyText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.all, (element) => element.wait.not.hasAnyText(opts)
+          this._node.all, (element) => element.wait.not.hasAnyText(otherOpts), filterMask, true
         )
       },
       containsText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => {
@@ -827,9 +963,11 @@ export class PageElementListWait<
           this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText
         )
       },
-      hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => {
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.all, (element) => element.wait.not.hasAnyDirectText(opts)
+          this._node.all, (element) => element.wait.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
       containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => {
@@ -882,16 +1020,35 @@ export class PageElementListEventually<
     return this._node.__eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  exists(opts?: Workflo.IWDIOParams) {
-    return this.not.isEmpty(opts)
+  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
+    if (filterMask) {
+      if (filterMask === false) {
+        // no element should be checked because filter mask is false
+        return true
+      } else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
+        // no element should be checked because all array elements in filter mask are false
+        return true
+      } else {
+        return this._node.eachCheck(this._node.all, element => element.eventually.exists(otherOpts), filterMask, true)
+      }
+    } else {
+      // if no filterMask is set, all elements in list exist if list is not empty
+      return this.not.isEmpty(otherOpts)
+    }
   }
 
-  isVisible(opts?: Workflo.IWDIOParams) {
-    return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(opts))
+  isVisible(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
+    return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(otherOpts), filterMask, true)
   }
 
-  isEnabled(opts?: Workflo.IWDIOParams) {
-    return this._node.eachCheck(this._node.all, element => element.eventually.isEnabled(opts))
+  isEnabled(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
+    return this._node.eachCheck(this._node.all, element => element.eventually.isEnabled(otherOpts), filterMask, true)
   }
 
   hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval) {
@@ -900,9 +1057,11 @@ export class PageElementListEventually<
     )
   }
 
-  hasAnyText(opts?: Workflo.IWDIOParamsInterval) {
+  hasAnyText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.all, (element) => element.eventually.hasAnyText(opts)
+      this._node.all, (element) => element.eventually.hasAnyText(otherOpts), filterMask, true
     )
   }
 
@@ -918,9 +1077,11 @@ export class PageElementListEventually<
     )
   }
 
-  hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval) {
+  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.all, (element) => element.eventually.hasAnyDirectText(opts)
+      this._node.all, (element) => element.eventually.hasAnyDirectText(otherOpts), filterMask, true
     )
   }
 
@@ -938,23 +1099,52 @@ export class PageElementListEventually<
       hasLength: (length: number, opts: IPageElementListWaitLengthParams = {}) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
-      exists: (opts?: Workflo.IWDIOParams) => {
-        return this.isEmpty(opts)
+      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
+        if (filterMask) {
+          if (filterMask === false) {
+            // no element should be checked because filter mask is false
+            return true
+          } else if (
+            _.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length
+          ) {
+            // no element should be checked because all array elements in filter mask are false
+            return true
+          } else {
+            return this._node.eachCheck(
+              this._node.all, element => element.eventually.not.exists(otherOpts), filterMask, true
+            )
+          }
+        } else {
+          // if no filterMask is set, all elements in list exist if list is not empty
+          return this.isEmpty(otherOpts)
+        }
       },
-      isVisible: (opts?: Workflo.IWDIOParams) => {
-        return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts))
+      isVisible: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
+        return this._node.eachCheck(
+          this._node.all, element => element.eventually.not.isVisible(otherOpts), filterMask, true
+        )
       },
-      isEnabled: (opts?: Workflo.IWDIOParams) => {
-        return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts))
+      isEnabled: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
+        return this._node.eachCheck(
+          this._node.all, element => element.eventually.not.isEnabled(opts), filterMask, true
+        )
       },
       hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck(
           this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text
         )
       },
-      hasAnyText: (opts?: Workflo.IWDIOParamsInterval) => {
+      hasAnyText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.all, undefined, (element) => element.eventually.not.hasAnyText(opts)
+          this._node.all, (element) => element.eventually.not.hasAnyText(otherOpts), filterMask, true
         )
       },
       containsText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => {
@@ -967,9 +1157,11 @@ export class PageElementListEventually<
           this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText
         )
       },
-      hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => {
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.all, undefined, (element) => element.eventually.not.hasAnyDirectText(opts)
+          this._node.all, (element) => element.eventually.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
       containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => {

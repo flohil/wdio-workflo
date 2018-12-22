@@ -100,7 +100,7 @@ interface ICustomListMatchers {
     }): boolean;
     toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean;
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
-    toExist(): boolean;
+    toExist(filterMask?: boolean | boolean[]): boolean;
     toBeVisible(): boolean;
     toBeEnabled(): boolean;
     toHaveText(text: string | string[]): boolean;
@@ -437,7 +437,7 @@ declare global {
                 filterMask?: Partial<Record<K, true>>;
             }
             interface IGroupFilterMask<Content extends GroupContent> {
-                filterMask?: Workflo.PageNode.ExtractBooleanFilterMask<Content>;
+                filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
             }
         }
         interface IProblem<ValueType, ResultType> {

@@ -110,7 +110,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * @param checkFunc
      * @param expected
      */
-    eachCheck<T>(elements: PageElementType[], checkFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[]): boolean;
+    eachCheck<T>(elements: PageElementType[], checkFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[], isFilterMask?: boolean): boolean;
     eachGet<T>(elements: PageElementType[], getFunc: (element: PageElementType) => T): T[];
     /**
      * Uses default interval and default timeout of each element contained in this list.
@@ -162,7 +162,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     getIsEnabled(): boolean[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
-    exists(): boolean;
+    exists(filterMask?: boolean | boolean[]): boolean;
     isVisible(): boolean;
     isEnabled(): boolean;
     hasText(text: string | string[]): boolean;
@@ -174,7 +174,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     readonly not: {
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
-        exists: () => boolean;
+        exists: (filterMask?: boolean | boolean[]) => boolean;
         isVisible: () => boolean;
         isEnabled: () => boolean;
         hasText: (text: string | string[]) => boolean;

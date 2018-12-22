@@ -248,7 +248,9 @@ exports.elementMatchers = {
             errorTextFunc: ({ node }) => createMessage(node, "exist")
         },
         list: {
-            resultFunc: ({ node }) => [() => node.currently.exists(), () => node.currently.not.exists()],
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.exists(expected), () => node.currently.not.exists(expected)
+            ],
             errorTextFunc: ({ node }) => createEachMessage(node, "exist")
         },
         map: {

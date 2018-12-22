@@ -107,8 +107,8 @@ implements Workflo.PageNode.IElementNode<
     return this._selector
   }
 
-  __getTrue(filterMask?: Partial<Record<K, true>>) {
-    return this.eachGet(this._$, filterMask, node => node.__getTrue())
+  __getTrue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this.eachGet(this._$, node => node.__getTrue(), filterMask)
   }
 
    /**
@@ -119,35 +119,44 @@ implements Workflo.PageNode.IElementNode<
    *
    * @param filter a filter mask
    */
-  getText(filterMask?: Partial<Record<K, true>>) {
-    return this.eachGet(this._$, filterMask, node => node.getText())
+  getText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this.eachGet(this._$, node => node.getText(), filterMask)
   }
 
-  getDirectText(filterMask?: Partial<Record<K, true>>) {
-    return this.eachGet(this._$, filterMask, node => node.getDirectText())
+  getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this.eachGet(this._$, node => node.getDirectText(), filterMask)
   }
 
-  getIsEnabled(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
-    return this.eachGet(this.$, filterMask, node => {
+  getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
+    return this.eachGet(this.$, node => {
       node.wait.isEnabled()
       return node.currently.isEnabled()
-    })
+    }, filterMask)
   }
 
   // HELPER FUNCTIONS
 
   eachCheck<T>(
     context: Record<K, PageElementType>,
+    checkFunc: (element: PageElementType, expected?: T) => boolean,
     expected: Partial<Record<K, T>>,
-    checkFunc: (element: PageElementType, expected?: T) => boolean
+    isFilterMask: boolean = false
   ): boolean {
     const diffs: Workflo.IDiffTree = {}
 
     for (const key in context) {
       if (expected) {
-        if (typeof expected[key] !== 'undefined') {
-          if (!checkFunc(context[key], expected[key] as any as T)) {
-            diffs[`.${key}`] = context[key].__lastDiff
+        if (isFilterMask) {
+          if (typeof expected[key] === 'boolean' && expected[key]) {
+            if (!checkFunc(context[key])) {
+              diffs[`.${key}`] = context[key].__lastDiff
+            }
+          }
+        } else {
+          if (typeof expected[key] !== 'undefined') {
+            if (!checkFunc(context[key], expected[key] as any as T)) {
+              diffs[`.${key}`] = context[key].__lastDiff
+            }
           }
         }
       } else {
@@ -177,14 +186,14 @@ implements Workflo.PageNode.IElementNode<
     ResultType
   >(
     context: Record<K, PageElementType>,
-    filterMask: Partial<Record<K, true>>,
     getFunc: (node: PageElementType) => ResultType,
+    filterMask: Workflo.PageNode.MapFilterMask<K>,
   ): Partial<Record<K, ResultType>> {
     let result = {} as Record<K, ResultType>;
 
     for (const k in context) {
       if (filterMask) {
-        if (typeof filterMask[k] !== 'undefined') {
+        if (typeof filterMask[k] === 'boolean' && filterMask[k]) {
           result[k] = getFunc(context[k])
         }
       } else {
@@ -197,13 +206,20 @@ implements Workflo.PageNode.IElementNode<
 
   eachWait<ValueType>(
     context: Record<K, PageElementType>,
-    expected: Partial<Record<K, ValueType>>,
     waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType,
+    expected: Partial<Record<K, ValueType>>,
+    isFilterMask: boolean = false
   ): this {
     for (const key in context) {
       if (expected) {
-        if (typeof expected[key] !== 'undefined') {
-          waitFunc(context[key], expected[key] as any as ValueType)
+        if (isFilterMask) {
+          if (typeof expected[key] === 'boolean' && expected[key]) {
+            waitFunc(context[key])
+          }
+        } else {
+          if (typeof expected[key] !== 'undefined') {
+            waitFunc(context[key], expected[key] as any as ValueType)
+          }
         }
       } else {
         waitFunc(context[key], expected[key] as any as ValueType)
@@ -215,12 +231,12 @@ implements Workflo.PageNode.IElementNode<
 
   eachDo(
     context: Record<K, PageElementType>,
-    filterMask: Partial<Record<K, true>>,
     doFunc: (element: PageElementType) => PageElementType,
+    filterMask: Workflo.PageNode.MapFilterMask<K>,
   ): this {
     for (const key in context) {
       if (filterMask) {
-        if (typeof filterMask[key] !== 'undefined') {
+        if (typeof filterMask[key] === 'boolean' && filterMask[key]) {
           doFunc(context[key])
         }
       } else {
@@ -233,8 +249,8 @@ implements Workflo.PageNode.IElementNode<
 
   eachSet<ValueType>(
     context: Record<K, PageElementType>,
-    values: Partial<Record<K, ValueType>>,
     setFunc: (element: PageElementType, value: ValueType) => PageElementType,
+    values: Partial<Record<K, ValueType>>,
   ): this {
     for (const key in context) {
       if (values) {
@@ -266,129 +282,129 @@ export class PageElementMapCurrently<
    *
    * @param filter a filter mask
    */
-  getText(filterMask?: Partial<Record<K, true>>) {
+  getText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachGet(
-      this._node.$, filterMask, node => node.currently.getText()
+      this._node.$, node => node.currently.getText(), filterMask
     )
   }
 
-  getDirectText(filterMask?: Partial<Record<K, true>>) {
+  getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachGet(
-      this._node.$, filterMask, node => node.currently.getDirectText()
+      this._node.$, node => node.currently.getDirectText(), filterMask
     )
   }
 
-  getExists(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
-    return this._node.eachGet(this._node.$, filterMask, node => node.currently.exists())
+  getExists(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
+    return this._node.eachGet(this._node.$, node => node.currently.exists(), filterMask)
   }
 
-  getIsVisible(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
-    return this._node.eachGet(this._node.$, filterMask, node => node.currently.isVisible())
+  getIsVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
+    return this._node.eachGet(this._node.$, node => node.currently.isVisible(), filterMask)
   }
 
-  getIsEnabled(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>> {
-    return this._node.eachGet(this._node.$, filterMask, node => node.currently.isEnabled())
+  getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
+    return this._node.eachGet(this._node.$, node => node.currently.isEnabled(), filterMask)
   }
 
-  exists(filterMask?: Partial<Record<K, true>>) {
+  exists(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, filterMask, element => element.currently.exists()
+      this._node.$, element => element.currently.exists(), filterMask, true
     )
   }
 
-  isVisible(filterMask?: Partial<Record<K, true>>) {
+  isVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, filterMask, element => element.currently.isVisible()
+      this._node.$, element => element.currently.isVisible(), filterMask, true
     )
   }
 
-  isEnabled(filterMask?: Partial<Record<K, true>>) {
+  isEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, filterMask, element => element.currently.isEnabled()
+      this._node.$, element => element.currently.isEnabled(), filterMask, true
     )
   }
 
   hasText(text: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, text, (element, expected) => element.currently.hasText(expected)
+      this._node.$, (element, expected) => element.currently.hasText(expected), text
     )
   }
 
-  hasAnyText(filterMask?: Partial<Record<K, true>>) {
+  hasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, filterMask, (element) => element.currently.hasAnyText()
+      this._node.$, (element) => element.currently.hasAnyText(), filterMask, true
     )
   }
 
   containsText(text: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, text, (element, expected) => element.currently.containsText(expected)
+      this._node.$, (element, expected) => element.currently.containsText(expected), text
     )
   }
 
   hasDirectText(directText: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, directText, (element, expected) => element.currently.hasDirectText(expected)
+      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directText
     )
   }
 
-  hasAnyDirectText(filterMask?: Partial<Record<K, true>>) {
+  hasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, filterMask, (element) => element.currently.hasAnyDirectText()
+      this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true
     )
   }
 
   containsDirectText(directText: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, directText, (element, expected) => element.currently.containsDirectText(expected)
+      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directText
     )
   }
 
   get not() {
     return {
-      exists: (filterMask?: Partial<Record<K, true>>) => {
+      exists: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, filterMask, element => element.currently.not.exists()
+          this._node.$, element => element.currently.not.exists(), filterMask, true
         )
       },
-      isVisible: (filterMask?: Partial<Record<K, true>>) => {
+      isVisible: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, filterMask, element => element.currently.not.isVisible()
+          this._node.$, element => element.currently.not.isVisible(), filterMask, true
         )
       },
-      isEnabled: (filterMask?: Partial<Record<K, true>>) => {
+      isEnabled: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, filterMask, element => element.currently.not.isEnabled()
+          this._node.$, element => element.currently.not.isEnabled(), filterMask, true
         )
       },
       hasText: (text: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, text, (element, expected) => element.currently.not.hasText(expected)
+          this._node.$, (element, expected) => element.currently.not.hasText(expected), text
         )
       },
-      hasAnyText: (filterMask?: Partial<Record<K, true>>) => {
+      hasAnyText: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, filterMask, (element) => element.currently.not.hasAnyText()
+          this._node.$, (element) => element.currently.not.hasAnyText(), filterMask, true
         )
       },
       containsText: (text: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, text, (element, expected) => element.currently.not.containsText(expected)
+          this._node.$, (element, expected) => element.currently.not.containsText(expected), text
         )
       },
       hasDirectText: (directText: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, directText, (element, expected) => element.currently.not.hasDirectText(expected)
+          this._node.$, (element, expected) => element.currently.not.hasDirectText(expected), directText
         )
       },
-      hasAnyDirectText: (filterMask?: Partial<Record<K, true>>) => {
+      hasAnyDirectText: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, filterMask, (element) => element.currently.not.hasAnyDirectText()
+          this._node.$, (element) => element.currently.not.hasAnyDirectText(), filterMask, true
         )
       },
       containsDirectText: (directText: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, directText, (element, expected) => element.currently.not.containsDirectText(expected)
+          this._node.$, (element, expected) => element.currently.not.containsDirectText(expected), directText
         )
       }
     }
@@ -403,105 +419,125 @@ export class PageElementMapWait<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
 > extends PageNodeWait<Store, MapType> {
 
-  exists(opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) {
+  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.$, opts.filterMask, element => element.wait.exists(opts)
+      this._node.$, element => element.wait.exists(otherOpts), filterMask, true
     )
   }
 
-  isVisible(opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) {
+  isVisible(opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.$, opts.filterMask, element => element.wait.isVisible(opts)
+      this._node.$, element => element.wait.isVisible(otherOpts), filterMask, true
     )
   }
 
-  isEnabled(opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) {
+  isEnabled(opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.$, opts.filterMask, element => element.wait.isEnabled(opts)
+      this._node.$, element => element.wait.isEnabled(otherOpts), filterMask, true
     )
   }
 
   hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait(
-      this._node.$, text, (element, expected) => element.wait.hasText(expected, opts)
+      this._node.$, (element, expected) => element.wait.hasText(expected, opts), text
     )
   }
 
-  hasAnyText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
+  hasAnyText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.$, opts.filterMask, (element) => element.wait.hasAnyText(opts)
+      this._node.$, (element) => element.wait.hasAnyText(otherOpts), filterMask, true
     )
   }
 
   containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait(
-      this._node.$, text, (element, expected) => element.wait.containsText(expected, opts)
+      this._node.$, (element, expected) => element.wait.containsText(expected, opts), text
     )
   }
 
   hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait(
-      this._node.$, directText, (element, expected) => element.wait.hasDirectText(expected, opts)
+      this._node.$, (element, expected) => element.wait.hasDirectText(expected, opts), directText
     )
   }
 
-  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
+  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait(
-      this._node.$, opts.filterMask, (element) => element.wait.hasAnyDirectText(opts)
+      this._node.$, (element) => element.wait.hasAnyDirectText(otherOpts), filterMask, true
     )
   }
 
   containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait(
-      this._node.$, directText, (element, expected) => element.wait.containsDirectText(expected, opts)
+      this._node.$, (element, expected) => element.wait.containsDirectText(expected, opts), directText
     )
   }
 
   get not() {
     return {
-      exists: (opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.$, opts.filterMask, element => element.wait.not.exists(opts)
+          this._node.$, element => element.wait.not.exists(otherOpts), filterMask, true
         )
       },
-      isVisible: (opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      isVisible: (opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.$, opts.filterMask, element => element.wait.not.isVisible(opts)
+          this._node.$, element => element.wait.not.isVisible(otherOpts), filterMask, true
         )
       },
-      isEnabled: (opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      isEnabled: (opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.$, opts.filterMask, element => element.wait.not.isEnabled(opts)
+          this._node.$, element => element.wait.not.isEnabled(otherOpts), filterMask, true
         )
       },
       hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait(
-          this._node.$, text, (element, expected) => element.wait.not.hasText(expected, opts)
+          this._node.$, (element, expected) => element.wait.not.hasText(expected, opts), text
         )
       },
-      hasAnyText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      hasAnyText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyText(opts)
+          this._node.$, (element) => element.wait.not.hasAnyText(otherOpts), filterMask, true
         )
       },
       containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait(
-          this._node.$, text, (element, expected) => element.wait.not.containsText(expected, opts)
+          this._node.$, (element, expected) => element.wait.not.containsText(expected, opts), text
         )
       },
       hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait(
-          this._node.$, directText, (element, expected) => element.wait.not.hasDirectText(expected, opts)
+          this._node.$, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText
         )
       },
-      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait(
-          this._node.$, opts.filterMask, (element) => element.wait.not.hasAnyDirectText(opts)
+          this._node.$, (element) => element.wait.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
       containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait(
-          this._node.$, directText, (element, expected) => element.wait.not.containsDirectText(expected, opts)
+          this._node.$, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText
         )
       }
     }
@@ -516,105 +552,125 @@ export class PageElementMapEventually<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
 > extends PageNodeEventually<Store, MapType> {
 
-  exists(opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) {
+  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.$, opts.filterMask, element => element.eventually.exists(opts)
+      this._node.$, element => element.eventually.exists(otherOpts), filterMask, true
     )
   }
 
-  isVisible(opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) {
+  isVisible(opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.$, opts.filterMask, element => element.eventually.isVisible(opts)
+      this._node.$, element => element.eventually.isVisible(otherOpts), filterMask, true
     )
   }
 
-  isEnabled(opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) {
+  isEnabled(opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.$, opts.filterMask, element => element.eventually.isEnabled(opts)
+      this._node.$, element => element.eventually.isEnabled(otherOpts), filterMask, true
     )
   }
 
   hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck(
-      this._node.$, text, (element, expected) => element.eventually.hasText(expected, opts)
+      this._node.$, (element, expected) => element.eventually.hasText(expected, opts), text
     )
   }
 
-  hasAnyText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
+  hasAnyText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.$, opts.filterMask, (element) => element.eventually.hasAnyText(opts)
+      this._node.$, (element) => element.eventually.hasAnyText(otherOpts), filterMask, true
     )
   }
 
   containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck(
-      this._node.$, text, (element, expected) => element.eventually.containsText(expected, opts)
+      this._node.$, (element, expected) => element.eventually.containsText(expected, opts), text
     )
   }
 
   hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck(
-      this._node.$, directText, (element, expected) => element.eventually.hasDirectText(expected, opts)
+      this._node.$, (element, expected) => element.eventually.hasDirectText(expected, opts), directText
     )
   }
 
-  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) {
+  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck(
-      this._node.$, opts.filterMask, (element) => element.eventually.hasAnyDirectText(opts)
+      this._node.$, (element) => element.eventually.hasAnyDirectText(otherOpts), filterMask, true
     )
   }
 
   containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck(
-      this._node.$, directText, (element, expected) => element.eventually.containsDirectText(expected, opts)
+      this._node.$, (element, expected) => element.eventually.containsDirectText(expected, opts), directText
     )
   }
 
   get not() {
     return {
-      exists: (opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.$, opts.filterMask, element => element.eventually.not.exists(opts)
+          this._node.$, element => element.eventually.not.exists(otherOpts), filterMask, true
         )
       },
-      isVisible: (opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      isVisible: (opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.$, opts.filterMask, element => element.eventually.not.isVisible(opts)
+          this._node.$, element => element.eventually.not.isVisible(otherOpts), filterMask, true
         )
       },
-      isEnabled: (opts: Workflo.IWDIOParams & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      isEnabled: (opts: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.$, opts.filterMask, element => element.eventually.not.isEnabled(opts)
+          this._node.$, element => element.eventually.not.isEnabled(otherOpts), filterMask, true
         )
       },
       hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck(
-          this._node.$, text, (element, expected) => element.eventually.not.hasText(expected, opts)
+          this._node.$, (element, expected) => element.eventually.not.hasText(expected, opts), text
         )
       },
-      hasAnyText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      hasAnyText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyText(opts)
+          this._node.$, (element) => element.eventually.not.hasAnyText(otherOpts), filterMask, true
         )
       },
       containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck(
-          this._node.$, text, (element, expected) => element.eventually.not.containsText(expected, opts)
+          this._node.$, (element, expected) => element.eventually.not.containsText(expected, opts), text
         )
       },
       hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck(
-          this._node.$, directText, (element, expected) => element.eventually.not.hasDirectText(expected, opts)
+          this._node.$, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText
         )
       },
-      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<K, true>>} = {}) => {
+      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck(
-          this._node.$, opts.filterMask, (element) => element.eventually.not.hasAnyDirectText(opts)
+          this._node.$, (element) => element.eventually.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
       containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck(
-          this._node.$, directText, (element, expected) => element.eventually.not.containsDirectText(expected, opts)
+          this._node.$, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText
         )
       }
     }

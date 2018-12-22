@@ -215,7 +215,7 @@ class PageElementList extends _1.PageNode {
      * @param checkFunc
      * @param expected
      */
-    eachCheck(elements, checkFunc, expected) {
+    eachCheck(elements, checkFunc, expected, isFilterMask = false) {
         const diffs = {};
         if (util_2.isArray(expected) && expected.length !== elements.length) {
             throw new Error(`${this.constructor.name}: ` +
@@ -225,8 +225,17 @@ class PageElementList extends _1.PageNode {
         for (let i = 0; i < elements.length; ++i) {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
-            if (!checkFunc(element, _expected)) {
-                diffs[`[${i + 1}]`] = element.__lastDiff;
+            if (isFilterMask) {
+                if (typeof _expected === 'boolean' && _expected === true) {
+                    if (!checkFunc(element, _expected)) {
+                        diffs[`[${i + 1}]`] = element.__lastDiff;
+                    }
+                }
+            }
+            else {
+                if (!checkFunc(element, _expected)) {
+                    diffs[`[${i + 1}]`] = element.__lastDiff;
+                }
             }
         }
         this._lastDiff = {
@@ -385,8 +394,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         });
         return util_1.compare(actualLength, length, comparator);
     }
-    exists() {
-        return this._node.eachCheck(this.all, element => element.currently.exists());
+    exists(filterMask) {
+        return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true);
     }
     isVisible() {
         return this._node.eachCheck(this.all, element => element.currently.isVisible());
@@ -416,8 +425,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return {
             isEmpty: () => !this.isEmpty(),
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
-            exists: () => {
-                return this._node.eachCheck(this.all, element => element.currently.not.exists());
+            exists: (filterMask) => {
+                return this._node.eachCheck(this.all, element => element.currently.not.exists(), filterMask, true);
             },
             isVisible: () => {
                 return this._node.eachCheck(this.all, element => element.currently.not.isVisible());

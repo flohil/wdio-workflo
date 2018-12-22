@@ -91,7 +91,7 @@ interface ICustomListMatchers {
   toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
 
-  toExist(): boolean
+  toExist(filterMask?: Workflo.PageNode.ListFilterMask): boolean
   toBeVisible(): boolean
   toBeEnabled(): boolean
   toHaveText(text: string | string[]): boolean
@@ -526,12 +526,22 @@ declare global {
         not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>
       }
 
+      type ListFilterMask = boolean | boolean[]
+
+      type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>
+
+      type GroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractBoolean<Content>
+
+      interface IListFilterMask {
+        filterMask?: ListFilterMask
+      }
+
       interface IMapFilterMask<K extends string | number | symbol> {
-        filterMask?: Partial<Record<K, true>>
+        filterMask?: Partial<Record<K, boolean>>
       }
 
       interface IGroupFilterMask<Content extends GroupContent> {
-        filterMask?: Workflo.PageNode.ExtractBooleanFilterMask<Content>
+        filterMask?: Workflo.PageNode.ExtractBoolean<Content>
       }
     }
 

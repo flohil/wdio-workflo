@@ -73,7 +73,7 @@ class PageElementGroup extends _1.PageNode {
         }
         return result;
     }
-    eachCheck(supportsInterface, expected, checkFunc) {
+    eachCheck(supportsInterface, expected, checkFunc, isFilterMask = false) {
         const diffs = {};
         const context = this._$;
         for (const key in context) {
@@ -81,9 +81,18 @@ class PageElementGroup extends _1.PageNode {
             if (supportsInterface(context[key])) {
                 if (expected) {
                     const expectedValue = expected[key];
-                    if (typeof expectedValue !== 'undefined') {
-                        if (!checkFunc(node, expectedValue)) {
-                            diffs[`.${key}`] = context[key].__lastDiff;
+                    if (isFilterMask) {
+                        if (typeof expectedValue === 'boolean' && expectedValue === true) {
+                            if (!checkFunc(node, expectedValue)) {
+                                diffs[`.${key}`] = context[key].__lastDiff;
+                            }
+                        }
+                    }
+                    else {
+                        if (typeof expectedValue !== 'undefined') {
+                            if (!checkFunc(node, expectedValue)) {
+                                diffs[`.${key}`] = context[key].__lastDiff;
+                            }
                         }
                     }
                 }
@@ -178,7 +187,7 @@ class PageElementGroupCurrently extends _1.PageNodeCurrently {
         return this._node.eachGet(isIElementNode, filterMask, node => node.currently.getDirectText());
     }
     exists(filterMask) {
-        return this._node.eachCheck(isIElementNode, filterMask, (node, filterMask) => node.currently.exists(filterMask));
+        return this._node.eachCheck(isIElementNode, filterMask, (node, filterMask) => node.currently.exists(filterMask), true);
     }
     isVisible(filterMask) {
         return this._node.eachCheck(isIElementNode, filterMask, node => node.currently.isVisible());

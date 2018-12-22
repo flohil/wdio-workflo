@@ -3,10 +3,12 @@ import * as _ from 'lodash'
 
 // MATCHER FUNTCION INTERFACES
 
+type WithoutExpected = 'element' | 'list' | 'map' | 'group'
+
 export interface IMatcherArgs<
   NodeType extends Workflo.PageNode.INode,
   ExpectedType,
-  OptsType extends {timeout?: number} = {timeout?: number}
+  OptsType
 > {
   resultFunc: ResultFunction<
     NodeType,
@@ -44,12 +46,12 @@ export type ResultFunction<
   NodeType extends Workflo.PageNode.INode,
   OptsType,
   ExpectedType
-> = (args: IResultFuncArgs<NodeType, OptsType & {timeout?: number}, ExpectedType>) => ResultFunctionResult[]
+> = (args: IResultFuncArgs<NodeType, OptsType, ExpectedType>) => ResultFunctionResult[]
 
 export type ResultWithoutExpectedFunction<
   NodeType extends Workflo.PageNode.INode,
   OptsType
-> = (args: IResultFuncWithoutExpected<NodeType, OptsType & {timeout?: number}>) => ResultFunctionResult[]
+> = (args: IResultFuncWithoutExpected<NodeType, OptsType>) => ResultFunctionResult[]
 
 export interface ErrorFuncArgs<
   NodeType extends Workflo.PageNode.INode,
@@ -75,14 +77,51 @@ export type ErrorTextFunction<
   NodeType extends Workflo.PageNode.INode,
   OptsType,
   ExpectedType,
-> = (args: ErrorFuncArgs<NodeType, OptsType & {timeout?: number}, ExpectedType>) => string[]
+> = (args: ErrorFuncArgs<NodeType, OptsType, ExpectedType>) => string[]
 
 export type ErrorTextWithoutExpectedFunction<
   NodeType extends Workflo.PageNode.INode,
   OptsType
-> = (args: ErrorFuncWithoutExpected<NodeType, OptsType & {timeout?: number}>) => string[]
+> = (args: ErrorFuncWithoutExpected<NodeType, OptsType>) => string[]
 
 export interface ICompareElementFuncs<
+  ElementExpectedType = never,
+  ListExpectedType = never,
+  MapExpectedType = never,
+  GroupExpectedType = never
+> {
+  element?: IMatcherArgs<
+    elements.PageElement<stores.PageElementStore>,
+    ElementExpectedType,
+    never
+  >,
+  list?: IMatcherArgs<
+    elements.PageElementList<
+      stores.PageElementStore,
+      elements.PageElement<stores.PageElementStore>,
+      elements.IPageElementOpts<stores.PageElementStore>
+    >,
+    ListExpectedType,
+    Workflo.PageNode.ListFilterMask
+  >,
+  map?: IMatcherArgs<
+    elements.PageElementMap<
+      stores.PageElementStore,
+      string,
+      elements.PageElement<stores.PageElementStore>,
+      elements.IPageElementOpts<stores.PageElementStore>
+    >,
+    MapExpectedType,
+    Workflo.PageNode.IMapFilterMask<string>
+  >,
+  group?: IMatcherArgs<
+    elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
+    GroupExpectedType,
+    Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
+  >
+}
+
+export interface ICompareEventuallyElementFuncs<
   ElementExpectedType = undefined,
   ListExpectedType = undefined,
   MapExpectedType = undefined,
@@ -100,7 +139,7 @@ export interface ICompareElementFuncs<
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     ListExpectedType,
-    Workflo.IWDIOParamsInterval
+    Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask
   >,
   map?: IMatcherArgs<
     elements.PageElementMap<
@@ -110,16 +149,55 @@ export interface ICompareElementFuncs<
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     MapExpectedType,
-    Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<string, true>>}
+    Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>
   >,
   group?: IMatcherArgs<
     elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
     GroupExpectedType,
-    Workflo.IWDIOParamsInterval & {filterMask?: Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>}
+    Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
   >
 }
 
 export interface ICompareValueElementFuncs<
+  ElementValueType = any,
+  ListValueType = any | any[],
+  MapValueType = Partial<Record<string, any>>,
+  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+> {
+  element?: IMatcherArgs<
+    elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
+    ElementValueType,
+    never
+  >,
+  list?: IMatcherArgs<
+    elements.ValuePageElementList<
+      stores.PageElementStore,
+      elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
+      elements.IValuePageElementOpts<stores.PageElementStore>,
+      ElementValueType
+    >,
+    ListValueType,
+    Workflo.PageNode.ListFilterMask
+  >,
+  map?: IMatcherArgs<
+    elements.ValuePageElementMap<
+      stores.PageElementStore,
+      string,
+      elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
+      elements.IPageElementOpts<stores.PageElementStore>,
+      ElementValueType
+    >,
+    MapValueType,
+    Workflo.PageNode.IMapFilterMask<string>
+  >,
+  group?: IMatcherArgs<
+    elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
+    GroupValueType,
+    Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
+  >
+}
+
+export interface ICompareEventuallyValueElementFuncs<
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
@@ -138,7 +216,7 @@ export interface ICompareValueElementFuncs<
       ElementValueType
     >,
     ListValueType,
-    Workflo.IWDIOParamsInterval
+    Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask
   >,
   map?: IMatcherArgs<
     elements.ValuePageElementMap<
@@ -149,26 +227,58 @@ export interface ICompareValueElementFuncs<
       ElementValueType
     >,
     MapValueType,
-    Workflo.IWDIOParamsInterval & {filterMask?: Partial<Record<string, true>>}
+    Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>
   >,
   group?: IMatcherArgs<
     elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
     GroupValueType,
-    Workflo.IWDIOParamsInterval & {filterMask?: Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>}
+    Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
   >
 }
 
 // MATCHER FUNCS
 
+function isWithoutExpected(node: Workflo.PageNode.INode, withoutExpected: WithoutExpected[] = []) {
+  let _withoutExpected = false
+
+  if (node instanceof elements.PageElement) {
+    if (withoutExpected.indexOf('element') >= 0) {
+      _withoutExpected = true
+    }
+  } else if (node instanceof elements.PageElementList) {
+    if (withoutExpected.indexOf('list') >= 0) {
+      _withoutExpected = true
+    }
+  } else if (node instanceof elements.PageElementMap) {
+    if (withoutExpected.indexOf('map') >= 0) {
+      _withoutExpected = true
+    }
+  } else if (node instanceof elements.PageElementGroup) {
+    if (withoutExpected.indexOf('group') >= 0) {
+      _withoutExpected = true
+    }
+  } else {
+    throw new Error(`Unknown node type in matchers: ${node.constructor.name}.` +
+      `Node type needs to extend PageElement, PageElementList, PageElementMap or PageElementGroup.`)
+  }
+
+  return _withoutExpected
+}
+
 export function createMatcher<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
-  ElementExpectedType = undefined,
-  ListExpectedType = undefined,
-  MapExpectedType = undefined,
-  GroupExpectedType = undefined,
+  OptsType extends Object = Object,
+  CompareFuncsType extends (ICompareElementFuncs<
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  > | ICompareEventuallyElementFuncs<
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >) = ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+  ElementExpectedType = never,
+  ListExpectedType = never,
+  MapExpectedType = never,
+  GroupExpectedType = never,
 >(
-  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
-  withoutExpected: boolean = false
+  compareFuncs: CompareFuncsType,
+  withoutExpected: WithoutExpected[] = []
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
 
@@ -242,26 +352,23 @@ export function createMatcher<
       return result;
     }
 
-    if (withoutExpected) {
-      return {
-        compare: (node: Workflo.PageNode.INode, opts?: OptsType): jasmine.CustomMatcherResult => {
-          return baseCompareFunction(node, false, opts);
-        },
-        negativeCompare: (node: Workflo.PageNode.INode, opts?: OptsType): jasmine.CustomMatcherResult => {
-          return baseCompareFunction(node, true, opts);
+    return {
+      compare: (
+        node: Workflo.PageNode.INode, expectedOrOpts?: any | OptsType, opts?: OptsType
+      ): jasmine.CustomMatcherResult => {
+        if (isWithoutExpected(node, withoutExpected)) {
+          return baseCompareFunction(node, false, expectedOrOpts as OptsType);
+        } else {
+          return baseCompareFunction(node, false, opts, expectedOrOpts);
         }
-      }
-    } else {
-      return {
-        compare: (
-          node: Workflo.PageNode.INode, expected: any, opts?: OptsType
-        ): jasmine.CustomMatcherResult => {
-          return baseCompareFunction(node, false, opts, expected);
-        },
-        negativeCompare: (
-          node: Workflo.PageNode.INode, expected: any, opts?: OptsType
-        ): jasmine.CustomMatcherResult => {
-          return baseCompareFunction(node, true, opts, expected);
+      },
+      negativeCompare: (
+        node: Workflo.PageNode.INode, expectedOrOpts?: any | OptsType, opts?: OptsType
+      ): jasmine.CustomMatcherResult => {
+        if (isWithoutExpected(node, withoutExpected)) {
+          return baseCompareFunction(node, true, expectedOrOpts as OptsType);
+        } else {
+          return baseCompareFunction(node, true, opts, expectedOrOpts);
         }
       }
     }
@@ -269,32 +376,236 @@ export function createMatcher<
 }
 
 export function createMatcherWithoutExpected<
+  OptsType extends Object = Object
+>(
+  compareFuncs: ICompareElementFuncs,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<OptsType>(compareFuncs, withoutExpected)
+}
+
+export function createEventuallyMatcher<
+  OptsType extends Object = Workflo.IWDIOParamsInterval
+>(
+  compareFuncs: ICompareEventuallyElementFuncs
+) {
+  return createMatcher<OptsType, ICompareEventuallyElementFuncs>(compareFuncs)
+}
+
+export function createEventuallyMatcherWithoutExpected<
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
+>(
+  compareFuncs: ICompareEventuallyElementFuncs,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<OptsType, ICompareEventuallyElementFuncs>(compareFuncs, withoutExpected)
+}
+
+export function createTextMatcher<
+  OptsType extends Object = Object,
+  ElementExpectedType = string,
+  ListExpectedType = string | string[],
+  MapExpectedType = Record<string, string>,
+  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
+>(
+  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<
+    OptsType,
+    ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs, withoutExpected)
+}
+
+export function createTextMatcherWithoutExpected<
+  OptsType extends Object = Object,
+  ElementExpectedType = string,
+  ListExpectedType = string | string[],
+  MapExpectedType = Record<string, string>,
+  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
+>(
+  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<
+    OptsType,
+    ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs, withoutExpected)
+}
+
+export function createEventuallyTextMatcher<
   OptsType extends Object = Workflo.IWDIOParamsInterval,
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
-  GroupExpectedType = Workflo.PageNode.ExtractText<{[key: string]: Workflo.PageNode.INode}>,
+  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
 >(
-  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+  compareFuncs: ICompareEventuallyElementFuncs<
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >
 ) {
-  return createMatcher<OptsType>(compareFuncs, true)
+  return createMatcher<
+    OptsType,
+    ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs)
+}
+
+export function createEventuallyTextMatcherWithoutExpected<
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  ElementExpectedType = string,
+  ListExpectedType = string | string[],
+  MapExpectedType = Record<string, string>,
+  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
+>(
+  compareFuncs: ICompareEventuallyElementFuncs<
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<
+    OptsType,
+    ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs, withoutExpected)
+}
+
+export function createBooleanMatcher<
+  OptsType extends Object = Object,
+  ElementExpectedType = boolean,
+  ListExpectedType = boolean | boolean[],
+  MapExpectedType = Record<string, boolean>,
+  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
+>(
+  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>
+) {
+  return createMatcher<
+    OptsType,
+    ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs)
 }
 
 export function createBooleanMatcherWithoutExpected<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Object,
+  ElementExpectedType = boolean,
+  ListExpectedType = boolean | boolean[],
+  MapExpectedType = Record<string, boolean>,
+  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
 >(
-  compareFuncs: ICompareElementFuncs<undefined, undefined, undefined, undefined>,
+  compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
 ) {
-  return createMatcher<OptsType>(compareFuncs, true)
+  return createMatcher<
+    OptsType,
+    ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs, withoutExpected)
+}
+
+export function createEventuallyBooleanMatcher<
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  ElementExpectedType = boolean,
+  ListExpectedType = boolean | boolean[],
+  MapExpectedType = Record<string, boolean>,
+  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
+>(
+  compareFuncs: ICompareEventuallyElementFuncs<
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >
+) {
+  return createMatcher<
+    OptsType,
+    ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs)
+}
+
+export function createEventuallyBooleanMatcherWithoutExpected<
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  ElementExpectedType = boolean,
+  ListExpectedType = boolean | boolean[],
+  MapExpectedType = Record<string, boolean>,
+  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
+>(
+  compareFuncs: ICompareEventuallyElementFuncs<
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<
+    OptsType,
+    ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
+    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
+  >(compareFuncs, withoutExpected)
 }
 
 export function createValueMatcher<
-  NodeType extends Workflo.PageNode.INode,
-  OptsType extends Object = {timeout?: number},
+  OptsType extends Object = Object,
+  ElementValueType = any,
+  ListValueType = any | any[],
+  MapValueType = Partial<Record<string, any>>,
+  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
 >(
-  compareFuncs: ICompareValueElementFuncs,
+  compareFuncs: ICompareValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
 ) {
-  return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs)
+  return createMatcher<
+    OptsType,
+    ICompareValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
+    ElementValueType, ListValueType, MapValueType, GroupValueType
+  >(compareFuncs)
+}
+
+export function createValueMatcherWithoutExpected<
+  OptsType extends Object = Object,
+  ElementValueType = any,
+  ListValueType = any | any[],
+  MapValueType = Partial<Record<string, any>>,
+  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+>(
+  compareFuncs: ICompareValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<
+    OptsType,
+    ICompareValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
+    ElementValueType, ListValueType, MapValueType, GroupValueType
+  >(compareFuncs, withoutExpected)
+}
+
+export function createEventuallyValueMatcher<
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  ElementValueType = any,
+  ListValueType = any | any[],
+  MapValueType = Partial<Record<string, any>>,
+  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+>(
+  compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
+) {
+  return createMatcher<
+    OptsType,
+    ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
+    ElementValueType, ListValueType, MapValueType, GroupValueType
+  >(compareFuncs)
+}
+
+export function createEventuallyValueMatcherWithoutExpected<
+  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  ElementValueType = any,
+  ListValueType = any | any[],
+  MapValueType = Partial<Record<string, any>>,
+  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+>(
+  compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
+  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
+) {
+  return createMatcher<
+    OptsType,
+    ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
+    ElementValueType, ListValueType, MapValueType, GroupValueType
+  >(compareFuncs, withoutExpected)
 }
 
 // export function createValueMatcherWithoutExpected<
@@ -449,7 +760,7 @@ export function createEachMessage<
   PageElementType extends elements.PageElement<Store>,
   PageElementOptions extends elements.IPageElementOpts<Store>,
   K extends string,
-  Content extends {[key: string]: Workflo.PageNode.INode},
+  Content extends Workflo.PageNode.GroupContent,
   NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> |
     elements.PageElementMap<Store, K, PageElementType, PageElementOptions> |
     elements.PageElementGroup<Store, Content>
@@ -480,7 +791,7 @@ export function createEventuallyEachMessage<
   PageElementType extends elements.PageElement<Store>,
   PageElementOptions extends elements.IPageElementOpts<Store>,
   K extends string,
-  Content extends {[key: string]: Workflo.PageNode.INode},
+  Content extends Workflo.PageNode.GroupContent,
   NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> |
     elements.PageElementMap<Store, K, PageElementType, PageElementOptions> |
     elements.PageElementGroup<Store, Content>
@@ -497,13 +808,15 @@ export function createEventuallyEachMessage<
 // MATCHERS
 
 export const elementMatchers: jasmine.CustomMatcherFactories = {
-  toExist: createBooleanMatcherWithoutExpected({
+  toExist: createMatcherWithoutExpected({
     element: {
       resultFunc: ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
       errorTextFunc: ({node}) => createMessage(node, "exist")
     },
     list: {
-      resultFunc: ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
+      resultFunc: ({node, opts}) => [
+        () => node.currently.exists(opts), () => node.currently.not.exists(opts)
+      ],
       errorTextFunc: ({node}) => createEachMessage(node, "exist")
     },
     map: {
@@ -519,7 +832,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node}) => createEachMessage(node, "exist")
     }
   }),
-  toEventuallyExist: createBooleanMatcherWithoutExpected({
+  toEventuallyExist: createEventuallyMatcherWithoutExpected({
     element: {
       resultFunc: ({node, opts}) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
       errorTextFunc: ({node, opts}) => createEventuallyMessage(node, "exist", opts.timeout)

@@ -147,6 +147,7 @@ implements ElementNode<Content> {
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     expected: ExpectedType,
     checkFunc: (node: NodeInterface, expected?: ResultType[keyof ResultType]) => boolean,
+    isFilterMask: boolean = false
   ): boolean {
     const diffs: Workflo.IDiffTree = {}
     const context = this._$ as any as ResultType
@@ -158,9 +159,17 @@ implements ElementNode<Content> {
         if (expected) {
           const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType]
 
-          if (typeof expectedValue !== 'undefined') {
-            if (!checkFunc(node, expectedValue)) {
-              diffs[`.${key}`] = context[key].__lastDiff
+          if (isFilterMask) {
+            if (typeof expectedValue === 'boolean' && expectedValue === true) {
+              if (!checkFunc(node, expectedValue)) {
+                diffs[`.${key}`] = context[key].__lastDiff
+              }
+            }
+          } else {
+            if (typeof expectedValue !== 'undefined') {
+              if (!checkFunc(node, expectedValue)) {
+                diffs[`.${key}`] = context[key].__lastDiff
+              }
             }
           }
         } else {
@@ -308,7 +317,7 @@ export class PageElementGroupCurrently<
 
   exists(filterMask?: ExtractTrue<Content>) {
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
-      isIElementNode, filterMask, (node, filterMask) => node.currently.exists(filterMask)
+      isIElementNode, filterMask, (node, filterMask) => node.currently.exists(filterMask), true
     )
   }
 
