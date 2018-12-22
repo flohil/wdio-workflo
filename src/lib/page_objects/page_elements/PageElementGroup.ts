@@ -142,7 +142,7 @@ implements ElementNode<Content> {
   eachCheck<
     NodeInterface,
     ResultType extends Partial<Content>,
-    ExpectedType extends Partial<Content> = ExtractTrue<Content>
+    ExpectedType extends Partial<Content> = ExtractTrue<Content>,
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     expected: ExpectedType,
@@ -308,7 +308,7 @@ export class PageElementGroupCurrently<
 
   exists(filterMask?: ExtractTrue<Content>) {
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
-      isIElementNode, filterMask, node => node.currently.exists()
+      isIElementNode, filterMask, (node, filterMask) => node.currently.exists(filterMask)
     )
   }
 

@@ -308,6 +308,28 @@ exports.elementMatchers = {
             errorTextFunc: ({ node }) => createEachMessage(node, "be visible")
         }
     }),
+    toEventuallyBeVisible: createBooleanMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node, opts }) => [() => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)],
+            errorTextFunc: ({ node, opts }) => createEventuallyMessage(node, "be visible", opts.timeout)
+        },
+        list: {
+            resultFunc: ({ node, opts }) => [() => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "be visible", opts.timeout)
+        },
+        map: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "be visible", opts.timeout)
+        },
+        group: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "be visible", opts.timeout)
+        }
+    }),
     toHaveText: createMatcher({
         element: {
             resultFunc: ({ node, expected }) => [

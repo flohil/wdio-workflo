@@ -101,23 +101,23 @@ interface ICustomListMatchers {
 }
 
 interface ICustomMapMatchers<K extends string | number | symbol> {
-  toExist(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
-  toBeVisible(opts?: {filterMask?: Partial<Record<K, true>>}): boolean
+  toExist(opts?: Workflo.PageNode.IMapFilterMask<K>): boolean
+  toBeVisible(opts?: Workflo.PageNode.IMapFilterMask<K>): boolean
 
   toHaveText(text: Partial<Record<K, string>>): boolean
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
-  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyExist(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean
 }
 
 interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
-  toExist(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
-  toBeVisible(opts?: {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
+  toExist(opts?: Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toBeVisible(opts?: Workflo.PageNode.IGroupFilterMask<Content>): boolean
 
   toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams & {filterMask?: Workflo.PageNode.ExtractBoolean<Content>}): boolean
-  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyExist(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean
 }
 
 interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers {
@@ -396,15 +396,27 @@ declare global {
       type GroupContent = {[key: string] : Workflo.PageNode.INode}
 
       type ExtractText<T extends {[key: string]: INode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getText']> : never;
+        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
+        TryArrayOrElement<ReturnType<T[P]['getText']>> :
+        never;
       }
 
       type ExtractBoolean<T extends {[key: string]: INode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getIsEnabled']> : never;
+        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
+        TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
+        never;
+      }
+
+      type ExtractBooleanFilterMask<T extends {[key: string]: INode}> = {
+        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
+        TryArrayElement<ReturnType<T[P]['getIsEnabled']>> :
+        never;
       }
 
       type ExtractTrue<T extends {[key: string]: INode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['__getTrue']> : never;
+        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
+        TryArrayOrElement<ReturnType<T[P]['__getTrue']>> :
+        never;
       }
 
       interface IElementNode<TextType, BooleanType, FilterType>
@@ -514,12 +526,12 @@ declare global {
         not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>
       }
 
-      interface IMapFilterMask<K extends string> {
-        filterMask?: {filterMask?: Partial<Record<K, true>>}
+      interface IMapFilterMask<K extends string | number | symbol> {
+        filterMask?: Partial<Record<K, true>>
       }
 
       interface IGroupFilterMask<Content extends GroupContent> {
-        filterMask?: Workflo.PageNode.ExtractBoolean<Content>
+        filterMask?: Workflo.PageNode.ExtractBooleanFilterMask<Content>
       }
     }
 

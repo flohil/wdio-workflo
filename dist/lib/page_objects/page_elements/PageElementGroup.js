@@ -178,7 +178,7 @@ class PageElementGroupCurrently extends _1.PageNodeCurrently {
         return this._node.eachGet(isIElementNode, filterMask, node => node.currently.getDirectText());
     }
     exists(filterMask) {
-        return this._node.eachCheck(isIElementNode, filterMask, node => node.currently.exists());
+        return this._node.eachCheck(isIElementNode, filterMask, (node, filterMask) => node.currently.exists(filterMask));
     }
     isVisible(filterMask) {
         return this._node.eachCheck(isIElementNode, filterMask, node => node.currently.isVisible());
