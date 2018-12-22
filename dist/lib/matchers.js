@@ -3,7 +3,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const page_objects_1 = require("./page_objects");
 const _ = require("lodash");
 // MATCHER FUNCS
-function createMatcher(compareFuncs, withoutExpected = false) {
+function isWithoutExpected(node, withoutExpected = []) {
+    let _withoutExpected = false;
+    if (node instanceof page_objects_1.elements.PageElement) {
+        if (withoutExpected.indexOf('element') >= 0) {
+            _withoutExpected = true;
+        }
+    }
+    else if (node instanceof page_objects_1.elements.PageElementList) {
+        if (withoutExpected.indexOf('list') >= 0) {
+            _withoutExpected = true;
+        }
+    }
+    else if (node instanceof page_objects_1.elements.PageElementMap) {
+        if (withoutExpected.indexOf('map') >= 0) {
+            _withoutExpected = true;
+        }
+    }
+    else if (node instanceof page_objects_1.elements.PageElementGroup) {
+        if (withoutExpected.indexOf('group') >= 0) {
+            _withoutExpected = true;
+        }
+    }
+    else {
+        throw new Error(`Unknown node type in matchers: ${node.constructor.name}.` +
+            `Node type needs to extend PageElement, PageElementList, PageElementMap or PageElementGroup.`);
+    }
+    return _withoutExpected;
+}
+function createMatcher(compareFuncs, withoutExpected = []) {
     return (util, customEqualityTesters) => {
         function baseCompareFunction(node, negativeComparison, opts = Object.create(null), expected = undefined) {
             let result = {
@@ -69,41 +97,87 @@ function createMatcher(compareFuncs, withoutExpected = false) {
             }
             return result;
         }
-        if (withoutExpected) {
-            return {
-                compare: (node, opts) => {
-                    return baseCompareFunction(node, false, opts);
-                },
-                negativeCompare: (node, opts) => {
-                    return baseCompareFunction(node, true, opts);
+        return {
+            compare: (node, expectedOrOpts, opts) => {
+                if (isWithoutExpected(node, withoutExpected)) {
+                    return baseCompareFunction(node, false, expectedOrOpts);
                 }
-            };
-        }
-        else {
-            return {
-                compare: (node, expected, opts) => {
-                    return baseCompareFunction(node, false, opts, expected);
-                },
-                negativeCompare: (node, expected, opts) => {
-                    return baseCompareFunction(node, true, opts, expected);
+                else {
+                    return baseCompareFunction(node, false, opts, expectedOrOpts);
                 }
-            };
-        }
+            },
+            negativeCompare: (node, expectedOrOpts, opts) => {
+                if (isWithoutExpected(node, withoutExpected)) {
+                    return baseCompareFunction(node, true, expectedOrOpts);
+                }
+                else {
+                    return baseCompareFunction(node, true, opts, expectedOrOpts);
+                }
+            }
+        };
     };
 }
 exports.createMatcher = createMatcher;
-function createMatcherWithoutExpected(compareFuncs) {
-    return createMatcher(compareFuncs, true);
+function createMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
 }
 exports.createMatcherWithoutExpected = createMatcherWithoutExpected;
-function createBooleanMatcherWithoutExpected(compareFuncs) {
-    return createMatcher(compareFuncs, true);
+function createEventuallyMatcher(compareFuncs) {
+    return createMatcher(compareFuncs);
+}
+exports.createEventuallyMatcher = createEventuallyMatcher;
+function createEventuallyMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
+}
+exports.createEventuallyMatcherWithoutExpected = createEventuallyMatcherWithoutExpected;
+function createTextMatcher(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
+}
+exports.createTextMatcher = createTextMatcher;
+function createTextMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
+}
+exports.createTextMatcherWithoutExpected = createTextMatcherWithoutExpected;
+function createEventuallyTextMatcher(compareFuncs) {
+    return createMatcher(compareFuncs);
+}
+exports.createEventuallyTextMatcher = createEventuallyTextMatcher;
+function createEventuallyTextMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
+}
+exports.createEventuallyTextMatcherWithoutExpected = createEventuallyTextMatcherWithoutExpected;
+function createBooleanMatcher(compareFuncs) {
+    return createMatcher(compareFuncs);
+}
+exports.createBooleanMatcher = createBooleanMatcher;
+function createBooleanMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
 }
 exports.createBooleanMatcherWithoutExpected = createBooleanMatcherWithoutExpected;
+function createEventuallyBooleanMatcher(compareFuncs) {
+    return createMatcher(compareFuncs);
+}
+exports.createEventuallyBooleanMatcher = createEventuallyBooleanMatcher;
+function createEventuallyBooleanMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
+}
+exports.createEventuallyBooleanMatcherWithoutExpected = createEventuallyBooleanMatcherWithoutExpected;
 function createValueMatcher(compareFuncs) {
     return createMatcher(compareFuncs);
 }
 exports.createValueMatcher = createValueMatcher;
+function createValueMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
+}
+exports.createValueMatcherWithoutExpected = createValueMatcherWithoutExpected;
+function createEventuallyValueMatcher(compareFuncs) {
+    return createMatcher(compareFuncs);
+}
+exports.createEventuallyValueMatcher = createEventuallyValueMatcher;
+function createEventuallyValueMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
+    return createMatcher(compareFuncs, withoutExpected);
+}
+exports.createEventuallyValueMatcherWithoutExpected = createEventuallyValueMatcherWithoutExpected;
 // export function createValueMatcherWithoutExpected<
 //   NodeType extends Workflo.PageNode.INode,
 //   OptsType extends Object = {timeout?: number},
@@ -242,14 +316,14 @@ function createEventuallyEachMessage(node, errorTexts, timeout) {
 exports.createEventuallyEachMessage = createEventuallyEachMessage;
 // MATCHERS
 exports.elementMatchers = {
-    toExist: createBooleanMatcherWithoutExpected({
+    toExist: createMatcherWithoutExpected({
         element: {
             resultFunc: ({ node }) => [() => node.currently.exists(), () => node.currently.not.exists()],
             errorTextFunc: ({ node }) => createMessage(node, "exist")
         },
         list: {
-            resultFunc: ({ node, expected }) => [
-                () => node.currently.exists(expected), () => node.currently.not.exists(expected)
+            resultFunc: ({ node, opts }) => [
+                () => node.currently.exists(opts), () => node.currently.not.exists(opts)
             ],
             errorTextFunc: ({ node }) => createEachMessage(node, "exist")
         },
@@ -266,7 +340,7 @@ exports.elementMatchers = {
             errorTextFunc: ({ node }) => createEachMessage(node, "exist")
         }
     }),
-    toEventuallyExist: createBooleanMatcherWithoutExpected({
+    toEventuallyExist: createEventuallyMatcherWithoutExpected({
         element: {
             resultFunc: ({ node, opts }) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
             errorTextFunc: ({ node, opts }) => createEventuallyMessage(node, "exist", opts.timeout)

@@ -313,10 +313,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
     }
   }
 
-  __getTrue(): true {
-    return true
-  }
-
   getText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this.eachGet(this.all, element => element.getText(), filterMask)
   }

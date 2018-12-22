@@ -107,10 +107,6 @@ implements Workflo.PageNode.IElementNode<
     return this._selector
   }
 
-  __getTrue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this.eachGet(this._$, node => node.__getTrue(), filterMask)
-  }
-
    /**
    * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
    *

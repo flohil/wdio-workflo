@@ -149,10 +149,6 @@ export class PageElement<
 
 // Public GETTER FUNCTIONS (return state after initial wait)
 
-  __getTrue(): true {
-    return true
-  }
-
   getIsEnabled() {
     return this._executeAfterInitialWait( () => this.currently.isEnabled() )
   }

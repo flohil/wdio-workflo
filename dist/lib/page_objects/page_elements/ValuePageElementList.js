@@ -1,4 +1,13 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require("./");
 class ValuePageElementList extends _1.PageElementList {
@@ -21,8 +30,8 @@ class ValuePageElementList extends _1.PageElementList {
      * Returns values of all list elements in the order they were retrieved from the DOM
      * after the initial wait was performed.
      */
-    getValue() {
-        return this.eachGet(this.all, element => element.getValue());
+    getValue(filterMask) {
+        return this.eachGet(this.all, element => element.getValue(), filterMask);
     }
     // SETTER FUNCTIONS
     /**
@@ -44,15 +53,15 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
     /**
      * Returns values of all list elements in the order they were retrieved from the DOM immediatly.
      */
-    getValue() {
-        return this._node.eachGet(this.all, element => element.currently.getValue());
+    getValue(filterMask) {
+        return this._node.eachGet(this.all, element => element.currently.getValue(), filterMask);
     }
     // CHECK STATE
     hasValue(value) {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.hasValue(expected), value);
     }
-    hasAnyValue() {
-        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue());
+    hasAnyValue(filterMask) {
+        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
     }
     containsValue(value) {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.containsValue(expected), value);
@@ -60,8 +69,8 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
     get not() {
         return Object.assign({}, super.not, { hasValue: (value) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasValue(expected), value);
-            }, hasAnyValue: () => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue());
+            }, hasAnyValue: (filterMask) => {
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue(), filterMask, true);
             }, containsValue: (value) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsValue(expected), value);
             } });
@@ -71,8 +80,9 @@ class ValuePageElementListWait extends _1.PageElementListWait {
     hasValue(value, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.hasValue(expected, opts), value);
     }
-    hasAnyValue(opts) {
-        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyValue(opts));
+    hasAnyValue(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyValue(otherOpts), filterMask, true);
     }
     containsValue(value, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsValue(expected, opts), value);
@@ -80,8 +90,9 @@ class ValuePageElementListWait extends _1.PageElementListWait {
     get not() {
         return Object.assign({}, super.not, { hasValue: (value, opts) => {
                 return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasValue(expected, opts), value);
-            }, hasAnyValue: (opts) => {
-                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyValue(opts));
+            }, hasAnyValue: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyValue(otherOpts), filterMask, true);
             }, containsValue: (value, opts) => {
                 return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsValue(expected, opts), value);
             } });
@@ -92,8 +103,9 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
     hasValue(value, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasValue(expected, opts), value);
     }
-    hasAnyValue(opts) {
-        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyValue(opts));
+    hasAnyValue(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyValue(otherOpts), filterMask, true);
     }
     containsValue(value, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsValue(expected, opts), value);
@@ -101,8 +113,9 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
     get not() {
         return Object.assign({}, super.not, { hasValue: (value, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value);
-            }, hasAnyValue: (opts) => {
-                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyValue(opts));
+            }, hasAnyValue: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachCheck(this._node.all, (element) => element.eventually.not.hasAnyValue(otherOpts), filterMask, true);
             }, containsValue: (value, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value);
             } });

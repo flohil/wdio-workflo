@@ -27,7 +27,6 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
      */
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     initialWait(): this;
-    __getTrue(): true;
     getIsEnabled(): boolean;
     getHTML(): string;
     getDirectText(): string;

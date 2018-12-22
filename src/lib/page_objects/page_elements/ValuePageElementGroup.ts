@@ -53,7 +53,7 @@ implements ValueElementNode<Content> {
    */
   setValue(values: Workflo.StripNever<ExtractValue<Content>>) {
     return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, values, (node, value) => node.setValue(value)
+      isIValueElementNode, (node, value) => node.setValue(value), values
     )
   }
 }
@@ -66,25 +66,25 @@ class ValuePageElementGroupCurrently<
 
   getValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachGet<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, filterMask, node => node.currently.getValue()
+      isIValueElementNode, node => node.currently.getValue(), filterMask
     )
   }
 
   hasValue(value: ExtractValue<Content>) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-      isIValueElementNode, value, (node, value) => node.currently.hasValue(value)
+      isIValueElementNode, (node, value) => node.currently.hasValue(value), value
     )
   }
 
   hasAnyValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, filterMask, node => node.currently.hasAnyValue()
+      isIValueElementNode, node => node.currently.hasAnyValue(), filterMask, true
     )
   }
 
   containsValue(value: ExtractValue<Content>) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-      isIValueElementNode, value, (node, value) => node.currently.containsValue(value)
+      isIValueElementNode, (node, value) => node.currently.containsValue(value), value
     )
   }
 
@@ -92,17 +92,17 @@ class ValuePageElementGroupCurrently<
     return {...super.not,
       hasValue: (value: ExtractValue<Content>) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-          isIValueElementNode, value, (node, value) => node.currently.not.hasValue(value)
+          isIValueElementNode, (node, value) => node.currently.not.hasValue(value), value
         )
       },
       hasAnyValue: (filterMask?: Workflo.PageNode.GroupFilterMask<Content>) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, filterMask, node => node.currently.not.hasAnyValue()
+          isIValueElementNode, node => node.currently.not.hasAnyValue(), filterMask, true
         )
       },
       containsValue: (value: ExtractValue<Content>) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-          isIValueElementNode, value, (node, value) => node.currently.not.containsValue(value)
+          isIValueElementNode, (node, value) => node.currently.not.containsValue(value), value
         )
       }
     }
@@ -117,19 +117,21 @@ class ValuePageElementGroupWait<
 
   hasValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-      isIValueElementNode, value, (node, value) => node.wait.hasValue(value, opts)
+      isIValueElementNode, (node, value) => node.wait.hasValue(value, opts), value
     )
   }
 
   hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts)
+      isIValueElementNode, node => node.wait.hasAnyValue(otherOpts), filterMask, true
     )
   }
 
   containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-      isIValueElementNode, value, (node, value) => node.wait.containsValue(value, opts)
+      isIValueElementNode, (node, value) => node.wait.containsValue(value, opts), value
     )
   }
 
@@ -137,17 +139,19 @@ class ValuePageElementGroupWait<
     return {...super.not,
       hasValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-          isIValueElementNode, value, (node, value) => node.wait.hasValue(value, opts)
+          isIValueElementNode, (node, value) => node.wait.hasValue(value, opts), value
         )
       },
       hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, opts.filterMask, node => node.wait.hasAnyValue(opts)
+          isIValueElementNode, node => node.wait.hasAnyValue(opts), filterMask, true
         )
       },
       containsValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-          isIValueElementNode, value, (node, value) => node.wait.containsValue(value, opts)
+          isIValueElementNode, (node, value) => node.wait.containsValue(value, opts), value
         )
       }
     }
@@ -162,19 +166,21 @@ class ValuePageElementGroupEventually<
 
   hasValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-      isIValueElementNode, value, (node, value) => node.eventually.hasValue(value, opts)
+      isIValueElementNode, (node, value) => node.eventually.hasValue(value, opts), value
     )
   }
 
   hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+    const {filterMask, ...otherOpts} = opts
+
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, opts.filterMask, node => node.eventually.hasAnyValue(opts)
+      isIValueElementNode, node => node.eventually.hasAnyValue(otherOpts), filterMask, true
     )
   }
 
   containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-      isIValueElementNode, value, (node, value) => node.eventually.containsValue(value, opts)
+      isIValueElementNode, (node, value) => node.eventually.containsValue(value, opts), value
     )
   }
 
@@ -182,17 +188,19 @@ class ValuePageElementGroupEventually<
     return {...super.not,
       hasValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-          isIValueElementNode, value, (node, value) => node.eventually.not.hasValue(value, opts)
+          isIValueElementNode, (node, value) => node.eventually.not.hasValue(value, opts), value
         )
       },
       hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+        const {filterMask, ...otherOpts} = opts
+
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, opts.filterMask, node => node.eventually.not.hasAnyValue(opts)
+          isIValueElementNode, node => node.eventually.not.hasAnyValue(otherOpts), filterMask, true
         )
       },
       containsValue: (value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>, ExtractValue<Content>> (
-          isIValueElementNode, value, (node, value) => node.eventually.not.containsValue(value, opts)
+          isIValueElementNode, (node, value) => node.eventually.not.containsValue(value, opts), value
         )
       }
     }

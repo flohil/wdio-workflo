@@ -33,7 +33,6 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
      */
     changeMappingObject(mappingObject: Record<K, string>): void;
     getSelector(): string;
-    __getTrue(filterMask?: Partial<Record<K, true>>): Partial<Record<K, true>>;
     /**
     * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
     *
@@ -42,10 +41,10 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
     *
     * @param filter a filter mask
     */
-    getText(filterMask?: Partial<Record<K, true>>): Partial<Record<K, string>>;
-    getDirectText(filterMask?: Partial<Record<K, true>>): Partial<Record<K, string>>;
-    getIsEnabled(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>>;
-    eachCheck<T>(context: Record<K, PageElementType>, expected: Partial<Record<K, T>>, checkFunc: (element: PageElementType, expected?: T) => boolean): boolean;
+    getText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, string>>;
+    getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, string>>;
+    getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    eachCheck<T>(context: Record<K, PageElementType>, checkFunc: (element: PageElementType, expected?: T) => boolean, expected: Partial<Record<K, T>>, isFilterMask?: boolean): boolean;
     /**
      * Helper function to map element content nodes to a value by calling a node interface function on each node.
      *
@@ -55,10 +54,10 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
      * @param getFunc
      * @param filterMask a filter mask
      */
-    eachGet<ResultType>(context: Record<K, PageElementType>, filterMask: Partial<Record<K, true>>, getFunc: (node: PageElementType) => ResultType): Partial<Record<K, ResultType>>;
-    eachWait<ValueType>(context: Record<K, PageElementType>, expected: Partial<Record<K, ValueType>>, waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType): this;
-    eachDo(context: Record<K, PageElementType>, filterMask: Partial<Record<K, true>>, doFunc: (element: PageElementType) => PageElementType): this;
-    eachSet<ValueType>(context: Record<K, PageElementType>, values: Partial<Record<K, ValueType>>, setFunc: (element: PageElementType, value: ValueType) => PageElementType): this;
+    eachGet<ResultType>(context: Record<K, PageElementType>, getFunc: (node: PageElementType) => ResultType, filterMask: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, ResultType>>;
+    eachWait<ValueType>(context: Record<K, PageElementType>, waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType, expected: Partial<Record<K, ValueType>>, isFilterMask?: boolean): this;
+    eachDo(context: Record<K, PageElementType>, doFunc: (element: PageElementType) => PageElementType, filterMask: Workflo.PageNode.MapFilterMask<K>): this;
+    eachSet<ValueType>(context: Record<K, PageElementType>, setFunc: (element: PageElementType, value: ValueType) => PageElementType, values: Partial<Record<K, ValueType>>): this;
 }
 export declare class PageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeCurrently<Store, MapType> {
     /**
@@ -69,113 +68,73 @@ export declare class PageElementMapCurrently<Store extends PageElementStore, K e
      *
      * @param filter a filter mask
      */
-    getText(filterMask?: Partial<Record<K, true>>): Partial<Record<K, string>>;
-    getDirectText(filterMask?: Partial<Record<K, true>>): Partial<Record<K, string>>;
-    getExists(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>>;
-    getIsVisible(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>>;
-    getIsEnabled(filterMask?: Partial<Record<K, true>>): Partial<Record<K, boolean>>;
-    exists(filterMask?: Partial<Record<K, true>>): boolean;
-    isVisible(filterMask?: Partial<Record<K, true>>): boolean;
-    isEnabled(filterMask?: Partial<Record<K, true>>): boolean;
+    getText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, string>>;
+    getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, string>>;
+    getExists(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getIsVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    exists(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
+    isVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
+    isEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
     hasText(text: Partial<Record<K, string>>): boolean;
-    hasAnyText(filterMask?: Partial<Record<K, true>>): boolean;
+    hasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
     containsText(text: Partial<Record<K, string>>): boolean;
     hasDirectText(directText: Partial<Record<K, string>>): boolean;
-    hasAnyDirectText(filterMask?: Partial<Record<K, true>>): boolean;
+    hasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
     containsDirectText(directText: Partial<Record<K, string>>): boolean;
     readonly not: {
-        exists: (filterMask?: Partial<Record<K, true>>) => boolean;
-        isVisible: (filterMask?: Partial<Record<K, true>>) => boolean;
-        isEnabled: (filterMask?: Partial<Record<K, true>>) => boolean;
+        exists: (filterMask?: Partial<Record<K, boolean>>) => boolean;
+        isVisible: (filterMask?: Partial<Record<K, boolean>>) => boolean;
+        isEnabled: (filterMask?: Partial<Record<K, boolean>>) => boolean;
         hasText: (text: Partial<Record<K, string>>) => boolean;
-        hasAnyText: (filterMask?: Partial<Record<K, true>>) => boolean;
+        hasAnyText: (filterMask?: Partial<Record<K, boolean>>) => boolean;
         containsText: (text: Partial<Record<K, string>>) => boolean;
         hasDirectText: (directText: Partial<Record<K, string>>) => boolean;
-        hasAnyDirectText: (filterMask?: Partial<Record<K, true>>) => boolean;
+        hasAnyDirectText: (filterMask?: Partial<Record<K, boolean>>) => boolean;
         containsDirectText: (directText: Partial<Record<K, string>>) => boolean;
     };
 }
 export declare class PageElementMapWait<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeWait<Store, MapType> {
-    exists(opts?: Workflo.IWDIOParams & {
-        filterMask?: Partial<Record<K, true>>;
-    }): MapType;
-    isVisible(opts?: Workflo.IWDIOParams & {
-        filterMask?: Partial<Record<K, true>>;
-    }): MapType;
-    isEnabled(opts?: Workflo.IWDIOParams & {
-        filterMask?: Partial<Record<K, true>>;
-    }): MapType;
+    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): MapType;
+    isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): MapType;
+    isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): MapType;
     hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): MapType;
-    hasAnyText(opts?: Workflo.IWDIOParamsInterval & {
-        filterMask?: Partial<Record<K, true>>;
-    }): MapType;
+    hasAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): MapType;
     containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): MapType;
     hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): MapType;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & {
-        filterMask?: Partial<Record<K, true>>;
-    }): MapType;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): MapType;
     containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): MapType;
     readonly not: {
-        exists: (opts?: Workflo.IWDIOParams & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => MapType;
-        isVisible: (opts?: Workflo.IWDIOParams & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => MapType;
-        isEnabled: (opts?: Workflo.IWDIOParams & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => MapType;
+        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => MapType;
         hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => MapType;
+        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
         containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
         hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => MapType;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
         containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
     };
 }
 export declare class PageElementMapEventually<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeEventually<Store, MapType> {
-    exists(opts?: Workflo.IWDIOParams & {
-        filterMask?: Partial<Record<K, true>>;
-    }): boolean;
-    isVisible(opts?: Workflo.IWDIOParams & {
-        filterMask?: Partial<Record<K, true>>;
-    }): boolean;
-    isEnabled(opts?: Workflo.IWDIOParams & {
-        filterMask?: Partial<Record<K, true>>;
-    }): boolean;
+    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean;
+    isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean;
+    isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean;
     hasText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyText(opts?: Workflo.IWDIOParamsInterval & {
-        filterMask?: Partial<Record<K, true>>;
-    }): boolean;
+    hasAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
     containsText(text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean;
     hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & {
-        filterMask?: Partial<Record<K, true>>;
-    }): boolean;
+    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
     containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean;
     readonly not: {
-        exists: (opts?: Workflo.IWDIOParams & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => boolean;
-        isVisible: (opts?: Workflo.IWDIOParams & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => boolean;
-        isEnabled: (opts?: Workflo.IWDIOParams & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => boolean;
+        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => boolean;
         hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => boolean;
+        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
         containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & {
-            filterMask?: Partial<Record<K, true>>;
-        }) => boolean;
+        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
         containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
     };
 }

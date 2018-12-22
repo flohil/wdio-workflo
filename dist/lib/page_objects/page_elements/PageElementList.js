@@ -1,4 +1,13 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const util_1 = require("../../utility_functions/util");
@@ -191,20 +200,17 @@ class PageElementList extends _1.PageNode {
             return 0;
         }
     }
-    __getTrue() {
-        return true;
+    getText(filterMask) {
+        return this.eachGet(this.all, element => element.getText(), filterMask);
     }
-    getText() {
-        return this.eachGet(this.all, element => element.getText());
+    getDirectText(filterMask) {
+        return this.eachGet(this.all, element => element.getDirectText(), filterMask);
     }
-    getDirectText() {
-        return this.eachGet(this.all, element => element.getDirectText());
-    }
-    getIsEnabled() {
+    getIsEnabled(filterMask) {
         return this.eachGet(this.all, element => {
             element.initialWait();
             return element.currently.isEnabled();
-        });
+        }, filterMask);
     }
     // HELPER FUNCTIONS
     /**
@@ -227,7 +233,7 @@ class PageElementList extends _1.PageNode {
             const element = elements[i];
             if (isFilterMask) {
                 if (typeof _expected === 'boolean' && _expected === true) {
-                    if (!checkFunc(element, _expected)) {
+                    if (!checkFunc(element)) {
                         diffs[`[${i + 1}]`] = element.__lastDiff;
                     }
                 }
@@ -243,8 +249,26 @@ class PageElementList extends _1.PageNode {
         };
         return Object.keys(diffs).length === 0;
     }
-    eachGet(elements, getFunc) {
-        return elements.map(element => getFunc(element));
+    eachGet(elements, getFunc, filterMask) {
+        if (filterMask) {
+            return elements.map(element => getFunc(element));
+        }
+        else {
+            const result = [];
+            if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
+                throw new Error(`${this.constructor.name}: ` +
+                    `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
+                    `( ${this._selector} )`);
+            }
+            for (let i = 0; i < elements.length; ++i) {
+                const _filterMask = util_2.isArray(filterMask) ? filterMask[i] : filterMask;
+                const element = elements[i];
+                if (_filterMask === true) {
+                    result.push(getFunc(element));
+                }
+            }
+            return result;
+        }
     }
     /**
      * Uses default interval and default timeout of each element contained in this list.
@@ -253,7 +277,7 @@ class PageElementList extends _1.PageNode {
      * @param waitFunc
      * @param expected
      */
-    eachWait(elements, waitFunc, expected) {
+    eachWait(elements, waitFunc, expected, isFilterMask = false) {
         if (util_2.isArray(expected) && expected.length !== elements.length) {
             throw new Error(`${this.constructor.name}: ` +
                 `Length of expected (${expected.length}) did not match length of list (${elements.length})\n` +
@@ -262,12 +286,36 @@ class PageElementList extends _1.PageNode {
         for (let i = 0; i < elements.length; ++i) {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
-            waitFunc(element, _expected);
+            if (isFilterMask) {
+                if (typeof _expected === 'boolean' && _expected === true) {
+                    waitFunc(element);
+                }
+            }
+            else {
+                waitFunc(element, _expected);
+            }
         }
         return this;
     }
-    eachDo(elements, doFunc) {
-        return elements.map(element => doFunc(element));
+    eachDo(elements, doFunc, filterMask) {
+        if (filterMask) {
+            elements.map(element => doFunc(element));
+        }
+        else {
+            if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
+                throw new Error(`${this.constructor.name}: ` +
+                    `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
+                    `( ${this._selector} )`);
+            }
+            for (let i = 0; i < elements.length; ++i) {
+                const _filterMask = util_2.isArray(filterMask) ? filterMask[i] : filterMask;
+                const element = elements[i];
+                if (_filterMask === true) {
+                    doFunc(element);
+                }
+            }
+        }
+        return this;
     }
     eachSet(elements, setFunc, values) {
         if (_.isArray(values)) {
@@ -368,20 +416,20 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
             return 0;
         }
     }
-    getText() {
-        return this._node.eachGet(this.all, element => element.currently.getText());
+    getText(filterMask) {
+        return this._node.eachGet(this.all, element => element.currently.getText(), filterMask);
     }
-    getDirectText() {
-        return this._node.eachGet(this.all, element => element.currently.getDirectText());
+    getDirectText(filterMask) {
+        return this._node.eachGet(this.all, element => element.currently.getDirectText(), filterMask);
     }
-    getExists() {
-        return this._node.eachGet(this.all, element => element.currently.exists());
+    getExists(filterMask) {
+        return this._node.eachGet(this.all, element => element.currently.exists(), filterMask);
     }
-    getIsVisible() {
-        return this._node.eachGet(this.all, element => element.currently.isVisible());
+    getIsVisible(filterMask) {
+        return this._node.eachGet(this.all, element => element.currently.isVisible(), filterMask);
     }
-    getIsEnabled() {
-        return this._node.eachGet(this.all, element => element.currently.isEnabled());
+    getIsEnabled(filterMask) {
+        return this._node.eachGet(this.all, element => element.currently.isEnabled(), filterMask);
     }
     // CHECK STATE FUNCTIONS
     isEmpty() {
@@ -395,19 +443,35 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return util_1.compare(actualLength, length, comparator);
     }
     exists(filterMask) {
-        return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true);
+        if (filterMask) {
+            if (filterMask === false) {
+                // no element should be checked because filter mask is false
+                return true;
+            }
+            else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
+                // no element should be checked because all array elements in filter mask are false
+                return true;
+            }
+            else {
+                return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true);
+            }
+        }
+        else {
+            // if no filterMask is set, all elements in list exist if list is not empty
+            return this.not.isEmpty();
+        }
     }
-    isVisible() {
-        return this._node.eachCheck(this.all, element => element.currently.isVisible());
+    isVisible(filterMask) {
+        return this._node.eachCheck(this.all, element => element.currently.isVisible(), filterMask, true);
     }
-    isEnabled() {
-        return this._node.eachCheck(this.all, element => element.currently.isEnabled());
+    isEnabled(filterMask) {
+        return this._node.eachCheck(this.all, element => element.currently.isEnabled(), filterMask, true);
     }
     hasText(text) {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.hasText(expected), text);
     }
-    hasAnyText() {
-        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText());
+    hasAnyText(filterMask) {
+        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
     }
     containsText(text) {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.containsText(expected), text);
@@ -415,8 +479,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     hasDirectText(directText) {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.hasDirectText(expected), directText);
     }
-    hasAnyDirectText() {
-        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText());
+    hasAnyDirectText(filterMask) {
+        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
     }
     containsDirectText(directText) {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
@@ -426,19 +490,35 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
             isEmpty: () => !this.isEmpty(),
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
             exists: (filterMask) => {
-                return this._node.eachCheck(this.all, element => element.currently.not.exists(), filterMask, true);
+                if (filterMask) {
+                    if (filterMask === false) {
+                        // no element should be checked because filter mask is false
+                        return true;
+                    }
+                    else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
+                        // no element should be checked because all array elements in filter mask are false
+                        return true;
+                    }
+                    else {
+                        return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true);
+                    }
+                }
+                else {
+                    // if no filterMask is set, all elements in list exist if list is not empty
+                    return this.isEmpty();
+                }
             },
-            isVisible: () => {
-                return this._node.eachCheck(this.all, element => element.currently.not.isVisible());
+            isVisible: (filterMask) => {
+                return this._node.eachCheck(this.all, element => element.currently.not.isVisible(), filterMask, true);
             },
-            isEnabled: () => {
-                return this._node.eachCheck(this.all, element => element.currently.not.isEnabled());
+            isEnabled: (filterMask) => {
+                return this._node.eachCheck(this.all, element => element.currently.not.isEnabled(), filterMask, true);
             },
             hasText: (text) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
             },
-            hasAnyText: () => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText());
+            hasAnyText: (filterMask) => {
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText(), filterMask, true);
             },
             containsText: (text) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text);
@@ -446,8 +526,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
             hasDirectText: (directText) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText);
             },
-            hasAnyDirectText: () => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText());
+            hasAnyDirectText: (filterMask) => {
+                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true);
             },
             containsDirectText: (directText) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText);
@@ -492,21 +572,40 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     get none() {
         return this._node.currently.first.wait.not;
     }
-    exists(opts) {
-        this._node.currently.first.wait.exists();
-        return this.not.isEmpty(opts);
+    exists(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        if (opts.filterMask) {
+            if (opts.filterMask === false) {
+                // no element should be checked because filter mask is false
+            }
+            else if (_.isArray(opts.filterMask) &&
+                opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length) {
+                // no element should be checked because all array elements in filter mask are false
+            }
+            else {
+                this._node.eachWait(this._node.all, element => element.wait.exists(otherOpts), filterMask, true);
+            }
+        }
+        else {
+            // if no filterMask is set, ell elements in list exist if list is not empty
+            this.not.isEmpty(otherOpts);
+        }
+        return this._node;
     }
-    isVisible(opts) {
-        return this._node.eachWait(this._node.all, element => element.wait.isVisible(opts));
+    isVisible(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachWait(this._node.all, element => element.wait.isVisible(otherOpts), filterMask, true);
     }
-    isEnabled(opts) {
-        return this._node.eachWait(this._node.all, element => element.wait.isEnabled(opts));
+    isEnabled(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachWait(this._node.all, element => element.wait.isEnabled(otherOpts), filterMask, true);
     }
     hasText(text, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.hasText(expected, opts), text);
     }
-    hasAnyText(opts) {
-        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyText(opts));
+    hasAnyText(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyText(otherOpts), filterMask, true);
     }
     containsText(text, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsText(expected, opts), text);
@@ -514,8 +613,9 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     hasDirectText(directText, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.hasDirectText(expected, opts), directText);
     }
-    hasAnyDirectText(opts) {
-        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyDirectText(opts));
+    hasAnyDirectText(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachWait(this._node.all, (element) => element.wait.hasAnyDirectText(otherOpts), filterMask, true);
     }
     containsDirectText(directText, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsDirectText(expected, opts), directText);
@@ -528,20 +628,40 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
             hasLength: (length, opts = {}) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
-            exists: (opts) => {
-                return this.not.isEmpty(opts);
+            exists: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                if (opts.filterMask) {
+                    if (opts.filterMask === false) {
+                        // no element should be checked because filter mask is false
+                    }
+                    else if (_.isArray(opts.filterMask) &&
+                        opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length) {
+                        // no element should be checked because all array elements in filter mask are false
+                    }
+                    else {
+                        this._node.eachWait(this._node.all, element => element.wait.not.exists(otherOpts), filterMask, true);
+                    }
+                }
+                else {
+                    // if no filterMask is set, ell elements in list exist if list is not empty
+                    this.isEmpty(otherOpts);
+                }
+                return this._node;
             },
-            isVisible: (opts) => {
-                return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(opts));
+            isVisible: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(otherOpts), filterMask, true);
             },
-            isEnabled: (opts) => {
-                return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(opts));
+            isEnabled: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(otherOpts), filterMask, true);
             },
             hasText: (text, opts) => {
                 return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text);
             },
-            hasAnyText: (opts) => {
-                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyText(opts));
+            hasAnyText: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyText(otherOpts), filterMask, true);
             },
             containsText: (text, opts) => {
                 return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsText(expected, opts), text);
@@ -549,8 +669,9 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
             hasDirectText: (directText, opts) => {
                 return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText);
             },
-            hasAnyDirectText: (opts) => {
-                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyDirectText(opts));
+            hasAnyDirectText: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachWait(this._node.all, (element) => element.wait.not.hasAnyDirectText(otherOpts), filterMask, true);
             },
             containsDirectText: (directText, opts) => {
                 return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText);
@@ -578,20 +699,40 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         return this._node.__eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
     }
-    exists(opts) {
-        return this.not.isEmpty(opts);
+    exists(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        if (filterMask) {
+            if (filterMask === false) {
+                // no element should be checked because filter mask is false
+                return true;
+            }
+            else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
+                // no element should be checked because all array elements in filter mask are false
+                return true;
+            }
+            else {
+                return this._node.eachCheck(this._node.all, element => element.eventually.exists(otherOpts), filterMask, true);
+            }
+        }
+        else {
+            // if no filterMask is set, all elements in list exist if list is not empty
+            return this.not.isEmpty(otherOpts);
+        }
     }
-    isVisible(opts) {
-        return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(opts));
+    isVisible(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(otherOpts), filterMask, true);
     }
-    isEnabled(opts) {
-        return this._node.eachCheck(this._node.all, element => element.eventually.isEnabled(opts));
+    isEnabled(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachCheck(this._node.all, element => element.eventually.isEnabled(otherOpts), filterMask, true);
     }
     hasText(text, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasText(expected, opts), text);
     }
-    hasAnyText(opts) {
-        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyText(opts));
+    hasAnyText(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyText(otherOpts), filterMask, true);
     }
     containsText(text, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsText(expected, opts), text);
@@ -599,8 +740,9 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     hasDirectText(directText, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasDirectText(expected, opts), directText);
     }
-    hasAnyDirectText(opts) {
-        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyDirectText(opts));
+    hasAnyDirectText(opts = {}) {
+        const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+        return this._node.eachCheck(this._node.all, (element) => element.eventually.hasAnyDirectText(otherOpts), filterMask, true);
     }
     containsDirectText(directText, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsDirectText(expected, opts), directText);
@@ -613,20 +755,40 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             hasLength: (length, opts = {}) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
             }),
-            exists: (opts) => {
-                return this.isEmpty(opts);
+            exists: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                if (filterMask) {
+                    if (filterMask === false) {
+                        // no element should be checked because filter mask is false
+                        return true;
+                    }
+                    else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
+                        // no element should be checked because all array elements in filter mask are false
+                        return true;
+                    }
+                    else {
+                        return this._node.eachCheck(this._node.all, element => element.eventually.not.exists(otherOpts), filterMask, true);
+                    }
+                }
+                else {
+                    // if no filterMask is set, all elements in list exist if list is not empty
+                    return this.isEmpty(otherOpts);
+                }
             },
-            isVisible: (opts) => {
-                return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(opts));
+            isVisible: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachCheck(this._node.all, element => element.eventually.not.isVisible(otherOpts), filterMask, true);
             },
-            isEnabled: (opts) => {
-                return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts));
+            isEnabled: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts), filterMask, true);
             },
             hasText: (text, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text);
             },
-            hasAnyText: (opts) => {
-                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyText(opts));
+            hasAnyText: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachCheck(this._node.all, (element) => element.eventually.not.hasAnyText(otherOpts), filterMask, true);
             },
             containsText: (text, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text);
@@ -634,8 +796,9 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             hasDirectText: (directText, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText);
             },
-            hasAnyDirectText: (opts) => {
-                return this._node.eachCheck(this._node.all, undefined, (element) => element.eventually.not.hasAnyDirectText(opts));
+            hasAnyDirectText: (opts = {}) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                return this._node.eachCheck(this._node.all, (element) => element.eventually.not.hasAnyDirectText(otherOpts), filterMask, true);
             },
             containsDirectText: (directText, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText);

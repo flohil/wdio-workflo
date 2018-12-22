@@ -118,9 +118,6 @@ class PageElement extends _1.PageElementBase {
         return this;
     }
     // Public GETTER FUNCTIONS (return state after initial wait)
-    __getTrue() {
-        return true;
-    }
     getIsEnabled() {
         return this._executeAfterInitialWait(() => this.currently.isEnabled());
     }

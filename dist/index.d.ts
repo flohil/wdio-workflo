@@ -100,7 +100,7 @@ interface ICustomListMatchers {
     }): boolean;
     toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean;
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
-    toExist(filterMask?: boolean | boolean[]): boolean;
+    toExist(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     toBeVisible(): boolean;
     toBeEnabled(): boolean;
     toHaveText(text: string | string[]): boolean;
@@ -308,30 +308,24 @@ declare global {
                 [key: string]: Workflo.PageNode.INode;
             };
             type ExtractText<T extends {
-                [key: string]: INode;
+                [key in keyof T]: INode;
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getText']>> : never;
             };
             type ExtractBoolean<T extends {
-                [key: string]: INode;
+                [key in keyof T]: INode;
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
             };
             type ExtractBooleanFilterMask<T extends {
-                [key: string]: INode;
+                [key in keyof T]: INode;
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayElement<ReturnType<T[P]['getIsEnabled']>> : never;
-            };
-            type ExtractTrue<T extends {
-                [key: string]: INode;
-            }> = {
-                [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['__getTrue']>> : never;
             };
             interface IElementNode<TextType, BooleanType, FilterType> extends INode, IGetElement<TextType, BooleanType, FilterType> {
                 currently: IGetElement<TextType, BooleanType, FilterType> & ICheckElementCurrently<TextType, BooleanType, FilterType>;
                 wait: IWaitElement<TextType, BooleanType, FilterType>;
                 eventually: ICheckElementEventually<TextType, BooleanType, FilterType>;
-                __getTrue(filterMask?: StripNever<FilterType>): FilterType;
             }
             interface IGetElement<TextType, BooleanType, FilterType> {
                 getIsEnabled(filterMask?: StripNever<FilterType>): BooleanType;
@@ -433,11 +427,17 @@ declare global {
                 containsValue(value: StripNever<ValueType>, opts?: IWDIOParamsInterval): boolean;
                 not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>;
             }
+            type ListFilterMask = boolean | boolean[];
+            type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>;
+            type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>;
+            interface IListFilterMask {
+                filterMask?: ListFilterMask;
+            }
             interface IMapFilterMask<K extends string | number | symbol> {
-                filterMask?: Partial<Record<K, true>>;
+                filterMask?: Partial<Record<K, boolean>>;
             }
             interface IGroupFilterMask<Content extends GroupContent> {
-                filterMask?: Workflo.PageNode.ExtractBoolean<Content>;
+                filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>;
             }
         }
         interface IProblem<ValueType, ResultType> {

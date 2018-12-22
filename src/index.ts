@@ -395,27 +395,21 @@ declare global {
 
       type GroupContent = {[key: string] : Workflo.PageNode.INode}
 
-      type ExtractText<T extends {[key: string]: INode}> = {
+      type ExtractText<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getText']>> :
         never;
       }
 
-      type ExtractBoolean<T extends {[key: string]: INode}> = {
+      type ExtractBoolean<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
         never;
       }
 
-      type ExtractBooleanFilterMask<T extends {[key: string]: INode}> = {
+      type ExtractBooleanFilterMask<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayElement<ReturnType<T[P]['getIsEnabled']>> :
-        never;
-      }
-
-      type ExtractTrue<T extends {[key: string]: INode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-        TryArrayOrElement<ReturnType<T[P]['__getTrue']>> :
         never;
       }
 
@@ -426,7 +420,6 @@ declare global {
           ICheckElementCurrently<TextType, BooleanType, FilterType>
         wait: IWaitElement<TextType, BooleanType, FilterType>
         eventually: ICheckElementEventually<TextType, BooleanType, FilterType>
-        __getTrue(filterMask?: StripNever<FilterType>): FilterType
       }
 
       interface IGetElement<TextType, BooleanType, FilterType> {
@@ -530,7 +523,7 @@ declare global {
 
       type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>
 
-      type GroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractBoolean<Content>
+      type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>
 
       interface IListFilterMask {
         filterMask?: ListFilterMask
@@ -541,7 +534,7 @@ declare global {
       }
 
       interface IGroupFilterMask<Content extends GroupContent> {
-        filterMask?: Workflo.PageNode.ExtractBoolean<Content>
+        filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>
       }
     }
 
