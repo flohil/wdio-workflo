@@ -331,7 +331,7 @@ export function createMatcher<
       if (!success) {
         let optsWithTimeout: OptsType & {timeout?: number} = (typeof opts === 'object') ? opts : Object.create(null);
 
-        if (!opts['timeout'] ) {
+        if (!optsWithTimeout['timeout'] ) {
           optsWithTimeout.timeout = node.getTimeout()
         }
 

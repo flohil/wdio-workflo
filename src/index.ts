@@ -1454,12 +1454,22 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
   dates?: string[]
   /**
    * Do not run automatic testcases and consider only manual results.
+   *
+   * @default {default: false}
    */
   manualOnly?: boolean
   /**
    * Run only automatic testcases and do not consider manual results.
+   *
+   * @default {default: false}
    */
   automaticOnly?: boolean
+  /**
+   * Remove error stack trace lines that originate from the test framework itself.
+   *
+   * @default {default: true}
+   */
+  cleanStackTraces?: boolean
 
 // RETYPE OBJECTS
 

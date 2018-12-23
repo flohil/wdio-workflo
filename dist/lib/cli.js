@@ -85,6 +85,7 @@ const ALLOWED_OPTS = [
     'retries',
     'consoleLogLevel',
     'debugSeleniumCommand',
+    'cleanStackTraces',
     '_',
     '$0'
 ];
@@ -144,6 +145,7 @@ optimist
     '\t\t\t   "testcases" will additionally print the name of the currently executed test\n' +
     '\t\t\t   "steps" will additionally print all executed steps in the console')
     .describe('debugSeleniumCommand', 'Outputs selenium commands in the allure report if set to true (default: true)')
+    .describe('cleanStackTraces', 'Remove error stack trace lines that originate from the test framework itself (default: true)')
     // filters
     .describe('testcases', 'restricts test execution to these testcases\n' +
     '\t\t\t   \'["Suite1", "Suite2.Testcase1"]\' => execute all testcases of Suite1 and Testcase1 of Suite2\n' +
@@ -302,7 +304,8 @@ const mergeOpts = [
     'dates',
     'manualOnly',
     'automaticOnly',
-    'debugSeleniumCommand'
+    'debugSeleniumCommand',
+    'cleanStackTraces'
 ];
 mergeOpts.forEach(opt => {
     if (typeof workfloConfig[opt] !== 'undefined') {
@@ -628,6 +631,12 @@ checkReport().then(() => {
             debugSeleniumCommand = false;
         }
     }
+    let cleanStackTraces = true;
+    if (typeof argv.cleanStackTraces !== 'undefined') {
+        if ((argv.cleanStackTraces === 'false')) {
+            cleanStackTraces = false;
+        }
+    }
     // patch wdio.conf.js
     args['logOutput'] = logsPath,
         args['seleniumLogs'] = path.relative('./', path.join(logsPath));
@@ -641,6 +650,7 @@ checkReport().then(() => {
             }
         });
     args['bail'] = 0;
+    args['cleanStackTraces'] = cleanStackTraces;
     if (workfloConfig.debug === true || argv.debug === true) {
         workfloConfig.execArgv = ['--inspect'];
         workfloConfig.debug = false;

@@ -89,7 +89,7 @@ function createMatcher(compareFuncs, withoutExpected = []) {
             const success = (negativeComparison) ? successes[1]() : successes[0]();
             if (!success) {
                 let optsWithTimeout = (typeof opts === 'object') ? opts : Object.create(null);
-                if (!opts['timeout']) {
+                if (!optsWithTimeout['timeout']) {
                     optsWithTimeout.timeout = node.getTimeout();
                 }
                 const actual = node.__lastDiff.actual;
@@ -341,7 +341,10 @@ exports.elementMatchers = {
                     ];
                 }
             },
-            errorTextFunc: ({ node }) => createEachMessage(node, "exist")
+            errorTextFunc: ({ node }) => [
+                `Expected at least one of ${node.constructor.name}'s elements to exist.\n( ${node.__getNodeId()} )`,
+                `Expected none one of ${node.constructor.name}'s elements to exist.\n( ${node.__getNodeId()} )`
+            ]
         },
         map: {
             resultFunc: ({ node, opts }) => [
@@ -374,7 +377,12 @@ exports.elementMatchers = {
                     ];
                 }
             },
-            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "exist", opts.timeout)
+            errorTextFunc: ({ node, opts }) => [
+                `Expected at least one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+                    `( ${node.__getNodeId()} )`,
+                `Expected none one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+                    `( ${node.__getNodeId()} )`
+            ]
         },
         map: {
             resultFunc: ({ node, opts }) => [
