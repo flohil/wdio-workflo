@@ -401,15 +401,15 @@ declare global {
         never;
       }
 
-      type ExtractBoolean<T extends {[key in keyof T]: INode}> = {
+      type ExtractExistsFilterMask<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-        TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
+        TryArrayElement<ReturnType<T[P]['currently']['getExists']>> :
         never;
       }
 
-      type ExtractBooleanFilterMask<T extends {[key in keyof T]: INode}> = {
+      type ExtractBoolean<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-        TryArrayElement<ReturnType<T[P]['getIsEnabled']>> :
+        TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
         never;
       }
 
@@ -525,6 +525,9 @@ declare global {
 
       type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>
 
+      type GroupFilterMaskExists<Content extends GroupContent> =
+        Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
+
       interface IListFilterMask {
         filterMask?: ListFilterMask
       }
@@ -535,6 +538,10 @@ declare global {
 
       interface IGroupFilterMask<Content extends GroupContent> {
         filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>
+      }
+
+      interface IGroupFilterMaskExists<Content extends GroupContent> {
+        filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
       }
     }
 

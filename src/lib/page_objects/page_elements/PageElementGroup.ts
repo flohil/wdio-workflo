@@ -313,8 +313,10 @@ export class PageElementGroupCurrently<
     )
   }
 
-  exists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+  exists(filterMask?: Workflo.PageNode.GroupFilterMaskExists<Content>) {
+    return this._node.eachCheck<
+      ElementNode<Content>, ExtractBoolean<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
+    > (
       isIElementNode, (node, filterMask) => node.currently.exists(filterMask), filterMask, true
     )
   }
@@ -369,8 +371,10 @@ export class PageElementGroupCurrently<
 
   get not() {
     return {
-      exists: (filterMask?: Workflo.PageNode.GroupFilterMask<Content>) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+      exists: (filterMask?: Workflo.PageNode.GroupFilterMaskExists<Content>) => {
+        return this._node.eachCheck<
+          ElementNode<Content>, ExtractBoolean<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
+        > (
           isIElementNode, node => node.currently.not.exists(), filterMask, true
         )
       },
@@ -424,10 +428,12 @@ export class PageElementGroupWait<
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeWait<Store, GroupType> {
 
-  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
-    return this._node.eachWait<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachWait<
+      ElementNode<Content>, ExtractBoolean<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
+    > (
       isIElementNode, node => node.wait.exists(otherOpts), filterMask, true
     )
   }
@@ -490,10 +496,12 @@ export class PageElementGroupWait<
 
   get not() {
     return {
-      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
-        return this._node.eachWait<ElementNode<Content>, ExtractBoolean<Content>> (
+        return this._node.eachWait<
+          ElementNode<Content>, ExtractBoolean<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
+        > (
           isIElementNode, node => node.wait.not.exists(otherOpts), filterMask, true
         )
       },
@@ -555,10 +563,12 @@ export class PageElementGroupEventually<
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeEventually<Store, GroupType> {
 
-  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
-    return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachCheck<
+      ElementNode<Content>, ExtractBoolean<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
+    > (
       isIElementNode, node => node.eventually.exists(otherOpts), filterMask, true
     )
   }
@@ -621,10 +631,12 @@ export class PageElementGroupEventually<
 
   get not() {
     return {
-      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
-        return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+        return this._node.eachCheck<
+          ElementNode<Content>, ExtractBoolean<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
+        > (
           isIElementNode, node => node.eventually.not.exists(otherOpts), filterMask, true
         )
       },

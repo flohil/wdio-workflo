@@ -62,7 +62,7 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
      */
     getText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractText<Content>;
     getDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractText<Content>;
-    exists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
+    exists(filterMask?: Workflo.PageNode.GroupFilterMaskExists<Content>): boolean;
     isVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
     isEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
     hasText(text: ExtractText<Content>): boolean;
@@ -72,7 +72,7 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
     hasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
     containsDirectText(directText: ExtractText<Content>): boolean;
     readonly not: {
-        exists: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        exists: (filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>) => boolean;
         isVisible: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
         isEnabled: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
         hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
@@ -86,7 +86,7 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
 export declare class PageElementGroupWait<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends PageElementGroup<Store, Content>> extends PageNodeWait<Store, GroupType> {
-    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): GroupType;
+    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>): GroupType;
     isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): GroupType;
     isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): GroupType;
     hasText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): GroupType;
@@ -96,7 +96,7 @@ export declare class PageElementGroupWait<Store extends PageElementStore, Conten
     hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): GroupType;
     containsDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): GroupType;
     readonly not: {
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
+        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>) => GroupType;
         isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
         isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
         hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
@@ -110,7 +110,7 @@ export declare class PageElementGroupWait<Store extends PageElementStore, Conten
 export declare class PageElementGroupEventually<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends PageElementGroup<Store, Content>> extends PageNodeEventually<Store, GroupType> {
-    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
+    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>): boolean;
     isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     hasText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean;
@@ -120,7 +120,7 @@ export declare class PageElementGroupEventually<Store extends PageElementStore, 
     hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     containsDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean;
     readonly not: {
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
+        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>) => boolean;
         isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
         hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;

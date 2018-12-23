@@ -37,7 +37,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Con
         hasValue: (value: Workflo.PageNode.ExtractValue<Content>) => boolean;
         hasAnyValue: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>) => boolean;
-        exists: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        exists: (filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>) => boolean;
         isVisible: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
         isEnabled: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
         hasText: (text: Workflo.PageNode.ExtractText<Content>) => boolean;
@@ -58,7 +58,7 @@ declare class ValuePageElementGroupWait<Store extends PageElementStore, Content 
         hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
         hasAnyValue: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
+        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>) => GroupType;
         isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
         isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
         hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
@@ -79,7 +79,7 @@ declare class ValuePageElementGroupEventually<Store extends PageElementStore, Co
         hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasAnyValue: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
         containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
+        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>) => boolean;
         isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
         hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;

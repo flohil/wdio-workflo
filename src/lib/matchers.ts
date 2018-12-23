@@ -278,7 +278,8 @@ export function createMatcher<
   GroupExpectedType = never,
 >(
   compareFuncs: CompareFuncsType,
-  withoutExpected: WithoutExpected[] = []
+  ensureOpts: boolean = false,
+  withoutExpected: WithoutExpected[] = [],
 ) {
   return (util: jasmine.MatchersUtil, customEqualityTesters: Array<jasmine.CustomEqualityTester>) => {
 
@@ -323,6 +324,10 @@ export function createMatcher<
       } else {
         throw new Error(`Unknown node type in matchers: ${node.constructor.name}.` +
           `Node type needs to extend PageElement, PageElementList, PageElementMap or PageElementGroup.`)
+      }
+
+      if (ensureOpts && typeof opts === 'undefined') {
+        opts = Object.create(null)
       }
 
       const successes = resultFunc({node, expected, opts})
@@ -381,7 +386,7 @@ export function createMatcherWithoutExpected<
   compareFuncs: ICompareElementFuncs,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
 ) {
-  return createMatcher<OptsType>(compareFuncs, withoutExpected)
+  return createMatcher<OptsType>(compareFuncs, false, withoutExpected)
 }
 
 export function createEventuallyMatcher<
@@ -389,7 +394,7 @@ export function createEventuallyMatcher<
 >(
   compareFuncs: ICompareEventuallyElementFuncs
 ) {
-  return createMatcher<OptsType, ICompareEventuallyElementFuncs>(compareFuncs)
+  return createMatcher<OptsType, ICompareEventuallyElementFuncs>(compareFuncs, true)
 }
 
 export function createEventuallyMatcherWithoutExpected<
@@ -398,7 +403,7 @@ export function createEventuallyMatcherWithoutExpected<
   compareFuncs: ICompareEventuallyElementFuncs,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
 ) {
-  return createMatcher<OptsType, ICompareEventuallyElementFuncs>(compareFuncs, withoutExpected)
+  return createMatcher<OptsType, ICompareEventuallyElementFuncs>(compareFuncs, true, withoutExpected)
 }
 
 export function createTextMatcher<
@@ -409,13 +414,12 @@ export function createTextMatcher<
   GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
-  withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
 ) {
   return createMatcher<
     OptsType,
     ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
-  >(compareFuncs, withoutExpected)
+  >(compareFuncs, false)
 }
 
 export function createTextMatcherWithoutExpected<
@@ -432,7 +436,7 @@ export function createTextMatcherWithoutExpected<
     OptsType,
     ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
-  >(compareFuncs, withoutExpected)
+  >(compareFuncs, false, withoutExpected)
 }
 
 export function createEventuallyTextMatcher<
@@ -450,7 +454,7 @@ export function createEventuallyTextMatcher<
     OptsType,
     ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
-  >(compareFuncs)
+  >(compareFuncs, true)
 }
 
 export function createEventuallyTextMatcherWithoutExpected<
@@ -469,7 +473,7 @@ export function createEventuallyTextMatcherWithoutExpected<
     OptsType,
     ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
-  >(compareFuncs, withoutExpected)
+  >(compareFuncs, true, withoutExpected)
 }
 
 export function createBooleanMatcher<
@@ -502,7 +506,7 @@ export function createBooleanMatcherWithoutExpected<
     OptsType,
     ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
-  >(compareFuncs, withoutExpected)
+  >(compareFuncs, false, withoutExpected)
 }
 
 export function createEventuallyBooleanMatcher<
@@ -520,7 +524,7 @@ export function createEventuallyBooleanMatcher<
     OptsType,
     ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
-  >(compareFuncs)
+  >(compareFuncs, true)
 }
 
 export function createEventuallyBooleanMatcherWithoutExpected<
@@ -539,7 +543,7 @@ export function createEventuallyBooleanMatcherWithoutExpected<
     OptsType,
     ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
-  >(compareFuncs, withoutExpected)
+  >(compareFuncs, true, withoutExpected)
 }
 
 export function createValueMatcher<
@@ -572,7 +576,7 @@ export function createValueMatcherWithoutExpected<
     OptsType,
     ICompareValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
     ElementValueType, ListValueType, MapValueType, GroupValueType
-  >(compareFuncs, withoutExpected)
+  >(compareFuncs, false, withoutExpected)
 }
 
 export function createEventuallyValueMatcher<
@@ -588,7 +592,7 @@ export function createEventuallyValueMatcher<
     OptsType,
     ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
     ElementValueType, ListValueType, MapValueType, GroupValueType
-  >(compareFuncs)
+  >(compareFuncs, true)
 }
 
 export function createEventuallyValueMatcherWithoutExpected<
@@ -605,7 +609,7 @@ export function createEventuallyValueMatcherWithoutExpected<
     OptsType,
     ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
     ElementValueType, ListValueType, MapValueType, GroupValueType
-  >(compareFuncs, withoutExpected)
+  >(compareFuncs, true, withoutExpected)
 }
 
 // export function createValueMatcherWithoutExpected<
@@ -860,9 +864,9 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
         }
       },
       errorTextFunc: ({node, opts}) => [
-        `Expected at least one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+        `Expected at least one of ${node.constructor.name}'s elements to exist within ${opts.timeout}ms.\n` +
         `( ${node.__getNodeId()} )`,
-        `Expected none one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+        `Expected none one of ${node.constructor.name}'s elements to exist within ${opts.timeout}ms.\n` +
         `( ${node.__getNodeId()} )`
       ]
     },

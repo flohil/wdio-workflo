@@ -40,7 +40,7 @@ function isWithoutExpected(node, withoutExpected = []) {
     }
     return _withoutExpected;
 }
-function createMatcher(compareFuncs, withoutExpected = []) {
+function createMatcher(compareFuncs, ensureOpts = false, withoutExpected = []) {
     return (util, customEqualityTesters) => {
         function baseCompareFunction(node, negativeComparison, opts = undefined, expected = undefined) {
             let result = {
@@ -85,6 +85,9 @@ function createMatcher(compareFuncs, withoutExpected = []) {
                 throw new Error(`Unknown node type in matchers: ${node.constructor.name}.` +
                     `Node type needs to extend PageElement, PageElementList, PageElementMap or PageElementGroup.`);
             }
+            if (ensureOpts && typeof opts === 'undefined') {
+                opts = Object.create(null);
+            }
             const successes = resultFunc({ node, expected, opts });
             const success = (negativeComparison) ? successes[1]() : successes[0]();
             if (!success) {
@@ -128,31 +131,31 @@ function createMatcher(compareFuncs, withoutExpected = []) {
 }
 exports.createMatcher = createMatcher;
 function createMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createMatcherWithoutExpected = createMatcherWithoutExpected;
 function createEventuallyMatcher(compareFuncs) {
-    return createMatcher(compareFuncs);
+    return createMatcher(compareFuncs, true);
 }
 exports.createEventuallyMatcher = createEventuallyMatcher;
 function createEventuallyMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyMatcherWithoutExpected = createEventuallyMatcherWithoutExpected;
-function createTextMatcher(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+function createTextMatcher(compareFuncs) {
+    return createMatcher(compareFuncs, false);
 }
 exports.createTextMatcher = createTextMatcher;
 function createTextMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createTextMatcherWithoutExpected = createTextMatcherWithoutExpected;
 function createEventuallyTextMatcher(compareFuncs) {
-    return createMatcher(compareFuncs);
+    return createMatcher(compareFuncs, true);
 }
 exports.createEventuallyTextMatcher = createEventuallyTextMatcher;
 function createEventuallyTextMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyTextMatcherWithoutExpected = createEventuallyTextMatcherWithoutExpected;
 function createBooleanMatcher(compareFuncs) {
@@ -160,15 +163,15 @@ function createBooleanMatcher(compareFuncs) {
 }
 exports.createBooleanMatcher = createBooleanMatcher;
 function createBooleanMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createBooleanMatcherWithoutExpected = createBooleanMatcherWithoutExpected;
 function createEventuallyBooleanMatcher(compareFuncs) {
-    return createMatcher(compareFuncs);
+    return createMatcher(compareFuncs, true);
 }
 exports.createEventuallyBooleanMatcher = createEventuallyBooleanMatcher;
 function createEventuallyBooleanMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyBooleanMatcherWithoutExpected = createEventuallyBooleanMatcherWithoutExpected;
 function createValueMatcher(compareFuncs) {
@@ -176,15 +179,15 @@ function createValueMatcher(compareFuncs) {
 }
 exports.createValueMatcher = createValueMatcher;
 function createValueMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createValueMatcherWithoutExpected = createValueMatcherWithoutExpected;
 function createEventuallyValueMatcher(compareFuncs) {
-    return createMatcher(compareFuncs);
+    return createMatcher(compareFuncs, true);
 }
 exports.createEventuallyValueMatcher = createEventuallyValueMatcher;
 function createEventuallyValueMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, withoutExpected);
+    return createMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyValueMatcherWithoutExpected = createEventuallyValueMatcherWithoutExpected;
 // export function createValueMatcherWithoutExpected<
@@ -378,9 +381,9 @@ exports.elementMatchers = {
                 }
             },
             errorTextFunc: ({ node, opts }) => [
-                `Expected at least one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+                `Expected at least one of ${node.constructor.name}'s elements to exist within ${opts.timeout}ms.\n` +
                     `( ${node.__getNodeId()} )`,
-                `Expected none one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+                `Expected none one of ${node.constructor.name}'s elements to exist within ${opts.timeout}ms.\n` +
                     `( ${node.__getNodeId()} )`
             ]
         },
