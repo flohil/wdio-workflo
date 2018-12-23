@@ -91,18 +91,18 @@ interface ICustomListMatchers {
   toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
 
-  toExist(filterMask?: Workflo.PageNode.ListFilterMask): boolean
-  toBeVisible(): boolean
-  toBeEnabled(): boolean
+  toExist(filterMask?: boolean): boolean
+  toBeVisible(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  toBeEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean
   toHaveText(text: string | string[]): boolean
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
-  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
+  toEventuallyExist(opts?: Workflo.IWDIOParams & {filterMask?: boolean}): boolean
+  toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean
 }
 
 interface ICustomMapMatchers<K extends string | number | symbol> {
-  toExist(opts?: Workflo.PageNode.IMapFilterMask<K>): boolean
-  toBeVisible(opts?: Workflo.PageNode.IMapFilterMask<K>): boolean
+  toExist(opts?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toBeVisible(opts?: Workflo.PageNode.MapFilterMask<K>): boolean
 
   toHaveText(text: Partial<Record<K, string>>): boolean
 
@@ -111,8 +111,8 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
 }
 
 interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
-  toExist(opts?: Workflo.PageNode.IGroupFilterMask<Content>): boolean
-  toBeVisible(opts?: Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toExist(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toBeVisible(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
 
   toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
 

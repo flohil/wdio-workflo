@@ -28,8 +28,8 @@ export interface IResultFuncArgs<
   ExpectedType
 > {
   node: NodeType;
-  expected?: ExpectedType;
-  opts?: OptsType;
+  expected: ExpectedType;
+  opts: OptsType;
 }
 
 export interface IResultFuncWithoutExpected<
@@ -37,7 +37,7 @@ export interface IResultFuncWithoutExpected<
   OptsType
 > {
   node: NodeType;
-  opts?: OptsType;
+  opts: OptsType;
 }
 
 export type ResultFunctionResult = () => boolean
@@ -59,9 +59,9 @@ export interface ErrorFuncArgs<
   ExpectedType,
 > {
   actual: string;
-  expected?: ExpectedType;
-  node?: NodeType;
-  opts?: OptsType;
+  expected: ExpectedType;
+  node: NodeType;
+  opts: OptsType;
 }
 
 export interface ErrorFuncWithoutExpected<
@@ -69,8 +69,8 @@ export interface ErrorFuncWithoutExpected<
   OptsType
 > {
   actual: string;
-  node?: NodeType;
-  opts?: OptsType;
+  node: NodeType;
+  opts: OptsType;
 }
 
 export type ErrorTextFunction<
@@ -112,12 +112,12 @@ export interface ICompareElementFuncs<
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     MapExpectedType,
-    Workflo.PageNode.IMapFilterMask<string>
+    Workflo.PageNode.MapFilterMask<string>
   >,
   group?: IMatcherArgs<
     elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
     GroupExpectedType,
-    Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
+    Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>
   >
 }
 
@@ -188,12 +188,12 @@ export interface ICompareValueElementFuncs<
       ElementValueType
     >,
     MapValueType,
-    Workflo.PageNode.IMapFilterMask<string>
+    Workflo.PageNode.MapFilterMask<string>
   >,
   group?: IMatcherArgs<
     elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
     GroupValueType,
-    Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
+    Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>
   >
 }
 
@@ -285,7 +285,7 @@ export function createMatcher<
     function baseCompareFunction(
       node: Workflo.PageNode.INode,
       negativeComparison: boolean,
-      opts: OptsType = Object.create(null),
+      opts: OptsType = undefined,
       expected: any = undefined,
     ): jasmine.CustomMatcherResult {
       let result: jasmine.CustomMatcherResult = {
@@ -329,9 +329,9 @@ export function createMatcher<
       const success = (negativeComparison) ? successes[1]() : successes[0]()
 
       if (!success) {
-        let optsWithTimeout: OptsType & {timeout?: number} = opts || Object.create(null)
+        let optsWithTimeout: OptsType & {timeout?: number} = (typeof opts === 'object') ? opts : Object.create(null);
 
-        if (typeof opts === 'undefined' || !opts['timeout'] ) {
+        if (!opts['timeout'] ) {
           optsWithTimeout.timeout = node.getTimeout()
         }
 
@@ -814,20 +814,29 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node}) => createMessage(node, "exist")
     },
     list: {
+      resultFunc: ({node, opts}) => {
+        if (_.isArray(opts)) {
+          throw new Error('Filtermask for toExist() on PageElementList can only be boolean')
+        } else {
+          return [
+            () => node.currently.exists(opts), () => node.currently.not.exists(opts)
+          ]
+        }
+      },
+      errorTextFunc: ({node}) => [
+        `Expected at least one of ${node.constructor.name}'s elements to exist.\n( ${node.__getNodeId()} )`,
+        `Expected none one of ${node.constructor.name}'s elements to exist.\n( ${node.__getNodeId()} )`
+      ]
+    },
+    map: {
       resultFunc: ({node, opts}) => [
         () => node.currently.exists(opts), () => node.currently.not.exists(opts)
       ],
       errorTextFunc: ({node}) => createEachMessage(node, "exist")
     },
-    map: {
-      resultFunc: ({node, opts}) => [
-        () => node.currently.exists(opts.filterMask), () => node.currently.not.exists(opts.filterMask)
-      ],
-      errorTextFunc: ({node}) => createEachMessage(node, "exist")
-    },
     group: {
       resultFunc: ({node, opts}) => [
-        () => node.currently.exists(opts.filterMask), () => node.currently.not.exists(opts.filterMask)
+        () => node.currently.exists(opts), () => node.currently.not.exists(opts)
       ],
       errorTextFunc: ({node}) => createEachMessage(node, "exist")
     }
@@ -838,8 +847,24 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node, opts}) => createEventuallyMessage(node, "exist", opts.timeout)
     },
     list: {
-      resultFunc: ({node, opts}) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist", opts.timeout)
+      resultFunc: ({node, opts}) => {
+        const {filterMask, ...otherOpts} = opts
+
+        if (_.isArray(filterMask)) {
+          throw new Error('Filtermask for toExist() on PageElementList can only be boolean')
+        } else {
+          return [
+            () => node.eventually.exists({filterMask, ...otherOpts}),
+            () => node.eventually.not.exists({filterMask, ...otherOpts})
+          ]
+        }
+      },
+      errorTextFunc: ({node, opts}) => [
+        `Expected at least one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+        `( ${node.__getNodeId()} )`,
+        `Expected none one of ${node.constructor.name}'s elements to exist within ${opts.interval}ms.\n` +
+        `( ${node.__getNodeId()} )`
+      ]
     },
     map: {
       resultFunc: ({node, opts}) => [
@@ -854,29 +879,29 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist", opts.timeout)
     }
   }),
-  toBeVisible: createBooleanMatcherWithoutExpected({
+  toBeVisible: createMatcherWithoutExpected({
     element: {
       resultFunc: ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
       errorTextFunc: ({node}) => createMessage(node, "be visible")
     },
     list: {
-      resultFunc: ({node}) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
+      resultFunc: ({node, opts}) => [() => node.currently.isVisible(opts), () => node.currently.not.isVisible(opts)],
       errorTextFunc: ({node}) => createEachMessage(node, "be visible")
     },
     map: {
       resultFunc: ({node, opts}) => [
-        () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
+        () => node.currently.isVisible(opts), () => node.currently.not.isVisible(opts)
       ],
       errorTextFunc: ({node}) => createEachMessage(node, "be visible")
     },
     group: {
       resultFunc: ({node, opts}) => [
-        () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
+        () => node.currently.isVisible(opts), () => node.currently.not.isVisible(opts)
       ],
       errorTextFunc: ({node}) => createEachMessage(node, "be visible")
     }
   }),
-  toEventuallyBeVisible: createBooleanMatcherWithoutExpected({
+  toEventuallyBeVisible: createEventuallyMatcherWithoutExpected({
     element: {
       resultFunc: ({node, opts}) => [() => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)],
       errorTextFunc: ({node, opts}) => createEventuallyMessage(node, "be visible", opts.timeout)
@@ -898,7 +923,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be visible", opts.timeout)
     }
   }),
-  toHaveText: createMatcher({
+  toHaveText: createTextMatcher({
     element: {
       resultFunc: ({node, expected}) => [
         () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)

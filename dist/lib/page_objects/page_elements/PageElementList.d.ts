@@ -161,7 +161,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
-    exists(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
+    exists(filterMask?: boolean): boolean;
     isVisible(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     isEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     hasText(text: string | string[]): boolean;
@@ -173,7 +173,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     readonly not: {
         isEmpty: () => boolean;
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
-        exists: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;
+        exists: (filterMask?: boolean) => boolean;
         isVisible: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;
         isEnabled: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;
         hasText: (text: string | string[]) => boolean;
@@ -189,7 +189,9 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
     readonly any: PageElementType["wait"];
     readonly none: PageElementType['wait']['not'];
-    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): ListType;
+    exists(opts?: Workflo.IWDIOParams & {
+        filterMask?: boolean;
+    }): ListType;
     isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): ListType;
     isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): ListType;
     hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
@@ -201,7 +203,9 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     readonly not: {
         isEmpty: (opts?: Workflo.IWDIOParamsInterval) => ListType;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => ListType;
+        exists: (opts?: Workflo.IWDIOParams & {
+            filterMask?: boolean;
+        }) => ListType;
         isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => ListType;
         isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => ListType;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
@@ -217,7 +221,9 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     readonly none: PageElementType['eventually']['not'];
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
-    exists(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean;
+    exists(opts?: Workflo.IWDIOParams & {
+        filterMask?: boolean;
+    }): boolean;
     isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean;
     isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean;
     hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
@@ -229,7 +235,9 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     readonly not: {
         isEmpty: (opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => boolean;
+        exists: (opts?: Workflo.IWDIOParams & {
+            filterMask?: boolean;
+        }) => boolean;
         isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => boolean;
         isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => boolean;
         hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;

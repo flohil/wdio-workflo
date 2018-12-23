@@ -1,4 +1,13 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const page_objects_1 = require("./page_objects");
 const _ = require("lodash");
@@ -33,7 +42,7 @@ function isWithoutExpected(node, withoutExpected = []) {
 }
 function createMatcher(compareFuncs, withoutExpected = []) {
     return (util, customEqualityTesters) => {
-        function baseCompareFunction(node, negativeComparison, opts = Object.create(null), expected = undefined) {
+        function baseCompareFunction(node, negativeComparison, opts = undefined, expected = undefined) {
             let result = {
                 pass: true,
                 message: ''
@@ -79,8 +88,8 @@ function createMatcher(compareFuncs, withoutExpected = []) {
             const successes = resultFunc({ node, expected, opts });
             const success = (negativeComparison) ? successes[1]() : successes[0]();
             if (!success) {
-                let optsWithTimeout = opts || Object.create(null);
-                if (typeof opts === 'undefined' || !opts['timeout']) {
+                let optsWithTimeout = (typeof opts === 'object') ? opts : Object.create(null);
+                if (!opts['timeout']) {
                     optsWithTimeout.timeout = node.getTimeout();
                 }
                 const actual = node.__lastDiff.actual;
@@ -322,20 +331,27 @@ exports.elementMatchers = {
             errorTextFunc: ({ node }) => createMessage(node, "exist")
         },
         list: {
+            resultFunc: ({ node, opts }) => {
+                if (_.isArray(opts)) {
+                    throw new Error('Filtermask for toExist() on PageElementList can only be boolean');
+                }
+                else {
+                    return [
+                        () => node.currently.exists(opts), () => node.currently.not.exists(opts)
+                    ];
+                }
+            },
+            errorTextFunc: ({ node }) => createEachMessage(node, "exist")
+        },
+        map: {
             resultFunc: ({ node, opts }) => [
                 () => node.currently.exists(opts), () => node.currently.not.exists(opts)
             ],
             errorTextFunc: ({ node }) => createEachMessage(node, "exist")
         },
-        map: {
-            resultFunc: ({ node, opts }) => [
-                () => node.currently.exists(opts.filterMask), () => node.currently.not.exists(opts.filterMask)
-            ],
-            errorTextFunc: ({ node }) => createEachMessage(node, "exist")
-        },
         group: {
             resultFunc: ({ node, opts }) => [
-                () => node.currently.exists(opts.filterMask), () => node.currently.not.exists(opts.filterMask)
+                () => node.currently.exists(opts), () => node.currently.not.exists(opts)
             ],
             errorTextFunc: ({ node }) => createEachMessage(node, "exist")
         }
@@ -346,7 +362,18 @@ exports.elementMatchers = {
             errorTextFunc: ({ node, opts }) => createEventuallyMessage(node, "exist", opts.timeout)
         },
         list: {
-            resultFunc: ({ node, opts }) => [() => node.eventually.exists(opts), () => node.eventually.not.exists(opts)],
+            resultFunc: ({ node, opts }) => {
+                const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
+                if (_.isArray(filterMask)) {
+                    throw new Error('Filtermask for toExist() on PageElementList can only be boolean');
+                }
+                else {
+                    return [
+                        () => node.eventually.exists(Object.assign({ filterMask }, otherOpts)),
+                        () => node.eventually.not.exists(Object.assign({ filterMask }, otherOpts))
+                    ];
+                }
+            },
             errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "exist", opts.timeout)
         },
         map: {
@@ -362,29 +389,29 @@ exports.elementMatchers = {
             errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "exist", opts.timeout)
         }
     }),
-    toBeVisible: createBooleanMatcherWithoutExpected({
+    toBeVisible: createMatcherWithoutExpected({
         element: {
             resultFunc: ({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
             errorTextFunc: ({ node }) => createMessage(node, "be visible")
         },
         list: {
-            resultFunc: ({ node }) => [() => node.currently.isVisible(), () => node.currently.not.isVisible()],
+            resultFunc: ({ node, opts }) => [() => node.currently.isVisible(opts), () => node.currently.not.isVisible(opts)],
             errorTextFunc: ({ node }) => createEachMessage(node, "be visible")
         },
         map: {
             resultFunc: ({ node, opts }) => [
-                () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
+                () => node.currently.isVisible(opts), () => node.currently.not.isVisible(opts)
             ],
             errorTextFunc: ({ node }) => createEachMessage(node, "be visible")
         },
         group: {
             resultFunc: ({ node, opts }) => [
-                () => node.currently.isVisible(opts.filterMask), () => node.currently.not.isVisible(opts.filterMask)
+                () => node.currently.isVisible(opts), () => node.currently.not.isVisible(opts)
             ],
             errorTextFunc: ({ node }) => createEachMessage(node, "be visible")
         }
     }),
-    toEventuallyBeVisible: createBooleanMatcherWithoutExpected({
+    toEventuallyBeVisible: createEventuallyMatcherWithoutExpected({
         element: {
             resultFunc: ({ node, opts }) => [() => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)],
             errorTextFunc: ({ node, opts }) => createEventuallyMessage(node, "be visible", opts.timeout)
@@ -406,7 +433,7 @@ exports.elementMatchers = {
             errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "be visible", opts.timeout)
         }
     }),
-    toHaveText: createMatcher({
+    toHaveText: createTextMatcher({
         element: {
             resultFunc: ({ node, expected }) => [
                 () => node.currently.hasText(expected), () => node.currently.not.hasText(expected)

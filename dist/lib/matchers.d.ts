@@ -8,34 +8,34 @@ export interface IMatcherArgs<NodeType extends Workflo.PageNode.INode, ExpectedT
 }
 export interface IResultFuncArgs<NodeType extends Workflo.PageNode.INode, OptsType, ExpectedType> {
     node: NodeType;
-    expected?: ExpectedType;
-    opts?: OptsType;
+    expected: ExpectedType;
+    opts: OptsType;
 }
 export interface IResultFuncWithoutExpected<NodeType extends Workflo.PageNode.INode, OptsType> {
     node: NodeType;
-    opts?: OptsType;
+    opts: OptsType;
 }
 export declare type ResultFunctionResult = () => boolean;
 export declare type ResultFunction<NodeType extends Workflo.PageNode.INode, OptsType, ExpectedType> = (args: IResultFuncArgs<NodeType, OptsType, ExpectedType>) => ResultFunctionResult[];
 export declare type ResultWithoutExpectedFunction<NodeType extends Workflo.PageNode.INode, OptsType> = (args: IResultFuncWithoutExpected<NodeType, OptsType>) => ResultFunctionResult[];
 export interface ErrorFuncArgs<NodeType extends Workflo.PageNode.INode, OptsType, ExpectedType> {
     actual: string;
-    expected?: ExpectedType;
-    node?: NodeType;
-    opts?: OptsType;
+    expected: ExpectedType;
+    node: NodeType;
+    opts: OptsType;
 }
 export interface ErrorFuncWithoutExpected<NodeType extends Workflo.PageNode.INode, OptsType> {
     actual: string;
-    node?: NodeType;
-    opts?: OptsType;
+    node: NodeType;
+    opts: OptsType;
 }
 export declare type ErrorTextFunction<NodeType extends Workflo.PageNode.INode, OptsType, ExpectedType> = (args: ErrorFuncArgs<NodeType, OptsType, ExpectedType>) => string[];
 export declare type ErrorTextWithoutExpectedFunction<NodeType extends Workflo.PageNode.INode, OptsType> = (args: ErrorFuncWithoutExpected<NodeType, OptsType>) => string[];
 export interface ICompareElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never> {
     element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, never>;
     list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, Workflo.PageNode.ListFilterMask>;
-    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, Workflo.PageNode.IMapFilterMask<string>>;
-    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
+    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, Workflo.PageNode.MapFilterMask<string>>;
+    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
 export interface ICompareEventuallyElementFuncs<ElementExpectedType = undefined, ListExpectedType = undefined, MapExpectedType = undefined, GroupExpectedType = undefined> {
     element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, Workflo.IWDIOParamsInterval>;
@@ -46,8 +46,8 @@ export interface ICompareEventuallyElementFuncs<ElementExpectedType = undefined,
 export interface ICompareValueElementFuncs<ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>> {
     element?: IMatcherArgs<elements.ValuePageElement<stores.PageElementStore, ElementValueType>, ElementValueType, never>;
     list?: IMatcherArgs<elements.ValuePageElementList<stores.PageElementStore, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IValuePageElementOpts<stores.PageElementStore>, ElementValueType>, ListValueType, Workflo.PageNode.ListFilterMask>;
-    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.PageNode.IMapFilterMask<string>>;
-    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
+    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.PageNode.MapFilterMask<string>>;
+    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
 export interface ICompareEventuallyValueElementFuncs<ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>> {
     element?: IMatcherArgs<elements.ValuePageElement<stores.PageElementStore, ElementValueType>, ElementValueType, Workflo.IWDIOParamsInterval>;

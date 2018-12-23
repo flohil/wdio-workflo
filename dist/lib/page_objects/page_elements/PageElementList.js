@@ -443,21 +443,10 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return util_1.compare(actualLength, length, comparator);
     }
     exists(filterMask) {
-        if (filterMask) {
-            if (filterMask === false) {
-                // no element should be checked because filter mask is false
-                return true;
-            }
-            else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
-                // no element should be checked because all array elements in filter mask are false
-                return true;
-            }
-            else {
-                return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true);
-            }
+        if (filterMask === false) {
+            return true;
         }
         else {
-            // if no filterMask is set, all elements in list exist if list is not empty
             return this.not.isEmpty();
         }
     }
@@ -490,21 +479,10 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
             isEmpty: () => !this.isEmpty(),
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
             exists: (filterMask) => {
-                if (filterMask) {
-                    if (filterMask === false) {
-                        // no element should be checked because filter mask is false
-                        return true;
-                    }
-                    else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
-                        // no element should be checked because all array elements in filter mask are false
-                        return true;
-                    }
-                    else {
-                        return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true);
-                    }
+                if (filterMask === false) {
+                    return true;
                 }
                 else {
-                    // if no filterMask is set, all elements in list exist if list is not empty
                     return this.isEmpty();
                 }
             },
@@ -574,20 +552,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     }
     exists(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
-        if (opts.filterMask) {
-            if (opts.filterMask === false) {
-                // no element should be checked because filter mask is false
-            }
-            else if (_.isArray(opts.filterMask) &&
-                opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length) {
-                // no element should be checked because all array elements in filter mask are false
-            }
-            else {
-                this._node.eachWait(this._node.all, element => element.wait.exists(otherOpts), filterMask, true);
-            }
-        }
-        else {
-            // if no filterMask is set, ell elements in list exist if list is not empty
+        if (filterMask !== false) {
             this.not.isEmpty(otherOpts);
         }
         return this._node;
@@ -630,20 +595,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
             }),
             exists: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
-                if (opts.filterMask) {
-                    if (opts.filterMask === false) {
-                        // no element should be checked because filter mask is false
-                    }
-                    else if (_.isArray(opts.filterMask) &&
-                        opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length) {
-                        // no element should be checked because all array elements in filter mask are false
-                    }
-                    else {
-                        this._node.eachWait(this._node.all, element => element.wait.not.exists(otherOpts), filterMask, true);
-                    }
-                }
-                else {
-                    // if no filterMask is set, ell elements in list exist if list is not empty
+                if (filterMask !== false) {
                     this.isEmpty(otherOpts);
                 }
                 return this._node;
@@ -701,21 +653,10 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     }
     exists(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
-        if (filterMask) {
-            if (filterMask === false) {
-                // no element should be checked because filter mask is false
-                return true;
-            }
-            else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
-                // no element should be checked because all array elements in filter mask are false
-                return true;
-            }
-            else {
-                return this._node.eachCheck(this._node.all, element => element.eventually.exists(otherOpts), filterMask, true);
-            }
+        if (filterMask === false) {
+            return true;
         }
         else {
-            // if no filterMask is set, all elements in list exist if list is not empty
             return this.not.isEmpty(otherOpts);
         }
     }
@@ -757,21 +698,10 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             }),
             exists: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
-                if (filterMask) {
-                    if (filterMask === false) {
-                        // no element should be checked because filter mask is false
-                        return true;
-                    }
-                    else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
-                        // no element should be checked because all array elements in filter mask are false
-                        return true;
-                    }
-                    else {
-                        return this._node.eachCheck(this._node.all, element => element.eventually.not.exists(otherOpts), filterMask, true);
-                    }
+                if (filterMask === false) {
+                    return true;
                 }
                 else {
-                    // if no filterMask is set, all elements in list exist if list is not empty
                     return this.isEmpty(otherOpts);
                 }
             },
@@ -781,7 +711,7 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             },
             isEnabled: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
-                return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(opts), filterMask, true);
+                return this._node.eachCheck(this._node.all, element => element.eventually.not.isEnabled(otherOpts), filterMask, true);
             },
             hasText: (text, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text);

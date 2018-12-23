@@ -649,19 +649,10 @@ export class PageElementListCurrently<
     return compare(actualLength, length, comparator)
   }
 
-  exists(filterMask?: Workflo.PageNode.ListFilterMask) {
-    if (filterMask) {
-      if (filterMask === false) {
-        // no element should be checked because filter mask is false
-        return true
-      } else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
-        // no element should be checked because all array elements in filter mask are false
-        return true
-      } else {
-        return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true)
-      }
+  exists(filterMask?: boolean) {
+    if (filterMask === false) {
+      return true
     } else {
-      // if no filterMask is set, all elements in list exist if list is not empty
       return this.not.isEmpty()
     }
   }
@@ -708,19 +699,10 @@ export class PageElementListCurrently<
       hasLength: (
         length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
       ) => !this.hasLength(length, comparator),
-      exists: (filterMask?: Workflo.PageNode.ListFilterMask) => {
-        if (filterMask) {
-          if (filterMask === false) {
-            // no element should be checked because filter mask is false
-            return true
-          } else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
-            // no element should be checked because all array elements in filter mask are false
-            return true
-          } else {
-            return this._node.eachCheck(this.all, element => element.currently.exists(), filterMask, true)
-          }
+      exists: (filterMask?: boolean) => {
+        if (filterMask === false) {
+          return true
         } else {
-          // if no filterMask is set, all elements in list exist if list is not empty
           return this.isEmpty()
         }
       },
@@ -822,22 +804,10 @@ export class PageElementListWait<
     return this._node.currently.first.wait.not
   }
 
-  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+  exists(opts: Workflo.IWDIOParams & {filterMask?: boolean} = {}) {
     const {filterMask, ...otherOpts} = opts
 
-    if (opts.filterMask) {
-      if (opts.filterMask === false) {
-        // no element should be checked because filter mask is false
-      } else if (
-        _.isArray(opts.filterMask) &&
-        opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length
-      ) {
-        // no element should be checked because all array elements in filter mask are false
-      } else {
-        this._node.eachWait(this._node.all, element => element.wait.exists(otherOpts), filterMask, true)
-      }
-    } else {
-      // if no filterMask is set, ell elements in list exist if list is not empty
+    if (filterMask !== false) {
       this.not.isEmpty(otherOpts)
     }
 
@@ -906,22 +876,10 @@ export class PageElementListWait<
       ) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
-      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+      exists: (opts: Workflo.IWDIOParams & {filterMask?: boolean} = {}) => {
         const {filterMask, ...otherOpts} = opts
 
-        if (opts.filterMask) {
-          if (opts.filterMask === false) {
-            // no element should be checked because filter mask is false
-          } else if (
-            _.isArray(opts.filterMask) &&
-            opts.filterMask.length === opts.filterMask.filter(filter => filter === false).length
-          ) {
-            // no element should be checked because all array elements in filter mask are false
-          } else {
-            this._node.eachWait(this._node.all, element => element.wait.not.exists(otherOpts), filterMask, true)
-          }
-        } else {
-          // if no filterMask is set, ell elements in list exist if list is not empty
+        if (filterMask !== false) {
           this.isEmpty(otherOpts)
         }
 
@@ -1016,21 +974,12 @@ export class PageElementListEventually<
     return this._node.__eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
-  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) {
+  exists(opts: Workflo.IWDIOParams & {filterMask?: boolean} = {}) {
     const {filterMask, ...otherOpts} = opts
 
-    if (filterMask) {
-      if (filterMask === false) {
-        // no element should be checked because filter mask is false
-        return true
-      } else if (_.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length) {
-        // no element should be checked because all array elements in filter mask are false
-        return true
-      } else {
-        return this._node.eachCheck(this._node.all, element => element.eventually.exists(otherOpts), filterMask, true)
-      }
+    if (filterMask === false) {
+      return true
     } else {
-      // if no filterMask is set, all elements in list exist if list is not empty
       return this.not.isEmpty(otherOpts)
     }
   }
@@ -1095,25 +1044,12 @@ export class PageElementListEventually<
       hasLength: (length: number, opts: IPageElementListWaitLengthParams = {}) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
-      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask = {}) => {
+      exists: (opts: Workflo.IWDIOParams & {filterMask?: boolean} = {}) => {
         const {filterMask, ...otherOpts} = opts
 
-        if (filterMask) {
-          if (filterMask === false) {
-            // no element should be checked because filter mask is false
-            return true
-          } else if (
-            _.isArray(filterMask) && filterMask.length === filterMask.filter(filter => filter === false).length
-          ) {
-            // no element should be checked because all array elements in filter mask are false
-            return true
-          } else {
-            return this._node.eachCheck(
-              this._node.all, element => element.eventually.not.exists(otherOpts), filterMask, true
-            )
-          }
+        if (filterMask === false) {
+          return true
         } else {
-          // if no filterMask is set, all elements in list exist if list is not empty
           return this.isEmpty(otherOpts)
         }
       },
@@ -1128,7 +1064,7 @@ export class PageElementListEventually<
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachCheck(
-          this._node.all, element => element.eventually.not.isEnabled(opts), filterMask, true
+          this._node.all, element => element.eventually.not.isEnabled(otherOpts), filterMask, true
         )
       },
       hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => {
