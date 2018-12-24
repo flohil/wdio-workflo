@@ -251,9 +251,6 @@ class PageElementList extends _1.PageNode {
     }
     eachGet(elements, getFunc, filterMask) {
         if (filterMask) {
-            return elements.map(element => getFunc(element));
-        }
-        else {
             const result = [];
             if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
                 throw new Error(`${this.constructor.name}: ` +
@@ -268,6 +265,9 @@ class PageElementList extends _1.PageNode {
                 }
             }
             return result;
+        }
+        else {
+            return elements.map(element => getFunc(element));
         }
     }
     /**
@@ -299,9 +299,6 @@ class PageElementList extends _1.PageNode {
     }
     eachDo(elements, doFunc, filterMask) {
         if (filterMask) {
-            elements.map(element => doFunc(element));
-        }
-        else {
             if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
                 throw new Error(`${this.constructor.name}: ` +
                     `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
@@ -314,6 +311,9 @@ class PageElementList extends _1.PageNode {
                     doFunc(element);
                 }
             }
+        }
+        else {
+            elements.map(element => doFunc(element));
         }
         return this;
     }

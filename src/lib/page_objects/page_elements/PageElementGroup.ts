@@ -123,9 +123,9 @@ implements ElementNode<Content> {
         if (filterMask) {
           if (typeof filterMask[key] === 'boolean') {
             if (filterMask[key] === true) {
-              result[key] = getFunc({node})
+              result[key] = getFunc({node, filter: filterMask[key]})
             }
-          } else {
+          } else if (typeof filterMask[key] !== 'undefined' && filterMask[key] !== null) {
             result[key] = getFunc({node, filter: filterMask[key]})
           }
         } else {
@@ -160,11 +160,11 @@ implements ElementNode<Content> {
           if (isFilterMask) {
             if (typeof expectedValue === 'boolean') {
               if (expectedValue === true) {
-                if (!checkFunc({node})) {
+                if (!checkFunc({node, filter: expectedValue})) {
                   diffs[`.${key}`] = this._$[key].__lastDiff
                 }
               }
-            } else {
+            } else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
               if (!checkFunc({node, filter: expectedValue})) {
                 diffs[`.${key}`] = this._$[key].__lastDiff
               }
@@ -212,9 +212,9 @@ implements ElementNode<Content> {
           if (isFilterMask) {
             if (typeof expectedValue === 'boolean') {
               if (expectedValue === true) {
-                waitFunc({node})
+                waitFunc({node, filter: expectedValue})
               }
-            } else {
+            } else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
               waitFunc({node, filter: expectedValue})
             }
           } else {
@@ -248,9 +248,9 @@ implements ElementNode<Content> {
         if (filterMask) {
           if (typeof filterMask[key] === 'boolean') {
             if (filterMask[key] === true) {
-              doFunc({node})
+              doFunc({node, filter: filterMask[key]})
             }
-          } else {
+          } else if (typeof filterMask[key] !== 'undefined' && filterMask[key] !== null) {
             doFunc({node, filter: filterMask[key]})
           }
         } else {

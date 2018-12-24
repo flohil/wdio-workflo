@@ -384,8 +384,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
     filterMask?: Workflo.PageNode.ListFilterMask,
   ): T[] {
     if (filterMask) {
-      return elements.map(element => getFunc(element))
-    } else {
       const result: T[] = []
 
       if (isArray(filterMask) && filterMask.length !== elements.length) {
@@ -406,6 +404,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
       }
 
       return result
+    } else {
+      return elements.map(element => getFunc(element))
     }
   }
 
@@ -452,8 +452,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
     filterMask?: Workflo.PageNode.ListFilterMask
   ) {
     if (filterMask) {
-      elements.map(element => doFunc(element))
-    } else {
       if (isArray(filterMask) && filterMask.length !== elements.length) {
         throw new Error(
           `${this.constructor.name}: ` +
@@ -470,6 +468,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
           doFunc(element)
         }
       }
+    } else {
+      elements.map(element => doFunc(element))
     }
 
     return this
