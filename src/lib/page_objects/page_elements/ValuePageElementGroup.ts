@@ -7,10 +7,10 @@ import {
   PageElementGroupWait
 } from '.';
 
-type ExtractValue<T extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<T>
+type ExtractValue<Content extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<Content>
 
 type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> =
-Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.GroupFilterMask<Content>>
+Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IGroupFilterMask<Content>>
 
 export interface IValueGroupOpts<
   Store extends PageElementStore,

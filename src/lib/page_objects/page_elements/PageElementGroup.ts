@@ -106,12 +106,13 @@ implements ElementNode<Content> {
   eachGet<
     NodeInterface,
     ResultType extends Partial<Content>,
+    FilterType extends Workflo.PageNode.GroupFilterMask<Content> = Workflo.PageNode.GroupFilterMask<Content>
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     getFunc: (
-      args: {node: NodeInterface, filter?: Workflo.PageNode.GroupFilterMask<Content>[keyof Content]}
+      args: {node: NodeInterface, filter?: FilterType[keyof FilterType]}
     ) => any,
-    filterMask?: Workflo.PageNode.GroupFilterMask<Content>,
+    filterMask?: FilterType,
   ): Workflo.StripNever<ResultType> {
     let result = {} as ResultType;
 
@@ -231,13 +232,14 @@ implements ElementNode<Content> {
   }
 
   eachDo<
-    NodeInterface
+    NodeInterface,
+    FilterType extends Workflo.PageNode.GroupFilterMask<Content> = Workflo.PageNode.GroupFilterMask<Content>
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     doFunc: (args: {
-      node: NodeInterface, filter?: Workflo.PageNode.GroupFilterMask<Content>[keyof Content]
+      node: NodeInterface, filter?: FilterType[keyof FilterType]
     }) => NodeInterface,
-    filterMask?: Workflo.PageNode.GroupFilterMask<Content>,
+    filterMask?: FilterType,
   ): this {
     for (const key in this._$) {
       const node = this._$[key] as any as NodeInterface
