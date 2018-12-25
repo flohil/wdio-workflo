@@ -40,7 +40,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
      */
     getText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractText<Content>;
     getDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractText<Content>;
-    eachGet<NodeInterface, ResultType extends Partial<Content>, FilterType extends Workflo.PageNode.GroupFilterMask<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, getFunc: (args: {
+    eachGet<NodeInterface, ResultType extends Partial<Content>, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, getFunc: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];
     }) => any, filterMask?: FilterType): Workflo.StripNever<ResultType>;
@@ -54,7 +54,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
         expected?: ExpectedType[keyof ExpectedType];
         filter?: ExpectedType[keyof ExpectedType];
     }) => NodeInterface, expected?: ExpectedType, isFilterMask?: boolean): this;
-    eachDo<NodeInterface, FilterType extends Workflo.PageNode.GroupFilterMask<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, doFunc: (args: {
+    eachDo<NodeInterface, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, doFunc: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];
     }) => NodeInterface, filterMask?: FilterType): this;

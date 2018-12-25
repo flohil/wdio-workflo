@@ -16,7 +16,7 @@ export class ValuePageElementMap<
   PageElementOptions extends Partial<IValuePageElementOpts<Store>>,
   ValueType
 > extends PageElementMap<Store, K, PageElementType, PageElementOptions>
-implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, true>>> {
+implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, boolean>>> {
 
   readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this, ValueType>
   readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOptions, this, ValueType>

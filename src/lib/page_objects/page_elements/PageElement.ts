@@ -19,7 +19,7 @@ export interface IPageElementOpts<
 
 export class PageElement<
   Store extends PageElementStore
-> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, true> {
+> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, boolean> {
 
   protected _customScroll: Workflo.IScrollParams
 

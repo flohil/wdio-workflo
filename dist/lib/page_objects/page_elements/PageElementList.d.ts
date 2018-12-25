@@ -26,7 +26,7 @@ export interface IPageElementListOpts<Store extends PageElementStore, PageElemen
     disableCache?: boolean;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
 }
-export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<string[], boolean[], true> {
+export declare class PageElementList<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     protected selector: string;
     protected _$: Store;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;

@@ -15,7 +15,7 @@ export interface IPageElementMapOpts<Store extends PageElementStore, K extends s
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
 }
-export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, true>>> {
+export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, boolean>>> {
     protected _selector: string;
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _elementOptions: PageElementOptions;

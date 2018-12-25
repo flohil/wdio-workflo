@@ -106,7 +106,7 @@ implements ElementNode<Content> {
   eachGet<
     NodeInterface,
     ResultType extends Partial<Content>,
-    FilterType extends Workflo.PageNode.GroupFilterMask<Content> = Workflo.PageNode.GroupFilterMask<Content>
+    FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     getFunc: (
@@ -121,12 +121,14 @@ implements ElementNode<Content> {
         const node = this.$[key] as any as NodeInterface
 
         if (filterMask) {
-          if (typeof filterMask[key] === 'boolean') {
-            if (filterMask[key] === true) {
-              result[key] = getFunc({node, filter: filterMask[key]})
+          const filter = filterMask[key]
+
+          if (typeof filter === 'boolean') {
+            if (filter === true) {
+              result[key] = getFunc({node, filter})
             }
-          } else if (typeof filterMask[key] !== 'undefined' && filterMask[key] !== null) {
-            result[key] = getFunc({node, filter: filterMask[key]})
+          } else if (typeof filter !== 'undefined' && filter !== null) {
+            result[key] = getFunc({node, filter})
           }
         } else {
           result[key] = getFunc({node})
@@ -233,7 +235,7 @@ implements ElementNode<Content> {
 
   eachDo<
     NodeInterface,
-    FilterType extends Workflo.PageNode.GroupFilterMask<Content> = Workflo.PageNode.GroupFilterMask<Content>
+    FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     doFunc: (args: {
@@ -246,12 +248,14 @@ implements ElementNode<Content> {
 
       if (supportsInterface(this._$[key])) {
         if (filterMask) {
-          if (typeof filterMask[key] === 'boolean') {
-            if (filterMask[key] === true) {
-              doFunc({node, filter: filterMask[key]})
+          const filter = filterMask[key]
+
+          if (typeof filter === 'boolean') {
+            if (filter === true) {
+              doFunc({node, filter})
             }
-          } else if (typeof filterMask[key] !== 'undefined' && filterMask[key] !== null) {
-            doFunc({node, filter: filterMask[key]})
+          } else if (typeof filter !== 'undefined' && filter !== null) {
+            doFunc({node, filter})
           }
         } else {
           doFunc({node})

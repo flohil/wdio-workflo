@@ -481,8 +481,14 @@ declare global {
           TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
       }
 
+      type ExtractValueBoolean<T extends {[key in keyof T]: INode}> = {
+        [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
+        TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
+        never;
+      }
+
       interface IValueElementNode<GetType, FilterType, SetType = GetType>
-        extends INode, IValueElement<GetType, FilterType>
+      extends INode, IValueElement<GetType, FilterType>
       {
         currently: IValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>
         wait: IWaitValue<GetType, FilterType>
@@ -493,6 +499,7 @@ declare global {
 
       interface IValueElement<GetType, FilterType> {
         getValue(filterMask?: StripNever<FilterType>): StripNever<GetType>
+        getIsEnabled(filterMask?: StripNever<FilterType>): FilterType
       }
 
       interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {
@@ -528,6 +535,8 @@ declare global {
       type GroupFilterMaskExists<Content extends GroupContent> =
         Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
 
+      type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
+
       interface IListFilterMask {
         filterMask?: ListFilterMask
       }
@@ -536,12 +545,16 @@ declare global {
         filterMask?: Partial<Record<K, boolean>>
       }
 
-      interface IGroupFilterMask<Content extends GroupContent> {
+      interface IGroupFilterMask<Content extends GroupContent>{
         filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>
       }
 
       interface IGroupFilterMaskExists<Content extends GroupContent> {
         filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
+      }
+
+      interface IValueGroupFilterMask<Content extends GroupContent> {
+        filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
       }
     }
 

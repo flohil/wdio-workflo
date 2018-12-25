@@ -10,7 +10,7 @@ import {
 type ExtractValue<Content extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<Content>
 
 type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> =
-Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IGroupFilterMask<Content>>
+Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>
 
 export interface IValueGroupOpts<
   Store extends PageElementStore,
@@ -39,8 +39,10 @@ implements ValueElementNode<Content> {
     this.eventually = new ValuePageElementGroupEventually(this)
   }
 
-  getValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this.eachGet<ValueElementNode<Content>, ExtractValue<Content>> (
+  getValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) {
+    return this.eachGet<
+      ValueElementNode<Content>, ExtractValue<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>
+    > (
       isIValueElementNode, ({node, filter}) => node.getValue(filter), filterMask
     )
   }
@@ -64,8 +66,10 @@ class ValuePageElementGroupCurrently<
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupCurrently<Store, Content, GroupType> {
 
-  getValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachGet<ValueElementNode<Content>, ExtractValue<Content>> (
+  getValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) {
+    return this._node.eachGet<
+      ValueElementNode<Content>, ExtractValue<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>
+    > (
       isIValueElementNode, ({node, filter}) => node.currently.getValue(filter), filterMask
     )
   }
@@ -76,8 +80,8 @@ class ValuePageElementGroupCurrently<
     )
   }
 
-  hasAnyValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachCheck<ValueElementNode<Content>> (
+  hasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) {
+    return this._node.eachCheck<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
       isIValueElementNode, ({node, filter}) => node.currently.hasAnyValue(filter), filterMask, true
     )
   }
@@ -95,8 +99,8 @@ class ValuePageElementGroupCurrently<
           isIValueElementNode, ({node, expected}) => node.currently.not.hasValue(expected), value
         )
       },
-      hasAnyValue: (filterMask?: Workflo.PageNode.GroupFilterMask<Content>) => {
-        return this._node.eachCheck<ValueElementNode<Content>> (
+      hasAnyValue: (filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) => {
+        return this._node.eachCheck<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
           isIValueElementNode, ({node, filter}) => node.currently.not.hasAnyValue(filter), filterMask, true
         )
       },
@@ -121,10 +125,10 @@ class ValuePageElementGroupWait<
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.ValueGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
-    return this._node.eachWait<ValueElementNode<Content>> (
+    return this._node.eachWait<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
       isIValueElementNode,
       ({node, filter}) => node.wait.hasAnyValue({filterMask: filter, ...otherOpts}),
       filterMask,
@@ -145,10 +149,10 @@ class ValuePageElementGroupWait<
           isIValueElementNode, ({node, expected}) => node.wait.hasValue(expected, opts), value
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.ValueGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
-        return this._node.eachWait<ValueElementNode<Content>> (
+        return this._node.eachWait<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
           isIValueElementNode,
           ({node, filter}) => node.wait.hasAnyValue({filterMask: filter, ...otherOpts}),
           filterMask,

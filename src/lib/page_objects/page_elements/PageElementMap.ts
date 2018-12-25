@@ -36,7 +36,7 @@ export class PageElementMap<
   PageElementOptions extends Partial<IPageElementOpts<Store>>
 > extends PageNode<Store>
 implements Workflo.PageNode.IElementNode<
-  Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, true>>
+  Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, boolean>>
 > {
 
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType

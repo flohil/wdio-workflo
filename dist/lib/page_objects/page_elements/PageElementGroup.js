@@ -68,13 +68,14 @@ class PageElementGroup extends _1.PageNode {
             if (supportsInterface(this.$[key])) {
                 const node = this.$[key];
                 if (filterMask) {
-                    if (typeof filterMask[key] === 'boolean') {
-                        if (filterMask[key] === true) {
-                            result[key] = getFunc({ node, filter: filterMask[key] });
+                    const filter = filterMask[key];
+                    if (typeof filter === 'boolean') {
+                        if (filter === true) {
+                            result[key] = getFunc({ node, filter });
                         }
                     }
-                    else if (typeof filterMask[key] !== 'undefined' && filterMask[key] !== null) {
-                        result[key] = getFunc({ node, filter: filterMask[key] });
+                    else if (typeof filter !== 'undefined' && filter !== null) {
+                        result[key] = getFunc({ node, filter });
                     }
                 }
                 else {
@@ -159,13 +160,14 @@ class PageElementGroup extends _1.PageNode {
             const node = this._$[key];
             if (supportsInterface(this._$[key])) {
                 if (filterMask) {
-                    if (typeof filterMask[key] === 'boolean') {
-                        if (filterMask[key] === true) {
-                            doFunc({ node, filter: filterMask[key] });
+                    const filter = filterMask[key];
+                    if (typeof filter === 'boolean') {
+                        if (filter === true) {
+                            doFunc({ node, filter });
                         }
                     }
-                    else if (typeof filterMask[key] !== 'undefined' && filterMask[key] !== null) {
-                        doFunc({ node, filter: filterMask[key] });
+                    else if (typeof filter !== 'undefined' && filter !== null) {
+                        doFunc({ node, filter });
                     }
                 }
                 else {

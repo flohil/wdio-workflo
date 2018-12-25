@@ -4,7 +4,7 @@ import { PageElementStore } from '../stores';
 export interface IPageElementOpts<Store extends PageElementStore> extends IPageElementBaseOpts<Store> {
     customScroll?: Workflo.IScrollParams;
 }
-export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, true> {
+export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, boolean> {
     protected _customScroll: Workflo.IScrollParams;
     readonly currently: PageElementCurrently<Store, this>;
     readonly wait: PageElementWait<Store, this>;

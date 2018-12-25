@@ -398,6 +398,11 @@ declare global {
             }> = {
                 [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
             };
+            type ExtractValueBoolean<T extends {
+                [key in keyof T]: INode;
+            }> = {
+                [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
+            };
             interface IValueElementNode<GetType, FilterType, SetType = GetType> extends INode, IValueElement<GetType, FilterType> {
                 currently: IValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>;
                 wait: IWaitValue<GetType, FilterType>;
@@ -406,6 +411,7 @@ declare global {
             }
             interface IValueElement<GetType, FilterType> {
                 getValue(filterMask?: StripNever<FilterType>): StripNever<GetType>;
+                getIsEnabled(filterMask?: StripNever<FilterType>): FilterType;
             }
             interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {
                 hasValue(text: StripNever<ValueType>, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
@@ -433,6 +439,7 @@ declare global {
             type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>;
             type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>;
             type GroupFilterMaskExists<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>;
+            type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>;
             interface IListFilterMask {
                 filterMask?: ListFilterMask;
             }
@@ -444,6 +451,9 @@ declare global {
             }
             interface IGroupFilterMaskExists<Content extends GroupContent> {
                 filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>;
+            }
+            interface IValueGroupFilterMask<Content extends GroupContent> {
+                filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>;
             }
         }
         interface IProblem<ValueType, ResultType> {
