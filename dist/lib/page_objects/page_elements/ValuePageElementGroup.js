@@ -21,6 +21,15 @@ class ValuePageElementGroup extends _1.PageElementGroup {
     getValue(filterMask) {
         return this.eachGet(isIValueElementNode, ({ node, filter }) => node.getValue(filter), filterMask);
     }
+    getHasValue(value) {
+        return this.eachCompare(isIValueElementNode, ({ node, expected }) => node.getHasValue(expected), value);
+    }
+    getHasAnyValue(filterMask) {
+        return this.eachCompare(isIValueElementNode, ({ node, filter }) => node.getHasAnyValue(filter), filterMask, true);
+    }
+    getContainsValue(value) {
+        return this.eachCompare(isIValueElementNode, ({ node, expected }) => node.getContainsValue(expected), value);
+    }
     /**
      * Sets values after performing the initial wait on all nodes that implement the setValue method.
      * Nodes that do not implement the setValue method will be ignored.
@@ -35,6 +44,15 @@ exports.ValuePageElementGroup = ValuePageElementGroup;
 class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
     getValue(filterMask) {
         return this._node.eachGet(isIValueElementNode, ({ node, filter }) => node.currently.getValue(filter), filterMask);
+    }
+    getHasValue(value) {
+        return this._node.eachCompare(isIValueElementNode, ({ node, expected }) => node.currently.getHasValue(expected), value);
+    }
+    getHasAnyValue(filterMask) {
+        return this._node.eachCompare(isIValueElementNode, ({ node, filter }) => node.currently.getHasAnyValue(filter), filterMask, true);
+    }
+    getContainsValue(value) {
+        return this._node.eachCompare(isIValueElementNode, ({ node, expected }) => node.currently.getContainsValue(expected), value);
     }
     hasValue(value) {
         return this._node.eachCheck(isIValueElementNode, ({ node, expected }) => node.currently.hasValue(expected), value);

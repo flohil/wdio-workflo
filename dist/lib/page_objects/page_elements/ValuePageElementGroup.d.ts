@@ -18,6 +18,9 @@ export declare class ValuePageElementGroup<Store extends PageElementStore, Conte
     readonly eventually: ValuePageElementGroupEventually<Store, Content, this>;
     constructor(id: string, { ...superOpts }: IValueGroupOpts<Store, Content>);
     getValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>): Workflo.PageNode.ExtractValue<Content>;
+    getHasValue(value: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getHasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getContainsValue(value: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     /**
      * Sets values after performing the initial wait on all nodes that implement the setValue method.
      * Nodes that do not implement the setValue method will be ignored.
@@ -30,6 +33,9 @@ declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Con
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupCurrently<Store, Content, GroupType> {
     getValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>): Workflo.PageNode.ExtractValue<Content>;
+    getHasValue(value: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getHasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getContainsValue(value: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     hasValue(value: ExtractValue<Content>): boolean;
     hasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>): boolean;
     containsValue(value: ExtractValue<Content>): boolean;

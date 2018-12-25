@@ -33,6 +33,15 @@ class ValuePageElementList extends _1.PageElementList {
     getValue(filterMask) {
         return this.eachGet(this.all, element => element.getValue(), filterMask);
     }
+    getHasValue(value) {
+        return this.eachCompare(this.all, (element, expected) => element.currently.hasValue(expected), value);
+    }
+    getHasAnyValue(filterMask) {
+        return this.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
+    }
+    getContainsValue(value) {
+        return this.eachCompare(this.all, (element, expected) => element.currently.containsValue(expected), value);
+    }
     // SETTER FUNCTIONS
     /**
      * Sets values on all list elements after the initial wait was performed.
@@ -55,6 +64,15 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      */
     getValue(filterMask) {
         return this._node.eachGet(this.all, element => element.currently.getValue(), filterMask);
+    }
+    getHasValue(value) {
+        return this._node.eachCompare(this.all, (element, expected) => element.currently.hasValue(expected), value);
+    }
+    getHasAnyValue(filterMask) {
+        return this._node.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
+    }
+    getContainsValue(value) {
+        return this._node.eachCompare(this.all, (element, expected) => element.currently.containsValue(expected), value);
     }
     // CHECK STATE
     hasValue(value) {

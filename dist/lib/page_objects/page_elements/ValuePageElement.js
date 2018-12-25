@@ -21,9 +21,27 @@ class ValuePageElement extends PageElement_1.PageElement {
     getValue() {
         return this._executeAfterInitialWait(() => this.currently.getValue());
     }
+    getHasValue(value) {
+        return this._executeAfterInitialWait(() => this.currently.hasValue(value));
+    }
+    getHasAnyValue() {
+        return this._executeAfterInitialWait(() => this.currently.hasAnyValue());
+    }
+    getContainsValue(value) {
+        return this._executeAfterInitialWait(() => this.currently.containsValue(value));
+    }
 }
 exports.ValuePageElement = ValuePageElement;
 class ValuePageElementCurrently extends PageElement_1.PageElementCurrently {
+    getHasValue(value) {
+        return this.hasValue(value);
+    }
+    getHasAnyValue() {
+        return this.hasAnyValue();
+    }
+    getContainsValue(value) {
+        return this.containsValue(value);
+    }
     hasValue(value) {
         return this._compareHas(value, this.getValue());
     }

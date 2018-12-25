@@ -9,6 +9,9 @@ import {
 
 type ExtractValue<Content extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<Content>
 
+type ExtractValueBoolean<Content extends {[key: string]: Workflo.PageNode.INode}> =
+Workflo.PageNode.ExtractValueBoolean<Content>
+
 type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> =
 Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>
 
@@ -47,6 +50,26 @@ implements ValueElementNode<Content> {
     )
   }
 
+  getHasValue(value: ExtractValue<Content>) {
+    return this.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+      isIValueElementNode, ({node, expected}) => node.getHasValue(expected), value
+    )
+  }
+
+  getHasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) {
+    return this.eachCompare<
+      ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>, ExtractValueBoolean<Content>
+    > (
+      isIValueElementNode, ({node, filter}) => node.getHasAnyValue(filter), filterMask, true
+    )
+  }
+
+  getContainsValue(value: ExtractValue<Content>) {
+    return this.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+      isIValueElementNode, ({node, expected}) => node.getContainsValue(expected), value
+    )
+  }
+
   /**
    * Sets values after performing the initial wait on all nodes that implement the setValue method.
    * Nodes that do not implement the setValue method will be ignored.
@@ -71,6 +94,26 @@ class ValuePageElementGroupCurrently<
       ValueElementNode<Content>, ExtractValue<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>
     > (
       isIValueElementNode, ({node, filter}) => node.currently.getValue(filter), filterMask
+    )
+  }
+
+  getHasValue(value: ExtractValue<Content>) {
+    return this._node.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+      isIValueElementNode, ({node, expected}) => node.currently.getHasValue(expected), value
+    )
+  }
+
+  getHasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) {
+    return this._node.eachCompare<
+      ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>, ExtractValueBoolean<Content>
+    > (
+      isIValueElementNode, ({node, filter}) => node.currently.getHasAnyValue(filter), filterMask, true
+    )
+  }
+
+  getContainsValue(value: ExtractValue<Content>) {
+    return this._node.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+      isIValueElementNode, ({node, expected}) => node.currently.getContainsValue(expected), value
     )
   }
 

@@ -13,6 +13,9 @@ export declare class ValuePageElementList<Store extends PageElementStore, PageEl
      * after the initial wait was performed.
      */
     getValue(filterMask?: Workflo.PageNode.ListFilterMask): ValueType[];
+    getHasValue(value: ValueType | ValueType[]): boolean[];
+    getHasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getContainsValue(value: ValueType | ValueType[]): boolean[];
     /**
      * Sets values on all list elements after the initial wait was performed.
      *
@@ -30,6 +33,9 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
      * Returns values of all list elements in the order they were retrieved from the DOM immediatly.
      */
     getValue(filterMask?: Workflo.PageNode.ListFilterMask): ValueType[];
+    getHasValue(value: ValueType | ValueType[]): boolean[];
+    getHasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getContainsValue(value: ValueType | ValueType[]): boolean[];
     hasValue(value: ValueType | ValueType[]): boolean;
     hasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     containsValue(value: ValueType | ValueType[]): boolean;

@@ -322,13 +322,70 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this.eachGet(this.all, element => {
-      element.initialWait()
-      return element.currently.isEnabled()
-    }, filterMask)
+    return this.eachGet(this.all, element => element.currently.isEnabled(), filterMask)
+  }
+
+  getHasText(text: string | string[]) {
+    return this.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text)
+  }
+
+  getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true)
+  }
+
+  getContainsText(text: string | string[]) {
+    return this.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text)
+  }
+
+  getHasDirectText(directText: string | string[]) {
+    return this.eachCompare(
+      this.all, (element, expected) => element.currently.hasDirectText(expected), directText
+    )
+  }
+
+  getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true)
+  }
+
+  getContainsDirectText(directText: string | string[]) {
+    return this.eachCompare(
+      this.all, (element, expected) => element.currently.containsDirectText(expected), directText
+    )
   }
 
   // HELPER FUNCTIONS
+
+  eachCompare<T>(
+    elements: PageElementType[],
+    checkFunc: (element: PageElementType, expected?: T) => boolean,
+    expected?: T | T[],
+    isFilterMask: boolean = false
+  ): boolean[] {
+    const result = []
+
+    if (isArray(expected) && expected.length !== elements.length) {
+      throw new Error(
+        `${this.constructor.name}: ` +
+        `Length of expected (${expected.length}) did not match length of list (${elements.length})\n` +
+        `( ${this._selector} )`
+      )
+    }
+
+    for (let i = 0; i < elements.length; ++i) {
+      const _expected: T = isArray(expected) ? expected[i] : expected
+      const element = elements[i]
+
+      if (isFilterMask) {
+        if (typeof _expected === 'boolean' && _expected === true) {
+          result.push(checkFunc(element, _expected))
+        }
+      } else {
+        result.push(checkFunc(element, _expected))
+      }
+    }
+
+    return result
+  }
 
   /**
    * If the list is empty (no elements could be located matching the list selector),
@@ -360,7 +417,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
       if (isFilterMask) {
         if (typeof _expected === 'boolean' && _expected === true) {
-          if (!checkFunc(element)) {
+          if (!checkFunc(element, _expected)) {
             diffs[`[${i + 1}]`] = element.__lastDiff
           }
         }
@@ -629,6 +686,34 @@ export class PageElementListCurrently<
 
   getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachGet(this.all, element => element.currently.isEnabled(), filterMask)
+  }
+
+  getHasText(text: string | string[]) {
+    return this._node.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text)
+  }
+
+  getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true)
+  }
+
+  getContainsText(text: string | string[]) {
+    return this._node.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text)
+  }
+
+  getHasDirectText(directText: string | string[]) {
+    return this._node.eachCompare(
+      this.all, (element, expected) => element.currently.hasDirectText(expected), directText
+    )
+  }
+
+  getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true)
+  }
+
+  getContainsDirectText(directText: string | string[]) {
+    return this._node.eachCompare(
+      this.all, (element, expected) => element.currently.containsDirectText(expected), directText
+    )
   }
 
 // CHECK STATE FUNCTIONS

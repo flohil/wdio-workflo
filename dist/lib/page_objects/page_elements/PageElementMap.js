@@ -60,12 +60,49 @@ class PageElementMap extends _1.PageNode {
         return this.eachGet(this._$, node => node.getDirectText(), filterMask);
     }
     getIsEnabled(filterMask) {
-        return this.eachGet(this.$, node => {
-            node.wait.isEnabled();
-            return node.currently.isEnabled();
-        }, filterMask);
+        return this.eachGet(this.$, node => node.getIsEnabled(), filterMask);
+    }
+    getHasText(text) {
+        return this.eachCompare(this.$, (element, expected) => element.currently.hasText(expected), text);
+    }
+    getHasAnyText(filterMask) {
+        return this.eachCompare(this.$, (element) => element.currently.hasAnyText(), filterMask, true);
+    }
+    getContainsText(text) {
+        return this.eachCompare(this.$, (element, expected) => element.currently.containsText(expected), text);
+    }
+    getHasDirectText(directText) {
+        return this.eachCompare(this.$, (element, expected) => element.currently.hasDirectText(expected), directText);
+    }
+    getHasAnyDirectText(filterMask) {
+        return this.eachCompare(this.$, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+    }
+    getContainsDirectText(directText) {
+        return this.eachCompare(this.$, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     // HELPER FUNCTIONS
+    eachCompare(context, checkFunc, expected, isFilterMask = false) {
+        const result = {};
+        for (const key in context) {
+            if (expected) {
+                const expectedValue = expected[key];
+                if (isFilterMask) {
+                    if (typeof expectedValue === 'boolean' && expectedValue) {
+                        result[key] = checkFunc(context[key], expectedValue);
+                    }
+                }
+                else {
+                    if (typeof expectedValue !== 'undefined') {
+                        result[key] = checkFunc(context[key], expectedValue);
+                    }
+                }
+            }
+            else {
+                result[key] = checkFunc(context[key]);
+            }
+        }
+        return result;
+    }
     eachCheck(context, checkFunc, expected, isFilterMask = false) {
         const diffs = {};
         for (const key in context) {
@@ -190,6 +227,24 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
     }
     getIsEnabled(filterMask) {
         return this._node.eachGet(this._node.$, node => node.currently.isEnabled(), filterMask);
+    }
+    getHasText(text) {
+        return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasText(expected), text);
+    }
+    getHasAnyText(filterMask) {
+        return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyText(), filterMask, true);
+    }
+    getContainsText(text) {
+        return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsText(expected), text);
+    }
+    getHasDirectText(directText) {
+        return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasDirectText(expected), directText);
+    }
+    getHasAnyDirectText(filterMask) {
+        return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+    }
+    getContainsDirectText(directText) {
+        return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     exists(filterMask) {
         return this._node.eachCheck(this._node.$, element => element.currently.exists(), filterMask, true);

@@ -50,6 +50,22 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
     return this.eachGet(this.all, element => element.getValue(), filterMask)
   }
 
+  getHasValue(value: ValueType | ValueType[]) {
+    return this.eachCompare(
+      this.all, (element, expected) => element.currently.hasValue(expected), value
+    )
+  }
+
+  getHasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true)
+  }
+
+  getContainsValue(value: ValueType | ValueType[]) {
+    return this.eachCompare(
+      this.all, (element, expected) => element.currently.containsValue(expected), value
+    )
+  }
+
 // SETTER FUNCTIONS
 
   /**
@@ -82,6 +98,22 @@ class ValuePageElementListCurrently<
    */
   getValue(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachGet(this.all, element => element.currently.getValue(), filterMask)
+  }
+
+  getHasValue(value: ValueType | ValueType[]) {
+    return this._node.eachCompare(
+      this.all, (element, expected) => element.currently.hasValue(expected), value
+    )
+  }
+
+  getHasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask) {
+    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true)
+  }
+
+  getContainsValue(value: ValueType | ValueType[]) {
+    return this._node.eachCompare(
+      this.all, (element, expected) => element.currently.containsValue(expected), value
+    )
   }
 
   // CHECK STATE

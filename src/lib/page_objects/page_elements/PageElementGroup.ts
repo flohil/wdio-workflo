@@ -75,12 +75,6 @@ implements ElementNode<Content> {
 
   // GETTER FUNCTIONS
 
-  getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
-      isIElementNode, ({node, filter}) => node.getIsEnabled(filter), filterMask
-    )
-  }
-
   /**
    * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.
    *
@@ -98,6 +92,48 @@ implements ElementNode<Content> {
   getDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this.eachGet<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, filter}) => node.getDirectText(filter), filterMask
+    )
+  }
+
+  getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
+    return this.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
+      isIElementNode, ({node, filter}) => node.getIsEnabled(filter), filterMask
+    )
+  }
+
+  getHasText(text: ExtractText<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.getHasText(expected), text
+    )
+  }
+
+  getHasAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
+    return this.eachCompare<ElementNode<Content>> (
+      isIElementNode, ({node, filter}) => node.getHasAnyText(filter), filterMask, true
+    )
+  }
+
+  getContainsText(text: ExtractText<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.getContainsText(expected), text
+    )
+  }
+
+  getHasDirectText(directText: ExtractText<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.getHasDirectText(expected), directText
+    )
+  }
+
+  getHasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
+    return this.eachCompare<ElementNode<Content>> (
+      isIElementNode, ({node, filter}) => node.getHasAnyDirectText(filter), filterMask, true
+    )
+  }
+
+  getContainsDirectText(directText: ExtractText<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.getContainsDirectText(expected), directText
     )
   }
 
@@ -137,6 +173,49 @@ implements ElementNode<Content> {
     }
 
     return result;
+  }
+
+  eachCompare<
+    NodeInterface,
+    ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>,
+    ResultType extends Partial<Content> = Workflo.PageNode.ExtractBoolean<Content>,
+  >(
+    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    compareFunc: (args: {
+      node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType]
+    }) => any,
+    expected?: ExpectedType,
+    isFilterMask: boolean = false
+  ): ResultType {
+    let result = {} as ResultType;
+
+    for (const key in this._$) {
+      const node = this._$[key] as any as NodeInterface
+
+      if (supportsInterface(this._$[key])) {
+        if (expected) {
+          const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType]
+
+          if (isFilterMask) {
+            if (typeof expectedValue === 'boolean') {
+              if (expectedValue === true) {
+                result[key] = compareFunc({node, filter: expectedValue})
+              }
+            } else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+              result[key] = compareFunc({node, filter: expectedValue})
+            }
+          } else {
+            if (typeof expectedValue !== 'undefined') {
+              result[key] = compareFunc({node, expected: expectedValue})
+            }
+          }
+        } else {
+          result[key] = compareFunc({node})
+        }
+      }
+    }
+
+    return result
   }
 
   eachCheck<
@@ -315,6 +394,42 @@ export class PageElementGroupCurrently<
   getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode, ({node, filter}) => node.currently.getIsEnabled(filter), filterMask
+    )
+  }
+
+  getHasText(text: ExtractText<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.currently.getHasText(expected), text
+    )
+  }
+
+  getHasAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
+    return this._node.eachCompare<ElementNode<Content>> (
+      isIElementNode, ({node, filter}) => node.currently.getHasAnyText(filter), filterMask, true
+    )
+  }
+
+  getContainsText(text: ExtractText<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.currently.getContainsText(expected), text
+    )
+  }
+
+  getHasDirectText(directText: ExtractText<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.currently.getHasDirectText(expected), directText
+    )
+  }
+
+  getHasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
+    return this._node.eachCompare<ElementNode<Content>> (
+      isIElementNode, ({node, filter}) => node.currently.getHasAnyDirectText(filter), filterMask, true
+    )
+  }
+
+  getContainsDirectText(directText: ExtractText<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+      isIElementNode, ({node, expected}) => node.currently.getContainsDirectText(expected), directText
     )
   }
 

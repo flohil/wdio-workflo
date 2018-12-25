@@ -15,9 +15,15 @@ export declare abstract class ValuePageElement<Store extends PageElementStore, V
     abstract setValue(value: ValueType): this;
     initialWait(): this;
     getValue(): ValueType;
+    getHasValue(value: ValueType): boolean;
+    getHasAnyValue(): boolean;
+    getContainsValue(value: ValueType): any;
 }
 export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> {
     abstract getValue(): ValueType;
+    getHasValue(value: ValueType): boolean;
+    getHasAnyValue(): boolean;
+    getContainsValue(value: ValueType): any;
     hasValue(value: ValueType): boolean;
     hasAnyValue(): boolean;
     containsValue(value: ValueType): any;

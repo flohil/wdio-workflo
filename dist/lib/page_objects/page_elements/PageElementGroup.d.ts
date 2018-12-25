@@ -29,7 +29,6 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     readonly __getLastDiff: Workflo.IDiff;
     toJSON(): Workflo.IElementJSON;
     __getNodeId(): string;
-    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.
      *
@@ -40,10 +39,22 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
      */
     getText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractText<Content>;
     getDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractText<Content>;
+    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasText(text: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsText(text: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasDirectText(directText: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsDirectText(directText: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     eachGet<NodeInterface, ResultType extends Partial<Content>, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, getFunc: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];
     }) => any, filterMask?: FilterType): Workflo.StripNever<ResultType>;
+    eachCompare<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>, ResultType extends Partial<Content> = Workflo.PageNode.ExtractBoolean<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, compareFunc: (args: {
+        node: NodeInterface;
+        expected?: ExpectedType[keyof ExpectedType];
+        filter?: ExpectedType[keyof ExpectedType];
+    }) => any, expected?: ExpectedType, isFilterMask?: boolean): ResultType;
     eachCheck<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, checkFunc: (args: {
         node: NodeInterface;
         expected?: ExpectedType[keyof ExpectedType];
@@ -69,6 +80,12 @@ export declare class PageElementGroupCurrently<Store extends PageElementStore, C
     getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasText(text: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsText(text: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasDirectText(directText: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsDirectText(directText: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns texts of all group elements immediatly in the order they were retrieved from the DOM.
      *

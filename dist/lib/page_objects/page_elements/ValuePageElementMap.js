@@ -28,6 +28,15 @@ class ValuePageElementMap extends _1.PageElementMap {
     getValue(filterMask) {
         return this.eachGet(this._$, node => node.getValue(), filterMask);
     }
+    getHasValue(value) {
+        return this.eachCompare(this.$, (element, expected) => element.currently.hasValue(expected), value);
+    }
+    getHasAnyValue(filterMask) {
+        return this.eachCompare(this.$, (element) => element.currently.hasAnyValue(), filterMask, true);
+    }
+    getContainsValue(value) {
+        return this.eachCompare(this.$, (element, expected) => element.currently.containsValue(expected), value);
+    }
     /**
      * Sets values on all list elements.
      *
@@ -54,6 +63,15 @@ class ValuePageElementMapCurrently extends _1.PageElementMapCurrently {
      */
     getValue(filterMask) {
         return this._node.eachGet(this._node.$, node => node.currently.getValue(), filterMask);
+    }
+    getHasValue(value) {
+        return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasValue(expected), value);
+    }
+    getHasAnyValue(filterMask) {
+        return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyValue(), filterMask, true);
+    }
+    getContainsValue(value) {
+        return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsValue(expected), value);
     }
     hasValue(value) {
         return this._node.eachCheck(this._node.$, (element, expected) => element.currently.hasValue(expected), value);

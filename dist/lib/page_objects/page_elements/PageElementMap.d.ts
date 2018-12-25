@@ -44,6 +44,13 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
     getText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, string>>;
     getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, string>>;
     getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getHasText(text: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getContainsText(text: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    getHasDirectText(directText: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getContainsDirectText(directText: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    eachCompare<T>(context: Record<K, PageElementType>, checkFunc: (element: PageElementType, expected?: T) => boolean, expected: Partial<Record<K, T>>, isFilterMask?: boolean): Partial<Record<K, boolean>>;
     eachCheck<T>(context: Record<K, PageElementType>, checkFunc: (element: PageElementType, expected?: T) => boolean, expected: Partial<Record<K, T>>, isFilterMask?: boolean): boolean;
     /**
      * Helper function to map element content nodes to a value by calling a node interface function on each node.
@@ -73,6 +80,12 @@ export declare class PageElementMapCurrently<Store extends PageElementStore, K e
     getExists(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
     getIsVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
     getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getHasText(text: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getContainsText(text: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    getHasDirectText(directText: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getContainsDirectText(directText: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
     exists(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
     isVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
     isEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;

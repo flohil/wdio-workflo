@@ -41,6 +41,12 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     getSize(): Workflo.ISize;
     getWidth(): number;
     getHeight(): number;
+    getHasText(text: string): boolean;
+    getHasAnyText(): boolean;
+    getContainsText(text: string): any;
+    getHasDirectText(directText: string): boolean;
+    getHasAnyDirectText(): boolean;
+    getContainsDirectText(directText: string): any;
     /**
      *
      * @param postCondition Sometimes javascript that is to be executed after a click
@@ -149,6 +155,12 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
      * currently, wait and eventually containers.
      */
     getHeight(): number;
+    getHasText(text: string): boolean;
+    getHasAnyText(): boolean;
+    getContainsText(text: string): any;
+    getHasDirectText(directText: string): boolean;
+    getHasAnyDirectText(): boolean;
+    getContainsDirectText(directText: string): any;
     /**
    * @param actual the actual browser value in pixels
    * @param expected the expected value in pixels or 0 if expected was smaller than 0

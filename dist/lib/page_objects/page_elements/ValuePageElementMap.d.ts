@@ -16,6 +16,9 @@ export declare class ValuePageElementMap<Store extends PageElementStore, K exten
      * @param filterMask a filter mask
      */
     getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, ValueType>>;
+    getHasValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
+    getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getContainsValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
     /**
      * Sets values on all list elements.
      *
@@ -38,6 +41,9 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
      * @param filterMask a filter mask
      */
     getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, ValueType>>;
+    getHasValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
+    getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    getContainsValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
     hasValue(value: Partial<Record<K, ValueType>>): boolean;
     hasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
     containsValue(value: Partial<Record<K, ValueType>>): boolean;

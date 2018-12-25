@@ -45,6 +45,24 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
     return this.eachGet(this._$, node => node.getValue(), filterMask)
   }
 
+  getHasValue(value: Partial<Record<K, ValueType>>) {
+    return this.eachCompare(
+      this.$, (element, expected) => element.currently.hasValue(expected), value
+    )
+  }
+
+  getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this.eachCompare(
+      this.$, (element) => element.currently.hasAnyValue(), filterMask, true
+    )
+  }
+
+  getContainsValue(value: Partial<Record<K, ValueType>>) {
+    return this.eachCompare(
+      this.$, (element, expected) => element.currently.containsValue(expected), value
+    )
+  }
+
   /**
    * Sets values on all list elements.
    *
@@ -79,6 +97,24 @@ class ValuePageElementMapCurrently<
    */
   getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachGet(this._node.$, node => node.currently.getValue(), filterMask)
+  }
+
+  getHasValue(value: Partial<Record<K, ValueType>>) {
+    return this._node.eachCompare(
+      this._node.$, (element, expected) => element.currently.hasValue(expected), value
+    )
+  }
+
+  getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this._node.eachCompare(
+      this._node.$, (element) => element.currently.hasAnyValue(), filterMask, true
+    )
+  }
+
+  getContainsValue(value: Partial<Record<K, ValueType>>) {
+    return this._node.eachCompare(
+      this._node.$, (element, expected) => element.currently.containsValue(expected), value
+    )
   }
 
   hasValue(value: Partial<Record<K, ValueType>>) {

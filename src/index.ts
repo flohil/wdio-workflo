@@ -426,6 +426,13 @@ declare global {
         getIsEnabled(filterMask?: StripNever<FilterType>): BooleanType
         getText(filterMask?: StripNever<FilterType>): StripNever<TextType>
         getDirectText(filterMask?: StripNever<FilterType>): StripNever<TextType>
+
+        getHasText(text: StripNever<TextType>): BooleanType
+        getHasAnyText(filterMask?: StripNever<FilterType>): BooleanType
+        getContainsText(text: StripNever<TextType>): BooleanType
+        getHasDirectText(text: StripNever<TextType>): BooleanType
+        getHasAnyDirectText(filterMask?: StripNever<FilterType>): BooleanType
+        getContainsDirectText(text: StripNever<TextType>): BooleanType
       }
 
       interface IWaitElement<TextType, BooleanType, FilterType, OptsType = IWDIOParamsReverseInterval> {
@@ -483,7 +490,7 @@ declare global {
 
       type ExtractValueBoolean<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
-        TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
+        TryArrayOrElement<ReturnType<T[P]['getHasValue']>> :
         never;
       }
 
@@ -499,7 +506,10 @@ declare global {
 
       interface IValueElement<GetType, FilterType> {
         getValue(filterMask?: StripNever<FilterType>): StripNever<GetType>
-        getIsEnabled(filterMask?: StripNever<FilterType>): FilterType
+
+        getHasValue(value: StripNever<GetType>): FilterType
+        getHasAnyValue(filterMask?: StripNever<FilterType>): FilterType
+        getContainsValue(value: StripNever<GetType>): FilterType
       }
 
       interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {

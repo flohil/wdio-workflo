@@ -207,12 +207,48 @@ class PageElementList extends _1.PageNode {
         return this.eachGet(this.all, element => element.getDirectText(), filterMask);
     }
     getIsEnabled(filterMask) {
-        return this.eachGet(this.all, element => {
-            element.initialWait();
-            return element.currently.isEnabled();
-        }, filterMask);
+        return this.eachGet(this.all, element => element.currently.isEnabled(), filterMask);
+    }
+    getHasText(text) {
+        return this.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text);
+    }
+    getHasAnyText(filterMask) {
+        return this.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
+    }
+    getContainsText(text) {
+        return this.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text);
+    }
+    getHasDirectText(directText) {
+        return this.eachCompare(this.all, (element, expected) => element.currently.hasDirectText(expected), directText);
+    }
+    getHasAnyDirectText(filterMask) {
+        return this.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+    }
+    getContainsDirectText(directText) {
+        return this.eachCompare(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     // HELPER FUNCTIONS
+    eachCompare(elements, checkFunc, expected, isFilterMask = false) {
+        const result = [];
+        if (util_2.isArray(expected) && expected.length !== elements.length) {
+            throw new Error(`${this.constructor.name}: ` +
+                `Length of expected (${expected.length}) did not match length of list (${elements.length})\n` +
+                `( ${this._selector} )`);
+        }
+        for (let i = 0; i < elements.length; ++i) {
+            const _expected = util_2.isArray(expected) ? expected[i] : expected;
+            const element = elements[i];
+            if (isFilterMask) {
+                if (typeof _expected === 'boolean' && _expected === true) {
+                    result.push(checkFunc(element, _expected));
+                }
+            }
+            else {
+                result.push(checkFunc(element, _expected));
+            }
+        }
+        return result;
+    }
     /**
      * If the list is empty (no elements could be located matching the list selector),
      * this function will always return true.
@@ -233,7 +269,7 @@ class PageElementList extends _1.PageNode {
             const element = elements[i];
             if (isFilterMask) {
                 if (typeof _expected === 'boolean' && _expected === true) {
-                    if (!checkFunc(element)) {
+                    if (!checkFunc(element, _expected)) {
                         diffs[`[${i + 1}]`] = element.__lastDiff;
                     }
                 }
@@ -430,6 +466,24 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     }
     getIsEnabled(filterMask) {
         return this._node.eachGet(this.all, element => element.currently.isEnabled(), filterMask);
+    }
+    getHasText(text) {
+        return this._node.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text);
+    }
+    getHasAnyText(filterMask) {
+        return this._node.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
+    }
+    getContainsText(text) {
+        return this._node.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text);
+    }
+    getHasDirectText(directText) {
+        return this._node.eachCompare(this.all, (element, expected) => element.currently.hasDirectText(expected), directText);
+    }
+    getHasAnyDirectText(filterMask) {
+        return this._node.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+    }
+    getContainsDirectText(directText) {
+        return this._node.eachCompare(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     // CHECK STATE FUNCTIONS
     isEmpty() {

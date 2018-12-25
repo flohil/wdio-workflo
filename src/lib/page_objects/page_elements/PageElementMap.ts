@@ -124,13 +124,63 @@ implements Workflo.PageNode.IElementNode<
   }
 
   getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
-    return this.eachGet(this.$, node => {
-      node.wait.isEnabled()
-      return node.currently.isEnabled()
-    }, filterMask)
+    return this.eachGet(this.$, node => node.getIsEnabled(), filterMask)
+  }
+
+  getHasText(text: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.hasText(expected), text)
+  }
+
+  getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this.eachCompare(this.$, (element) => element.currently.hasAnyText(), filterMask, true)
+  }
+
+  getContainsText(text: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.containsText(expected), text)
+  }
+
+  getHasDirectText(directText: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.hasDirectText(expected), directText)
+  }
+
+  getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this.eachCompare(this.$, (element) => element.currently.hasAnyDirectText(), filterMask, true)
+  }
+
+  getContainsDirectText(directText: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.containsDirectText(expected), directText)
   }
 
   // HELPER FUNCTIONS
+
+  eachCompare<T>(
+    context: Record<K, PageElementType>,
+    checkFunc: (element: PageElementType, expected?: T) => boolean,
+    expected: Partial<Record<K, T>>,
+    isFilterMask: boolean = false
+  ): Partial<Record<K, boolean>> {
+    const result: Partial<Record<K, boolean>> = {}
+
+    for (const key in context) {
+      if (expected) {
+        const expectedValue = expected[key] as any as T
+
+        if (isFilterMask) {
+          if (typeof expectedValue === 'boolean' && expectedValue) {
+            result[key] = checkFunc(context[key], expectedValue)
+          }
+        } else {
+          if (typeof expectedValue !== 'undefined') {
+            result[key] = checkFunc(context[key], expectedValue)
+          }
+        }
+      } else {
+        result[key] = checkFunc(context[key])
+      }
+    }
+
+    return result
+  }
 
   eachCheck<T>(
     context: Record<K, PageElementType>,
@@ -300,6 +350,34 @@ export class PageElementMapCurrently<
 
   getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
     return this._node.eachGet(this._node.$, node => node.currently.isEnabled(), filterMask)
+  }
+
+  getHasText(text: Partial<Record<K, string>>) {
+    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasText(expected), text)
+  }
+
+  getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyText(), filterMask, true)
+  }
+
+  getContainsText(text: Partial<Record<K, string>>) {
+    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsText(expected), text)
+  }
+
+  getHasDirectText(directText: Partial<Record<K, string>>) {
+    return this._node.eachCompare(
+      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directText
+    )
+  }
+
+  getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
+    return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true)
+  }
+
+  getContainsDirectText(directText: Partial<Record<K, string>>) {
+    return this._node.eachCompare(
+      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directText
+    )
   }
 
   exists(filterMask?: Workflo.PageNode.MapFilterMask<K>) {

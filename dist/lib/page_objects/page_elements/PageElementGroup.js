@@ -44,9 +44,6 @@ class PageElementGroup extends _1.PageNode {
         return this._id;
     }
     // GETTER FUNCTIONS
-    getIsEnabled(filterMask) {
-        return this.eachGet(isIElementNode, ({ node, filter }) => node.getIsEnabled(filter), filterMask);
-    }
     /**
      * Returns texts of all group elements after performing an initial wait in the order they were retrieved from the DOM.
      *
@@ -60,6 +57,27 @@ class PageElementGroup extends _1.PageNode {
     }
     getDirectText(filterMask) {
         return this.eachGet(isIElementNode, ({ node, filter }) => node.getDirectText(filter), filterMask);
+    }
+    getIsEnabled(filterMask) {
+        return this.eachGet(isIElementNode, ({ node, filter }) => node.getIsEnabled(filter), filterMask);
+    }
+    getHasText(text) {
+        return this.eachCompare(isIElementNode, ({ node, expected }) => node.getHasText(expected), text);
+    }
+    getHasAnyText(filterMask) {
+        return this.eachCompare(isIElementNode, ({ node, filter }) => node.getHasAnyText(filter), filterMask, true);
+    }
+    getContainsText(text) {
+        return this.eachCompare(isIElementNode, ({ node, expected }) => node.getContainsText(expected), text);
+    }
+    getHasDirectText(directText) {
+        return this.eachCompare(isIElementNode, ({ node, expected }) => node.getHasDirectText(expected), directText);
+    }
+    getHasAnyDirectText(filterMask) {
+        return this.eachCompare(isIElementNode, ({ node, filter }) => node.getHasAnyDirectText(filter), filterMask, true);
+    }
+    getContainsDirectText(directText) {
+        return this.eachCompare(isIElementNode, ({ node, expected }) => node.getContainsDirectText(expected), directText);
     }
     // HELPER FUNCTIONS
     eachGet(supportsInterface, getFunc, filterMask) {
@@ -80,6 +98,36 @@ class PageElementGroup extends _1.PageNode {
                 }
                 else {
                     result[key] = getFunc({ node });
+                }
+            }
+        }
+        return result;
+    }
+    eachCompare(supportsInterface, compareFunc, expected, isFilterMask = false) {
+        let result = {};
+        for (const key in this._$) {
+            const node = this._$[key];
+            if (supportsInterface(this._$[key])) {
+                if (expected) {
+                    const expectedValue = expected[key];
+                    if (isFilterMask) {
+                        if (typeof expectedValue === 'boolean') {
+                            if (expectedValue === true) {
+                                result[key] = compareFunc({ node, filter: expectedValue });
+                            }
+                        }
+                        else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+                            result[key] = compareFunc({ node, filter: expectedValue });
+                        }
+                    }
+                    else {
+                        if (typeof expectedValue !== 'undefined') {
+                            result[key] = compareFunc({ node, expected: expectedValue });
+                        }
+                    }
+                }
+                else {
+                    result[key] = compareFunc({ node });
                 }
             }
         }
@@ -204,6 +252,24 @@ class PageElementGroupCurrently extends _1.PageNodeCurrently {
     }
     getIsEnabled(filterMask) {
         return this._node.eachGet(isIElementNode, ({ node, filter }) => node.currently.getIsEnabled(filter), filterMask);
+    }
+    getHasText(text) {
+        return this._node.eachCompare(isIElementNode, ({ node, expected }) => node.currently.getHasText(expected), text);
+    }
+    getHasAnyText(filterMask) {
+        return this._node.eachCompare(isIElementNode, ({ node, filter }) => node.currently.getHasAnyText(filter), filterMask, true);
+    }
+    getContainsText(text) {
+        return this._node.eachCompare(isIElementNode, ({ node, expected }) => node.currently.getContainsText(expected), text);
+    }
+    getHasDirectText(directText) {
+        return this._node.eachCompare(isIElementNode, ({ node, expected }) => node.currently.getHasDirectText(expected), directText);
+    }
+    getHasAnyDirectText(filterMask) {
+        return this._node.eachCompare(isIElementNode, ({ node, filter }) => node.currently.getHasAnyDirectText(filter), filterMask, true);
+    }
+    getContainsDirectText(directText) {
+        return this._node.eachCompare(isIElementNode, ({ node, expected }) => node.currently.getContainsDirectText(expected), directText);
     }
     /**
      * Returns texts of all group elements immediatly in the order they were retrieved from the DOM.

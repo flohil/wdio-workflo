@@ -160,6 +160,24 @@ class PageElement extends _1.PageElementBase {
     getHeight() {
         return this._executeAfterInitialWait(() => this.currently.getHeight());
     }
+    getHasText(text) {
+        return this._executeAfterInitialWait(() => this.currently.hasText(text));
+    }
+    getHasAnyText() {
+        return this._executeAfterInitialWait(() => this.currently.hasAnyText());
+    }
+    getContainsText(text) {
+        return this._executeAfterInitialWait(() => this.currently.containsText(text));
+    }
+    getHasDirectText(directText) {
+        return this._executeAfterInitialWait(() => this.currently.hasDirectText(directText));
+    }
+    getHasAnyDirectText() {
+        return this._executeAfterInitialWait(() => this.currently.hasAnyDirectText());
+    }
+    getContainsDirectText(directText) {
+        return this._executeAfterInitialWait(() => this.currently.containsDirectText(directText));
+    }
     // INTERACTION FUNCTIONS (interact with state after initial wait)
     /**
      *
@@ -515,6 +533,24 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
      */
     getHeight() {
         return this.getSize().height;
+    }
+    getHasText(text) {
+        return this.hasText(text);
+    }
+    getHasAnyText() {
+        return this.hasAnyText();
+    }
+    getContainsText(text) {
+        return this.containsText(text);
+    }
+    getHasDirectText(directText) {
+        return this.hasDirectText(directText);
+    }
+    getHasAnyDirectText() {
+        return this.hasAnyDirectText();
+    }
+    getContainsDirectText(directText) {
+        return this.containsDirectText(directText);
     }
     // CHECK STATE
     /**

@@ -101,6 +101,13 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getText(filterMask?: Workflo.PageNode.ListFilterMask): string[];
     getDirectText(filterMask?: Workflo.PageNode.ListFilterMask): string[];
     getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getHasText(text: string | string[]): boolean[];
+    getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getContainsText(text: string | string[]): boolean[];
+    getHasDirectText(directText: string | string[]): boolean[];
+    getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getContainsDirectText(directText: string | string[]): boolean[];
+    eachCompare<T>(elements: PageElementType[], checkFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[], isFilterMask?: boolean): boolean[];
     /**
      * If the list is empty (no elements could be located matching the list selector),
      * this function will always return true.
@@ -159,6 +166,12 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
     getExists(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     getIsVisible(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getHasText(text: string | string[]): boolean[];
+    getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getContainsText(text: string | string[]): boolean[];
+    getHasDirectText(directText: string | string[]): boolean[];
+    getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
+    getContainsDirectText(directText: string | string[]): boolean[];
     isEmpty(): boolean;
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
     exists(filterMask?: boolean): boolean;

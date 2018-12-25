@@ -49,6 +49,18 @@ export abstract class ValuePageElement<
   getValue() {
     return this._executeAfterInitialWait( () => this.currently.getValue() )
   }
+
+  getHasValue(value: ValueType) {
+    return this._executeAfterInitialWait( () => this.currently.hasValue(value) )
+  }
+
+  getHasAnyValue() {
+    return this._executeAfterInitialWait( () => this.currently.hasAnyValue() )
+  }
+
+  getContainsValue(value: ValueType) {
+    return this._executeAfterInitialWait( () => this.currently.containsValue(value) )
+  }
 }
 
 export abstract class ValuePageElementCurrently<
@@ -58,6 +70,18 @@ export abstract class ValuePageElementCurrently<
 > extends PageElementCurrently<Store, PageElementType> {
 
   abstract getValue(): ValueType
+
+  getHasValue(value: ValueType) {
+    return this.hasValue(value)
+  }
+
+  getHasAnyValue() {
+    return this.hasAnyValue()
+  }
+
+  getContainsValue(value: ValueType) {
+    return this.containsValue(value)
+  }
 
   hasValue(value: ValueType) {
     return this._compareHas(value, this.getValue())
