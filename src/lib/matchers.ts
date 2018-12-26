@@ -1849,6 +1849,60 @@ export const valueElementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any value", opts.timeout)
     }
   }),
+  toContainValue: createValueMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'value', 'contain', actual, expected)
+    },
+    list: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'contain value')
+    },
+    map: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'contain value')
+    },
+    group: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsValue(expected), () => node.currently.not.containsValue(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, "contain value")
+    }
+  }),
+  toEventuallyContainValue: createEventuallyValueMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsValue(expected, opts), () => node.eventually.not.containsValue(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'value', 'contain', actual, expected, opts.timeout
+      )
+    },
+    list: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsValue(expected, opts), () => node.eventually.not.containsValue(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain value', opts.timeout)
+    },
+    map: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsValue(expected, opts), () => node.eventually.not.containsValue(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain value', opts.timeout)
+    },
+    group: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsValue(expected, opts), () => node.eventually.not.containsValue(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain value", opts.timeout)
+    }
+  }),
 
   // toHaveValue: valueElementMatcherFunction(
   //   ({node, expected}) => [

@@ -154,20 +154,26 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
 interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
     toHaveValue(value: ValueType | ValueType[]): boolean;
     toHaveAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
+    toContainValue(value: ValueType | ValueType[]): boolean;
     toEventuallyHaveValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval): boolean;
     toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean;
+    toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval): boolean;
 }
 interface ICustomValueMapMatchers<K extends string | number | symbol, ValueType> extends ICustomMapMatchers<K> {
     toHaveValue(value: Partial<Record<K, ValueType>>): boolean;
     toHaveAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
+    toContainValue(value: Partial<Record<K, ValueType>>): boolean;
     toEventuallyHaveValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): boolean;
     toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
+    toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): boolean;
 }
 interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> extends ICustomGroupMatchers<Content> {
     toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean;
     toHaveAnyValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
+    toContainValue(value: Workflo.PageNode.ExtractValue<Content>): boolean;
     toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): boolean;
     toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
+    toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): boolean;
 }
 interface IElementMatchers extends ICustomElementMatchers {
     not: ICustomElementMatchers;
