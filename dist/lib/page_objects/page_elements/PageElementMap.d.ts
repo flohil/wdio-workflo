@@ -50,6 +50,7 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
     getHasDirectText(directText: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
     getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
     getContainsDirectText(directText: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
+    protected _includedInFilter(value: any): boolean;
     eachCompare<T>(context: Record<K, PageElementType>, checkFunc: (element: PageElementType, expected?: T) => boolean, expected: Partial<Record<K, T>>, isFilterMask?: boolean): Partial<Record<K, boolean>>;
     eachCheck<T>(context: Record<K, PageElementType>, checkFunc: (element: PageElementType, expected?: T) => boolean, expected: Partial<Record<K, T>>, isFilterMask?: boolean): boolean;
     /**

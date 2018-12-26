@@ -34,6 +34,10 @@ function isNullOrUndefined(value) {
     return value === null || typeof value === 'undefined';
 }
 exports.isNullOrUndefined = isNullOrUndefined;
+function notIsNullOrUndefined(value) {
+    return value !== null || typeof value !== 'undefined';
+}
+exports.notIsNullOrUndefined = notIsNullOrUndefined;
 function isEmpty(value) {
     if (typeof value === 'string') {
         return value.length === 0;

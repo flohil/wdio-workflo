@@ -16,6 +16,7 @@ const builders_1 = require("../builders");
 const __1 = require("../");
 const util_2 = require("util");
 const PageNode_1 = require("./PageNode");
+const helpers_1 = require("../../helpers");
 // holds several PageElement instances of the same type
 class PageElementList extends _1.PageNode {
     constructor(selector, opts) {
@@ -228,6 +229,9 @@ class PageElementList extends _1.PageNode {
         return this.eachCompare(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     // HELPER FUNCTIONS
+    _includedInFilter(filter) {
+        return (typeof filter === 'boolean' && filter === true);
+    }
     eachCompare(elements, checkFunc, expected, isFilterMask = false) {
         const result = [];
         if (util_2.isArray(expected) && expected.length !== elements.length) {
@@ -239,7 +243,7 @@ class PageElementList extends _1.PageNode {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
             if (isFilterMask) {
-                if (typeof _expected === 'boolean' && _expected === true) {
+                if (helpers_1.isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
                     result.push(checkFunc(element, _expected));
                 }
             }
@@ -268,7 +272,7 @@ class PageElementList extends _1.PageNode {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
             if (isFilterMask) {
-                if (typeof _expected === 'boolean' && _expected === true) {
+                if (helpers_1.isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
                     if (!checkFunc(element, _expected)) {
                         diffs[`[${i + 1}]`] = element.__lastDiff;
                     }
@@ -286,7 +290,10 @@ class PageElementList extends _1.PageNode {
         return Object.keys(diffs).length === 0;
     }
     eachGet(elements, getFunc, filterMask) {
-        if (filterMask) {
+        if (helpers_1.isNullOrUndefined(filterMask)) {
+            return elements.map(element => getFunc(element));
+        }
+        else if (filterMask !== false) {
             const result = [];
             if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
                 throw new Error(`${this.constructor.name}: ` +
@@ -296,14 +303,14 @@ class PageElementList extends _1.PageNode {
             for (let i = 0; i < elements.length; ++i) {
                 const _filterMask = util_2.isArray(filterMask) ? filterMask[i] : filterMask;
                 const element = elements[i];
-                if (_filterMask === true) {
+                if (this._includedInFilter(_filterMask)) {
                     result.push(getFunc(element));
                 }
             }
             return result;
         }
         else {
-            return elements.map(element => getFunc(element));
+            return [];
         }
     }
     /**
@@ -323,7 +330,7 @@ class PageElementList extends _1.PageNode {
             const _expected = util_2.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
             if (isFilterMask) {
-                if (typeof _expected === 'boolean' && _expected === true) {
+                if (helpers_1.isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
                     waitFunc(element);
                 }
             }
@@ -334,7 +341,10 @@ class PageElementList extends _1.PageNode {
         return this;
     }
     eachDo(elements, doFunc, filterMask) {
-        if (filterMask) {
+        if (helpers_1.isNullOrUndefined(filterMask)) {
+            elements.map(element => doFunc(element));
+        }
+        else if (filterMask !== false) {
             if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
                 throw new Error(`${this.constructor.name}: ` +
                     `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
@@ -343,13 +353,10 @@ class PageElementList extends _1.PageNode {
             for (let i = 0; i < elements.length; ++i) {
                 const _filterMask = util_2.isArray(filterMask) ? filterMask[i] : filterMask;
                 const element = elements[i];
-                if (_filterMask === true) {
+                if (this._includedInFilter(_filterMask)) {
                     doFunc(element);
                 }
             }
-        }
-        else {
-            elements.map(element => doFunc(element));
         }
         return this;
     }

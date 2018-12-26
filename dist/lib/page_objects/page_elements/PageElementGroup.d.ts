@@ -46,6 +46,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     getHasDirectText(directText: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     getHasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     getContainsDirectText(directText: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    protected _includedInFilter(value: any): boolean;
     eachGet<NodeInterface, ResultType extends Partial<Content>, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, getFunc: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];

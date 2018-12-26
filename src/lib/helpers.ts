@@ -34,11 +34,15 @@ export function tolerancesToString(values, tolerances?) {
   return str + '}';
 }
 
-export function isNullOrUndefined<T>(value: T) {
+export function isNullOrUndefined(value: any) {
   return value === null || typeof value === 'undefined'
 }
 
-export function isEmpty<T>(value: T) {
+export function notIsNullOrUndefined(value: any) {
+  return value !== null || typeof value !== 'undefined'
+}
+
+export function isEmpty(value: any) {
   if (typeof value === 'string') {
     return value.length === 0
   }

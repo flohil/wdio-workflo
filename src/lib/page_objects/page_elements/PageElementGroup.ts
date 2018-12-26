@@ -1,6 +1,7 @@
 import { PageElementStore } from '../stores'
 import { PageNodeCurrently, PageNode } from '.';
 import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
+import { isNullOrUndefined } from '../../helpers';
 
 export type ExtractText<Content extends {[key: string]: Workflo.PageNode.INode}> =
   Workflo.PageNode.ExtractText<Content>
@@ -139,6 +140,10 @@ implements ElementNode<Content> {
 
   // HELPER FUNCTIONS
 
+  protected _includedInFilter(value: any) {
+    return !!value
+  }
+
   eachGet<
     NodeInterface,
     ResultType extends Partial<Content>,
@@ -156,18 +161,14 @@ implements ElementNode<Content> {
       if (supportsInterface(this.$[key])) {
         const node = this.$[key] as any as NodeInterface
 
-        if (filterMask) {
+        if (isNullOrUndefined(filterMask)) {
+          result[key] = getFunc({node})
+        } else {
           const filter = filterMask[key]
 
-          if (typeof filter === 'boolean') {
-            if (filter === true) {
-              result[key] = getFunc({node, filter})
-            }
-          } else if (typeof filter !== 'undefined' && filter !== null) {
+          if (this._includedInFilter(filter)) {
             result[key] = getFunc({node, filter})
           }
-        } else {
-          result[key] = getFunc({node})
         }
       }
     }
@@ -193,15 +194,13 @@ implements ElementNode<Content> {
       const node = this._$[key] as any as NodeInterface
 
       if (supportsInterface(this._$[key])) {
-        if (expected) {
+        if (isNullOrUndefined(expected)) {
+          result[key] = compareFunc({node})
+        } else {
           const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType]
 
           if (isFilterMask) {
-            if (typeof expectedValue === 'boolean') {
-              if (expectedValue === true) {
-                result[key] = compareFunc({node, filter: expectedValue})
-              }
-            } else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+            if (this._includedInFilter(expectedValue)) {
               result[key] = compareFunc({node, filter: expectedValue})
             }
           } else {
@@ -209,8 +208,6 @@ implements ElementNode<Content> {
               result[key] = compareFunc({node, expected: expectedValue})
             }
           }
-        } else {
-          result[key] = compareFunc({node})
         }
       }
     }
@@ -235,17 +232,15 @@ implements ElementNode<Content> {
       const node = this._$[key] as any as NodeInterface
 
       if (supportsInterface(this._$[key])) {
-        if (expected) {
+        if (isNullOrUndefined(expected)) {
+          if (!checkFunc({node})) {
+            diffs[`.${key}`] = this._$[key].__lastDiff
+          }
+        } else {
           const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType]
 
           if (isFilterMask) {
-            if (typeof expectedValue === 'boolean') {
-              if (expectedValue === true) {
-                if (!checkFunc({node, filter: expectedValue})) {
-                  diffs[`.${key}`] = this._$[key].__lastDiff
-                }
-              }
-            } else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+            if (this._includedInFilter(expectedValue)) {
               if (!checkFunc({node, filter: expectedValue})) {
                 diffs[`.${key}`] = this._$[key].__lastDiff
               }
@@ -256,10 +251,6 @@ implements ElementNode<Content> {
                 diffs[`.${key}`] = this._$[key].__lastDiff
               }
             }
-          }
-        } else {
-          if (!checkFunc({node})) {
-            diffs[`.${key}`] = this._$[key].__lastDiff
           }
         }
       }
@@ -287,15 +278,13 @@ implements ElementNode<Content> {
       const node = this._$[key] as any as NodeInterface
 
       if (supportsInterface(this._$[key])) {
-        if (expected) {
+        if (isNullOrUndefined(expected)) {
+          waitFunc({node})
+        } else {
           const expectedValue = expected[key]
 
           if (isFilterMask) {
-            if (typeof expectedValue === 'boolean') {
-              if (expectedValue === true) {
-                waitFunc({node, filter: expectedValue})
-              }
-            } else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+            if (this._includedInFilter(expectedValue)) {
               waitFunc({node, filter: expectedValue})
             }
           } else {
@@ -303,8 +292,6 @@ implements ElementNode<Content> {
               waitFunc({node, expected: expectedValue})
             }
           }
-        } else {
-          waitFunc({node})
         }
       }
     }
@@ -326,18 +313,14 @@ implements ElementNode<Content> {
       const node = this._$[key] as any as NodeInterface
 
       if (supportsInterface(this._$[key])) {
-        if (filterMask) {
+        if (isNullOrUndefined(filterMask)) {
+          doFunc({node})
+        } else {
           const filter = filterMask[key]
 
-          if (typeof filter === 'boolean') {
-            if (filter === true) {
-              doFunc({node, filter})
-            }
-          } else if (typeof filter !== 'undefined' && filter !== null) {
+          if (this._includedInFilter(filter)) {
             doFunc({node, filter})
           }
-        } else {
-          doFunc({node})
         }
       }
     }

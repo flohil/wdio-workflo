@@ -10,6 +10,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
+const helpers_1 = require("../../helpers");
 // holds several PageElement instances of the same type
 class PageElementMap extends _1.PageNode {
     constructor(_selector, _a) {
@@ -81,13 +82,19 @@ class PageElementMap extends _1.PageNode {
         return this.eachCompare(this.$, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     // HELPER FUNCTIONS
+    _includedInFilter(value) {
+        return (typeof value === 'boolean' && value === true);
+    }
     eachCompare(context, checkFunc, expected, isFilterMask = false) {
         const result = {};
         for (const key in context) {
-            if (expected) {
+            if (helpers_1.isNullOrUndefined(expected)) {
+                result[key] = checkFunc(context[key]);
+            }
+            else {
                 const expectedValue = expected[key];
                 if (isFilterMask) {
-                    if (typeof expectedValue === 'boolean' && expectedValue) {
+                    if (this._includedInFilter(expectedValue)) {
                         result[key] = checkFunc(context[key], expectedValue);
                     }
                 }
@@ -97,18 +104,20 @@ class PageElementMap extends _1.PageNode {
                     }
                 }
             }
-            else {
-                result[key] = checkFunc(context[key]);
-            }
         }
         return result;
     }
     eachCheck(context, checkFunc, expected, isFilterMask = false) {
         const diffs = {};
         for (const key in context) {
-            if (expected) {
+            if (helpers_1.isNullOrUndefined(expected)) {
+                if (!checkFunc(context[key])) {
+                    diffs[`.${key}`] = context[key].__lastDiff;
+                }
+            }
+            else {
                 if (isFilterMask) {
-                    if (typeof expected[key] === 'boolean' && expected[key]) {
+                    if (this._includedInFilter(expected[key])) {
                         if (!checkFunc(context[key])) {
                             diffs[`.${key}`] = context[key].__lastDiff;
                         }
@@ -120,11 +129,6 @@ class PageElementMap extends _1.PageNode {
                             diffs[`.${key}`] = context[key].__lastDiff;
                         }
                     }
-                }
-            }
-            else {
-                if (!checkFunc(context[key])) {
-                    diffs[`.${key}`] = context[key].__lastDiff;
                 }
             }
         }
@@ -144,47 +148,45 @@ class PageElementMap extends _1.PageNode {
      */
     eachGet(context, getFunc, filterMask) {
         let result = {};
-        for (const k in context) {
-            if (filterMask) {
-                if (typeof filterMask[k] === 'boolean' && filterMask[k]) {
-                    result[k] = getFunc(context[k]);
-                }
+        for (const key in context) {
+            if (helpers_1.isNullOrUndefined(filterMask)) {
+                result[key] = getFunc(context[key]);
             }
             else {
-                result[k] = getFunc(context[k]);
+                if (this._includedInFilter(filterMask[key])) {
+                    result[key] = getFunc(context[key]);
+                }
             }
         }
         return result;
     }
     eachWait(context, waitFunc, expected, isFilterMask = false) {
         for (const key in context) {
-            if (expected) {
+            if (helpers_1.isNullOrUndefined(expected)) {
+                waitFunc(context[key], expected[key]);
+            }
+            else {
                 if (isFilterMask) {
-                    if (typeof expected[key] === 'boolean' && expected[key]) {
+                    if (this._includedInFilter(expected[key])) {
                         waitFunc(context[key]);
                     }
                 }
-                else {
-                    if (typeof expected[key] !== 'undefined') {
-                        waitFunc(context[key], expected[key]);
-                    }
+                else if (typeof expected[key] !== 'undefined') {
+                    waitFunc(context[key], expected[key]);
                 }
-            }
-            else {
-                waitFunc(context[key], expected[key]);
             }
         }
         return this;
     }
     eachDo(context, doFunc, filterMask) {
         for (const key in context) {
-            if (filterMask) {
-                if (typeof filterMask[key] === 'boolean' && filterMask[key]) {
-                    doFunc(context[key]);
-                }
+            if (helpers_1.isNullOrUndefined(filterMask)) {
+                doFunc(context[key]);
             }
             else {
-                doFunc(context[key]);
+                if (this._includedInFilter(filterMask[key])) {
+                    doFunc(context[key]);
+                }
             }
         }
         return this;

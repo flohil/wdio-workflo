@@ -14,6 +14,7 @@ import { ListWhereBuilder, XPathBuilder } from '../builders'
 import { DEFAULT_INTERVAL } from '../'
 import { isArray } from 'util';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
+import { notIsNullOrUndefined, isNullOrUndefined } from '../../helpers';
 
 export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
 
@@ -355,6 +356,10 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
   // HELPER FUNCTIONS
 
+  protected _includedInFilter(filter: any) {
+    return (typeof filter === 'boolean' && filter === true)
+  }
+
   eachCompare<T>(
     elements: PageElementType[],
     checkFunc: (element: PageElementType, expected?: T) => boolean,
@@ -376,7 +381,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
       const element = elements[i]
 
       if (isFilterMask) {
-        if (typeof _expected === 'boolean' && _expected === true) {
+        if (isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
           result.push(checkFunc(element, _expected))
         }
       } else {
@@ -416,7 +421,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
       const element = elements[i]
 
       if (isFilterMask) {
-        if (typeof _expected === 'boolean' && _expected === true) {
+        if (isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
           if (!checkFunc(element, _expected)) {
             diffs[`[${i + 1}]`] = element.__lastDiff
           }
@@ -440,7 +445,9 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     getFunc: (element: PageElementType) => T,
     filterMask?: Workflo.PageNode.ListFilterMask,
   ): T[] {
-    if (filterMask) {
+    if (isNullOrUndefined(filterMask)) {
+      return elements.map(element => getFunc(element))
+    } else if (filterMask !== false) {
       const result: T[] = []
 
       if (isArray(filterMask) && filterMask.length !== elements.length) {
@@ -455,14 +462,14 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
         const _filterMask: boolean = isArray(filterMask) ? filterMask[i] : filterMask
         const element = elements[i]
 
-        if (_filterMask === true) {
+        if (this._includedInFilter(_filterMask)) {
           result.push(getFunc(element))
         }
       }
 
       return result
     } else {
-      return elements.map(element => getFunc(element))
+      return []
     }
   }
 
@@ -492,7 +499,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
       const element = elements[i]
 
       if (isFilterMask) {
-        if (typeof _expected === 'boolean' && _expected === true) {
+        if (isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
           waitFunc(element)
         }
       } else {
@@ -508,7 +515,9 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     doFunc: (element: PageElementType) => PageElementType,
     filterMask?: Workflo.PageNode.ListFilterMask
   ) {
-    if (filterMask) {
+    if (isNullOrUndefined(filterMask)) {
+      elements.map(element => doFunc(element))
+    } else if (filterMask !== false) {
       if (isArray(filterMask) && filterMask.length !== elements.length) {
         throw new Error(
           `${this.constructor.name}: ` +
@@ -521,12 +530,10 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
         const _filterMask: boolean = isArray(filterMask) ? filterMask[i] : filterMask
         const element = elements[i]
 
-        if (_filterMask === true) {
+        if (this._includedInFilter(_filterMask)) {
           doFunc(element)
         }
       }
-    } else {
-      elements.map(element => doFunc(element))
     }
 
     return this

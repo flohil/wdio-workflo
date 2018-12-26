@@ -2,6 +2,7 @@ import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageNodeEventua
 import { PageElementStore } from '../stores'
 import { XPathBuilder } from '../builders'
 import _ = require('lodash');
+import { isNullOrUndefined } from '../../helpers';
 
 // https://github.com/Microsoft/TypeScript/issues/14930
 
@@ -153,6 +154,10 @@ implements Workflo.PageNode.IElementNode<
 
   // HELPER FUNCTIONS
 
+  protected _includedInFilter(value: any) {
+    return (typeof value === 'boolean' && value === true)
+  }
+
   eachCompare<T>(
     context: Record<K, PageElementType>,
     checkFunc: (element: PageElementType, expected?: T) => boolean,
@@ -162,11 +167,13 @@ implements Workflo.PageNode.IElementNode<
     const result: Partial<Record<K, boolean>> = {}
 
     for (const key in context) {
-      if (expected) {
+      if (isNullOrUndefined(expected)) {
+        result[key] = checkFunc(context[key])
+      } else {
         const expectedValue = expected[key] as any as T
 
         if (isFilterMask) {
-          if (typeof expectedValue === 'boolean' && expectedValue) {
+          if (this._includedInFilter(expectedValue)) {
             result[key] = checkFunc(context[key], expectedValue)
           }
         } else {
@@ -174,8 +181,6 @@ implements Workflo.PageNode.IElementNode<
             result[key] = checkFunc(context[key], expectedValue)
           }
         }
-      } else {
-        result[key] = checkFunc(context[key])
       }
     }
 
@@ -191,9 +196,13 @@ implements Workflo.PageNode.IElementNode<
     const diffs: Workflo.IDiffTree = {}
 
     for (const key in context) {
-      if (expected) {
+      if (isNullOrUndefined(expected)) {
+        if (!checkFunc(context[key])) {
+          diffs[`.${key}`] = context[key].__lastDiff
+        }
+      } else {
         if (isFilterMask) {
-          if (typeof expected[key] === 'boolean' && expected[key]) {
+          if (this._includedInFilter(expected[key])) {
             if (!checkFunc(context[key])) {
               diffs[`.${key}`] = context[key].__lastDiff
             }
@@ -204,10 +213,6 @@ implements Workflo.PageNode.IElementNode<
               diffs[`.${key}`] = context[key].__lastDiff
             }
           }
-        }
-      } else {
-        if (!checkFunc(context[key])) {
-          diffs[`.${key}`] = context[key].__lastDiff
         }
       }
     }
@@ -237,13 +242,13 @@ implements Workflo.PageNode.IElementNode<
   ): Partial<Record<K, ResultType>> {
     let result = {} as Record<K, ResultType>;
 
-    for (const k in context) {
-      if (filterMask) {
-        if (typeof filterMask[k] === 'boolean' && filterMask[k]) {
-          result[k] = getFunc(context[k])
-        }
+    for (const key in context) {
+      if (isNullOrUndefined(filterMask)) {
+        result[key] = getFunc(context[key])
       } else {
-        result[k] = getFunc(context[k])
+        if (this._includedInFilter(filterMask[key])) {
+          result[key] = getFunc(context[key])
+        }
       }
     }
 
@@ -257,18 +262,16 @@ implements Workflo.PageNode.IElementNode<
     isFilterMask: boolean = false
   ): this {
     for (const key in context) {
-      if (expected) {
+      if (isNullOrUndefined(expected)) {
+        waitFunc(context[key], expected[key] as any as ValueType)
+      } else {
         if (isFilterMask) {
-          if (typeof expected[key] === 'boolean' && expected[key]) {
+          if (this._includedInFilter(expected[key])) {
             waitFunc(context[key])
           }
-        } else {
-          if (typeof expected[key] !== 'undefined') {
-            waitFunc(context[key], expected[key] as any as ValueType)
-          }
+        } else if (typeof expected[key] !== 'undefined') {
+          waitFunc(context[key], expected[key] as any as ValueType)
         }
-      } else {
-        waitFunc(context[key], expected[key] as any as ValueType)
       }
     }
 
@@ -281,12 +284,12 @@ implements Workflo.PageNode.IElementNode<
     filterMask: Workflo.PageNode.MapFilterMask<K>,
   ): this {
     for (const key in context) {
-      if (filterMask) {
-        if (typeof filterMask[key] === 'boolean' && filterMask[key]) {
+      if (isNullOrUndefined(filterMask)) {
+        doFunc(context[key])
+      } else {
+        if (this._includedInFilter(filterMask[key])) {
           doFunc(context[key])
         }
-      } else {
-        doFunc(context[key])
       }
     }
 

@@ -107,6 +107,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getHasDirectText(directText: string | string[]): boolean[];
     getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     getContainsDirectText(directText: string | string[]): boolean[];
+    protected _includedInFilter(filter: any): boolean;
     eachCompare<T>(elements: PageElementType[], checkFunc: (element: PageElementType, expected?: T) => boolean, expected?: T | T[], isFilterMask?: boolean): boolean[];
     /**
      * If the list is empty (no elements could be located matching the list selector),

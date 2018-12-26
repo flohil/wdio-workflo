@@ -11,6 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 const PageNode_1 = require("./PageNode");
+const helpers_1 = require("../../helpers");
 // Encapsulates arbitrary page element types.
 // Exposes its content directly as its own members,
 // so each key in content can be accessed via dot notation.
@@ -80,24 +81,22 @@ class PageElementGroup extends _1.PageNode {
         return this.eachCompare(isIElementNode, ({ node, expected }) => node.getContainsDirectText(expected), directText);
     }
     // HELPER FUNCTIONS
+    _includedInFilter(value) {
+        return !!value;
+    }
     eachGet(supportsInterface, getFunc, filterMask) {
         let result = {};
         for (const key in this.$) {
             if (supportsInterface(this.$[key])) {
                 const node = this.$[key];
-                if (filterMask) {
-                    const filter = filterMask[key];
-                    if (typeof filter === 'boolean') {
-                        if (filter === true) {
-                            result[key] = getFunc({ node, filter });
-                        }
-                    }
-                    else if (typeof filter !== 'undefined' && filter !== null) {
-                        result[key] = getFunc({ node, filter });
-                    }
+                if (helpers_1.isNullOrUndefined(filterMask)) {
+                    result[key] = getFunc({ node });
                 }
                 else {
-                    result[key] = getFunc({ node });
+                    const filter = filterMask[key];
+                    if (this._includedInFilter(filter)) {
+                        result[key] = getFunc({ node, filter });
+                    }
                 }
             }
         }
@@ -108,15 +107,13 @@ class PageElementGroup extends _1.PageNode {
         for (const key in this._$) {
             const node = this._$[key];
             if (supportsInterface(this._$[key])) {
-                if (expected) {
+                if (helpers_1.isNullOrUndefined(expected)) {
+                    result[key] = compareFunc({ node });
+                }
+                else {
                     const expectedValue = expected[key];
                     if (isFilterMask) {
-                        if (typeof expectedValue === 'boolean') {
-                            if (expectedValue === true) {
-                                result[key] = compareFunc({ node, filter: expectedValue });
-                            }
-                        }
-                        else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+                        if (this._includedInFilter(expectedValue)) {
                             result[key] = compareFunc({ node, filter: expectedValue });
                         }
                     }
@@ -125,9 +122,6 @@ class PageElementGroup extends _1.PageNode {
                             result[key] = compareFunc({ node, expected: expectedValue });
                         }
                     }
-                }
-                else {
-                    result[key] = compareFunc({ node });
                 }
             }
         }
@@ -138,17 +132,15 @@ class PageElementGroup extends _1.PageNode {
         for (const key in this._$) {
             const node = this._$[key];
             if (supportsInterface(this._$[key])) {
-                if (expected) {
+                if (helpers_1.isNullOrUndefined(expected)) {
+                    if (!checkFunc({ node })) {
+                        diffs[`.${key}`] = this._$[key].__lastDiff;
+                    }
+                }
+                else {
                     const expectedValue = expected[key];
                     if (isFilterMask) {
-                        if (typeof expectedValue === 'boolean') {
-                            if (expectedValue === true) {
-                                if (!checkFunc({ node, filter: expectedValue })) {
-                                    diffs[`.${key}`] = this._$[key].__lastDiff;
-                                }
-                            }
-                        }
-                        else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+                        if (this._includedInFilter(expectedValue)) {
                             if (!checkFunc({ node, filter: expectedValue })) {
                                 diffs[`.${key}`] = this._$[key].__lastDiff;
                             }
@@ -162,11 +154,6 @@ class PageElementGroup extends _1.PageNode {
                         }
                     }
                 }
-                else {
-                    if (!checkFunc({ node })) {
-                        diffs[`.${key}`] = this._$[key].__lastDiff;
-                    }
-                }
             }
         }
         this._lastDiff = {
@@ -178,15 +165,13 @@ class PageElementGroup extends _1.PageNode {
         for (const key in this._$) {
             const node = this._$[key];
             if (supportsInterface(this._$[key])) {
-                if (expected) {
+                if (helpers_1.isNullOrUndefined(expected)) {
+                    waitFunc({ node });
+                }
+                else {
                     const expectedValue = expected[key];
                     if (isFilterMask) {
-                        if (typeof expectedValue === 'boolean') {
-                            if (expectedValue === true) {
-                                waitFunc({ node, filter: expectedValue });
-                            }
-                        }
-                        else if (typeof expectedValue !== 'undefined' && expectedValue !== null) {
+                        if (this._includedInFilter(expectedValue)) {
                             waitFunc({ node, filter: expectedValue });
                         }
                     }
@@ -196,9 +181,6 @@ class PageElementGroup extends _1.PageNode {
                         }
                     }
                 }
-                else {
-                    waitFunc({ node });
-                }
             }
         }
         return this;
@@ -207,19 +189,14 @@ class PageElementGroup extends _1.PageNode {
         for (const key in this._$) {
             const node = this._$[key];
             if (supportsInterface(this._$[key])) {
-                if (filterMask) {
-                    const filter = filterMask[key];
-                    if (typeof filter === 'boolean') {
-                        if (filter === true) {
-                            doFunc({ node, filter });
-                        }
-                    }
-                    else if (typeof filter !== 'undefined' && filter !== null) {
-                        doFunc({ node, filter });
-                    }
+                if (helpers_1.isNullOrUndefined(filterMask)) {
+                    doFunc({ node });
                 }
                 else {
-                    doFunc({ node });
+                    const filter = filterMask[key];
+                    if (this._includedInFilter(filter)) {
+                        doFunc({ node, filter });
+                    }
                 }
             }
         }
