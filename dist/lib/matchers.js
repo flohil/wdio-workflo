@@ -626,6 +626,58 @@ exports.elementMatchers = {
             errorTextFunc: ({ node, opts }) => createEventuallyAnyEachMessage(node, "have any text", opts.timeout)
         }
     }),
+    toContainText: createTextMatcher({
+        element: {
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+            ],
+            errorTextFunc: ({ node, actual, expected }) => createPropertyMessage(node, 'text', 'contain', actual, expected)
+        },
+        list: {
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+            ],
+            errorTextFunc: ({ node }) => createEachMessage(node, 'contain text')
+        },
+        map: {
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+            ],
+            errorTextFunc: ({ node }) => createEachMessage(node, 'contain text')
+        },
+        group: {
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.containsText(expected), () => node.currently.not.containsText(expected)
+            ],
+            errorTextFunc: ({ node }) => createEachMessage(node, "contain text")
+        }
+    }),
+    toEventuallyContainText: createEventuallyTextMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.containsText(expected, opts), () => node.eventually.not.containsText(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'text', 'contain', actual, expected, opts.timeout)
+        },
+        list: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.containsText(expected, opts), () => node.eventually.not.containsText(expected, opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, 'contain text', opts.timeout)
+        },
+        map: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.containsText(expected, opts), () => node.eventually.not.containsText(expected, opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, 'contain text', opts.timeout)
+        },
+        group: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.containsText(expected, opts), () => node.eventually.not.containsText(expected, opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "contain text", opts.timeout)
+        }
+    }),
 };
 // export const listMatchers: jasmine.CustomMatcherFactories = {
 // toBeEmpty: listMatcherFunction(
