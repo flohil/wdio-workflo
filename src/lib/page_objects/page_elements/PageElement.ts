@@ -942,8 +942,8 @@ export class PageElementWait<
     )
   }
   hasAnyText(opts?: Workflo.IWDIOParamsReverseInterval) {
-    return this._waitWdioCheckFunc(
-      'had any text', opts => this._node.currently.element.waitForText(opts.timeout, opts.reverse), opts
+    return this._waitHasAnyProperty(
+      'text', () => this._node.currently.hasAnyText(), opts
     )
   }
   containsText(text: string, opts?: Workflo.IWDIOParamsReverseInterval) {

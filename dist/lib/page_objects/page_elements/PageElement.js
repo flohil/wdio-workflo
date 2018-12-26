@@ -774,7 +774,7 @@ class PageElementWait extends _1.PageElementBaseWait {
         return this._waitHasProperty('text', text, () => this._node.currently.hasText(text), opts);
     }
     hasAnyText(opts) {
-        return this._waitWdioCheckFunc('had any text', opts => this._node.currently.element.waitForText(opts.timeout, opts.reverse), opts);
+        return this._waitHasAnyProperty('text', () => this._node.currently.hasAnyText(), opts);
     }
     containsText(text, opts) {
         return this._waitHasProperty('text', text, () => this._node.currently.containsText(text), opts);
