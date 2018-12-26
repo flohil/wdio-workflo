@@ -710,6 +710,58 @@ exports.valueElementMatchers = {
             errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "have value", opts.timeout)
         }
     }),
+    toHaveAnyValue: createValueMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node }) => [
+                () => node.currently.hasAnyValue(), () => node.currently.not.hasAnyValue()
+            ],
+            errorTextFunc: ({ node, actual }) => createAnyMessage(node, "value", "have", actual)
+        },
+        list: {
+            resultFunc: ({ node, opts }) => [
+                () => node.currently.hasAnyValue(opts), () => node.currently.not.hasAnyValue(opts)
+            ],
+            errorTextFunc: ({ node }) => createAnyEachMessage(node, 'have any value')
+        },
+        map: {
+            resultFunc: ({ node, opts }) => [
+                () => node.currently.hasAnyValue(opts), () => node.currently.not.hasAnyValue(opts)
+            ],
+            errorTextFunc: ({ node }) => createAnyEachMessage(node, 'have any value')
+        },
+        group: {
+            resultFunc: ({ node, opts }) => [
+                () => node.currently.hasAnyValue(opts), () => node.currently.not.hasAnyValue(opts)
+            ],
+            errorTextFunc: ({ node }) => createAnyEachMessage(node, "have any value")
+        }
+    }),
+    toEventuallyHaveAnyValue: createEventuallyValueMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.hasAnyValue(opts), () => node.eventually.not.hasAnyValue(opts)
+            ],
+            errorTextFunc: ({ node, actual, opts }) => createEventuallyAnyMessage(node, "value", "have", actual, opts.timeout)
+        },
+        list: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.hasAnyValue(opts), () => node.eventually.not.hasAnyValue(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyAnyEachMessage(node, 'have any value', opts.timeout)
+        },
+        map: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.hasAnyValue(opts), () => node.eventually.not.hasAnyValue(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyAnyEachMessage(node, 'have any value', opts.timeout)
+        },
+        group: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.hasAnyValue(opts), () => node.eventually.not.hasAnyValue(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyAnyEachMessage(node, "have any value", opts.timeout)
+        }
+    }),
 };
 function expectElement(element) {
     return expect(element);

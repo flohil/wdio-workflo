@@ -117,8 +117,8 @@ export class ValuePageElementWait<
   }
 
   hasAnyValue(opts: Workflo.IWDIOParamsReverseInterval = {}) {
-    return this._waitWdioCheckFunc(
-      'had any value', opts => this._node.currently.element.waitForValue(opts.timeout, opts.reverse), opts
+    return this._waitHasAnyProperty(
+      'value', () => this._node.currently.hasAnyValue(), opts
     )
   }
 
