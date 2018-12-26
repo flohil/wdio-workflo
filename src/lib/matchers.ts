@@ -1198,7 +1198,174 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain text", opts.timeout)
     }
   }),
-
+  toHaveDirectText: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasDirectText(expected), () => node.currently.not.hasDirectText(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'direct text', 'be', actual, expected)
+    },
+    list: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasDirectText(expected), () => node.currently.not.hasDirectText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'have direct text')
+    },
+    map: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasDirectText(expected), () => node.currently.not.hasDirectText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'have direct text')
+    },
+    group: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasDirectText(expected), () => node.currently.not.hasDirectText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, "have direct text")
+    }
+  }),
+  toEventuallyHaveDirectText: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasDirectText(expected, opts), () => node.eventually.not.hasDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'direct text', 'be', actual, expected, opts.timeout
+      )
+    },
+    list: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasDirectText(expected, opts), () => node.eventually.not.hasDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have direct text', opts.timeout)
+    },
+    map: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasDirectText(expected, opts), () => node.eventually.not.hasDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have direct text', opts.timeout)
+    },
+    group: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasDirectText(expected, opts), () => node.eventually.not.hasDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "have direct text", opts.timeout)
+    }
+  }),
+  toHaveAnyDirectText: createTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node}) => [
+        () => node.currently.hasAnyDirectText(), () => node.currently.not.hasAnyDirectText()
+      ],
+      errorTextFunc: ({node, actual}) => createAnyMessage(node, "direct text", "have", actual)
+    },
+    list: {
+      resultFunc: ({node, opts}) => [
+        () => node.currently.hasAnyDirectText(opts), () => node.currently.not.hasAnyDirectText(opts)
+      ],
+      errorTextFunc: ({node}) => createAnyEachMessage(node, 'have any direct text')
+    },
+    map: {
+      resultFunc: ({node, opts}) => [
+        () => node.currently.hasAnyDirectText(opts), () => node.currently.not.hasAnyDirectText(opts)
+      ],
+      errorTextFunc: ({node}) => createAnyEachMessage(node, 'have any direct text')
+    },
+    group: {
+      resultFunc: ({node, opts}) => [
+        () => node.currently.hasAnyDirectText(opts), () => node.currently.not.hasAnyDirectText(opts)
+      ],
+      errorTextFunc: ({node}) => createAnyEachMessage(node, "have any direct text")
+    }
+  }),
+  toEventuallyHaveAnyDirectText: createEventuallyTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyDirectText(opts), () => node.eventually.not.hasAnyDirectText(opts)
+      ],
+      errorTextFunc: ({node, actual, opts}) => createEventuallyAnyMessage(
+        node, "direct text", "have", actual, opts.timeout
+      )
+    },
+    list: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyDirectText(opts), () => node.eventually.not.hasAnyDirectText(opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any direct text', opts.timeout)
+    },
+    map: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyDirectText(opts), () => node.eventually.not.hasAnyDirectText(opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any direct text', opts.timeout)
+    },
+    group: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyDirectText(opts), () => node.eventually.not.hasAnyDirectText(opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any direct text", opts.timeout)
+    }
+  }),
+  toContainDirectText: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsDirectText(expected), () => node.currently.not.containsDirectText(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(
+        node, 'direct text', 'contain', actual, expected
+      )
+    },
+    list: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsDirectText(expected), () => node.currently.not.containsDirectText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'contain direct text')
+    },
+    map: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsDirectText(expected), () => node.currently.not.containsDirectText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, 'contain direct text')
+    },
+    group: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsDirectText(expected), () => node.currently.not.containsDirectText(expected)
+      ],
+      errorTextFunc: ({node}) => createEachMessage(node, "contain direct text")
+    }
+  }),
+  toEventuallyContainDirectText: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsDirectText(expected, opts),
+        () => node.eventually.not.containsDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'direct text', 'contain', actual, expected, opts.timeout
+      )
+    },
+    list: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsDirectText(expected, opts),
+        () => node.eventually.not.containsDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain direct text', opts.timeout)
+    },
+    map: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsDirectText(expected, opts),
+        () => node.eventually.not.containsDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain direct text', opts.timeout)
+    },
+    group: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsDirectText(expected, opts),
+        () => node.eventually.not.containsDirectText(expected, opts)
+      ],
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain direct text", opts.timeout)
+    }
+  }),
   // toExist: elementMatcherFunction(
   //   ({node}) => [() => node.currently.exists(), () => node.currently.not.exists()],
   //   ({node}) => createBaseMessage(node, "to exist")

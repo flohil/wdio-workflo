@@ -97,6 +97,9 @@ interface ICustomListMatchers {
   toHaveText(text: string | string[]): boolean
   toHaveAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean
   toContainText(text: string | string[]): boolean
+  toHaveDirectText(text: string | string[]): boolean
+  toHaveAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  toContainDirectText(text: string | string[]): boolean
 
   toEventuallyExist(opts?: Workflo.IWDIOParams & {filterMask?: boolean}): boolean
   toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean
@@ -104,6 +107,9 @@ interface ICustomListMatchers {
   toEventuallyHaveText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean
   toEventuallyContainText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveDirectText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyContainDirectText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
 interface ICustomMapMatchers<K extends string | number | symbol> {
@@ -113,6 +119,9 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
   toHaveText(text: Partial<Record<K, string>>): boolean
   toHaveAnyText(opts?: Workflo.PageNode.MapFilterMask<K>): boolean
   toContainText(text: Partial<Record<K, string>>): boolean
+  toHaveDirectText(text: Partial<Record<K, string>>): boolean
+  toHaveAnyDirectText(opts?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toContainDirectText(text: Partial<Record<K, string>>): boolean
 
   toEventuallyExist(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean
   toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean
@@ -120,6 +129,9 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
   toEventuallyHaveText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
   toEventuallyContainText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveDirectText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyContainDirectText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
 interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
@@ -129,6 +141,9 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
   toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
   toHaveAnyText(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
   toContainText(text: Workflo.PageNode.ExtractText<Content>): boolean
+  toHaveDirectText(text: Workflo.PageNode.ExtractText<Content>): boolean
+  toHaveAnyDirectText(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toContainDirectText(text: Workflo.PageNode.ExtractText<Content>): boolean
 
   toEventuallyExist(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean
   toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean
@@ -136,6 +151,9 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
   toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
   toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveDirectText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyContainDirectText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
 interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers {
