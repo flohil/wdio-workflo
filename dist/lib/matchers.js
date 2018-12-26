@@ -85,13 +85,13 @@ function createMatcher(compareFuncs, ensureOpts = false, withoutExpected = []) {
                 throw new Error(`Unknown node type in matchers: ${node.constructor.name}.` +
                     `Node type needs to extend PageElement, PageElementList, PageElementMap or PageElementGroup.`);
             }
-            if (ensureOpts && typeof opts === 'undefined') {
+            if (ensureOpts && (typeof opts === 'undefined' || opts === null)) {
                 opts = Object.create(null);
             }
             const successes = resultFunc({ node, expected, opts });
             const success = (negativeComparison) ? successes[1]() : successes[0]();
             if (!success) {
-                let optsWithTimeout = (typeof opts === 'object') ? opts : Object.create(null);
+                let optsWithTimeout = (typeof opts === 'object' && opts !== null) ? opts : Object.create(null);
                 if (!optsWithTimeout['timeout']) {
                     optsWithTimeout.timeout = node.getTimeout();
                 }
@@ -574,7 +574,7 @@ exports.elementMatchers = {
             errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "have text", opts.timeout)
         }
     }),
-    toHaveAnyText: createTextMatcher({
+    toHaveAnyText: createTextMatcherWithoutExpected({
         element: {
             resultFunc: ({ node }) => [
                 () => node.currently.hasAnyText(), () => node.currently.not.hasAnyText()
@@ -600,7 +600,7 @@ exports.elementMatchers = {
             errorTextFunc: ({ node }) => createAnyEachMessage(node, "have any text")
         }
     }),
-    toEventuallyHaveAnyText: createEventuallyTextMatcher({
+    toEventuallyHaveAnyText: createEventuallyTextMatcherWithoutExpected({
         element: {
             resultFunc: ({ node, expected, opts }) => [
                 () => node.eventually.hasText(expected, opts), () => node.eventually.not.hasText(expected, opts)
