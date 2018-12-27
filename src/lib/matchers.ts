@@ -1089,71 +1089,163 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       )
     }
   }),
+  toHaveClass: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasClass(expected), () => node.currently.not.hasClass(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'class', 'be', actual, expected)
+    }
+  }),
+  toEventuallyHaveClass: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasClass(expected, opts), () => node.eventually.not.hasClass(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'class', 'be', actual, expected, opts.timeout
+      )
+    }
+  }),
+  toHaveAnyClass: createTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node}) => [
+        () => node.currently.hasAnyClass(), () => node.currently.not.hasAnyClass()
+      ],
+      errorTextFunc: ({node, actual}) => createAnyMessage(node, "class", "have", actual)
+    }
+  }),
+  toEventuallyHaveAnyClass: createEventuallyTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyClass(opts), () => node.eventually.not.hasAnyClass(opts)
+      ],
+      errorTextFunc: ({node, actual, opts}) => createEventuallyAnyMessage(node, "class", "have", actual, opts.timeout)
+    }
+  }),
+  toContainClass: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsClass(expected), () => node.currently.not.containsClass(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'class', 'contain', actual, expected)
+    }
+  }),
+  toEventuallyContainClass: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsClass(expected, opts), () => node.eventually.not.containsClass(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'class', 'contain', actual, expected, opts.timeout
+      )
+    }
+  }),
+  toHaveId: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasId(expected), () => node.currently.not.hasId(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'id', 'be', actual, expected)
+    }
+  }),
+  toEventuallyHaveId: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasId(expected, opts), () => node.eventually.not.hasId(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'id', 'be', actual, expected, opts.timeout
+      )
+    }
+  }),
+  toHaveAnyId: createTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node}) => [
+        () => node.currently.hasAnyId(), () => node.currently.not.hasAnyId()
+      ],
+      errorTextFunc: ({node, actual}) => createAnyMessage(node, "id", "have", actual)
+    }
+  }),
+  toEventuallyHaveAnyId: createEventuallyTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyId(opts), () => node.eventually.not.hasAnyId(opts)
+      ],
+      errorTextFunc: ({node, actual, opts}) => createEventuallyAnyMessage(node, "id", "have", actual, opts.timeout)
+    }
+  }),
+  toContainId: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsId(expected), () => node.currently.not.containsId(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'id', 'contain', actual, expected)
+    }
+  }),
+  toEventuallyContainId: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsId(expected, opts), () => node.eventually.not.containsId(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'id', 'contain', actual, expected, opts.timeout
+      )
+    }
+  }),
+  toHaveName: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasName(expected), () => node.currently.not.hasName(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'name', 'be', actual, expected)
+    }
+  }),
+  toEventuallyHaveName: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasName(expected, opts), () => node.eventually.not.hasName(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'name', 'be', actual, expected, opts.timeout
+      )
+    }
+  }),
+  toHaveAnyName: createTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node}) => [
+        () => node.currently.hasAnyName(), () => node.currently.not.hasAnyName()
+      ],
+      errorTextFunc: ({node, actual}) => createAnyMessage(node, "name", "have", actual)
+    }
+  }),
+  toEventuallyHaveAnyName: createEventuallyTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyName(opts), () => node.eventually.not.hasAnyName(opts)
+      ],
+      errorTextFunc: ({node, actual, opts}) => createEventuallyAnyMessage(node, "name", "have", actual, opts.timeout)
+    }
+  }),
+  toContainName: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsName(expected), () => node.currently.not.containsName(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'name', 'contain', actual, expected)
+    }
+  }),
+  toEventuallyContainName: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsName(expected, opts), () => node.eventually.not.containsName(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'name', 'contain', actual, expected, opts.timeout
+      )
+    }
+  }),
 
-  // toEventuallyHaveAnyAttribute: elementMatcherFunction<string>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasAnyAttribute(expected, opts),
-  //     () => node.eventually.not.hasAnyAttribute(expected, opts),
-  //   ],
-  //   ({expected, opts, node}) => createBaseMessage(
-  //     node, ` to eventually have any ${expected} within ${opts.timeout} ms`
-  //   )
-  // ),
-
-  // toHaveClass: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.hasClass(expected), () => node.currently.not.hasClass(expected)
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'class', 'be', actual, expected)
-  // ),
-  // toHaveAnyClass: elementMatcherFunction(
-  //   ({node}) => [
-  //     () => node.currently.hasAnyClass(), () => node.currently.not.hasAnyClass()
-  //   ],
-  //   ({node}) => createBaseMessage(node, ` to have any class`)
-  // ),
-  // toContainClass: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.containsClass(expected), () => node.currently.not.containsClass(expected)
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'class', 'contain', actual, expected)
-  // ),
-  // toHaveId: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.hasId(expected), () => node.currently.not.hasId(expected)
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'id', 'be', actual, expected)
-  // ),
-  // toHaveAnyId: elementMatcherFunction(
-  //   ({node}) => [
-  //     () => node.currently.hasAnyId(), () => node.currently.not.hasAnyId()
-  //   ],
-  //   ({node}) => createBaseMessage(node, "to have any id")
-  // ),
-  // toContainId: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.containsId(expected), () => node.currently.not.containsId(expected)
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'id', 'contain', actual, expected)
-  // ),
-  // toHaveName: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.hasName(expected), () => node.currently.not.hasName(expected)
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'name', 'be', actual, expected)
-  // ),
-  // toHaveAnyName: elementMatcherFunction(
-  //   ({node}) => [
-  //     () => node.currently.hasAnyName(), () => node.currently.not.hasAnyName()
-  //   ],
-  //   ({node}) => createBaseMessage(node, "to have any name")
-  // ),
-  // toContainName: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.containsName(expected), () => node.currently.not.containsName(expected)
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'name', 'contain', actual, expected)
-  // ),
   // toHaveLocation: elementMatcherFunction<Workflo.ICoordinates, {tolerances?: Partial<Workflo.ICoordinates>}>(
   //   ({node, expected, opts}) => [
   //     () => node.currently.hasLocation(expected, opts.tolerances),
@@ -1233,81 +1325,6 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
   //   )
   // ),
 
-  
-  // toEventuallyHaveClass: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasClass(expected, opts),
-  //     () => node.eventually.not.hasClass(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'class', 'be', actual, expected, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveAnyClass: elementMatcherWithoutExpectedFunction(
-  //   ({node}) => [
-  //     () => node.eventually.hasAnyClass(), () => node.eventually.not.hasAnyClass()
-  //   ],
-  //   ({opts, node}) => createBaseMessage(node, ` to eventually have any class within ${opts.timeout} ms`)
-  // ),
-  // toEventuallyContainClass: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.containsClass(expected, opts),
-  //     () => node.eventually.not.containsClass(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'class', 'contain', actual, expected, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveId: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasId(expected, opts),
-  //     () => node.eventually.not.hasId(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'id', 'be', actual, expected, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveAnyId: elementMatcherWithoutExpectedFunction(
-  //   ({node}) => [
-  //     () => node.eventually.hasAnyId(), () => node.eventually.not.hasAnyId()
-  //   ],
-  //   ({opts, node}) => createBaseMessage(
-  //     node, ` to eventually have any id within ${opts.timeout} ms`
-  //   )
-  // ),
-  // toEventuallyContainId: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.containsId(expected, opts),
-  //     () => node.eventually.not.containsId(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'id', 'contain', actual, expected, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveName: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasName(expected, opts),
-  //     () => node.eventually.not.hasName(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'name', 'be', actual, expected, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveAnyName: elementMatcherWithoutExpectedFunction(
-  //   ({node}) => [() => node.eventually.hasAnyName(), () => node.eventually.not.hasAnyName()],
-  //   ({opts, node}) => createBaseMessage(
-  //     node, ` to eventually have any name within ${opts.timeout} ms`
-  //   )
-  // ),
-  // toEventuallyContainName: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.containsName(expected, opts),
-  //     () => node.eventually.not.containsName(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'name', 'contain', actual, expected, opts.timeout
-  //   )
-  // ),
   // toEventuallyHaveLocation: elementMatcherFunction<Workflo.ICoordinates, {tolerances?: Partial<Workflo.ICoordinates>}>(
   //   ({node, expected, opts}) => [
   //     () => node.eventually.hasLocation(expected, opts),
