@@ -929,6 +929,58 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       errorTextFunc: ({node, opts}) => createEventuallyMessage(node, "be checked", opts.timeout)
     }
   }),
+  toHaveHTML: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasHTML(expected), () => node.currently.not.hasHTML(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'HTML', 'be', actual, expected)
+    }
+  }),
+  toEventuallyHaveHTML: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasHTML(expected, opts), () => node.eventually.not.hasHTML(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'HTML', 'be', actual, expected, opts.timeout
+      )
+    }
+  }),
+  toHaveAnyHTML: createTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node}) => [
+        () => node.currently.hasAnyHTML(), () => node.currently.not.hasAnyHTML()
+      ],
+      errorTextFunc: ({node, actual}) => createAnyMessage(node, "HTML", "have", actual)
+    }
+  }),
+  toEventuallyHaveAnyHTML: createEventuallyTextMatcherWithoutExpected({
+    element: {
+      resultFunc: ({node, opts}) => [
+        () => node.eventually.hasAnyHTML(opts), () => node.eventually.not.hasAnyHTML(opts)
+      ],
+      errorTextFunc: ({node, actual, opts}) => createEventuallyAnyMessage(node, "HTML", "have", actual, opts.timeout)
+    }
+  }),
+  toContainHTML: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsHTML(expected), () => node.currently.not.containsHTML(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createPropertyMessage(node, 'HTML', 'contain', actual, expected)
+    }
+  }),
+  toEventuallyContainHTML: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsHTML(expected, opts), () => node.eventually.not.containsHTML(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, 'HTML', 'contain', actual, expected, opts.timeout
+      )
+    }
+  }),
 
   // toHaveHTML: elementMatcherFunction(
   //   ({node, expected}) => [
