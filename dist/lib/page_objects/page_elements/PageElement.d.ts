@@ -17,7 +17,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     __equals<T>(actual: T, expected: T): boolean;
     __any<T>(actual: T): boolean;
     __contains<T>(actual: T, expected: T): boolean;
-    __typeToString<T>(value: T): "" | (T & string);
+    __typeToString<T>(value: T): string;
     /**
      * Return WdioElement from current state, not performing an initial wait.
      */

@@ -71,6 +71,30 @@ export interface ICompareAttributeElementFuncs extends ICompareElementFuncs<Work
 export interface ICompareEventuallyAttributeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.IAttribute> {
     element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.IAttribute, Workflo.IWDIOParamsInterval>;
 }
+export interface ICompareLocationElementFuncs extends ICompareElementFuncs<Workflo.ICoordinates> {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ICoordinates, Partial<Workflo.ICoordinates>>;
+}
+export interface ICompareEventuallyLocationElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ICoordinates> {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ICoordinates, Workflo.IWDIOParamsInterval & {
+        tolerances?: Partial<Workflo.ICoordinates>;
+    }>;
+}
+export interface ICompareSizeElementFuncs extends ICompareElementFuncs<Workflo.ISize> {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ISize, Partial<Workflo.ISize>>;
+}
+export interface ICompareEventuallySizeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ISize> {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ISize, Workflo.IWDIOParamsInterval & {
+        tolerances?: Partial<Workflo.ISize>;
+    }>;
+}
+export interface ICompareNumberWithToleranceElementFuncs extends ICompareElementFuncs<number> {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, number, number>;
+}
+export interface ICompareEventuallyNumberWithToleranceElementFuncs extends ICompareEventuallyElementFuncs<number> {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, number, Workflo.IWDIOParamsInterval & {
+        tolerance?: number;
+    }>;
+}
 export declare function createBaseMatcher<OptsType extends Object = Object, CompareFuncsType extends (ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType, ElementOptsType, ListOptsType, MapOptsType, GroupOptsType> | ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType, ElementOptsType, ListOptsType, MapOptsType, GroupOptsType>) = ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType, ElementOptsType, ListOptsType, MapOptsType, GroupOptsType>, ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = never, ListOptsType = never, MapOptsType = never, GroupOptsType = never>(compareFuncs: CompareFuncsType, ensureOpts?: boolean, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
@@ -152,6 +176,30 @@ export declare function createAttributeMatcher<OptsType extends Object = Object>
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
 export declare function createEventuallyAttributeMatcher<OptsType extends Object = Object>(compareFuncs: ICompareEventuallyAttributeElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createLocationMatcher<OptsType extends Object = Object>(compareFuncs: ICompareLocationElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createEventuallyLocationMatcher<OptsType extends Object = Object>(compareFuncs: ICompareEventuallyLocationElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createSizeMatcher<OptsType extends Object = Object>(compareFuncs: ICompareSizeElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createEventuallySizeMatcher<OptsType extends Object = Object>(compareFuncs: ICompareEventuallySizeElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createNumberWithToleranceMatcher<OptsType extends Object = Object>(compareFuncs: ICompareNumberWithToleranceElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createEventuallyNumberWithToleranceMatcher<OptsType extends Object = Object>(compareFuncs: ICompareEventuallyNumberWithToleranceElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };

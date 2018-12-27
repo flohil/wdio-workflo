@@ -2,6 +2,7 @@ import * as _ from 'lodash'
 
 import { elements, stores } from './page_objects'
 import { comparatorStr } from './utility_functions/util'
+import { tolerancesToString } from './helpers';
 
 // MATCHER FUNTCION INTERFACES
 
@@ -291,6 +292,66 @@ export interface ICompareEventuallyAttributeElementFuncs extends ICompareEventua
     >,
     Workflo.IAttribute,
     Workflo.IWDIOParamsInterval
+  >
+}
+
+export interface ICompareLocationElementFuncs extends ICompareElementFuncs<Workflo.ICoordinates> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    Workflo.ICoordinates,
+    Partial<Workflo.ICoordinates>
+  >
+}
+
+export interface ICompareEventuallyLocationElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ICoordinates> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    Workflo.ICoordinates,
+    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ICoordinates>}
+  >
+}
+
+export interface ICompareSizeElementFuncs extends ICompareElementFuncs<Workflo.ISize> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    Workflo.ISize,
+    Partial<Workflo.ISize>
+  >
+}
+
+export interface ICompareEventuallySizeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ISize> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    Workflo.ISize,
+    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ISize>}
+  >
+}
+
+export interface ICompareNumberWithToleranceElementFuncs extends ICompareElementFuncs<number> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    number,
+    number
+  >
+}
+
+export interface ICompareEventuallyNumberWithToleranceElementFuncs extends ICompareEventuallyElementFuncs<number> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    number,
+    Workflo.IWDIOParamsInterval & {tolerance?: number}
   >
 }
 
@@ -741,6 +802,84 @@ export function createEventuallyAttributeMatcher<
     OptsType,
     ICompareEventuallyAttributeElementFuncs,
     Workflo.IAttribute, never, never, never
+  >(compareFuncs, false)
+}
+
+export function createLocationMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareLocationElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareLocationElementFuncs,
+    Workflo.ICoordinates, never, never, never,
+    Partial<Workflo.ICoordinates>
+  >(compareFuncs, false)
+}
+
+export function createEventuallyLocationMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareEventuallyLocationElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareEventuallyLocationElementFuncs,
+    Workflo.ICoordinates, never, never, never,
+    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ICoordinates>}
+  >(compareFuncs, false)
+}
+
+export function createSizeMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareSizeElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareSizeElementFuncs,
+    Workflo.ISize, never, never, never,
+    Partial<Workflo.ISize>
+  >(compareFuncs, false)
+}
+
+export function createEventuallySizeMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareEventuallySizeElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareEventuallySizeElementFuncs,
+    Workflo.ISize, never, never, never,
+    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ISize>}
+  >(compareFuncs, false)
+}
+
+export function createNumberWithToleranceMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareNumberWithToleranceElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareNumberWithToleranceElementFuncs,
+    number, never, never, never,
+    number
+  >(compareFuncs, false)
+}
+
+export function createEventuallyNumberWithToleranceMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareEventuallyNumberWithToleranceElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareEventuallyNumberWithToleranceElementFuncs,
+    number, never, never, never,
+    Workflo.IWDIOParamsInterval & {tolerance?: number}
   >(compareFuncs, false)
 }
 
@@ -1245,166 +1384,180 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       )
     }
   }),
-
-  // toHaveLocation: elementMatcherFunction<Workflo.ICoordinates, {tolerances?: Partial<Workflo.ICoordinates>}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.currently.hasLocation(expected, opts.tolerances),
-  //     () => node.currently.not.hasLocation(expected, opts.tolerances)
-  //   ],
-  //   ({actual, expected, opts, node}) => createPropertyMessage(
-  //     node,
-  //     'location',
-  //     (opts.tolerances && (opts.tolerances.x > 0 || opts.tolerances.y > 0)) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerances)
-  //   )
-  // ),
-  // toHaveX: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.currently.hasX(expected, opts.tolerance),
-  //     () => node.currently.not.hasX(expected, opts.tolerance)
-  //   ],
-  //   ({actual, expected, opts, node}) => createPropertyMessage(
-  //     node,
-  //     'X-coordinate',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance)
-  //   )
-  // ),
-  // toHaveY: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.currently.hasY(expected, opts.tolerance),
-  //     () => node.currently.not.hasY(expected, opts.tolerance)
-  //   ],
-  //   ({actual, expected, opts, node}) => createPropertyMessage(
-  //     node,
-  //     'Y-coordinate',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance)
-  //   )
-  // ),
-  // toHaveSize: elementMatcherFunction<Workflo.ISize, {tolerances?: Partial<Workflo.ISize>}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.currently.hasSize(expected, opts.tolerances),
-  //     () => node.currently.not.hasSize(expected, opts.tolerances)
-  //   ],
-  //   ({actual, expected, opts, node}) => createPropertyMessage(
-  //     node,
-  //     'size',
-  //     (opts.tolerances && (opts.tolerances.width > 0 || opts.tolerances.height > 0)) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerances)
-  //   )
-  // ),
-  // toHaveWidth: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.currently.hasWidth(expected, opts.tolerance),
-  //     () => node.currently.not.hasWidth(expected, opts.tolerance)
-  //   ],
-  //   ({actual, expected, opts, node}) => createPropertyMessage(
-  //     node,
-  //     'width',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance)
-  //   )
-  // ),
-  // toHaveHeight: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.currently.hasHeight(expected, opts.tolerance),
-  //     () => node.currently.not.hasHeight(expected, opts.tolerance)
-  //   ],
-  //   ({actual, expected, opts, node}) => createPropertyMessage(
-  //     node,
-  //     'height',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance)
-  //   )
-  // ),
-
-  // toEventuallyHaveLocation: elementMatcherFunction<Workflo.ICoordinates, {tolerances?: Partial<Workflo.ICoordinates>}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasLocation(expected, opts),
-  //     () => node.eventually.not.hasLocation(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node,
-  //     'location',
-  //     (opts.tolerances && (opts.tolerances.x > 0 || opts.tolerances.y > 0)) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerances),
-  //     opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveX: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasX(expected, opts), () => node.eventually.not.hasX(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node,
-  //     'X-coordinate',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance),
-  //     opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveY: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasY(expected, opts), () => node.eventually.not.hasY(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node,
-  //     'Y-coordinate',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance),
-  //     opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveSize: elementMatcherFunction<Workflo.ISize, {tolerances?: Partial<Workflo.ISize>}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasSize(expected, opts), () => node.eventually.not.hasSize(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node,
-  //     'size',
-  //     (opts.tolerances && (opts.tolerances.width > 0 || opts.tolerances.height > 0)) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerances),
-  //     opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveWidth: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasWidth(expected, opts), () => node.eventually.not.hasWidth(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node,
-  //     'width',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance),
-  //     opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveHeight: elementMatcherFunction<number, {tolerance?: number}>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasHeight(expected, opts),
-  //     () => node.eventually.not.hasHeight(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node,
-  //     'height',
-  //     (opts.tolerance && opts.tolerance > 0) ? 'be in range' : 'be',
-  //     actual,
-  //     tolerancesToString(expected, opts.tolerance),
-  //     opts.timeout
-  //   )
-  // )
+  toHaveLocation: createLocationMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.currently.hasLocation(expected, opts), () => node.currently.not.hasLocation(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createPropertyMessage(
+        node,
+        'location',
+        (opts && (opts.x > 0 || opts.y > 0)) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, opts)
+      )
+    }
+  }),
+  toEventuallyHaveLocation: createEventuallyLocationMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasLocation(expected, opts), () => node.eventually.not.hasLocation(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node,
+        'location',
+        (opts.tolerances && (opts.tolerances.x > 0 || opts.tolerances.y > 0)) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, opts.tolerances),
+        opts.timeout
+      )
+    }
+  }),
+  toHaveX: createNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.currently.hasX(expected, opts), () => node.currently.not.hasX(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createPropertyMessage(
+        node,
+        'X-coordinate',
+        (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined)
+      )
+    }
+  }),
+  toEventuallyHaveX: createEventuallyNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasX(expected, opts), () => node.eventually.not.hasX(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node,
+        'X-coordinate',
+        (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be',
+        actual,
+        tolerancesToString(expected, opts.tolerance),
+        opts.timeout
+      )
+    }
+  }),
+  toHaveY: createNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.currently.hasY(expected, opts), () => node.currently.not.hasY(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createPropertyMessage(
+        node,
+        'Y-coordinate',
+        (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined)
+      )
+    }
+  }),
+  toEventuallyHaveY: createEventuallyNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasY(expected, opts), () => node.eventually.not.hasY(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node,
+        'Y-coordinate',
+        (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be',
+        actual,
+        tolerancesToString(expected, opts.tolerance),
+        opts.timeout
+      )
+    }
+  }),
+  toHaveSize: createSizeMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.currently.hasSize(expected, opts), () => node.currently.not.hasSize(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createPropertyMessage(
+        node,
+        'size',
+        (opts && (opts.width > 0 || opts.height > 0)) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, opts)
+      )
+    }
+  }),
+  toEventuallyHaveSize: createEventuallySizeMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasSize(expected, opts), () => node.eventually.not.hasSize(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node,
+        'size',
+        (opts.tolerances && (opts.tolerances.width > 0 || opts.tolerances.height > 0)) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, opts.tolerances),
+        opts.timeout
+      )
+    }
+  }),
+  toHaveWidth: createNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.currently.hasWidth(expected, opts), () => node.currently.not.hasWidth(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createPropertyMessage(
+        node,
+        'width',
+        (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined)
+      )
+    }
+  }),
+  toEventuallyHaveWidth: createEventuallyNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasWidth(expected, opts), () => node.eventually.not.hasWidth(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node,
+        'width',
+        (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be',
+        actual,
+        tolerancesToString(expected, opts.tolerance),
+        opts.timeout
+      )
+    }
+  }),
+  toHaveHeight: createNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.currently.hasHeight(expected, opts), () => node.currently.not.hasHeight(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createPropertyMessage(
+        node,
+        'height',
+        (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be',
+        actual,
+        tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined)
+      )
+    }
+  }),
+  toEventuallyHaveHeight: createEventuallyNumberWithToleranceMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasHeight(expected, opts), () => node.eventually.not.hasHeight(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node,
+        'height',
+        (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be',
+        actual,
+        tolerancesToString(expected, opts.tolerance),
+        opts.timeout
+      )
+    }
+  })
 }
 
 export const listMatchers: jasmine.CustomMatcherFactories = {

@@ -100,6 +100,8 @@ export class PageElement<
       return ''
     } else if (typeof value === 'string') {
       return (value.length > 0) ? value : ''
+    } else if (typeof value === 'number') {
+      return value.toString()
     } else {
       throw new Error(`${this.constructor.name}.__typeToString is missing an implementation for type of value: ${value}`)
     }

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const page_objects_1 = require("./page_objects");
 const util_1 = require("./utility_functions/util");
+const helpers_1 = require("./helpers");
 // MATCHER FUNCS
 function isWithoutExpected(node, withoutExpected = []) {
     let _withoutExpected = false;
@@ -211,6 +212,30 @@ function createEventuallyAttributeMatcher(compareFuncs) {
     return createBaseMatcher(compareFuncs, false);
 }
 exports.createEventuallyAttributeMatcher = createEventuallyAttributeMatcher;
+function createLocationMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createLocationMatcher = createLocationMatcher;
+function createEventuallyLocationMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createEventuallyLocationMatcher = createEventuallyLocationMatcher;
+function createSizeMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createSizeMatcher = createSizeMatcher;
+function createEventuallySizeMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createEventuallySizeMatcher = createEventuallySizeMatcher;
+function createNumberWithToleranceMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createNumberWithToleranceMatcher = createNumberWithToleranceMatcher;
+function createEventuallyNumberWithToleranceMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createEventuallyNumberWithToleranceMatcher = createEventuallyNumberWithToleranceMatcher;
 // ERROR TEXT FUNCTIONS
 function convertDiffToMessages(diff, actualOnly = false, comparisonLines = [], paths = []) {
     if (diff.tree && Object.keys(diff.tree).length > 0) {
@@ -653,6 +678,102 @@ exports.elementMatchers = {
             errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'name', 'contain', actual, expected, opts.timeout)
         }
     }),
+    toHaveLocation: createLocationMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasLocation(expected, opts), () => node.currently.not.hasLocation(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createPropertyMessage(node, 'location', (opts && (opts.x > 0 || opts.y > 0)) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, opts))
+        }
+    }),
+    toEventuallyHaveLocation: createEventuallyLocationMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasLocation(expected, opts), () => node.eventually.not.hasLocation(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'location', (opts.tolerances && (opts.tolerances.x > 0 || opts.tolerances.y > 0)) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, opts.tolerances), opts.timeout)
+        }
+    }),
+    toHaveX: createNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasX(expected, opts), () => node.currently.not.hasX(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createPropertyMessage(node, 'X-coordinate', (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined))
+        }
+    }),
+    toEventuallyHaveX: createEventuallyNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasX(expected, opts), () => node.eventually.not.hasX(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'X-coordinate', (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be', actual, helpers_1.tolerancesToString(expected, opts.tolerance), opts.timeout)
+        }
+    }),
+    toHaveY: createNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasY(expected, opts), () => node.currently.not.hasY(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createPropertyMessage(node, 'Y-coordinate', (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined))
+        }
+    }),
+    toEventuallyHaveY: createEventuallyNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasY(expected, opts), () => node.eventually.not.hasY(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'Y-coordinate', (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be', actual, helpers_1.tolerancesToString(expected, opts.tolerance), opts.timeout)
+        }
+    }),
+    toHaveSize: createSizeMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasSize(expected, opts), () => node.currently.not.hasSize(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createPropertyMessage(node, 'size', (opts && (opts.width > 0 || opts.height > 0)) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, opts))
+        }
+    }),
+    toEventuallyHaveSize: createEventuallySizeMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasSize(expected, opts), () => node.eventually.not.hasSize(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'size', (opts.tolerances && (opts.tolerances.width > 0 || opts.tolerances.height > 0)) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, opts.tolerances), opts.timeout)
+        }
+    }),
+    toHaveWidth: createNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasWidth(expected, opts), () => node.currently.not.hasWidth(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createPropertyMessage(node, 'width', (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined))
+        }
+    }),
+    toEventuallyHaveWidth: createEventuallyNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasWidth(expected, opts), () => node.eventually.not.hasWidth(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'width', (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be', actual, helpers_1.tolerancesToString(expected, opts.tolerance), opts.timeout)
+        }
+    }),
+    toHaveHeight: createNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasHeight(expected, opts), () => node.currently.not.hasHeight(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createPropertyMessage(node, 'height', (typeof opts === 'number' && opts > 0) ? 'be in range' : 'be', actual, helpers_1.tolerancesToString(expected, (typeof opts === 'number') ? opts : undefined))
+        }
+    }),
+    toEventuallyHaveHeight: createEventuallyNumberWithToleranceMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasHeight(expected, opts), () => node.eventually.not.hasHeight(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'height', (opts.tolerance && opts.tolerance > 0) ? 'be in range ' : 'be', actual, helpers_1.tolerancesToString(expected, opts.tolerance), opts.timeout)
+        }
+    })
 };
 exports.listMatchers = {
     toBeEmpty: createMatcherWithoutExpected({

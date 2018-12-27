@@ -30,24 +30,12 @@ interface ICustomElementMatchers {
     toHaveName(name: string): boolean;
     toHaveAnyName(): boolean;
     toContainName(name: string): boolean;
-    toHaveLocation(coordinates: Workflo.ICoordinates, opts?: {
-        tolerances?: Partial<Workflo.ICoordinates>;
-    }): boolean;
-    toHaveX(x: number, opts?: {
-        tolerance?: number;
-    }): boolean;
-    toHaveY(y: number, opts?: {
-        tolerance?: number;
-    }): boolean;
-    toHaveSize(size: Workflo.ISize, opts?: {
-        tolerances?: Partial<Workflo.ISize>;
-    }): boolean;
-    toHaveWidth(width: number, opts?: {
-        tolerance?: number;
-    }): boolean;
-    toHaveHeight(height: number, opts?: {
-        tolerance?: number;
-    }): boolean;
+    toHaveLocation(coordinates: Workflo.ICoordinates, tolerances?: Partial<Workflo.ICoordinates>): boolean;
+    toHaveX(x: number, tolerance?: number): boolean;
+    toHaveY(y: number, tolerance?: number): boolean;
+    toHaveSize(size: Workflo.ISize, tolerances?: Partial<Workflo.ISize>): boolean;
+    toHaveWidth(width: number, tolerance?: number): boolean;
+    toHaveHeight(height: number, tolerance?: number): boolean;
     toEventuallyExist(opts?: Workflo.IWDIOParams): boolean;
     toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean;
     toEventuallyBeEnabled(opts?: Workflo.IWDIOParams): boolean;
