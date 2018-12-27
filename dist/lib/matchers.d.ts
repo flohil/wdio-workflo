@@ -154,7 +154,8 @@ export declare function createEventuallyEachMessage(node: Workflo.PageNode.INode
 export declare function createEventuallyAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
 export declare const elementMatchers: jasmine.CustomMatcherFactories;
 export declare const listMatchers: jasmine.CustomMatcherFactories;
-export declare const valueElementMatchers: jasmine.CustomMatcherFactories;
+export declare const allMatchers: jasmine.CustomMatcherFactories;
+export declare const valueAllMatchers: jasmine.CustomMatcherFactories;
 export declare function expectElement<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>>(element: PageElementType): jasmine.Matchers<PageElementType>;
 export declare function expectList<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): jasmine.Matchers<PageElementListType>;
 export declare function expectMap<Store extends stores.PageElementStore, K extends string, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementMapType extends elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): jasmine.Matchers<PageElementMapType>;

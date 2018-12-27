@@ -7,13 +7,14 @@ import * as classFunctions from './lib/utility_functions/class'
 import * as stringFunctions from './lib/utility_functions/string'
 import * as utilFunctions from './lib/utility_functions/util'
 import {
+  allMatchers,
   elementMatchers,
   expectElement,
   expectList,
   expectMap,
   expectGroup,
   listMatchers,
-  valueElementMatchers,
+  valueAllMatchers,
 } from './lib/matchers'
 
 function safeAdd( context, key, obj ) {
@@ -66,8 +67,9 @@ inject({})
 
 beforeAll(() => {
   jasmine.addMatchers(elementMatchers)
-  jasmine.addMatchers(valueElementMatchers)
   jasmine.addMatchers(listMatchers)
+  jasmine.addMatchers(allMatchers)
+  jasmine.addMatchers(valueAllMatchers)
 })
 
 export { inject }

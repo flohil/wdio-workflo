@@ -186,7 +186,7 @@ class PageElement extends _1.PageElementBase {
      * is fulfilled. (eg. element is visible)
      * In this case, postCondition function will be
      */
-    click(options) {
+    click(options = {}) {
         this.initialWait();
         let errorMessage = '';
         const interval = options.interval || this._interval;

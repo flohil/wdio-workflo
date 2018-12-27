@@ -238,7 +238,9 @@ export class PageElement<
    * is fulfilled. (eg. element is visible)
    * In this case, postCondition function will be
    */
-  click(options?: { postCondition?: () => boolean, customScroll?: Workflo.IScrollParams } & Workflo.IWDIOParamsInterval) {
+  click(
+    options: { postCondition?: () => boolean, customScroll?: Workflo.IScrollParams } & Workflo.IWDIOParamsInterval = {}
+  ) {
     this.initialWait()
 
     let errorMessage = ''

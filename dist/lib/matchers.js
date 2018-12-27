@@ -367,6 +367,76 @@ function createEventuallyAnyEachMessage(node, errorTexts, timeout) {
 exports.createEventuallyAnyEachMessage = createEventuallyAnyEachMessage;
 // MATCHERS
 exports.elementMatchers = {
+    toBeSelected: createMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node }) => [() => node.currently.isSelected(), () => node.currently.not.isSelected()],
+            errorTextFunc: ({ node }) => createMessage(node, "be selected")
+        }
+    }),
+    toEventuallyBeSelected: createEventuallyMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.isSelected(opts), () => node.eventually.not.isSelected(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyMessage(node, "be selected", opts.timeout)
+        }
+    }),
+    toBeChecked: createMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node }) => [() => node.currently.isChecked(), () => node.currently.not.isChecked()],
+            errorTextFunc: ({ node }) => createMessage(node, "be checked")
+        }
+    }),
+    toEventuallyBeChecked: createEventuallyMatcherWithoutExpected({
+        element: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.isChecked(opts), () => node.eventually.not.isChecked(opts)
+            ],
+            errorTextFunc: ({ node, opts }) => createEventuallyMessage(node, "be checked", opts.timeout)
+        }
+    }),
+};
+exports.listMatchers = {
+    toBeEmpty: createMatcherWithoutExpected({
+        list: {
+            resultFunc: ({ node }) => [
+                () => node.currently.isEmpty(), () => node.currently.not.isEmpty()
+            ],
+            errorTextFunc: ({ node, actual }) => createBaseMessage(node, [` with length ${actual} to be empty`, ` not to be empty`])
+        },
+    }),
+    toHaveLength: createListLengthMatcher({
+        list: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasLength(expected, opts), () => node.currently.not.hasLength(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
+                `'s length ${actual} to be${util_1.comparatorStr(opts)} ${expected}`,
+                `'s length ${actual} not to be${util_1.comparatorStr(opts)} ${expected}`
+            ])
+        },
+    }),
+    toEventuallyBeEmpty: createEventuallyMatcherWithoutExpected({
+        list: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.isEmpty(opts), () => node.eventually.not.isEmpty(opts)
+            ],
+            errorTextFunc: ({ node, actual, opts }) => createBaseMessage(node, [` with length ${actual} to be empty within ${opts.timeout}ms`, ` not to be empty within ${opts.timeout}ms`])
+        },
+    }),
+    toEventuallyHaveLength: createEventuallyListLengthMatcher({
+        list: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasLength(expected, opts), () => node.eventually.not.hasLength(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
+                `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout}ms`,
+                `'s length ${actual} not to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout}ms`
+            ])
+        },
+    })
+};
+exports.allMatchers = {
     toExist: createMatcherWithoutExpected({
         element: {
             resultFunc: ({ node }) => [() => node.currently.exists(), () => node.currently.not.exists()],
@@ -842,49 +912,9 @@ exports.elementMatchers = {
             ],
             errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "contain direct text", opts.timeout)
         }
-    }),
-};
-exports.listMatchers = {
-    toBeEmpty: createMatcherWithoutExpected({
-        list: {
-            resultFunc: ({ node }) => [
-                () => node.currently.isEmpty(), () => node.currently.not.isEmpty()
-            ],
-            errorTextFunc: ({ node, actual }) => createBaseMessage(node, [` with length ${actual} to be empty`, ` not to be empty`])
-        },
-    }),
-    toHaveLength: createListLengthMatcher({
-        list: {
-            resultFunc: ({ node, expected, opts }) => [
-                () => node.currently.hasLength(expected, opts), () => node.currently.not.hasLength(expected, opts)
-            ],
-            errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
-                `'s length ${actual} to be${util_1.comparatorStr(opts)} ${expected}`,
-                `'s length ${actual} not to be${util_1.comparatorStr(opts)} ${expected}`
-            ])
-        },
-    }),
-    toEventuallyBeEmpty: createEventuallyMatcherWithoutExpected({
-        list: {
-            resultFunc: ({ node, opts }) => [
-                () => node.eventually.isEmpty(opts), () => node.eventually.not.isEmpty(opts)
-            ],
-            errorTextFunc: ({ node, actual, opts }) => createBaseMessage(node, [` with length ${actual} to be empty within ${opts.timeout}ms`, ` not to be empty within ${opts.timeout}ms`])
-        },
-    }),
-    toEventuallyHaveLength: createEventuallyListLengthMatcher({
-        list: {
-            resultFunc: ({ node, expected, opts }) => [
-                () => node.eventually.hasLength(expected, opts), () => node.eventually.not.hasLength(expected, opts)
-            ],
-            errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
-                `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout}ms`,
-                `'s length ${actual} not to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout}ms`
-            ])
-        },
     })
 };
-exports.valueElementMatchers = {
+exports.valueAllMatchers = {
     toHaveValue: createValueMatcher({
         element: {
             resultFunc: ({ node, expected }) => [
