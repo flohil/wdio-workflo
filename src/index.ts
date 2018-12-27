@@ -87,7 +87,7 @@ interface ICustomElementMatchers {
 
 interface ICustomListMatchers {
   toBeEmpty(): boolean
-  toHaveLength(length: number, opts?: {comparator?: Workflo.Comparator}): boolean
+  toHaveLength(length: number, opts?: Workflo.Comparator): boolean
   toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
 

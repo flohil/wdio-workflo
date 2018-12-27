@@ -20,4 +20,4 @@ export declare function convertToObject<T>(unknownTypedInput: {
     [key: string]: T;
 };
 export declare function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;
-export declare function comparatorStr(comparator: Workflo.Comparator): " " | " other than" | " greater than" | " less than";
+export declare function comparatorStr(comparator: Workflo.Comparator): "" | " other than" | " greater than" | " less than";

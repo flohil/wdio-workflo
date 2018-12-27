@@ -66,7 +66,7 @@ function comparatorStr(comparator) {
         return ' less than';
     }
     else {
-        return ' ';
+        return '';
     }
 }
 exports.comparatorStr = comparatorStr;

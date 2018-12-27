@@ -6,8 +6,7 @@ import {
   IPageNodeOpts,
   PageElement,
   IPageElementOpts,
-  IPageElementBaseOpts,
-  PageElementGroup
+  IPageElementBaseOpts
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder, XPathBuilder } from '../builders'
@@ -726,7 +725,13 @@ export class PageElementListCurrently<
 // CHECK STATE FUNCTIONS
 
   isEmpty() {
-    return !browser.isExisting(this._selector)
+    const actualLength = this.getLength()
+
+    this._node.__setLastDiff({
+      actual: actualLength.toString()
+    })
+
+    return actualLength === 0
   }
 
   hasLength(

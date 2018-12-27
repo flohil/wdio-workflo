@@ -6,7 +6,15 @@ import * as arrayFunctions from './lib/utility_functions/array'
 import * as classFunctions from './lib/utility_functions/class'
 import * as stringFunctions from './lib/utility_functions/string'
 import * as utilFunctions from './lib/utility_functions/util'
-import {elementMatchers, expectElement, expectList, valueElementMatchers, expectMap, expectGroup} from './lib/matchers'
+import {
+  elementMatchers,
+  expectElement,
+  expectList,
+  expectMap,
+  expectGroup,
+  listMatchers,
+  valueElementMatchers,
+} from './lib/matchers'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {
@@ -59,6 +67,7 @@ inject({})
 beforeAll(() => {
   jasmine.addMatchers(elementMatchers)
   jasmine.addMatchers(valueElementMatchers)
+  jasmine.addMatchers(listMatchers)
 })
 
 export { inject }

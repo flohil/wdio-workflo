@@ -9,8 +9,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const page_objects_1 = require("./page_objects");
 const _ = require("lodash");
+const page_objects_1 = require("./page_objects");
+const util_1 = require("./utility_functions/util");
 // MATCHER FUNCS
 function isWithoutExpected(node, withoutExpected = []) {
     let _withoutExpected = false;
@@ -40,7 +41,7 @@ function isWithoutExpected(node, withoutExpected = []) {
     }
     return _withoutExpected;
 }
-function createMatcher(compareFuncs, ensureOpts = false, withoutExpected = []) {
+function createBaseMatcher(compareFuncs, ensureOpts = false, withoutExpected = []) {
     return (util, customEqualityTesters) => {
         function baseCompareFunction(node, negativeComparison, opts = undefined, expected = undefined) {
             let result = {
@@ -91,8 +92,8 @@ function createMatcher(compareFuncs, ensureOpts = false, withoutExpected = []) {
             const successes = resultFunc({ node, expected, opts });
             const success = (negativeComparison) ? successes[1]() : successes[0]();
             if (!success) {
-                let optsWithTimeout = (typeof opts === 'object' && opts !== null) ? opts : Object.create(null);
-                if (!optsWithTimeout['timeout']) {
+                let optsWithTimeout = ((typeof opts === 'object' && opts !== null) || !!opts) ? opts : Object.create(null);
+                if (typeof optsWithTimeout === 'object' && !optsWithTimeout['timeout']) {
                     optsWithTimeout.timeout = node.getTimeout();
                 }
                 const actual = node.__lastDiff.actual;
@@ -129,75 +130,79 @@ function createMatcher(compareFuncs, ensureOpts = false, withoutExpected = []) {
         };
     };
 }
+exports.createBaseMatcher = createBaseMatcher;
+function createMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
 exports.createMatcher = createMatcher;
 function createMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, false, withoutExpected);
+    return createBaseMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createMatcherWithoutExpected = createMatcherWithoutExpected;
 function createEventuallyMatcher(compareFuncs) {
-    return createMatcher(compareFuncs, true);
+    return createBaseMatcher(compareFuncs, true);
 }
 exports.createEventuallyMatcher = createEventuallyMatcher;
 function createEventuallyMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, true, withoutExpected);
+    return createBaseMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyMatcherWithoutExpected = createEventuallyMatcherWithoutExpected;
 function createTextMatcher(compareFuncs) {
-    return createMatcher(compareFuncs, false);
+    return createBaseMatcher(compareFuncs, false);
 }
 exports.createTextMatcher = createTextMatcher;
 function createTextMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, false, withoutExpected);
+    return createBaseMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createTextMatcherWithoutExpected = createTextMatcherWithoutExpected;
 function createEventuallyTextMatcher(compareFuncs) {
-    return createMatcher(compareFuncs, true);
+    return createBaseMatcher(compareFuncs, true);
 }
 exports.createEventuallyTextMatcher = createEventuallyTextMatcher;
 function createEventuallyTextMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, true, withoutExpected);
+    return createBaseMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyTextMatcherWithoutExpected = createEventuallyTextMatcherWithoutExpected;
 function createBooleanMatcher(compareFuncs) {
-    return createMatcher(compareFuncs);
+    return createBaseMatcher(compareFuncs);
 }
 exports.createBooleanMatcher = createBooleanMatcher;
 function createBooleanMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, false, withoutExpected);
+    return createBaseMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createBooleanMatcherWithoutExpected = createBooleanMatcherWithoutExpected;
 function createEventuallyBooleanMatcher(compareFuncs) {
-    return createMatcher(compareFuncs, true);
+    return createBaseMatcher(compareFuncs, true);
 }
 exports.createEventuallyBooleanMatcher = createEventuallyBooleanMatcher;
 function createEventuallyBooleanMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, true, withoutExpected);
+    return createBaseMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyBooleanMatcherWithoutExpected = createEventuallyBooleanMatcherWithoutExpected;
 function createValueMatcher(compareFuncs) {
-    return createMatcher(compareFuncs);
+    return createBaseMatcher(compareFuncs);
 }
 exports.createValueMatcher = createValueMatcher;
 function createValueMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, false, withoutExpected);
+    return createBaseMatcher(compareFuncs, false, withoutExpected);
 }
 exports.createValueMatcherWithoutExpected = createValueMatcherWithoutExpected;
 function createEventuallyValueMatcher(compareFuncs) {
-    return createMatcher(compareFuncs, true);
+    return createBaseMatcher(compareFuncs, true);
 }
 exports.createEventuallyValueMatcher = createEventuallyValueMatcher;
 function createEventuallyValueMatcherWithoutExpected(compareFuncs, withoutExpected = ['element', 'list', 'map', 'group']) {
-    return createMatcher(compareFuncs, true, withoutExpected);
+    return createBaseMatcher(compareFuncs, true, withoutExpected);
 }
 exports.createEventuallyValueMatcherWithoutExpected = createEventuallyValueMatcherWithoutExpected;
-// export function createValueMatcherWithoutExpected<
-//   NodeType extends Workflo.PageNode.INode,
-//   OptsType extends Object = {timeout?: number},
-// >(
-//   compareFuncs: ICompareValueElementFuncs,
-// ) {
-//   return createMatcher<NodeType, OptsType, undefined, ICompareValueElementFuncs>(compareFuncs, true)
-// }
+function createListLengthMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createListLengthMatcher = createListLengthMatcher;
+function createEventuallyListLengthMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createEventuallyListLengthMatcher = createEventuallyListLengthMatcher;
 // ERROR TEXT FUNCTIONS
 function convertDiffToMessages(diff, actualOnly = false, comparisonLines = [], paths = []) {
     if (diff.tree && Object.keys(diff.tree).length > 0) {
@@ -283,8 +288,8 @@ function createEventuallyMessage(node, errorTexts, timeout) {
         notErrorText = errorTexts;
     }
     return createBaseMessage(node, [
-        ` to eventually ${errorText} within ${timeout} ms`,
-        ` not to eventually ${notErrorText} within ${timeout} ms`
+        ` to eventually ${errorText} within ${timeout}ms`,
+        ` not to eventually ${notErrorText} within ${timeout}ms`
     ]);
 }
 exports.createEventuallyMessage = createEventuallyMessage;
@@ -309,16 +314,16 @@ function createEventuallyPropertyMessage(node, property, comparison, actual, exp
     const _actual = printValue(actual);
     const _expected = printValue(expected);
     return createBaseMessage(node, [
-        `'s ${property} "${_actual}" to eventually ${comparison} "${_expected}" within ${timeout} ms`,
-        `'s ${property} "${_actual}" not to eventually ${comparison} "${_expected}" within ${timeout} ms`
+        `'s ${property} "${_actual}" to eventually ${comparison} "${_expected}" within ${timeout}ms`,
+        `'s ${property} "${_actual}" not to eventually ${comparison} "${_expected}" within ${timeout}ms`
     ]);
 }
 exports.createEventuallyPropertyMessage = createEventuallyPropertyMessage;
 function createEventuallyAnyMessage(node, property, comparison, actual, timeout) {
     const _actual = printValue(actual);
     return createBaseMessage(node, [
-        ` to eventually ${comparison} any ${property} within ${timeout} ms`,
-        ` to eventually ${comparison} no ${property} within ${timeout} ms but had ${property} "${_actual}"`,
+        ` to eventually ${comparison} any ${property} within ${timeout}ms`,
+        ` to eventually ${comparison} no ${property} within ${timeout}ms but had ${property} "${_actual}"`,
     ]);
 }
 exports.createEventuallyAnyMessage = createEventuallyAnyMessage;
@@ -839,36 +844,46 @@ exports.elementMatchers = {
         }
     }),
 };
-// export const listMatchers: jasmine.CustomMatcherFactories = {
-// toBeEmpty: listMatcherFunction(
-//   ({node}) => [() => node.currently.isEmpty(), () => node.currently.not.isEmpty()],
-//   ({node}) => createBaseMessage(node, "to be empty")
-// ),
-// toHaveLength: listMatcherFunction<number, {comparator?: Workflo.Comparator}>(
-//   ({node, expected, opts}) => [
-//     () => node.currently.hasLength(expected, opts.comparator),
-//     () => node.currently.not.hasLength(expected, opts.comparator)
-//   ],
-//   ({actual, expected, opts, node}) => createBaseMessage(
-//     node, `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected}`
-//   )
-// ),
-// toEventuallyBeEmpty: listMatcherWithoutExpectedFunction<IPageElementListWaitEmptyParams>(
-//   ({node, opts}) => [
-//     () => node.eventually.isEmpty(opts), () => node.eventually.not.isEmpty(opts)
-//   ],
-//   ({opts, node}) => createBaseMessage(node, ` to eventually be empty within ${opts.timeout} ms`)
-// ),
-// toEventuallyHaveLength: listMatcherFunction<number, IPageElementListWaitLengthParams>(
-//   ({node, expected, opts}) => [
-//     () => node.eventually.hasLength(expected, opts),
-//     () => node.eventually.not.hasLength(expected, opts)
-//   ],
-//   ({actual, expected, opts, node}) => createBaseMessage(
-//     node, `'s length ${actual} to be${comparatorStr(opts.comparator)} ${expected} within ${opts.timeout} ms`
-//   )
-// ),
-// }
+exports.listMatchers = {
+    toBeEmpty: createMatcherWithoutExpected({
+        list: {
+            resultFunc: ({ node }) => [
+                () => node.currently.isEmpty(), () => node.currently.not.isEmpty()
+            ],
+            errorTextFunc: ({ node, actual }) => createBaseMessage(node, [` with length ${actual} to be empty`, ` not to be empty`])
+        },
+    }),
+    toHaveLength: createListLengthMatcher({
+        list: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.currently.hasLength(expected, opts), () => node.currently.not.hasLength(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
+                `'s length ${actual} to be${util_1.comparatorStr(opts)} ${expected}`,
+                `'s length ${actual} not to be${util_1.comparatorStr(opts)} ${expected}`
+            ])
+        },
+    }),
+    toEventuallyBeEmpty: createEventuallyMatcherWithoutExpected({
+        list: {
+            resultFunc: ({ node, opts }) => [
+                () => node.eventually.isEmpty(opts), () => node.eventually.not.isEmpty(opts)
+            ],
+            errorTextFunc: ({ node, actual, opts }) => createBaseMessage(node, [` with length ${actual} to be empty within ${opts.timeout}ms`, ` not to be empty within ${opts.timeout}ms`])
+        },
+    }),
+    toEventuallyHaveLength: createEventuallyListLengthMatcher({
+        list: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasLength(expected, opts), () => node.eventually.not.hasLength(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
+                `'s length ${actual} to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout}ms`,
+                `'s length ${actual} not to be${util_1.comparatorStr(opts.comparator)} ${expected} within ${opts.timeout}ms`
+            ])
+        },
+    })
+};
 exports.valueElementMatchers = {
     toHaveValue: createValueMatcher({
         element: {
@@ -1025,7 +1040,7 @@ exports.valueElementMatchers = {
             ],
             errorTextFunc: ({ node, opts }) => createEventuallyEachMessage(node, "contain value", opts.timeout)
         }
-    }),
+    })
 };
 function expectElement(element) {
     return expect(element);

@@ -70,6 +70,6 @@ export function comparatorStr(comparator: Workflo.Comparator) {
   } else if (comparator === Workflo.Comparator.lt) {
     return ' less than'
   } else {
-    return ' '
+    return ''
   }
 }

@@ -31,13 +31,13 @@ export interface ErrorFuncWithoutExpected<NodeType extends Workflo.PageNode.INod
 }
 export declare type ErrorTextFunction<NodeType extends Workflo.PageNode.INode, OptsType, ExpectedType> = (args: ErrorFuncArgs<NodeType, OptsType, ExpectedType>) => string[];
 export declare type ErrorTextWithoutExpectedFunction<NodeType extends Workflo.PageNode.INode, OptsType> = (args: ErrorFuncWithoutExpected<NodeType, OptsType>) => string[];
-export interface ICompareElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never> {
-    element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, never>;
-    list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, Workflo.PageNode.ListFilterMask>;
-    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, Workflo.PageNode.MapFilterMask<string>>;
-    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>>;
+export interface ICompareElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = never, ListOptsType = Workflo.PageNode.ListFilterMask, MapOptsType = Workflo.PageNode.MapFilterMask<string>, GroupOptsType = Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>> {
+    element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, ElementOptsType>;
+    list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, ListOptsType>;
+    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, MapOptsType>;
+    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, GroupOptsType>;
 }
-export interface ICompareEventuallyElementFuncs<ElementExpectedType = undefined, ListExpectedType = undefined, MapExpectedType = undefined, GroupExpectedType = undefined> {
+export interface ICompareEventuallyElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = Workflo.IWDIOParamsInterval, ListOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask, MapOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>, GroupOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>> {
     element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, Workflo.IWDIOParamsInterval>;
     list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask>;
     map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>>;
@@ -55,7 +55,21 @@ export interface ICompareEventuallyValueElementFuncs<ElementValueType = any, Lis
     map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>>;
     group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
-export declare function createMatcher<OptsType extends Object = Object, CompareFuncsType extends (ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType> | ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>) = ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>, ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never>(compareFuncs: CompareFuncsType, ensureOpts?: boolean, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export interface ICompareListLengthElementFuncs extends ICompareElementFuncs<never, number, never, never, never, Workflo.Comparator, never, never> {
+    list: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, number, Workflo.Comparator>;
+}
+export interface ICompareEventuallyListLengthElementFuncs extends ICompareEventuallyElementFuncs<never, number, never, never, never, Workflo.IWDIOParamsInterval & {
+    comparator?: Workflo.Comparator;
+}, never, never> {
+    list: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, number, Workflo.IWDIOParamsInterval & {
+        comparator?: Workflo.Comparator;
+    }>;
+}
+export declare function createBaseMatcher<OptsType extends Object = Object, CompareFuncsType extends (ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType, ElementOptsType, ListOptsType, MapOptsType, GroupOptsType> | ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType, ElementOptsType, ListOptsType, MapOptsType, GroupOptsType>) = ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType, ElementOptsType, ListOptsType, MapOptsType, GroupOptsType>, ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = never, ListOptsType = never, MapOptsType = never, GroupOptsType = never>(compareFuncs: CompareFuncsType, ensureOpts?: boolean, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createMatcher<OptsType extends Object = Object, ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never>(compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
@@ -119,18 +133,27 @@ export declare function createEventuallyValueMatcherWithoutExpected<OptsType ext
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createBaseMessage<Store extends stores.PageElementStore, NodeType extends elements.PageElement<Store>>(node: NodeType, errorTexts: string | string[]): string[];
-export declare function createMessage<Store extends stores.PageElementStore, NodeType extends elements.PageElement<Store>>(node: NodeType, errorTexts: string | string[]): string[];
-export declare function createEventuallyMessage<Store extends stores.PageElementStore, NodeType extends elements.PageElement<Store>>(node: NodeType, errorTexts: string | string[], timeout: number): string[];
-export declare function createPropertyMessage<Store extends stores.PageElementStore, NodeType extends elements.PageElement<Store>, ExpectedType = string>(node: NodeType, property: string, comparison: string, actual: string, expected: ExpectedType): string[];
-export declare function createAnyMessage<Store extends stores.PageElementStore, NodeType extends elements.PageElement<Store>>(node: NodeType, property: string, comparison: string, actual: string): string[];
-export declare function createEventuallyPropertyMessage<Store extends stores.PageElementStore, NodeType extends elements.PageElement<Store>, ExpectedType = string>(node: NodeType, property: string, comparison: string, actual: string, expected: ExpectedType, timeout: number): string[];
-export declare function createEventuallyAnyMessage<Store extends stores.PageElementStore, NodeType extends elements.PageElement<Store>>(node: NodeType, property: string, comparison: string, actual: string, timeout: number): string[];
-export declare function createEachMessage<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions extends elements.IPageElementOpts<Store>, K extends string, Content extends Workflo.PageNode.GroupContent, NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> | elements.PageElementMap<Store, K, PageElementType, PageElementOptions> | elements.PageElementGroup<Store, Content>>(node: NodeType, errorTexts: string | string[], actualOnly?: boolean): string[];
-export declare function createAnyEachMessage<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions extends elements.IPageElementOpts<Store>, K extends string, Content extends Workflo.PageNode.GroupContent, NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> | elements.PageElementMap<Store, K, PageElementType, PageElementOptions> | elements.PageElementGroup<Store, Content>>(node: NodeType, errorTexts: string | string[]): string[];
-export declare function createEventuallyEachMessage<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions extends elements.IPageElementOpts<Store>, K extends string, Content extends Workflo.PageNode.GroupContent, NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> | elements.PageElementMap<Store, K, PageElementType, PageElementOptions> | elements.PageElementGroup<Store, Content>>(node: NodeType, errorTexts: string | string[], timeout: number): string[];
-export declare function createEventuallyAnyEachMessage<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions extends elements.IPageElementOpts<Store>, K extends string, Content extends Workflo.PageNode.GroupContent, NodeType extends elements.PageElementList<Store, PageElementType, PageElementOptions> | elements.PageElementMap<Store, K, PageElementType, PageElementOptions> | elements.PageElementGroup<Store, Content>>(node: NodeType, errorTexts: string | string[], timeout: number): string[];
+export declare function createListLengthMatcher<OptsType extends Object = Object>(compareFuncs: ICompareListLengthElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createEventuallyListLengthMatcher<OptsType extends Object = Object>(compareFuncs: ICompareEventuallyListLengthElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+    compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+    negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
+};
+export declare function createBaseMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
+export declare function createMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
+export declare function createEventuallyMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
+export declare function createPropertyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: any): string[];
+export declare function createAnyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string): string[];
+export declare function createEventuallyPropertyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: any, timeout: number): string[];
+export declare function createEventuallyAnyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, timeout: number): string[];
+export declare function createEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], actualOnly?: boolean): string[];
+export declare function createAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
+export declare function createEventuallyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
+export declare function createEventuallyAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
 export declare const elementMatchers: jasmine.CustomMatcherFactories;
+export declare const listMatchers: jasmine.CustomMatcherFactories;
 export declare const valueElementMatchers: jasmine.CustomMatcherFactories;
 export declare function expectElement<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>>(element: PageElementType): jasmine.Matchers<PageElementType>;
 export declare function expectList<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): jasmine.Matchers<PageElementListType>;

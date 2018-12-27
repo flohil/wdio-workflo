@@ -494,7 +494,11 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     }
     // CHECK STATE FUNCTIONS
     isEmpty() {
-        return !browser.isExisting(this._selector);
+        const actualLength = this.getLength();
+        this._node.__setLastDiff({
+            actual: actualLength.toString()
+        });
+        return actualLength === 0;
     }
     hasLength(length, comparator = "==" /* equalTo */) {
         const actualLength = this.getLength();
