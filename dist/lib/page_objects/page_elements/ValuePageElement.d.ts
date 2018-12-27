@@ -42,9 +42,9 @@ export declare abstract class ValuePageElementCurrently<Store extends PageElemen
         hasDirectText: (directText: string) => boolean;
         hasAnyDirectText: () => boolean;
         containsDirectText: (directText: string) => boolean;
-        hasAttribute: (attributeName: string, attributeValue: string) => boolean;
+        hasAttribute: (attribute: Workflo.IAttribute) => boolean;
         hasAnyAttribute: (attributeName: string) => boolean;
-        containsAttribute: (attributeName: string, attributeValue: string) => boolean;
+        containsAttribute: (attribute: Workflo.IAttribute) => boolean;
         hasHTML: (html: string) => boolean;
         hasAnyHTML: () => boolean;
         containsHTML: (html: string) => boolean;
@@ -87,9 +87,9 @@ export declare class ValuePageElementWait<Store extends PageElementStore, PageEl
         hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
         hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
         containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
+        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
         hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
+        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
         hasClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
         hasAnyClass: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
         containsClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
@@ -141,9 +141,9 @@ export declare class ValuePageElementEventually<Store extends PageElementStore, 
         hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => boolean;
         containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
+        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
+        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
         hasAnyClass: (opts?: Workflo.IWDIOParamsInterval) => boolean;
         containsClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => boolean;

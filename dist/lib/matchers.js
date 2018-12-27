@@ -203,6 +203,14 @@ function createEventuallyListLengthMatcher(compareFuncs) {
     return createBaseMatcher(compareFuncs, false);
 }
 exports.createEventuallyListLengthMatcher = createEventuallyListLengthMatcher;
+function createAttributeMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createAttributeMatcher = createAttributeMatcher;
+function createEventuallyAttributeMatcher(compareFuncs) {
+    return createBaseMatcher(compareFuncs, false);
+}
+exports.createEventuallyAttributeMatcher = createEventuallyAttributeMatcher;
 // ERROR TEXT FUNCTIONS
 function convertDiffToMessages(diff, actualOnly = false, comparisonLines = [], paths = []) {
     if (diff.tree && Object.keys(diff.tree).length > 0) {
@@ -441,6 +449,64 @@ exports.elementMatchers = {
                 () => node.eventually.containsHTML(expected, opts), () => node.eventually.not.containsHTML(expected, opts)
             ],
             errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, 'HTML', 'contain', actual, expected, opts.timeout)
+        }
+    }),
+    toHaveAttribute: createAttributeMatcher({
+        element: {
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.hasAttribute(expected), () => node.currently.not.hasAttribute(expected)
+            ],
+            errorTextFunc: ({ node, actual, expected }) => createPropertyMessage(node, expected.name, 'be', actual, expected.value)
+        }
+    }),
+    toEventuallyHaveAttribute: createEventuallyAttributeMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasAttribute(expected, opts), () => node.eventually.not.hasAttribute(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, expected.name, 'be', actual, expected.value, opts.timeout)
+        }
+    }),
+    toHaveAnyAttribute: createTextMatcher({
+        element: {
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.hasAnyAttribute(expected),
+                () => node.currently.not.hasAnyAttribute(expected)
+            ],
+            errorTextFunc: ({ node, actual, expected }) => createBaseMessage(node, [
+                ` to have any ${expected}`,
+                ` to have no ${expected} but had ${expected} "${actual}"`
+            ])
+        }
+    }),
+    toEventuallyHaveAnyAttribute: createEventuallyTextMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.hasAnyAttribute(expected, opts),
+                () => node.eventually.not.hasAnyAttribute(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
+                ` to have any ${expected} within ${opts.timeout}ms`,
+                ` to have no ${expected} within ${opts.timeout}ms but had ${expected} "${actual}"`
+            ])
+        }
+    }),
+    toContainAttribute: createAttributeMatcher({
+        element: {
+            resultFunc: ({ node, expected }) => [
+                () => node.currently.containsAttribute(expected),
+                () => node.currently.not.containsAttribute(expected)
+            ],
+            errorTextFunc: ({ node, actual, expected }) => createPropertyMessage(node, expected.name, 'contain', actual, expected.value)
+        }
+    }),
+    toEventuallyContainAttribute: createEventuallyAttributeMatcher({
+        element: {
+            resultFunc: ({ node, expected, opts }) => [
+                () => node.eventually.containsAttribute(expected, opts),
+                () => node.eventually.not.containsAttribute(expected, opts)
+            ],
+            errorTextFunc: ({ node, actual, expected, opts }) => createEventuallyPropertyMessage(node, expected.name, 'contain', actual, expected.value, opts.timeout)
         }
     }),
 };

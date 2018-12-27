@@ -20,9 +20,9 @@ interface ICustomElementMatchers {
   toHaveDirectText(directText: string): boolean
   toHaveAnyDirectText(): boolean
   toContainDirectText(directText: string): boolean
-  toHaveAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
+  toHaveAttribute(attribute: Workflo.IAttribute): boolean
   toHaveAnyAttribute(attributeName: string): boolean
-  toContainAttribute(attributeArgs: Workflo.IAttributeArgs): boolean
+  toContainAttribute(attribute: Workflo.IAttribute): boolean
   toHaveClass(className: string): boolean
   toHaveAnyClass(): boolean
   toContainClass(className: string): boolean
@@ -59,9 +59,9 @@ interface ICustomElementMatchers {
   toEventuallyHaveDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainAttribute(attributeArgs: Workflo.IAttributeArgs, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsInterval): boolean
   toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
@@ -393,11 +393,11 @@ declare global {
       reverse?: boolean,
     }
 
-    interface IAnyAttributeArgs {
+    interface IAnyAttribute {
       name: string,
     }
 
-    interface IAttributeArgs extends IAnyAttributeArgs {
+    interface IAttribute extends IAnyAttribute {
       value: string
     }
 

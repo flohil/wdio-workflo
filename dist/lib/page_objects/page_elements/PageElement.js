@@ -637,14 +637,14 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
     containsDirectText(directText) {
         return this._compareContains(directText, this.getDirectText());
     }
-    hasAttribute(attributeName, attributeValue) {
-        return this._compareHas(attributeValue, this.getAttribute(attributeName));
+    hasAttribute(attribute) {
+        return this._compareHas(attribute.value, this.getAttribute(attribute.name));
     }
     hasAnyAttribute(attributeName) {
         return this._compareHasAny(this.getAttribute(attributeName));
     }
-    containsAttribute(attributeName, attributeValue) {
-        return this._compareContains(attributeValue, this.getAttribute(attributeName));
+    containsAttribute(attribute) {
+        return this._compareContains(attribute.value, this.getAttribute(attribute.name));
     }
     hasClass(className) {
         return this._compareHas(className, this.getClass());
@@ -718,9 +718,9 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
             hasDirectText: (directText) => !this.hasDirectText(directText),
             hasAnyDirectText: () => !this.hasAnyDirectText(),
             containsDirectText: (directText) => !this.containsDirectText(directText),
-            hasAttribute: (attributeName, attributeValue) => !this.hasAttribute(attributeName, attributeValue),
+            hasAttribute: (attribute) => !this.hasAttribute(attribute),
             hasAnyAttribute: (attributeName) => !this.hasAnyAttribute(attributeName),
-            containsAttribute: (attributeName, attributeValue) => !this.containsAttribute(attributeName, attributeValue),
+            containsAttribute: (attribute) => !this.containsAttribute(attribute),
             hasHTML: (html) => !this.hasHTML(html),
             hasAnyHTML: () => !this.hasAnyHTML(),
             containsHTML: (html) => !this.containsHTML(html),
@@ -797,14 +797,14 @@ class PageElementWait extends _1.PageElementBaseWait {
     containsDirectText(directText, opts) {
         return this._waitContainsProperty('direct text', directText, () => this._node.currently.containsDirectText(directText), opts);
     }
-    hasAttribute(attributeName, attributeValue, opts) {
-        return this._waitHasProperty(`Attribute '${attributeName}'`, attributeValue, () => this._node.currently.hasAttribute(attributeName, attributeValue), opts);
+    hasAttribute(attribute, opts) {
+        return this._waitHasProperty(`Attribute '${attribute.name}'`, attribute.value, () => this._node.currently.hasAttribute(attribute), opts);
     }
     hasAnyAttribute(attributeName, opts) {
         return this._waitHasAnyProperty(`Attribute '${attributeName}'`, () => this._node.currently.hasAnyAttribute(attributeName), opts);
     }
-    containsAttribute(attributeName, attributeValue, opts) {
-        return this._waitContainsProperty(`Attribute '${attributeName}'`, attributeValue, () => this._node.currently.containsAttribute(attributeName, attributeValue), opts);
+    containsAttribute(attribute, opts) {
+        return this._waitContainsProperty(`Attribute '${attribute.name}'`, attribute.value, () => this._node.currently.containsAttribute(attribute), opts);
     }
     hasClass(className, opts) {
         return this._waitHasProperty(`class`, className, () => this._node.currently.hasClass(className), opts);
@@ -935,14 +935,14 @@ class PageElementWait extends _1.PageElementBaseWait {
             containsDirectText: (directText, opts) => {
                 return this.containsDirectText(directText, this._makeReverseParams(opts));
             },
-            hasAttribute: (attributeName, attributeValue, opts) => {
-                return this.hasAttribute(attributeName, attributeValue, this._makeReverseParams(opts));
+            hasAttribute: (attribute, opts) => {
+                return this.hasAttribute(attribute, this._makeReverseParams(opts));
             },
             hasAnyAttribute: (attributeName, opts) => {
                 return this.hasAnyAttribute(attributeName, this._makeReverseParams(opts));
             },
-            containsAttribute: (attributeName, attributeValue, opts) => {
-                return this.containsAttribute(attributeName, attributeValue, this._makeReverseParams(opts));
+            containsAttribute: (attribute, opts) => {
+                return this.containsAttribute(attribute, this._makeReverseParams(opts));
             },
             hasClass: (className, opts) => {
                 return this.hasClass(className, this._makeReverseParams(opts));
@@ -1024,14 +1024,14 @@ class PageElementEventually extends _1.PageElementBaseEventually {
     containsDirectText(directText, opts) {
         return this._node.__eventually(() => this._node.wait.containsDirectText(directText, opts));
     }
-    hasAttribute(attributeName, attributeValue, opts) {
-        return this._node.__eventually(() => this._node.wait.hasAttribute(attributeName, attributeValue, opts));
+    hasAttribute(attribute, opts) {
+        return this._node.__eventually(() => this._node.wait.hasAttribute(attribute, opts));
     }
     hasAnyAttribute(attributeName, opts) {
         return this._node.__eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts));
     }
-    containsAttribute(attributeName, attributeValue, opts) {
-        return this._node.__eventually(() => this._node.wait.containsAttribute(attributeName, attributeValue, opts));
+    containsAttribute(attribute, opts) {
+        return this._node.__eventually(() => this._node.wait.containsAttribute(attribute, opts));
     }
     hasClass(className, opts) {
         return this._node.__eventually(() => this._node.wait.hasClass(className, opts));
@@ -1125,14 +1125,14 @@ class PageElementEventually extends _1.PageElementBaseEventually {
             containsDirectText: (directText, opts) => {
                 return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts));
             },
-            hasAttribute: (attributeName, attributeValue, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts));
+            hasAttribute: (attribute, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.hasAttribute(attribute, opts));
             },
             hasAnyAttribute: (attributeName, opts) => {
                 return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts));
             },
-            containsAttribute: (attributeName, attributeValue, opts) => {
-                return this._node.__eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts));
+            containsAttribute: (attribute, opts) => {
+                return this._node.__eventually(() => this._node.wait.not.containsAttribute(attribute, opts));
             },
             hasClass: (className, opts) => {
                 return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts));

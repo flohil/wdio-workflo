@@ -778,14 +778,14 @@ export class PageElementCurrently<
   containsDirectText(directText: string) {
     return this._compareContains(directText, this.getDirectText())
   }
-  hasAttribute(attributeName: string, attributeValue: string) {
-    return this._compareHas(attributeValue, this.getAttribute(attributeName))
+  hasAttribute(attribute: Workflo.IAttribute) {
+    return this._compareHas(attribute.value, this.getAttribute(attribute.name))
   }
   hasAnyAttribute(attributeName: string) {
     return this._compareHasAny(this.getAttribute(attributeName))
   }
-  containsAttribute(attributeName: string, attributeValue: string) {
-    return this._compareContains(attributeValue, this.getAttribute(attributeName))
+  containsAttribute(attribute: Workflo.IAttribute) {
+    return this._compareContains(attribute.value, this.getAttribute(attribute.name))
   }
   hasClass(className: string) {
     return this._compareHas(className, this.getClass())
@@ -866,9 +866,9 @@ export class PageElementCurrently<
       hasDirectText: (directText: string) => !this.hasDirectText(directText),
       hasAnyDirectText: () => !this.hasAnyDirectText(),
       containsDirectText: (directText: string) => !this.containsDirectText(directText),
-      hasAttribute: (attributeName: string, attributeValue: string) => !this.hasAttribute(attributeName, attributeValue),
+      hasAttribute: (attribute: Workflo.IAttribute) => !this.hasAttribute(attribute),
       hasAnyAttribute: (attributeName: string) => !this.hasAnyAttribute(attributeName),
-      containsAttribute: (attributeName: string, attributeValue: string) => !this.containsAttribute(attributeName, attributeValue),
+      containsAttribute: (attribute: Workflo.IAttribute) => !this.containsAttribute(attribute),
       hasHTML: (html: string) => !this.hasHTML(html),
       hasAnyHTML: () => !this.hasAnyHTML(),
       containsHTML: (html: string) => !this.containsHTML(html),
@@ -983,11 +983,11 @@ export class PageElementWait<
       'direct text', directText, () => this._node.currently.containsDirectText(directText), opts
     )
   }
-  hasAttribute(attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsReverseInterval) {
+  hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsReverseInterval) {
     return this._waitHasProperty(
-      `Attribute '${attributeName}'`,
-      attributeValue,
-      () => this._node.currently.hasAttribute(attributeName, attributeValue), opts
+      `Attribute '${attribute.name}'`,
+      attribute.value,
+      () => this._node.currently.hasAttribute(attribute), opts
     )
   }
   hasAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsReverseInterval) {
@@ -995,11 +995,11 @@ export class PageElementWait<
       `Attribute '${attributeName}'`, () => this._node.currently.hasAnyAttribute(attributeName), opts
     )
   }
-  containsAttribute(attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsReverseInterval) {
+  containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsReverseInterval) {
     return this._waitContainsProperty(
-      `Attribute '${attributeName}'`,
-      attributeValue,
-      () => this._node.currently.containsAttribute(attributeName, attributeValue), opts
+      `Attribute '${attribute.name}'`,
+      attribute.value,
+      () => this._node.currently.containsAttribute(attribute), opts
     )
   }
   hasClass(className: string, opts?: Workflo.IWDIOParamsReverseInterval) {
@@ -1236,14 +1236,14 @@ export class PageElementWait<
       containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => {
         return this.containsDirectText(directText, this._makeReverseParams(opts))
       },
-      hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => {
-        return this.hasAttribute(attributeName, attributeValue, this._makeReverseParams(opts))
+      hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => {
+        return this.hasAttribute(attribute, this._makeReverseParams(opts))
       },
       hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsInterval) => {
         return this.hasAnyAttribute(attributeName, this._makeReverseParams(opts))
       },
-      containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => {
-        return this.containsAttribute(attributeName, attributeValue, this._makeReverseParams(opts))
+      containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => {
+        return this.containsAttribute(attribute, this._makeReverseParams(opts))
       },
       hasClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => {
         return this.hasClass(className, this._makeReverseParams(opts))
@@ -1357,14 +1357,14 @@ export class PageElementEventually<
   containsDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.__eventually(() => this._node.wait.containsDirectText(directText, opts))
   }
-  hasAttribute(attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAttribute(attributeName, attributeValue, opts))
+  hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) {
+    return this._node.__eventually(() => this._node.wait.hasAttribute(attribute, opts))
   }
   hasAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts))
   }
-  containsAttribute(attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) {
-    return this._node.__eventually(() => this._node.wait.containsAttribute(attributeName, attributeValue, opts))
+  containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) {
+    return this._node.__eventually(() => this._node.wait.containsAttribute(attribute, opts))
   }
   hasClass(className: string, opts?: Workflo.IWDIOParamsInterval) {
     return this._node.__eventually(() => this._node.wait.hasClass(className, opts))
@@ -1487,14 +1487,14 @@ export class PageElementEventually<
       containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts))
       },
-      hasAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAttribute(attributeName, attributeValue, opts))
+      hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => {
+        return this._node.__eventually(() => this._node.wait.not.hasAttribute(attribute, opts))
       },
       hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts))
       },
-      containsAttribute: (attributeName: string, attributeValue: string, opts?: Workflo.IWDIOParamsInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsAttribute(attributeName, attributeValue, opts))
+      containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => {
+        return this._node.__eventually(() => this._node.wait.not.containsAttribute(attribute, opts))
       },
       hasClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => {
         return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts))

@@ -274,6 +274,26 @@ export interface ICompareEventuallyListLengthElementFuncs extends ICompareEventu
   >
 }
 
+export interface ICompareAttributeElementFuncs extends ICompareElementFuncs<Workflo.IAttribute> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    Workflo.IAttribute,
+    never
+  >
+}
+
+export interface ICompareEventuallyAttributeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.IAttribute> {
+  element: IMatcherArgs<
+    elements.PageElement<
+      stores.PageElementStore
+    >,
+    Workflo.IAttribute,
+    Workflo.IWDIOParamsInterval
+  >
+}
+
 // MATCHER FUNCS
 
 function isWithoutExpected(node: Workflo.PageNode.INode, withoutExpected: WithoutExpected[] = []) {
@@ -700,6 +720,30 @@ export function createEventuallyListLengthMatcher<
   >(compareFuncs, false)
 }
 
+export function createAttributeMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareAttributeElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareAttributeElementFuncs,
+    Workflo.IAttribute, never, never, never
+  >(compareFuncs, false)
+}
+
+export function createEventuallyAttributeMatcher<
+  OptsType extends Object = Object,
+>(
+  compareFuncs: ICompareEventuallyAttributeElementFuncs
+) {
+  return createBaseMatcher<
+    OptsType,
+    ICompareEventuallyAttributeElementFuncs,
+    Workflo.IAttribute, never, never, never
+  >(compareFuncs, false)
+}
+
 // ERROR TEXT FUNCTIONS
 
 function convertDiffToMessages(
@@ -981,46 +1025,81 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
       )
     }
   }),
+  toHaveAttribute: createAttributeMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasAttribute(expected), () => node.currently.not.hasAttribute(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) =>
+        createPropertyMessage(node, expected.name, 'be', actual, expected.value)
+    }
+  }),
+  toEventuallyHaveAttribute: createEventuallyAttributeMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasAttribute(expected, opts), () => node.eventually.not.hasAttribute(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, expected.name, 'be', actual, expected.value, opts.timeout
+      )
+    }
+  }),
+  toHaveAnyAttribute: createTextMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.hasAnyAttribute(expected),
+        () => node.currently.not.hasAnyAttribute(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) => createBaseMessage(node, [
+        ` to have any ${expected}`,
+        ` to have no ${expected} but had ${expected} "${actual}"`
+      ])
+    }
+  }),
+  toEventuallyHaveAnyAttribute: createEventuallyTextMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.hasAnyAttribute(expected, opts),
+        () => node.eventually.not.hasAnyAttribute(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createBaseMessage(node, [
+        ` to have any ${expected} within ${opts.timeout}ms`,
+        ` to have no ${expected} within ${opts.timeout}ms but had ${expected} "${actual}"`
+      ])
+    }
+  }),
+  toContainAttribute: createAttributeMatcher({
+    element: {
+      resultFunc: ({node, expected}) => [
+        () => node.currently.containsAttribute(expected),
+        () => node.currently.not.containsAttribute(expected)
+      ],
+      errorTextFunc: ({node, actual, expected}) =>
+        createPropertyMessage(node, expected.name, 'contain', actual, expected.value)
+    }
+  }),
+  toEventuallyContainAttribute: createEventuallyAttributeMatcher({
+    element: {
+      resultFunc: ({node, expected, opts}) => [
+        () => node.eventually.containsAttribute(expected, opts),
+        () => node.eventually.not.containsAttribute(expected, opts)
+      ],
+      errorTextFunc: ({node, actual, expected, opts}) => createEventuallyPropertyMessage(
+        node, expected.name, 'contain', actual, expected.value, opts.timeout
+      )
+    }
+  }),
 
-  // toHaveHTML: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.hasHTML(expected), () => node.currently.not.hasHTML(expected)
+  // toEventuallyHaveAnyAttribute: elementMatcherFunction<string>(
+  //   ({node, expected, opts}) => [
+  //     () => node.eventually.hasAnyAttribute(expected, opts),
+  //     () => node.eventually.not.hasAnyAttribute(expected, opts),
   //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'HTML', 'be', actual, expected)
+  //   ({expected, opts, node}) => createBaseMessage(
+  //     node, ` to eventually have any ${expected} within ${opts.timeout} ms`
+  //   )
   // ),
-  // toHaveAnyHTML: elementMatcherFunction(
-  //   ({node}) => [
-  //     () => node.currently.hasAnyHTML(), () => node.currently.not.hasAnyHTML()
-  //   ],
-  //   ({node}) => createBaseMessage(node, "to have any HTML")
-  // ),
-  // toContainHTML: elementMatcherFunction(
-  //   ({node, expected}) => [
-  //     () => node.currently.containsHTML(expected), () => node.currently.not.containsHTML(expected)
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, 'HTML', 'contain', actual, expected)
-  // ),
-  // toHaveAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-  //   ({node, expected}) => [
-  //     () => node.currently.hasAttribute(expected.name, expected.value),
-  //     () => node.currently.not.hasAttribute(expected.name, expected.value),
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, expected.name, 'be', actual, expected.value)
-  // ),
-  // toHaveAnyAttribute: elementMatcherFunction<string>(
-  //   ({node, expected}) => [
-  //     () => node.currently.hasAnyAttribute(expected),
-  //     () => node.currently.not.hasAnyAttribute(expected)
-  //   ],
-  //   ({expected, node}) => createBaseMessage(node, ` to have any ${expected}`)
-  // ),
-  // toContainAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-  //   ({node, expected}) => [
-  //     () => node.currently.containsAttribute(expected.name, expected.value),
-  //     () => node.currently.not.containsAttribute(expected.name, expected.value),
-  //   ],
-  //   ({actual, expected, node}) => createPropertyMessage(node, expected.name, 'contain', actual, expected.value)
-  // ),
+
   // toHaveClass: elementMatcherFunction(
   //   ({node, expected}) => [
   //     () => node.currently.hasClass(expected), () => node.currently.not.hasClass(expected)
@@ -1154,69 +1233,7 @@ export const elementMatchers: jasmine.CustomMatcherFactories = {
   //   )
   // ),
 
-  // toEventuallyBeSelected: elementMatcherWithoutExpectedFunction(
-  //   ({node, opts}) => [
-  //     () => node.eventually.isSelected(opts), () => node.eventually.not.isSelected(opts)
-  //   ],
-  //   ({opts, node}) => createBaseMessage(node, ` to eventually be selected within ${opts.timeout} ms`)
-  // ),
-  // toEventuallyBeChecked: elementMatcherWithoutExpectedFunction(
-  //   ({node, opts}) => [
-  //     () => node.eventually.isChecked(opts), () => node.eventually.not.isChecked(opts)
-  //   ],
-  //   ({opts, node}) => createBaseMessage(node, ` to eventually be checked within ${opts.timeout} ms`)
-  // ),
-  // toEventuallyHaveHTML: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasHTML(expected, opts),
-  //     () => node.eventually.not.hasHTML(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'HTML', 'be', actual, expected, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveAnyHTML: elementMatcherWithoutExpectedFunction(
-  //   ({node, opts}) => [
-  //     () => node.eventually.hasAnyHTML(opts), () => node.eventually.not.hasAnyHTML(opts)
-  //   ],
-  //   ({opts, node}) => createBaseMessage(node, ` to eventually have any HTML within ${opts.timeout} ms`)
-  // ),
-  // toEventuallyContainHTML: elementMatcherFunction(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.containsHTML(expected, opts),
-  //     () => node.eventually.not.containsHTML(expected, opts)
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, 'HTML', 'contain', actual, expected, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasAttribute(expected.name, expected.value, opts),
-  //     () => node.eventually.not.hasAttribute(expected.name, expected.value, opts),
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, expected.name, 'be', actual, expected.value, opts.timeout
-  //   )
-  // ),
-  // toEventuallyHaveAnyAttribute: elementMatcherFunction<string>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.hasAnyAttribute(expected, opts),
-  //     () => node.eventually.not.hasAnyAttribute(expected, opts),
-  //   ],
-  //   ({expected, opts, node}) => createBaseMessage(
-  //     node, ` to eventually have any ${expected} within ${opts.timeout} ms`
-  //   )
-  // ),
-  // toEventuallyContainAttribute: elementMatcherFunction<Workflo.IAttributeArgs>(
-  //   ({node, expected, opts}) => [
-  //     () => node.eventually.containsAttribute(expected.name, expected.value, opts),
-  //     () => node.eventually.not.containsAttribute(expected.name, expected.value, opts),
-  //   ],
-  //   ({actual, expected, opts, node}) => createEventuallyPropertyMessage(
-  //     node, expected.name, 'contain', actual, expected.value, opts.timeout
-  //   )
-  // ),
+  
   // toEventuallyHaveClass: elementMatcherFunction(
   //   ({node, expected, opts}) => [
   //     () => node.eventually.hasClass(expected, opts),
