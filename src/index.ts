@@ -313,7 +313,14 @@ declare global {
       P
     }[keyof T];
 
-    type StripNever<T> = T // Omit<T, FilteredKeys<T, never>>
+
+
+
+    type KeysWithoutNever<T> = { [P in keyof T]: T[P] extends never ? never : P }[keyof T];
+
+    type WithoutNever<T> = Pick<T, KeysWithoutNever<T>>
+
+    type StripNever<T> = T // Pick<T, KeysWithoutNever<T>> // Omit<T, FilteredKeys<T, never>> // T
 
     type StripNeverByReturnType<T> = T // Omit<T, FilteredKeysByReturnType<T, never>>
 
@@ -549,6 +556,12 @@ declare global {
         never;
       }
 
+      type ExtractValueBooleanWN<T extends {[key in keyof T]: INode}> = {
+        [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
+        WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> :
+        never;
+      }
+
       interface IValueElementNode<GetType, FilterType, SetType = GetType>
       extends INode, IValueElement<GetType, FilterType>
       {
@@ -600,7 +613,15 @@ declare global {
       type GroupFilterMaskExists<Content extends GroupContent> =
         Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
 
-      type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
+      type ValueGroupFilterMask<Content extends GroupContent> = StripNever<
+        Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
+      >
+
+
+      type ValueGroupFilterMaskWN<Content extends GroupContent> = WithoutNever<
+        Partial<Workflo.PageNode.ExtractValueBooleanWN<Content>>
+      >
+
 
       interface IListFilterMask {
         filterMask?: ListFilterMask
