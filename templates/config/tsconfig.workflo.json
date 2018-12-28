@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "types": ["jasmine", "jasmine-expect", "node", "webdriverio"],
+        "preserveConstEnums": true
+    },
+    "include": [
+        "node_modules/wdio-workflo/**/*.ts",
+        "system_test/src/**/*"
+    ]
+}

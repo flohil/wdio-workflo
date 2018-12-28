@@ -163,6 +163,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
 
+  // typescript bugs 3.3.0:
+  // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
   get $() /*: Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>*/ {
     return this._$
   }

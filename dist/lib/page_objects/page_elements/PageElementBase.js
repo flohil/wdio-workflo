@@ -32,6 +32,8 @@ class PageElementBase extends _1.PageNode {
         }
         this._waitType = waitType;
     }
+    // typescript bugs 3.3.0: 
+    // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
     get $() {
         return this._$;
     }
