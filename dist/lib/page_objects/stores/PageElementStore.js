@@ -214,7 +214,7 @@ exports.PageElementStore = PageElementStore;
 // }
 // const inputStore = new InputStore()
 // const innerGroup = pageObjects.stores.pageElement.ValueGroup({
-//   input: new Input('//input'),
+//   input: inputStore.Input('//input'),
 //   element: inputStore.Element('//div'),
 //   inputList: inputStore.InputList('//input'),
 //   elementList: inputStore.ElementList('//div'),
@@ -285,20 +285,30 @@ exports.PageElementStore = PageElementStore;
 //     })
 //   })
 // })
-// innerGroup.getValue({
+// const res = innerGroup.getValue({
+// })
+// innerGroup.currently.getValue({
+// })
+// const input = innerGroup.$.input
+// const inputList = innerGroup.$.inputList
+// const mask: Workflo.PageNode.ValueGroupFilterMaskWN<typeof innerGroup.$> = {
 //   input: false,
-//   inputList: [true],
+//   inputList: false,
 //   inputMap: {
 //     x: true,
 //     y: false
 //   },
 //   inputGroup: {
 //     input: true,
-//     inputList: false,
+//     inputList: [true, false],
 //     inputMap: {
 //       x: true,
 //       y: false
 //     }
 //   }
-// })
+// }
+// const mask2: Workflo.PageNode.ExtractValueBooleanWN<typeof innerGroup.$> = {
+//   inputGroup: {
+//   }
+// }
 //# sourceMappingURL=PageElementStore.js.map

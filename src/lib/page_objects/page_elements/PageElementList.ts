@@ -6,7 +6,8 @@ import {
   IPageNodeOpts,
   PageElement,
   IPageElementOpts,
-  IPageElementBaseOpts
+  IPageElementBaseOpts,
+  PageElementGroup
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder, XPathBuilder } from '../builders'
@@ -162,7 +163,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
 
-  get $() { // Omit<Store, FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
+  get $(): Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
     return this._$
   }
 
