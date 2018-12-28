@@ -268,7 +268,7 @@ class ValuePageElementGroupEventually<
 
 // type guards
 
-function isIValueElementNode<
+export function isIValueElementNode<
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 >(node: Workflo.PageNode.INode | ValueElementNode<Content>): node is ValueElementNode<Content> {
   return typeof node['getValue'] === 'function' &&

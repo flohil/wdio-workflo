@@ -163,7 +163,7 @@ class PageElementMap extends _1.PageNode {
     eachWait(context, waitFunc, expected, isFilterMask = false) {
         for (const key in context) {
             if (helpers_1.isNullOrUndefined(expected)) {
-                waitFunc(context[key], expected[key]);
+                waitFunc(context[key]);
             }
             else {
                 if (isFilterMask) {
@@ -178,7 +178,8 @@ class PageElementMap extends _1.PageNode {
         }
         return this;
     }
-    eachDo(context, doFunc, filterMask) {
+    eachDo(doFunc, filterMask) {
+        const context = this.$;
         for (const key in context) {
             if (helpers_1.isNullOrUndefined(filterMask)) {
                 doFunc(context[key]);
@@ -199,7 +200,7 @@ class PageElementMap extends _1.PageNode {
                 }
             }
             else {
-                setFunc(context[key], values[key]);
+                setFunc(context[key]);
             }
         }
         return this;

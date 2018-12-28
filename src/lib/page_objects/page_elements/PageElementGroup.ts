@@ -306,7 +306,7 @@ implements ElementNode<Content> {
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     doFunc: (args: {
       node: NodeInterface, filter?: FilterType[keyof FilterType]
-    }) => NodeInterface,
+    }) => any,
     filterMask?: FilterType,
   ): this {
     for (const key in this._$) {
@@ -858,7 +858,7 @@ export class PageElementGroupEventually<
 }
 
 // type guards
-function isIElementNode<
+export function isIElementNode<
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 >(node: Workflo.PageNode.INode | ElementNode<Content>): node is ElementNode<Content> {
   return typeof node['getText'] === 'function' &&

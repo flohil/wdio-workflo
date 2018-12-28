@@ -69,7 +69,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     eachDo<NodeInterface, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, doFunc: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];
-    }) => NodeInterface, filterMask?: FilterType): this;
+    }) => any, filterMask?: FilterType): this;
     eachSet<NodeInterface extends Workflo.PageNode.INode, ValuesType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, setFunc: (args: {
         node: NodeInterface;
         value?: ValuesType[keyof ValuesType];
@@ -166,4 +166,7 @@ export declare class PageElementGroupEventually<Store extends PageElementStore, 
         containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
     };
 }
+export declare function isIElementNode<Content extends {
+    [K in keyof Content]: Workflo.PageNode.INode;
+}>(node: Workflo.PageNode.INode | ElementNode<Content>): node is ElementNode<Content>;
 export {};

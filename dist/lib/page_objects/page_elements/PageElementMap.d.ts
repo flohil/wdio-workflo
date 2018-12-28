@@ -64,8 +64,8 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
      */
     eachGet<ResultType>(context: Record<K, PageElementType>, getFunc: (node: PageElementType) => ResultType, filterMask: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, ResultType>>;
     eachWait<ValueType>(context: Record<K, PageElementType>, waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType, expected: Partial<Record<K, ValueType>>, isFilterMask?: boolean): this;
-    eachDo(context: Record<K, PageElementType>, doFunc: (element: PageElementType) => PageElementType, filterMask: Workflo.PageNode.MapFilterMask<K>): this;
-    eachSet<ValueType>(context: Record<K, PageElementType>, setFunc: (element: PageElementType, value: ValueType) => PageElementType, values: Partial<Record<K, ValueType>>): this;
+    eachDo(doFunc: (element: PageElementType) => any, filterMask?: Workflo.PageNode.MapFilterMask<K>): this;
+    eachSet<ValueType>(context: Record<K, PageElementType>, setFunc: (element: PageElementType, value?: ValueType) => PageElementType, values: Partial<Record<K, ValueType>>): this;
 }
 export declare class PageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>> extends PageNodeCurrently<Store, MapType> {
     /**

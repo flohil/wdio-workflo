@@ -475,7 +475,7 @@ declare global {
         never;
       }
 
-      interface IElementNode<TextType, BooleanType, FilterType>
+      interface IElementNode<TextType, BooleanType, FilterType = any>
         extends INode, IGetElement<TextType, BooleanType, FilterType>
       {
         currently: IGetElement<TextType, BooleanType, FilterType> &
@@ -562,7 +562,7 @@ declare global {
         never;
       }
 
-      interface IValueElementNode<GetType, FilterType, SetType = GetType>
+      interface IValueElementNode<GetType, FilterType = any, SetType = GetType>
       extends INode, IValueElement<GetType, FilterType>
       {
         currently: IValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>

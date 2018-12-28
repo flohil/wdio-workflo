@@ -511,10 +511,11 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   eachDo(
-    elements: PageElementType[],
-    doFunc: (element: PageElementType) => PageElementType,
+    doFunc: (element: PageElementType) => any,
     filterMask?: Workflo.PageNode.ListFilterMask
   ) {
+    const elements = this.all
+
     if (isNullOrUndefined(filterMask)) {
       elements.map(element => doFunc(element))
     } else if (filterMask !== false) {

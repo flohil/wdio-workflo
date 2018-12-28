@@ -96,4 +96,7 @@ declare class ValuePageElementGroupEventually<Store extends PageElementStore, Co
         containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
     };
 }
+export declare function isIValueElementNode<Content extends {
+    [K in keyof Content]: Workflo.PageNode.INode;
+}>(node: Workflo.PageNode.INode | ValueElementNode<Content>): node is ValueElementNode<Content>;
 export {};

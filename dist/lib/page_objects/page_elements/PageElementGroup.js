@@ -487,4 +487,5 @@ function isIElementNode(node) {
         typeof node.eventually['hasAnyDirectText'] === 'function' &&
         typeof node.eventually['containsDirectText'] === 'function';
 }
+exports.isIElementNode = isIElementNode;
 //# sourceMappingURL=PageElementGroup.js.map

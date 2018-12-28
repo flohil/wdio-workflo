@@ -127,7 +127,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * @param expected
      */
     eachWait<T>(elements: PageElementType[], waitFunc: (element: PageElementType, expected?: T) => PageElementType, expected?: T | T[], isFilterMask?: boolean): this;
-    eachDo(elements: PageElementType[], doFunc: (element: PageElementType) => PageElementType, filterMask?: Workflo.PageNode.ListFilterMask): this;
+    eachDo(doFunc: (element: PageElementType) => any, filterMask?: Workflo.PageNode.ListFilterMask): this;
     eachSet<T>(elements: PageElementType[], setFunc: (element: PageElementType, value: T) => PageElementType, values?: T | T[]): this;
 }
 export declare class PageElementListCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeCurrently<Store, ListType> {

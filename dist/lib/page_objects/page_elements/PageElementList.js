@@ -340,7 +340,8 @@ class PageElementList extends _1.PageNode {
         }
         return this;
     }
-    eachDo(elements, doFunc, filterMask) {
+    eachDo(doFunc, filterMask) {
+        const elements = this.all;
         if (helpers_1.isNullOrUndefined(filterMask)) {
             elements.map(element => doFunc(element));
         }

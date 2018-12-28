@@ -132,4 +132,5 @@ function isIValueElementNode(node) {
         typeof node.eventually['hasAnyValue'] === 'function' &&
         typeof node.eventually['containsValue'] === 'function';
 }
+exports.isIValueElementNode = isIValueElementNode;
 //# sourceMappingURL=ValuePageElementGroup.js.map

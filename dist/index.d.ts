@@ -367,7 +367,7 @@ declare global {
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
             };
-            interface IElementNode<TextType, BooleanType, FilterType> extends INode, IGetElement<TextType, BooleanType, FilterType> {
+            interface IElementNode<TextType, BooleanType, FilterType = any> extends INode, IGetElement<TextType, BooleanType, FilterType> {
                 currently: IGetElement<TextType, BooleanType, FilterType> & ICheckElementCurrently<TextType, BooleanType, FilterType>;
                 wait: IWaitElement<TextType, BooleanType, FilterType>;
                 eventually: ICheckElementEventually<TextType, BooleanType, FilterType>;
@@ -457,7 +457,7 @@ declare global {
             }> = {
                 [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> : never;
             };
-            interface IValueElementNode<GetType, FilterType, SetType = GetType> extends INode, IValueElement<GetType, FilterType> {
+            interface IValueElementNode<GetType, FilterType = any, SetType = GetType> extends INode, IValueElement<GetType, FilterType> {
                 currently: IValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>;
                 wait: IWaitValue<GetType, FilterType>;
                 eventually: ICheckValueEventually<GetType, FilterType>;

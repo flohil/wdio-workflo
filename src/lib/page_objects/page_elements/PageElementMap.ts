@@ -263,7 +263,7 @@ implements Workflo.PageNode.IElementNode<
   ): this {
     for (const key in context) {
       if (isNullOrUndefined(expected)) {
-        waitFunc(context[key], expected[key] as any as ValueType)
+        waitFunc(context[key])
       } else {
         if (isFilterMask) {
           if (this._includedInFilter(expected[key])) {
@@ -279,10 +279,11 @@ implements Workflo.PageNode.IElementNode<
   }
 
   eachDo(
-    context: Record<K, PageElementType>,
-    doFunc: (element: PageElementType) => PageElementType,
-    filterMask: Workflo.PageNode.MapFilterMask<K>,
+    doFunc: (element: PageElementType) => any,
+    filterMask?: Workflo.PageNode.MapFilterMask<K>,
   ): this {
+    const context = this.$
+
     for (const key in context) {
       if (isNullOrUndefined(filterMask)) {
         doFunc(context[key])
@@ -298,7 +299,7 @@ implements Workflo.PageNode.IElementNode<
 
   eachSet<ValueType>(
     context: Record<K, PageElementType>,
-    setFunc: (element: PageElementType, value: ValueType) => PageElementType,
+    setFunc: (element: PageElementType, value?: ValueType) => PageElementType,
     values: Partial<Record<K, ValueType>>,
   ): this {
     for (const key in context) {
@@ -307,7 +308,7 @@ implements Workflo.PageNode.IElementNode<
           setFunc(context[key], values[key] as any as ValueType)
         }
       } else {
-        setFunc(context[key], values[key] as any as ValueType)
+        setFunc(context[key])
       }
     }
 
