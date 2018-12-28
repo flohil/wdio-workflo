@@ -14,7 +14,7 @@ import { ListWhereBuilder, XPathBuilder } from '../builders'
 import { DEFAULT_INTERVAL } from '../'
 import { isArray } from 'util';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
-import { notIsNullOrUndefined, isNullOrUndefined } from '../../helpers';
+import { isNullOrUndefined } from '../../helpers';
 
 export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
 

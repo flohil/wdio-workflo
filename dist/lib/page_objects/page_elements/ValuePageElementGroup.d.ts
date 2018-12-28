@@ -27,7 +27,7 @@ export declare class ValuePageElementGroup<Store extends PageElementStore, Conte
      *
      * @param values
      */
-    setValue(values: Workflo.StripNever<ExtractValue<Content>>): this;
+    setValue(values: ExtractValue<Content>): this;
 }
 declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;

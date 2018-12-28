@@ -33,7 +33,7 @@ export class PageElementGroup<
 > extends PageNode<Store>
 implements ElementNode<Content> {
   protected _id: string
-  protected _$: Workflo.StripNever<Content>
+  protected _$: Content
   protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementGroupCurrently<Store, Content, this>
@@ -154,7 +154,7 @@ implements ElementNode<Content> {
       args: {node: NodeInterface, filter?: FilterType[keyof FilterType]}
     ) => any,
     filterMask?: FilterType,
-  ): Workflo.StripNever<ResultType> {
+  ): ResultType {
     let result = {} as ResultType;
 
     for (const key in this.$) {
@@ -336,7 +336,7 @@ implements ElementNode<Content> {
     setFunc: (
       args: {node: NodeInterface, value?: ValuesType[keyof ValuesType]}
     ) => NodeInterface,
-    values: Workflo.StripNever<ValuesType>,
+    values: ValuesType,
   ): this {
     for (const key in this._$) {
       const node = this._$[key] as any as NodeInterface

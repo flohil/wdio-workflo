@@ -76,7 +76,7 @@ implements ValueElementNode<Content> {
    *
    * @param values
    */
-  setValue(values: Workflo.StripNever<ExtractValue<Content>>) {
+  setValue(values: ExtractValue<Content>) {
     return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>> (
       isIValueElementNode, ({node, value}) => node.setValue(value), values
     )

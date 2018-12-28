@@ -19,7 +19,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     [K in keyof Content]: Workflo.PageNode.INode;
 }> extends PageNode<Store> implements ElementNode<Content> {
     protected _id: string;
-    protected _$: Workflo.StripNever<Content>;
+    protected _$: Content;
     protected _lastDiff: Workflo.IDiff;
     readonly currently: PageElementGroupCurrently<Store, Content, this>;
     readonly wait: PageElementGroupWait<Store, Content, this>;
@@ -50,7 +50,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     eachGet<NodeInterface, ResultType extends Partial<Content>, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, getFunc: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];
-    }) => any, filterMask?: FilterType): Workflo.StripNever<ResultType>;
+    }) => any, filterMask?: FilterType): ResultType;
     eachCompare<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>, ResultType extends Partial<Content> = Workflo.PageNode.ExtractBoolean<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, compareFunc: (args: {
         node: NodeInterface;
         expected?: ExpectedType[keyof ExpectedType];
@@ -73,7 +73,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     eachSet<NodeInterface extends Workflo.PageNode.INode, ValuesType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, setFunc: (args: {
         node: NodeInterface;
         value?: ValuesType[keyof ValuesType];
-    }) => NodeInterface, values: Workflo.StripNever<ValuesType>): this;
+    }) => NodeInterface, values: ValuesType): this;
 }
 export declare class PageElementGroupCurrently<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
