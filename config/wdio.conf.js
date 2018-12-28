@@ -29,23 +29,6 @@ if (!workfloConf.capabilities.browserName) {
   workfloConf.capabilities.browserName = 'chrome'
 }
 
-const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g
-
-function cleanStack (error, removeMessage) {
-  let stack = error.split('\n')
-  stack = stack.filter((line) => {
-    let keep = !line.match(STACKTRACE_FILTER)
-
-    if (removeMessage && keep) {
-      keep = line.startsWith('    at ')
-    }
-
-    return keep
-  })
-  error = stack.join('\n')
-  return error
-}
-
 function increaseBailErrors() {
   if (!global.bailErrors) {
     global.bailErrors = 1
@@ -153,7 +136,7 @@ exports.config = {
             process.send({event: 'retry:validateFailure', assertion: assertion})
           }
         } else {
-          assertion.stack = (global.cleanStackTraces) ? cleanStack(assertion.error.stack, true) : assertion.error.stack
+          assertion.stack = assertion.error.stack
 
           delete assertion.matcherName
           delete assertion.passed
@@ -195,7 +178,6 @@ exports.config = {
     global.bailErrors = config.bailErrors
     global.screenshotId = config.screenshotId + 1
     global.errorScreenshotFilename = undefined
-    global.cleanStackTraces = config.cleanStackTraces
 
     if (typeof workfloConf.beforeSession === 'function') {
       return workfloConf.beforeSession(config, capabilities, testcases)

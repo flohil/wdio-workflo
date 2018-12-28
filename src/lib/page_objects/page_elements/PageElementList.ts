@@ -163,7 +163,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
 
-  get $(): Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>> {
+  get $() /*: Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>*/ {
     return this._$
   }
 

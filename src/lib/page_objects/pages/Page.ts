@@ -62,19 +62,29 @@ class PageWait<
     const timeout = opts.timeout || this._page.getTimeout()
     const interval = opts.interval || this._page.getInterval()
 
+    let error = undefined
+
     try {
-      browser.waitUntil(() => conditionFunc(), timeout, '', interval)
-    } catch (error) {
-      if (error.type === 'WaitUntilTimeoutError') {
+      browser.waitUntil(() => {
+        try {
+          return conditionFunc()
+        } catch( _error ) {
+          error = _error
+        }
+      }, timeout, '', interval)
+    } catch (untilError) {
+      const _error = error || untilError
+
+      if (_error.type === 'WaitUntilTimeoutError') {
         const waitError = new Error(
-          `Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed`
+          `Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed.`
         ) as any
 
         waitError.type = 'WaitUntilTimeoutError'
 
         throw waitError
       } else {
-        throw error
+        throw _error
       }
     }
 
@@ -109,23 +119,34 @@ class PageEventually<
     const timeout = opts.timeout || this._page.getTimeout()
     const interval = opts.interval || this._page.getInterval()
 
+    let error = undefined
+
     try {
-      browser.waitUntil(() => conditionFunc(), timeout, '', interval)
+      browser.waitUntil(
+        () => {
+          try {
+            return conditionFunc()
+          } catch( _error ) {
+            error = _error
+          }
+        }, timeout, '', interval)
       return true
-    } catch(error) {
-      if (error.type === 'WaitUntilTimeoutError') {
+    } catch (untilError) {
+      const _error = error || untilError
+
+      if (_error.type === 'WaitUntilTimeoutError') {
         return false;
       } else {
-        throw error
+        throw _error
       }
     }
   }
 
   isOpen(opts: IsOpenOpts & Workflo.IWDIOParamsInterval = Object.create(null)) {
-    this._eventually(() => this._page.isOpen(opts), opts)
+    return this._eventually(() => this._page.isOpen(opts), opts)
   }
 
   isClosed(opts: IsClosedOpts & Workflo.IWDIOParamsInterval = Object.create(null)) {
-    this._eventually(() => this._page.isClosed(opts), opts)
+    return this._eventually(() => this._page.isClosed(opts), opts)
   }
 }

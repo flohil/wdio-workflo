@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageElementGroup } from '.';
+import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
@@ -55,7 +55,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     init(cloneFunc: (selector: Workflo.XPath) => this): void;
     initialWait(): void;
-    readonly $: Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>;
+    readonly $: Store;
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     /**

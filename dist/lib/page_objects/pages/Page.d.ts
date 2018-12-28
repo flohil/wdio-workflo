@@ -26,7 +26,7 @@ declare class PageEventually<Store extends PageElementStore, PageType extends Pa
     protected _page: PageType;
     constructor(page: PageType);
     protected _eventually(conditionFunc: () => boolean, opts?: Workflo.IWDIOParamsInterval): boolean;
-    isOpen(opts?: IsOpenOpts & Workflo.IWDIOParamsInterval): void;
-    isClosed(opts?: IsClosedOpts & Workflo.IWDIOParamsInterval): void;
+    isOpen(opts?: IsOpenOpts & Workflo.IWDIOParamsInterval): boolean;
+    isClosed(opts?: IsClosedOpts & Workflo.IWDIOParamsInterval): boolean;
 }
 export {};

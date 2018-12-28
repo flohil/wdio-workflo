@@ -27,17 +27,26 @@ class PageWait {
     _wait(conditionFunc, conditionMessage, opts = Object.create(null)) {
         const timeout = opts.timeout || this._page.getTimeout();
         const interval = opts.interval || this._page.getInterval();
+        let error = undefined;
         try {
-            browser.waitUntil(() => conditionFunc(), timeout, '', interval);
+            browser.waitUntil(() => {
+                try {
+                    return conditionFunc();
+                }
+                catch (_error) {
+                    error = _error;
+                }
+            }, timeout, '', interval);
         }
-        catch (error) {
-            if (error.type === 'WaitUntilTimeoutError') {
-                const waitError = new Error(`Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed`);
+        catch (untilError) {
+            const _error = error || untilError;
+            if (_error.type === 'WaitUntilTimeoutError') {
+                const waitError = new Error(`Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed.`);
                 waitError.type = 'WaitUntilTimeoutError';
                 throw waitError;
             }
             else {
-                throw error;
+                throw _error;
             }
         }
         return this._page;
@@ -56,24 +65,33 @@ class PageEventually {
     _eventually(conditionFunc, opts = Object.create(null)) {
         const timeout = opts.timeout || this._page.getTimeout();
         const interval = opts.interval || this._page.getInterval();
+        let error = undefined;
         try {
-            browser.waitUntil(() => conditionFunc(), timeout, '', interval);
+            browser.waitUntil(() => {
+                try {
+                    return conditionFunc();
+                }
+                catch (_error) {
+                    error = _error;
+                }
+            }, timeout, '', interval);
             return true;
         }
-        catch (error) {
-            if (error.type === 'WaitUntilTimeoutError') {
+        catch (untilError) {
+            const _error = error || untilError;
+            if (_error.type === 'WaitUntilTimeoutError') {
                 return false;
             }
             else {
-                throw error;
+                throw _error;
             }
         }
     }
     isOpen(opts = Object.create(null)) {
-        this._eventually(() => this._page.isOpen(opts), opts);
+        return this._eventually(() => this._page.isOpen(opts), opts);
     }
     isClosed(opts = Object.create(null)) {
-        this._eventually(() => this._page.isClosed(opts), opts);
+        return this._eventually(() => this._page.isClosed(opts), opts);
     }
 }
 //# sourceMappingURL=Page.js.map
