@@ -595,7 +595,7 @@ const innerGroup = pageObjects.stores.pageElement.ValueGroup({
 
 const res = innerGroup.getValue({
   
-})
+}).
 
 const mask: Workflo.PageNode.ValueGroupFilterMaskWN<typeof innerGroup.$> = {
   input: false,
@@ -616,6 +616,6 @@ const mask: Workflo.PageNode.ValueGroupFilterMaskWN<typeof innerGroup.$> = {
 
 const mask2: Workflo.PageNode.ExtractValueBooleanWN<typeof innerGroup.$> = {
   inputGroup: {
-
+    
   }
 }
