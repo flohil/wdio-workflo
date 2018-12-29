@@ -1,5 +1,4 @@
 /// <reference types="jasmine" />
-/// <reference types="jasmine-expect" />
 import { elements, stores } from './page_objects';
 declare type WithoutExpected = 'element' | 'list' | 'map' | 'group';
 export interface IMatcherArgs<NodeType extends Workflo.PageNode.INode, ExpectedType, OptsType> {

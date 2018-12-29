@@ -195,7 +195,7 @@ exports.config = {
     require('ts-node/register')
     require('tsconfig-paths/register')
 
-    require('../dist/inject.js')
+    require('../dist/lib/inject.js')
 
     // extend webdriverio client instance with capability to resolve any type of promise in order to continue code synchronously
     browser.addCommand('resolvePromise', function async (promise) {
@@ -217,7 +217,7 @@ exports.config = {
     require('ts-node/register')
     require('tsconfig-paths/register')
 
-    require('../dist/inject.js')
+    require('../dist/lib/inject.js')
 
     finishedTestcases = true
 

@@ -10,7 +10,6 @@
         "experimentalDecorators": true,
         "declaration": true,
         "outDir": "./dist",
-        "types": ["jasmine", "jasmine-expect", "node", "webdriverio", "deepmerge"]
     },
     "include": [
         "index.d.ts",
