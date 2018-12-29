@@ -1,11 +1,11 @@
 //import functions from './functions'
 //import registerSteps from './registerSteps'
-import * as Functions from './lib/api'
-import * as objectFunctions from './lib/utility_functions/object'
-import * as arrayFunctions from './lib/utility_functions/array'
-import * as classFunctions from './lib/utility_functions/class'
-import * as stringFunctions from './lib/utility_functions/string'
-import * as utilFunctions from './lib/utility_functions/util'
+import * as Functions from './api'
+import * as objectFunctions from './utility_functions/object'
+import * as arrayFunctions from './utility_functions/array'
+import * as classFunctions from './utility_functions/class'
+import * as stringFunctions from './utility_functions/string'
+import * as utilFunctions from './utility_functions/util'
 import {
   allMatchers,
   elementMatchers,
@@ -15,7 +15,7 @@ import {
   expectGroup,
   listMatchers,
   valueAllMatchers,
-} from './lib/matchers'
+} from './matchers'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {

@@ -15,7 +15,7 @@ import * as optimist from 'optimist'
 import * as merge from 'deepmerge'
 
 import { objectFunctions, arrayFunctions } from '..'
-import { IWorkfloConfig } from '../'
+import { IWorkfloConfig } from '..'
 
 import { Launcher, baseReporter } from 'webdriverio-workflo'
 import { flattenDiagnosticMessageText } from 'typescript';

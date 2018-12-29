@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 //import functions from './functions'
 //import registerSteps from './registerSteps'
-const Functions = require("./lib/api");
-const objectFunctions = require("./lib/utility_functions/object");
-const arrayFunctions = require("./lib/utility_functions/array");
-const classFunctions = require("./lib/utility_functions/class");
-const stringFunctions = require("./lib/utility_functions/string");
-const utilFunctions = require("./lib/utility_functions/util");
-const matchers_1 = require("./lib/matchers");
+const Functions = require("./api");
+const objectFunctions = require("./utility_functions/object");
+const arrayFunctions = require("./utility_functions/array");
+const classFunctions = require("./utility_functions/class");
+const stringFunctions = require("./utility_functions/string");
+const utilFunctions = require("./utility_functions/util");
+const matchers_1 = require("./matchers");
 function safeAdd(context, key, obj) {
     if (context.hasOwnProperty(key)) {
         throw new Error(`${key} is already defined within context`);
