@@ -24,6 +24,13 @@ class PageElementBase extends _1.PageNode {
                     if (_selector instanceof builders_1.XPathBuilder) {
                         _selector = builders_1.XPathBuilder.getInstance().build();
                     }
+                    if (typeof _selector === 'object') {
+                        // Cleaner solution would be to remove PageElementGroups from public store accessor of PageElement,
+                        // but this does not work due to typescript bugs that prevent extended generics to work with keyof.
+                        // typescript bugs 3.3.0:
+                        // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
+                        throw new Error("Selector chaining is not supported for PageElementGroups.");
+                    }
                     // chain selectors
                     _selector = `${selector}${_selector}`;
                     return this._store[method].apply(this._store, [_selector, _options]);
