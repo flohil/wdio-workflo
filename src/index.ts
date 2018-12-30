@@ -236,15 +236,18 @@ extends ICustomValueGroupMatchers<Content> {
   not: ICustomValueGroupMatchers<Content>
 }
 
-// global should be replaced with declare ... at some point...
 declare global {
+
+  // using Store instead of any should work for stores that inherit from pageObjects.element.PageElement
+  // somewhere in the prototype chain, but it doesn't at the moment
 
   function expectElement<
     Store extends pageObjects.stores.PageElementStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     ValueType
   >(element: PageElementType): (typeof element) extends (infer ElementType) ?
-    ElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
+    // ElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
+    ElementType extends pageObjects.elements.ValuePageElement<any, ValueType> ?
     IValueElementMatchers<ReturnType<ElementType['getValue']>> :
     IElementMatchers : IElementMatchers
 
@@ -254,9 +257,13 @@ declare global {
     PageElementOptions,
     PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>,
   >(list: PageElementListType): (typeof list) extends (infer ListType) ?
+    // ListType extends pageObjects.elements.ValuePageElementList<
+    //   Store, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
+    // > ?
     ListType extends pageObjects.elements.ValuePageElementList<
-      Store, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
-    > ? IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
+      any, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
+    > ?
+    IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
 
   function expectMap<
     Store extends pageObjects.stores.PageElementStore,
@@ -265,9 +272,13 @@ declare global {
     PageElementOptions,
     PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>,
   >(map: PageElementMapType): (typeof map) extends (infer MapType) ?
+  // MapType extends pageObjects.elements.ValuePageElementMap<
+  //   Store, K, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
+  // > ?
   MapType extends pageObjects.elements.ValuePageElementMap<
-    Store, K, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
-  > ? IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
+    any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
+  > ?
+  IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
   IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
 
   function expectGroup<
@@ -275,7 +286,8 @@ declare global {
     Content extends Workflo.PageNode.GroupContent,
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
   >(group: PageElementGroupType): (typeof group) extends (infer GroupType) ?
-    GroupType extends pageObjects.elements.ValuePageElementGroup<Store, Content> ?
+    // GroupType extends pageObjects.elements.ValuePageElementGroup<Store, Content> ?
+    GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ?
     IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>
 
   namespace WebdriverIO {

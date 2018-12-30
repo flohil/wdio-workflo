@@ -635,110 +635,112 @@ export class PageElementStore {
 //   }
 // }
 
-// class MyStore extends PageElementStore {
-//   Element(
-//     selector: Workflo.XPath,
-//     options?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
-//   ) {
-//     return this._getElement<MyElement<this>, IMyElementOpts<this>>(
-//       selector,
-//       MyElement,
-//       {
-//         store: this,
-//         ...options
-//       }
-//     )
-//   }
+class MyStore extends PageElementStore {
+  Element(
+    selector: Workflo.XPath,
+    options?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
+  ) {
+    return this._getElement<MyElement<this>, IMyElementOpts<this>>(
+      selector,
+      MyElement,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
 
-//   Input(
-//     selector: Workflo.XPath,
-//     options?: Pick<IMyInputOpts<this>, Workflo.Store.ElementPublicKeys | "testInputProp">
-//   ) {
-//     return this._getElement<MyInput<this>, IMyInputOpts<this>>(
-//       selector,
-//       MyInput,
-//       {
-//         store: this,
-//         ...options
-//       }
-//     )
-//   }
-// }
+  Input(
+    selector: Workflo.XPath,
+    options?: Pick<IMyInputOpts<this>, Workflo.Store.ElementPublicKeys | "testInputProp">
+  ) {
+    return this._getElement<MyInput<this>, IMyInputOpts<this>>(
+      selector,
+      MyInput,
+      {
+        store: this,
+        ...options
+      }
+    )
+  }
+}
 
-// interface IMyElementOpts<Store extends MyStore> extends IPageElementOpts<Store> {
-//   testProp: string
-// }
+interface IMyElementOpts<Store extends MyStore> extends IPageElementOpts<Store> {
+  testProp: string
+}
 
-// // constructor args structure must remain intact -> 1st arg selector, 2nd arg object with arbitrary structure
-// // that extends baseclass opts structure
-// class MyElement<Store extends MyStore> extends PageElement<Store> {
+// constructor args structure must remain intact -> 1st arg selector, 2nd arg object with arbitrary structure
+// that extends baseclass opts structure
+class MyElement<Store extends MyStore> extends PageElement<Store> {
 
-//   constructor(selector: string, opts: IMyElementOpts<Store>) {
-//     super(selector, opts)
+  constructor(selector: string, opts: IMyElementOpts<Store>) {
+    super(selector, opts)
 
-//     this.testProp = opts.testProp
-//   }
+    this.testProp = opts.testProp
+  }
 
-//   testProp: string
-// }
+  testProp: string
+}
 
-// interface IMyInputOpts<Store extends PageElementStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
-//   testInputProp: string
-// }
+interface IMyInputOpts<Store extends PageElementStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
+  testInputProp: string
+}
 
-// class MyInput<
-//   Store extends MyStore,
-// > extends pageObjects.elements.ValuePageElement<
-//   Store, string
-// > implements MyElement<Store> {
+class MyInput<
+  Store extends MyStore,
+> extends pageObjects.elements.ValuePageElement<
+  Store, string
+> implements MyElement<Store> {
 
-//   currently: MyInputCurrently<Store, this>;
+  currently: MyInputCurrently<Store, this>;
 
-//   testInputProp: string
-//   testProp: string
+  testInputProp: string
+  testProp: string
 
-//   constructor(selector: string, opts?: IMyInputOpts<Store>) {
-//     super(selector, opts)
+  constructor(selector: string, opts?: IMyInputOpts<Store>) {
+    super(selector, opts)
 
-//     this.testInputProp = opts.testInputProp
+    this.testInputProp = opts.testInputProp
 
-//     this.currently = new MyInputCurrently(this)
-//   }
+    this.currently = new MyInputCurrently(this)
+  }
 
-//   setValue(value: string) {
-//     this.element.setValue(value)
+  setValue(value: string) {
+    this.element.setValue(value)
 
-//     return this
-//   }
-// }
+    return this
+  }
+}
 
-// class MyInputCurrently<
-//   Store extends MyStore,
-//   PageElementType extends MyInput<Store>
-// > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
-//   getValue(): string {
-//     return this.element.getValue()
-//   }
-// }
+class MyInputCurrently<
+  Store extends MyStore,
+  PageElementType extends MyInput<Store>
+> extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+  getValue(): string {
+    return this.element.getValue()
+  }
+}
 
-// applyMixins(MyInput, [MyElement]);
+applyMixins(MyInput, [MyElement]);
 
 
-// function applyMixins(derivedCtor: any, baseCtors: any[]) {
-//   baseCtors.forEach(baseCtor => {
-//       Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-//           derivedCtor.prototype[name] = baseCtor.prototype[name];
-//       });
-//   });
-// }
+function applyMixins(derivedCtor: any, baseCtors: any[]) {
+  baseCtors.forEach(baseCtor => {
+      Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+          derivedCtor.prototype[name] = baseCtor.prototype[name];
+      });
+  });
+}
 
-// const myStore = new MyStore()
-// const element = myStore.Element('//asdf')
-// const input = myStore.Input('//asdf')
+const myStore = new MyStore()
+const element = myStore.Element('//asdf')
+const input = myStore.Input('//asdf')
 
-// element.testProp = 'asdf';
+element.testProp = 'asdf';
 
-// input.testInputProp = 'asdf';
-// input.testProp = 'asdf';
+input.testInputProp = 'asdf';
+input.testProp = 'asdf';
+
+expectElement(input).toHaveValue('asdf')
 
 
