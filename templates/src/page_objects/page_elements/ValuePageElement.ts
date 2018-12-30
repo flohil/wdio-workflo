@@ -24,8 +24,8 @@ export interface IValuePageElementOpts<
 export abstract class ValuePageElement<
   Store extends PageElementStore,
   ValueType
-> extends core.elements.ValuePageElement<Store, ValueType>
-implements PageElement<Store> {
+> extends PageElement<Store>
+implements core.elements.ValuePageElement<Store, ValueType> {
 
   readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>
   readonly wait: ValuePageElementWait<Store, this, ValueType>
@@ -37,30 +37,64 @@ implements PageElement<Store> {
     this.wait = new ValuePageElementWait(this)
     this.eventually = new ValuePageElementEventually(this)
   }
+
+  abstract setValue(value: ValueType): this;
+
+  getValue: () => ValueType;
+  getHasValue: (value: ValueType) => boolean;
+  getHasAnyValue: () => boolean;
+  getContainsValue: (value: ValueType) => boolean;
 }
 
 export abstract class ValuePageElementCurrently<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
-> extends core.elements.ValuePageElementCurrently<Store, PageElementType, ValueType>
-implements PageElementCurrently<Store, PageElementType> {}
+> extends PageElementCurrently<Store, PageElementType>
+implements core.elements.ValuePageElementCurrently<Store, PageElementType, ValueType> {
+  abstract getValue(): ValueType
+  getHasValue: (value: ValueType) => boolean
+  getHasAnyValue: () => boolean
+  getContainsValue: (value: ValueType) => boolean
+  hasValue: (value: ValueType) => boolean
+  hasAnyValue: () => boolean
+  containsValue: (value: ValueType) => boolean
+
+  readonly not: core.elements.ValuePageElementCurrently<Store, PageElementType, ValueType>['not'] &
+    PageElementCurrently<Store, PageElementType>['not']
+}
 
 export class ValuePageElementWait<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
-> extends core.elements.ValuePageElementWait<Store, PageElementType, ValueType>
-implements PageElementWait<Store, PageElementType> {}
+> extends PageElementWait<Store, PageElementType>
+implements core.elements.ValuePageElementWait<Store, PageElementType, ValueType> {
+  hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsReverseInterval) => PageElementType
+  hasAnyValue: (opts?: Workflo.IWDIOParamsReverseInterval) => PageElementType
+  containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsReverseInterval) => PageElementType
+
+  readonly not: core.elements.ValuePageElementWait<Store, PageElementType, ValueType>['not'] &
+    PageElementWait<Store, PageElementType>['not']
+}
 
 export class ValuePageElementEventually<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
-> extends core.elements.ValuePageElementEventually<Store, PageElementType, ValueType>
-implements PageElementEventually<Store, PageElementType> {}
+> extends PageElementEventually<Store, PageElementType>
+implements core.elements.ValuePageElementEventually<Store, PageElementType, ValueType> {
+  hasValue: (value: ValueType, opts?: Workflo.IWDIOParamsInterval) => boolean
+  hasAnyValue: (opts?: Workflo.IWDIOParamsInterval) => boolean
+  containsValue: (value: ValueType, opts?: Workflo.IWDIOParamsInterval) => boolean
 
-helpers.applyMixins(ValuePageElement, [PageElement]);
-helpers.applyMixins(ValuePageElementCurrently, [PageElementCurrently]);
-helpers.applyMixins(ValuePageElementWait, [PageElementWait]);
-helpers.applyMixins(ValuePageElementEventually, [PageElementEventually]);
+  readonly not: core.elements.ValuePageElementEventually<Store, PageElementType, ValueType>['not'] &
+    PageElementEventually<Store, PageElementType>['not']
+}
+
+// mixin functionalities of extended PageElement base class -> https://www.typescriptlang.org/docs/handbook/mixins.html
+
+helpers.applyMixins(ValuePageElement, [core.elements.ValuePageElement], ['not']);
+helpers.applyMixins(ValuePageElementCurrently, [core.elements.ValuePageElementCurrently], ['not']);
+helpers.applyMixins(ValuePageElementWait, [core.elements.ValuePageElementWait], ['not']);
+helpers.applyMixins(ValuePageElementEventually, [core.elements.ValuePageElementEventually], ['not']);
