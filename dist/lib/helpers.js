@@ -45,4 +45,35 @@ function isEmpty(value) {
     return isNullOrUndefined(value);
 }
 exports.isEmpty = isEmpty;
+function applyMixins(derivedCtor, baseCtors, mergeObjectKeys = []) {
+    baseCtors.forEach(baseCtor => {
+        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+            try {
+                derivedCtor.prototype[name] = baseCtor.prototype[name];
+            }
+            catch (error) {
+                if (error.message.includes('which has only a getter')) {
+                    const baseValue = baseCtor.prototype[name];
+                    const derivedValue = derivedCtor.prototype[name];
+                    let result = undefined;
+                    if ((typeof baseValue === 'object' && typeof derivedValue === 'object') && mergeObjectKeys.indexOf(name) >= 0) {
+                        result = Object.assign({}, baseValue, derivedValue);
+                    }
+                    else {
+                        result = baseValue;
+                    }
+                    Object.defineProperty(derivedCtor.prototype, name, {
+                        get: function () {
+                            return result;
+                        }
+                    });
+                }
+                else {
+                    throw error;
+                }
+            }
+        });
+    });
+}
+exports.applyMixins = applyMixins;
 //# sourceMappingURL=helpers.js.map

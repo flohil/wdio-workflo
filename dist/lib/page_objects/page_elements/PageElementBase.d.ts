@@ -18,7 +18,7 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
     getInterval(): number;
     abstract __equals<T>(actual: T, expected: T): boolean;
     abstract __any<T>(actual: T): boolean;
-    abstract __contains<T>(actual: T, expected: T): any;
+    abstract __contains<T>(actual: T, expected: T): boolean;
     /**
      * This function is used to write a value of an arbitrary type
      * into error messages and log outputs.
@@ -38,7 +38,7 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
     protected _withinTolerance(actual: number, expected: number, tolerance?: number): boolean;
     protected _compareHas<T>(expected: T, actual: T): boolean;
     protected _compareHasAny<T>(actual: T): boolean;
-    protected _compareContains<T>(expected: T, actual: T): any;
+    protected _compareContains<T>(expected: T, actual: T): boolean;
 }
 export declare abstract class PageElementBaseWait<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
     protected _waitWdioCheckFunc(checkTypeStr: string, conditionFunc: (opts: Workflo.IWDIOParamsReverseInterval) => boolean, { timeout, reverse, interval }?: Workflo.IWDIOParamsReverseInterval): PageElementType;

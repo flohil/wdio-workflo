@@ -1,6 +1,5 @@
 import { pageObjects as core } from 'wdio-workflo'
 import { IPageElementOpts, PageElement } from '../page_elements';
-import { IPageElementListOpts, IPageElementMapOpts } from 'wdio-workflo/dist/lib/page_objects/page_elements';
 
 /**
  * This class can be used to extend or customize the functionality provided by wdio-workflo's PageElementStore class.
@@ -47,7 +46,9 @@ export class PageElementStore extends core.stores.PageElementStore {
   ElementList(
     selector: Workflo.XPath,
     options?: Workflo.PickPartial<
-      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      core.elements.IPageElementListOpts<
+        this, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>
+      >,
       Workflo.Store.ListPublicKeys,
       Workflo.Store.ListPublicPartialKeys
     >
@@ -65,7 +66,7 @@ export class PageElementStore extends core.stores.PageElementStore {
   ExistElementList(
     selector: Workflo.XPath,
     options?: Workflo.PickPartial<
-      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
+      core.elements.IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
       Exclude<Workflo.Store.ListPublicKeys, "waitType">,
       Workflo.Store.ListPublicPartialKeys
     >
@@ -86,7 +87,9 @@ export class PageElementStore extends core.stores.PageElementStore {
   ElementMap<K extends string>(
     selector: Workflo.XPath,
     options: Workflo.PickPartial<
-      IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
+      core.elements.IPageElementMapOpts<
+        this, K, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>
+      >,
       Workflo.Store.MapPublicKeys,
       Workflo.Store.MapPublicPartialKeys
     >
@@ -104,7 +107,7 @@ export class PageElementStore extends core.stores.PageElementStore {
   ExistElementMap<K extends string>(
     selector: Workflo.XPath,
     options: Workflo.PickPartial<
-      IPageElementMapOpts<
+      core.elements.IPageElementMapOpts<
         this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
       >,
       Workflo.Store.MapPublicKeys,

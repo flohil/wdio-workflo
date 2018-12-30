@@ -43,10 +43,10 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     getHeight(): number;
     getHasText(text: string): boolean;
     getHasAnyText(): boolean;
-    getContainsText(text: string): any;
+    getContainsText(text: string): boolean;
     getHasDirectText(directText: string): boolean;
     getHasAnyDirectText(): boolean;
-    getContainsDirectText(directText: string): any;
+    getContainsDirectText(directText: string): boolean;
     /**
      *
      * @param postCondition Sometimes javascript that is to be executed after a click
@@ -157,10 +157,10 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
     getHeight(): number;
     getHasText(text: string): boolean;
     getHasAnyText(): boolean;
-    getContainsText(text: string): any;
+    getContainsText(text: string): boolean;
     getHasDirectText(directText: string): boolean;
     getHasAnyDirectText(): boolean;
-    getContainsDirectText(directText: string): any;
+    getContainsDirectText(directText: string): boolean;
     /**
    * @param actual the actual browser value in pixels
    * @param expected the expected value in pixels or 0 if expected was smaller than 0
@@ -196,25 +196,25 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
     isChecked(): boolean;
     hasText(text: string): boolean;
     hasAnyText(): boolean;
-    containsText(text: string): any;
+    containsText(text: string): boolean;
     hasHTML(html: string): boolean;
     hasAnyHTML(): boolean;
-    containsHTML(html: string): any;
+    containsHTML(html: string): boolean;
     hasDirectText(directText: string): boolean;
     hasAnyDirectText(): boolean;
-    containsDirectText(directText: string): any;
+    containsDirectText(directText: string): boolean;
     hasAttribute(attribute: Workflo.IAttribute): boolean;
     hasAnyAttribute(attributeName: string): boolean;
-    containsAttribute(attribute: Workflo.IAttribute): any;
+    containsAttribute(attribute: Workflo.IAttribute): boolean;
     hasClass(className: string): boolean;
     hasAnyClass(): boolean;
-    containsClass(className: string): any;
+    containsClass(className: string): boolean;
     hasId(id: string): boolean;
     hasAnyId(): boolean;
-    containsId(id: string): any;
+    containsId(id: string): boolean;
     hasName(name: string): boolean;
     hasAnyName(): boolean;
-    containsName(name: string): any;
+    containsName(name: string): boolean;
     hasLocation(coordinates: Workflo.ICoordinates, tolerances?: Partial<Workflo.ICoordinates>): boolean;
     hasX(x: number, tolerance?: number): boolean;
     hasY(y: number, tolerance?: number): boolean;

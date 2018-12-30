@@ -49,3 +49,36 @@ export function isEmpty(value: any) {
 
   return isNullOrUndefined(value)
 }
+
+export function applyMixins(derivedCtor: any, baseCtors: any[], mergeObjectKeys: string[] = []) {
+  baseCtors.forEach(baseCtor => {
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+      try {
+        derivedCtor.prototype[name] = baseCtor.prototype[name];
+      } catch ( error ) {
+        if ( error.message.includes('which has only a getter') ) {
+          const baseValue = baseCtor.prototype[name]
+          const derivedValue = derivedCtor.prototype[name]
+
+          let result = undefined
+
+          if (
+            (typeof baseValue === 'object' && typeof derivedValue === 'object') && mergeObjectKeys.indexOf(name) >= 0
+          ) {
+            result = {...baseValue, ...derivedValue}
+          } else {
+            result = baseValue
+          }
+
+          Object.defineProperty(derivedCtor.prototype, name, {
+            get: function () {
+              return result
+            }
+          });
+        } else {
+          throw error
+        }
+      }
+    });
+  });
+}

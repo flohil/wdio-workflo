@@ -17,16 +17,16 @@ export declare abstract class ValuePageElement<Store extends PageElementStore, V
     getValue(): ValueType;
     getHasValue(value: ValueType): boolean;
     getHasAnyValue(): boolean;
-    getContainsValue(value: ValueType): any;
+    getContainsValue(value: ValueType): boolean;
 }
 export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> {
     abstract getValue(): ValueType;
     getHasValue(value: ValueType): boolean;
     getHasAnyValue(): boolean;
-    getContainsValue(value: ValueType): any;
+    getContainsValue(value: ValueType): boolean;
     hasValue(value: ValueType): boolean;
     hasAnyValue(): boolean;
-    containsValue(value: ValueType): any;
+    containsValue(value: ValueType): boolean;
     readonly not: {
         hasValue: (value: ValueType) => boolean;
         hasAnyValue: () => boolean;

@@ -1,7 +1,13 @@
-import { pageObjects as core } from 'wdio-workflo'
+import { pageObjects as core, helpers } from 'wdio-workflo'
 
 import { PageElementStore } from '../stores'
-import { PageElement, PageElementCurrently, PageElementEventually, PageElementWait, IPageElementOpts } from '../page_elements'
+import {
+  PageElement,
+  PageElementCurrently,
+  PageElementEventually,
+  PageElementWait,
+  IPageElementOpts
+} from '../page_elements'
 
 /**
  * This interface can be used to extend wdio-workflo's IValuePageElementOpts interface.
@@ -53,3 +59,8 @@ export class ValuePageElementEventually<
   ValueType
 > extends core.elements.ValuePageElementEventually<Store, PageElementType, ValueType>
 implements PageElementEventually<Store, PageElementType> {}
+
+helpers.applyMixins(ValuePageElement, [PageElement]);
+helpers.applyMixins(ValuePageElementCurrently, [PageElementCurrently]);
+helpers.applyMixins(ValuePageElementWait, [PageElementWait]);
+helpers.applyMixins(ValuePageElementEventually, [PageElementEventually]);

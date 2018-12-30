@@ -3,6 +3,7 @@ import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element }
 
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli'
 import * as pageObjects from './lib/page_objects'
+import * as helpers from './lib/helpers'
 import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList'
 
 interface ICustomElementMatchers {
@@ -238,15 +239,11 @@ extends ICustomValueGroupMatchers<Content> {
 
 declare global {
 
-  // using Store instead of any should work for stores that inherit from pageObjects.element.PageElement
-  // somewhere in the prototype chain, but it doesn't at the moment
-
   function expectElement<
     Store extends pageObjects.stores.PageElementStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     ValueType
   >(element: PageElementType): (typeof element) extends (infer ElementType) ?
-    // ElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
     ElementType extends pageObjects.elements.ValuePageElement<any, ValueType> ?
     IValueElementMatchers<ReturnType<ElementType['getValue']>> :
     IElementMatchers : IElementMatchers
@@ -257,9 +254,6 @@ declare global {
     PageElementOptions,
     PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>,
   >(list: PageElementListType): (typeof list) extends (infer ListType) ?
-    // ListType extends pageObjects.elements.ValuePageElementList<
-    //   Store, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
-    // > ?
     ListType extends pageObjects.elements.ValuePageElementList<
       any, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
     > ?
@@ -272,21 +266,17 @@ declare global {
     PageElementOptions,
     PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>,
   >(map: PageElementMapType): (typeof map) extends (infer MapType) ?
-  // MapType extends pageObjects.elements.ValuePageElementMap<
-  //   Store, K, pageObjects.elements.ValuePageElement<Store, any>, PageElementOptions, any
-  // > ?
-  MapType extends pageObjects.elements.ValuePageElementMap<
-    any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
-  > ?
-  IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
-  IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
+    MapType extends pageObjects.elements.ValuePageElementMap<
+      any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
+    > ?
+    IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
+    IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
 
   function expectGroup<
     Store extends pageObjects.stores.PageElementStore,
     Content extends Workflo.PageNode.GroupContent,
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
   >(group: PageElementGroupType): (typeof group) extends (infer GroupType) ?
-    // GroupType extends pageObjects.elements.ValuePageElementGroup<Store, Content> ?
     GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ?
     IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>
 
@@ -1019,7 +1009,7 @@ import * as utilFunctions from './lib/utility_functions/util'
 
 export { objectFunctions, arrayFunctions, classFunctions, stringFunctions }
 
-export { pageObjects }
+export { pageObjects, helpers }
 
 import Kiwi from './lib/Kiwi'
 

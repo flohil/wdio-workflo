@@ -2,6 +2,7 @@ import { InstallOpts, StartOpts } from 'selenium-standalone';
 import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element } from 'webdriverio';
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli';
 import * as pageObjects from './lib/page_objects';
+import * as helpers from './lib/helpers';
 import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList';
 interface ICustomElementMatchers {
     toExist(): boolean;
@@ -812,7 +813,7 @@ import * as arrayFunctions from './lib/utility_functions/array';
 import * as classFunctions from './lib/utility_functions/class';
 import * as stringFunctions from './lib/utility_functions/string';
 export { objectFunctions, arrayFunctions, classFunctions, stringFunctions };
-export { pageObjects };
+export { pageObjects, helpers };
 import Kiwi from './lib/Kiwi';
 export { Kiwi };
 export interface Error {

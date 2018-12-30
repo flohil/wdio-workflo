@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const page_elements_1 = require("../page_elements");
 const builders_1 = require("../builders");
 const ValuePageElementMap_1 = require("../page_elements/ValuePageElementMap");
-const __1 = require("../../..");
 // Stores singleton instances of page elements to avoid creating new
 // elements on each invocation of a page element.
 class PageElementStore {
@@ -316,51 +315,88 @@ exports.PageElementStore = PageElementStore;
 //   inputGroup: {
 //   }
 // }
-class MyStore extends PageElementStore {
-    Element(selector, options) {
-        return this._getElement(selector, MyElement, Object.assign({ store: this }, options));
-    }
-    Input(selector, options) {
-        return this._getElement(selector, MyInput, Object.assign({ store: this }, options));
-    }
-}
-// constructor args structure must remain intact -> 1st arg selector, 2nd arg object with arbitrary structure
-// that extends baseclass opts structure
-class MyElement extends page_elements_1.PageElement {
-    constructor(selector, opts) {
-        super(selector, opts);
-        this.testProp = opts.testProp;
-    }
-}
-class MyInput extends __1.pageObjects.elements.ValuePageElement {
-    constructor(selector, opts) {
-        super(selector, opts);
-        this.testInputProp = opts.testInputProp;
-        this.currently = new MyInputCurrently(this);
-    }
-    setValue(value) {
-        this.element.setValue(value);
-        return this;
-    }
-}
-class MyInputCurrently extends __1.pageObjects.elements.ValuePageElementCurrently {
-    getValue() {
-        return this.element.getValue();
-    }
-}
-applyMixins(MyInput, [MyElement]);
-function applyMixins(derivedCtor, baseCtors) {
-    baseCtors.forEach(baseCtor => {
-        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-            derivedCtor.prototype[name] = baseCtor.prototype[name];
-        });
-    });
-}
-const myStore = new MyStore();
-const element = myStore.Element('//asdf');
-const input = myStore.Input('//asdf');
-element.testProp = 'asdf';
-input.testInputProp = 'asdf';
-input.testProp = 'asdf';
-expectElement(input).toHaveValue('asdf');
+// class MyStore extends PageElementStore {
+//   Element(
+//     selector: Workflo.XPath,
+//     options?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
+//   ) {
+//     return this._getElement<MyElement<this>, IMyElementOpts<this>>(
+//       selector,
+//       MyElement,
+//       {
+//         store: this,
+//         ...options
+//       }
+//     )
+//   }
+//   Input(
+//     selector: Workflo.XPath,
+//     options?: Pick<IMyInputOpts<this>, Workflo.Store.ElementPublicKeys | "testInputProp">
+//   ) {
+//     return this._getElement<MyInput<this>, IMyInputOpts<this>>(
+//       selector,
+//       MyInput,
+//       {
+//         store: this,
+//         ...options
+//       }
+//     )
+//   }
+// }
+// interface IMyElementOpts<Store extends MyStore> extends IPageElementOpts<Store> {
+//   testProp: string
+// }
+// // constructor args structure must remain intact -> 1st arg selector, 2nd arg object with arbitrary structure
+// // that extends baseclass opts structure
+// class MyElement<Store extends MyStore> extends PageElement<Store> {
+//   constructor(selector: string, opts: IMyElementOpts<Store>) {
+//     super(selector, opts)
+//     this.testProp = opts.testProp
+//   }
+//   testProp: string
+// }
+// interface IMyInputOpts<Store extends PageElementStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
+//   testInputProp: string
+// }
+// class MyInput<
+//   Store extends MyStore,
+// > extends pageObjects.elements.ValuePageElement<
+//   Store, string
+// > implements MyElement<Store> {
+//   currently: MyInputCurrently<Store, this>;
+//   testInputProp: string
+//   testProp: string
+//   constructor(selector: string, opts?: IMyInputOpts<Store>) {
+//     super(selector, opts)
+//     this.testInputProp = opts.testInputProp
+//     this.currently = new MyInputCurrently(this)
+//   }
+//   setValue(value: string) {
+//     this.element.setValue(value)
+//     return this
+//   }
+// }
+// class MyInputCurrently<
+//   Store extends MyStore,
+//   PageElementType extends MyInput<Store>
+// > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+//   getValue(): string {
+//     return this.element.getValue()
+//   }
+// }
+// applyMixins(MyInput, [MyElement]);
+// function applyMixins(derivedCtor: any, baseCtors: any[]) {
+//   baseCtors.forEach(baseCtor => {
+//       Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+//           derivedCtor.prototype[name] = baseCtor.prototype[name];
+//       });
+//   });
+// }
+// const myStore = new MyStore()
+// const element = myStore.Element('//asdf')
+// const input = myStore.Input('//asdf')
+// element.testProp = 'asdf';
+// input.testInputProp = 'asdf';
+// input.testProp = 'asdf';
+// expectElement(input).toHaveValue('asdf')
 //# sourceMappingURL=PageElementStore.js.map

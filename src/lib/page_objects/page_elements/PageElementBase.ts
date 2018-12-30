@@ -84,7 +84,7 @@ export abstract class PageElementBase<
 
   abstract __equals<T>(actual: T, expected: T): boolean
   abstract __any<T>(actual: T): boolean
-  abstract __contains<T>(actual: T, expected: T)
+  abstract __contains<T>(actual: T, expected: T): boolean
 
   /**
    * This function is used to write a value of an arbitrary type

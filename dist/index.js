@@ -5,6 +5,8 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const pageObjects = require("./lib/page_objects");
 exports.pageObjects = pageObjects;
+const helpers = require("./lib/helpers");
+exports.helpers = helpers;
 __export(require("./lib/steps"));
 const objectFunctions = require("./lib/utility_functions/object");
 exports.objectFunctions = objectFunctions;
