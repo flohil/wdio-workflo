@@ -29,68 +29,6 @@ export class PageElementStore {
     this._xPathBuilder = XPathBuilder.getInstance()
   }
 
-// GROUPS
-
-  // Encapsulates arbitrary page element types.
-  // Returns all nodes passed in content as its own members,
-  // so that they can be accessed via dot notation.
-  //
-  // content is a collection of node getters, where each node
-  // can be any form of page element defined in PageElementStore.
-  //
-  // walkerClass is optional and allows for passing a
-  // custom group walker class.
-  // Per default, ElementGroupWalker will be used as a walker.
-  //
-  // functions is an optional array of group function names that
-  // defines the functions this group is supposed to support.
-  //
-  // id is a string to uniquely identify a group.
-  // If id is not defined, the group instance will be identified
-  // by a concatenated string of its node key names and types.
-  ElementGroup<Content extends Record<string, Workflo.PageNode.INode>> (
-    content: Content,
-    options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
-  ) {
-    return this._getGroup<
-      this,
-      Content,
-      PageElementGroup<this, Content>,
-      Pick<IPageElementGroupOpts<
-        this,
-        Content
-      >, Workflo.Store.GroupConstructorKeys>
-    > (
-      PageElementGroup,
-      {
-        store: this,
-        content: content,
-        ...options
-      }
-    )
-  }
-
-  ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(
-    content: Content,
-    options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
-  ) {
-    return this._getGroup<
-      this,
-      Content,
-      ValuePageElementGroup<this, Content>,
-      Pick<IValueGroupOpts<
-        this, Content
-      >, Workflo.Store.GroupConstructorKeys>
-    > (
-      ValuePageElementGroup,
-      {
-        store: this,
-        content: content,
-        ...options
-      }
-    )
-  }
-
 // ELEMENTS
 
   /**
@@ -297,6 +235,68 @@ export class PageElementStore {
       {
         elementStoreFunc: this.ExistElement,
         elementOptions: {},
+        ...options
+      }
+    )
+  }
+
+// GROUPS
+
+  // Encapsulates arbitrary page element types.
+  // Returns all nodes passed in content as its own members,
+  // so that they can be accessed via dot notation.
+  //
+  // content is a collection of node getters, where each node
+  // can be any form of page element defined in PageElementStore.
+  //
+  // walkerClass is optional and allows for passing a
+  // custom group walker class.
+  // Per default, ElementGroupWalker will be used as a walker.
+  //
+  // functions is an optional array of group function names that
+  // defines the functions this group is supposed to support.
+  //
+  // id is a string to uniquely identify a group.
+  // If id is not defined, the group instance will be identified
+  // by a concatenated string of its node key names and types.
+  ElementGroup<Content extends Record<string, Workflo.PageNode.INode>> (
+    content: Content,
+    options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
+  ) {
+    return this._getGroup<
+      this,
+      Content,
+      PageElementGroup<this, Content>,
+      Pick<IPageElementGroupOpts<
+        this,
+        Content
+      >, Workflo.Store.GroupConstructorKeys>
+    > (
+      PageElementGroup,
+      {
+        store: this,
+        content: content,
+        ...options
+      }
+    )
+  }
+
+  ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(
+    content: Content,
+    options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
+  ) {
+    return this._getGroup<
+      this,
+      Content,
+      ValuePageElementGroup<this, Content>,
+      Pick<IValueGroupOpts<
+        this, Content
+      >, Workflo.Store.GroupConstructorKeys>
+    > (
+      ValuePageElementGroup,
+      {
+        store: this,
+        content: content,
         ...options
       }
     )
@@ -634,3 +634,111 @@ export class PageElementStore {
 
 //   }
 // }
+
+// class MyStore extends PageElementStore {
+//   Element(
+//     selector: Workflo.XPath,
+//     options?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
+//   ) {
+//     return this._getElement<MyElement<this>, IMyElementOpts<this>>(
+//       selector,
+//       MyElement,
+//       {
+//         store: this,
+//         ...options
+//       }
+//     )
+//   }
+
+//   Input(
+//     selector: Workflo.XPath,
+//     options?: Pick<IMyInputOpts<this>, Workflo.Store.ElementPublicKeys | "testInputProp">
+//   ) {
+//     return this._getElement<MyInput<this>, IMyInputOpts<this>>(
+//       selector,
+//       MyInput,
+//       {
+//         store: this,
+//         ...options
+//       }
+//     )
+//   }
+// }
+
+// interface IMyElementOpts<Store extends MyStore> extends IPageElementOpts<Store> {
+//   testProp: string
+// }
+
+// // constructor args structure must remain intact -> 1st arg selector, 2nd arg object with arbitrary structure
+// // that extends baseclass opts structure
+// class MyElement<Store extends MyStore> extends PageElement<Store> {
+
+//   constructor(selector: string, opts: IMyElementOpts<Store>) {
+//     super(selector, opts)
+
+//     this.testProp = opts.testProp
+//   }
+
+//   testProp: string
+// }
+
+// interface IMyInputOpts<Store extends PageElementStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
+//   testInputProp: string
+// }
+
+// class MyInput<
+//   Store extends MyStore,
+// > extends pageObjects.elements.ValuePageElement<
+//   Store, string
+// > implements MyElement<Store> {
+
+//   currently: MyInputCurrently<Store, this>;
+
+//   testInputProp: string
+//   testProp: string
+
+//   constructor(selector: string, opts?: IMyInputOpts<Store>) {
+//     super(selector, opts)
+
+//     this.testInputProp = opts.testInputProp
+
+//     this.currently = new MyInputCurrently(this)
+//   }
+
+//   setValue(value: string) {
+//     this.element.setValue(value)
+
+//     return this
+//   }
+// }
+
+// class MyInputCurrently<
+//   Store extends MyStore,
+//   PageElementType extends MyInput<Store>
+// > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
+//   getValue(): string {
+//     return this.element.getValue()
+//   }
+// }
+
+// applyMixins(MyInput, [MyElement]);
+
+
+// function applyMixins(derivedCtor: any, baseCtors: any[]) {
+//   baseCtors.forEach(baseCtor => {
+//       Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+//           derivedCtor.prototype[name] = baseCtor.prototype[name];
+//       });
+//   });
+// }
+
+// const myStore = new MyStore()
+// const element = myStore.Element('//asdf')
+// const input = myStore.Input('//asdf')
+
+// element.testProp = 'asdf';
+
+// input.testInputProp = 'asdf';
+// input.testProp = 'asdf';
+
+

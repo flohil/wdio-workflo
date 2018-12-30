@@ -2598,7 +2598,9 @@ function ensureFolderStructure(testDir: string) {
     const manualResultsDir = path.join(srcDir, 'manual_results')
     const stepsDir = path.join(srcDir, 'steps')
     const pageObjectsDir = path.join(srcDir, 'page_objects')
+
     const stepsIndexPath = path.join(stepsDir, 'index.ts')
+
     const templatesDir = path.resolve(__dirname, '../../templates/');
 
     const createDirs = [
@@ -2616,6 +2618,8 @@ function ensureFolderStructure(testDir: string) {
     ]
 
     try {
+        const pageObjectsExisted = fs.existsSync(pageObjectsDir)
+
         // create all necessary test directories
         createDirs.forEach( dir => {
             if (!fs.existsSync(dir)) {
@@ -2626,6 +2630,11 @@ function ensureFolderStructure(testDir: string) {
         // add steps index file
         if (!fs.existsSync(stepsIndexPath)) {
             fsExtra.copySync(path.join(templatesDir, 'src', 'steps', 'index.ts'), stepsIndexPath);
+        }
+
+        // add base classes
+        if (!pageObjectsExisted) {
+            fsExtra.copySync(path.join(templatesDir, 'src', 'page_objects'), pageObjectsDir)
         }
 
         console.log("\nSuccessfully initialized folder structure for wdio-workflo!")

@@ -8,8 +8,6 @@ export declare class PageElementStore {
     };
     protected _xPathBuilder: XPathBuilder;
     constructor();
-    ElementGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content, options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): PageElementGroup<this, Content>;
-    ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content, options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): ValuePageElementGroup<this, Content>;
     /**
      *
      * @param selector
@@ -25,6 +23,8 @@ export declare class PageElementStore {
     protected ValueMap<K extends string, PageElementType extends ValuePageElement<this, ReturnType<PageElementType["getValue"]>>, PageElementOpts extends Pick<IValuePageElementOpts<this>, Workflo.Store.ElementPublicKeys>>(selector: Workflo.XPath, options: Pick<IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>, Workflo.Store.MapConstructorKeys>): ValuePageElementMap<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>;
     ElementMap<K extends string>(selector: Workflo.XPath, options: Workflo.PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>, Workflo.Store.MapPublicKeys, Workflo.Store.MapPublicPartialKeys>): PageElementMap<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>;
     ExistElementMap<K extends string>(selector: Workflo.XPath, options: Workflo.PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>>, Workflo.Store.MapPublicKeys, Workflo.Store.MapPublicPartialKeys>): PageElementMap<this, K, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "customScroll">>;
+    ElementGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content, options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): PageElementGroup<this, Content>;
+    ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(content: Content, options?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): ValuePageElementGroup<this, Content>;
     /**
      * Returns a page element with the given selector, type and options.
      *
