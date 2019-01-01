@@ -868,7 +868,7 @@ declare global {
       [key: string] : IManualCriteria
     }
 
-    type StepImpl = <I, O>(params: IStepArgs<I, O>) => IStep
+    type StepImpl = <I, O>(params: IStepParams<I, O>) => IStep
 
     type StepImplMap = { [key:string]: StepImpl }
 
@@ -944,13 +944,13 @@ declare global {
       specObj: IValidateSpecObject
     }
 
-    interface IOptStepArgs<ArgsType extends Object, ReturnType> {
+    interface IOptStepParams<ArgsType extends Object, ReturnType> {
       cb?: (param: ReturnType) => void,
       arg?: ArgsType,
       description?: string
     }
 
-    interface IStepArgs<ArgsType extends Object, ReturnType> extends IOptStepArgs<ArgsType, ReturnType> {
+    interface IStepParams<ArgsType extends Object, ReturnType> extends IOptStepParams<ArgsType, ReturnType> {
       arg: ArgsType,
     }
 
@@ -958,6 +958,10 @@ declare global {
       __description: string,
       __execute: (prefix?: string) => void
     }
+
+    type StepDefinitions = Record<
+      string, (params?: Workflo.IStepParams<any, any> | Workflo.IOptStepParams<any, any>) => Workflo.IStep
+    >
   }
 
   // API FUNCTIONS
@@ -999,8 +1003,9 @@ export type Severity = Workflo.Severity
 export type TestcaseStatus = Workflo.TestcaseStatus
 export type SpecStatus = Workflo.SpecStatus
 export type IStep = Workflo.IStep
-export type IStepArgs<ArgsType extends Object, ReturnType> = Workflo.IStepArgs<ArgsType, ReturnType>
-export type IOptStepArgs<ArgsType extends Object, ReturnType> = Workflo.IOptStepArgs<ArgsType, ReturnType>
+export type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepParams<ArgsType, ReturnType>
+export type IOptStepParams<ArgsType extends Object, ReturnType> = Workflo.IOptStepParams<ArgsType, ReturnType>
+export type StepDefinitions = Workflo.StepDefinitions
 
 export * from './lib/steps'
 

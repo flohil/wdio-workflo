@@ -3,7 +3,7 @@ import * as _ from 'lodash'
 import * as CircularJson from 'circular-json'
 
 function mergeStepDefaults<I, O>
-(defaults: Partial<I>, params: Workflo.IStepArgs<I, O> | Workflo.IOptStepArgs<I, O>): Workflo.IStepArgs<I, O> {
+(defaults: Partial<I>, params: Workflo.IStepParams<I, O> | Workflo.IOptStepParams<I, O>): Workflo.IStepParams<I, O> {
   const _params = <any>params
 
   const res: { arg?: { [ key: string ]: any }, cb?: any } = _params || {}
@@ -11,17 +11,7 @@ function mergeStepDefaults<I, O>
   return _params
 }
 
-/**
- * This function must be used as a getter for all steps in wdio-workflo to ensure their correct functionality.
- *
- * By default, this is already taken care of in the steps/index.ts template file created
- * when executing `wdio-workflo --init`.
- *
- * @param target
- * @param name
- * @param receiver
- */
-export function stepsGetter(target, name, receiver) {
+function stepsGetter(target, name, receiver) {
   if (typeof name === "string") {
     const stepName: string = name
     const parameterizedStep: Workflo.StepImpl = target[stepName]
@@ -30,7 +20,7 @@ export function stepsGetter(target, name, receiver) {
       throw new Error(`Step ${stepName} is not implemented`)
     }
 
-    return <I, O>(stepCbArgs: Workflo.IOptStepArgs<I, O> = {}) : Workflo.IStep => {
+    return <I, O>(stepCbArgs: Workflo.IOptStepParams<I, O> = {}) : Workflo.IStep => {
       stepCbArgs.description = stepName
 
       const stepArgs = mergeStepDefaults({}, stepCbArgs)
@@ -42,20 +32,33 @@ export function stepsGetter(target, name, receiver) {
   }
 }
 
-/**
- * This function must be used as a setter for all steps in wdio-workflo to ensure their correct functionality.
- *
- * By default, this is already taken care of in the steps/index.ts template file created
- * when executing `wdio-workflo --init`.
- *
- * @param target
- * @param name
- * @param value
- */
-export function stepsSetter(target, name, value) : boolean {
+function stepsSetter(target, name, value) : boolean {
   throw new Error(
     "Step implementations may not be changed: Tried to set Step " + name.toString() + " to value " + value.toString()
   )
+}
+
+/**
+ * Use this function to create step definitions and preserve their types.
+ *
+ * @param stepDefinitions An object whose keys are step descriptions and whose values are step creation functions.
+ */
+export function defineSteps<StepDefinitions extends Workflo.StepDefinitions>(stepDefinitions: StepDefinitions) {
+  return stepDefinitions
+}
+
+/**
+ * Creates a Proxy that adds custom getters and setters to the merged step definitions.
+ * Steps in wdio-workflo can only function properly if this proxy is used to interact with them.
+ *
+ * @param stepDefinitions the merged step definitions
+ * @returns the proxified steps
+ */
+export function proxifySteps(stepDefinitions: Workflo.StepDefinitions) {
+  return new Proxy(stepDefinitions, {
+    get: (target, name, receiver) => stepsGetter(target, name, receiver),
+    set: (target, name, value) => stepsSetter(target, name, value)
+  })
 }
 
 export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep {
@@ -181,7 +184,7 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
    * @param params encapsulates the following step parameters: description, step arguments and step callback
    * @param executionFunction changes the state of the tested application
    */
-  constructor(params: Workflo.IOptStepArgs<ArgsType, ReturnType>, executionFunction: (arg: ArgsType) => ReturnType) {
+  constructor(params: Workflo.IOptStepParams<ArgsType, ReturnType>, executionFunction: (arg: ArgsType) => ReturnType) {
 
     // HACK!!!
     // patch browser object to create stacktrace which can be displayed on selenium errors

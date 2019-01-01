@@ -9,16 +9,6 @@ function mergeStepDefaults(defaults, params) {
     res.arg = _.merge(defaults, res.arg);
     return _params;
 }
-/**
- * This function must be used as a getter for all steps in wdio-workflo to ensure their correct functionality.
- *
- * By default, this is already taken care of in the steps/index.ts template file created
- * when executing `wdio-workflo --init`.
- *
- * @param target
- * @param name
- * @param receiver
- */
 function stepsGetter(target, name, receiver) {
     if (typeof name === "string") {
         const stepName = name;
@@ -36,21 +26,32 @@ function stepsGetter(target, name, receiver) {
         throw new Error("Property keys of Steps must be of type string: Step " + name.toString);
     }
 }
-exports.stepsGetter = stepsGetter;
-/**
- * This function must be used as a setter for all steps in wdio-workflo to ensure their correct functionality.
- *
- * By default, this is already taken care of in the steps/index.ts template file created
- * when executing `wdio-workflo --init`.
- *
- * @param target
- * @param name
- * @param value
- */
 function stepsSetter(target, name, value) {
     throw new Error("Step implementations may not be changed: Tried to set Step " + name.toString() + " to value " + value.toString());
 }
-exports.stepsSetter = stepsSetter;
+/**
+ * Use this function to create step definitions and preserve their types.
+ *
+ * @param stepDefinitions An object whose keys are step descriptions and whose values are step creation functions.
+ */
+function defineSteps(stepDefinitions) {
+    return stepDefinitions;
+}
+exports.defineSteps = defineSteps;
+/**
+ * Creates a Proxy that adds custom getters and setters to the merged step definitions.
+ * Steps in wdio-workflo can only function properly if this proxy is used to interact with them.
+ *
+ * @param stepDefinitions the merged step definitions
+ * @returns the proxified steps
+ */
+function proxifySteps(stepDefinitions) {
+    return new Proxy(stepDefinitions, {
+        get: (target, name, receiver) => stepsGetter(target, name, receiver),
+        set: (target, name, value) => stepsSetter(target, name, value)
+    });
+}
+exports.proxifySteps = proxifySteps;
 class Step {
     /**
      * Steps consist of a description and an execution function.

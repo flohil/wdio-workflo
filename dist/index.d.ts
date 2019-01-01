@@ -707,7 +707,7 @@ declare global {
         interface IManualTestcaseResults {
             [key: string]: IManualCriteria;
         }
-        type StepImpl = <I, O>(params: IStepArgs<I, O>) => IStep;
+        type StepImpl = <I, O>(params: IStepParams<I, O>) => IStep;
         type StepImplMap = {
             [key: string]: StepImpl;
         };
@@ -769,18 +769,19 @@ declare global {
         type IValidateContainer = {
             specObj: IValidateSpecObject;
         };
-        interface IOptStepArgs<ArgsType extends Object, ReturnType> {
+        interface IOptStepParams<ArgsType extends Object, ReturnType> {
             cb?: (param: ReturnType) => void;
             arg?: ArgsType;
             description?: string;
         }
-        interface IStepArgs<ArgsType extends Object, ReturnType> extends IOptStepArgs<ArgsType, ReturnType> {
+        interface IStepParams<ArgsType extends Object, ReturnType> extends IOptStepParams<ArgsType, ReturnType> {
             arg: ArgsType;
         }
         interface IStep {
             __description: string;
             __execute: (prefix?: string) => void;
         }
+        type StepDefinitions = Record<string, (params?: Workflo.IStepParams<any, any> | Workflo.IOptStepParams<any, any>) => Workflo.IStep>;
     }
     function getUid(id: string): string;
     function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
@@ -808,8 +809,9 @@ export declare type Severity = Workflo.Severity;
 export declare type TestcaseStatus = Workflo.TestcaseStatus;
 export declare type SpecStatus = Workflo.SpecStatus;
 export declare type IStep = Workflo.IStep;
-export declare type IStepArgs<ArgsType extends Object, ReturnType> = Workflo.IStepArgs<ArgsType, ReturnType>;
-export declare type IOptStepArgs<ArgsType extends Object, ReturnType> = Workflo.IOptStepArgs<ArgsType, ReturnType>;
+export declare type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepParams<ArgsType, ReturnType>;
+export declare type IOptStepParams<ArgsType extends Object, ReturnType> = Workflo.IOptStepParams<ArgsType, ReturnType>;
+export declare type StepDefinitions = Workflo.StepDefinitions;
 export * from './lib/steps';
 import * as objectFunctions from './lib/utility_functions/object';
 import * as arrayFunctions from './lib/utility_functions/array';

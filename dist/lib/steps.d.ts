@@ -1,25 +1,17 @@
 /**
- * This function must be used as a getter for all steps in wdio-workflo to ensure their correct functionality.
+ * Use this function to create step definitions and preserve their types.
  *
- * By default, this is already taken care of in the steps/index.ts template file created
- * when executing `wdio-workflo --init`.
- *
- * @param target
- * @param name
- * @param receiver
+ * @param stepDefinitions An object whose keys are step descriptions and whose values are step creation functions.
  */
-export declare function stepsGetter(target: any, name: any, receiver: any): <I, O>(stepCbArgs?: Workflo.IOptStepArgs<I, O>) => Workflo.IStep;
+export declare function defineSteps<StepDefinitions extends Workflo.StepDefinitions>(stepDefinitions: StepDefinitions): StepDefinitions;
 /**
- * This function must be used as a setter for all steps in wdio-workflo to ensure their correct functionality.
+ * Creates a Proxy that adds custom getters and setters to the merged step definitions.
+ * Steps in wdio-workflo can only function properly if this proxy is used to interact with them.
  *
- * By default, this is already taken care of in the steps/index.ts template file created
- * when executing `wdio-workflo --init`.
- *
- * @param target
- * @param name
- * @param value
+ * @param stepDefinitions the merged step definitions
+ * @returns the proxified steps
  */
-export declare function stepsSetter(target: any, name: any, value: any): boolean;
+export declare function proxifySteps(stepDefinitions: Workflo.StepDefinitions): Record<string, (params?: Workflo.IStepParams<any, any> | Workflo.IOptStepParams<any, any>) => Workflo.IStep>;
 export declare class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep {
     __description: string;
     __execute: (prefix: string) => void;
@@ -45,5 +37,5 @@ export declare class Step<ArgsType extends Object, ReturnType> implements Workfl
      * @param params encapsulates the following step parameters: description, step arguments and step callback
      * @param executionFunction changes the state of the tested application
      */
-    constructor(params: Workflo.IOptStepArgs<ArgsType, ReturnType>, executionFunction: (arg: ArgsType) => ReturnType);
+    constructor(params: Workflo.IOptStepParams<ArgsType, ReturnType>, executionFunction: (arg: ArgsType) => ReturnType);
 }
