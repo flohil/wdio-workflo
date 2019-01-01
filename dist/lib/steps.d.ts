@@ -20,32 +20,30 @@ export declare function stepsGetter(target: any, name: any, receiver: any): <I, 
  * @param value
  */
 export declare function stepsSetter(target: any, name: any, value: any): boolean;
-/**
- * This class is used to implement all steps in wdio-workflo.
- *
- * ParameterizedSteps are each identified by a step description that briefly summarizes in natural language all the
- * state manipulations performed by the step. This step description is also displayed in the generated test reports and
- * should therefore be understandable for all stakeholders.
- *
- * A ParameterizedStep is not executed when
- *
- * needs to be executed with the same parameters
- *
- * always with the same parameters and therefore called ParameterizedStep - but executed at a later point
- *
- */
-export declare class Step<I, O> implements Workflo.IStep {
-    /**
-     *
-     */
+export declare class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep {
     __description: string;
     __execute: (prefix: string) => void;
     private static _patchedBrowser;
     private static _commandBlacklist;
     /**
+     * Steps consist of a description and an execution function.
+     * The execution function performs changes to the state of the tested application and the description briefly summarizes
+     * these changes in natural language.
      *
-     * @param params
-     * @param stepFunc
+     * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
+     * execution function:
+     *
+     * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+     * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
+     * with key's value retrieved from the step arguments object).
+     *
+     * Step callbacks can be used to query and validate the state of the tested application right after step execution.
+     * A step callback will be passed the return value of the execution function as its first parameter.
+     *
+     * @template ArgsType defines the type of the step arguments passed to the execution function.
+     * @template ReturnType defines the return type of the execution function.
+     * @param params encapsulates the following step parameters: description, step arguments and step callback
+     * @param executionFunction changes the state of the tested application
      */
-    constructor(params: Workflo.IOptStepArgs<I, O>, stepFunc: (arg: I) => O);
+    constructor(params: Workflo.IOptStepArgs<ArgsType, ReturnType>, executionFunction: (arg: ArgsType) => ReturnType);
 }

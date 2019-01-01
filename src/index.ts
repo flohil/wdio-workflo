@@ -944,13 +944,13 @@ declare global {
       specObj: IValidateSpecObject
     }
 
-    interface IOptStepArgs<ArgsType, CallbackParamType> {
-      cb?: (param: CallbackParamType) => void,
+    interface IOptStepArgs<ArgsType extends Object, ReturnType> {
+      cb?: (param: ReturnType) => void,
       arg?: ArgsType,
       description?: string
     }
 
-    interface IStepArgs<ArgsType, CallbackParamType> extends IOptStepArgs<ArgsType, CallbackParamType> {
+    interface IStepArgs<ArgsType extends Object, ReturnType> extends IOptStepArgs<ArgsType, ReturnType> {
       arg: ArgsType,
     }
 
@@ -999,8 +999,8 @@ export type Severity = Workflo.Severity
 export type TestcaseStatus = Workflo.TestcaseStatus
 export type SpecStatus = Workflo.SpecStatus
 export type IStep = Workflo.IStep
-export type IStepArgs<ArgsType, CallbackParamType> = Workflo.IStepArgs<ArgsType, CallbackParamType>
-export type IOptStepArgs<ArgsType, CallbackParamType> = Workflo.IOptStepArgs<ArgsType, CallbackParamType>
+export type IStepArgs<ArgsType extends Object, ReturnType> = Workflo.IStepArgs<ArgsType, ReturnType>
+export type IOptStepArgs<ArgsType extends Object, ReturnType> = Workflo.IOptStepArgs<ArgsType, ReturnType>
 
 export * from './lib/steps'
 

@@ -769,12 +769,12 @@ declare global {
         type IValidateContainer = {
             specObj: IValidateSpecObject;
         };
-        interface IOptStepArgs<ArgsType, CallbackParamType> {
-            cb?: (param: CallbackParamType) => void;
+        interface IOptStepArgs<ArgsType extends Object, ReturnType> {
+            cb?: (param: ReturnType) => void;
             arg?: ArgsType;
             description?: string;
         }
-        interface IStepArgs<ArgsType, CallbackParamType> extends IOptStepArgs<ArgsType, CallbackParamType> {
+        interface IStepArgs<ArgsType extends Object, ReturnType> extends IOptStepArgs<ArgsType, ReturnType> {
             arg: ArgsType;
         }
         interface IStep {
@@ -808,8 +808,8 @@ export declare type Severity = Workflo.Severity;
 export declare type TestcaseStatus = Workflo.TestcaseStatus;
 export declare type SpecStatus = Workflo.SpecStatus;
 export declare type IStep = Workflo.IStep;
-export declare type IStepArgs<ArgsType, CallbackParamType> = Workflo.IStepArgs<ArgsType, CallbackParamType>;
-export declare type IOptStepArgs<ArgsType, CallbackParamType> = Workflo.IOptStepArgs<ArgsType, CallbackParamType>;
+export declare type IStepArgs<ArgsType extends Object, ReturnType> = Workflo.IStepArgs<ArgsType, ReturnType>;
+export declare type IOptStepArgs<ArgsType extends Object, ReturnType> = Workflo.IOptStepArgs<ArgsType, ReturnType>;
 export * from './lib/steps';
 import * as objectFunctions from './lib/utility_functions/object';
 import * as arrayFunctions from './lib/utility_functions/array';
