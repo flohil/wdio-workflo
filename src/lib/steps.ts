@@ -3,7 +3,7 @@ import * as _ from 'lodash'
 import * as CircularJson from 'circular-json'
 
 function mergeStepDefaults<I, O>
-( defaults: Partial<I>, params: IStepArgs<I, O> | IOptStepArgs<I, O>): IStepArgs<I, O> {
+(defaults: Partial<I>, params: Workflo.IStepArgs<I, O> | Workflo.IOptStepArgs<I, O>): Workflo.IStepArgs<I, O> {
   const _params = <any>params
 
   const res: { arg?: { [ key: string ]: any }, cb?: any } = _params || {}
@@ -11,6 +11,16 @@ function mergeStepDefaults<I, O>
   return _params
 }
 
+/**
+ * This function must be used as a getter for all steps in wdio-workflo to ensure their correct functionality.
+ *
+ * By default, this is already taken care of in the steps/index.ts template file created
+ * when executing `wdio-workflo --init`.
+ *
+ * @param target
+ * @param name
+ * @param receiver
+ */
 export function stepsGetter(target, name, receiver) {
   if (typeof name === "string") {
     const stepName: string = name
@@ -20,7 +30,7 @@ export function stepsGetter(target, name, receiver) {
       throw new Error(`Step ${stepName} is not implemented`)
     }
 
-    return <I, O>(stepCbArgs: IOptStepArgs<I, O> = {}) : IParameterizedStep => {
+    return <I, O>(stepCbArgs: Workflo.IOptStepArgs<I, O> = {}) : Workflo.IStep => {
       stepCbArgs.description = stepName
 
       const stepArgs = mergeStepDefaults({}, stepCbArgs)
@@ -32,13 +42,42 @@ export function stepsGetter(target, name, receiver) {
   }
 }
 
+/**
+ * This function must be used as a setter for all steps in wdio-workflo to ensure their correct functionality.
+ *
+ * By default, this is already taken care of in the steps/index.ts template file created
+ * when executing `wdio-workflo --init`.
+ *
+ * @param target
+ * @param name
+ * @param value
+ */
 export function stepsSetter(target, name, value) : boolean {
-  throw new Error("Step implementations may not be changed: Tried to set Step " + name.toString() + " to value " + value.toString())
+  throw new Error(
+    "Step implementations may not be changed: Tried to set Step " + name.toString() + " to value " + value.toString()
+  )
 }
 
-export class ParameterizedStep<I, O> implements IParameterizedStep {
-  public description: string
-  public execute: (prefix: string) => void
+/**
+ * This class is used to implement all steps in wdio-workflo.
+ *
+ * ParameterizedSteps are each identified by a step description that briefly summarizes in natural language all the
+ * state manipulations performed by the step. This step description is also displayed in the generated test reports and
+ * should therefore be understandable for all stakeholders.
+ *
+ * A ParameterizedStep is not executed when
+ * 
+ * needs to be executed with the same parameters 
+ * 
+ * always with the same parameters and therefore called ParameterizedStep - but executed at a later point
+ * 
+ */
+export class Step<I, O> implements Workflo.IStep {
+  /**
+   * 
+   */
+  public __description: string
+  public __execute: (prefix: string) => void
 
   private static _patchedBrowser = false
   private static _commandBlacklist = {
@@ -138,39 +177,47 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
     'lastResult': true
   }
 
-  constructor(params: IOptStepArgs<I, O>, stepFunc: (arg: I) => O) {
+  /**
+   * 
+   * @param params 
+   * @param stepFunc 
+   */
+  constructor(params: Workflo.IOptStepArgs<I, O>, stepFunc: (arg: I) => O) {
 
     // HACK!!!
     // patch browser object to create stacktrace which can be displayed on selenium errors
     // to show the line number in the testcase where the error occured
-    //
-    // TODO: look for a better place to do this
-    if (!ParameterizedStep._patchedBrowser) {
+    if (!Step._patchedBrowser) {
       browser = new Proxy(browser, {
-          get: function(target, name) {
-              if (!ParameterizedStep._commandBlacklist.hasOwnProperty(name) || ParameterizedStep._commandBlacklist[name] === false) {
-                  Error.stackTraceLimit = 30
+        get: function(target, name) {
+          if (
+            !Step._commandBlacklist.hasOwnProperty(name) ||
+            Step._commandBlacklist[name] === false
+          ) {
+            Error.stackTraceLimit = 30
 
-                  const error = new Error()
-                  const stack = error.stack
+            const error = new Error()
+            const stack = error.stack
 
-                  process.send({ event: 'runner:currentStack', stack: stack, name: name });
-              }
-
-              return target[name]
+            process.send({ event: 'runner:currentStack', stack: stack, name: name });
           }
-        })
 
-      ParameterizedStep._patchedBrowser = true
+          return target[name]
+        }
+      })
+
+      Step._patchedBrowser = true
   }
 
     if( typeof params.description !== "undefined" ) {
-      this.description = Kiwi.compose(params.description, params.arg)
+      this.__description = Kiwi.compose(params.description, params.arg)
     }
     if ( typeof params.cb !== "undefined" ) {
-      this.execute = prefix => {
+      this.__execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `
-        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg)})
+        process.send(
+          {event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg)}
+        )
         const result: O = stepFunc(params.arg)
         process.send({event: 'step:start', title: `Callback`, arg: CircularJson.stringify(result)})
         params.cb(result)
@@ -178,9 +225,11 @@ export class ParameterizedStep<I, O> implements IParameterizedStep {
         process.send({event: 'step:end', arg: CircularJson.stringify(result)})
       }
     } else {
-      this.execute = prefix => {
+      this.__execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `
-        process.send({event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg)})
+        process.send(
+          {event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg)}
+        )
         const result: O = stepFunc(params.arg)
         process.send({event: 'step:end', arg: CircularJson.stringify(result)})
       }

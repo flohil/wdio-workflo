@@ -868,7 +868,7 @@ declare global {
       [key: string] : IManualCriteria
     }
 
-    type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep
+    type StepImpl = <I, O>(params: IStepArgs<I, O>) => IStep
 
     type StepImplMap = { [key:string]: StepImpl }
 
@@ -885,12 +885,12 @@ declare global {
     }
 
     interface ITCWhen {
-      and: (step: IParameterizedStep) => ITCWhen
+      and: (step: IStep) => ITCWhen
     }
 
     interface ITCGiven {
-      and: (step: IParameterizedStep) => ITCGiven,
-      when: (step: IParameterizedStep) => ITCWhen
+      and: (step: IStep) => ITCGiven,
+      when: (step: IStep) => ITCWhen
     }
 
     interface IDescriptionStack {
@@ -943,21 +943,21 @@ declare global {
     type IValidateContainer = {
       specObj: IValidateSpecObject
     }
-  }
 
-  interface IOptStepArgs<I, O> {
-    cb?: (out: O) => void,
-    arg?: I,
-    description?: string
-  }
+    interface IOptStepArgs<ArgsType, CallbackParamType> {
+      cb?: (param: CallbackParamType) => void,
+      arg?: ArgsType,
+      description?: string
+    }
 
-  interface IStepArgs<I, O> extends IOptStepArgs<I, O> {
-    arg: I,
-  }
+    interface IStepArgs<ArgsType, CallbackParamType> extends IOptStepArgs<ArgsType, CallbackParamType> {
+      arg: ArgsType,
+    }
 
-  interface IParameterizedStep{
-    description: string,
-    execute: (prefix?: string) => void
+    interface IStep {
+      __description: string,
+      __execute: (prefix?: string) => void
+    }
   }
 
   // API FUNCTIONS
@@ -988,7 +988,7 @@ declare global {
   function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
   function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
 
-  function given(step: IParameterizedStep) : Workflo.ITCGiven
+  function given(step: Workflo.IStep) : Workflo.ITCGiven
 
   function validate(validateObject: Workflo.IValidateSpecObject, func: (...args : any[]) => void) : void
 
@@ -998,6 +998,9 @@ declare global {
 export type Severity = Workflo.Severity
 export type TestcaseStatus = Workflo.TestcaseStatus
 export type SpecStatus = Workflo.SpecStatus
+export type IStep = Workflo.IStep
+export type IStepArgs<ArgsType, CallbackParamType> = Workflo.IStepArgs<ArgsType, CallbackParamType>
+export type IOptStepArgs<ArgsType, CallbackParamType> = Workflo.IOptStepArgs<ArgsType, CallbackParamType>
 
 export * from './lib/steps'
 

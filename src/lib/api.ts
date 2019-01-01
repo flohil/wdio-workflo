@@ -510,10 +510,10 @@ export const xtestcase = (
   testcase(description, metadata, () => { pending() })
 }
 
-const _when = function(step: IParameterizedStep, prefix: string) {
+const _when = function(step: Workflo.IStep, prefix: string) {
   //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
 
-  step.execute(prefix)
+  step.__execute(prefix)
 
   //process.send({event: 'step:end'})
 
@@ -522,10 +522,10 @@ const _when = function(step: IParameterizedStep, prefix: string) {
   }
 }
 
-const _given = function(step: IParameterizedStep, prefix: string) {
+const _given = function(step: Workflo.IStep, prefix: string) {
   //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
 
-  step.execute(prefix)
+  step.__execute(prefix)
 
   //process.send({event: 'step:end'})
 
@@ -535,7 +535,7 @@ const _given = function(step: IParameterizedStep, prefix: string) {
   }
 }
 
-export const given = function(step: IParameterizedStep) {
+export const given = function(step: Workflo.IStep) {
   return _given(step, words.Given)
 }
 

@@ -20,7 +20,7 @@ export declare const xsuite: (description: string, metadata: Workflo.ISuiteMetad
 export declare const testcase: (description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void, jasmineFunc?: (description: string, bodyFunc: () => void) => void) => void;
 export declare const ftestcase: (description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) => void;
 export declare const xtestcase: (description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) => void;
-export declare const given: (step: IParameterizedStep) => {
+export declare const given: (step: Workflo.IStep) => {
     "and": (step: any) => any;
     "when": (step: any) => {
         "and": (step: any) => any;

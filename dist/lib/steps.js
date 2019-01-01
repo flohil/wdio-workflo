@@ -9,6 +9,16 @@ function mergeStepDefaults(defaults, params) {
     res.arg = _.merge(defaults, res.arg);
     return _params;
 }
+/**
+ * This function must be used as a getter for all steps in wdio-workflo to ensure their correct functionality.
+ *
+ * By default, this is already taken care of in the steps/index.ts template file created
+ * when executing `wdio-workflo --init`.
+ *
+ * @param target
+ * @param name
+ * @param receiver
+ */
 function stepsGetter(target, name, receiver) {
     if (typeof name === "string") {
         const stepName = name;
@@ -27,21 +37,49 @@ function stepsGetter(target, name, receiver) {
     }
 }
 exports.stepsGetter = stepsGetter;
+/**
+ * This function must be used as a setter for all steps in wdio-workflo to ensure their correct functionality.
+ *
+ * By default, this is already taken care of in the steps/index.ts template file created
+ * when executing `wdio-workflo --init`.
+ *
+ * @param target
+ * @param name
+ * @param value
+ */
 function stepsSetter(target, name, value) {
     throw new Error("Step implementations may not be changed: Tried to set Step " + name.toString() + " to value " + value.toString());
 }
 exports.stepsSetter = stepsSetter;
-class ParameterizedStep {
+/**
+ * This class is used to implement all steps in wdio-workflo.
+ *
+ * ParameterizedSteps are each identified by a step description that briefly summarizes in natural language all the
+ * state manipulations performed by the step. This step description is also displayed in the generated test reports and
+ * should therefore be understandable for all stakeholders.
+ *
+ * A ParameterizedStep is not executed when
+ *
+ * needs to be executed with the same parameters
+ *
+ * always with the same parameters and therefore called ParameterizedStep - but executed at a later point
+ *
+ */
+class Step {
+    /**
+     *
+     * @param params
+     * @param stepFunc
+     */
     constructor(params, stepFunc) {
         // HACK!!!
         // patch browser object to create stacktrace which can be displayed on selenium errors
         // to show the line number in the testcase where the error occured
-        //
-        // TODO: look for a better place to do this
-        if (!ParameterizedStep._patchedBrowser) {
+        if (!Step._patchedBrowser) {
             browser = new Proxy(browser, {
                 get: function (target, name) {
-                    if (!ParameterizedStep._commandBlacklist.hasOwnProperty(name) || ParameterizedStep._commandBlacklist[name] === false) {
+                    if (!Step._commandBlacklist.hasOwnProperty(name) ||
+                        Step._commandBlacklist[name] === false) {
                         Error.stackTraceLimit = 30;
                         const error = new Error();
                         const stack = error.stack;
@@ -50,15 +88,15 @@ class ParameterizedStep {
                     return target[name];
                 }
             });
-            ParameterizedStep._patchedBrowser = true;
+            Step._patchedBrowser = true;
         }
         if (typeof params.description !== "undefined") {
-            this.description = Kiwi_1.default.compose(params.description, params.arg);
+            this.__description = Kiwi_1.default.compose(params.description, params.arg);
         }
         if (typeof params.cb !== "undefined") {
-            this.execute = prefix => {
+            this.__execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-                process.send({ event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg) });
+                process.send({ event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) });
                 const result = stepFunc(params.arg);
                 process.send({ event: 'step:start', title: `Callback`, arg: CircularJson.stringify(result) });
                 params.cb(result);
@@ -67,17 +105,17 @@ class ParameterizedStep {
             };
         }
         else {
-            this.execute = prefix => {
+            this.__execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-                process.send({ event: 'step:start', title: `${prefix}${this.description}`, arg: CircularJson.stringify(params.arg) });
+                process.send({ event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) });
                 const result = stepFunc(params.arg);
                 process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
             };
         }
     }
 }
-ParameterizedStep._patchedBrowser = false;
-ParameterizedStep._commandBlacklist = {
+Step._patchedBrowser = false;
+Step._commandBlacklist = {
     'isExecuted': true,
     'isMultiremote': true,
     'defer': true,
@@ -173,5 +211,5 @@ ParameterizedStep._commandBlacklist = {
     'saveScreenshot': true,
     'lastResult': true
 };
-exports.ParameterizedStep = ParameterizedStep;
+exports.Step = Step;
 //# sourceMappingURL=steps.js.map

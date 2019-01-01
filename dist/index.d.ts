@@ -707,7 +707,7 @@ declare global {
         interface IManualTestcaseResults {
             [key: string]: IManualCriteria;
         }
-        type StepImpl = <I, O>(params: IStepArgs<I, O>) => IParameterizedStep;
+        type StepImpl = <I, O>(params: IStepArgs<I, O>) => IStep;
         type StepImplMap = {
             [key: string]: StepImpl;
         };
@@ -721,11 +721,11 @@ declare global {
             And: (description: string, bodyFunc?: () => void) => ISpecWhen;
         }
         interface ITCWhen {
-            and: (step: IParameterizedStep) => ITCWhen;
+            and: (step: IStep) => ITCWhen;
         }
         interface ITCGiven {
-            and: (step: IParameterizedStep) => ITCGiven;
-            when: (step: IParameterizedStep) => ITCWhen;
+            and: (step: IStep) => ITCGiven;
+            when: (step: IStep) => ITCWhen;
         }
         interface IDescriptionStack {
             givens: string[];
@@ -769,18 +769,18 @@ declare global {
         type IValidateContainer = {
             specObj: IValidateSpecObject;
         };
-    }
-    interface IOptStepArgs<I, O> {
-        cb?: (out: O) => void;
-        arg?: I;
-        description?: string;
-    }
-    interface IStepArgs<I, O> extends IOptStepArgs<I, O> {
-        arg: I;
-    }
-    interface IParameterizedStep {
-        description: string;
-        execute: (prefix?: string) => void;
+        interface IOptStepArgs<ArgsType, CallbackParamType> {
+            cb?: (param: CallbackParamType) => void;
+            arg?: ArgsType;
+            description?: string;
+        }
+        interface IStepArgs<ArgsType, CallbackParamType> extends IOptStepArgs<ArgsType, CallbackParamType> {
+            arg: ArgsType;
+        }
+        interface IStep {
+            __description: string;
+            __execute: (prefix?: string) => void;
+        }
     }
     function getUid(id: string): string;
     function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void): void;
@@ -800,13 +800,16 @@ declare global {
     function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void): void;
     function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void): void;
     function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void): void;
-    function given(step: IParameterizedStep): Workflo.ITCGiven;
+    function given(step: Workflo.IStep): Workflo.ITCGiven;
     function validate(validateObject: Workflo.IValidateSpecObject, func: (...args: any[]) => void): void;
     function xpath(selector: string): pageObjects.builders.XPathBuilder;
 }
 export declare type Severity = Workflo.Severity;
 export declare type TestcaseStatus = Workflo.TestcaseStatus;
 export declare type SpecStatus = Workflo.SpecStatus;
+export declare type IStep = Workflo.IStep;
+export declare type IStepArgs<ArgsType, CallbackParamType> = Workflo.IStepArgs<ArgsType, CallbackParamType>;
+export declare type IOptStepArgs<ArgsType, CallbackParamType> = Workflo.IOptStepArgs<ArgsType, CallbackParamType>;
 export * from './lib/steps';
 import * as objectFunctions from './lib/utility_functions/object';
 import * as arrayFunctions from './lib/utility_functions/array';
