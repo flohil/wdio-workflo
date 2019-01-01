@@ -711,9 +711,15 @@ declare global {
         type StepImplMap = {
             [key: string]: StepImpl;
         };
-        type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial';
         type TestcaseStatus = 'passed' | 'failed' | 'broken' | 'unknown' | 'pending';
         type SpecStatus = 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending';
+        const enum Severity {
+            blocker = "blocker",
+            critical = "critical",
+            normal = "normal",
+            minor = "minor",
+            trivial = "trivial"
+        }
         interface ISpecGiven {
             And: (description: string, bodyFunc?: () => void) => ISpecGiven;
         }
@@ -792,6 +798,7 @@ declare global {
      * To reset a single counter value, you can edit this file. To reset all counter values, you can delete it.
      *
      * @param str a string for which to create a unique id
+     * @returns the generated unique id
      */
     function getUid(str: string): string;
     /**

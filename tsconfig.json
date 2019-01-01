@@ -17,5 +17,33 @@
     ],
     "exclude": [
         "node_modules"
-    ]
+    ],
+    "typedocOptions": {
+        "mode": "file",
+        "out": "./apiDoc",
+        "theme": "default",
+        "excludeNotExported": false,
+        "excludePrivate": true,
+        "excludeProtected": true,
+        "excludeExternals": true,
+        "target": "ES6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "preserveConstEnums": true,
+        "stripInternal": true,
+        "suppressExcessPropertyErrors": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "exclude": [
+            "**/cli.ts",
+            "**/api.ts",
+            "**/allureReport.ts",
+            "**/inject.ts",
+            "**/io.ts",
+            "**/jasmineMatchers.ts",
+            "**/Kiwi.ts",
+            "**/matchers.ts",
+            "**/parser.ts",
+            "**/utility_functions/*.ts",
+        ]
+    }
 }

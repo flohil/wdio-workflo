@@ -872,9 +872,17 @@ declare global {
 
     type StepImplMap = { [key:string]: StepImpl }
 
-    type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
+    // type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
     type TestcaseStatus = 'passed' | 'failed' | 'broken' | 'unknown' | 'pending'
     type SpecStatus = 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending'
+
+    const enum Severity {
+      blocker = 'blocker',
+      critical = 'critical',
+      normal = 'normal',
+      minor = 'minor',
+      trivial = 'trivial'
+    }
 
     interface ISpecGiven {
       And: (description: string, bodyFunc?: () => void) => ISpecGiven
@@ -1131,6 +1139,7 @@ export type IStep = Workflo.IStep
 export type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepParams<ArgsType, ReturnType>
 export type IOptStepParams<ArgsType extends Object, ReturnType> = Workflo.IOptStepParams<ArgsType, ReturnType>
 export type StepDefinitions = Workflo.StepDefinitions
+
 
 export * from './lib/steps'
 

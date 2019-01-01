@@ -53,7 +53,7 @@ export function isNullOrUndefined(value: any) {
 }
 
 /**
- * Returns true if value neither null nor undefined.
+ * Returns true if value is neither null nor undefined.
  *
  * @param value an arbitrary value
  */

@@ -2033,7 +2033,8 @@ checkReport().then(() => {
 
             for (const spec in filters.specs) {
                 const feature = parseResults.specs.specTable[spec].feature
-                const severity: Workflo.Severity = parseResults.specs.specTree[feature].specHash[spec].metadata.severity || 'normal'
+                const severity: Workflo.Severity = parseResults.specs.specTree[feature].specHash[spec].metadata.severity 
+                    || Workflo.Severity.normal
 
                 if (!severities[severity]) {
                     delete filters.specs[spec]
@@ -2105,7 +2106,9 @@ checkReport().then(() => {
 
             for (const testcase in filters.testcases) {
                 const suite = parseResults.testcases.testcaseTable[testcase].suiteId
-                const severity: Workflo.Severity = parseResults.testcases.tree[suite].testcaseHash[testcase].metadata.severity || 'normal'
+                const severity: Workflo.Severity = 
+                    parseResults.testcases.tree[suite].testcaseHash[testcase].metadata.severity || 
+                    Workflo.Severity.normal
 
                 if (!severities[severity]) {
                     delete filters.testcases[testcase]
