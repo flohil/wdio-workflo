@@ -9,16 +9,14 @@ import { stepsGetter, stepsSetter } from 'wdio-workflo'
 // import OtherSteps from '?/steps/other.step'
 
 // REPLACE THIS LINE AND ADD YOUR STEPS IN THE WAY SHOWN BELOW
-const Steps = Object.assign({})
+const Steps = {}
 
 // CREATE A SINGLE STEPS OBJECT THAT MERGES ALL STEP DEFINITIONS
-// const Steps:
-//   typeof DemoSteps &
-//   typeof OtherSteps
-// = Object.assign(
-//   DemoSteps,
-//   OtherSteps
-// )
+
+// const Steps = {
+//   ...DemoSteps,
+//   ...OtherSteps
+// }
 
 ////////////////////////////////////////////////////////////////////////
 

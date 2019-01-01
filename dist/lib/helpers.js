@@ -62,7 +62,7 @@ function applyMixins(derivedCtor, baseCtors, mergeObjectKeys = []) {
                     else {
                         result = baseValue;
                     }
-                    Object.defineProperty(derivedCtor.prototype, name, {
+                    Object.defineProperty(derivedCtor, name, {
                         get: function () {
                             return result;
                         }

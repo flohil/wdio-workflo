@@ -46,6 +46,10 @@ implements core.elements.ValuePageElement<Store, ValueType> {
   getContainsValue: (value: ValueType) => boolean;
 }
 
+/**
+ * This class can be used to extend or customize the functionality provided by wdio-workflo's ValuePageElementCurrently 
+ * class. It is supposed to serve as the base ValuePageElementCurrently class throughout your project.
+ */
 export abstract class ValuePageElementCurrently<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
@@ -64,6 +68,10 @@ implements core.elements.ValuePageElementCurrently<Store, PageElementType, Value
     PageElementCurrently<Store, PageElementType>['not']
 }
 
+/**
+ * This class can be used to extend or customize the functionality provided by wdio-workflo's ValuePageElementWait 
+ * class. It is supposed to serve as the base ValuePageElementWait class throughout your project.
+ */
 export class ValuePageElementWait<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
@@ -78,6 +86,10 @@ implements core.elements.ValuePageElementWait<Store, PageElementType, ValueType>
     PageElementWait<Store, PageElementType>['not']
 }
 
+/**
+ * This class can be used to extend or customize the functionality provided by wdio-workflo's ValuePageElementEventually
+ * class. It is supposed to serve as the base ValuePageElementEventually class throughout your project.
+ */
 export class ValuePageElementEventually<
   Store extends PageElementStore,
   PageElementType extends ValuePageElement<Store, ValueType>,

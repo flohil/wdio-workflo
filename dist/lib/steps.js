@@ -9,7 +9,6 @@ function mergeStepDefaults(defaults, params) {
     res.arg = _.merge(defaults, res.arg);
     return _params;
 }
-exports.mergeStepDefaults = mergeStepDefaults;
 function stepsGetter(target, name, receiver) {
     if (typeof name === "string") {
         const stepName = name;

@@ -70,7 +70,7 @@ export function applyMixins(derivedCtor: any, baseCtors: any[], mergeObjectKeys:
             result = baseValue
           }
 
-          Object.defineProperty(derivedCtor.prototype, name, {
+          Object.defineProperty(derivedCtor, name, {
             get: function () {
               return result
             }
