@@ -253,15 +253,15 @@ declare global {
         interface IJSError {
             notFound: string[];
         }
-        interface ICoordinates {
+        interface ICoordinates extends Record<string, number> {
             x: number;
             y: number;
         }
-        interface ISize {
+        interface ISize extends Record<string, number> {
             width: number;
             height: number;
         }
-        interface ITolerance {
+        interface ITolerance extends Record<string, number> {
             lower: number;
             upper: number;
         }

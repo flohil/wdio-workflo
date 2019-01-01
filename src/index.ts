@@ -340,17 +340,17 @@ declare global {
       notFound: string[]
     }
 
-    interface ICoordinates {
+    interface ICoordinates extends Record<string, number> {
       x: number,
       y: number
     }
 
-    interface ISize {
+    interface ISize extends Record<string, number> {
       width: number,
       height: number
     }
 
-    interface ITolerance {
+    interface ITolerance extends Record<string, number> {
       lower: number,
       upper: number
     }
@@ -966,36 +966,160 @@ declare global {
 
   // API FUNCTIONS
 
-  function getUid(id: string) : string
+  /**
+   * Returns a unique id by concatenating the passed string and a counter value that is incremented on each invocation
+   * of the function with the same passed string.
+   *
+   * Pairs of each passed string and the latest value of its respective counter are stored in the file uidStore.json
+   * and will be preserved for the next test run.
+   * To reset a single counter value, you can edit this file. To reset all counter values, you can delete it.
+   *
+   * @param str a string for which to create a unique id
+   */
+  function getUid(str: string) : string
 
+  /**
+   * 
+   * 
+   * @param description the name or a short description of the Feature
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
+
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
+
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
 
+  /**
+   * 
+   * @param id 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
+  /**
+   * 
+   * @param id 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
+  /**
+   * 
+   * @param id 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
 
+  /**
+   * 
+   */
   function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven
 
+  /**
+   * 
+   * @param description 
+   * @param bodyFunc 
+   */
   function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen
 
+  /**
+   * 
+   * @param id 
+   * @param description 
+   */
   function Then(id: number, description: string) : void
+  /**
+   * 
+   * @param id 
+   * @param description 
+   */
   function fThen(id: number, description: string) : void
+  /**
+   * 
+   * @param id 
+   * @param description 
+   */
   function xThen(id: number, description: string) : void
 
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function suite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function fsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function xsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
 
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
+  /**
+   * 
+   * @param description 
+   * @param metadata 
+   * @param bodyFunc 
+   */
   function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
 
+  /**
+   * 
+   * @param step 
+   */
   function given(step: Workflo.IStep) : Workflo.ITCGiven
 
+  /**
+   * 
+   * @param validateObject 
+   * @param func 
+   */
   function validate(validateObject: Workflo.IValidateSpecObject, func: (...args : any[]) => void) : void
 
+  /**
+   * 
+   * @param selector 
+   */
   function xpath(selector: string) : pageObjects.builders.XPathBuilder
 }
 
