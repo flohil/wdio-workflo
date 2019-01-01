@@ -975,6 +975,7 @@ declare global {
    * To reset a single counter value, you can edit this file. To reset all counter values, you can delete it.
    *
    * @param str a string for which to create a unique id
+   * @returns the generated unique id
    */
   function getUid(str: string) : string
 

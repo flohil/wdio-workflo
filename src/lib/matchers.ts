@@ -174,6 +174,15 @@ export interface ICompareValueElementFuncs<
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
   GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+> extends ICompareElementFuncs<
+  ElementValueType,
+  ListValueType,
+  MapValueType,
+  GroupValueType,
+  never,
+  Workflo.PageNode.ListFilterMask,
+  Workflo.PageNode.MapFilterMask<string>,
+  Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>
 > {
   element?: IMatcherArgs<
     elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
@@ -213,6 +222,15 @@ export interface ICompareEventuallyValueElementFuncs<
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
   GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+> extends ICompareElementFuncs<
+  ElementValueType,
+  ListValueType,
+  MapValueType,
+  GroupValueType,
+  Workflo.IWDIOParamsInterval,
+  Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask,
+  Workflo.IWDIOParamsInterval & Workflo.PageNode.MapFilterMask<string>,
+  Workflo.IWDIOParamsInterval & Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>
 > {
   element?: IMatcherArgs<
     elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
