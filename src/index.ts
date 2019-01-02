@@ -988,146 +988,367 @@ declare global {
   function getUid(str: string) : string
 
   /**
-   * 
-   * 
+   * A Feature in wdio-workflo represents a collection of related Stories.
+   *
    * @param description the name or a short description of the Feature
-   * @param metadata 
-   * @param bodyFunc 
+   * @param metadata the metadata of the Feature
+   * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
   function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
 
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * If one or more Features in a scope (usually a .spec.ts file) are marked as "fFeature",
+   * the test runner will execute only these Features and ignore all other Features defined in the same scope.
+   *
+   * A Feature in wdio-workflo represents a collection of related Stories.
+   *
+   * @param description the name or a short description of the Feature
+   * @param metadata the metadata of the Feature
+   * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
   function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
 
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * All Features marked as "xFeature" will not be executed by the test runner.
+   *
+   * A Feature in wdio-workflo represents a collection of related Stories.
+   *
+   * @param description the name or a short description of the Feature
+   * @param metadata the metadata of the Feature
+   * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
   function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
 
   /**
-   * 
-   * @param id 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
+   * It also contains acceptance criteria that validate the state following a state change.
+   *
+   * Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.
+   *
+   * States, state changes and acceptance criteria can be implemented using the following functions:
+   *
+   * - `Given` to describe the initial state
+   * - `When` for state changes
+   * - `Then` to define acceptance criteria
+   *
+   * @param id a unique id that identifies a Story (1.1, 2.4.5 etc...)
+   * @param description the name or a short description of the Story
+   * @param metadata the metadata of the Story
+   * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
   function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
+
   /**
-   * 
-   * @param id 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * If one or more Stories in a Feature are marked as "fStory",
+   * the test runner will execute only these Stories and ignore all other Stories defined in the same Feature.
+   *
+   * A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
+   * It also contains acceptance criteria that validate the state following a state change.
+   *
+   * Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.
+   *
+   * States, state changes and acceptance criteria can be implemented using the following functions:
+   *
+   * - `Given` to describe the initial state
+   * - `When` for state changes
+   * - `Then` to define acceptance criteria
+   *
+   * @param id a unique id that identifies a Story (1.1, 2.4.5 etc...)
+   * @param description the name or a short description of the Story
+   * @param metadata the metadata of the Story
+   * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
   function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
+
   /**
-   * 
-   * @param id 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * All Stories marked as "xStory" will not be executed by the test runner.
+   *
+   * A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
+   * It also contains acceptance criteria that validate the state following a state change.
+   *
+   * Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.
+   *
+   * States, state changes and acceptance criteria can be implemented using the following functions:
+   *
+   * - `Given` to describe the initial state
+   * - `When` for state changes
+   * - `Then` to define acceptance criteria
+   *
+   * @param id a unique id that identifies a Story (1.1, 2.4.5 etc...)
+   * @param description the name or a short description of the Story
+   * @param metadata the metadata of the Story
+   * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
   function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
 
   /**
-   * 
+   * Given describes an initial state of a Story.
+   *
+   * To join multiple initial states sequentially, you can either chain them together by appending `.And` to the end of
+   * this function or you can nest another `Given` inside the bodyFunc to express diverging "Story lines".
+   *
+   * Once you finished describing all initial states, you can invoke a state change by either appending `.When` to the
+   * end of the Given function/chain or by nesting a `When` inside the bodyFunc to express diverging "Story lines".
+   *
+   * To validate an initial state with acceptance criteria, use `Then` inside the bodyFunc of Given.
+   *
+   * @param description a short description of an initial state
+   * @param bodyFunc Use the body of this function to define acceptance criteria, nested initial states or nested state
+   * changes.
    */
   function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven
 
   /**
-   * 
-   * @param description 
-   * @param bodyFunc 
+   * When describes a state change inside a Story that is triggered either by a user or by a system.
+   *
+   * To join multiple state changes sequentially, you can either chain them together by appending `.And` to the end of
+   * this function or you can nest another `When` inside the bodyFunc to express diverging "Story lines".
+   *
+   * To validate the state following a state change with acceptance criteria, use `Then` inside the bodyFunc of When.
+   *
+   * @param description a short description of who did what to trigger a state change
+   * @param bodyFunc Use the body of this function to define acceptance criteria or nested state changes.
    */
   function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen
 
   /**
-   * 
-   * @param id 
-   * @param description 
+   * Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
+   * state.
+   *
+   * An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story's id and its
+   * own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
+   * in a testcase's `validate` function.
+   *
+   * Wdio-workflo evaluates all validations defined inside testcases that reference an acceptance criteria and sets the
+   * result of the acceptance criteria accordingly:
+   *
+   * - Only if all validations for an acceptance criteria were successful, the criteria is marked as "passed".
+   * - If one or more validations were unsuccessful (the actual value did not match the expected value), the criteria is
+   *  marked as "failed".
+   * - If runtime errors occurred within at least one validation, the criteria is marked as "broken".
+   * - If an acceptance criteria is not referenced by any validation, the criteria is marked as "unvalidated".
+   *
+   * @param id the id of an acceptance criteria which must be unique within its surrounding Story
+   * @param description a short description of the expected state under validation
    */
   function Then(id: number, description: string) : void
+
   /**
-   * 
-   * @param id 
-   * @param description 
+   * If one or more acceptance criteria in a Story are marked as "fThen",
+   * the test runner will execute only these acceptance criteria and ignore all others defined in the same Story.
+   *
+   * Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
+   * state.
+   *
+   * An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story's id and its
+   * own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
+   * in a testcase's `validate` function.
+   *
+   * Wdio-workflo evaluates all validations defined inside testcases that reference an acceptance criteria and sets the
+   * result of the acceptance criteria accordingly:
+   *
+   * - Only if all validations for an acceptance criteria were successful, the criteria is marked as "passed".
+   * - If one or more validations were unsuccessful (the actual value did not match the expected value), the criteria is
+   *  marked as "failed".
+   * - If runtime errors occurred within at least one validation, the criteria is marked as "broken".
+   * - If an acceptance criteria is not referenced by any validation, the criteria is marked as "unvalidated".
+   *
+   * @param id the id of an acceptance criteria which must be unique within its surrounding Story
+   * @param description a short description of the expected state under validation
    */
   function fThen(id: number, description: string) : void
+
   /**
-   * 
-   * @param id 
-   * @param description 
+   * All acceptance criteria marked as "xThen" will not be executed by the test runner.
+   *
+   * Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
+   * state.
+   *
+   * An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story's id and its
+   * own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
+   * in a testcase's `validate` function.
+   *
+   * Wdio-workflo evaluates all validations defined inside testcases that reference an acceptance criteria and sets the
+   * result of the acceptance criteria accordingly:
+   *
+   * - Only if all validations for an acceptance criteria were successful, the criteria is marked as "passed".
+   * - If one or more validations were unsuccessful (the actual value did not match the expected value), the criteria is
+   *  marked as "failed".
+   * - If runtime errors occurred within at least one validation, the criteria is marked as "broken".
+   * - If an acceptance criteria is not referenced by any validation, the criteria is marked as "unvalidated".
+   *
+   * @param id the id of an acceptance criteria which must be unique within its surrounding Story
+   * @param description a short description of the expected state under validation
    */
   function xThen(id: number, description: string) : void
 
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * A suite is a collection of related testcases.
+   *
+   * @param description the name or a short description of the suite
+   * @param metadata the metadata of the suite
+   * @param bodyFunc define all testcases for this suite inside the body of this function
    */
   function suite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
+
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * If one or more suites in a scope (usually a .tc.ts file) are marked as "fsuite",
+   * the test runner will execute only these suites and ignore all others defined in the same scope.
+   *
+   * A suite is a collection of related testcases.
+   *
+   * @param description the name or a short description of the suite
+   * @param metadata the metadata of the suite
+   * @param bodyFunc define all testcases for this suite inside the body of this function
    */
   function fsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
+
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * All suites marked as "xsuite" will not be executed by the test runner.
+   *
+   * A suite is a collection of related testcases.
+   *
+   * @param description the name or a short description of the suite
+   * @param metadata the metadata of the suite
+   * @param bodyFunc define all testcases for this suite inside the body of this function
    */
   function xsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
 
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * A testcase is composed of a sequence of steps strung together in a step chain.
+   *
+   * Each step represents a single or multiple interactions with the tested application and allows you to pass a step
+   * callback in order to perform validations of the application state right after the step was performed.
+   *
+   * Wdio-workflo evaluates all validations defined within a testcase and sets the testcase status accordingly:
+   *
+   * - Only if all validations defined within a testcase were successful, the testcase is marked as "passed".
+   * - If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
+   *  marked as "failed".
+   * - If runtime errors occurred anywhere inside a testcase, the testcase is marked as "broken".
+   * - A testcase can also be marked as "skipped" if it was not executed because it was marked with "xtestcase" or
+   * because a bail option was specified and the bail limit was already reached.
+   *
+   * Steps and validations can be implemented using the following functions:
+   *
+   * - `given` to establish the initial state
+   * - `when` to describe changes of the application state
+   * - `validate` to perform validations of the application state inside a step callback
+   *
+   * @param description the name or a short description of the suite
+   * @param metadata the metadata of the testcase
+   * @param bodyFunc define all steps for this testcase inside the body of this function
    */
   function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
+
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * If one or testcases in a suite are marked as "fTestcase",
+   * the test runner will execute only testcases and ignore all others defined in the same suite.
+   *
+   * A testcase is composed of a sequence of steps.
+   *
+   * Each step represents a single or multiple interactions with the tested application and allows you to pass a step
+   * callback in order to perform validations of the application state right after the step was performed.
+   *
+   * Wdio-workflo evaluates all validations defined within a testcase and sets the testcase status accordingly:
+   *
+   * - Only if all validations defined within a testcase were successful, the testcase is marked as "passed".
+   * - If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
+   *  marked as "failed".
+   * - If runtime errors occurred anywhere inside a testcase, the testcase is marked as "broken".
+   * - A testcase can also be marked as "skipped" if it was not executed because it was marked with "xtestcase" or
+   * because a bail option was specified and the bail limit was already reached.
+   *
+   * Steps and validations can be implemented using the following functions:
+   *
+   * - `given` to establish the initial state
+   * - `when` to describe changes of the application state
+   * - `validate` to perform validations of the application state inside a step callback
+   *
+   * @param description the name or a short description of the suite
+   * @param metadata the metadata of the testcase
+   * @param bodyFunc define all steps for this testcase inside the body of this function
    */
   function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
+
   /**
-   * 
-   * @param description 
-   * @param metadata 
-   * @param bodyFunc 
+   * All testcases criteria marked as "xtestcase" will not be executed by the test runner.
+   *
+   * A testcase is composed of a sequence of steps.
+   *
+   * Each step represents a single or multiple interactions with the tested application and allows you to pass a step
+   * callback in order to perform validations of the application state right after the step was performed.
+   *
+   * Wdio-workflo evaluates all validations defined within a testcase and sets the testcase status accordingly:
+   *
+   * - Only if all validations defined within a testcase were successful, the testcase is marked as "passed".
+   * - If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
+   *  marked as "failed".
+   * - If runtime errors occurred anywhere inside a testcase, the testcase is marked as "broken".
+   * - A testcase can also be marked as "skipped" if it was not executed because it was marked with "xtestcase" or
+   * because a bail option was specified and the bail limit was already reached.
+   *
+   * Steps and validations can be implemented using the following functions:
+   *
+   * - `given` to establish the initial state
+   * - `when` to describe changes of the application state
+   * - `validate` to perform validations of the application state inside a step callback
+   *
+   * @param description the name or a short description of the suite
+   * @param metadata the metadata of the testcase
+   * @param bodyFunc define all steps for this testcase inside the body of this function
    */
   function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
 
   /**
-   * 
-   * @param step 
+   * The `given` function establishes the initial state of a tested application by executing the passed step.
+   *
+   * You can also chain together multiple given statements to create the initial state by appending `.and` to the end
+   * of this function.
+   *
+   * Once you finished establishing the initial state(s), you can trigger a state change by appending a `.when` step to
+   * the end of the given function/chain.
+   * State change steps can also be chained together sequentially by appending `.and` to the end of the step chain.
+   *
+   * @param step a step that establishes the initial state
    */
   function given(step: Workflo.IStep) : Workflo.ITCGiven
 
   /**
-   * 
-   * @param validateObject 
-   * @param func 
+   * The `validate` function provides the means to validate an application state.
+   * It MUST BE PLACED INSIDE A STEP CALLBACK, otherwise validations will not function properly.
+   *
+   * Validations can reference a single or more acceptance criteria in one or more Stories:
+   *
+   * In order for wdio-workflo to know which specs (Features, Stories, acceptance criteria) should be validated by this
+   * function, you need to pass a validateObject as first parameter.
+   * This object's keys are the ids of the validated Stories (eg."2.4.5") and its values are either a single id (eg. 3)
+   * or an ids array (eg. [3, 4, 5]) of acceptance criteria defined within the associated Story.
+   *
+   * The result status of a validation is determined by the results of all expectation matchers
+   * (eg. `expect(1).toBe(2)`) defined within its validationFunc:
+   *
+   * - If all expectation matchers pass, the validation is marked as 'passed'.
+   * - If one or more expectation matchers failed (actual value did not match expected value), the validation is marked
+   * as 'failed'.
+   * - If a runtime error occurred inside the validationFunc, the validation is marked as 'broken'.
+   *
+   * @param validateObject an object whose keys represent the ids of Stories to be validated and whose values are either
+   * a single id or an array of ids of validated acceptance criteria
+   * @param validationFunc Define all expectation matchers that together determine the result of this validation inside
+   * the body of this function.
    */
-  function validate(validateObject: Workflo.IValidateSpecObject, func: (...args : any[]) => void) : void
+  function validate(validateObject: Workflo.IValidateSpecObject, validationFunc: (...args : any[]) => void) : void
 
   /**
-   * 
-   * @param selector 
+   * Returns an instance of XPathBuilder to create XPath expressions using functions instead of writing the whole
+   * XPath as a raw string.
+   *
+   * Using XPathBuilder can help to reduce the number of errors originating from a wrong usage of the sometimes quite
+   * complex syntax of XPath.
+   *
+   * @param selector the initial XPath selector (eg. "//div", "/span")
+   * @returns an instance of XPathBuilder
    */
   function xpath(selector: string) : pageObjects.builders.XPathBuilder
 }
