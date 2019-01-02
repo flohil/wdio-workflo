@@ -1600,7 +1600,7 @@ checkReport().then(() => {
             for (const spec in filters.specs) {
                 const feature = parseResults.specs.specTable[spec].feature;
                 const severity = parseResults.specs.specTree[feature].specHash[spec].metadata.severity
-                    || "normal" /* normal */;
+                    || 'normal';
                 if (!severities[severity]) {
                     delete filters.specs[spec];
                 }
@@ -1666,8 +1666,7 @@ checkReport().then(() => {
             }
             for (const testcase in filters.testcases) {
                 const suite = parseResults.testcases.testcaseTable[testcase].suiteId;
-                const severity = parseResults.testcases.tree[suite].testcaseHash[testcase].metadata.severity ||
-                    "normal" /* normal */;
+                const severity = parseResults.testcases.tree[suite].testcaseHash[testcase].metadata.severity || 'normal';
                 if (!severities[severity]) {
                     delete filters.testcases[testcase];
                 }

@@ -120,10 +120,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L997">index.ts:997</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L997">index.ts:997</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A Feature in wdio-workflo represents a collection of related Stories.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -135,10 +138,14 @@
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.ifeaturemetadata.html" class="tsd-signature-type">IFeatureMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the Feature</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Define all Stories that belong to this Feature in the body of this function.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -168,16 +175,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1043">index.ts:1043</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1099">index.ts:1099</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given describes an initial state of a Story.</p>
+								</div>
+								<p>To join multiple initial states sequentially, you can either chain them together by appending <code>.And</code> to the end of
+								this function or you can nest another <code>Given</code> inside the bodyFunc to express diverging &quot;Story lines&quot;.</p>
+								<p>Once you finished describing all initial states, you can invoke a state change by either appending <code>.When</code> to the
+								end of the Given function/chain or by nesting a <code>When</code> inside the bodyFunc to express diverging &quot;Story lines&quot;.</p>
+								<p>To validate an initial state with acceptance criteria, use <code>Then</code> inside the bodyFunc of Given.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a short description of an initial state</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> bodyFunc: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Use the body of this function to define acceptance criteria, nested initial states or nested state
+										changes.</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -206,25 +230,46 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1022">index.ts:1022</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1039">index.ts:1039</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
+									It also contains acceptance criteria that validate the state following a state change.</p>
+								</div>
+								<p>Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.</p>
+								<p>States, state changes and acceptance criteria can be implemented using the following functions:</p>
+								<ul>
+									<li><code>Given</code> to describe the initial state</li>
+									<li><code>When</code> for state changes</li>
+									<li><code>Then</code> to define acceptance criteria</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a unique id that identifies a Story (1.1, 2.4.5 etc...)</p>
+									</div>
 								</li>
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.istorymetadata.html" class="tsd-signature-type">IStoryMetaData</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Define all states, state changes and acceptance criteria of a Story in the body of this function.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -254,19 +299,39 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1057">index.ts:1057</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1134">index.ts:1134</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
+									state.</p>
+								</div>
+								<p>An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story&#39;s id and its
+									own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
+								in a testcase&#39;s <code>validate</code> function.</p>
+								<p>Wdio-workflo evaluates all validations defined inside testcases that reference an acceptance criteria and sets the
+								result of the acceptance criteria accordingly:</p>
+								<ul>
+									<li>Only if all validations for an acceptance criteria were successful, the criteria is marked as &quot;passed&quot;.</li>
+									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the criteria is
+									marked as &quot;failed&quot;.</li>
+									<li>If runtime errors occurred within at least one validation, the criteria is marked as &quot;broken&quot;.</li>
+									<li>If an acceptance criteria is not referenced by any validation, the criteria is marked as &quot;unvalidated&quot;.</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the id of an acceptance criteria which must be unique within its surrounding Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>a short description of the expected state under validation</p>
 									</div>
 								</li>
 							</ul>
@@ -284,19 +349,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1050">index.ts:1050</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1112">index.ts:1112</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>When describes a state change inside a Story that is triggered either by a user or by a system.</p>
+								</div>
+								<p>To join multiple state changes sequentially, you can either chain them together by appending <code>.And</code> to the end of
+								this function or you can nest another <code>When</code> inside the bodyFunc to express diverging &quot;Story lines&quot;.</p>
+								<p>To validate the state following a state change with acceptance criteria, use <code>Then</code> inside the bodyFunc of When.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a short description of who did what to trigger a state change</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Use the body of this function to define acceptance criteria or nested state changes.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -326,7 +401,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L242">index.ts:242</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L242">index.ts:242</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -361,7 +436,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L275">index.ts:275</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L275">index.ts:275</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -396,7 +471,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L251">index.ts:251</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L251">index.ts:251</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -434,7 +509,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L262">index.ts:262</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L262">index.ts:262</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -475,22 +550,34 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1005">index.ts:1005</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1009">index.ts:1009</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If one or more Features in a scope (usually a .spec.ts file) are marked as &quot;fFeature&quot;,
+									the test runner will execute only these Features and ignore all other Features defined in the same scope.</p>
+								</div>
+								<p>A Feature in wdio-workflo represents a collection of related Stories.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the Feature</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.ifeaturemetadata.html" class="tsd-signature-type">IFeatureMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the Feature</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Define all Stories that belong to this Feature in the body of this function.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -520,25 +607,48 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1030">index.ts:1030</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1061">index.ts:1061</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If one or more Stories in a Feature are marked as &quot;fStory&quot;,
+									the test runner will execute only these Stories and ignore all other Stories defined in the same Feature.</p>
+								</div>
+								<p>A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
+								It also contains acceptance criteria that validate the state following a state change.</p>
+								<p>Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.</p>
+								<p>States, state changes and acceptance criteria can be implemented using the following functions:</p>
+								<ul>
+									<li><code>Given</code> to describe the initial state</li>
+									<li><code>When</code> for state changes</li>
+									<li><code>Then</code> to define acceptance criteria</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a unique id that identifies a Story (1.1, 2.4.5 etc...)</p>
+									</div>
 								</li>
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.istorymetadata.html" class="tsd-signature-type">IStoryMetaData</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Define all states, state changes and acceptance criteria of a Story in the body of this function.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -568,19 +678,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1063">index.ts:1063</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1159">index.ts:1159</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If one or more acceptance criteria in a Story are marked as &quot;fThen&quot;,
+									the test runner will execute only these acceptance criteria and ignore all others defined in the same Story.</p>
+								</div>
+								<p>Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
+								state.</p>
+								<p>An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story&#39;s id and its
+									own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
+								in a testcase&#39;s <code>validate</code> function.</p>
+								<p>Wdio-workflo evaluates all validations defined inside testcases that reference an acceptance criteria and sets the
+								result of the acceptance criteria accordingly:</p>
+								<ul>
+									<li>Only if all validations for an acceptance criteria were successful, the criteria is marked as &quot;passed&quot;.</li>
+									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the criteria is
+									marked as &quot;failed&quot;.</li>
+									<li>If runtime errors occurred within at least one validation, the criteria is marked as &quot;broken&quot;.</li>
+									<li>If an acceptance criteria is not referenced by any validation, the criteria is marked as &quot;unvalidated&quot;.</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the id of an acceptance criteria which must be unique within its surrounding Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>a short description of the expected state under validation</p>
 									</div>
 								</li>
 							</ul>
@@ -598,22 +730,34 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1084">index.ts:1084</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1204">index.ts:1204</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If one or more suites in a scope (usually a .tc.ts file) are marked as &quot;fsuite&quot;,
+									the test runner will execute only these suites and ignore all others defined in the same scope.</p>
+								</div>
+								<p>A suite is a collection of related testcases.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.isuitemetadata.html" class="tsd-signature-type">ISuiteMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>define all testcases for this suite inside the body of this function</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -643,22 +787,51 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1106">index.ts:1106</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1272">index.ts:1272</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If one or testcases in a suite are marked as &quot;fTestcase&quot;,
+									the test runner will execute only testcases and ignore all others defined in the same suite.</p>
+								</div>
+								<p>A testcase is composed of a sequence of steps.</p>
+								<p>Each step represents a single or multiple interactions with the tested application and allows you to pass a step
+								callback in order to perform validations of the application state right after the step was performed.</p>
+								<p>Wdio-workflo evaluates all validations defined within a testcase and sets the testcase status accordingly:</p>
+								<ul>
+									<li>Only if all validations defined within a testcase were successful, the testcase is marked as &quot;passed&quot;.</li>
+									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
+									marked as &quot;failed&quot;.</li>
+									<li>If runtime errors occurred anywhere inside a testcase, the testcase is marked as &quot;broken&quot;.</li>
+									<li>A testcase can also be marked as &quot;skipped&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
+									because a bail option was specified and the bail limit was already reached.</li>
+								</ul>
+								<p>Steps and validations can be implemented using the following functions:</p>
+								<ul>
+									<li><code>given</code> to establish the initial state</li>
+									<li><code>when</code> to describe changes of the application state</li>
+									<li><code>validate</code> to perform validations of the application state inside a step callback</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.itestcasemetadata.html" class="tsd-signature-type">ITestcaseMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the testcase</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>define all steps for this testcase inside the body of this function</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -688,7 +861,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L988">index.ts:988</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L988">index.ts:988</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -724,16 +897,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1119">index.ts:1119</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1315">index.ts:1315</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The <code>given</code> function establishes the initial state of a tested application by executing the passed step.</p>
+								</div>
+								<p>You can also chain together multiple given statements to create the initial state by appending <code>.and</code> to the end
+								of this function.</p>
+								<p>Once you finished establishing the initial state(s), you can trigger a state change by appending a <code>.when</code> step to
+									the end of the given function/chain.
+								State change steps can also be chained together sequentially by appending <code>.and</code> to the end of the step chain.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>step: <a href="../interfaces/__global.workflo.istep.html" class="tsd-signature-type">IStep</a></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>a step that establishes the initial state</p>
 									</div>
 								</li>
 							</ul>
@@ -751,22 +933,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1077">index.ts:1077</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1192">index.ts:1192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A suite is a collection of related testcases.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.isuitemetadata.html" class="tsd-signature-type">ISuiteMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>define all testcases for this suite inside the body of this function</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -796,22 +988,49 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1099">index.ts:1099</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1242">index.ts:1242</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A testcase is composed of a sequence of steps strung together in a step chain.</p>
+								</div>
+								<p>Each step represents a single or multiple interactions with the tested application and allows you to pass a step
+								callback in order to perform validations of the application state right after the step was performed.</p>
+								<p>Wdio-workflo evaluates all validations defined within a testcase and sets the testcase status accordingly:</p>
+								<ul>
+									<li>Only if all validations defined within a testcase were successful, the testcase is marked as &quot;passed&quot;.</li>
+									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
+									marked as &quot;failed&quot;.</li>
+									<li>If runtime errors occurred anywhere inside a testcase, the testcase is marked as &quot;broken&quot;.</li>
+									<li>A testcase can also be marked as &quot;skipped&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
+									because a bail option was specified and the bail limit was already reached.</li>
+								</ul>
+								<p>Steps and validations can be implemented using the following functions:</p>
+								<ul>
+									<li><code>given</code> to establish the initial state</li>
+									<li><code>when</code> to describe changes of the application state</li>
+									<li><code>validate</code> to perform validations of the application state inside a step callback</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.itestcasemetadata.html" class="tsd-signature-type">ITestcaseMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the testcase</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>define all steps for this testcase inside the body of this function</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -835,25 +1054,48 @@
 					<a name="validate" class="tsd-anchor"></a>
 					<h3>validate</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">validate<span class="tsd-signature-symbol">(</span>validateObject<span class="tsd-signature-symbol">: </span><a href="__global.workflo.html#ivalidatespecobject" class="tsd-signature-type">IValidateSpecObject</a>, func<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">validate<span class="tsd-signature-symbol">(</span>validateObject<span class="tsd-signature-symbol">: </span><a href="__global.workflo.html#ivalidatespecobject" class="tsd-signature-type">IValidateSpecObject</a>, validationFunc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1126">index.ts:1126</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1341">index.ts:1341</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The <code>validate</code> function provides the means to validate an application state.
+									It MUST BE PLACED INSIDE A STEP CALLBACK, otherwise validations will not function properly.</p>
+								</div>
+								<p>Validations can reference a single or more acceptance criteria in one or more Stories:</p>
+								<p>In order for wdio-workflo to know which specs (Features, Stories, acceptance criteria) should be validated by this
+									function, you need to pass a validateObject as first parameter.
+									This object&#39;s keys are the ids of the validated Stories (eg.&quot;2.4.5&quot;) and its values are either a single id (eg. 3)
+								or an ids array (eg. [3, 4, 5]) of acceptance criteria defined within the associated Story.</p>
+								<p>The result status of a validation is determined by the results of all expectation matchers
+								(eg. <code>expect(1).toBe(2)</code>) defined within its validationFunc:</p>
+								<ul>
+									<li>If all expectation matchers pass, the validation is marked as &#39;passed&#39;.</li>
+									<li>If one or more expectation matchers failed (actual value did not match expected value), the validation is marked
+									as &#39;failed&#39;.</li>
+									<li>If a runtime error occurred inside the validationFunc, the validation is marked as &#39;broken&#39;.</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>validateObject: <a href="__global.workflo.html#ivalidatespecobject" class="tsd-signature-type">IValidateSpecObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an object whose keys represent the ids of Stories to be validated and whose values are either
+										a single id or an array of ids of validated acceptance criteria</p>
+									</div>
 								</li>
 								<li>
-									<h5>func: <span class="tsd-signature-type">function</span></h5>
+									<h5>validationFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Define all expectation matchers that together determine the result of this validation inside
+										the body of this function.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -889,22 +1131,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1013">index.ts:1013</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1020">index.ts:1020</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>All Features marked as &quot;xFeature&quot; will not be executed by the test runner.</p>
+								</div>
+								<p>A Feature in wdio-workflo represents a collection of related Stories.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the Feature</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.ifeaturemetadata.html" class="tsd-signature-type">IFeatureMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the Feature</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Define all Stories that belong to this Feature in the body of this function.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -934,25 +1187,47 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1038">index.ts:1038</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1082">index.ts:1082</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>All Stories marked as &quot;xStory&quot; will not be executed by the test runner.</p>
+								</div>
+								<p>A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
+								It also contains acceptance criteria that validate the state following a state change.</p>
+								<p>Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.</p>
+								<p>States, state changes and acceptance criteria can be implemented using the following functions:</p>
+								<ul>
+									<li><code>Given</code> to describe the initial state</li>
+									<li><code>When</code> for state changes</li>
+									<li><code>Then</code> to define acceptance criteria</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a unique id that identifies a Story (1.1, 2.4.5 etc...)</p>
+									</div>
 								</li>
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.istorymetadata.html" class="tsd-signature-type">IStoryMetaData</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>Define all states, state changes and acceptance criteria of a Story in the body of this function.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -982,19 +1257,40 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1069">index.ts:1069</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1183">index.ts:1183</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>All acceptance criteria marked as &quot;xThen&quot; will not be executed by the test runner.</p>
+								</div>
+								<p>Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
+								state.</p>
+								<p>An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story&#39;s id and its
+									own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
+								in a testcase&#39;s <code>validate</code> function.</p>
+								<p>Wdio-workflo evaluates all validations defined inside testcases that reference an acceptance criteria and sets the
+								result of the acceptance criteria accordingly:</p>
+								<ul>
+									<li>Only if all validations for an acceptance criteria were successful, the criteria is marked as &quot;passed&quot;.</li>
+									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the criteria is
+									marked as &quot;failed&quot;.</li>
+									<li>If runtime errors occurred within at least one validation, the criteria is marked as &quot;broken&quot;.</li>
+									<li>If an acceptance criteria is not referenced by any validation, the criteria is marked as &quot;unvalidated&quot;.</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the id of an acceptance criteria which must be unique within its surrounding Story</p>
+									</div>
 								</li>
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>a short description of the expected state under validation</p>
 									</div>
 								</li>
 							</ul>
@@ -1012,20 +1308,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1132">index.ts:1132</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1353">index.ts:1353</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an instance of XPathBuilder to create XPath expressions using functions instead of writing the whole
+									XPath as a raw string.</p>
+								</div>
+								<p>Using XPathBuilder can help to reduce the number of errors originating from a wrong usage of the sometimes quite
+								complex syntax of XPath.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>the initial XPath selector (eg. &quot;//div&quot;, &quot;/span&quot;)</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../classes/xpathbuilder.html" class="tsd-signature-type">XPathBuilder</a></h4>
+							<p>an instance of XPathBuilder</p>
 						</li>
 					</ul>
 				</section>
@@ -1039,22 +1343,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1091">index.ts:1091</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1215">index.ts:1215</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>All suites marked as &quot;xsuite&quot; will not be executed by the test runner.</p>
+								</div>
+								<p>A suite is a collection of related testcases.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.isuitemetadata.html" class="tsd-signature-type">ISuiteMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>define all testcases for this suite inside the body of this function</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -1084,22 +1399,50 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5a41bfb/src/index.ts#L1113">index.ts:1113</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1301">index.ts:1301</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>All testcases criteria marked as &quot;xtestcase&quot; will not be executed by the test runner.</p>
+								</div>
+								<p>A testcase is composed of a sequence of steps.</p>
+								<p>Each step represents a single or multiple interactions with the tested application and allows you to pass a step
+								callback in order to perform validations of the application state right after the step was performed.</p>
+								<p>Wdio-workflo evaluates all validations defined within a testcase and sets the testcase status accordingly:</p>
+								<ul>
+									<li>Only if all validations defined within a testcase were successful, the testcase is marked as &quot;passed&quot;.</li>
+									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
+									marked as &quot;failed&quot;.</li>
+									<li>If runtime errors occurred anywhere inside a testcase, the testcase is marked as &quot;broken&quot;.</li>
+									<li>A testcase can also be marked as &quot;skipped&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
+									because a bail option was specified and the bail limit was already reached.</li>
+								</ul>
+								<p>Steps and validations can be implemented using the following functions:</p>
+								<ul>
+									<li><code>given</code> to establish the initial state</li>
+									<li><code>when</code> to describe changes of the application state</li>
+									<li><code>validate</code> to perform validations of the application state inside a step callback</li>
+								</ul>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name or a short description of the suite</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/__global.workflo.itestcasemetadata.html" class="tsd-signature-type">ITestcaseMetadata</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the metadata of the testcase</p>
+									</div>
 								</li>
 								<li>
 									<h5>bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>define all steps for this testcase inside the body of this function</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">

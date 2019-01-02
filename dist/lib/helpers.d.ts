@@ -12,7 +12,7 @@ export declare function tolerancesToString(values: number | Record<string, numbe
  */
 export declare function isNullOrUndefined(value: any): boolean;
 /**
- * Returns true if value neither null nor undefined.
+ * Returns true if value is neither null nor undefined.
  *
  * @param value an arbitrary value
  */

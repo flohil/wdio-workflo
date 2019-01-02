@@ -6,6 +6,11 @@ import * as pageObjects from './lib/page_objects'
 import * as helpers from './lib/helpers'
 import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList'
 
+/**
+ * This interface describes custom expectation matchers for PageElements.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ */
 interface ICustomElementMatchers {
   toExist(): boolean
   toBeVisible(): boolean
@@ -86,6 +91,11 @@ interface ICustomElementMatchers {
   toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes custom expectation matchers for PageElementLists.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ */
 interface ICustomListMatchers {
   toBeEmpty(): boolean
   toHaveLength(length: number, opts?: Workflo.Comparator): boolean
@@ -113,6 +123,13 @@ interface ICustomListMatchers {
   toEventuallyContainDirectText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes custom expectation matchers for PageElementMaps.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template K the names of the elements stored in the map (the map's keys) as string literals
+ */
 interface ICustomMapMatchers<K extends string | number | symbol> {
   toExist(opts?: Workflo.PageNode.MapFilterMask<K>): boolean
   toBeVisible(opts?: Workflo.PageNode.MapFilterMask<K>): boolean
@@ -135,6 +152,13 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
   toEventuallyContainDirectText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes custom expectation matchers for PageElementGroups.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template Content the type of the content managed by the group
+ */
 interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
   toExist(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
   toBeVisible(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
@@ -157,6 +181,13 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
   toEventuallyContainDirectText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes custom expectation matchers for ValuePageElements.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template ValueType the type of the values handled by this elements' xxxValue functions
+ */
 interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers {
   toHaveValue(value: ValueType): boolean
   toHaveAnyValue(): boolean
@@ -167,6 +198,13 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
   toEventuallyContainValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes custom expectation matchers for ValuePageElementLists.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template ValueType the type of the values handled by the list's elements' xxxValue functions
+ */
 interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
   toHaveValue(value: ValueType | ValueType[]): boolean
   toHaveAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean
@@ -177,6 +215,14 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
   toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes custom expectation matchers for ValuePageElementMaps.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template K the names of the elements stored in the map (the map's keys) as string literals
+ * @template ValueType the type of the values handled by the map's elements' xxxValue functions
+ */
 interface ICustomValueMapMatchers<
   K extends string | number | symbol,
   ValueType
@@ -190,6 +236,13 @@ interface ICustomValueMapMatchers<
   toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes custom expectation matchers for ValuePageElementGroups.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template Content the type of the content managed by the group
+ */
 interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> extends ICustomGroupMatchers<Content>
 {
   toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
@@ -201,37 +254,98 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
   toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for PageElements.
+ *
+ * It is implemented by the return value of the `expectElement` function if expectElement was passed an instance of
+ * PageElement.
+ */
 interface IElementMatchers extends ICustomElementMatchers {
   not: ICustomElementMatchers
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for PageElementLists.
+ *
+ * It is implemented by the return value of the `expectList` function if expectList was passed an instance of
+ * PageElementList.
+ */
 interface IListMatchers extends ICustomListMatchers {
   not: ICustomListMatchers
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for PageElementMaps.
+ *
+ * It is implemented by the return value of the `expectMap` function if expectMap was passed an instance of
+ * PageElementMap.
+ *
+ * @template K the names of the elements stored in the map (the map's keys) as string literals
+ */
 interface IMapMatchers<K extends string | number | symbol> extends ICustomMapMatchers<K> {
   not: ICustomMapMatchers<K>
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for PageElementGroups.
+ *
+ * It is implemented by the return value of the `expectGroup` function if expectGroup was passed an instance of
+ * PageElementGroup.
+ *
+ * @template Content the type of the content managed by the group
+ */
 interface IGroupMatchers<
   Content extends {[key: string]: Workflo.PageNode.INode}
 > extends ICustomGroupMatchers<Content> {
   not: ICustomGroupMatchers<Content>
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for ValuePageElements.
+ *
+ * It is implemented by the return value of the `expectElement` function if expectElement was passed an instance of
+ * ValuePageElement.
+ *
+ * @template ValueType the type of the values handled by this elements' xxxValue functions
+ */
 interface IValueElementMatchers<ValueType> extends ICustomValueElementMatchers<ValueType> {
   not: ICustomValueElementMatchers<ValueType>
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for ValuePageElementLists.
+ *
+ * It is implemented by the return value of the `expectList` function if expectList was passed an instance of
+ * ValuePageElementList.
+ *
+ * @template ValueType the type of the values handled by the list's elements' xxxValue functions
+ */
 interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<Workflo.ArrayElement<ValueType>> {
   not: ICustomValueListMatchers<Workflo.ArrayElement<ValueType>>
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for ValuePageElementMaps.
+ *
+ * It is implemented by the return value of the `expectMap` function if expectMap was passed an instance of
+ * ValuePageElementMap.
+ *
+ * @template K the names of the elements stored in the map (the map's keys) as string literals
+ * @template ValueType the type of the values handled by the map's elements' xxxValue functions
+ */
 interface IValueMapMatchers<K extends string | number | symbol, ValueType>
 extends ICustomValueMapMatchers<K, ValueType> {
   not: ICustomValueMapMatchers<K, ValueType>
 }
 
+/**
+ * This interface describes positive and negative (.not) expectation matchers for ValuePageElementGroups.
+ *
+ * It is implemented by the return value of the `expectGroup` function if expectGroup was passed an instance of
+ * ValuePageElementGroup.
+ *
+ * @template Content the type of the content managed by the group
+ */
 interface IValueGroupMatchers<Content extends Workflo.PageNode.GroupContent>
 extends ICustomValueGroupMatchers<Content> {
   not: ICustomValueGroupMatchers<Content>
@@ -239,6 +353,19 @@ extends ICustomValueGroupMatchers<Content> {
 
 declare global {
 
+  /**
+   * This function provides expectation matchers for PageElements or ValuePageElements.
+   *
+   * All template type parameters can be inferred automatically.
+   *
+   * @template Store type of PageElementStore used by the passed element
+   * @template PageElementType type of the passed element
+   * @template ValueType If the passed element is an instance of ValuePageElement, this is the type of the values
+   * handled in element's xxxValue functions.
+   *
+   * @param element an instance of PageElement or an instance of ValuePageElement
+   * @returns the expectation matchers for PageElement or ValuePageElement
+   */
   function expectElement<
     Store extends pageObjects.stores.PageElementStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
@@ -248,6 +375,19 @@ declare global {
     IValueElementMatchers<ReturnType<ElementType['getValue']>> :
     IElementMatchers : IElementMatchers
 
+  /**
+   * This function provides expectation matchers for PageElementLists or ValuePageElementLists.
+   *
+   * All template type parameters can be inferred automatically.
+   *
+   * @template Store type of PageElementStore used by the passed list and its elements
+   * @template PageElementType type of the element's handled by the passed list
+   * @template PageElementOptions options type of the element's handled by the passed list
+   * @template PageElementListType type of the passed list
+   *
+   * @param list an instance of PageElementList or an instance of ValuePageElementList
+   * @returns the expectation matchers for PageElementList or ValuePageElementList
+   */
   function expectList<
     Store extends pageObjects.stores.PageElementStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
@@ -259,6 +399,20 @@ declare global {
     > ?
     IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
 
+  /**
+   * This function provides expectation matchers for PageElementMaps or ValuePageElementMaps.
+   *
+   * All template type parameters can be inferred automatically.
+   *
+   * @template Store type of PageElementStore used by the passed map and its elements
+   * @template K the names of the elements stored in the map (the map's keys) as string literals
+   * @template PageElementType type of the element's handled by the passed map
+   * @template PageElementOptions options type of the element's handled by the passed map
+   * @template PageElementMapType type of the passed map
+   *
+   * @param map an instance of PageElementMap or an instance of ValuePageElementMap
+   * @returns the expectation matchers for PageElementMap or ValuePageElementMap
+   */
   function expectMap<
     Store extends pageObjects.stores.PageElementStore,
     K extends string,
@@ -272,6 +426,18 @@ declare global {
     IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
     IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
 
+  /**
+   * This function provides expectation matchers for PageElementGroups or ValuePageElementGroups.
+   *
+   * All template type parameters can be inferred automatically.
+   *
+   * @template Store type of PageElementStore used by the passed group
+   * @template Content type of the content managed by the passed group
+   * @template PageElementGroupType type of the passed group
+   *
+   * @param group an instance of PageElementGroup or an instance of ValuePageElementGroup
+   * @returns the expectation matchers for PageElementGroup or ValuePageElementGroup
+   */
   function expectGroup<
     Store extends pageObjects.stores.PageElementStore,
     Content extends Workflo.PageNode.GroupContent,
@@ -283,7 +449,7 @@ declare global {
   namespace WebdriverIO {
     interface Client<T> {
       /**
-       * Allow any type of promise to be resolved in order to continue synchronous code execution.
+       * Allows for any type of promise to be resolved in order to continue synchronous code execution.
        */
       resolvePromise <Type> (promise: Promise<Type>): Type
     }
@@ -305,65 +471,160 @@ declare global {
      */
     type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>
 
+    /**
+     * Omits all properties from T whose key names are in K.
+     */
     type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
+    /**
+     * Returns the keys of all properties of T whose values extend U.
+     */
     type FilteredKeys<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];
 
+    /**
+     * Returns the keys of all properties of T whose values' ReturnTypes extend U.
+     */
     type FilteredKeysByReturnType<T, U> = {
       [P in keyof T]: T[P] extends (...args) => Workflo.PageNode.INode ?
       ReturnType<T[P]> extends U ? P : never :
       P
     }[keyof T];
 
-
-
-
+    /**
+     * Returns the keys of all properties of T whose values are not never.
+     */
     type KeysWithoutNever<T> = { [P in keyof T]: T[P] extends never ? never : P }[keyof T];
 
+    /**
+     * Returns all properties of T whose values are not never.
+     */
     type WithoutNever<T> = Pick<T, KeysWithoutNever<T>>
 
+    /**
+     * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
+     * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
+     */
     type StripNever<T> = T // Pick<T, KeysWithoutNever<T>> // Omit<T, FilteredKeys<T, never>> // T
 
+    /**
+     * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
+     * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
+     */
     type StripNeverByReturnType<T> = T // Omit<T, FilteredKeysByReturnType<T, never>>
 
+    /**
+     * If ArrayType is an array, returns the type of an array element.
+     * If ArrayType is not an array, returns never.
+     */
     type ArrayElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType : never;
 
+    /**
+     * If ArrayType is an array, returns the type of an array element or the type of the array.
+     * If ArrayType is not an array, returns never.
+     */
     type ArrayOrElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType | ElementType[] : never;
 
+    /**
+     * If ArrayType is an array, returns the type of an array element.
+     * If ArrayType is not an array, returns ArrayType.
+     */
     type TryArrayElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType : ArrayType;
 
+    /**
+     * If ArrayType is an array, returns the type of an array element or the type of the array.
+     * If ArrayType is not an array, returns ArrayType.
+     */
     type TryArrayOrElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType | ElementType[] : ArrayType;
 
+    /**
+     * The type of a webdriverio element returned by browser.element or browser.elements.
+     *
+     * @see http://v4.webdriver.io/api/protocol/element.html
+     */
     type WdioElement = Client<RawResult<Element>> & RawResult<Element>
 
+    /**
+     * @ignore
+     */
     interface IJSError {
       notFound: string[]
     }
 
+    /**
+     * This interface describes the coordinates of the upper left corner of a PageElement on the page in pixels.
+     */
     interface ICoordinates extends Record<string, number> {
+      /**
+       * X-Location of the upper left corner of a PageElement on the page in pixels
+       */
       x: number,
+      /**
+       * Y-Location of the upper left corner of a PageElement on the page in pixels
+       */
       y: number
     }
 
+    /**
+     * This interface describes the size of a PageElement in pixels.
+     */
     interface ISize extends Record<string, number> {
+      /**
+       * Width of a PageElement in pixels
+       */
       width: number,
+      /**
+       * Height of a PageElement in pixels
+       */
       height: number
     }
 
+    /**
+     * Tolerances used for comparisons of numbers.
+     */
     interface ITolerance extends Record<string, number> {
+      /**
+       * Lower tolerances bound used for comparisons of numbers.
+       */
       lower: number,
+      /**
+       * Upper tolerances bound used for comparisons of numbers.
+       */
       upper: number
     }
 
+    /**
+     * Desribes the result of calling the `scroll` function on PageElement in pixels.
+     */
     interface IScrollResult {
+      /**
+       * Top location of the scrolled element in pixels.
+       */
       elemTop: number
+      /**
+       * Left location of the scrolled element in pixels.
+       */
       elemLeft: number
+      /**
+       * Top location of the scroll container in pixels.
+       */
       containerTop: number
+      /**
+       * Left location of the scrolled container in pixels.
+       */
       containerLeft: number
+      /**
+       * Value of the HTML scrollTop property of the scroll container in pixels.
+       */
       scrollTop: number
+      /**
+       * Value of the HTML scrollLeft property of the scroll container in pixels.
+       */
       scrollLeft: number
     }
 
+    /**
+     * 
+     */
     interface IScrollParams {
       containerSelector?: string,
       directions: {
@@ -642,26 +903,25 @@ declare global {
       }
     }
 
-    interface IProblem<ValueType, ResultType> {
-      values: IRecObj<ValueType>,
-      solve: <NodeType extends Workflo.PageNode.INode>(
-        node: NodeType,
-        value?: ValueType
-      ) => ISolveResult<ResultType>
-    }
-
-    interface ISolveResult<ResultType>{
-      nodeSupported: boolean,
-      result?: ResultType
-    }
-
-    interface IWalkerOptions {
-      throwUnmatchedKey?: boolean,
-      throwSolveError?: boolean
-    }
-
+    /**
+     * @ignored
+     */
     type Value = string | boolean | number
 
+    /**
+     * This enum describes the four possible initial waiting types supported by wdio-workflo.
+     *
+     * Every time an interaction with the tested application takes place via a PageElement's action (eg. click),
+     * an initial wait condition will be performed before executing the specified action:
+     *
+     * - 'exist' waits for the PageElement to exist in the DOM
+     * - 'visible' waits for the PageElement to become visible in the viewport (this will not be the case if the
+     * PageElement is concealed by another element, hidden, not existing or outside of the viewport)
+     * - 'text' waits for the PageElement to have any text (this will not be the case if the PageElement does not exist,
+     * is not visible, or has no text at all)
+     * - 'value' waits for the PageElement to have any value (this will not be the case if the PageElement does not
+     * exist, is not visible, or has no value at all)
+     */
     const enum WaitType {
       exist = 'exist',
       visible = 'visible',
@@ -669,6 +929,9 @@ declare global {
       value = 'value'
     }
 
+    /**
+     * This enum is used to perform comparisons of numbers.
+     */
     const enum Comparator {
       equalTo = '==',
       lessThan = '<',
@@ -680,6 +943,9 @@ declare global {
       gt = '>',
     }
 
+    /**
+     * XPath can be supplied to wdio-workflo either via an XPathBuilder or as a raw XPath string
+     */
     type XPath = pageObjects.builders.XPathBuilder | string
 
    // UTILITY FUNCTIONS
@@ -845,6 +1111,9 @@ declare global {
       export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;
     }
 
+    /**
+     * @ignore
+     */
     interface FilterList {
       listFiles?: string[]
       specFiles?: string[]
@@ -856,6 +1125,16 @@ declare global {
 
   // SPECS AND TESTCASES
 
+    /**
+    * This interfaces describes the results of manually executed testcases for one Story in the form of an object.
+    *
+    * The object's keys are the ids of acceptance criteria of the validated Story and its values are an object that
+    * contains:
+    *
+    * - the result of the validation as a boolean (true if it passed, false if it failed)
+    * - the date at which the validation was performed
+    * - an optional comment to add supplementary notes (eg. "fails in Internet Explorer only")
+    */
     interface IManualCriteria {
       [key: number] : {
         result: boolean,
@@ -864,66 +1143,221 @@ declare global {
       }
     }
 
+    /**
+     * This interface describes an object that defines the results of manually executed testcases to also include them
+     * in the test report.
+     *
+     * The object's keys are the ids of the manually validated Stories (eg. "2.4.5") and its values are objects which
+     * implement IManualCriteria.
+     */
     interface IManualTestcaseResults {
       [key: string] : IManualCriteria
     }
 
-    type StepImpl = <I, O>(params: IStepParams<I, O>) => IStep
+    /**
+     * @ignore
+     */
+    type StepImpl = <ArgsType extends Object, ReturnType>(params: IStepParams<ArgsType, ReturnType>) => IStep
 
+    /**
+     * @ignore
+     */
     type StepImplMap = { [key:string]: StepImpl }
 
-    // type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
+    /**
+     * Severity describes how severe the implications of something not working correctly would be.
+     */
+    type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
+    /**
+     * The result status of a testcase.
+     */
     type TestcaseStatus = 'passed' | 'failed' | 'broken' | 'unknown' | 'pending'
-    type SpecStatus = 'passed' | 'failed' | 'unvalidated' | 'unknown' | 'pending'
+    /**
+     * The result status of a validation/an acceptance criteria of a Story.
+     */
+    type SpecStatus = 'passed' | 'failed' | 'broken' | 'unvalidated' | 'unknown' | 'pending'
 
-    const enum Severity {
-      blocker = 'blocker',
-      critical = 'critical',
-      normal = 'normal',
-      minor = 'minor',
-      trivial = 'trivial'
-    }
-
+    /**
+     * This interface is implemented by the return value of a Story's `Given` function.
+     *
+     * It can be used to chain multiple `Given` functions together sequentially by calling `.And` in order to create an
+     * initial state.
+     */
     interface ISpecGiven {
+      /**
+       * Call this function to chain multiple `Given` functions together sequentially in order to create an initial state.
+       *
+       * Alternatively, if you can nest another `Given` inside the bodyFunc to express diverging "Story lines".
+       *
+       * Once you finished describing all initial states, you can invoke a state change by calling `When` inside the
+       * bodyFunc of this function.
+       *
+       * To validate an initial state with acceptance criteria, use `Then` inside the bodyFunc of this function.
+       *
+       * @param description a short description of an initial state
+       * @param bodyFunc Use the body of this function to define acceptance criteria, nested initial states or state
+       * changes.
+       */
       And: (description: string, bodyFunc?: () => void) => ISpecGiven
     }
 
+   /**
+     * This interface is implemented by the return value of a Story's `When` function.
+     *
+     * It can be used to chain multiple `When` functions together sequentially by calling `.And`.
+     */
     interface ISpecWhen {
+      /**
+       * Call this function to chain multiple `When` functions together sequentially.
+       *
+       * Alternatively, if you can nest another `When` inside the bodyFunc to express diverging "Story lines".
+       *
+       * To validate the state following a state change with acceptance criteria, use `Then` inside the bodyFunc of When.
+       *
+       * @param description a short description of an initial state
+       * @param bodyFunc Use the body of this function to define acceptance criteria or nested state changes.
+       */
       And: (description: string, bodyFunc?: () => void) => ISpecWhen
     }
 
+  /**
+   * The `given` function establishes the initial state of a tested application by executing the passed step.
+   *
+   * You can also chain together multiple given statements to create the initial state by appending `.and` to the end
+   * of this function.
+   *
+   * Once you finished establishing the initial state(s), you can trigger a state change by appending a `.when` step to
+   * the end of the given function/chain.
+   * State change steps can also be chained together sequentially by appending `.and` to the end of the step chain.
+   *
+   * @param step a step that establishes the initial state
+   */
+
+    /**
+     * This interface is implemented by the return value of a testcase's `when` function.
+     *
+     * It can be used to chain multiple `when` functions together sequentially by calling `.and`.
+     */
     interface ITCWhen {
+      /**
+       * Call this function to chain multiple `when` functions together sequentially.
+       *
+       * To validate the state following the execution of this step, use `validate` inside the step callback.
+       *
+       * @param step a step that performs a state change
+       */
       and: (step: IStep) => ITCWhen
     }
 
+    /**
+     * This interface is implemented by the return value of a testcase's `given` function.
+     *
+     * It can be used to chain multiple `given` functions together sequentially by calling `.and` or to trigger
+     * a state change by invoking `.when`.
+     */
     interface ITCGiven {
+      /**
+       * Call this function to chain multiple `given` functions together sequentially.
+       *
+       * To validate the initial state following the execution of this step, use `validate` inside the step callback.
+       *
+       * @param step a step that establishes the initial state
+       */
       and: (step: IStep) => ITCGiven,
+      /**
+       * Call this function to invoke a state change of the tested application.
+       *
+       * To validate the state following the execution of this step, use `validate` inside the step callback.
+       *
+       * @param step a step that performs a state change
+       */
       when: (step: IStep) => ITCWhen
     }
 
+    /**
+     * @ignore
+     */
     interface IDescriptionStack {
       givens: string[]
       whens: string[]
     }
 
+    /**
+     * Optional metadata of a Story.
+     */
     interface IStoryMetaData {
+      /**
+       * Ids of issues associated with this Story in an issue tracker tool (eg. user stories in JIRA).
+       *
+       * In the allure test report, links to these issues will be created.
+       * To build these links, wdio-workflo examines the "allure" property in workflo.conf.ts
+       * and for each issue concatenates allure.issuePrefix, allure.issueTrackerPattern and allure.issueAppendix and
+       * substitutes '%s' in the issueTrackerPattern with the issue id.
+       */
       issues?: string[],
+      /**
+       * Ids of bugs associated with this Story in an issue tracker tool (eg. bugs in JIRA).
+       *
+       * In the allure test report, links to these bugs will be created.
+       * To build these links, wdio-workflo examines the "allure" property in workflo.conf.ts
+       * and for each bug concatenates allure.bugPrefix, allure.issueTrackerPattern and allure.bugAppendix and
+       * substitutes '%s' in the issueTrackerPattern with the bug id.
+       */
       bugs?: string[],
-      severity?: Workflo.Severity // Workflo.severity
+      /**
+       * The severity of a Story describes how severe the implications of one or more acceptance criteria of the Story 
+       * not being fulfilled correctly would be. It defaults to 'normal'.
+       */
+      severity?: Workflo.Severity
     }
 
+    /**
+     * Optional metadata of a Feature.
+     *
+     * Empty at the moment - reserved for future use.
+     */
     interface IFeatureMetadata {
     }
 
+    /**
+     * Optional metadata of a suite.
+     *
+     * Empty at the moment - reserved for future use.
+     */
     interface ISuiteMetadata {
     }
 
+    /**
+     * Optional metadata of a testcase.
+     */
     interface ITestcaseMetadata {
+      /**
+       * Ids of bugs associated with this testcase in an issue tracker tool.
+       *
+       * In the allure test report, links to these bugs will be created.
+       * To build these links, wdio-workflo examines the "allure" property in workflo.conf.ts
+       * and for each bug concatenates allure.bugPrefix, allure.issueTrackerPattern and allure.bugAppendix and
+       * substitutes '%s' in the issueTrackerPattern with the bug id.
+       */
       bugs?: string[],
+      /**
+       * Id of this testcase in a test management tool.
+       *
+       * In the test report, a link to this testcase will be created.
+       * To build this link, wdio-workflo examines the "allure" property in workflo.conf.ts
+       * and substitutes '%s' in allure.testManagementPattern with the test id.
+       */
       testId?: string,
-      severity?: Workflo.Severity // Workflo.severity
+      /**
+       * The severity of a testcase describes how severe the implications of the testcase failing would be.
+       * It defaults to 'normal'.
+       */
+      severity?: Workflo.Severity
     }
 
+    /**
+     * @ignore
+     */
     interface IStoryMapEntry {
       descriptionStack: IDescriptionStack
       description: string
@@ -938,35 +1372,96 @@ declare global {
       givenRecLevel: number
     }
 
+    /**
+     * @ignore
+     */
     interface IExpectationBlock {
       testcaseName: string
       execute: () => void
       screenshot: any
     }
 
+   /**
+    * This object's keys are the ids of the validated Stories (eg."2.4.5") and its values are either a single id (eg. 3)
+    * or an ids array (eg. [3, 4, 5]) of acceptance criteria defined within the associated Story.
+    */
     type IValidateSpecObject = {
       [specId: string]: number | number[]
     }
 
+    /**
+     * @ignore
+     */
     type IValidateContainer = {
       specObj: IValidateSpecObject
     }
 
+    /**
+     * IStepOptParams are supposed to be used as the parameters of a step creation function if a step does not require
+     * any or only optional arguments.
+     *
+     * @template ArgsType defines the type of the step arguments passed to the execution function.
+     * @template ReturnType defines the return type of the execution function.
+     */
     interface IOptStepParams<ArgsType extends Object, ReturnType> {
+      /**
+       * An optional callback function that is invoked right after the execution of a step.
+       *
+       * The return value of the step's execution function is passed to the callback function as a single parameter.
+       *
+       * The step callback function can be used to retrieve and validate the state of the application right after
+       * the execution of a step.
+       */
       cb?: (param: ReturnType) => void,
+      /**
+       * Optional arguments that can, but do not have to be, passed to a step execution function.
+       */
       arg?: ArgsType,
+      /**
+       * A short description of the interactions a step performs with the tested application.
+       */
       description?: string
     }
 
+    /**
+     * IStepParams are supposed to be used as the parameters of a step creation function if a step requires mandatory
+     * step arguments.
+     *
+     * @template ArgsType defines the type of the step arguments passed to the execution function.
+     * @template ReturnType defines the return type of the execution function.
+     */
     interface IStepParams<ArgsType extends Object, ReturnType> extends IOptStepParams<ArgsType, ReturnType> {
+      /**
+       * Mandatory arguments that a step requires in order to be executed.
+       */
       arg: ArgsType,
     }
 
+    /**
+     * Steps consist of a description and an execution function.
+     * The execution function performs changes to the state of the tested application and the description briefly
+     * summarizes these changes in natural language.
+     *
+     * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
+     * execution function:
+     *
+     * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+     * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
+     * with key's value retrieved from the step arguments object).
+     *
+     * Step callbacks can be used to query and validate the state of the tested application right after step execution.
+     * A step callback will be passed the return value of the execution function as its first parameter.
+     *
+     */
     interface IStep {
       __description: string,
       __execute: (prefix?: string) => void
     }
 
+    /**
+     * Steps in wdio-workflo need to be defined in this format - on object where the keys are the step descriptions and
+     * the values are step creation functions that take the step parameters as and argument and return a created Step.
+     */
     type StepDefinitions = Record<
       string, (params?: Workflo.IStepParams<any, any> | Workflo.IOptStepParams<any, any>) => Workflo.IStep
     >
@@ -1087,13 +1582,13 @@ declare global {
    * To join multiple initial states sequentially, you can either chain them together by appending `.And` to the end of
    * this function or you can nest another `Given` inside the bodyFunc to express diverging "Story lines".
    *
-   * Once you finished describing all initial states, you can invoke a state change by either appending `.When` to the
-   * end of the Given function/chain or by nesting a `When` inside the bodyFunc to express diverging "Story lines".
+   * Once you finished describing all initial states, you can invoke a state change by calling `When` inside the
+   * bodyFunc of this Given function.
    *
    * To validate an initial state with acceptance criteria, use `Then` inside the bodyFunc of Given.
    *
    * @param description a short description of an initial state
-   * @param bodyFunc Use the body of this function to define acceptance criteria, nested initial states or nested state
+   * @param bodyFunc Use the body of this function to define acceptance criteria, nested initial states or state
    * changes.
    */
   function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven
@@ -1226,7 +1721,7 @@ declare global {
    * - If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
    *  marked as "failed".
    * - If runtime errors occurred anywhere inside a testcase, the testcase is marked as "broken".
-   * - A testcase can also be marked as "skipped" if it was not executed because it was marked with "xtestcase" or
+   * - A testcase can also be marked as "pending" if it was not executed because it was marked with "xtestcase" or
    * because a bail option was specified and the bail limit was already reached.
    *
    * Steps and validations can be implemented using the following functions:
@@ -1256,7 +1751,7 @@ declare global {
    * - If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
    *  marked as "failed".
    * - If runtime errors occurred anywhere inside a testcase, the testcase is marked as "broken".
-   * - A testcase can also be marked as "skipped" if it was not executed because it was marked with "xtestcase" or
+   * - A testcase can also be marked as "pending" if it was not executed because it was marked with "xtestcase" or
    * because a bail option was specified and the bail limit was already reached.
    *
    * Steps and validations can be implemented using the following functions:
@@ -1285,7 +1780,7 @@ declare global {
    * - If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
    *  marked as "failed".
    * - If runtime errors occurred anywhere inside a testcase, the testcase is marked as "broken".
-   * - A testcase can also be marked as "skipped" if it was not executed because it was marked with "xtestcase" or
+   * - A testcase can also be marked as "pending" if it was not executed because it was marked with "xtestcase" or
    * because a bail option was specified and the bail limit was already reached.
    *
    * Steps and validations can be implemented using the following functions:
@@ -1361,7 +1856,6 @@ export type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepPara
 export type IOptStepParams<ArgsType extends Object, ReturnType> = Workflo.IOptStepParams<ArgsType, ReturnType>
 export type StepDefinitions = Workflo.StepDefinitions
 
-
 export * from './lib/steps'
 
 import * as objectFunctions from './lib/utility_functions/object'
@@ -1370,16 +1864,25 @@ import * as classFunctions from './lib/utility_functions/class'
 import * as stringFunctions from './lib/utility_functions/string'
 import * as utilFunctions from './lib/utility_functions/util'
 
-export { objectFunctions, arrayFunctions, classFunctions, stringFunctions }
+export { objectFunctions, arrayFunctions, classFunctions, stringFunctions, utilFunctions }
 
 export { pageObjects, helpers }
 
+/**
+ * @ignore
+ */
 import Kiwi from './lib/Kiwi'
 
+/**
+ * @ignore
+ */
 export { Kiwi }
 
 // CONFIG FILE TYPES SECTION
 
+/**
+ * @ignore
+ */
 export interface Error {
   stack?: string;
 }
@@ -1400,11 +1903,17 @@ export interface IIntervals {
   default?: number
 }
 
+/**
+ * @ignore
+ */
 export interface ICountAndPercentage {
   count?: number
   percentage?: string
 }
 
+/**
+ * @ignore
+ */
 export interface IPrintObject {
   'Spec Files': number,
   'Testcase Files': number,
