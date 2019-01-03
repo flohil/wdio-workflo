@@ -73,6 +73,37 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.</p>
+					</div>
+					<p>IElementNode guarantees support of the following state retrieval functions:</p>
+					<ul>
+						<li>getIsEnabled</li>
+						<li>getText</li>
+						<li>getDirectText</li>
+						<li>getHasText</li>
+						<li>getHasAnyText</li>
+						<li>getContainsText</li>
+						<li>getHasDirectText</li>
+						<li>getHasAnyDirectText</li>
+						<li>getContainsDirectText</li>
+					</ul>
+					<p>IElementNode guarantees support of the following state check functions:</p>
+					<ul>
+						<li>exists</li>
+						<li>isVisible</li>
+						<li>isEnabled</li>
+						<li>hasText</li>
+						<li>hasAnyText</li>
+						<li>containsText</li>
+						<li>hasDirectText</li>
+						<li>hasAnyDirectText</li>
+						<li>containsDirectText</li>
+					</ul>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -159,9 +190,15 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.ilastdiff.html">ILastDiff</a>.<a href="__global.workflo.ilastdiff.html#__lastdiff">__lastDiff</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L419">index.ts:419</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L969">index.ts:969</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Retries the last differences of a PageNode&#39;s check state functions.</p>
+						</div>
+						<p>Intended for framework-internal usage only.</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
 					<a name="__setlastdiff" class="tsd-anchor"></a>
@@ -170,9 +207,15 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.ilastdiff.html">ILastDiff</a>.<a href="__global.workflo.ilastdiff.html#__setlastdiff">__setLastDiff</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L420">index.ts:420</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L975">index.ts:975</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Sets the last differences of a PageNode&#39;s check state functions.</p>
+						</div>
+						<p>Intended for framework-internal usage only.</p>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
@@ -198,33 +241,33 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-not-exported">
 					<a name="currently" class="tsd-anchor"></a>
 					<h3>currently</h3>
-					<div class="tsd-signature tsd-kind-icon">currently<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.igetelement.html" class="tsd-signature-type">IGetElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.icheckelementcurrently.html" class="tsd-signature-type">ICheckElementCurrently</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">currently<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.igetelement.html" class="tsd-signature-type">IGetElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.icheckcurrently.html" class="tsd-signature-type">ICheckCurrently</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="__global.workflo.pagenode.inode.html">INode</a>.<a href="__global.workflo.pagenode.inode.html#currently">currently</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L483">index.ts:483</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1134">index.ts:1134</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-not-exported">
 					<a name="eventually" class="tsd-anchor"></a>
 					<h3>eventually</h3>
-					<div class="tsd-signature tsd-kind-icon">eventually<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.icheckelementeventually.html" class="tsd-signature-type">ICheckElementEventually</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">eventually<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.icheckeventually.html" class="tsd-signature-type">ICheckEventually</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="__global.workflo.pagenode.inode.html">INode</a>.<a href="__global.workflo.pagenode.inode.html#eventually">eventually</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L486">index.ts:486</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1137">index.ts:1137</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-not-exported">
 					<a name="wait" class="tsd-anchor"></a>
 					<h3>wait</h3>
-					<div class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.iwaitelement.html" class="tsd-signature-type">IWaitElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.icheckwait.html" class="tsd-signature-type">ICheckWait</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="__global.workflo.pagenode.inode.html">INode</a>.<a href="__global.workflo.pagenode.inode.html#wait">wait</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L485">index.ts:485</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1136">index.ts:1136</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -242,9 +285,15 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.inode.html">INode</a>.<a href="__global.workflo.pagenode.inode.html#__getnodeid">__getNodeId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L451">index.ts:451</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1040">index.ts:1040</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the id of the PageNode.</p>
+								</div>
+								<p>Intended for framework-internal usage only.</p>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -260,7 +309,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#getcontainsdirecttext">getContainsDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L499">index.ts:499</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1154">index.ts:1154</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,7 +333,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#getcontainstext">getContainsText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L496">index.ts:496</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1151">index.ts:1151</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -308,7 +357,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#getdirecttext">getDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L492">index.ts:492</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1147">index.ts:1147</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -332,7 +381,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#gethasanydirecttext">getHasAnyDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L498">index.ts:498</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1153">index.ts:1153</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -356,7 +405,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#gethasanytext">getHasAnyText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L495">index.ts:495</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1150">index.ts:1150</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -380,7 +429,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#gethasdirecttext">getHasDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L497">index.ts:497</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1152">index.ts:1152</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -404,7 +453,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#gethastext">getHasText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L494">index.ts:494</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1149">index.ts:1149</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -428,7 +477,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#getisenabled">getIsEnabled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L490">index.ts:490</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1145">index.ts:1145</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -452,7 +501,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.igetelement.html">IGetElement</a>.<a href="__global.workflo.pagenode.igetelement.html#gettext">getText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L491">index.ts:491</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1146">index.ts:1146</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -476,9 +525,15 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.inode.html">INode</a>.<a href="__global.workflo.pagenode.inode.html#gettimeout">getTimeout</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L452">index.ts:452</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1045">index.ts:1045</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the default timeout that a PageNode uses if no other explicit timeout
+									is passed to a function that operates with timeouts (eg. wait, eventually)</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -494,9 +549,14 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="__global.workflo.pagenode.inode.html">INode</a>.<a href="__global.workflo.pagenode.inode.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L453">index.ts:453</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1049">index.ts:1049</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a JSON representation of the PageNode.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.ielementjson.html" class="tsd-signature-type">IElementJSON</a></h4>
 						</li>
 					</ul>
@@ -548,16 +608,22 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckelementcurrently.html" class="tsd-kind-icon">ICheck<wbr>Element<wbr>Currently</a>
+						<a href="__global.workflo.pagenode.icheckcurrently.html" class="tsd-kind-icon">ICheck<wbr>Currently</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckelementeventually.html" class="tsd-kind-icon">ICheck<wbr>Element<wbr>Eventually</a>
+						<a href="__global.workflo.pagenode.icheckeventually.html" class="tsd-kind-icon">ICheck<wbr>Eventually</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.icheckvaluecurrently.html" class="tsd-kind-icon">ICheck<wbr>Value<wbr>Currently</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.icheckvalueeventually.html" class="tsd-kind-icon">ICheck<wbr>Value<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="__global.workflo.pagenode.icheckwait.html" class="tsd-kind-icon">ICheck<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="__global.workflo.pagenode.icheckwaitvalue.html" class="tsd-kind-icon">ICheck<wbr>Wait<wbr>Value</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -623,6 +689,9 @@
 						<a href="__global.workflo.pagenode.igetelement.html" class="tsd-kind-icon">IGet<wbr>Element</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="__global.workflo.pagenode.igetvalueelement.html" class="tsd-kind-icon">IGet<wbr>Value<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-kind-icon">IGroup<wbr>Filter<wbr>Mask</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
@@ -638,19 +707,10 @@
 						<a href="__global.workflo.pagenode.inode.html" class="tsd-kind-icon">INode</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ivalueelement.html" class="tsd-kind-icon">IValue<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-kind-icon">IValue<wbr>Element<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.ivaluegroupfiltermask.html" class="tsd-kind-icon">IValue<wbr>Group<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.iwaitelement.html" class="tsd-kind-icon">IWait<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.iwaitvalue.html" class="tsd-kind-icon">IWait<wbr>Value</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="../modules/__global.workflo.pagenode.html#extractboolean" class="tsd-kind-icon">Extract<wbr>Boolean</a>

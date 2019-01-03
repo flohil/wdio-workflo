@@ -70,6 +70,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This interface is implemented by the return value of a testcase&#39;s <code>when</code> function.</p>
+					</div>
+					<p>It can be used to chain multiple <code>when</code> functions together sequentially by calling <code>.and</code>.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -99,9 +107,20 @@
 					<div class="tsd-signature tsd-kind-icon">and<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L896">index.ts:896</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1730">index.ts:1730</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Call this function to chain multiple <code>when</code> functions together sequentially.</p>
+						</div>
+						<p>To validate the state following the execution of this step, use <code>validate</code> inside the step callback.</p>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>a step that performs a state change</p>
+							</dd>
+						</dl>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">

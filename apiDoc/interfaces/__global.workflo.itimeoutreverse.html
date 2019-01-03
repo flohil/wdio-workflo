@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IWDIOParamsInterval | wdio-workflo</title>
+	<title>ITimeoutReverse | wdio-workflo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,39 +60,41 @@
 					<a href="../modules/__global.workflo.html">Workflo</a>
 				</li>
 				<li>
-					<a href="__global.workflo.iwdioparamsinterval.html">IWDIOParamsInterval</a>
+					<a href="__global.workflo.itimeoutreverse.html">ITimeoutReverse</a>
 				</li>
 			</ul>
-			<h1>Interface IWDIOParamsInterval</h1>
+			<h1>Interface ITimeoutReverse</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This interface is used to describe parameters passed to functions which periodically check for a certain
+						condition to be met until a timeout is reached (primarily <code>wait</code> and <code>eventually</code>).</p>
+					</div>
+					<p>It allows to set a reverse flag which, if set to true, will check for the condition NOT to be met instead.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IWDIOParamsInterval</span>
+						<a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a>
+					</li>
+					<li>
+						<a href="__global.workflo.ireverse.html" class="tsd-signature-type">IReverse</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="ipageelementbaseopts.html" class="tsd-signature-type">IPageElementBaseOpts</a>
-							</li>
-							<li>
-								<a href="ipageelementlistwaitemptyreverseparams.html" class="tsd-signature-type">IPageElementListWaitEmptyReverseParams</a>
-							</li>
-							<li>
-								<a href="ipageelementlistwaitlengthparams.html" class="tsd-signature-type">IPageElementListWaitLengthParams</a>
-							</li>
-							<li>
-								<a href="ipageelementlistopts.html" class="tsd-signature-type">IPageElementListOpts</a>
-							</li>
-							<li>
-								<a href="ipageargs.html" class="tsd-signature-type">IPageArgs</a>
-							</li>
-							<li>
-								<a href="__global.workflo.iwdioparamsreverseinterval.html" class="tsd-signature-type">IWDIOParamsReverseInterval</a>
+								<span class="target">ITimeoutReverse</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
@@ -102,37 +104,49 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section tsd-is-inherited tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.iwdioparamsinterval.html#interval" class="tsd-kind-icon">interval</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.iwdioparamsinterval.html#timeout" class="tsd-kind-icon">timeout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="__global.workflo.itimeoutreverse.html#reverse" class="tsd-kind-icon">reverse</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="__global.workflo.itimeoutreverse.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-not-exported">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="interval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> interval</h3>
-					<div class="tsd-signature tsd-kind-icon">interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="reverse" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> reverse</h3>
+					<div class="tsd-signature tsd-kind-icon">reverse<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="__global.workflo.ireverse.html">IReverse</a>.<a href="__global.workflo.ireverse.html#reverse">reverse</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L394">index.ts:394</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L910">index.ts:910</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Set this flag to true to check for a condition NOT to be met.</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
 					<a name="timeout" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> timeout</h3>
 					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="__global.workflo.itimeout.html">ITimeout</a>.<a href="__global.workflo.itimeout.html#timeout">timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L393">index.ts:393</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L885">index.ts:885</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A timeout in milliseconds.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -183,13 +197,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="__global.workflo.iwdioparamsinterval.html" class="tsd-kind-icon">IWDIOParams<wbr>Interval</a>
+						<a href="__global.workflo.itimeoutreverse.html" class="tsd-kind-icon">ITimeout<wbr>Reverse</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.iwdioparamsinterval.html#interval" class="tsd-kind-icon">interval</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="__global.workflo.itimeoutreverse.html#reverse" class="tsd-kind-icon">reverse</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.iwdioparamsinterval.html#timeout" class="tsd-kind-icon">timeout</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="__global.workflo.itimeoutreverse.html#timeout" class="tsd-kind-icon">timeout</a>
 							</li>
 						</ul>
 					</li>

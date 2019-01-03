@@ -64,6 +64,20 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This interface describes positive and negative (.not) expectation matchers for PageElementGroups.</p>
+					</div>
+					<p>It is implemented by the return value of the <code>expectGroup</code> function if expectGroup was passed an instance of
+					PageElementGroup.</p>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Content the type of the content managed by the group</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -129,7 +143,7 @@
 					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="icustomgroupmatchers.html" class="tsd-signature-type">ICustomGroupMatchers</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L219">index.ts:219</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L512">index.ts:512</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -147,7 +161,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tobeenabled">toBeEnabled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L141">index.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L377">index.ts:377</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -171,7 +185,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tobevisible">toBeVisible</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L140">index.ts:140</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L376">index.ts:376</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -195,7 +209,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tocontaindirecttext">toContainDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L147">index.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L383">index.ts:383</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -219,7 +233,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tocontaintext">toContainText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L144">index.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L380">index.ts:380</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -236,20 +250,20 @@
 					<a name="toeventuallybeenabled" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>BeEnabled</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>BeEnabled<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparams.html" class="tsd-signature-type">IWDIOParams</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>BeEnabled<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallybeenabled">toEventuallyBeEnabled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L151">index.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L387">index.ts:387</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparams.html" class="tsd-signature-type">IWDIOParams</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -260,20 +274,20 @@
 					<a name="toeventuallybevisible" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>BeVisible</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>BeVisible<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparams.html" class="tsd-signature-type">IWDIOParams</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>BeVisible<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallybevisible">toEventuallyBeVisible</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L150">index.ts:150</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L386">index.ts:386</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparams.html" class="tsd-signature-type">IWDIOParams</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -284,14 +298,14 @@
 					<a name="toeventuallycontaindirecttext" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>Contain<wbr>Direct<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Contain<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Contain<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallycontaindirecttext">toEventuallyContainDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L157">index.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L393">index.ts:393</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -300,7 +314,7 @@
 									<h5>text: <a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -311,14 +325,14 @@
 					<a name="toeventuallycontaintext" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>Contain<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Contain<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Contain<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallycontaintext">toEventuallyContainText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L154">index.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L390">index.ts:390</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -327,7 +341,7 @@
 									<h5>text: <a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -338,20 +352,20 @@
 					<a name="toeventuallyexist" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>Exist</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Exist<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparams.html" class="tsd-signature-type">IWDIOParams</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Exist<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallyexist">toEventuallyExist</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L149">index.ts:149</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L385">index.ts:385</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparams.html" class="tsd-signature-type">IWDIOParams</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -362,20 +376,20 @@
 					<a name="toeventuallyhaveanydirecttext" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>Have<wbr>Any<wbr>Direct<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Any<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Any<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallyhaveanydirecttext">toEventuallyHaveAnyDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L156">index.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L392">index.ts:392</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -386,20 +400,20 @@
 					<a name="toeventuallyhaveanytext" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>Have<wbr>Any<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Any<wbr>Text<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Any<wbr>Text<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallyhaveanytext">toEventuallyHaveAnyText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L153">index.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L389">index.ts:389</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-signature-type">IGroupFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -410,14 +424,14 @@
 					<a name="toeventuallyhavedirecttext" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>Have<wbr>Direct<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallyhavedirecttext">toEventuallyHaveDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L155">index.ts:155</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L391">index.ts:391</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -426,7 +440,7 @@
 									<h5>text: <a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -437,14 +451,14 @@
 					<a name="toeventuallyhavetext" class="tsd-anchor"></a>
 					<h3>to<wbr>Eventually<wbr>Have<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Eventually<wbr>Have<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toeventuallyhavetext">toEventuallyHaveText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L152">index.ts:152</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L388">index.ts:388</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -453,7 +467,7 @@
 									<h5>text: <a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-signature-type">ExtractText</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.iwdioparamsinterval.html" class="tsd-signature-type">IWDIOParamsInterval</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -471,7 +485,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#toexist">toExist</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L139">index.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L375">index.ts:375</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -495,7 +509,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tohaveanydirecttext">toHaveAnyDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L146">index.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L382">index.ts:382</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -519,7 +533,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tohaveanytext">toHaveAnyText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L143">index.ts:143</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L379">index.ts:379</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -543,7 +557,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tohavedirecttext">toHaveDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L145">index.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L381">index.ts:381</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -567,7 +581,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="icustomgroupmatchers.html">ICustomGroupMatchers</a>.<a href="icustomgroupmatchers.html#tohavetext">toHaveText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L142">index.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L378">index.ts:378</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>

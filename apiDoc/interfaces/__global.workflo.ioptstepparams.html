@@ -70,6 +70,22 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>IStepOptParams are supposed to be used as the parameters of a step creation function if a step does not require
+						any or only optional arguments.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>ArgsType defines the type of the step arguments passed to the execution function.</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>ReturnType defines the return type of the execution function.</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -117,9 +133,14 @@
 					<div class="tsd-signature tsd-kind-icon">arg<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ArgsType</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L957">index.ts:957</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1900">index.ts:1900</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Optional arguments that can, but do not have to be, passed to a step execution function.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
 					<a name="cb" class="tsd-anchor"></a>
@@ -127,9 +148,17 @@
 					<div class="tsd-signature tsd-kind-icon">cb<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L956">index.ts:956</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1896">index.ts:1896</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An optional callback function that is invoked right after the execution of a step.</p>
+						</div>
+						<p>The return value of the step&#39;s execution function is passed to the callback function as a single parameter.</p>
+						<p>The step callback function can be used to retrieve and validate the state of the application right after
+						the execution of a step.</p>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
@@ -158,9 +187,14 @@
 					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L958">index.ts:958</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1904">index.ts:1904</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A short description of the interactions a step performs with the tested application.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>

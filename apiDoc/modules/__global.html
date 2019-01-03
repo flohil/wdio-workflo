@@ -120,7 +120,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L997">index.ts:997</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1973">index.ts:1973</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -175,7 +175,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1099">index.ts:1099</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2075">index.ts:2075</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -184,8 +184,8 @@
 								</div>
 								<p>To join multiple initial states sequentially, you can either chain them together by appending <code>.And</code> to the end of
 								this function or you can nest another <code>Given</code> inside the bodyFunc to express diverging &quot;Story lines&quot;.</p>
-								<p>Once you finished describing all initial states, you can invoke a state change by either appending <code>.When</code> to the
-								end of the Given function/chain or by nesting a <code>When</code> inside the bodyFunc to express diverging &quot;Story lines&quot;.</p>
+								<p>Once you finished describing all initial states, you can invoke a state change by calling <code>When</code> inside the
+								bodyFunc of this Given function.</p>
 								<p>To validate an initial state with acceptance criteria, use <code>Then</code> inside the bodyFunc of Given.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -199,7 +199,7 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> bodyFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Use the body of this function to define acceptance criteria, nested initial states or nested state
+										<p>Use the body of this function to define acceptance criteria, nested initial states or state
 										changes.</p>
 									</div>
 									<ul class="tsd-parameters">
@@ -230,7 +230,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1039">index.ts:1039</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2015">index.ts:2015</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -299,7 +299,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1134">index.ts:1134</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2110">index.ts:2110</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -349,7 +349,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1112">index.ts:1112</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2088">index.ts:2088</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -401,9 +401,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L242">index.ts:242</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L581">index.ts:581</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function provides expectation matchers for PageElements or ValuePageElements.</p>
+								</div>
+								<p>All template type parameters can be inferred automatically.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>Store type of PageElementStore used by the passed element</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementType type of the passed element</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>ValueType If the passed element is an instance of ValuePageElement, this is the type of the values
+										handled in element&#39;s xxxValue functions.</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -420,9 +438,13 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>element: <span class="tsd-signature-type">PageElementType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an instance of PageElement or an instance of ValuePageElement</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType extends infer ElementType ? ElementType extends ValuePageElement&lt;any, ValueType&gt; ? IValueElementMatchers&lt;ReturnType&lt;ElementType[&quot;getValue&quot;]&gt;&gt; : IElementMatchers : IElementMatchers</span></h4>
+							<p>the expectation matchers for PageElement or ValuePageElement</p>
 						</li>
 					</ul>
 				</section>
@@ -436,9 +458,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L275">index.ts:275</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L653">index.ts:653</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function provides expectation matchers for PageElementGroups or ValuePageElementGroups.</p>
+								</div>
+								<p>All template type parameters can be inferred automatically.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>Store type of PageElementStore used by the passed group</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>Content type of the content managed by the passed group</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementGroupType type of the passed group</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -455,9 +494,13 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>group: <span class="tsd-signature-type">PageElementGroupType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an instance of PageElementGroup or an instance of ValuePageElementGroup</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementGroupType extends infer GroupType ? GroupType extends ValuePageElementGroup&lt;any, Content&gt; ? IValueGroupMatchers&lt;GroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;PageElementGroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;...&gt;</span></h4>
+							<p>the expectation matchers for PageElementGroup or ValuePageElementGroup</p>
 						</li>
 					</ul>
 				</section>
@@ -471,9 +514,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L251">index.ts:251</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L603">index.ts:603</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function provides expectation matchers for PageElementLists or ValuePageElementLists.</p>
+								</div>
+								<p>All template type parameters can be inferred automatically.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>Store type of PageElementStore used by the passed list and its elements</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementType type of the element&#39;s handled by the passed list</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementOptions options type of the element&#39;s handled by the passed list</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementListType type of the passed list</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -493,9 +556,13 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>list: <span class="tsd-signature-type">PageElementListType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an instance of PageElementList or an instance of ValuePageElementList</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementListType extends infer ListType ? ListType extends ValuePageElementList&lt;any, ValuePageElement&lt;any, any&gt;, PageElementOptions, any&gt; ? IValueListMatchers&lt;ReturnType&lt;ListType[&quot;getValue&quot;]&gt;&gt; : IListMatchers : IListMatchers</span></h4>
+							<p>the expectation matchers for PageElementList or ValuePageElementList</p>
 						</li>
 					</ul>
 				</section>
@@ -509,9 +576,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L262">index.ts:262</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L628">index.ts:628</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function provides expectation matchers for PageElementMaps or ValuePageElementMaps.</p>
+								</div>
+								<p>All template type parameters can be inferred automatically.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>Store type of PageElementStore used by the passed map and its elements</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>K the names of the elements stored in the map (the map&#39;s keys) as string literals</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementType type of the element&#39;s handled by the passed map</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementOptions options type of the element&#39;s handled by the passed map</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementMapType type of the passed map</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -534,9 +624,13 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>map: <span class="tsd-signature-type">PageElementMapType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an instance of PageElementMap or an instance of ValuePageElementMap</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementMapType extends infer MapType ? MapType extends ValuePageElementMap&lt;any, K, ValuePageElement&lt;any, any&gt;, PageElementOptions, any&gt; ? IValueMapMatchers&lt;keyof MapType[&quot;$&quot;], ReturnType&lt;MapType[&quot;getValue&quot;]&gt;[keyof MapType[&quot;$&quot;]]&gt; : IMapMatchers&lt;...&gt; : IMapMatchers&lt;...&gt;</span></h4>
+							<p>the expectation matchers for PageElementMap or ValuePageElementMap</p>
 						</li>
 					</ul>
 				</section>
@@ -550,7 +644,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1009">index.ts:1009</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1985">index.ts:1985</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -607,7 +701,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1061">index.ts:1061</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2037">index.ts:2037</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -678,7 +772,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1159">index.ts:1159</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2135">index.ts:2135</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -730,7 +824,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1204">index.ts:1204</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2180">index.ts:2180</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -787,7 +881,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1272">index.ts:1272</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2248">index.ts:2248</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -804,7 +898,7 @@
 									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
 									marked as &quot;failed&quot;.</li>
 									<li>If runtime errors occurred anywhere inside a testcase, the testcase is marked as &quot;broken&quot;.</li>
-									<li>A testcase can also be marked as &quot;skipped&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
+									<li>A testcase can also be marked as &quot;pending&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
 									because a bail option was specified and the bail limit was already reached.</li>
 								</ul>
 								<p>Steps and validations can be implemented using the following functions:</p>
@@ -861,7 +955,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L988">index.ts:988</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1964">index.ts:1964</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -897,7 +991,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1315">index.ts:1315</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2291">index.ts:2291</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -933,7 +1027,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1192">index.ts:1192</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2168">index.ts:2168</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -988,7 +1082,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1242">index.ts:1242</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2218">index.ts:2218</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1003,7 +1097,7 @@
 									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
 									marked as &quot;failed&quot;.</li>
 									<li>If runtime errors occurred anywhere inside a testcase, the testcase is marked as &quot;broken&quot;.</li>
-									<li>A testcase can also be marked as &quot;skipped&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
+									<li>A testcase can also be marked as &quot;pending&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
 									because a bail option was specified and the bail limit was already reached.</li>
 								</ul>
 								<p>Steps and validations can be implemented using the following functions:</p>
@@ -1060,7 +1154,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1341">index.ts:1341</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2317">index.ts:2317</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1131,7 +1225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1020">index.ts:1020</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1996">index.ts:1996</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1187,7 +1281,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1082">index.ts:1082</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2058">index.ts:2058</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1257,7 +1351,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1183">index.ts:1183</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2159">index.ts:2159</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1308,7 +1402,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1353">index.ts:1353</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2329">index.ts:2329</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1343,7 +1437,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1215">index.ts:1215</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2191">index.ts:2191</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1399,7 +1493,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L1301">index.ts:1301</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L2277">index.ts:2277</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1415,7 +1509,7 @@
 									<li>If one or more validations were unsuccessful (the actual value did not match the expected value), the testcase is
 									marked as &quot;failed&quot;.</li>
 									<li>If runtime errors occurred anywhere inside a testcase, the testcase is marked as &quot;broken&quot;.</li>
-									<li>A testcase can also be marked as &quot;skipped&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
+									<li>A testcase can also be marked as &quot;pending&quot; if it was not executed because it was marked with &quot;xtestcase&quot; or
 									because a bail option was specified and the bail limit was already reached.</li>
 								</ul>
 								<p>Steps and validations can be implemented using the following functions:</p>

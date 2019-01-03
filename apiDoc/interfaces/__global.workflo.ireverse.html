@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IProblem | wdio-workflo</title>
+	<title>IReverse | wdio-workflo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,32 +60,35 @@
 					<a href="../modules/__global.workflo.html">Workflo</a>
 				</li>
 				<li>
-					<a href="__global.workflo.iproblem.html">IProblem</a>
+					<a href="__global.workflo.ireverse.html">IReverse</a>
 				</li>
 			</ul>
-			<h1>Interface IProblem&lt;ValueType, ResultType&gt;</h1>
+			<h1>Interface IReverse</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>ValueType</h4>
-					</li>
-					<li>
-						<h4>ResultType</h4>
-					</li>
-				</ul>
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This interface is used to describe parameters passed to functions which check for a certain
+						condition to be met.</p>
+					</div>
+					<p>It allows to set a reverse flag which, if set to true, will check for the condition NOT to be met instead.</p>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IProblem</span>
+						<span class="target">IReverse</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="__global.workflo.itimeoutreverse.html" class="tsd-signature-type">ITimeoutReverse</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -96,8 +99,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.iproblem.html#solve" class="tsd-kind-icon">solve</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.iproblem.html#values" class="tsd-kind-icon">values</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ireverse.html#reverse" class="tsd-kind-icon">reverse</a></li>
 							</ul>
 						</section>
 					</div>
@@ -106,54 +108,19 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="solve" class="tsd-anchor"></a>
-					<h3>solve</h3>
-					<div class="tsd-signature tsd-kind-icon">solve<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<a name="reverse" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> reverse</h3>
+					<div class="tsd-signature tsd-kind-icon">reverse<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L647">index.ts:647</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L910">index.ts:910</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-has-type-parameter tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon">&lt;NodeType&gt;<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NodeType</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__global.workflo.isolveresult.html" class="tsd-signature-type">ISolveResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ResultType</span><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-type-parameters-title">Type parameters</h4>
-										<ul class="tsd-type-parameters">
-											<li>
-												<h4>NodeType<span class="tsd-signature-symbol">: </span><a href="__global.workflo.pagenode.inode.html" class="tsd-signature-type">INode</a></h4>
-											</li>
-										</ul>
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>node: <span class="tsd-signature-type">NodeType</span></h5>
-											</li>
-											<li>
-												<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">ValueType</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <a href="__global.workflo.isolveresult.html" class="tsd-signature-type">ISolveResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ResultType</span><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Set this flag to true to check for a condition NOT to be met.</p>
+						</div>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="values" class="tsd-anchor"></a>
-					<h3>values</h3>
-					<div class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.irecobj.html" class="tsd-signature-type">IRecObj</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L646">index.ts:646</a></li>
-						</ul>
-					</aside>
 				</section>
 			</section>
 		</div>
@@ -203,14 +170,11 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.iproblem.html" class="tsd-kind-icon">IProblem</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="__global.workflo.ireverse.html" class="tsd-kind-icon">IReverse</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.iproblem.html#solve" class="tsd-kind-icon">solve</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.iproblem.html#values" class="tsd-kind-icon">values</a>
+								<a href="__global.workflo.ireverse.html#reverse" class="tsd-kind-icon">reverse</a>
 							</li>
 						</ul>
 					</li>

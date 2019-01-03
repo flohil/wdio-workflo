@@ -70,6 +70,22 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Steps consist of a description and an execution function.
+							The execution function performs changes to the state of the tested application and the description briefly
+						summarizes these changes in natural language.</p>
+					</div>
+					<p>A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
+					execution function:</p>
+					<p>Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+						They also enable the interpolation of a step&#39;s description by replacing <code>%{key}</code> in the description string
+					with key&#39;s value retrieved from the step arguments object).</p>
+					<p>Step callbacks can be used to query and validate the state of the tested application right after step execution.
+					A step callback will be passed the return value of the execution function as its first parameter.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -106,7 +122,7 @@
 					<div class="tsd-signature tsd-kind-icon">__description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L966">index.ts:966</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1938">index.ts:1938</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -116,7 +132,7 @@
 					<div class="tsd-signature tsd-kind-icon">__execute<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e749c96/src/index.ts#L967">index.ts:967</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/5ae9066/src/index.ts#L1939">index.ts:1939</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
