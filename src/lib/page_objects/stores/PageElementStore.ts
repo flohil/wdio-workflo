@@ -5,15 +5,22 @@ import {
   PageElementList, IPageElementListOpts,
   PageElementMap, IPageElementMapOpts,
   PageElementGroup, IPageElementGroupOpts,
-  ValuePageElementGroup, IValueGroupOpts, ValuePageElement, IValuePageElementOpts, IValuePageElementListOpts, ValuePageElementList, IPageElementBaseOpts
+  ValuePageElementGroup, IValueGroupOpts,
+  ValuePageElement, IValuePageElementOpts,
+  IValuePageElementListOpts, ValuePageElementList
 } from '../page_elements'
 
 import {
   XPathBuilder
 } from '../builders'
 import { IValuePageElementMapOpts, ValuePageElementMap } from '../page_elements/ValuePageElementMap';
-import { pageObjects } from '../../..';
 
+/**
+ * A function used to clone a PageElementList.
+ *
+ * @template the type of the cloned list
+ * @param selector the selector of the cloned list
+ */
 export type CloneFunc<Type> = (
   selector?: Workflo.XPath,
 ) => Type

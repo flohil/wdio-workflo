@@ -16,8 +16,6 @@ import { isArray } from 'util';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
 import { isNullOrUndefined } from '../../helpers';
 
-export type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>
-
 export interface IPageElementListIdentifier<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>

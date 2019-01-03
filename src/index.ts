@@ -1693,11 +1693,18 @@ declare global {
     type TryArrayOrElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType | ElementType[] : ArrayType;
 
     /**
-     * The type of a webdriverio element returned by browser.element or browser.elements.
+     * The type of a webdriverio element returned by `browser.element` or `browser.$`.
      *
      * @see http://v4.webdriver.io/api/protocol/element.html
      */
     type WdioElement = Client<RawResult<Element>> & RawResult<Element>
+
+    /**
+     * The type of webdriverio elements returned by `browser.elements` or `browser.$$`.
+     *
+     * @see http://v4.webdriver.io/api/protocol/elements.html
+     */
+    type WdioElements = Client<RawResult<Element[]>> & RawResult<Element[]>
 
     /**
      * @ignore
@@ -3415,6 +3422,9 @@ export interface ICapabilities extends DesiredCapabilities {
   [key: string]: any,
 }
 
+/**
+ * Type definitions of the `config` parameter passed to the callback functions of IWorkfloConfig.
+ */
 export interface ICallbackConfig extends IWorkfloCallbackConfig, IWorkfloCommonConfig, Options {
 
 }
@@ -3495,6 +3505,10 @@ export interface ICallbackConfig extends IWorkfloCallbackConfig, IWorkfloCommonC
         // traceInfo
         // printObject
 
+/**
+ * Type definitions of all properties of the `config` parameter passed to the callback functions of IWorkfloConfig that
+ * can be defined in IWorkfloConfig.
+ */
 export interface IWorkfloCommonConfig {
   /**
    * Root directory for all test artifacts of wdio-workflo.
@@ -3606,6 +3620,10 @@ export interface IWorkfloCommonConfig {
   retries?: number
 }
 
+/**
+ * Type definitions of all properties of the `config` parameter passed to the callback functions of IWorkfloConfig that
+ * only exist in wdio-workflo but not in webdriverio and that cannot be defined in IWorkfloConfig.
+ */
 export interface IWorkfloCallbackConfig {
   /**
    * Defines which testcase files should run. The pattern is relative to the directory
@@ -3680,6 +3698,9 @@ export interface IWorkfloCallbackConfig {
   printObject: IPrintObject
 }
 
+/**
+ * Type definitions of the config used by wdio-workflo in the file workflo.conf.ts.
+ */
 export interface IWorkfloConfig extends IWorkfloCommonConfig {
   /**
    * Set a base URL in order to shorten url command calls. If your `url` parameter starts

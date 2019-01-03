@@ -268,6 +268,11 @@ class ValuePageElementGroupEventually<
 
 // type guards
 
+/**
+ * Returns true if the passed node supports all functions defined in IValueElementNode.
+ *
+ * @param node a PageNode
+ */
 export function isIValueElementNode<
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 >(node: Workflo.PageNode.INode | ValueElementNode<Content>): node is ValueElementNode<Content> {

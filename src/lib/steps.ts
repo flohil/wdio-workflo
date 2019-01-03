@@ -2,6 +2,9 @@ import Kiwi from './Kiwi'
 import * as _ from 'lodash'
 import * as CircularJson from 'circular-json'
 
+/**
+ * @ignore
+ */
 function mergeStepDefaults<I, O>
 (defaults: Partial<I>, params: Workflo.IStepParams<I, O> | Workflo.IOptStepParams<I, O>): Workflo.IStepParams<I, O> {
   const _params = <any>params
@@ -11,6 +14,9 @@ function mergeStepDefaults<I, O>
   return _params
 }
 
+/**
+ * @ignore
+ */
 function stepsGetter(target, name, receiver) {
   if (typeof name === "string") {
     const stepName: string = name
@@ -32,6 +38,9 @@ function stepsGetter(target, name, receiver) {
   }
 }
 
+/**
+ * @ignore
+ */
 function stepsSetter(target, name, value) : boolean {
   throw new Error(
     "Step implementations may not be changed: Tried to set Step " + name.toString() + " to value " + value.toString()

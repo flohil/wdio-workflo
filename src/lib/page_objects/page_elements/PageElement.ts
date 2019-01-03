@@ -1571,6 +1571,11 @@ export class PageElementEventually<
 
 // TYPE GUARDS
 
+/**
+ * Returns true if the passed result is an instance of Workflo.IJSError.
+ *
+ * @param result an arbitrary value/object
+ */
 function isJsError(result: any): result is Workflo.IJSError {
   if (!result) {
     return false
@@ -1578,5 +1583,3 @@ function isJsError(result: any): result is Workflo.IJSError {
 
   return result.notFound !== undefined;
 }
-
-// HELPER FUNCTIONS

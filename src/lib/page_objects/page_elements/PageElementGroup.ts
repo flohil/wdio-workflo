@@ -858,6 +858,12 @@ export class PageElementGroupEventually<
 }
 
 // type guards
+
+/**
+ * Returns true if the passed node supports all functions defined in IElementNode.
+ *
+ * @param node a PageNode
+ */
 export function isIElementNode<
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 >(node: Workflo.PageNode.INode | ElementNode<Content>): node is ElementNode<Content> {
