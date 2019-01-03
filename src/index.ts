@@ -620,7 +620,7 @@ interface ICustomListMatchers {
   /**
    * Checks if all of the PageElements managed by PageElementList currently have the expected text.
    *
-   * @param text A single value or an array of values with the expected text(s).
+   * @param text A single value (used for all managed PageElements) or an array of values with the expected text(s).
    */
   toHaveText(text: string | string[]): boolean
   /**
@@ -632,7 +632,8 @@ interface ICustomListMatchers {
   /**
    * Checks if all of the PageElements managed by PageElementList currently contain the expected text.
    *
-   * @param text A single value or an array of values with the expected contained text(s).
+   * @param text A single value (used for all managed PageElements) or an array of values with the expected contained
+   * text(s).
    */
   toContainText(text: string | string[]): boolean
   /**
@@ -641,7 +642,8 @@ interface ICustomListMatchers {
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children elements.
    *
-   * @param directText A single value or an array of values with the expected direct text(s).
+   * @param directText A single value (used for all managed PageElements) or an array of values with the expected direct
+   * text(s).
    */
   toHaveDirectText(directText: string | string[]): boolean
   /**
@@ -659,7 +661,8 @@ interface ICustomListMatchers {
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children elements.
    *
-   * @param directText A single value or an array of values with the expected contained direct text(s).
+   * @param directText A single value (used for all managed PageElements) or an array of values with the expected
+   * contained direct text(s).
    */
   toContainDirectText(directText: string | string[]): boolean
 
@@ -695,7 +698,7 @@ interface ICustomListMatchers {
    * Checks if all of the PageElements managed by PageElementList eventually have the expected text within a specific
    * timeout.
    *
-   * @param text A single value or an array of values with the expected text(s).
+   * @param text A single value (used for all managed PageElements) or an array of values with the expected text(s).
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it.
    *
@@ -717,7 +720,8 @@ interface ICustomListMatchers {
    * Checks if all of the PageElements managed by PageElementList eventually contain the expected text within a specific
    * timeout.
    *
-   * @param text A single value or an array of values with the expected contained text(s).
+   * @param text A single value (used for all managed PageElements) or an array of values with the expected contained
+   * text(s).
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it.
    *
@@ -732,7 +736,8 @@ interface ICustomListMatchers {
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children elements.
    *
-   * @param directText A single value or an array of values with the expected direct text(s).
+   * @param directText A single value (used for all managed PageElements) or an array of values with the expected direct
+   * text(s).
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it.
    *
@@ -761,7 +766,8 @@ interface ICustomListMatchers {
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children elements.
    *
-   * @param directText A single value or an array of values with the expected contained direct text(s).
+   * @param directText A single value (used for all managed PageElements) or an array of values with the expected
+   * contained direct text(s).
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it.
    *
@@ -953,25 +959,190 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
  * @template Content the type of the content managed by the group
  */
 interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
-  toExist(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
-  toBeVisible(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
-  toBeEnabled(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup currently exist.
+   *
+   * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
+   * PageElementGroup.
+   */
+  toExist(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup are currently visible.
+   *
+   * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
+   * PageElementGroup.
+   */
+  toBeVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup are currently enabled.
+   *
+   * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
+   * PageElementGroup.
+   */
+  toBeEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by PageElementGroup currently have the expected text.
+   *
+   * @param text An object with the names of the corresponding PageNodes as keys and the expected texts as values.
+   */
   toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
-  toHaveAnyText(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by PageElementGroup currently have any text.
+   *
+   * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
+   * PageElementGroup.
+   */
+  toHaveAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by PageElementGroup currently contain the expected text.
+   *
+   * @param text An object with the names of the corresponding PageNodes as keys and the expected contained texts as
+   * values.
+   */
   toContainText(text: Workflo.PageNode.ExtractText<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by PageElementGroup currently have the expected direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children elements.
+   *
+   * @param directText An object with the names of the corresponding PageNodes as keys and the expected direct texts as
+   * values.
+   */
   toHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean
-  toHaveAnyDirectText(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by PageElementGroup currently have any direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children elements.
+   *
+   * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
+   * PageElementGroup.
+   */
+  toHaveAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by PageElementGroup currently contain the expected direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children elements.
+   *
+   * @param directText An object with the names of the corresponding PageNodes as keys and the expected contained direct
+   * texts as values.
+   */
   toContainDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean
 
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually exist within a specific
+   * timeout.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
+   * `timeout` within which the condition is expected to be met.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   */
   toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually become visible within a
+   * specific timeout.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
+   * `timeout` within which the condition is expected to be met.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   */
   toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually become enabled within a
+   * specific timeout.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
+   * `timeout` within which the condition is expected to be met.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   */
   toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have the expected text
+   * within a specific timeout.
+   *
+   * @param text An object with the names of the corresponding PageNodes as keys and the expected texts as values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have any text within a
+   * specific timeout.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements, the
+   * `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually contain the expected text
+   * within a specific timeout.
+   *
+   * @param text An object with the names of the corresponding PageNodes as keys and the expected contained texts as
+   * values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have the expected direct
+   * text within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children elements.
+   *
+   * @param directText An object with the names of the corresponding PageNodes as keys and the expected direct texts
+   * as values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval):
     boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have any direct text
+   * within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children elements.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageNodes, the
+   * `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of PageElementGroup eventually contain the expected
+   * direct text within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children elements.
+   *
+   * @param directText An object with the names of the corresponding PageNodes as keys and the expected contained
+   * direct texts as values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyContainDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval):
     boolean
 }
@@ -984,12 +1155,52 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
  * @template ValueType the type of the values handled by this elements' xxxValue functions
  */
 interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers {
+  /**
+   * Checks if the ValuePageElement currently has the specified value.
+   *
+   * @param value the value which the ValuePageElement is supposed to have
+   */
   toHaveValue(value: ValueType): boolean
+  /**
+   * Checks if the ValuePageElement currently has any value.
+   */
   toHaveAnyValue(): boolean
+  /**
+   * Checks if the ValuePageElement currently contains the specified value.
+   *
+   * @param value the value which the ValuePageElement is supposed to contain
+   */
   toContainValue(value: ValueType): boolean
 
+  /**
+   * Checks if the ValuePageElement eventually has the specified value within a specific timeout.
+   *
+   * @param value the value which the PageElement is supposed to have
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean
+  /**
+   * Checks if the ValuePageElement eventually has any value within a specific timeout.
+   *
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval): boolean
+  /**
+   * Checks if the ValuePageElement eventually contains the specified value within a specific timeout.
+   *
+   * @param value the value which the ValuePageElement is supposed to contain
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyContainValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean
 }
 
@@ -1001,12 +1212,61 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
  * @template ValueType the type of the values handled by the list's elements' xxxValue functions
  */
 interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementList currently have the expected value.
+   *
+   * @param value A single expected value (used for all managed PageElements) or an array of expected values.
+   */
   toHaveValue(value: ValueType | ValueType[]): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementList currently have any value.
+   *
+   * @param filterMask Can be used to skip the check for some or all managed ValuePageElements.
+   */
   toHaveAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementList currently contain the expected value.
+   *
+   * @param value A single expected contained value (used for all managed ValuePageElements) or an array of expected
+   * contained values.
+   */
   toContainValue(value: ValueType | ValueType[]): boolean
 
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementList eventually have the expected value within a
+   * specific timeout.
+   *
+   * @param value A single expected value (used for all managed ValuePageElements) or an array of expected values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementList eventually have any value within a specific
+   * timeout.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed ValuePageElements,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementList eventually have the expected value within a
+   * specific timeout.
+   *
+   * @param value A single expected contained value (used for all managed ValuePageElements) or an array of expected
+   * contained values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean
 }
 
@@ -1022,12 +1282,63 @@ interface ICustomValueMapMatchers<
   K extends string | number | symbol,
   ValueType
 > extends ICustomMapMatchers<K> {
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementMap currently have the expected value.
+   *
+   * @param value An object with the names of the corresponding ValuePageElements as keys and the expected values as
+   * values.
+   */
   toHaveValue(value: Partial<Record<K, ValueType>>): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementMap currently have any value.
+   *
+   * @param filterMask Can be used to skip the check for some or all managed ValuePageElements.
+   */
   toHaveAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementMap currently contain the expected value.
+   *
+   * @param value An object with the names of the corresponding ValuePageElements as keys and the expected contained
+   * values as values.
+   */
   toContainValue(value: Partial<Record<K, ValueType>>): boolean
 
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementMap eventually have the expected value within a
+   * specific timeout.
+   *
+   * @param value An object with the names of the corresponding ValuePageElements as keys and the expected values as
+   * values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementMap eventually have any value within a specific
+   * timeout.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed ValuePageElements,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  /**
+   * Checks if all of the ValuePageElements managed by ValuePageElementMap eventually contain the expected value within
+   * a specific timeout.
+   *
+   * @param value An object with the names of the corresponding ValuePageElements as keys and the expected contained
+   * values as values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean
 }
 
@@ -1040,12 +1351,62 @@ interface ICustomValueMapMatchers<
  */
 interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> extends ICustomGroupMatchers<Content>
 {
+  /**
+   * Checks if all of the PageNodes managed by ValuePageElementGroup currently have the expected value.
+   *
+   * @param value An object with the names of the corresponding PageNodes as keys and the expected values as values.
+   */
   toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by ValuePageElementGroup currently have any value.
+   *
+   * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
+   * ValuePageElementGroup.
+   */
   toHaveAnyValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes managed by ValuePageElementGroup currently contain the expected value.
+   *
+   * @param value An object with the names of the corresponding PageNodes as keys and the expected contained values as
+   * values.
+   */
   toContainValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
 
+  /**
+   * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually have the expected
+   * value within a specific timeout.
+   *
+   * @param value An object with the names of the corresponding PageNodes as keys and the expected values as values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean
+   /**
+   * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually have any value within
+   * a specific timeout.
+   *
+   * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageNodes, the
+   * `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  /**
+   * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually contain the expected
+   * value within a specific timeout.
+   *
+   * @param value An object with the names of the corresponding PageNodes as keys and the expected contained values as
+   * values.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean
 }
 
