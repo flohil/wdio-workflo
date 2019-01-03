@@ -529,7 +529,7 @@ export class PageElementCurrently<
 
   /**
    * Gets text that resides on the level directly below the selected page element.
-   * Does not include text of the page element's nested children elements.
+   * Does not include any text of the page element's nested children elements.
    *
    * Overwriting this function will affect the behaviour of the functions
    * getDirectText, hasDirectText, containsDirectText and hasDirectAnyText in PageElement base class and its
