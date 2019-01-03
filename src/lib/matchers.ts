@@ -133,15 +133,15 @@ export interface ICompareEventuallyElementFuncs<
   ListExpectedType = never,
   MapExpectedType = never,
   GroupExpectedType = never,
-  ElementOptsType = Workflo.IWDIOParamsInterval,
-  ListOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask,
-  MapOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>,
-  GroupOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
+  ElementOptsType = Workflo.ITimeoutInterval,
+  ListOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask,
+  MapOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>,
+  GroupOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
 > {
   element?: IMatcherArgs<
     elements.PageElement<stores.PageElementStore>,
     ElementExpectedType,
-    Workflo.IWDIOParamsInterval
+    Workflo.ITimeoutInterval
   >,
   list?: IMatcherArgs<
     elements.PageElementList<
@@ -150,7 +150,7 @@ export interface ICompareEventuallyElementFuncs<
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     ListExpectedType,
-    Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask
+    Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask
   >,
   map?: IMatcherArgs<
     elements.PageElementMap<
@@ -160,12 +160,12 @@ export interface ICompareEventuallyElementFuncs<
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     MapExpectedType,
-    Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>
+    Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>
   >,
   group?: IMatcherArgs<
     elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
     GroupExpectedType,
-    Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
+    Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
   >
 }
 
@@ -227,15 +227,15 @@ export interface ICompareEventuallyValueElementFuncs<
   ListValueType,
   MapValueType,
   GroupValueType,
-  Workflo.IWDIOParamsInterval,
-  Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask,
-  Workflo.IWDIOParamsInterval & Workflo.PageNode.MapFilterMask<string>,
-  Workflo.IWDIOParamsInterval & Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>
+  Workflo.ITimeoutInterval,
+  Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask,
+  Workflo.ITimeoutInterval & Workflo.PageNode.MapFilterMask<string>,
+  Workflo.ITimeoutInterval & Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>
 > {
   element?: IMatcherArgs<
     elements.ValuePageElement<stores.PageElementStore, ElementValueType>,
     ElementValueType,
-    Workflo.IWDIOParamsInterval
+    Workflo.ITimeoutInterval
   >,
   list?: IMatcherArgs<
     elements.ValuePageElementList<
@@ -245,7 +245,7 @@ export interface ICompareEventuallyValueElementFuncs<
       ElementValueType
     >,
     ListValueType,
-    Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask
+    Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask
   >,
   map?: IMatcherArgs<
     elements.ValuePageElementMap<
@@ -256,12 +256,12 @@ export interface ICompareEventuallyValueElementFuncs<
       ElementValueType
     >,
     MapValueType,
-    Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>
+    Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>
   >,
   group?: IMatcherArgs<
     elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>,
     GroupValueType,
-    Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
+    Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>
   >
 }
 
@@ -280,7 +280,7 @@ export interface ICompareListLengthElementFuncs extends ICompareElementFuncs<
 }
 
 export interface ICompareEventuallyListLengthElementFuncs extends ICompareEventuallyElementFuncs<
-  never, number, never, never, never, Workflo.IWDIOParamsInterval & {comparator?: Workflo.Comparator}, never, never
+  never, number, never, never, never, Workflo.ITimeoutInterval & {comparator?: Workflo.Comparator}, never, never
 > {
   list: IMatcherArgs<
     elements.PageElementList<
@@ -289,7 +289,7 @@ export interface ICompareEventuallyListLengthElementFuncs extends ICompareEventu
       elements.IPageElementOpts<stores.PageElementStore>
     >,
     number,
-    Workflo.IWDIOParamsInterval & {comparator?: Workflo.Comparator}
+    Workflo.ITimeoutInterval & {comparator?: Workflo.Comparator}
   >
 }
 
@@ -309,7 +309,7 @@ export interface ICompareEventuallyAttributeElementFuncs extends ICompareEventua
       stores.PageElementStore
     >,
     Workflo.IAttribute,
-    Workflo.IWDIOParamsInterval
+    Workflo.ITimeoutInterval
   >
 }
 
@@ -329,7 +329,7 @@ export interface ICompareEventuallyLocationElementFuncs extends ICompareEventual
       stores.PageElementStore
     >,
     Workflo.ICoordinates,
-    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ICoordinates>}
+    Workflo.ITimeoutInterval & {tolerances?: Partial<Workflo.ICoordinates>}
   >
 }
 
@@ -349,7 +349,7 @@ export interface ICompareEventuallySizeElementFuncs extends ICompareEventuallyEl
       stores.PageElementStore
     >,
     Workflo.ISize,
-    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ISize>}
+    Workflo.ITimeoutInterval & {tolerances?: Partial<Workflo.ISize>}
   >
 }
 
@@ -369,7 +369,7 @@ export interface ICompareEventuallyNumberWithToleranceElementFuncs extends IComp
       stores.PageElementStore
     >,
     number,
-    Workflo.IWDIOParamsInterval & {tolerance?: number}
+    Workflo.ITimeoutInterval & {tolerance?: number}
   >
 }
 
@@ -553,7 +553,7 @@ export function createMatcherWithoutExpected<
 }
 
 export function createEventuallyMatcher<
-  OptsType extends Object = Workflo.IWDIOParamsInterval
+  OptsType extends Object = Workflo.ITimeoutInterval
 >(
   compareFuncs: ICompareEventuallyElementFuncs
 ) {
@@ -561,7 +561,7 @@ export function createEventuallyMatcher<
 }
 
 export function createEventuallyMatcherWithoutExpected<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Workflo.ITimeoutInterval,
 >(
   compareFuncs: ICompareEventuallyElementFuncs,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group']
@@ -603,7 +603,7 @@ export function createTextMatcherWithoutExpected<
 }
 
 export function createEventuallyTextMatcher<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Workflo.ITimeoutInterval,
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
@@ -621,7 +621,7 @@ export function createEventuallyTextMatcher<
 }
 
 export function createEventuallyTextMatcherWithoutExpected<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Workflo.ITimeoutInterval,
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
@@ -673,7 +673,7 @@ export function createBooleanMatcherWithoutExpected<
 }
 
 export function createEventuallyBooleanMatcher<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Workflo.ITimeoutInterval,
   ElementExpectedType = boolean,
   ListExpectedType = boolean | boolean[],
   MapExpectedType = Record<string, boolean>,
@@ -691,7 +691,7 @@ export function createEventuallyBooleanMatcher<
 }
 
 export function createEventuallyBooleanMatcherWithoutExpected<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Workflo.ITimeoutInterval,
   ElementExpectedType = boolean,
   ListExpectedType = boolean | boolean[],
   MapExpectedType = Record<string, boolean>,
@@ -743,7 +743,7 @@ export function createValueMatcherWithoutExpected<
 }
 
 export function createEventuallyValueMatcher<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Workflo.ITimeoutInterval,
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
@@ -759,7 +759,7 @@ export function createEventuallyValueMatcher<
 }
 
 export function createEventuallyValueMatcherWithoutExpected<
-  OptsType extends Object = Workflo.IWDIOParamsInterval,
+  OptsType extends Object = Workflo.ITimeoutInterval,
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
@@ -795,7 +795,7 @@ export function createEventuallyListLengthMatcher<
   return createBaseMatcher<
     OptsType,
     ICompareEventuallyListLengthElementFuncs,
-    never, number, never, never, never, Workflo.IWDIOParamsInterval & {comparator?: Workflo.Comparator}, never, never
+    never, number, never, never, never, Workflo.ITimeoutInterval & {comparator?: Workflo.Comparator}, never, never
   >(compareFuncs, false)
 }
 
@@ -845,7 +845,7 @@ export function createEventuallyLocationMatcher<
     OptsType,
     ICompareEventuallyLocationElementFuncs,
     Workflo.ICoordinates, never, never, never,
-    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ICoordinates>}
+    Workflo.ITimeoutInterval & {tolerances?: Partial<Workflo.ICoordinates>}
   >(compareFuncs, false)
 }
 
@@ -871,7 +871,7 @@ export function createEventuallySizeMatcher<
     OptsType,
     ICompareEventuallySizeElementFuncs,
     Workflo.ISize, never, never, never,
-    Workflo.IWDIOParamsInterval & {tolerances?: Partial<Workflo.ISize>}
+    Workflo.ITimeoutInterval & {tolerances?: Partial<Workflo.ISize>}
   >(compareFuncs, false)
 }
 
@@ -897,7 +897,7 @@ export function createEventuallyNumberWithToleranceMatcher<
     OptsType,
     ICompareEventuallyNumberWithToleranceElementFuncs,
     number, never, never, never,
-    Workflo.IWDIOParamsInterval & {tolerance?: number}
+    Workflo.ITimeoutInterval & {tolerance?: number}
   >(compareFuncs, false)
 }
 

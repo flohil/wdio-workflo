@@ -51,44 +51,44 @@ interface ICustomElementMatchers {
   toHaveWidth(width: number, tolerance?: number): boolean,
   toHaveHeight(height: number, tolerance?: number): boolean,
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams): boolean
-  toEventuallyBeVisible(opts?: Workflo.IWDIOParams): boolean
-  toEventuallyBeEnabled(opts?: Workflo.IWDIOParams): boolean
-  toEventuallyBeSelected(opts?: Workflo.IWDIOParams): boolean
-  toEventuallyBeChecked(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyHTML(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyClass(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyId(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyName(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout): boolean
+  toEventuallyBeSelected(opts?: Workflo.ITimeout): boolean
+  toEventuallyBeChecked(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveText(text: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainText(text: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyHTML(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyClass(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveId(id: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyId(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainId(id: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveName(name: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyName(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainName(name: string, opts?: Workflo.ITimeoutInterval): boolean
   toEventuallyHaveLocation(
     coordinates: Workflo.ICoordinates,
-    opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.IWDIOParamsInterval
+    opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval
   ): boolean
-  toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
   toEventuallyHaveSize(
     size: Workflo.ISize,
-    opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.IWDIOParamsInterval
+    opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.ITimeoutInterval
   ): boolean
-  toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean,
-  toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean,
+  toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -99,7 +99,7 @@ interface ICustomElementMatchers {
 interface ICustomListMatchers {
   toBeEmpty(): boolean
   toHaveLength(length: number, opts?: Workflo.Comparator): boolean
-  toEventuallyBeEmpty(opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyBeEmpty(opts?: Workflo.ITimeoutInterval): boolean
   toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
 
   toExist(filterMask?: boolean): boolean
@@ -112,15 +112,15 @@ interface ICustomListMatchers {
   toHaveAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean
   toContainDirectText(text: string | string[]): boolean
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams & {filterMask?: boolean}): boolean
-  toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean
-  toEventuallyBeEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean
-  toEventuallyHaveText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean
-  toEventuallyContainText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveDirectText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean
-  toEventuallyContainDirectText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout & {filterMask?: boolean}): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyHaveText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyContainText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveDirectText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyContainDirectText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -141,15 +141,15 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
   toHaveAnyDirectText(opts?: Workflo.PageNode.MapFilterMask<K>): boolean
   toContainDirectText(text: Partial<Record<K, string>>): boolean
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean
-  toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean
-  toEventuallyBeEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>): boolean
-  toEventuallyHaveText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
-  toEventuallyContainText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveDirectText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
-  toEventuallyContainDirectText(text:Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyHaveText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyContainText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveDirectText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyContainDirectText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -170,15 +170,15 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
   toHaveAnyDirectText(opts?: Workflo.PageNode.GroupFilterMask<Content>): boolean
   toContainDirectText(text: Workflo.PageNode.ExtractText<Content>): boolean
 
-  toEventuallyExist(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean
-  toEventuallyBeVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean
-  toEventuallyBeEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>): boolean
-  toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
-  toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveDirectText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
-  toEventuallyContainDirectText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveDirectText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyContainDirectText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -193,9 +193,9 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
   toHaveAnyValue(): boolean
   toContainValue(value: ValueType): boolean
 
-  toEventuallyHaveValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyContainValue(value: ValueType, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -210,9 +210,9 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
   toHaveAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean
   toContainValue(value: ValueType | ValueType[]): boolean
 
-  toEventuallyHaveValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean
-  toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -231,9 +231,9 @@ interface ICustomValueMapMatchers<
   toHaveAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
   toContainValue(value: Partial<Record<K, ValueType>>): boolean
 
-  toEventuallyHaveValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
-  toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -249,9 +249,9 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
   toHaveAnyValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
   toContainValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
 
-  toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
-  toEventuallyHaveAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
-  toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): boolean
+  toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean
 }
 
 /**
@@ -623,73 +623,181 @@ declare global {
     }
 
     /**
-     * 
+     * This interface is used in the parameters of `scrollTo` and `click` actions of PageElement.
+     * It allows you to scroll a PageElement that resides inside a scrollable container into view.
      */
     interface IScrollParams {
+      /**
+       * The XPath selector of the scroll container.
+       * If undefined, the closest scrollable parent container is determined automatically.
+       */
       containerSelector?: string,
+      /**
+       * The directions for which scrolling should be performed.
+       * Set values to true to enable scrolling into the given direction.
+       */
       directions: {
         x?: boolean,
         y?: boolean
       },
+      /**
+       * Offsets that will be added to the final scroll position of the scrolled container.
+       */
       offsets?: {
         x?: number,
         y?: number
       },
-      padding?: {
-        x?: number,
-        y?: number
-      },
+      /**
+       * If no containerSelector is set explicitly, and therefore the scroll container is determined automatically,
+       * setting this property to true will also detect scroll containers whose overflow property is set to "hidden".
+       * Otherwise, scroll containers with an overflow property set to "hidden" will be ignored.
+       */
       closestContainerIncludesHidden?: boolean
     }
 
+    /**
+     * Allows you to build an recursively nested object whose values are of type Type.
+     */
     interface IRecObj<Type> {
       [key: string] : Type | IRecObj<Type>
     }
 
-    interface IWDIOParams {
+    /**
+     * This interface is used to describe parameters passed to functions which periodically check for a certain
+     * condition to be met until a timeout is reached (primarily `wait` and `eventually`).
+     */
+    interface ITimeout {
+      /**
+       * A timeout in milliseconds.
+       */
       timeout?: number,
     }
 
-    interface IWDIOParamsInterval {
-      timeout?: number,
+    /**
+     * This interface is used to describe parameters passed to functions which periodically check for a certain
+     * condition to be met until a timeout is reached (primarily `wait` and `eventually`). The checks are performed in
+     * the defined interval.
+     */
+    interface ITimeoutInterval extends ITimeout {
+      /**
+       * An interval in milliseconds.
+       */
       interval?: number
     }
 
-    interface IWDIOParamsReverse extends IWDIOParams {
-      reverse?: boolean,
+    /**
+     * This interface is used to describe parameters passed to functions which check for a certain
+     * condition to be met.
+     *
+     * It allows to set a reverse flag which, if set to true, will check for the condition NOT to be met instead.
+     */
+    interface IReverse {
+      /**
+       * Set this flag to true to check for a condition NOT to be met.
+       */
+      reverse?: boolean
     }
 
-    interface IWDIOParamsReverseInterval extends IWDIOParamsInterval {
-      reverse?: boolean,
-    }
+    /**
+     * This interface is used to describe parameters passed to functions which periodically check for a certain
+     * condition to be met until a timeout is reached (primarily `wait` and `eventually`).
+     *
+     * It allows to set a reverse flag which, if set to true, will check for the condition NOT to be met instead.
+     */
+    interface ITimeoutReverse extends ITimeout, IReverse {}
 
-    interface IAnyAttribute {
+    /**
+     * This interface is used to describe parameters passed to functions which periodically check for a certain
+     * condition to be met until a timeout is reached (primarily `wait` and `eventually`). The checks are performed in
+     * the defined interval.
+     *
+     * It allows to set a reverse flag which, if set to true, will check for the condition NOT to be met instead.
+     */
+    interface ITimeoutReverseInterval extends ITimeoutInterval, ITimeoutReverse {}
+
+    /**
+     * Used for the attribute parameter in the PageElement functions `hasAttribute` and `containsAttribute`
+     * and their respective expectation matcher functions.
+     */
+    interface IAttribute {
+      /**
+       * The name of an HTML element's attribute.
+       */
       name: string,
-    }
-
-    interface IAttribute extends IAnyAttribute {
+      /**
+       * The value of an HTML element's attribute.
+       */
       value: string
     }
 
+    /**
+     * Used when converting PageNodes to JSON.
+     */
     interface IElementJSON {
+      /**
+       * Type of the PageNode (usually its constructor name)
+       */
       pageNodeType: string,
+      /**
+       * An id to identify the PageNode.
+       */
       nodeId: string
     }
 
+    /**
+     * Used to get and set the last differences (actual vs expected values) of a PageNode's state check functions
+     * (eg. hasText, hasAnyText, containsText) in order to use them in expectation matcher error messages.
+     */
     interface ILastDiff {
+      /**
+       * Retries the last differences of a PageNode's check state functions.
+       *
+       * Intended for framework-internal usage only.
+       */
       __lastDiff: IDiff
+      /**
+       * Sets the last differences of a PageNode's check state functions.
+       *
+       * Intended for framework-internal usage only.
+       */
       __setLastDiff: (diff: IDiff) => void
     }
 
+    /**
+     * Used to store the last differences (actual vs expected values) of PageNodes' state check functions
+     * (eg. hasText, hasAnyText, containsText) in a tree structure in order to use them in expectation matcher error 
+     * messages.
+     */
     interface IDiffTree {
       [key: string]: IDiff
     }
 
+    /**
+     * Used to store the last differences (actual vs expected values) of PageNode's state check functions
+     * (eg. hasText, hasAnyText, containsText) in order to use them in expectation matcher error
+     * messages.
+     */
     interface IDiff {
+      /**
+       * The constructor name of the PageNode.
+       */
       constructorName?: string,
+      /**
+       * The actual value of a state check function.
+       */
       actual?: string,
+      /**
+       * The expected value of a state check function.
+       */
       expected?: string,
+      /**
+       * The selector of the PageNode.
+       */
       selector?: string,
+      /**
+       * If the PageNode is a PageElementList, PageElementMap or a PageElementGroup,
+       * the diffs of the PageElement's handled by PageNode are stored in tree.
+       */
       tree?: IDiffTree
     }
 
@@ -708,45 +816,119 @@ declare global {
 
     namespace PageNode {
 
+      /**
+       * This interfaces describes common functionalities of all PageNodes.
+       */
       interface INode extends ILastDiff {
+        /**
+         * Returns the id of the PageNode.
+         *
+         * Intended for framework-internal usage only.
+         */
         __getNodeId(): string
+        /**
+         * Returns the default timeout that a PageNode uses if no other explicit timeout
+         * is passed to a function that operates with timeouts (eg. wait, eventually)
+         */
         getTimeout(): number
+        /**
+         * Returns a JSON representation of the PageNode.
+         */
         toJSON(): IElementJSON
 
+        /**
+         * All functions defined inside currently, when invoked, will instantly check if a condition is met and return
+         * false if the condition is not met.
+         */
         currently: {}
+        /**
+         * All functions defined inside wait, when invoked, will wait for a condition to be met and throw
+         * an error if the condition is never met within a specified timeout.
+         */
         wait: {}
+        /**
+         * All functions defined inside eventually, when invoked, will wait for a condition to be met and return
+         * false if the the condition is never met within a specified timeout.
+         */
         eventually: {}
       }
 
+      /**
+       * The content of a PageElementGroup must be an object whose keys are arbitrary names of the PageNodes defined
+       * within the content and whose values or the PageNodes themselves.
+       */
       type GroupContent = {[key: string] : Workflo.PageNode.INode}
 
+      /**
+       * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
+       * content. For a PageElement, the extract return value type will be `string`.
+       */
       type ExtractText<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getText']>> :
         never;
       }
 
+      /**
+       * Extracts the return value types of the `currently.getExists` functions of all PageNodes defined within a
+       * PageElementGroup's content.
+       */
       type ExtractExistsFilterMask<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayElement<ReturnType<T[P]['currently']['getExists']>> :
         never;
       }
 
+      /**
+       * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a 
+       * PageElementGroup's content. For a PageElement, the extract return value type will be `boolean`.
+       */
       type ExtractBoolean<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
         never;
       }
 
+      /**
+       * This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.
+       *
+       * IElementNode guarantees support of the following state retrieval functions:
+       *
+       * - getIsEnabled
+       * - getText
+       * - getDirectText
+       * - getHasText
+       * - getHasAnyText
+       * - getContainsText
+       * - getHasDirectText
+       * - getHasAnyDirectText
+       * - getContainsDirectText
+       *
+       * IElementNode guarantees support of the following state check functions:
+       *
+       * - exists
+       * - isVisible
+       * - isEnabled
+       * - hasText
+       * - hasAnyText
+       * - containsText
+       * - hasDirectText
+       * - hasAnyDirectText
+       * - containsDirectText
+       */
       interface IElementNode<TextType, BooleanType, FilterType = any>
         extends INode, IGetElement<TextType, BooleanType, FilterType>
       {
         currently: IGetElement<TextType, BooleanType, FilterType> &
-          ICheckElementCurrently<TextType, BooleanType, FilterType>
-        wait: IWaitElement<TextType, BooleanType, FilterType>
-        eventually: ICheckElementEventually<TextType, BooleanType, FilterType>
+          ICheckCurrently<TextType, BooleanType, FilterType>
+        wait: ICheckWait<TextType, BooleanType, FilterType>
+        eventually: ICheckEventually<TextType, BooleanType, FilterType>
       }
 
+      /**
+       * Used by IElementNode to describe state retrieval functions supported by PageElement, PageElementList, 
+       * PageElementMap and PageElementGroup.
+       */
       interface IGetElement<TextType, BooleanType, FilterType> {
         getIsEnabled(filterMask?: FilterType): BooleanType
         getText(filterMask?: FilterType): TextType
@@ -760,7 +942,11 @@ declare global {
         getContainsDirectText(text: TextType): BooleanType
       }
 
-      interface IWaitElement<TextType, BooleanType, FilterType, OptsType = IWDIOParamsReverseInterval> {
+      /**
+       * Used by IElementNode to describe wait state check functions supported by PageElement, PageElementList,
+       * PageElementMap and PageElementGroup.
+       */
+      interface ICheckWait<TextType, BooleanType, FilterType, OptsType = ITimeoutReverseInterval> {
         exists(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
         isVisible(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
         isEnabled(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
@@ -771,10 +957,14 @@ declare global {
         hasAnyDirectText(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
         containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
 
-        not: Omit<IWaitElement<TextType, BooleanType, FilterType, IWDIOParamsInterval>, 'not'>
+        not: Omit<ICheckWait<TextType, BooleanType, FilterType, ITimeoutInterval>, 'not'>
       }
 
-      interface ICheckElementCurrently<TextType, BooleanType, FilterType> {
+      /**
+       * Used by IElementNode to describe currently state check functions supported by PageElement, PageElementList,
+       * PageElementMap and PageElementGroup.
+       */
+      interface ICheckCurrently<TextType, BooleanType, FilterType> {
         getExists(filterMask?: FilterType): BooleanType
         getIsVisible(filterMask?: FilterType): BooleanType
         getIsEnabled(filterMask?: FilterType): BooleanType
@@ -789,53 +979,86 @@ declare global {
         containsDirectText(directText: TextType): boolean
 
         not: Omit<
-          ICheckElementCurrently<TextType, BooleanType, FilterType>,
+          ICheckCurrently<TextType, BooleanType, FilterType>,
           'not' | 'getExists' | 'getIsVisible' | 'getIsEnabled'
         >
       }
 
-      interface ICheckElementEventually<TextType, BooleanType, FilterType> {
-        exists(opts?: IWDIOParams & {filterMask?: FilterType}): boolean
-        isVisible(opts?: IWDIOParams & {filterMask?: FilterType}): boolean
-        isEnabled(opts?: IWDIOParams & {filterMask?: FilterType}): boolean
-        hasText(text: TextType, opts?: IWDIOParamsInterval): boolean
-        hasAnyText(opts?: IWDIOParamsInterval & {filterMask?: FilterType}): boolean
-        containsText(text: TextType, opts?: IWDIOParamsInterval): boolean
-        hasDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean
-        hasAnyDirectText(opts?: IWDIOParamsInterval & {filterMask?: FilterType}): boolean
-        containsDirectText(text: TextType, opts?: IWDIOParamsInterval): boolean
+      /**
+       * Used by IElementNode to describe eventually state check functions supported by PageElement, PageElementList,
+       * PageElementMap and PageElementGroup.
+       */
+      interface ICheckEventually<TextType, BooleanType, FilterType> {
+        exists(opts?: ITimeout & {filterMask?: FilterType}): boolean
+        isVisible(opts?: ITimeout & {filterMask?: FilterType}): boolean
+        isEnabled(opts?: ITimeout & {filterMask?: FilterType}): boolean
+        hasText(text: TextType, opts?: ITimeoutInterval): boolean
+        hasAnyText(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean
+        containsText(text: TextType, opts?: ITimeoutInterval): boolean
+        hasDirectText(text: TextType, opts?: ITimeoutInterval): boolean
+        hasAnyDirectText(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean
+        containsDirectText(text: TextType, opts?: ITimeoutInterval): boolean
 
-        not: Omit<ICheckElementEventually<TextType, BooleanType, FilterType>, 'not'>
+        not: Omit<ICheckEventually<TextType, BooleanType, FilterType>, 'not'>
       }
 
+      /**
+       * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
+       * ValuePageElementGroup's content.
+       */
       type ExtractValue<T extends {[key: string]: INode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
           TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
       }
 
+      /**
+       * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
+       * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
+       */
       type ExtractValueBoolean<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getHasValue']>> :
         never;
       }
 
+      /**
+       * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
+       * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
+       */
       type ExtractValueBooleanWN<T extends {[key in keyof T]: INode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
         WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> :
         never;
       }
 
+      /**
+       * This interface is implemented by ValuePageElement, ValuePageElementList, ValuePageElementMap and 
+       * ValuePageElementGroup.
+       *
+       * IValueElementNode guarantees support of the following state retrieval functions:
+       *
+       * - getValue
+       * - getHasValue
+       * - getHasAnyValue
+       * - getContainsValue
+       *
+       * IValueElementNode guarantees support of the following state check functions:
+       *
+       * - hasValue
+       * - hasAnyValue
+       * - containsValue
+       */
       interface IValueElementNode<GetType, FilterType = any, SetType = GetType>
-      extends INode, IValueElement<GetType, FilterType>
+      extends INode, IGetValueElement<GetType, FilterType>
       {
-        currently: IValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>
-        wait: IWaitValue<GetType, FilterType>
+        currently: IGetValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>
+        wait: ICheckWaitValue<GetType, FilterType>
         eventually: ICheckValueEventually<GetType, FilterType>
 
         setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>
       }
 
-      interface IValueElement<GetType, FilterType> {
+      interface IGetValueElement<GetType, FilterType> {
         getValue(filterMask?: FilterType): GetType
 
         getHasValue(value: GetType): FilterType
@@ -843,14 +1066,22 @@ declare global {
         getContainsValue(value: GetType): FilterType
       }
 
-      interface IWaitValue<ValueType, FilterType, OptsType = IWDIOParamsReverseInterval> {
+      /**
+       * Used by IElementNode to describe wait state check functions supported by ValuePageElement,
+       * ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
+       */
+      interface ICheckWaitValue<ValueType, FilterType, OptsType = ITimeoutReverseInterval> {
         hasValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>
         hasAnyValue(opts?: OptsType & {filterMask?: FilterType}): IValueElementNode<ValueType, FilterType>
         containsValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>
 
-        not: Omit<IWaitValue<ValueType, FilterType, IWDIOParamsInterval>, 'not'>
+        not: Omit<ICheckWaitValue<ValueType, FilterType, ITimeoutInterval>, 'not'>
       }
 
+      /**
+       * Used by IElementNode to describe currently state check functions supported by ValuePageElement,
+       * ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
+       */
       interface ICheckValueCurrently<ValueType, FilterType> {
         hasValue(value: ValueType): boolean
         hasAnyValue(filterMask?: FilterType): boolean
@@ -859,45 +1090,83 @@ declare global {
         not: Omit<ICheckValueCurrently<ValueType, FilterType>, 'not'>
       }
 
+      /**
+       * Used by IElementNode to describe eventually state check functions supported by ValuePageElement,
+       * ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
+       */
       interface ICheckValueEventually<ValueType, FilterType> {
-        hasValue(value: ValueType, opts?: IWDIOParamsInterval): boolean
-        hasAnyValue(opts?: IWDIOParamsInterval & {filterMask?: FilterType}): boolean
-        containsValue(value: ValueType, opts?: IWDIOParamsInterval): boolean
+        hasValue(value: ValueType, opts?: ITimeoutInterval): boolean
+        hasAnyValue(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean
+        containsValue(value: ValueType, opts?: ITimeoutInterval): boolean
 
         not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>
       }
 
+      /**
+       * Type of the filter mask used by functions of PageElementList.
+       */
       type ListFilterMask = boolean | boolean[]
 
+      /**
+       * Type of the filter mask used by functions of PageElementMap.
+       */
       type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>
 
+      /**
+       * Type of the filter mask used by functions of PageElementGroup.
+       */
       type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>
 
+      /**
+       * Type of the filter mask used by exist functions of PageElementGroup.
+       */
       type GroupFilterMaskExists<Content extends GroupContent> =
         Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
 
+      /**
+       * Type of the filter mask used by functions of ValuePageElementGroup.
+       */
       type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
 
+      /**
+       * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
+       * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
+       */
       type ValueGroupFilterMaskWN<Content extends GroupContent> = WithoutNever<
         Partial<Workflo.PageNode.ExtractValueBooleanWN<Content>>
       >
 
+      /**
+       * Used to merge a filter mask into the opts parameter of a PageElementList's functions.
+       */
       interface IListFilterMask {
         filterMask?: ListFilterMask
       }
 
+      /**
+       * Used to merge a filter mask into the opts parameter of a PageElementMap's functions.
+       */
       interface IMapFilterMask<K extends string | number | symbol> {
         filterMask?: Partial<Record<K, boolean>>
       }
 
+      /**
+       * Used to merge a filter mask into the opts parameter of a PageElementGroup's functions.
+       */
       interface IGroupFilterMask<Content extends GroupContent>{
         filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>
       }
 
+      /**
+       * Used to merge a filter mask into the opts parameter of a PageElementGroup's exist functions.
+       */
       interface IGroupFilterMaskExists<Content extends GroupContent> {
         filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
       }
 
+      /**
+       * Used to merge a filter mask into the opts parameter of a ValuePageElementGroup's functions.
+       */
       interface IValueGroupFilterMask<Content extends GroupContent> {
         filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
       }
@@ -1305,7 +1574,7 @@ declare global {
        */
       bugs?: string[],
       /**
-       * The severity of a Story describes how severe the implications of one or more acceptance criteria of the Story 
+       * The severity of a Story describes how severe the implications of one or more acceptance criteria of the Story
        * not being fulfilled correctly would be. It defaults to 'normal'.
        */
       severity?: Workflo.Severity

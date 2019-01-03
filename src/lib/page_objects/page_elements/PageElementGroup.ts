@@ -551,7 +551,7 @@ export class PageElementGroupWait<
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeWait<Store, GroupType> {
 
-  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
+  exists(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait<
@@ -561,7 +561,7 @@ export class PageElementGroupWait<
     )
   }
 
-  isVisible(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait<ElementNode<Content>> (
@@ -569,7 +569,7 @@ export class PageElementGroupWait<
     )
   }
 
-  isEnabled(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait<ElementNode<Content>> (
@@ -577,13 +577,13 @@ export class PageElementGroupWait<
     )
   }
 
-  hasText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  hasText(text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.wait.hasText(expected, opts), text
     )
   }
 
-  hasAnyText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait<ElementNode<Content>> (
@@ -591,19 +591,19 @@ export class PageElementGroupWait<
     )
   }
 
-  containsText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  containsText(text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.wait.containsText(expected, opts), text
     )
   }
 
-  hasDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  hasDirectText(directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.wait.hasDirectText(expected, opts), directText
     )
   }
 
-  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait<ElementNode<Content>> (
@@ -614,7 +614,7 @@ export class PageElementGroupWait<
     )
   }
 
-  containsDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  containsDirectText(directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.wait.containsDirectText(expected, opts), directText
     )
@@ -622,7 +622,7 @@ export class PageElementGroupWait<
 
   get not() {
     return {
-      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
+      exists: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait<
@@ -631,7 +631,7 @@ export class PageElementGroupWait<
           isIElementNode, ({node, filter}) => node.wait.not.exists({filterMask: filter, ...otherOpts}), filterMask, true
         )
       },
-      isVisible: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait<ElementNode<Content>> (
@@ -641,7 +641,7 @@ export class PageElementGroupWait<
           true
         )
       },
-      isEnabled: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait<ElementNode<Content>> (
@@ -651,12 +651,12 @@ export class PageElementGroupWait<
           true
         )
       },
-      hasText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      hasText: (text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.wait.not.hasText(expected, opts), text
         )
       },
-      hasAnyText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait<ElementNode<Content>> (
@@ -666,17 +666,17 @@ export class PageElementGroupWait<
           true
         )
       },
-      containsText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      containsText: (text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.wait.not.containsText(expected, opts), text
         )
       },
-      hasDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      hasDirectText: (directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.wait.not.hasDirectText(expected, opts), directText
         )
       },
-      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait<ElementNode<Content>> (
@@ -686,7 +686,7 @@ export class PageElementGroupWait<
           true
         )
       },
-      containsDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      containsDirectText: (directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.wait.not.containsDirectText(expected, opts), directText
         )
@@ -701,7 +701,7 @@ export class PageElementGroupEventually<
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeEventually<Store, GroupType> {
 
-  exists(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
+  exists(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck<
@@ -711,7 +711,7 @@ export class PageElementGroupEventually<
     )
   }
 
-  isVisible(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -722,7 +722,7 @@ export class PageElementGroupEventually<
     )
   }
 
-  isEnabled(opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -733,13 +733,13 @@ export class PageElementGroupEventually<
     )
   }
 
-  hasText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  hasText(text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.eventually.hasText(expected, opts), text
     )
   }
 
-  hasAnyText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -750,19 +750,19 @@ export class PageElementGroupEventually<
     )
   }
 
-  containsText(text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  containsText(text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.eventually.containsText(expected, opts), text
     )
   }
 
-  hasDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  hasDirectText(directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.eventually.hasDirectText(expected, opts), directText
     )
   }
 
-  hasAnyDirectText(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
+  hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -773,7 +773,7 @@ export class PageElementGroupEventually<
     )
   }
 
-  containsDirectText(directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) {
+  containsDirectText(directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
       isIElementNode, ({node, expected}) => node.eventually.containsDirectText(expected, opts), directText
     )
@@ -781,7 +781,7 @@ export class PageElementGroupEventually<
 
   get not() {
     return {
-      exists: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
+      exists: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachCheck<
@@ -793,7 +793,7 @@ export class PageElementGroupEventually<
           true
         )
       },
-      isVisible: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -803,7 +803,7 @@ export class PageElementGroupEventually<
           true
         )
       },
-      isEnabled: (opts: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -813,12 +813,12 @@ export class PageElementGroupEventually<
           true
         )
       },
-      hasText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      hasText: (text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.eventually.not.hasText(expected, opts), text
         )
       },
-      hasAnyText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -828,17 +828,17 @@ export class PageElementGroupEventually<
           true
         )
       },
-      containsText: (text: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      containsText: (text: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.eventually.not.containsText(expected, opts), text
         )
       },
-      hasDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      hasDirectText: (directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.eventually.not.hasDirectText(expected, opts), directText
         )
       },
-      hasAnyDirectText: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
+      hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
@@ -848,7 +848,7 @@ export class PageElementGroupEventually<
           true
         )
       },
-      containsDirectText: (directText: ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => {
+      containsDirectText: (directText: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
           isIElementNode, ({node, expected}) => node.eventually.not.containsDirectText(expected, opts), directText
         )

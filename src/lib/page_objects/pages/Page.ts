@@ -1,7 +1,7 @@
 import { PageElementStore } from '../stores'
 import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL, stores } from '../'
 
-export interface IPageArgs<Store extends PageElementStore> extends Workflo.IWDIOParamsInterval {
+export interface IPageArgs<Store extends PageElementStore> extends Workflo.ITimeoutInterval {
   store: Store
 }
 
@@ -57,7 +57,7 @@ class PageWait<
   }
 
   protected _wait(
-    conditionFunc: () => boolean, conditionMessage: string, opts: Workflo.IWDIOParamsInterval = Object.create(null)
+    conditionFunc: () => boolean, conditionMessage: string, opts: Workflo.ITimeoutInterval = Object.create(null)
   ) {
     const timeout = opts.timeout || this._page.getTimeout()
     const interval = opts.interval || this._page.getInterval()
@@ -91,11 +91,11 @@ class PageWait<
     return this._page
   }
 
-  isOpen(opts: IsOpenOpts & Workflo.IWDIOParamsInterval = Object.create(null)) {
+  isOpen(opts: IsOpenOpts & Workflo.ITimeoutInterval = Object.create(null)) {
     return this._wait(() => this._page.isOpen(opts), " to be open", opts)
   }
 
-  isClosed(opts: IsClosedOpts & Workflo.IWDIOParamsInterval = Object.create(null)) {
+  isClosed(opts: IsClosedOpts & Workflo.ITimeoutInterval = Object.create(null)) {
     return this._wait(() => this._page.isClosed(opts), " to be closed", opts)
   }
 }
@@ -114,7 +114,7 @@ class PageEventually<
   }
 
   protected _eventually(
-    conditionFunc: () => boolean, opts: Workflo.IWDIOParamsInterval = Object.create(null)
+    conditionFunc: () => boolean, opts: Workflo.ITimeoutInterval = Object.create(null)
   ) {
     const timeout = opts.timeout || this._page.getTimeout()
     const interval = opts.interval || this._page.getInterval()
@@ -142,11 +142,11 @@ class PageEventually<
     }
   }
 
-  isOpen(opts: IsOpenOpts & Workflo.IWDIOParamsInterval = Object.create(null)) {
+  isOpen(opts: IsOpenOpts & Workflo.ITimeoutInterval = Object.create(null)) {
     return this._eventually(() => this._page.isOpen(opts), opts)
   }
 
-  isClosed(opts: IsClosedOpts & Workflo.IWDIOParamsInterval = Object.create(null)) {
+  isClosed(opts: IsClosedOpts & Workflo.ITimeoutInterval = Object.create(null)) {
     return this._eventually(() => this._page.isClosed(opts), opts)
   }
 }

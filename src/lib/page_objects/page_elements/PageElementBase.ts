@@ -7,7 +7,7 @@ import { DEFAULT_INTERVAL } from '..'
 
 export interface IPageElementBaseOpts<
   Store extends PageElementStore,
-> extends IPageNodeOpts<Store>, Workflo.IWDIOParamsInterval {
+> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
   waitType?: Workflo.WaitType
 }
 
@@ -161,9 +161,9 @@ export abstract class PageElementBaseWait<
 
   protected _waitWdioCheckFunc(
     checkTypeStr: string,
-    conditionFunc: (opts: Workflo.IWDIOParamsReverseInterval) => boolean,
+    conditionFunc: (opts: Workflo.ITimeoutReverseInterval) => boolean,
     { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() }:
-      Workflo.IWDIOParamsReverseInterval = {}
+      Workflo.ITimeoutReverseInterval = {}
   ) {
     const reverseStr = (reverse) ? ' not' : ''
 
@@ -175,9 +175,9 @@ export abstract class PageElementBaseWait<
   protected _waitProperty<T>(
     name: string,
     conditionType: 'has' | 'contains' | 'any' | 'within',
-    conditionFunc: (opts: Workflo.IWDIOParamsReverseInterval, value?: T) => boolean,
+    conditionFunc: (opts: Workflo.ITimeoutReverseInterval, value?: T) => boolean,
     { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() }:
-      Workflo.IWDIOParamsReverseInterval = {},
+      Workflo.ITimeoutReverseInterval = {},
     value?: T
   ) {
     const reverseStr = (reverse) ? ' not' : ''
@@ -213,7 +213,7 @@ export abstract class PageElementBaseWait<
     name: string,
     value: T,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.IWDIOParamsReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval
   ) {
     return this._waitProperty(name, 'within', conditionFunc, opts, value)
   }
@@ -222,7 +222,7 @@ export abstract class PageElementBaseWait<
     name: string,
     value: T,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.IWDIOParamsReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval
   ) {
     return this._waitProperty(name, 'has', conditionFunc, opts, value)
   }
@@ -230,7 +230,7 @@ export abstract class PageElementBaseWait<
   protected _waitHasAnyProperty<T>(
     name: string,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.IWDIOParamsReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval
   ) {
     return this._waitProperty(name, 'any', conditionFunc, opts)
   }
@@ -239,12 +239,12 @@ export abstract class PageElementBaseWait<
     name: string,
     value: T,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.IWDIOParamsReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval
   ) {
     return this._waitProperty(name, 'contains', conditionFunc, opts, value)
   }
 
-  protected _makeReverseParams(opts: Workflo.IWDIOParamsInterval = {}): Workflo.IWDIOParamsReverseInterval {
+  protected _makeReverseParams(opts: Workflo.ITimeoutInterval = {}): Workflo.ITimeoutReverseInterval {
     return {timeout: opts.timeout, reverse: true, interval: opts.interval}
   }
 }

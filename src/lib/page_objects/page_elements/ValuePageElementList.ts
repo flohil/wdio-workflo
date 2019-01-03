@@ -161,13 +161,13 @@ class ValuePageElementListWait<
   ValueType
 > extends PageElementListWait<Store, PageElementType, PageElementOptions, ListType> {
 
-  hasValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) {
+  hasValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
       this._node.all, (element, expected) => element.wait.hasValue(expected, opts), value
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) {
+  hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait(
@@ -175,7 +175,7 @@ class ValuePageElementListWait<
     )
   }
 
-  containsValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) {
+  containsValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
       this._node.all, (element, expected) => element.wait.containsValue(expected, opts), value
     )
@@ -183,19 +183,19 @@ class ValuePageElementListWait<
 
   get not() {
     return {...super.not,
-      hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) => {
+      hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
           this._node.all, (element, expected) => element.wait.not.hasValue(expected, opts), value
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) => {
+      hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait(
           this._node.all, (element) => element.wait.not.hasAnyValue(otherOpts), filterMask, true
         )
       },
-      containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) => {
+      containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
           this._node.all, (element, expected) => element.wait.not.containsValue(expected, opts), value
         )
@@ -214,13 +214,13 @@ class ValuePageElementListEventually<
 
   // CHECK STATE
 
-  hasValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) {
+  hasValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
       this._node.all, (element, expected) => element.eventually.hasValue(expected, opts), value
     )
   }
 
-  hasAnyValue(opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) {
+  hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck(
@@ -228,7 +228,7 @@ class ValuePageElementListEventually<
     )
   }
 
-  containsValue(value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) {
+  containsValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
       this._node.all, (element, expected) => element.eventually.containsValue(expected, opts), value
     )
@@ -236,19 +236,19 @@ class ValuePageElementListEventually<
 
   get not() {
     return {...super.not,
-      hasValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) => {
+      hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
           this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value
         )
       },
-      hasAnyValue: (opts: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask = {}) => {
+      hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachCheck(
           this._node.all, (element) => element.eventually.not.hasAnyValue(otherOpts), filterMask, true
         )
       },
-      containsValue: (value: ValueType | ValueType[], opts?: Workflo.IWDIOParamsInterval) => {
+      containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
           this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value
         )
