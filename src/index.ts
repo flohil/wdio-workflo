@@ -207,126 +207,130 @@ interface ICustomElementMatchers {
   /**
    * Checks if the PageElement eventually exists within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met.
-   * If no timeout is specified, the PageElement's default timeout is used.
+   * @param opts Includes the `timeout` within which the condition is expected to be met.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
    */
   toEventuallyExist(opts?: Workflo.ITimeout): boolean
   /**
    * Checks if the PageElement eventually becomes visible within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met.
-   * If no timeout is specified, the PageElement's default timeout is used.
+   * @param opts Includes the `timeout` within which the condition is expected to be met.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
    */
   toEventuallyBeVisible(opts?: Workflo.ITimeout): boolean
   /**
    * Checks if the PageElement eventually becomes enabled within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met.
-   * If no timeout is specified, the PageElement's default timeout is used.
+   * @param opts Includes the `timeout` within which the condition is expected to be met.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
    */
   toEventuallyBeEnabled(opts?: Workflo.ITimeout): boolean
   /**
    * Checks if the PageElement eventually becomes selected within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met.
-   * If no timeout is specified, the PageElement's default timeout is used.
+   * @param opts Includes the `timeout` within which the condition is expected to be met.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
    */
   toEventuallyBeSelected(opts?: Workflo.ITimeout): boolean
   /**
    * Checks if the PageElement eventually becomes checked within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met and the
-   * interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to 
+   * check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyBeChecked(opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually has the specified text within a specific timeout.
    *
    * @param text the text which the PageElement is supposed to have
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveText(text: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually has any text within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually contains the specified text within a specific timeout.
    *
    * @param text the text which the PageElement is supposed to contain
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyContainText(text: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually has the specified HTML within a specific timeout.
    *
    * @param html the HTML which the PageElement is supposed to have
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually has any HTML within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAnyHTML(opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually contains the specified HTML within a specific timeout.
    *
    * @param html the HTML which the PageElement is supposed to contain
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyContainHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually has the specified direct text within a specific timeout.
    *
    * @param directText the direct text which the PageElement is supposed to have
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually has any direct text within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the PageElement eventually contains the specified direct text within a specific timeout.
    *
    * @param directText the direct text which the PageElement is supposed to contain
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyContainDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
@@ -334,10 +338,10 @@ interface ICustomElementMatchers {
    *
    * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
    * is expected to have
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean
   /**
@@ -346,10 +350,10 @@ interface ICustomElementMatchers {
    *
    * @param attributeName the specified attributeName of an HTML attribute of PageElement which is supposed to have any
    * value
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
@@ -358,10 +362,10 @@ interface ICustomElementMatchers {
    *
    * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
    * is expected to contain
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean
   /**
@@ -369,19 +373,19 @@ interface ICustomElementMatchers {
    * timeout.
    *
    * @param className the className which the HTML attribute 'class' of PageElement is supposed to have
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the HTML attribute 'class' of PageElement eventually has any className within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAnyClass(opts?: Workflo.ITimeoutInterval): boolean
   /**
@@ -389,58 +393,59 @@ interface ICustomElementMatchers {
    * timeout.
    *
    * @param className the className which the HTML attribute 'class' of PageElement is supposed to contain
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyContainClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the HTML attribute 'id' of PageElement eventually has the specified value within a specific timeout.
    *
    * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveId(id: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the HTML attribute 'id' of PageElement eventually has any value within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAnyId(opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the HTML attribute 'id' of PageElement eventually contains the specified value within a specific timeout.
    *
    * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyContainId(id: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the HTML attribute 'name' of PageElement eventually has the specified value within a specific timeout.
    *
    * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveName(name: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
    * Checks if the HTML attribute 'name' of PageElement eventually has any value within a specific timeout.
    *
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to 
+   * check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveAnyName(opts?: Workflo.ITimeoutInterval): boolean
   /**
@@ -448,10 +453,11 @@ interface ICustomElementMatchers {
    * timeout.
    *
    * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
-   * @param opts Includes the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to 
+   * check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyContainName(name: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
@@ -459,11 +465,11 @@ interface ICustomElementMatchers {
    * if its location deviates no more than the specified tolerances from the specified coordinates.
    *
    * @param coordinates the expected coordinates of PageElement
-   * @param opts Includes the tolerances used to calculate the maximal allowed deviations from the expected coordinates,
-   * the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveLocation(
     coordinates: Workflo.ICoordinates,
@@ -474,11 +480,11 @@ interface ICustomElementMatchers {
    * or if PageElement's x-location deviates no more than the specified tolerance from the specified x-location.
    *
    * @param x the expected x-location of PageElement
-   * @param opts Includes the tolerance used to calculate the maximal allowed deviation from the expected x-location,
-   * the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected x-location,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
   /**
@@ -486,11 +492,11 @@ interface ICustomElementMatchers {
    * or if PageElement's y-location deviates no more than the specified tolerance from the specified y-location.
    *
    * @param y the expected y-location of PageElement
-   * @param opts Includes the tolerance used to calculate the maximal allowed deviation from the expected y-location,
-   * the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected y-location,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
   /**
@@ -498,11 +504,11 @@ interface ICustomElementMatchers {
    * PageElement's size deviates no more than the specified tolerances from the specified size.
    *
    * @param size the expected size of PageElement
-   * @param opts Includes the tolerances used to calculate the maximal allowed deviations from the expected size,
-   * the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected size,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveSize(
     size: Workflo.ISize,
@@ -513,11 +519,11 @@ interface ICustomElementMatchers {
    * PageElement's width deviates no more than the specified tolerance from the specified width.
    *
    * @param width the expected width of PageElement
-   * @param opts Includes the tolerance used to calculate the maximal allowed deviation from the expected width,
-   * the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected width,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean,
   /**
@@ -525,11 +531,11 @@ interface ICustomElementMatchers {
    * PageElement's height deviates no more than the specified tolerance from the specified height.
    *
    * @param height the expected height of PageElement
-   * @param opts Includes the tolerance used to calculate the maximal allowed deviation from the expected height,
-   * the timeout within which the condition is expected to be met and the interval used to check it.
+   * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected height,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
-   * If no timeout is specified, the PageElement's default timeout is used.
-   * If no interval is specified, the PageElement's default interval is used.
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
    */
   toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
 }
@@ -540,12 +546,52 @@ interface ICustomElementMatchers {
  * It can be used for both positive and negative (.not) comparisons.
  */
 interface ICustomListMatchers {
+  /**
+   * Checks if the PageElementList currently is empty.
+   */
   toBeEmpty(): boolean
+  /**
+   * Checks if the length of the PageElementList currently has/not has/is less or is greater than the specified length.
+   *
+   * @param length the specified length which is compared to PageElementList's actual length
+   * @param opts A comparator that defines how to compare the actual length and the expected length of the list
+   * (equals, not equals, less than, greater than).
+   */
   toHaveLength(length: number, opts?: Workflo.Comparator): boolean
+  /**
+   * Checks if the PageElementList eventually is empty within a specific timeout.
+   *
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyBeEmpty(opts?: Workflo.ITimeoutInterval): boolean
+  /**
+   * Checks if the length of the PageElementList eventually has/not has/is less or is greater than the specified length
+   * within a specific timeout.
+   *
+   * @param length the specified length which is compared to PageElementList's actual length
+   * @param opts Includes the `comparator` that defines how to compare the actual length and the expected length of the
+   * list (equals, not equals, less than, greater than), the `timeout` within which the condition is expected to be met
+   * and the `interval` used to check it.
+   *
+   * If no `timeout` is specified, the PageNode's default timeout is used.
+   * If no `interval` is specified, the PageNode's default interval is used.
+   */
   toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
 
+  /**
+   * Checks if at least one of PageElements managed by PageElementList currently exists.
+   *
+   * @param filterMask If set to false, the existence check will be skipped and the matcher will return true.
+   */
   toExist(filterMask?: boolean): boolean
+  /**
+   * Checks if the PageElements managed by PageElementList are currently visible.
+   *
+   * @param filterMask If set to false, the existence check will be skipped and the matcher will return true.
+   */
   toBeVisible(filterMask?: Workflo.PageNode.ListFilterMask): boolean
   toBeEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean
   toHaveText(text: string | string[]): boolean
@@ -1547,6 +1593,31 @@ declare global {
 
       /**
        * Type of the filter mask used by functions of PageElementList.
+       *
+       * A filter mask can be passed as a parameter to functions of PageElementList that invoke a 'child' function on
+       * each of the PageElements managed by the list. The filter mask can be used to skip the invocation of some or all
+       * of these 'child' functions.
+       *
+       * If used as a parameter of a state check function in PageElementList's `currently` or `eventually`:
+       *
+       * - A value of `false` will skip the 'child' function invocation for all managed PageElements and always return
+       * true.
+       * - An array element that is set to `false` will skip the 'child' function invocation of the managed PageElement
+       * that resides at the corresponding array index of PageElementList's `all` array.
+       *
+       * If used as a parameter of a `wait` function:
+       *
+       * - A value of `false` will skip the 'child' function invocation for all managed PageElements.
+       * - An array element that is set to `false` will skip the 'child' function invocation of the managed PageElement
+       * that resides at the corresponding array index of PageElementList's `all` array.
+       *
+       * If used as a parameter of a state retrieval function:
+       *
+       * - A value of `false` will skip the 'child' function invocation for all managed PageElements and return an empty
+       * array.
+       * - An array element that is set to `false` will skip the 'child' function invocation of the managed PageElement
+       * that resides at the corresponding array index of PageElementList's `all` array and therefore not include
+       * its result value in the results array of PageElementList's state retrieval function.
        */
       type ListFilterMask = boolean | boolean[]
 
