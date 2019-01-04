@@ -1,10 +1,25 @@
 import { PageElementStore } from '../stores'
 import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL, stores } from '../'
 
-export interface IPageArgs<Store extends PageElementStore> extends Workflo.ITimeoutInterval {
+/**
+ * Defines the opts parameter passed to the constructor of Page.
+ */
+export interface IPageOpts<Store extends PageElementStore> extends Workflo.ITimeoutInterval {
+  /**
+   * An instance of PageElementStore which can be used to retrieve/create PageNodes via Page
+   */
   store: Store
 }
 
+/**
+ * This class is supposed to be used as base class for all Pages.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`, `wait.isOpen` and
+ * `eventually.isOpen`
+ * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`, `wait.isClosed` and
+ * `eventually.isClosed`
+ */
 export abstract class Page<
   Store extends PageElementStore,
   IsOpenOpts = {},
@@ -17,11 +32,11 @@ export abstract class Page<
   wait: PageWait<Store, this, IsOpenOpts, IsClosedOpts>
   eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>
 
-  constructor(args: IPageArgs<Store>) {
-    this._store = args.store
+  constructor(opts: IPageOpts<Store>) {
+    this._store = opts.store
 
-    this._timeout = args.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
-    this._interval = args.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL
+    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
+    this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL
 
     this.wait = new PageWait(this)
     this.eventually = new PageEventually(this)

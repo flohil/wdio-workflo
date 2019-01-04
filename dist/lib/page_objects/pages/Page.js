@@ -1,11 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("../");
+/**
+ * This class is supposed to be used as base class for all Pages.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`, `wait.isOpen` and
+ * `eventually.isOpen`
+ * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`, `wait.isClosed` and
+ * `eventually.isClosed`
+ */
 class Page {
-    constructor(args) {
-        this._store = args.store;
-        this._timeout = args.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
-        this._interval = args.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
+    constructor(opts) {
+        this._store = opts.store;
+        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
+        this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
         this.wait = new PageWait(this);
         this.eventually = new PageEventually(this);
     }

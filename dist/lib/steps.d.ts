@@ -12,6 +12,24 @@ export declare function defineSteps<StepDefinitions extends Workflo.StepDefiniti
  * @returns the proxified steps
  */
 export declare function proxifySteps(stepDefinitions: Workflo.StepDefinitions): Record<string, (params?: Workflo.IStepParams<any, any> | Workflo.IOptStepParams<any, any>) => Workflo.IStep>;
+/**
+   * Steps consist of a description and an execution function.
+   * The execution function performs changes to the state of the tested application and the description briefly summarizes
+   * these changes in natural language.
+   *
+   * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
+   * execution function:
+   *
+   * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+   * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
+   * with key's value retrieved from the step arguments object).
+   *
+   * Step callbacks can be used to query and validate the state of the tested application right after step execution.
+   * A step callback will be passed the return value of the execution function as its first parameter.
+   *
+   * @template ArgsType defines the type of the step arguments passed to the execution function.
+   * @template ReturnType defines the return type of the execution function.
+   */
 export declare class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep {
     __description: string;
     __execute: (prefix: string) => void;
