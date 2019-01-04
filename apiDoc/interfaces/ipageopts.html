@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IPageArgs | wdio-workflo</title>
+	<title>IPageOpts | wdio-workflo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,23 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="ipageargs.html">IPageArgs</a>
+					<a href="ipageopts.html">IPageOpts</a>
 				</li>
 			</ul>
-			<h1>Interface IPageArgs&lt;Store&gt;</h1>
+			<h1>Interface IPageOpts&lt;Store&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Defines the opts parameter passed to the constructor of Page.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -79,7 +86,7 @@
 						<a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">IPageArgs</span>
+								<span class="target">IPageOpts</span>
 							</li>
 						</ul>
 					</li>
@@ -92,9 +99,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipageargs.html#interval" class="tsd-kind-icon">interval</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ipageargs.html#store" class="tsd-kind-icon">store</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipageargs.html#timeout" class="tsd-kind-icon">timeout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipageopts.html#interval" class="tsd-kind-icon">interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ipageopts.html#store" class="tsd-kind-icon">store</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipageopts.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
 						</section>
 					</div>
@@ -109,7 +116,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeoutinterval.html">ITimeoutInterval</a>.<a href="__global.workflo.itimeoutinterval.html#interval">interval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/index.ts#L1848">index.ts:1848</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L1848">index.ts:1848</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -124,9 +131,14 @@
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Store</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/lib/page_objects/pages/Page.ts#L5">lib/page_objects/pages/Page.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L11">lib/page_objects/pages/Page.ts:11</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>an instance of PageElementStore which can be used to retrieve/create PageNodes via Page</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="timeout" class="tsd-anchor"></a>
@@ -135,7 +147,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeout.html">ITimeout</a>.<a href="__global.workflo.itimeout.html#timeout">timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/index.ts#L1836">index.ts:1836</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L1836">index.ts:1836</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -159,16 +171,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="ipageargs.html" class="tsd-kind-icon">IPage<wbr>Args</a>
+						<a href="ipageopts.html" class="tsd-kind-icon">IPage<wbr>Opts</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="ipageargs.html#interval" class="tsd-kind-icon">interval</a>
+								<a href="ipageopts.html#interval" class="tsd-kind-icon">interval</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="ipageargs.html#store" class="tsd-kind-icon">store</a>
+								<a href="ipageopts.html#store" class="tsd-kind-icon">store</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="ipageargs.html#timeout" class="tsd-kind-icon">timeout</a>
+								<a href="ipageopts.html#timeout" class="tsd-kind-icon">timeout</a>
 							</li>
 						</ul>
 					</li>

@@ -90,10 +90,29 @@ export function proxifySteps(stepDefinitions: Workflo.StepDefinitions) {
    */
 export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep {
 
+  /**
+   * A step's description.
+   *
+   * Intended for framework-internal usage only.
+   */
   public __description: string
+  /**
+   * The execute function of the Step.
+   *
+   * Intended for framework-internal usage only.
+   *
+   * @param prefix the prefix of a nested step (titles of its "upper" steps in the nesting hierarchy)
+   */
   public __execute: (prefix: string) => void
 
+  /**
+   * Indicates whether browser object was already patched to create stacktrace which can be displayed on selenium errors
+   * and show the line number in the testcase where the error occurred.
+   */
   private static _patchedBrowser = false
+  /**
+   * Defines for which functions of the browser object no patched stacktrace should be created.
+   */
   private static _commandBlacklist = {
     'isExecuted': true,
     'isMultiremote': true,

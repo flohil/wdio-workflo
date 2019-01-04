@@ -64,6 +64,27 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This class defines all <code>wait</code> functions of Page.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>PageType type of the Page for which PageWait defines all <code>wait</code> functions</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>IsOpenOpts type of the opts parameter passed to the functions <code>isOpen</code></p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>IsClosedOpts type of the opts parameter passed to the functions <code>isClosed</code></p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -99,9 +120,16 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-not-exported"><a href="pagewait.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
+						<section class="tsd-index-section tsd-is-private-protected tsd-is-not-exported">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-not-exported"><a href="pagewait.html#_page" class="tsd-kind-icon">_page</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-not-exported"><a href="pagewait.html#_wait" class="tsd-kind-icon">_wait</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="pagewait.html#isclosed" class="tsd-kind-icon">is<wbr>Closed</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="pagewait.html#isopen" class="tsd-kind-icon">is<wbr>Open</a></li>
 							</ul>
@@ -121,13 +149,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/lib/page_objects/pages/Page.ts#L53">lib/page_objects/pages/Page.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L101">lib/page_objects/pages/Page.ts:101</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>PageWait defines all <code>wait</code> functions of Page.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>page: <span class="tsd-signature-type">PageType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the Page for which PageWait defines all <code>wait</code> functions</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pagewait.html" class="tsd-signature-type">PageWait</a></h4>
@@ -135,8 +173,62 @@
 					</ul>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected tsd-is-not-exported">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-not-exported">
+					<a name="_page" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _page</h3>
+					<div class="tsd-signature tsd-kind-icon">_page<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageType</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L101">lib/page_objects/pages/Page.ts:101</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-not-exported">
+					<a name="_wait" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _wait</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">_wait<span class="tsd-signature-symbol">(</span>conditionFunc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, conditionMessage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageType</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L112">lib/page_objects/pages/Page.ts:112</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>conditionFunc: <span class="tsd-signature-type">function</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>conditionMessage: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;Object.create(null)</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageType</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 					<a name="isclosed" class="tsd-anchor"></a>
 					<h3>is<wbr>Closed</h3>
@@ -147,16 +239,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/lib/page_objects/pages/Page.ts#L98">lib/page_objects/pages/Page.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L165">lib/page_objects/pages/Page.ts:165</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for Page to become closed and throws an error of the Page does not become closed within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">IsClosedOpts</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;Object.create(null)</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the options defined in IsClosedOpts, the timeout within which the Page must become closed and
+										the interval used to check for this condition.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageType</span></h4>
+							<p>an instance of Page</p>
 						</li>
 					</ul>
 				</section>
@@ -170,16 +272,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/lib/page_objects/pages/Page.ts#L94">lib/page_objects/pages/Page.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L154">lib/page_objects/pages/Page.ts:154</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for Page to become open and throws an error of the Page does not become open within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">IsOpenOpts</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;Object.create(null)</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the options defined in IsOpenOpts, the timeout within which the Page must become open and
+										the interval used to check for this condition.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageType</span></h4>
+							<p>an instance of Page</p>
 						</li>
 					</ul>
 				</section>
@@ -202,6 +314,12 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-not-exported">
 								<a href="pagewait.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-not-exported">
+								<a href="pagewait.html#_page" class="tsd-kind-icon">_page</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-not-exported">
+								<a href="pagewait.html#_wait" class="tsd-kind-icon">_wait</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 								<a href="pagewait.html#isclosed" class="tsd-kind-icon">is<wbr>Closed</a>

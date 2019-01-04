@@ -20,13 +20,22 @@ export interface IPageElementGroupOpts<
 }
 
 // Encapsulates arbitrary page element types.
-// Exposes its content directly as its own members,
-// so each key in content can be accessed via dot notation.
+// Returns all nodes passed in content as its own members,
+// so that they can be accessed via dot notation.
 //
-// Naming Convention:
-// - all content members must start with a lower case letter
-// - all group functions must start with upper case letter
-// - all private members of group must start with _
+// content is a collection of node getters, where each node
+// can be any form of page element defined in PageElementStore.
+//
+// walkerClass is optional and allows for passing a
+// custom group walker class.
+// Per default, ElementGroupWalker will be used as a walker.
+//
+// functions is an optional array of group function names that
+// defines the functions this group is supposed to support.
+//
+// id is a string to uniquely identify a group.
+// If id is not defined, the group instance will be identified
+// by a concatenated string of its node key names and types.
 export class PageElementGroup<
   Store extends PageElementStore,
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
