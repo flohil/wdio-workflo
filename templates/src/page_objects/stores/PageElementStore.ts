@@ -1,9 +1,19 @@
 import { pageObjects as core } from 'wdio-workflo'
 import { IPageElementOpts, PageElement } from '../page_elements';
 
-/**
+ /**
  * This class can be used to extend or customize the functionality provided by wdio-workflo's PageElementStore class.
  * It is supposed to serve as the base PageElementStore class throughout your project.
+ *
+ * PageElementStore serves as a facade for the creation and retrieval of Page Nodes.
+ * Basically, Page Nodes should only be created or retrieved via PageElementStores and never by "manually" invoking
+ * their constructor functions.
+ *
+ * PageElementStore caches instances of Page Nodes with the same type and selector to avoid creating new Page Nodes on each
+ * invocation of a retrieval function.
+ *
+ * Furthermore, PageElementStore allows you to define default opts parameters and provide pre-configured variants of
+ * PageNodes (eg. Element and ExistElement).
  */
 export class PageElementStore extends core.stores.PageElementStore {
 

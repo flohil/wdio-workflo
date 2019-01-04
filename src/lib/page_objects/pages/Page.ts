@@ -3,6 +3,8 @@ import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL, stores } from '../'
 
 /**
  * Defines the opts parameter passed to the constructor of Page.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
  */
 export interface IPageOpts<Store extends PageElementStore> extends Workflo.ITimeoutInterval {
   /**

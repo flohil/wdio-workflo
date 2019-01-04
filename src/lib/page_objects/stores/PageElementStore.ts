@@ -25,9 +25,6 @@ export type CloneFunc<Type> = (
   selector?: Workflo.XPath,
 ) => Type
 
-// Stores singleton instances of page elements to avoid creating new
-// elements on each invocation of a page element.
-
 /**
  * PageElementStore serves as a facade for the creation and retrieval of Page Nodes.
  * Basically, Page Nodes should only be created or retrieved via PageElementStores and never by "manually" invoking

@@ -2,6 +2,9 @@ import { PageElementStore } from '../stores'
 import _ = require('lodash');
 import { DEFAULT_TIMEOUT } from '..'
 
+/**
+ * Defines the opts parameter passed to the constructor function of PageNode.
+ */
 export interface IPageNodeOpts<Store extends PageElementStore> extends Workflo.ITimeout {
   store: Store
 }
