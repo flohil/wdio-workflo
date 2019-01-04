@@ -64,6 +64,20 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>XPathBuilder allows for the creation of XPath expressions using modification functions instead of writing the whole
+						XPath as a raw string.</p>
+					</div>
+					<p>Using XPathBuilder can help to reduce the number of errors originating from a wrong usage of the sometimes quite
+					complex syntax of XPath.</p>
+					<p>XPathBuilder implements the singleton pattern - therefore there can only ever by one instance of XPathBuilder
+					which internally stores the currently constructed XPath expression.</p>
+					<p>To build and retrieve a raw XPath string from the currently constructed XPath expression, call <code>build</code> on
+					XPathBuilder&#39;s singleton instance.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -135,12 +149,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L26">lib/page_objects/builders/XPathBuilder.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L51">lib/page_objects/builders/XPathBuilder.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Appends plain xPath to current selector.</p>
+									<p>Appends a plain XPath string to the currently constructed XPath expression.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -148,10 +162,12 @@
 								<li>
 									<h5>appendedXPath: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>the appended plan XPath string</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -159,25 +175,40 @@
 					<a name="attribute" class="tsd-anchor"></a>
 					<h3>attribute</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">attribute<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">attribute<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L94">lib/page_objects/builders/XPathBuilder.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L172">lib/page_objects/builders/XPathBuilder.ts:172</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute whose name equals
+									the passed name.</p>
+								</div>
+								<p>Optionally, if also passing a value, the currently constructed XPath expression is further restricted to elements
+								which have an HTML attribute whose name equals the passed name and whose value equals the passed value.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name of the HTML attribute used to restrict the currently constructed XPath expression</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a value that needs to equal the value of the HTML attribute with the passed <code>name</code></p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -185,25 +216,40 @@
 					<a name="attributecontains" class="tsd-anchor"></a>
 					<h3>attribute<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">attribute<wbr>Contains<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">attribute<wbr>Contains<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L114">lib/page_objects/builders/XPathBuilder.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L214">lib/page_objects/builders/XPathBuilder.ts:214</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute whose name contains
+									the passed name.</p>
+								</div>
+								<p>Optionally, if also passing a value, the currently constructed XPath expression is further restricted to elements
+								which have an HTML attribute whose name equals the passed name and whose value contains the passed value.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name of the HTML attribute used to restrict the currently constructed XPath expression</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a value that needs to be contained by the value of the HTML attribute with the passed <code>name</code></p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -217,10 +263,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L234">lib/page_objects/builders/XPathBuilder.ts:234</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L535">lib/page_objects/builders/XPathBuilder.ts:535</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Call this function to build and retrieve a raw XPath string from the currently constructed XPath expression.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>the built XPath string</p>
 						</li>
 					</ul>
 				</section>
@@ -234,10 +286,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L188">lib/page_objects/builders/XPathBuilder.ts:188</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L448">lib/page_objects/builders/XPathBuilder.ts:448</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;checked&#39;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -251,25 +309,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L38">lib/page_objects/builders/XPathBuilder.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L65">lib/page_objects/builders/XPathBuilder.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Appends childSelector to current selector in order to select a child element.</p>
+									<p>Appends a childSelector to the currently constructed XPath expression in order to select a child element.</p>
 								</div>
-								<p>After executing .child, the selected child element will become the new
-								&quot;target&quot; for all other xpath modifier functions like .id, .class ...</p>
+								<p>After executing <code>.child</code>, the selected child element becomes the new &quot;target&quot; for all future XPath modification
+								functions (eg. <code>.id</code>, <code>.class</code>) until the currently constructed XPath expression is reset.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>childSelector: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>a selector appended to the currently constructed XPath expression to select a child element</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -277,22 +337,34 @@
 					<a name="class" class="tsd-anchor"></a>
 					<h3>class</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">class<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">class<span class="tsd-signature-symbol">(</span>className<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L140">lib/page_objects/builders/XPathBuilder.ts:140</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L297">lib/page_objects/builders/XPathBuilder.ts:297</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;class&#39;.</p>
+								</div>
+								<p>Optionally, if also passing a class name, the currently constructed XPath expression is further restricted to
+								elements which have an HTML &#39;class&#39; attribute with a value that equals the passed class name.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> className: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a class name which must equal the value of the HTML &#39;class&#39; attribute of elements selected by the
+										currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -300,22 +372,33 @@
 					<a name="classcontains" class="tsd-anchor"></a>
 					<h3>class<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">class<wbr>Contains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">class<wbr>Contains<span class="tsd-signature-symbol">(</span>className<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L148">lib/page_objects/builders/XPathBuilder.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L323">lib/page_objects/builders/XPathBuilder.ts:323</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;class&#39; with a
+									value that contains the passed class name.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>className: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a class name which must be contained by the value of the HTML &#39;class&#39; attribute of elements
+										selected by the currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -329,23 +412,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L47">lib/page_objects/builders/XPathBuilder.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L80">lib/page_objects/builders/XPathBuilder.ts:80</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Adds plain xPath constraint to current selector.</p>
+									<p>Adds a plain XPath constraint (eg. &#39;[./span]&#39;) to the currently constructed XPath expression.</p>
 								</div>
+								<p>Optionally, a builderFunc can be used to apply XPath modification functions to the constraint selector instead of
+									the &quot;outer&quot; selector. To do so, builderFunc is passed an XPathBuilder instance configured to use
+								<code>constraintSelector</code> as a new root for the currently constructed XPath expression.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>constraintSelector: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a plain XPath constraint appended to the currently constructed XPath expression</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> builderFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>optional -&gt; can be used to apply XPathSelector API to constraintSelector</p>
+										<p>can be used to apply XPath modification functions to <code>constraintSelector</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -368,6 +457,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -381,10 +471,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L196">lib/page_objects/builders/XPathBuilder.ts:196</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L467">lib/page_objects/builders/XPathBuilder.ts:467</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;disabled&#39;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -398,24 +494,30 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L69">lib/page_objects/builders/XPathBuilder.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L108">lib/page_objects/builders/XPathBuilder.ts:108</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Restrict current selector to elements which have at least one child defined by childSelector.
-									Calls constraint() but adds a &#39;.&#39; to the beginning of the constraint to select only child elements.</p>
+									<p>Restricts the currently constructed XPath expression to elements which have at least one child element that matches
+									the passed childSelector.</p>
 								</div>
+								<p>Optionally, a builderFunc can be used to apply XPath modification functions to the child selector instead of
+									the &quot;outer&quot; selector. To do so, builderFunc is passed an XPathBuilder instance configured to use the <code>childSelector</code>
+								as a new root for the currently constructed XPath expression.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>childSelector: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a plain XPath constraint appended to the currently constructed XPath expression</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> builderFunc: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>optional -&gt; can be used to apply XPathSelector API to childrenSelector</p>
+										<p>can be used to apply XPath modification functions to <code>childSelector</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -438,6 +540,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -445,22 +548,34 @@
 					<a name="id" class="tsd-anchor"></a>
 					<h3>id</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L124">lib/page_objects/builders/XPathBuilder.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L245">lib/page_objects/builders/XPathBuilder.ts:245</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;id&#39;.</p>
+								</div>
+								<p>Optionally, if also passing an id, the currently constructed XPath expression is further restricted to elements
+								which have an HTML &#39;id&#39; attribute with a value that equals the passed id.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an id which must equal the value of the HTML &#39;id&#39; attribute of elements selected by the currently
+										constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -468,22 +583,33 @@
 					<a name="idcontains" class="tsd-anchor"></a>
 					<h3>id<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">id<wbr>Contains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">id<wbr>Contains<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L132">lib/page_objects/builders/XPathBuilder.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L271">lib/page_objects/builders/XPathBuilder.ts:271</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;id&#39; with a
+									value that contains the passed id.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an id which must be contained by the value of the HTML &#39;id&#39; attribute of elements selected by the
+										currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -497,24 +623,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L227">lib/page_objects/builders/XPathBuilder.ts:227</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L523">lib/page_objects/builders/XPathBuilder.ts:523</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Finds element by index of accurence accross all &quot;levels/depths&quot; of the DOM.</p>
+									<p>Restricts the currently constructed XPath expression to elements which have the passed index (starting at 1).</p>
 								</div>
+								<p>The passed index defines an element&#39;s index of occurrence across all &quot;levels/depths&quot; of the DOM.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>index: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>starts at 1</p>
+										<p>an element&#39;s index of occurrence on a all &quot;levels/depths&quot; of the DOM - STARTS AT 1</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -522,32 +650,34 @@
 					<a name="levelindex" class="tsd-anchor"></a>
 					<h3>level<wbr>Index</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">level<wbr>Index<span class="tsd-signature-symbol">(</span>index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">level<wbr>Index<span class="tsd-signature-symbol">(</span>levelIndex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L218">lib/page_objects/builders/XPathBuilder.ts:218</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L510">lib/page_objects/builders/XPathBuilder.ts:510</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Finds element by index of accurence on a single &quot;level&quot; of the DOM.
-										Eg.: If index === 3, there must be 3 siblings on the same DOM level that match the current selector
-									and the third one will be selected.</p>
+									<p>Restricts the currently constructed XPath expression to elements which have the passed level index (starting at 1).</p>
 								</div>
+								<p>The passed level index defines an element&#39;s index of occurrence on a single &quot;level&quot; of the DOM.
+									Eg.: If index === 3, there must be 3 siblings on the same DOM level that match the current selector
+								and the third one will be selected.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>index: <span class="tsd-signature-type">number</span></h5>
+									<h5>levelIndex: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>starts at 1</p>
+										<p>an element&#39;s index of occurrence on a single &quot;level&quot; of the DOM - STARTS AT 1</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -555,22 +685,34 @@
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L156">lib/page_objects/builders/XPathBuilder.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L349">lib/page_objects/builders/XPathBuilder.ts:349</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;name&#39;.</p>
+								</div>
+								<p>Optionally, if also passing a name, the currently constructed XPath expression is further restricted to elements
+								which have an HTML &#39;name&#39; attribute with a value that equals the passed name.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a name which must equal the value of the HTML &#39;name&#39; attribute of elements selected by the currently
+										constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -578,22 +720,33 @@
 					<a name="namecontains" class="tsd-anchor"></a>
 					<h3>name<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">name<wbr>Contains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">name<wbr>Contains<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L164">lib/page_objects/builders/XPathBuilder.ts:164</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L375">lib/page_objects/builders/XPathBuilder.ts:375</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;name&#39; with a
+									value that contains the passed name.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a name which must be contained by the value of the HTML &#39;name&#39; attribute of elements selected by the
+										currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -601,25 +754,40 @@
 					<a name="notattribute" class="tsd-anchor"></a>
 					<h3>not<wbr>Attribute</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Attribute<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Attribute<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L104">lib/page_objects/builders/XPathBuilder.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L193">lib/page_objects/builders/XPathBuilder.ts:193</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute whose name
+									equals the passed name.</p>
+								</div>
+								<p>Optionally, if also passing a value, the currently constructed XPath expression is restricted to elements
+								which have an HTML attribute whose name equals the passed name and whose value does not equal the passed value.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name of the HTML attribute used to restrict the currently constructed XPath expression</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a value that must not equal the value of the HTML attribute with the passed <code>name</code></p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -627,25 +795,40 @@
 					<a name="notattributecontains" class="tsd-anchor"></a>
 					<h3>not<wbr>Attribute<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Attribute<wbr>Contains<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Attribute<wbr>Contains<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L119">lib/page_objects/builders/XPathBuilder.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L230">lib/page_objects/builders/XPathBuilder.ts:230</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute whose name does not
+									contain the passed name.</p>
+								</div>
+								<p>Optionally, if also passing a value, the currently constructed XPath expression is restricted to elements
+								which have an HTML attribute whose name equals the passed name and whose value does not contain the passed value.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name of the HTML attribute used to restrict the currently constructed XPath expression</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a value that must not be contained by the value of the HTML attribute with the passed <code>name</code></p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -659,10 +842,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L192">lib/page_objects/builders/XPathBuilder.ts:192</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L458">lib/page_objects/builders/XPathBuilder.ts:458</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called
+									&#39;checked&#39;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -670,22 +860,34 @@
 					<a name="notclass" class="tsd-anchor"></a>
 					<h3>not<wbr>Class</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Class<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Class<span class="tsd-signature-symbol">(</span>className<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L144">lib/page_objects/builders/XPathBuilder.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L311">lib/page_objects/builders/XPathBuilder.ts:311</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called &#39;class&#39;.</p>
+								</div>
+								<p>Optionally, if also passing a class name, the currently constructed XPath expression is restricted to elements
+								which have an HTML &#39;class&#39; attribute with a value that does not equal the passed class name.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> className: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a class name which must not equal the value of the HTML &#39;class&#39; attribute of elements selected by
+										the currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -693,22 +895,33 @@
 					<a name="notclasscontains" class="tsd-anchor"></a>
 					<h3>not<wbr>Class<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Class<wbr>Contains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Class<wbr>Contains<span class="tsd-signature-symbol">(</span>className<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L152">lib/page_objects/builders/XPathBuilder.ts:152</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L335">lib/page_objects/builders/XPathBuilder.ts:335</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;class&#39; with a
+									value that does not contain the passed class name.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>className: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a class name which must not be contained by the value of the HTML &#39;class&#39; attribute of elements
+										selected by the currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -722,10 +935,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L200">lib/page_objects/builders/XPathBuilder.ts:200</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L477">lib/page_objects/builders/XPathBuilder.ts:477</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called
+									&#39;disabled&#39;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -733,22 +953,34 @@
 					<a name="notid" class="tsd-anchor"></a>
 					<h3>not<wbr>Id</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Id<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Id<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L128">lib/page_objects/builders/XPathBuilder.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L259">lib/page_objects/builders/XPathBuilder.ts:259</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called &#39;id&#39;.</p>
+								</div>
+								<p>Optionally, if also passing an id, the currently constructed XPath expression is restricted to elements which
+								have an HTML &#39;id&#39; attribute with a value that does not equal the passed id.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an id which must not equal the value of the HTML &#39;id&#39; attribute of elements selected by the currently
+										constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -756,22 +988,33 @@
 					<a name="notidcontains" class="tsd-anchor"></a>
 					<h3>not<wbr>IdContains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>IdContains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>IdContains<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L136">lib/page_objects/builders/XPathBuilder.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L283">lib/page_objects/builders/XPathBuilder.ts:283</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;id&#39; with a
+									value that does not contain the passed id.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an id which must not be contained by the value of the HTML &#39;id&#39; attribute of elements selected by the
+										currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -779,22 +1022,34 @@
 					<a name="notname" class="tsd-anchor"></a>
 					<h3>not<wbr>Name</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Name<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Name<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L160">lib/page_objects/builders/XPathBuilder.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L363">lib/page_objects/builders/XPathBuilder.ts:363</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called &#39;name&#39;.</p>
+								</div>
+								<p>Optionally, if also passing a name, the currently constructed XPath expression is restricted to elements
+								which have an HTML &#39;name&#39; attribute with a value that does not equal the passed name.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a name which must not equal the value of the HTML &#39;name&#39; attribute of elements selected by the currently
+										constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -802,22 +1057,33 @@
 					<a name="notnamecontains" class="tsd-anchor"></a>
 					<h3>not<wbr>Name<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Name<wbr>Contains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Name<wbr>Contains<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L168">lib/page_objects/builders/XPathBuilder.ts:168</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L387">lib/page_objects/builders/XPathBuilder.ts:387</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;name&#39; with a
+									value that does not contain the passed name.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a name which must not be contained by the value of the HTML &#39;name&#39; attribute of elements selected by
+										the currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -831,10 +1097,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L208">lib/page_objects/builders/XPathBuilder.ts:208</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L496">lib/page_objects/builders/XPathBuilder.ts:496</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called
+									&#39;selected&#39;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -848,16 +1121,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L79">lib/page_objects/builders/XPathBuilder.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L132">lib/page_objects/builders/XPathBuilder.ts:132</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements whose text does not equal the passed text.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a text which must not equal the text of elements selected by the currently constructed XPath
+										expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -871,16 +1154,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L89">lib/page_objects/builders/XPathBuilder.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L156">lib/page_objects/builders/XPathBuilder.ts:156</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements whose text does not contain the passed text.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a text which must not be contained by the text of elements selected by the currently constructed XPath
+										expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -888,22 +1181,34 @@
 					<a name="nottype" class="tsd-anchor"></a>
 					<h3>not<wbr>Type</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Type<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Type<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L176">lib/page_objects/builders/XPathBuilder.ts:176</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L415">lib/page_objects/builders/XPathBuilder.ts:415</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called &#39;type&#39;.</p>
+								</div>
+								<p>Optionally, if also passing a type, the currently constructed XPath expression is restricted to elements
+								which have an HTML &#39;type&#39; attribute with a value that does not equal the passed type.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a type which must not equal the value of the HTML &#39;type&#39; attribute of elements selected by the
+										currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -911,22 +1216,33 @@
 					<a name="nottypecontains" class="tsd-anchor"></a>
 					<h3>not<wbr>Type<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Type<wbr>Contains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Type<wbr>Contains<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L184">lib/page_objects/builders/XPathBuilder.ts:184</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L439">lib/page_objects/builders/XPathBuilder.ts:439</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;type&#39; with a
+									value does not contain the passed type.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a type which must not be contained by the value of the HTML &#39;type&#39; attribute of elements selected by
+										the currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -940,16 +1256,30 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L17">lib/page_objects/builders/XPathBuilder.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L40">lib/page_objects/builders/XPathBuilder.ts:40</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Resets the currently processed XPath expression to the passed initial XPath selector.</p>
+								</div>
+								<p>This initial XPath selector must select an HTML tag that is one of the following:</p>
+								<ul>
+									<li>a direct child (eg. &#39;/span&#39;) of either another XPath expression or of the DOM root node</li>
+									<li>an indirect/deeply nested child (eg. &#39;//div&#39;) of either another XPath expression or of the DOM root node</li>
+								</ul>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an XPath selector used as the initial &quot;root&quot; for a new XPath expression (eg. &#39;//div&#39;)</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -963,10 +1293,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L204">lib/page_objects/builders/XPathBuilder.ts:204</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L486">lib/page_objects/builders/XPathBuilder.ts:486</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;selected&#39;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -980,16 +1316,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L74">lib/page_objects/builders/XPathBuilder.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L120">lib/page_objects/builders/XPathBuilder.ts:120</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements whose text equals the passed text.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a text which must equal the text of elements selected by the currently constructed XPath
+										expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -1003,16 +1349,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L84">lib/page_objects/builders/XPathBuilder.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L144">lib/page_objects/builders/XPathBuilder.ts:144</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements whose text contains the passed text.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a text which must be contained by the text of elements selected by the currently constructed XPath
+										expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -1020,22 +1376,34 @@
 					<a name="type" class="tsd-anchor"></a>
 					<h3>type</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L172">lib/page_objects/builders/XPathBuilder.ts:172</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L401">lib/page_objects/builders/XPathBuilder.ts:401</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;type&#39;.</p>
+								</div>
+								<p>Optionally, if also passing a type, the currently constructed XPath expression is further restricted to elements
+								which have an HTML &#39;type&#39; attribute with a value that equals the passed type.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a type which must equal the value of the HTML &#39;type&#39; attribute of elements selected by the currently
+										constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -1043,22 +1411,33 @@
 					<a name="typecontains" class="tsd-anchor"></a>
 					<h3>type<wbr>Contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">type<wbr>Contains<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">type<wbr>Contains<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L180">lib/page_objects/builders/XPathBuilder.ts:180</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L427">lib/page_objects/builders/XPathBuilder.ts:427</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Restricts the currently constructed XPath expression to elements which have an HTML attribute called &#39;type&#39; with a
+									value that contains the passed type.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a type which must be contained by the value of the HTML &#39;type&#39; attribute of elements selected by the
+										currently constructed XPath expression</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>the singleton instance of XPathBuilder storing the currently constructed XPath expression</p>
 						</li>
 					</ul>
 				</section>
@@ -1072,9 +1451,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/2058976/src/lib/page_objects/builders/XPathBuilder.ts#L5">lib/page_objects/builders/XPathBuilder.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/XPathBuilder.ts#L21">lib/page_objects/builders/XPathBuilder.ts:21</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a singleton instance of XPathBuilder.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="xpathbuilder.html" class="tsd-signature-type">XPathBuilder</a></h4>
 						</li>
 					</ul>

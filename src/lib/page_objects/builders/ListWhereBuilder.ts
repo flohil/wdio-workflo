@@ -111,88 +111,88 @@ export class ListWhereBuilder<
     return this
   }
 
-  attribute(key: string, value?: string) {
-    this._xPathBuilder.attribute(key, value)
+  attribute(name: string, value?: string) {
+    this._xPathBuilder.attribute(name, value)
     return this
   }
 
-  notAttribute(key: string, value?: string) {
-    this._xPathBuilder.notAttribute(key, value)
+  notAttribute(name: string, value?: string) {
+    this._xPathBuilder.notAttribute(name, value)
     return this
   }
 
-  attributeContains(key: string, value: string) {
-    this._xPathBuilder.attributeContains(key, value)
+  attributeContains(name: string, value: string) {
+    this._xPathBuilder.attributeContains(name, value)
     return this
   }
 
-  notAttributeContains(key: string, value: string) {
-    this._xPathBuilder.notAttributeContains(key, value)
+  notAttributeContains(name: string, value: string) {
+    this._xPathBuilder.notAttributeContains(name, value)
     return this
   }
 
-  id(value?: string) {
-    return this.attribute('id', value)
+  id(id?: string) {
+    return this.attribute('id', id)
   }
 
-  notId(value?: string) {
-    return this.notAttribute('id', value)
+  notId(id?: string) {
+    return this.notAttribute('id', id)
   }
 
-  idContains(value: string) {
-    return this.attributeContains('id', value)
+  idContains(id: string) {
+    return this.attributeContains('id', id)
   }
 
-  notIdContains(value: string) {
-    return this.notAttributeContains('id', value)
+  notIdContains(id: string) {
+    return this.notAttributeContains('id', id)
   }
 
-  class(value?: string) {
-    return this.attribute('class', value)
+  class(className?: string) {
+    return this.attribute('class', className)
   }
 
-  notClass(value?: string) {
-    return this.notAttribute('class', value)
+  notClass(className?: string) {
+    return this.notAttribute('class', className)
   }
 
-  classContains(value: string) {
-    return this.attributeContains('class', value)
+  classContains(className: string) {
+    return this.attributeContains('class', className)
   }
 
-  notClassContains(value: string) {
-    return this.notAttributeContains('class', value)
+  notClassContains(className: string) {
+    return this.notAttributeContains('class', className)
   }
 
-  name(value?: string) {
-    return this.attribute('name', value)
+  name(name?: string) {
+    return this.attribute('name', name)
   }
 
-  notName(value?: string) {
-    return this.notAttribute('name', value)
+  notName(name?: string) {
+    return this.notAttribute('name', name)
   }
 
-  nameContains(value: string) {
-    return this.attributeContains('name', value)
+  nameContains(name: string) {
+    return this.attributeContains('name', name)
   }
 
-  notNameContains(value: string) {
-    return this.notAttributeContains('name', value)
+  notNameContains(name: string) {
+    return this.notAttributeContains('name', name)
   }
 
-  type(value?: string) {
-    return this.attribute('type', value)
+  type(type?: string) {
+    return this.attribute('type', type)
   }
 
-  notType(value?: string) {
-    return this.notAttribute('type', value)
+  notType(type?: string) {
+    return this.notAttribute('type', type)
   }
 
-  typeContains(value: string) {
-    return this.attributeContains('type', value)
+  typeContains(type: string) {
+    return this.attributeContains('type', type)
   }
 
-  notTypeContains(value: string) {
-    return this.notAttributeContains('type', value)
+  notTypeContains(type: string) {
+    return this.notAttributeContains('type', type)
   }
 
   checked() {
@@ -229,10 +229,10 @@ export class ListWhereBuilder<
    * Finds element by index of accurence on a single "level" of the DOM.
    * Eg.: If index === 3, there must be 3 siblings on the same DOM level that match the current selector
    * and the third one will be selected.
-   * @param index starts at 1
+   * @param levelIndex starts at 1
    */
-  levelIndex(level: number) {
-    this._xPathBuilder.levelIndex(level)
+  levelIndex(levelIndex: number) {
+    this._xPathBuilder.levelIndex(levelIndex)
     return this
   }
 
