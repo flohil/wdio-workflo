@@ -135,8 +135,8 @@ class PageWait<
    *
    * @param conditionFunc the condition which is expected to return true within a specific timeout
    * @param conditionMessage a message used to describe the checked condition in error messages
-   * @param opts includes the timeout within which the condition is expected to return true and
-   * the interval used to check for this condition.
+   * @param opts includes the `timeout` within which the condition is expected to return true and
+   * the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
@@ -179,8 +179,8 @@ class PageWait<
   /**
    * Waits for Page to become open and throws an error of the Page does not become open within a specific timeout.
    *
-   * @param opts includes the options defined in IsOpenOpts, the timeout within which the Page must become open and
-   * the interval used to check for this condition.
+   * @param opts includes the options defined in `IsOpenOpts`, the `timeout` within which the Page must become open and
+   * the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
@@ -194,8 +194,8 @@ class PageWait<
   /**
    * Waits for Page to become closed and throws an error of the Page does not become closed within a specific timeout.
    *
-   * @param opts includes the options defined in IsClosedOpts, the timeout within which the Page must become closed and
-   * the interval used to check for this condition.
+   * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed 
+   * and the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
@@ -241,8 +241,8 @@ class PageEventually<
    * within a specific timeout.
    *
    * @param conditionFunc the condition which is expected to return true within a specific timeout
-   * @param opts includes the timeout within which the condition is expected to return true and
-   * the interval used to check for this condition.
+   * @param opts includes the `timeout` within which the condition is expected to return true and
+   * the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
@@ -279,8 +279,8 @@ class PageEventually<
   /**
    * Checks if Page eventually becomes open within a specific timeout.
    *
-   * @param opts includes the options defined in IsOpenOpts, the timeout within which the Page must become open and
-   * the interval used to check for this condition.
+   * @param opts includes the options defined in `IsOpenOpts`, the `timeout` within which the Page must become open and
+   * the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
@@ -292,8 +292,8 @@ class PageEventually<
   /**
    * Checks if Page eventually becomes closed within a specific timeout.
    *
-   * @param opts includes the options defined in IsClosedOpts, the timeout within which the Page must become closed and
-   * the interval used to check for this condition.
+   * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed 
+   * and the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.

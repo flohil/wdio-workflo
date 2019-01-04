@@ -64,6 +64,18 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Defines the opts parameter passed to the constructor function of PageNode.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Store type of the PageElementStore used by PageNode to retrieve PageNodes from the store</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -76,7 +88,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a>
+						<a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">IPageNodeOpts</span>
@@ -106,6 +118,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipagenodeopts.html#interval" class="tsd-kind-icon">interval</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ipagenodeopts.html#store" class="tsd-kind-icon">store</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipagenodeopts.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
@@ -115,15 +128,36 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="interval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> interval</h3>
+					<div class="tsd-signature tsd-kind-icon">interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="__global.workflo.itimeoutinterval.html">ITimeoutInterval</a>.<a href="__global.workflo.itimeoutinterval.html#interval">interval</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L1848">index.ts:1848</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An interval in milliseconds.</p>
+						</div>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="store" class="tsd-anchor"></a>
 					<h3>store</h3>
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Store</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L6">lib/page_objects/page_elements/PageNode.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L14">lib/page_objects/page_elements/PageNode.ts:14</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>an instance of PageElementStore which can be used to retrieve/create PageNodes</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="timeout" class="tsd-anchor"></a>
@@ -132,7 +166,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeout.html">ITimeout</a>.<a href="__global.workflo.itimeout.html#timeout">timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L1836">index.ts:1836</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L1836">index.ts:1836</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -158,6 +192,9 @@
 					<li class="current tsd-kind-interface tsd-has-type-parameter">
 						<a href="ipagenodeopts.html" class="tsd-kind-icon">IPage<wbr>Node<wbr>Opts</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="ipagenodeopts.html#interval" class="tsd-kind-icon">interval</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="ipagenodeopts.html#store" class="tsd-kind-icon">store</a>
 							</li>

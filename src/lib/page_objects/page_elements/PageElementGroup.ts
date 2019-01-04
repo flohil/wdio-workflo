@@ -52,9 +52,10 @@ implements ElementNode<Content> {
   constructor(id: string, {
     store,
     timeout,
+    interval,
     content
   }: IPageElementGroupOpts<Store, Content>) {
-    super(id, {store, timeout})
+    super(id, {store, timeout, interval})
 
     this._id = id
     this._$ = content

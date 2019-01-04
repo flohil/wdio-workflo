@@ -134,6 +134,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.inode.html#__getnodeid" class="tsd-kind-icon">__get<wbr>Node<wbr>Id</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.inode.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.inode.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.inode.html#tojson" class="tsd-kind-icon">toJSON</a></li>
 							</ul>
@@ -150,12 +151,12 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.ilastdiff.html">ILastDiff</a>.<a href="__global.workflo.ilastdiff.html#__lastdiff">__lastDiff</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L1920">index.ts:1920</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L1920">index.ts:1920</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Retries the last differences of a PageNode&#39;s check state functions.</p>
+							<p>Retrieves the last differences of a PageNode&#39;s check state functions.</p>
 						</div>
 						<p>Intended for framework-internal usage only.</p>
 					</div>
@@ -167,7 +168,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.ilastdiff.html">ILastDiff</a>.<a href="__global.workflo.ilastdiff.html#__setlastdiff">__setLastDiff</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L1926">index.ts:1926</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L1926">index.ts:1926</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -204,7 +205,7 @@
 					<div class="tsd-signature tsd-kind-icon">currently<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">__type</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L2006">index.ts:2006</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2011">index.ts:2011</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -220,7 +221,7 @@
 					<div class="tsd-signature tsd-kind-icon">eventually<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">__type</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L2016">index.ts:2016</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2021">index.ts:2021</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -236,7 +237,7 @@
 					<div class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">__type</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L2011">index.ts:2011</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2016">index.ts:2016</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -259,16 +260,39 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L1991">index.ts:1991</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L1991">index.ts:1991</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns the id of the PageNode.</p>
+									<p>Retrieves the id used to identify a PageNode in the instance cache of PageElementStore.</p>
 								</div>
 								<p>Intended for framework-internal usage only.</p>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="getinterval" class="tsd-anchor"></a>
+					<h3>get<wbr>Interval</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Interval<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2001">index.ts:2001</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the default interval that a PageNode uses if no other explicit interval
+									is passed to a function that operates with intervals (eg. wait, eventually)</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -282,7 +306,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L1996">index.ts:1996</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L1996">index.ts:1996</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -305,7 +329,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/index.ts#L2000">index.ts:2000</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2005">index.ts:2005</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -424,6 +448,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
 								<a href="__global.workflo.pagenode.inode.html#__getnodeid" class="tsd-kind-icon">__get<wbr>Node<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="__global.workflo.pagenode.inode.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
 								<a href="__global.workflo.pagenode.inode.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a>

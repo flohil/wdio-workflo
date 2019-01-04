@@ -6,8 +6,7 @@ import {
   IPageNodeOpts,
   PageElement,
   IPageElementOpts,
-  IPageElementBaseOpts,
-  PageElementGroup
+  IPageElementBaseOpts
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder, XPathBuilder } from '../builders'
@@ -42,7 +41,7 @@ export interface IPageElementListOpts<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>
-> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
+> extends IPageNodeOpts<Store> {
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   elementOptions: PageElementOptions
   waitType?: Workflo.WaitType
@@ -63,7 +62,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   protected _elementOptions: PageElementOptions
   protected _waitType: Workflo.WaitType
 
-  protected _interval: number
   protected _disableCache: boolean
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
@@ -92,7 +90,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     this._elementStoreFunc = opts.elementStoreFunc
     this._identifier = opts.identifier
     this._identifiedObjCache = {}
-    this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL
 
     this.currently = new PageElementListCurrently<
       Store, PageElementType, PageElementOptions, this

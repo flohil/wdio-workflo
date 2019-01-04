@@ -1,13 +1,13 @@
 import { PageElementStore } from '../stores'
 import _ = require('lodash');
-import { DEFAULT_TIMEOUT } from '..'
+import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL } from '..'
 
 /**
  * Defines the opts parameter passed to the constructor function of PageNode.
  *
  * @template Store type of the PageElementStore used by PageNode to retrieve PageNodes from the store
  */
-export interface IPageNodeOpts<Store extends PageElementStore> extends Workflo.ITimeout {
+export interface IPageNodeOpts<Store extends PageElementStore> extends Workflo.ITimeoutInterval {
   /**
    * an instance of PageElementStore which can be used to retrieve/create PageNodes
    */
@@ -38,6 +38,10 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
    * the default timeout used by PageNode for all functions that operate with timeouts (eg. `wait` and `eventually`)
    */
   protected _timeout: number
+  /**
+   * the default interval used by PageNode for all functions that operate with intervals (eg. `wait` and `eventually`)
+   */
+  protected _interval: number
 
   /**
    * defines all functions of PageNode which check if a condition is currently true or which retrieve a current value
@@ -66,6 +70,7 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
     this._selector = selector
     this._store = opts.store
     this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
+    this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL
   }
 
   // INTERNAL GETTERS AND SETTERS
@@ -90,6 +95,10 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
 
   getTimeout() {
     return this._timeout
+  }
+
+  getInterval() {
+    return this._interval
   }
 
   // PUBLIC ACTIONS

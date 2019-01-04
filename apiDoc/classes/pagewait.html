@@ -149,7 +149,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L101">lib/page_objects/pages/Page.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/pages/Page.ts#L121">lib/page_objects/pages/Page.ts:121</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -181,9 +181,14 @@
 					<div class="tsd-signature tsd-kind-icon">_page<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageType</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L101">lib/page_objects/pages/Page.ts:101</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/pages/Page.ts#L121">lib/page_objects/pages/Page.ts:121</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the Page for which PageWait defines all <code>wait</code> functions</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -198,13 +203,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L112">lib/page_objects/pages/Page.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/pages/Page.ts#L144">lib/page_objects/pages/Page.ts:144</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A function which provides common functionality to wait for a certain conditionFunc to return true
+									within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>conditionFunc: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the condition which is expected to return true within a specific timeout</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -220,9 +234,18 @@
 								</li>
 								<li>
 									<h5>conditionMessage: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a message used to describe the checked condition in error messages</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;Object.create(null)</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to return true and
+										the <code>interval</code> used to check for this condition.</p>
+										<p>If no <code>timeout</code> is specified, the Page&#39;s default timeout is used instead.
+										If no <code>interval</code> is specified, the Page&#39;s default interval is used instead.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageType</span></h4>
@@ -239,7 +262,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L165">lib/page_objects/pages/Page.ts:165</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/pages/Page.ts#L205">lib/page_objects/pages/Page.ts:205</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -252,8 +275,10 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">IsClosedOpts</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;Object.create(null)</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>includes the options defined in IsClosedOpts, the timeout within which the Page must become closed and
-										the interval used to check for this condition.</p>
+										<p>includes the options defined in <code>IsClosedOpts</code>, the <code>timeout</code> within which the Page must become closed
+										and the <code>interval</code> used to check for this condition.</p>
+										<p>If no <code>timeout</code> is specified, the Page&#39;s default timeout is used instead.
+										If no <code>interval</code> is specified, the Page&#39;s default interval is used instead.</p>
 									</div>
 								</li>
 							</ul>
@@ -272,7 +297,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/pages/Page.ts#L154">lib/page_objects/pages/Page.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/pages/Page.ts#L190">lib/page_objects/pages/Page.ts:190</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -285,8 +310,10 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">IsOpenOpts</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;Object.create(null)</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>includes the options defined in IsOpenOpts, the timeout within which the Page must become open and
-										the interval used to check for this condition.</p>
+										<p>includes the options defined in <code>IsOpenOpts</code>, the <code>timeout</code> within which the Page must become open and
+										the <code>interval</code> used to check for this condition.</p>
+										<p>If no <code>timeout</code> is specified, the Page&#39;s default timeout is used instead.
+										If no <code>interval</code> is specified, the Page&#39;s default interval is used instead.</p>
 									</div>
 								</li>
 							</ul>

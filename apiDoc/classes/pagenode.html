@@ -64,6 +64,18 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This class serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Store type of the PageElementStore used by PageNode to retrieve PageNodes from the store</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -113,6 +125,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="pagenode.html#_interval" class="tsd-kind-icon">_interval</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="pagenode.html#_lastdiff" class="tsd-kind-icon">_last<wbr>Diff</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="pagenode.html#_selector" class="tsd-kind-icon">_selector</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="pagenode.html#_store" class="tsd-kind-icon">_store</a></li>
@@ -138,6 +151,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pagenode.html#__wait" class="tsd-kind-icon">__wait</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pagenode.html#__waituntil" class="tsd-kind-icon">__wait<wbr>Until</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="pagenode.html#_handlewaiterror" class="tsd-kind-icon">_handle<wbr>Wait<wbr>Error</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pagenode.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pagenode.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pagenode.html#tojson" class="tsd-kind-icon">toJSON</a></li>
 							</ul>
@@ -157,16 +171,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L17">lib/page_objects/page_elements/PageNode.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L58">lib/page_objects/page_elements/PageNode.ts:58</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>PageNode serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the raw XPath selector of the PageNode</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>opts: <a href="../interfaces/ipagenodeopts.html" class="tsd-signature-type">IPageNodeOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the options required to create an instance of PageNode</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pagenode.html" class="tsd-signature-type">PageNode</a></h4>
@@ -177,14 +206,35 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_interval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _interval</h3>
+					<div class="tsd-signature tsd-kind-icon">_interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L44">lib/page_objects/page_elements/PageNode.ts:44</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the default interval used by PageNode for all functions that operate with intervals (eg. <code>wait</code> and <code>eventually</code>)</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_lastdiff" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _last<wbr>Diff</h3>
 					<div class="tsd-signature tsd-kind-icon">_last<wbr>Diff<span class="tsd-signature-symbol">:</span> <a href="../interfaces/__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L11">lib/page_objects/page_elements/PageNode.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L32">lib/page_objects/page_elements/PageNode.ts:32</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Stores the last differences of PageNode&#39;s check state functions.</p>
+						</div>
+						<p>Intended for framework-internal usage only.</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_selector" class="tsd-anchor"></a>
@@ -192,9 +242,14 @@
 					<div class="tsd-signature tsd-kind-icon">_selector<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L12">lib/page_objects/page_elements/PageNode.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L36">lib/page_objects/page_elements/PageNode.ts:36</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the XPath selector of PageNode</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_store" class="tsd-anchor"></a>
@@ -202,9 +257,14 @@
 					<div class="tsd-signature tsd-kind-icon">_store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Store</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L10">lib/page_objects/page_elements/PageNode.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L26">lib/page_objects/page_elements/PageNode.ts:26</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>an instance of PageElementStore which can be used to retrieve/create PageNodes</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_timeout" class="tsd-anchor"></a>
@@ -212,9 +272,14 @@
 					<div class="tsd-signature tsd-kind-icon">_timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L13">lib/page_objects/page_elements/PageNode.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L40">lib/page_objects/page_elements/PageNode.ts:40</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the default timeout used by PageNode for all functions that operate with timeouts (eg. <code>wait</code> and <code>eventually</code>)</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="currently" class="tsd-anchor"></a>
@@ -223,9 +288,15 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.inode.html">INode</a>.<a href="../interfaces/__global.workflo.pagenode.inode.html#currently">currently</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L15">lib/page_objects/page_elements/PageNode.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L50">lib/page_objects/page_elements/PageNode.ts:50</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>defines all functions of PageNode which check if a condition is currently true or which retrieve a current value
+							from the tested application&#39;s state</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="eventually" class="tsd-anchor"></a>
@@ -234,9 +305,14 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.inode.html">INode</a>.<a href="../interfaces/__global.workflo.pagenode.inode.html#eventually">eventually</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L17">lib/page_objects/page_elements/PageNode.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L58">lib/page_objects/page_elements/PageNode.ts:58</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>defines all functions of PageNode which check if a condition eventually becomes true within a specified timeout</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="wait" class="tsd-anchor"></a>
@@ -245,9 +321,14 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.inode.html">INode</a>.<a href="../interfaces/__global.workflo.pagenode.inode.html#wait">wait</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L16">lib/page_objects/page_elements/PageNode.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L54">lib/page_objects/page_elements/PageNode.ts:54</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>defines all functions of PageNode which wait for a condition to become true within a specified timeout</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -262,7 +343,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L36">lib/page_objects/page_elements/PageNode.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L82">lib/page_objects/page_elements/PageNode.ts:82</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a></h4>
@@ -282,13 +363,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L86">lib/page_objects/page_elements/PageNode.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L148">lib/page_objects/page_elements/PageNode.ts:148</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Provides custom error handling of &#39;could not be located&#39; and &#39;WaitUntilTimeoutError&#39; errors for functions that
+									check if a condition returns true within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>func: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the function which is supposed to return true within a specific timeout</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -317,14 +407,20 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L70">lib/page_objects/page_elements/PageNode.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L125">lib/page_objects/page_elements/PageNode.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Executes func and, if an error occurs during execution of func,
-									throws a custom error message that the page element could not be located on the page.</p>
+									<p>Executes func and trows any errors that occur during its execution.</p>
 								</div>
+								<p>If an error occurs because an element could not be located on the page, throws a custom &#39;could not be located&#39;
+								error message.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>ResultType the result type of the executed function</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -337,6 +433,7 @@
 								<li>
 									<h5>func: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>the function to be executed</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -353,6 +450,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ResultType</span></h4>
+							<p>the result value of the executed function</p>
 						</li>
 					</ul>
 				</section>
@@ -367,7 +465,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.inode.html">INode</a>.<a href="../interfaces/__global.workflo.pagenode.inode.html#__getnodeid">__getNodeId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L32">lib/page_objects/page_elements/PageNode.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L78">lib/page_objects/page_elements/PageNode.ts:78</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -384,7 +482,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L44">lib/page_objects/page_elements/PageNode.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L90">lib/page_objects/page_elements/PageNode.ts:90</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -407,13 +505,24 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L101">lib/page_objects/page_elements/PageNode.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L176">lib/page_objects/page_elements/PageNode.ts:176</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Provides custom error handling of &#39;could not be located&#39; and &#39;WaitUntilTimeoutError&#39; errors for functions that
+										wait for a condition to become true within a specific timeout and throw an error if the condition does not become
+									true.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>func: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the function which is supposed to return true within a specific timeout and throws an error if the
+										condition does not become true</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -429,12 +538,20 @@
 								</li>
 								<li>
 									<h5>errorMessage: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an errorMessage that describes the condition which did not become true within a specific
+										timeout</p>
+									</div>
 								</li>
 								<li>
 									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the timeout used to wait for the result of the passed func to return true</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>an instance of PageNode</p>
 						</li>
 					</ul>
 				</section>
@@ -448,13 +565,24 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L111">lib/page_objects/page_elements/PageNode.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L201">lib/page_objects/page_elements/PageNode.ts:201</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function executes a waitFunc until it returns true or a specific timeout is reached.
+										If the return value of waitFunc does not become true within the timeout, this function throws a
+									&#39;WaitUntilTimeoutError&#39;.</p>
+								</div>
+								<p>__waitUntil also provides custom error handling for &#39;could not be located&#39; errors.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>waitFunc: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the function which is supposed to return true within a specific timeout</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -470,6 +598,10 @@
 								</li>
 								<li>
 									<h5>errorMessageFunc: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a function that returns an errorMessage which describes the condition that did not become
+										true within a specific timeout</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -485,12 +617,19 @@
 								</li>
 								<li>
 									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the timeout used to wait for the result of the waitFunc to return true</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> interval: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the interval used to check for the result of the waitFunc to return true</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>an instance of PageNode</p>
 						</li>
 					</ul>
 				</section>
@@ -504,22 +643,54 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L138">lib/page_objects/page_elements/PageNode.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L235">lib/page_objects/page_elements/PageNode.ts:235</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function implements custom error handling for &#39;could not be located&#39; and &#39;WaitUntilTimeoutError&#39; errors.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>error: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an arbitrary type of error</p>
+									</div>
 								</li>
 								<li>
 									<h5>errorMessage: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>used to describe the failed condition check which caused a WaitUntilTimeoutError</p>
+									</div>
 								</li>
 								<li>
 									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the timeout used to wait for an element to be located or for a wait condition to return true</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getinterval" class="tsd-anchor"></a>
+					<h3>get<wbr>Interval</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Interval<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.inode.html">INode</a>.<a href="../interfaces/__global.workflo.pagenode.inode.html#getinterval">getInterval</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L100">lib/page_objects/page_elements/PageNode.ts:100</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -534,7 +705,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.inode.html">INode</a>.<a href="../interfaces/__global.workflo.pagenode.inode.html#gettimeout">getTimeout</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L50">lib/page_objects/page_elements/PageNode.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L96">lib/page_objects/page_elements/PageNode.ts:96</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -552,7 +723,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.inode.html">INode</a>.<a href="../interfaces/__global.workflo.pagenode.inode.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L56">lib/page_objects/page_elements/PageNode.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L106">lib/page_objects/page_elements/PageNode.ts:106</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.ielementjson.html" class="tsd-signature-type">IElementJSON</a></h4>
@@ -578,6 +749,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="pagenode.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="pagenode.html#_interval" class="tsd-kind-icon">_interval</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="pagenode.html#_lastdiff" class="tsd-kind-icon">_last<wbr>Diff</a>
@@ -623,6 +797,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 								<a href="pagenode.html#_handlewaiterror" class="tsd-kind-icon">_handle<wbr>Wait<wbr>Error</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="pagenode.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="pagenode.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a>

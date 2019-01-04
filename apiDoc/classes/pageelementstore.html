@@ -139,7 +139,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L51">lib/page_objects/stores/PageElementStore.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L48">lib/page_objects/stores/PageElementStore.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementstore.html" class="tsd-signature-type">PageElementStore</a></h4>
@@ -155,12 +155,12 @@
 					<div class="tsd-signature tsd-kind-icon">_instance<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L47">lib/page_objects/stores/PageElementStore.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L44">lib/page_objects/stores/PageElementStore.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>ignore</p>
+							<p>Caches instances of PageNodes.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -178,12 +178,12 @@
 					<div class="tsd-signature tsd-kind-icon">_x<wbr>Path<wbr>Builder<span class="tsd-signature-symbol">:</span> <a href="xpathbuilder.html" class="tsd-signature-type">XPathBuilder</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L51">lib/page_objects/stores/PageElementStore.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L48">lib/page_objects/stores/PageElementStore.ts:48</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>ignore</p>
+							<p>An instance of XPathBuilder used to build the currently constructed XPath expressions of retrieved PageNodes.</p>
 						</div>
 					</div>
 				</section>
@@ -200,23 +200,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L65">lib/page_objects/stores/PageElementStore.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L66">lib/page_objects/stores/PageElementStore.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElement from the store.</p>
+								</div>
+								<p>The waitType of the PageElement is set to &#39;visible&#39; by default.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElement</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#elementpublickeys" class="tsd-signature-type">ElementPublicKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElement</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElement</p>
 						</li>
 					</ul>
 				</section>
@@ -230,9 +239,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L288">lib/page_objects/stores/PageElementStore.ts:288</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L392">lib/page_objects/stores/PageElementStore.ts:392</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElementGroup from the store.</p>
+								</div>
+								<p>The group functions (state check -&gt; hasXXX/hasAnyXXX/containsXXX, state retrieval -&gt; getXXX) supported by the
+								retrieved PageElementGroup are defined in Workflo.IElementNode.</p>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -243,12 +259,20 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>content: <span class="tsd-signature-type">Content</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an object whose keys are the names of PageNodes managed by the PageElementGroup and whose values
+										are instances of these PageNodes</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementgroupopts.html" class="tsd-signature-type">IPageElementGroupOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#grouppublickeys" class="tsd-signature-type">GroupPublicKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElementGroup</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementgroup.html" class="tsd-signature-type">PageElementGroup</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementGroup</p>
 						</li>
 					</ul>
 				</section>
@@ -262,19 +286,34 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L140">lib/page_objects/stores/PageElementStore.ts:140</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L189">lib/page_objects/stores/PageElementStore.ts:189</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
+									PageElement.</p>
+								</div>
+								<p>The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to
+								&#39;visible&#39; by default.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElementList</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/__global.workflo.html#pickpartial" class="tsd-signature-type">PickPartial</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementlistopts.html" class="tsd-signature-type">IPageElementListOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#elementpublickeys" class="tsd-signature-type">ElementPublicKeys</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#listpublickeys" class="tsd-signature-type">ListPublicKeys</a><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#listpublicpartialkeys" class="tsd-signature-type">ListPublicPartialKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElementList</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementlist.html" class="tsd-signature-type">PageElementList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementList</p>
 						</li>
 					</ul>
 				</section>
@@ -288,9 +327,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L231">lib/page_objects/stores/PageElementStore.ts:231</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L330">lib/page_objects/stores/PageElementStore.ts:330</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElementMap from the store that manages PageElement instances of the type
+									PageElement.</p>
+								</div>
+								<p>The waitType of PageElements managed by PageElementMap is set to &#39;visible&#39; by default.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>K the names of all PageElements managed by PageElementMap</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -301,12 +352,19 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElementMap</p>
+									</div>
 								</li>
 								<li>
 									<h5>opts: <a href="../modules/__global.workflo.html#pickpartial" class="tsd-signature-type">PickPartial</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementmapopts.html" class="tsd-signature-type">IPageElementMapOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#elementpublickeys" class="tsd-signature-type">ElementPublicKeys</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#mappublickeys" class="tsd-signature-type">MapPublicKeys</a><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#mappublicpartialkeys" class="tsd-signature-type">MapPublicPartialKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElementMap</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementmap.html" class="tsd-signature-type">PageElementMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementMap</p>
 						</li>
 					</ul>
 				</section>
@@ -320,19 +378,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L79">lib/page_objects/stores/PageElementStore.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L89">lib/page_objects/stores/PageElementStore.ts:89</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElement from the store.</p>
+								</div>
+								<p>The waitType of the retrieved PageElement is set to &#39;exist&#39; and cannot be overwritten.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElement</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/__global.workflo.store.html#elementpublickeys" class="tsd-signature-type">ElementPublicKeys</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"waitType"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElement</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElement</p>
 						</li>
 					</ul>
 				</section>
@@ -346,19 +417,34 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L158">lib/page_objects/stores/PageElementStore.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L218">lib/page_objects/stores/PageElementStore.ts:218</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
+									PageElement.</p>
+								</div>
+								<p>The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to &#39;exist&#39;
+								by default.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElementList</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/__global.workflo.html#pickpartial" class="tsd-signature-type">PickPartial</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementlistopts.html" class="tsd-signature-type">IPageElementListOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"timeout"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/__global.workflo.store.html#listpublickeys" class="tsd-signature-type">ListPublicKeys</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"waitType"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#listpublicpartialkeys" class="tsd-signature-type">ListPublicPartialKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElementList</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementlist.html" class="tsd-signature-type">PageElementList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementList</p>
 						</li>
 					</ul>
 				</section>
@@ -372,9 +458,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L249">lib/page_objects/stores/PageElementStore.ts:249</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L359">lib/page_objects/stores/PageElementStore.ts:359</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElementMap from the store that manages PageElement instances of the type
+									PageElement.</p>
+								</div>
+								<p>The waitType of PageElements managed by PageElementMap is set to &#39;exist&#39; by default.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>K the names of all PageElements managed by PageElementMap</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -385,12 +483,19 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElementMap</p>
+									</div>
 								</li>
 								<li>
 									<h5>opts: <a href="../modules/__global.workflo.html#pickpartial" class="tsd-signature-type">PickPartial</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementmapopts.html" class="tsd-signature-type">IPageElementMapOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/__global.workflo.store.html#elementpublickeys" class="tsd-signature-type">ElementPublicKeys</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"waitType"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#mappublickeys" class="tsd-signature-type">MapPublicKeys</a><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#mappublicpartialkeys" class="tsd-signature-type">MapPublicPartialKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElementMap</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementmap.html" class="tsd-signature-type">PageElementMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementMap</p>
 						</li>
 					</ul>
 				</section>
@@ -404,9 +509,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L94">lib/page_objects/stores/PageElementStore.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L118">lib/page_objects/stores/PageElementStore.ts:118</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElementList from the store that manages any instance of PageElement which inherits
+									from the PageElement class.</p>
+								</div>
+								<p>The waitType of PageElements managed by PageElementList and the waitType of the list itself are set to &#39;visible&#39; by
+								default.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>PageElementType the type of PageElement managed by PageElementList</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementOpts the type of the opts parameter passed to the constructor function of PageElements managed
+										by PageElementList</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -420,12 +542,19 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElementList</p>
+									</div>
 								</li>
 								<li>
 									<h5>opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementlistopts.html" class="tsd-signature-type">IPageElementListOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#listconstructorkeys" class="tsd-signature-type">ListConstructorKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElementList</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementlist.html" class="tsd-signature-type">PageElementList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementList</p>
 						</li>
 					</ul>
 				</section>
@@ -439,9 +568,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L179">lib/page_objects/stores/PageElementStore.ts:179</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L253">lib/page_objects/stores/PageElementStore.ts:253</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a PageElementMap from the store that manages any instance of PageElement which inherits
+									from the PageElement class.</p>
+								</div>
+								<p>The waitType of PageElements managed by PageElementMap is set to &#39;visible&#39; by default.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>K the names of all PageElements managed by PageElementMap</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementType the type of PageElement managed by PageElementMap</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementOpts the type of the opts parameter passed to the constructor function of PageElements managed
+										by PageElementMap</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -458,12 +606,19 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved PageElementMap</p>
+									</div>
 								</li>
 								<li>
 									<h5>opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementmapopts.html" class="tsd-signature-type">IPageElementMapOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#mapconstructorkeys" class="tsd-signature-type">MapConstructorKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved PageElementMap</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="pageelementmap.html" class="tsd-signature-type">PageElementMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementMap</p>
 						</li>
 					</ul>
 				</section>
@@ -477,9 +632,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L310">lib/page_objects/stores/PageElementStore.ts:310</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L425">lib/page_objects/stores/PageElementStore.ts:425</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a ValuePageElementGroup from the store.</p>
+								</div>
+								<p>The group functions (state check -&gt; hasXXX/hasAnyXXX/containsXXX, state retrieval -&gt; getXXX) supported by the
+								retrieved ValuePageElementGroup are defined in Workflo.IValueElementNode.</p>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -490,12 +652,20 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>content: <span class="tsd-signature-type">Content</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an object whose keys are the names of PageNodes managed by the ValuePageElementGroup and whose values
+										are instances of these PageNodes</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementgroupopts.html" class="tsd-signature-type">IPageElementGroupOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#grouppublickeys" class="tsd-signature-type">GroupPublicKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved ValuePageElementGroup</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="valuepageelementgroup.html" class="tsd-signature-type">ValuePageElementGroup</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved PageElementGroup</p>
 						</li>
 					</ul>
 				</section>
@@ -509,9 +679,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L117">lib/page_objects/stores/PageElementStore.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L155">lib/page_objects/stores/PageElementStore.ts:155</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a ValuePageElementList from the store that manages any instance of ValuePageElement which
+									inherits from the ValuePageElement class.</p>
+								</div>
+								<p>The waitType of PageElements managed by ValuePageElementList and the waitType of the list itself are set to
+								&#39;visible&#39; by default.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>PageElementType the type of ValuePageElement managed by ValuePageElementList</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementOpts the type of the opts parameter passed to the constructor function of ValuePageElements
+										managed by ValuePageElementList</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -525,12 +712,19 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved ValuePageElementList</p>
+									</div>
 								</li>
 								<li>
 									<h5>opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ivaluepageelementlistopts.html" class="tsd-signature-type">IValuePageElementListOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">, </span><a href="" class="tsd-signature-type">ReturnType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">PageElementType[&quot;getValue&quot;]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#listconstructorkeys" class="tsd-signature-type">ListConstructorKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved ValuePageElementList</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="valuepageelementlist.html" class="tsd-signature-type">ValuePageElementList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ReturnType&lt;PageElementType[&quot;getValue&quot;]&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved ValuePageElementList</p>
 						</li>
 					</ul>
 				</section>
@@ -544,9 +738,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L205">lib/page_objects/stores/PageElementStore.ts:205</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L293">lib/page_objects/stores/PageElementStore.ts:293</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves an instance of a ValuePageElementMap from the store that manages any instance of ValuePageElement which
+									inherits from the ValuePageElement class.</p>
+								</div>
+								<p>The waitType of ValuePageElements managed by ValuePageElementMap is set to &#39;visible&#39; by default.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>K the names of all ValuePageElements managed by ValuePageElementMap</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementType the type of ValuePageElement managed by ValuePageElementMap</p>
+									</dd>
+									<dt>template</dt>
+									<dd><p>PageElementOpts the type of the opts parameter passed to the constructor function of ValuePageElements
+										managed by ValuePageElementMap</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -563,12 +776,19 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <a href="../modules/__global.workflo.html#xpath" class="tsd-signature-type">XPath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the XPath selector of the retrieved ValuePageElementMap</p>
+									</div>
 								</li>
 								<li>
 									<h5>opts: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ivaluepageelementmapopts.html" class="tsd-signature-type">IValuePageElementMapOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">, </span><a href="" class="tsd-signature-type">ReturnType</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">PageElementType[&quot;getValue&quot;]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/__global.workflo.store.html#mapconstructorkeys" class="tsd-signature-type">MapConstructorKeys</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the publicly available options used to configure the retrieved ValuePageElementMap</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="valuepageelementmap.html" class="tsd-signature-type">ValuePageElementMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ReturnType&lt;PageElementType[&quot;getValue&quot;]&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>an instance of the retrieved ValuePageElementMap</p>
 						</li>
 					</ul>
 				</section>
@@ -582,7 +802,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L345">lib/page_objects/stores/PageElementStore.ts:345</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L460">lib/page_objects/stores/PageElementStore.ts:460</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -632,7 +852,7 @@
 												<li class="tsd-description">
 													<aside class="tsd-sources">
 														<ul>
-															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L350">lib/page_objects/stores/PageElementStore.ts:350</a></li>
+															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L465">lib/page_objects/stores/PageElementStore.ts:465</a></li>
 														</ul>
 													</aside>
 													<h4 class="tsd-parameters-title">Parameters</h4>
@@ -691,7 +911,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L385">lib/page_objects/stores/PageElementStore.ts:385</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L500">lib/page_objects/stores/PageElementStore.ts:500</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -739,7 +959,7 @@
 												<li class="tsd-description">
 													<aside class="tsd-sources">
 														<ul>
-															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L390">lib/page_objects/stores/PageElementStore.ts:390</a></li>
+															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L505">lib/page_objects/stores/PageElementStore.ts:505</a></li>
 														</ul>
 													</aside>
 													<h4 class="tsd-parameters-title">Parameters</h4>
@@ -777,7 +997,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L457">lib/page_objects/stores/PageElementStore.ts:457</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L572">lib/page_objects/stores/PageElementStore.ts:572</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -829,7 +1049,7 @@
 												<li class="tsd-description">
 													<aside class="tsd-sources">
 														<ul>
-															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L469">lib/page_objects/stores/PageElementStore.ts:469</a></li>
+															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L584">lib/page_objects/stores/PageElementStore.ts:584</a></li>
 														</ul>
 													</aside>
 													<h4 class="tsd-parameters-title">Parameters</h4>
@@ -867,7 +1087,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L405">lib/page_objects/stores/PageElementStore.ts:405</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L520">lib/page_objects/stores/PageElementStore.ts:520</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -915,7 +1135,7 @@
 												<li class="tsd-description">
 													<aside class="tsd-sources">
 														<ul>
-															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L410">lib/page_objects/stores/PageElementStore.ts:410</a></li>
+															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L525">lib/page_objects/stores/PageElementStore.ts:525</a></li>
 														</ul>
 													</aside>
 													<h4 class="tsd-parameters-title">Parameters</h4>
@@ -953,7 +1173,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L435">lib/page_objects/stores/PageElementStore.ts:435</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L550">lib/page_objects/stores/PageElementStore.ts:550</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1004,7 +1224,7 @@
 												<li class="tsd-description">
 													<aside class="tsd-sources">
 														<ul>
-															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/stores/PageElementStore.ts#L441">lib/page_objects/stores/PageElementStore.ts:441</a></li>
+															<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/stores/PageElementStore.ts#L556">lib/page_objects/stores/PageElementStore.ts:556</a></li>
 														</ul>
 													</aside>
 													<h4 class="tsd-parameters-title">Parameters</h4>

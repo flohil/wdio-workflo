@@ -171,7 +171,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="valuepageelement.html#getselector" class="tsd-kind-icon">get<wbr>Selector</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="valuepageelement.html#getsize" class="tsd-kind-icon">get<wbr>Size</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="valuepageelement.html#gettext" class="tsd-kind-icon">get<wbr>Text</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="valuepageelement.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="valuepageelement.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="valuepageelement.html#getvalue" class="tsd-kind-icon">get<wbr>Value</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="valuepageelement.html#getwidth" class="tsd-kind-icon">get<wbr>Width</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="valuepageelement.html#getx" class="tsd-kind-icon">getX</a></li>
@@ -198,7 +198,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L21">lib/page_objects/page_elements/ValuePageElement.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L21">lib/page_objects/page_elements/ValuePageElement.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -224,9 +224,15 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__">_$</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElementBase.ts#L20">lib/page_objects/page_elements/PageElementBase.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L44">lib/page_objects/page_elements/PageElementBase.ts:44</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><code>_$</code> provides access to the PageNode retrieval functions of PageElementBase&#39;s PageElementStore and prefixes the
+							selectors of all PageNodes retrieved via <code>_$</code> with the selector of PageElementBase.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_customscroll" class="tsd-anchor"></a>
@@ -235,7 +241,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#_customscroll">_customScroll</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L24">lib/page_objects/page_elements/PageElement.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L24">lib/page_objects/page_elements/PageElement.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -244,11 +250,16 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _interval</h3>
 					<div class="tsd-signature tsd-kind-icon">_interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#_interval">_interval</a></p>
+						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_interval">_interval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElementBase.ts#L18">lib/page_objects/page_elements/PageElementBase.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L44">lib/page_objects/page_elements/PageNode.ts:44</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the default interval used by PageNode for all functions that operate with intervals (eg. <code>wait</code> and <code>eventually</code>)</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_lastdiff" class="tsd-anchor"></a>
@@ -257,9 +268,15 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_lastdiff">_lastDiff</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L11">lib/page_objects/page_elements/PageNode.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L32">lib/page_objects/page_elements/PageNode.ts:32</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Stores the last differences of PageNode&#39;s check state functions.</p>
+						</div>
+						<p>Intended for framework-internal usage only.</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_selector" class="tsd-anchor"></a>
@@ -268,9 +285,14 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_selector">_selector</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L12">lib/page_objects/page_elements/PageNode.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L36">lib/page_objects/page_elements/PageNode.ts:36</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the XPath selector of PageNode</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_store" class="tsd-anchor"></a>
@@ -279,9 +301,14 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_store">_store</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L10">lib/page_objects/page_elements/PageNode.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L26">lib/page_objects/page_elements/PageNode.ts:26</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>an instance of PageElementStore which can be used to retrieve/create PageNodes</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_timeout" class="tsd-anchor"></a>
@@ -290,9 +317,14 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_timeout">_timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L13">lib/page_objects/page_elements/PageNode.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L40">lib/page_objects/page_elements/PageNode.ts:40</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the default timeout used by PageNode for all functions that operate with timeouts (eg. <code>wait</code> and <code>eventually</code>)</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_waittype" class="tsd-anchor"></a>
@@ -301,9 +333,16 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#_waittype">_waitType</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElementBase.ts#L19">lib/page_objects/page_elements/PageElementBase.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L39">lib/page_objects/page_elements/PageElementBase.ts:39</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Defines the kind of wait condition performed when <code>initialWait</code> is invoked.</p>
+						</div>
+						<p>The initial wait condition is performed every time before an interaction with the tested application takes place
+						via a PageElement&#39;s action (eg. click).</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a name="currently" class="tsd-anchor"></a>
@@ -313,7 +352,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#currently">currently</a></p>
 						<p>Overrides <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#currently">currently</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L19">lib/page_objects/page_elements/ValuePageElement.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L19">lib/page_objects/page_elements/ValuePageElement.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -325,7 +364,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#eventually">eventually</a></p>
 						<p>Overrides <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#eventually">eventually</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L21">lib/page_objects/page_elements/ValuePageElement.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L21">lib/page_objects/page_elements/ValuePageElement.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -337,7 +376,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#wait">wait</a></p>
 						<p>Overrides <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#wait">wait</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L20">lib/page_objects/page_elements/ValuePageElement.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L20">lib/page_objects/page_elements/ValuePageElement.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -355,9 +394,15 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#_">$</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElementBase.ts#L69">lib/page_objects/page_elements/PageElementBase.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L112">lib/page_objects/page_elements/PageElementBase.ts:112</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><code>$</code> provides access to the PageNode retrieval functions of PageElementBase&#39;s PageElementStore and prefixes the
+									selectors of all PageNodes retrieved via <code>$</code> with the selector of PageElementBase.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Store</span></h4>
 						</li>
 					</ul>
@@ -373,7 +418,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#___">__$</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L49">lib/page_objects/page_elements/PageElement.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L49">lib/page_objects/page_elements/PageElement.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -396,7 +441,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#__element">__element</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L115">lib/page_objects/page_elements/PageElement.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L115">lib/page_objects/page_elements/PageElement.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -422,7 +467,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__lastdiff">__lastDiff</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L36">lib/page_objects/page_elements/PageNode.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L82">lib/page_objects/page_elements/PageNode.ts:82</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a></h4>
@@ -440,7 +485,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#element">element</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L122">lib/page_objects/page_elements/PageElement.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L122">lib/page_objects/page_elements/PageElement.ts:122</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -470,7 +515,7 @@
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#__any">__any</a></p>
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__any">__any</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L67">lib/page_objects/page_elements/PageElement.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L67">lib/page_objects/page_elements/PageElement.ts:67</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -501,7 +546,7 @@
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#__contains">__contains</a></p>
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__contains">__contains</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L79">lib/page_objects/page_elements/PageElement.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L79">lib/page_objects/page_elements/PageElement.ts:79</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -535,7 +580,7 @@
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#__equals">__equals</a></p>
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__equals">__equals</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L55">lib/page_objects/page_elements/PageElement.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L55">lib/page_objects/page_elements/PageElement.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -568,13 +613,22 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__eventually">__eventually</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L86">lib/page_objects/page_elements/PageNode.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L148">lib/page_objects/page_elements/PageNode.ts:148</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Provides custom error handling of &#39;could not be located&#39; and &#39;WaitUntilTimeoutError&#39; errors for functions that
+									check if a condition returns true within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>func: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the function which is supposed to return true within a specific timeout</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -604,14 +658,20 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__execute">__execute</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L70">lib/page_objects/page_elements/PageNode.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L125">lib/page_objects/page_elements/PageNode.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Executes func and, if an error occurs during execution of func,
-									throws a custom error message that the page element could not be located on the page.</p>
+									<p>Executes func and trows any errors that occur during its execution.</p>
 								</div>
+								<p>If an error occurs because an element could not be located on the page, throws a custom &#39;could not be located&#39;
+								error message.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>ResultType the result type of the executed function</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -624,6 +684,7 @@
 								<li>
 									<h5>func: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>the function to be executed</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -640,6 +701,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ResultType</span></h4>
+							<p>the result value of the executed function</p>
 						</li>
 					</ul>
 				</section>
@@ -655,7 +717,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#__getnodeid">__getNodeId</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__getnodeid">__getNodeId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L32">lib/page_objects/page_elements/PageNode.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L78">lib/page_objects/page_elements/PageNode.ts:78</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -673,7 +735,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__setlastdiff">__setLastDiff</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L44">lib/page_objects/page_elements/PageNode.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L90">lib/page_objects/page_elements/PageNode.ts:90</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -698,7 +760,7 @@
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#__typetostring">__typeToString</a></p>
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__typetostring">__typeToString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L98">lib/page_objects/page_elements/PageElement.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L98">lib/page_objects/page_elements/PageElement.ts:98</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -728,13 +790,24 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__wait">__wait</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L101">lib/page_objects/page_elements/PageNode.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L176">lib/page_objects/page_elements/PageNode.ts:176</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Provides custom error handling of &#39;could not be located&#39; and &#39;WaitUntilTimeoutError&#39; errors for functions that
+										wait for a condition to become true within a specific timeout and throw an error if the condition does not become
+									true.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>func: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the function which is supposed to return true within a specific timeout and throws an error if the
+										condition does not become true</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -750,12 +823,20 @@
 								</li>
 								<li>
 									<h5>errorMessage: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an errorMessage that describes the condition which did not become true within a specific
+										timeout</p>
+									</div>
 								</li>
 								<li>
 									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the timeout used to wait for the result of the passed func to return true</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>an instance of PageNode</p>
 						</li>
 					</ul>
 				</section>
@@ -770,13 +851,24 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__waituntil">__waitUntil</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L111">lib/page_objects/page_elements/PageNode.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L201">lib/page_objects/page_elements/PageNode.ts:201</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function executes a waitFunc until it returns true or a specific timeout is reached.
+										If the return value of waitFunc does not become true within the timeout, this function throws a
+									&#39;WaitUntilTimeoutError&#39;.</p>
+								</div>
+								<p>__waitUntil also provides custom error handling for &#39;could not be located&#39; errors.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>waitFunc: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the function which is supposed to return true within a specific timeout</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -792,6 +884,10 @@
 								</li>
 								<li>
 									<h5>errorMessageFunc: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a function that returns an errorMessage which describes the condition that did not become
+										true within a specific timeout</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -807,12 +903,19 @@
 								</li>
 								<li>
 									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the timeout used to wait for the result of the waitFunc to return true</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> interval: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the interval used to check for the result of the waitFunc to return true</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>an instance of PageNode</p>
 						</li>
 					</ul>
 				</section>
@@ -827,7 +930,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#_executeafterinitialwait">_executeAfterInitialWait</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L470">lib/page_objects/page_elements/PageElement.ts:470</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L470">lib/page_objects/page_elements/PageElement.ts:470</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -877,19 +980,33 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_handlewaiterror">_handleWaitError</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L138">lib/page_objects/page_elements/PageNode.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L235">lib/page_objects/page_elements/PageNode.ts:235</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This function implements custom error handling for &#39;could not be located&#39; and &#39;WaitUntilTimeoutError&#39; errors.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>error: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an arbitrary type of error</p>
+									</div>
 								</li>
 								<li>
 									<h5>errorMessage: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>used to describe the failed condition check which caused a WaitUntilTimeoutError</p>
+									</div>
 								</li>
 								<li>
 									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the timeout used to wait for an element to be located or for a wait condition to return true</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -907,7 +1024,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#_scrollto">_scrollTo</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L351">lib/page_objects/page_elements/PageElement.ts:351</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L351">lib/page_objects/page_elements/PageElement.ts:351</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -931,7 +1048,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#click">click</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L249">lib/page_objects/page_elements/PageElement.ts:249</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L249">lib/page_objects/page_elements/PageElement.ts:249</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -957,7 +1074,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getattribute">getAttribute</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L170">lib/page_objects/page_elements/PageElement.ts:170</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L170">lib/page_objects/page_elements/PageElement.ts:170</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -981,7 +1098,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getclass">getClass</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L174">lib/page_objects/page_elements/PageElement.ts:174</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L174">lib/page_objects/page_elements/PageElement.ts:174</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -999,7 +1116,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getcontainsdirecttext">getContainsDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L230">lib/page_objects/page_elements/PageElement.ts:230</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L230">lib/page_objects/page_elements/PageElement.ts:230</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1023,7 +1140,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getcontainstext">getContainsText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L218">lib/page_objects/page_elements/PageElement.ts:218</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L218">lib/page_objects/page_elements/PageElement.ts:218</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1047,7 +1164,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#getcontainsvalue">getContainsValue</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L61">lib/page_objects/page_elements/ValuePageElement.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L61">lib/page_objects/page_elements/ValuePageElement.ts:61</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1071,7 +1188,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getdirecttext">getDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L162">lib/page_objects/page_elements/PageElement.ts:162</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L162">lib/page_objects/page_elements/PageElement.ts:162</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1089,7 +1206,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#gethtml">getHTML</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L158">lib/page_objects/page_elements/PageElement.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L158">lib/page_objects/page_elements/PageElement.ts:158</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1107,7 +1224,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#gethasanydirecttext">getHasAnyDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L226">lib/page_objects/page_elements/PageElement.ts:226</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L226">lib/page_objects/page_elements/PageElement.ts:226</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1125,7 +1242,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#gethasanytext">getHasAnyText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L214">lib/page_objects/page_elements/PageElement.ts:214</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L214">lib/page_objects/page_elements/PageElement.ts:214</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1142,7 +1259,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L57">lib/page_objects/page_elements/ValuePageElement.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L57">lib/page_objects/page_elements/ValuePageElement.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1160,7 +1277,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#gethasdirecttext">getHasDirectText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L222">lib/page_objects/page_elements/PageElement.ts:222</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L222">lib/page_objects/page_elements/PageElement.ts:222</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1184,7 +1301,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#gethastext">getHasText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L210">lib/page_objects/page_elements/PageElement.ts:210</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L210">lib/page_objects/page_elements/PageElement.ts:210</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1208,7 +1325,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#gethasvalue">getHasValue</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L53">lib/page_objects/page_elements/ValuePageElement.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L53">lib/page_objects/page_elements/ValuePageElement.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1232,7 +1349,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getheight">getHeight</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L206">lib/page_objects/page_elements/PageElement.ts:206</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L206">lib/page_objects/page_elements/PageElement.ts:206</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1250,7 +1367,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getid">getId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L178">lib/page_objects/page_elements/PageElement.ts:178</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L178">lib/page_objects/page_elements/PageElement.ts:178</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1266,9 +1383,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#getinterval">getInterval</a></p>
+								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#getinterval">getInterval</a></p>
+								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#getinterval">getInterval</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElementBase.ts#L81">lib/page_objects/page_elements/PageElementBase.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L100">lib/page_objects/page_elements/PageNode.ts:100</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1286,7 +1404,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getisenabled">getIsEnabled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L154">lib/page_objects/page_elements/PageElement.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L154">lib/page_objects/page_elements/PageElement.ts:154</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1304,7 +1422,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getlocation">getLocation</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L186">lib/page_objects/page_elements/PageElement.ts:186</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L186">lib/page_objects/page_elements/PageElement.ts:186</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.icoordinates.html" class="tsd-signature-type">ICoordinates</a></h4>
@@ -1322,7 +1440,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getname">getName</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L182">lib/page_objects/page_elements/PageElement.ts:182</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L182">lib/page_objects/page_elements/PageElement.ts:182</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1340,9 +1458,14 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#getselector">getSelector</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElementBase.ts#L73">lib/page_objects/page_elements/PageElementBase.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L119">lib/page_objects/page_elements/PageElementBase.ts:119</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the XPath selector of PageElementBase.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1358,7 +1481,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getsize">getSize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L198">lib/page_objects/page_elements/PageElement.ts:198</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L198">lib/page_objects/page_elements/PageElement.ts:198</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.isize.html" class="tsd-signature-type">ISize</a></h4>
@@ -1376,27 +1499,26 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#gettext">getText</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L166">lib/page_objects/page_elements/PageElement.ts:166</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L166">lib/page_objects/page_elements/PageElement.ts:166</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="gettimeout" class="tsd-anchor"></a>
 					<h3>get<wbr>Timeout</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">get<wbr>Timeout<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#gettimeout">getTimeout</a></p>
-								<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#gettimeout">getTimeout</a></p>
-								<p>Overrides <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#gettimeout">getTimeout</a></p>
+								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#gettimeout">getTimeout</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElementBase.ts#L77">lib/page_objects/page_elements/PageElementBase.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L96">lib/page_objects/page_elements/PageNode.ts:96</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1413,7 +1535,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L49">lib/page_objects/page_elements/ValuePageElement.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L49">lib/page_objects/page_elements/ValuePageElement.ts:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ValueType</span></h4>
@@ -1431,7 +1553,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getwidth">getWidth</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L202">lib/page_objects/page_elements/PageElement.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L202">lib/page_objects/page_elements/PageElement.ts:202</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1449,7 +1571,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#getx">getX</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L190">lib/page_objects/page_elements/PageElement.ts:190</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L190">lib/page_objects/page_elements/PageElement.ts:190</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1467,7 +1589,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#gety">getY</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L194">lib/page_objects/page_elements/PageElement.ts:194</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L194">lib/page_objects/page_elements/PageElement.ts:194</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1485,7 +1607,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#initialwait">initialWait</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L37">lib/page_objects/page_elements/ValuePageElement.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L37">lib/page_objects/page_elements/ValuePageElement.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1503,7 +1625,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelement.html">PageElement</a>.<a href="pageelement.html#scrollto">scrollTo</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageElement.ts#L454">lib/page_objects/page_elements/PageElement.ts:454</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L454">lib/page_objects/page_elements/PageElement.ts:454</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1527,7 +1649,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#setvalue">setValue</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/ValuePageElement.ts#L35">lib/page_objects/page_elements/ValuePageElement.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/ValuePageElement.ts#L35">lib/page_objects/page_elements/ValuePageElement.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1559,7 +1681,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html">IValueElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ivalueelementnode.html#tojson">toJSON</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7c979af/src/lib/page_objects/page_elements/PageNode.ts#L56">lib/page_objects/page_elements/PageNode.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L106">lib/page_objects/page_elements/PageNode.ts:106</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.ielementjson.html" class="tsd-signature-type">IElementJSON</a></h4>
@@ -1742,7 +1864,7 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="valuepageelement.html#gettext" class="tsd-kind-icon">get<wbr>Text</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="valuepageelement.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">

@@ -1995,6 +1995,11 @@ declare global {
          */
         getTimeout(): number
         /**
+         * Returns the default interval that a PageNode uses if no other explicit interval
+         * is passed to a function that operates with intervals (eg. wait, eventually)
+         */
+        getInterval(): number
+        /**
          * Returns a JSON representation of the PageNode.
          */
         toJSON(): IElementJSON
