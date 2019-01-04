@@ -1913,7 +1913,7 @@ declare global {
      */
     interface ILastDiff {
       /**
-       * Retries the last differences of a PageNode's check state functions.
+       * Retrieves the last differences of a PageNode's check state functions.
        *
        * Intended for framework-internal usage only.
        */
@@ -1984,7 +1984,7 @@ declare global {
        */
       interface INode extends ILastDiff {
         /**
-         * Returns the id of the PageNode.
+         * Retrieves the id used to identify a PageNode in the instance cache of PageElementStore.
          *
          * Intended for framework-internal usage only.
          */

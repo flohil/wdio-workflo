@@ -41,11 +41,11 @@ export abstract class Page<
   protected _interval: number
 
   /**
-   * defines all functions of PageNode which wait for a condition to become true within a specified timeout
+   * defines all functions of Page which wait for a condition to become true within a specified timeout
    */
   wait: PageWait<Store, this, IsOpenOpts, IsClosedOpts>
   /**
-   * defines all functions of PageNode which check if a condition eventually becomes true within a specified timeout
+   * defines all functions of Page which check if a condition eventually becomes true within a specified timeout
    */
   eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>
 
