@@ -64,6 +64,30 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Steps consist of a description and an execution function.
+							The execution function performs changes to the state of the tested application and the description briefly summarizes
+						these changes in natural language.</p>
+					</div>
+					<p>A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
+					execution function:</p>
+					<p>Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+						They also enable the interpolation of a step&#39;s description by replacing <code>%{key}</code> in the description string
+					with key&#39;s value retrieved from the step arguments object).</p>
+					<p>Step callbacks can be used to query and validate the state of the tested application right after step execution.
+					A step callback will be passed the return value of the execution function as its first parameter.</p>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>ArgsType defines the type of the step arguments passed to the execution function.</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>ReturnType defines the return type of the execution function.</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -121,7 +145,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/steps.ts#L174">lib/steps.ts:174</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/lib/steps.ts#L192">lib/steps.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -197,7 +221,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/__global.workflo.istep.html">IStep</a>.<a href="../interfaces/__global.workflo.istep.html#__description">__description</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/steps.ts#L75">lib/steps.ts:75</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/lib/steps.ts#L93">lib/steps.ts:93</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -208,7 +232,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/__global.workflo.istep.html">IStep</a>.<a href="../interfaces/__global.workflo.istep.html#__execute">__execute</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/steps.ts#L76">lib/steps.ts:76</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a96a42f/src/lib/steps.ts#L94">lib/steps.ts:94</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
