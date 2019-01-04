@@ -2882,7 +2882,7 @@ declare global {
     }
 
     /**
-     * IStepOptParams are supposed to be used as the parameters of a step creation function if a step does not require
+     * IOptStepParams are supposed to be used as the parameters of a step creation function if a step does not require
      * any or only optional arguments.
      *
      * @template ArgsType defines the type of the step arguments passed to the execution function.
@@ -3333,12 +3333,55 @@ declare global {
   function xpath(selector: string) : pageObjects.builders.XPathBuilder
 }
 
+/**
+ * Severity describes how severe the implications of something not working correctly would be.
+ */
 export type Severity = Workflo.Severity
+/**
+ * The result status of a testcase.
+ */
 export type TestcaseStatus = Workflo.TestcaseStatus
+/**
+ * The result status of a validation/an acceptance criteria of a Story.
+ */
 export type SpecStatus = Workflo.SpecStatus
+/**
+ * Steps consist of a description and an execution function.
+ * The execution function performs changes to the state of the tested application and the description briefly
+ * summarizes these changes in natural language.
+ *
+ * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
+ * execution function:
+ *
+ * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+ * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
+ * with key's value retrieved from the step arguments object).
+ *
+ * Step callbacks can be used to query and validate the state of the tested application right after step execution.
+ * A step callback will be passed the return value of the execution function as its first parameter.
+ *
+ */
 export type IStep = Workflo.IStep
+/**
+ * IStepParams are supposed to be used as the parameters of a step creation function if a step requires mandatory
+ * step arguments.
+ *
+ * @template ArgsType defines the type of the step arguments passed to the execution function.
+ * @template ReturnType defines the return type of the execution function.
+ */
 export type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepParams<ArgsType, ReturnType>
+/**
+ * IOptStepParams are supposed to be used as the parameters of a step creation function if a step does not require
+ * any or only optional arguments.
+ *
+ * @template ArgsType defines the type of the step arguments passed to the execution function.
+ * @template ReturnType defines the return type of the execution function.
+ */
 export type IOptStepParams<ArgsType extends Object, ReturnType> = Workflo.IOptStepParams<ArgsType, ReturnType>
+/**
+ * Steps in wdio-workflo need to be defined in this format - on object where the keys are the step descriptions and
+ * the values are step creation functions that take the step parameters as and argument and return a created Step.
+ */
 export type StepDefinitions = Workflo.StepDefinitions
 
 export * from './lib/steps'
