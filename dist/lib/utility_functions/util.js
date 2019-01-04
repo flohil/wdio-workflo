@@ -42,6 +42,22 @@ function convertToObject(unknownTypedInput, valueFunc = undefined) {
     return obj;
 }
 exports.convertToObject = convertToObject;
+/**
+ * This function compares the values of two passed variables with a compare method defined in `operator`.
+ *
+ * The following compare methods are supported:
+ *
+ * - equals
+ * - not equals
+ * - less than
+ * - greater than
+ *
+ * @template Type the type of the compared variables
+ * @param var1 the first variable to be compared
+ * @param var2 the second variable to be compared
+ * @param operator defines the method to be used for the comparison (===, !==, <, >)
+ * @returns the result of the comparison
+ */
 function compare(var1, var2, operator) {
     switch (operator) {
         case "==" /* equalTo */ || "==" /* eq */:
@@ -55,6 +71,12 @@ function compare(var1, var2, operator) {
     }
 }
 exports.compare = compare;
+/**
+ * This function returns the textual representation of a compare method (===, !==, <, >).
+ *
+ * @param comparator defines a method to be used for comparisons (===, !==, <, >)
+ * @returns the textual representation of the passed comparison method
+ */
 function comparatorStr(comparator) {
     if (comparator === "!=" /* ne */) {
         return ' other than';

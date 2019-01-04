@@ -63,41 +63,41 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
     };
 }
 declare class ValuePageElementMapWait<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementMapWait<Store, K, PageElementType, PageElementOptions, MapType> {
-    hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): MapType;
-    hasAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): MapType;
-    containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): MapType;
+    hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): MapType;
+    hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): MapType;
+    containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): MapType;
     readonly not: {
-        hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
-        hasAnyValue: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
-        containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => MapType;
-        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => MapType;
-        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => MapType;
-        hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
-        containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
-        hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
-        containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => MapType;
+        hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        hasText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        containsText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
+        containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => MapType;
     };
 }
 declare class ValuePageElementMapEventually<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementMapEventually<Store, K, PageElementType, PageElementOptions, MapType> {
-    hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
-    containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval): boolean;
+    hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
+    containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
     readonly not: {
-        hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyValue: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
-        containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => boolean;
-        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => boolean;
-        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IMapFilterMask<K>) => boolean;
-        hasText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
-        containsText: (text: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
-        containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.IWDIOParamsInterval) => boolean;
+        hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        hasText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        containsText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
+        containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => boolean;
     };
 }
 export {};

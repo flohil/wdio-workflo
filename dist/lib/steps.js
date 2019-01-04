@@ -3,12 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Kiwi_1 = require("./Kiwi");
 const _ = require("lodash");
 const CircularJson = require("circular-json");
+/**
+ * @ignore
+ */
 function mergeStepDefaults(defaults, params) {
     const _params = params;
     const res = _params || {};
     res.arg = _.merge(defaults, res.arg);
     return _params;
 }
+/**
+ * @ignore
+ */
 function stepsGetter(target, name, receiver) {
     if (typeof name === "string") {
         const stepName = name;
@@ -26,6 +32,9 @@ function stepsGetter(target, name, receiver) {
         throw new Error("Property keys of Steps must be of type string: Step " + name.toString);
     }
 }
+/**
+ * @ignore
+ */
 function stepsSetter(target, name, value) {
     throw new Error("Step implementations may not be changed: Tried to set Step " + name.toString() + " to value " + value.toString());
 }

@@ -118,6 +118,11 @@ class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
     }
 }
 // type guards
+/**
+ * Returns true if the passed node supports all functions defined in IValueElementNode.
+ *
+ * @param node a PageNode
+ */
 function isIValueElementNode(node) {
     return typeof node['getValue'] === 'function' &&
         typeof node['setValue'] === 'function' &&

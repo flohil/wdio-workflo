@@ -36,11 +36,11 @@ export interface ICompareElementFuncs<ElementExpectedType = never, ListExpectedT
     map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, MapOptsType>;
     group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, GroupOptsType>;
 }
-export interface ICompareEventuallyElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = Workflo.IWDIOParamsInterval, ListOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask, MapOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>, GroupOptsType = Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>> {
-    element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, Workflo.IWDIOParamsInterval>;
-    list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask>;
-    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>>;
-    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
+export interface ICompareEventuallyElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = Workflo.ITimeoutInterval, ListOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask, MapOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>, GroupOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>> {
+    element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, Workflo.ITimeoutInterval>;
+    list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask>;
+    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>>;
+    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
 export interface ICompareValueElementFuncs<ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>> extends ICompareElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType, never, Workflo.PageNode.ListFilterMask, Workflo.PageNode.MapFilterMask<string>, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>> {
     element?: IMatcherArgs<elements.ValuePageElement<stores.PageElementStore, ElementValueType>, ElementValueType, never>;
@@ -48,19 +48,19 @@ export interface ICompareValueElementFuncs<ElementValueType = any, ListValueType
     map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.PageNode.MapFilterMask<string>>;
     group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
-export interface ICompareEventuallyValueElementFuncs<ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>> extends ICompareElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType, Workflo.IWDIOParamsInterval, Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask, Workflo.IWDIOParamsInterval & Workflo.PageNode.MapFilterMask<string>, Workflo.IWDIOParamsInterval & Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>> {
-    element?: IMatcherArgs<elements.ValuePageElement<stores.PageElementStore, ElementValueType>, ElementValueType, Workflo.IWDIOParamsInterval>;
-    list?: IMatcherArgs<elements.ValuePageElementList<stores.PageElementStore, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IValuePageElementOpts<stores.PageElementStore>, ElementValueType>, ListValueType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask>;
-    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IMapFilterMask<string>>;
-    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
+export interface ICompareEventuallyValueElementFuncs<ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>> extends ICompareElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType, Workflo.ITimeoutInterval, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask, Workflo.ITimeoutInterval & Workflo.PageNode.MapFilterMask<string>, Workflo.ITimeoutInterval & Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>> {
+    element?: IMatcherArgs<elements.ValuePageElement<stores.PageElementStore, ElementValueType>, ElementValueType, Workflo.ITimeoutInterval>;
+    list?: IMatcherArgs<elements.ValuePageElementList<stores.PageElementStore, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IValuePageElementOpts<stores.PageElementStore>, ElementValueType>, ListValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask>;
+    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>>;
+    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
 export interface ICompareListLengthElementFuncs extends ICompareElementFuncs<never, number, never, never, never, Workflo.Comparator, never, never> {
     list: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, number, Workflo.Comparator>;
 }
-export interface ICompareEventuallyListLengthElementFuncs extends ICompareEventuallyElementFuncs<never, number, never, never, never, Workflo.IWDIOParamsInterval & {
+export interface ICompareEventuallyListLengthElementFuncs extends ICompareEventuallyElementFuncs<never, number, never, never, never, Workflo.ITimeoutInterval & {
     comparator?: Workflo.Comparator;
 }, never, never> {
-    list: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, number, Workflo.IWDIOParamsInterval & {
+    list: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, number, Workflo.ITimeoutInterval & {
         comparator?: Workflo.Comparator;
     }>;
 }
@@ -68,13 +68,13 @@ export interface ICompareAttributeElementFuncs extends ICompareElementFuncs<Work
     element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.IAttribute, never>;
 }
 export interface ICompareEventuallyAttributeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.IAttribute> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.IAttribute, Workflo.IWDIOParamsInterval>;
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.IAttribute, Workflo.ITimeoutInterval>;
 }
 export interface ICompareLocationElementFuncs extends ICompareElementFuncs<Workflo.ICoordinates> {
     element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ICoordinates, Partial<Workflo.ICoordinates>>;
 }
 export interface ICompareEventuallyLocationElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ICoordinates> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ICoordinates, Workflo.IWDIOParamsInterval & {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ICoordinates, Workflo.ITimeoutInterval & {
         tolerances?: Partial<Workflo.ICoordinates>;
     }>;
 }
@@ -82,7 +82,7 @@ export interface ICompareSizeElementFuncs extends ICompareElementFuncs<Workflo.I
     element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ISize, Partial<Workflo.ISize>>;
 }
 export interface ICompareEventuallySizeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ISize> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ISize, Workflo.IWDIOParamsInterval & {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ISize, Workflo.ITimeoutInterval & {
         tolerances?: Partial<Workflo.ISize>;
     }>;
 }
@@ -90,7 +90,7 @@ export interface ICompareNumberWithToleranceElementFuncs extends ICompareElement
     element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, number, number>;
 }
 export interface ICompareEventuallyNumberWithToleranceElementFuncs extends ICompareEventuallyElementFuncs<number> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, number, Workflo.IWDIOParamsInterval & {
+    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, number, Workflo.ITimeoutInterval & {
         tolerance?: number;
     }>;
 }
@@ -106,11 +106,11 @@ export declare function createMatcherWithoutExpected<OptsType extends Object = O
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyMatcher<OptsType extends Object = Workflo.IWDIOParamsInterval>(compareFuncs: ICompareEventuallyElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyMatcher<OptsType extends Object = Workflo.ITimeoutInterval>(compareFuncs: ICompareEventuallyElementFuncs): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyMatcherWithoutExpected<OptsType extends Object = Workflo.IWDIOParamsInterval>(compareFuncs: ICompareEventuallyElementFuncs, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyMatcherWithoutExpected<OptsType extends Object = Workflo.ITimeoutInterval>(compareFuncs: ICompareEventuallyElementFuncs, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
@@ -122,11 +122,11 @@ export declare function createTextMatcherWithoutExpected<OptsType extends Object
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyTextMatcher<OptsType extends Object = Workflo.IWDIOParamsInterval, ElementExpectedType = string, ListExpectedType = string | string[], MapExpectedType = Record<string, string>, GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyTextMatcher<OptsType extends Object = Workflo.ITimeoutInterval, ElementExpectedType = string, ListExpectedType = string | string[], MapExpectedType = Record<string, string>, GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyTextMatcherWithoutExpected<OptsType extends Object = Workflo.IWDIOParamsInterval, ElementExpectedType = string, ListExpectedType = string | string[], MapExpectedType = Record<string, string>, GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyTextMatcherWithoutExpected<OptsType extends Object = Workflo.ITimeoutInterval, ElementExpectedType = string, ListExpectedType = string | string[], MapExpectedType = Record<string, string>, GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
@@ -138,11 +138,11 @@ export declare function createBooleanMatcherWithoutExpected<OptsType extends Obj
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyBooleanMatcher<OptsType extends Object = Workflo.IWDIOParamsInterval, ElementExpectedType = boolean, ListExpectedType = boolean | boolean[], MapExpectedType = Record<string, boolean>, GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyBooleanMatcher<OptsType extends Object = Workflo.ITimeoutInterval, ElementExpectedType = boolean, ListExpectedType = boolean | boolean[], MapExpectedType = Record<string, boolean>, GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyBooleanMatcherWithoutExpected<OptsType extends Object = Workflo.IWDIOParamsInterval, ElementExpectedType = boolean, ListExpectedType = boolean | boolean[], MapExpectedType = Record<string, boolean>, GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyBooleanMatcherWithoutExpected<OptsType extends Object = Workflo.ITimeoutInterval, ElementExpectedType = boolean, ListExpectedType = boolean | boolean[], MapExpectedType = Record<string, boolean>, GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
@@ -154,11 +154,11 @@ export declare function createValueMatcherWithoutExpected<OptsType extends Objec
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyValueMatcher<OptsType extends Object = Workflo.IWDIOParamsInterval, ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyValueMatcher<OptsType extends Object = Workflo.ITimeoutInterval, ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };
-export declare function createEventuallyValueMatcherWithoutExpected<OptsType extends Object = Workflo.IWDIOParamsInterval, ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+export declare function createEventuallyValueMatcherWithoutExpected<OptsType extends Object = Workflo.ITimeoutInterval, ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>>(compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>, withoutExpected?: WithoutExpected[]): (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
     compare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
     negativeCompare: (node: Workflo.PageNode.INode, expectedOrOpts?: any, opts?: OptsType) => jasmine.CustomMatcherResult;
 };

@@ -57,45 +57,50 @@ declare class ValuePageElementGroupCurrently<Store extends PageElementStore, Con
 declare class ValuePageElementGroupWait<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupWait<Store, Content, GroupType> {
-    hasValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): GroupType;
-    hasAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.ValueGroupFilterMask<Content>): GroupType;
-    containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): GroupType;
+    hasValue(value: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
+    hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.ValueGroupFilterMask<Content>): GroupType;
+    containsValue(value: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
     readonly not: {
-        hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
-        hasAnyValue: (opts?: Workflo.IWDIOParamsInterval & Partial<Workflo.PageNode.ExtractValueBoolean<Content>>) => GroupType;
-        containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>) => GroupType;
-        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
-        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
-        hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
-        containsText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
-        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
-        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => GroupType;
+        hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Partial<Workflo.PageNode.ExtractValueBoolean<Content>>) => GroupType;
+        containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content>) => GroupType;
+        isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
+        isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
+        hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
+        containsText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
+        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
     };
 }
 declare class ValuePageElementGroupEventually<Store extends PageElementStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupEventually<Store, Content, GroupType> {
-    hasValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyValue(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
-    containsValue(value: ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval): boolean;
+    hasValue(value: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
+    containsValue(value: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     readonly not: {
-        hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyValue: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        exists: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMaskExists<Content>) => boolean;
-        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        containsText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.IWDIOParamsInterval) => boolean;
+        hasValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
+        containsValue: (value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content>) => boolean;
+        isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
+        isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
+        hasText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
+        containsText: (text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
+        containsDirectText: (directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
     };
 }
+/**
+ * Returns true if the passed node supports all functions defined in IValueElementNode.
+ *
+ * @param node a PageNode
+ */
 export declare function isIValueElementNode<Content extends {
     [K in keyof Content]: Workflo.PageNode.INode;
 }>(node: Workflo.PageNode.INode | ValueElementNode<Content>): node is ValueElementNode<Content>;

@@ -19,5 +19,27 @@ export declare function convertToObject<T>(unknownTypedInput: {
 } | string[] | string, valueFunc?: (key: string) => T): {
     [key: string]: T;
 };
+/**
+ * This function compares the values of two passed variables with a compare method defined in `operator`.
+ *
+ * The following compare methods are supported:
+ *
+ * - equals
+ * - not equals
+ * - less than
+ * - greater than
+ *
+ * @template Type the type of the compared variables
+ * @param var1 the first variable to be compared
+ * @param var2 the second variable to be compared
+ * @param operator defines the method to be used for the comparison (===, !==, <, >)
+ * @returns the result of the comparison
+ */
 export declare function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator): boolean;
+/**
+ * This function returns the textual representation of a compare method (===, !==, <, >).
+ *
+ * @param comparator defines a method to be used for comparisons (===, !==, <, >)
+ * @returns the textual representation of the passed comparison method
+ */
 export declare function comparatorStr(comparator: Workflo.Comparator): "" | " other than" | " greater than" | " less than";

@@ -4,7 +4,6 @@ import * as Functions from './api'
 import * as objectFunctions from './utility_functions/object'
 import * as arrayFunctions from './utility_functions/array'
 import * as classFunctions from './utility_functions/class'
-import * as stringFunctions from './utility_functions/string'
 import * as utilFunctions from './utility_functions/util'
 import {
   allMatchers,
@@ -53,7 +52,6 @@ function inject( config ) {
 
   safeAddAll(context.Workflo.Object, [objectFunctions])
   safeAddAll(context.Workflo.Array, [arrayFunctions])
-  safeAddAll(context.Workflo.String, [stringFunctions])
   safeAddAll(context.Workflo.Class, [classFunctions])
   safeAddAll(context.Workflo.Util, [utilFunctions])
 

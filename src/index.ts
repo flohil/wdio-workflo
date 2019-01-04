@@ -2389,7 +2389,7 @@ declare global {
     }
 
     /**
-     * @ignored
+     * @ignore
      */
     type Value = string | boolean | number
 
@@ -3389,10 +3389,9 @@ export * from './lib/steps'
 import * as objectFunctions from './lib/utility_functions/object'
 import * as arrayFunctions from './lib/utility_functions/array'
 import * as classFunctions from './lib/utility_functions/class'
-import * as stringFunctions from './lib/utility_functions/string'
 import * as utilFunctions from './lib/utility_functions/util'
 
-export { objectFunctions, arrayFunctions, classFunctions, stringFunctions, utilFunctions }
+export { objectFunctions, arrayFunctions, classFunctions, utilFunctions }
 
 export { pageObjects, helpers }
 

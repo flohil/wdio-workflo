@@ -57,7 +57,7 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
     click(options?: {
         postCondition?: () => boolean;
         customScroll?: Workflo.IScrollParams;
-    } & Workflo.IWDIOParamsInterval): this;
+    } & Workflo.ITimeoutInterval): this;
     protected _scrollTo(params: Workflo.IScrollParams): Workflo.IScrollResult;
     scrollTo(params: Workflo.IScrollParams): this;
     /**
@@ -79,7 +79,7 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
     getHTML(): string;
     /**
      * Gets text that resides on the level directly below the selected page element.
-     * Does not include text of the page element's nested children elements.
+     * Does not include any text of the page element's nested children elements.
      *
      * Overwriting this function will affect the behaviour of the functions
      * getDirectText, hasDirectText, containsDirectText and hasDirectAnyText in PageElement base class and its
@@ -257,188 +257,188 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
     };
 }
 export declare class PageElementWait<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseWait<Store, PageElementType> {
-    exists(opts?: Workflo.IWDIOParamsReverse): PageElementType;
-    isVisible(opts?: Workflo.IWDIOParamsReverse): PageElementType;
-    isEnabled(opts?: Workflo.IWDIOParamsReverse): PageElementType;
-    isSelected(opts?: Workflo.IWDIOParamsReverse): PageElementType;
-    isChecked(opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasText(text: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAnyText(opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    containsText(text: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasHTML(html: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAnyHTML(opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    containsHTML(html: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasDirectText(directText: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    containsDirectText(directText: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasClass(className: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAnyClass(opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    containsClass(className: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasId(id: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAnyId(opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    containsId(id: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasName(name: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    hasAnyName(opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
-    containsName(name: string, opts?: Workflo.IWDIOParamsReverseInterval): PageElementType;
+    exists(opts?: Workflo.ITimeoutReverse): PageElementType;
+    isVisible(opts?: Workflo.ITimeoutReverse): PageElementType;
+    isEnabled(opts?: Workflo.ITimeoutReverse): PageElementType;
+    isSelected(opts?: Workflo.ITimeoutReverse): PageElementType;
+    isChecked(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasText(text: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAnyText(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    containsText(text: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasHTML(html: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAnyHTML(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    containsHTML(html: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasDirectText(directText: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAnyDirectText(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    containsDirectText(directText: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasClass(className: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAnyClass(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    containsClass(className: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasId(id: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAnyId(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    containsId(id: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasName(name: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    hasAnyName(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
+    containsName(name: string, opts?: Workflo.ITimeoutReverseInterval): PageElementType;
     hasLocation(coordinates: Workflo.ICoordinates, opts?: {
         tolerances?: Partial<Workflo.ICoordinates>;
-    } & Workflo.IWDIOParamsReverseInterval): PageElementType;
+    } & Workflo.ITimeoutReverseInterval): PageElementType;
     hasX(x: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsReverseInterval): PageElementType;
+    } & Workflo.ITimeoutReverseInterval): PageElementType;
     hasY(y: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsReverseInterval): PageElementType;
+    } & Workflo.ITimeoutReverseInterval): PageElementType;
     hasSize(size: Workflo.ISize, opts?: {
         tolerances?: Partial<Workflo.ISize>;
-    } & Workflo.IWDIOParamsReverseInterval): PageElementType;
+    } & Workflo.ITimeoutReverseInterval): PageElementType;
     hasWidth(width: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsReverseInterval): PageElementType;
+    } & Workflo.ITimeoutReverseInterval): PageElementType;
     hasHeight(height: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsReverseInterval): PageElementType;
-    untilElement(description: string, condition: (element: PageElementType) => boolean, { timeout, interval }?: Workflo.IWDIOParamsInterval): PageElementType;
+    } & Workflo.ITimeoutReverseInterval): PageElementType;
+    untilElement(description: string, condition: (element: PageElementType) => boolean, { timeout, interval }?: Workflo.ITimeoutInterval): PageElementType;
     readonly not: {
-        exists: (opts?: Workflo.IWDIOParams) => PageElementType;
-        isVisible: (opts?: Workflo.IWDIOParams) => PageElementType;
-        isEnabled: (opts?: Workflo.IWDIOParams) => PageElementType;
-        isSelected: (opts?: Workflo.IWDIOParams) => PageElementType;
-        isChecked: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasText: (text: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsText: (text: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasHTML: (html: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAnyHTML: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsHTML: (html: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAnyClass: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasId: (id: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAnyId: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsId: (id: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasName: (name: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        hasAnyName: (opts?: Workflo.IWDIOParamsInterval) => PageElementType;
-        containsName: (name: string, opts?: Workflo.IWDIOParamsInterval) => PageElementType;
+        exists: (opts?: Workflo.ITimeout) => PageElementType;
+        isVisible: (opts?: Workflo.ITimeout) => PageElementType;
+        isEnabled: (opts?: Workflo.ITimeout) => PageElementType;
+        isSelected: (opts?: Workflo.ITimeout) => PageElementType;
+        isChecked: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasText: (text: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsText: (text: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyAttribute: (attributeName: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyClass: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyId: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasName: (name: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyName: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsName: (name: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasLocation: (coordinates: Workflo.ICoordinates, opts?: {
             tolerances?: Partial<Workflo.ICoordinates>;
-        } & Workflo.IWDIOParamsInterval) => PageElementType;
+        } & Workflo.ITimeoutInterval) => PageElementType;
         hasX: (x: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => PageElementType;
+        } & Workflo.ITimeoutInterval) => PageElementType;
         hasY: (y: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => PageElementType;
+        } & Workflo.ITimeoutInterval) => PageElementType;
         hasSize: (size: Workflo.ISize, opts?: {
             tolerances?: Partial<Workflo.ISize>;
-        } & Workflo.IWDIOParamsInterval) => PageElementType;
+        } & Workflo.ITimeoutInterval) => PageElementType;
         hasWidth: (width: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => PageElementType;
+        } & Workflo.ITimeoutInterval) => PageElementType;
         hasHeight: (height: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => PageElementType;
+        } & Workflo.ITimeoutInterval) => PageElementType;
     };
 }
 export declare class PageElementEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseEventually<Store, PageElementType> {
-    exists(opts?: Workflo.IWDIOParams): boolean;
-    isVisible(opts?: Workflo.IWDIOParams): boolean;
-    isEnabled(opts?: Workflo.IWDIOParams): boolean;
-    isSelected(opts?: Workflo.IWDIOParams): boolean;
-    isChecked(opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyText(opts?: Workflo.IWDIOParamsInterval): boolean;
-    containsText(text: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyHTML(opts?: Workflo.IWDIOParamsInterval): boolean;
-    containsHTML(html: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval): boolean;
-    containsDirectText(directText: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyAttribute(attributeName: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyClass(opts?: Workflo.IWDIOParamsInterval): boolean;
-    containsClass(className: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyId(opts?: Workflo.IWDIOParamsInterval): boolean;
-    containsId(id: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyName(opts?: Workflo.IWDIOParamsInterval): boolean;
-    containsName(name: string, opts?: Workflo.IWDIOParamsInterval): boolean;
+    exists(opts?: Workflo.ITimeout): boolean;
+    isVisible(opts?: Workflo.ITimeout): boolean;
+    isEnabled(opts?: Workflo.ITimeout): boolean;
+    isSelected(opts?: Workflo.ITimeout): boolean;
+    isChecked(opts?: Workflo.ITimeoutInterval): boolean;
+    hasText(text: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyText(opts?: Workflo.ITimeoutInterval): boolean;
+    containsText(text: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyHTML(opts?: Workflo.ITimeoutInterval): boolean;
+    containsHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyDirectText(opts?: Workflo.ITimeoutInterval): boolean;
+    containsDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval): boolean;
+    containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean;
+    hasClass(className: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyClass(opts?: Workflo.ITimeoutInterval): boolean;
+    containsClass(className: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasId(id: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyId(opts?: Workflo.ITimeoutInterval): boolean;
+    containsId(id: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasName(name: string, opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyName(opts?: Workflo.ITimeoutInterval): boolean;
+    containsName(name: string, opts?: Workflo.ITimeoutInterval): boolean;
     hasLocation(coordinates: Workflo.ICoordinates, opts?: {
         tolerances?: Partial<Workflo.ICoordinates>;
-    } & Workflo.IWDIOParamsInterval): boolean;
+    } & Workflo.ITimeoutInterval): boolean;
     hasX(x: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsInterval): boolean;
+    } & Workflo.ITimeoutInterval): boolean;
     hasY(y: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsInterval): boolean;
+    } & Workflo.ITimeoutInterval): boolean;
     hasSize(size: Workflo.ISize, opts?: {
         tolerances?: Partial<Workflo.ISize>;
-    } & Workflo.IWDIOParamsInterval): boolean;
+    } & Workflo.ITimeoutInterval): boolean;
     hasWidth(width: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsInterval): boolean;
+    } & Workflo.ITimeoutInterval): boolean;
     hasHeight(height: number, opts?: {
         tolerance?: number;
-    } & Workflo.IWDIOParamsInterval): boolean;
-    meetsCondition(condition: (element: PageElementType) => boolean, opts?: Workflo.IWDIOParamsInterval): boolean;
+    } & Workflo.ITimeoutInterval): boolean;
+    meetsCondition(condition: (element: PageElementType) => boolean, opts?: Workflo.ITimeoutInterval): boolean;
     readonly not: {
-        exists: (opts?: Workflo.IWDIOParams) => boolean;
-        isVisible: (opts?: Workflo.IWDIOParams) => boolean;
-        isEnabled: (opts?: Workflo.IWDIOParams) => boolean;
-        isSelected: (opts?: Workflo.IWDIOParams) => boolean;
-        isChecked: (opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasText: (text: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsText: (text: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasHTML: (html: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyHTML: (opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsHTML: (html: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsDirectText: (directText: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyAttribute: (attributeName: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyClass: (opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsClass: (className: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasId: (id: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyId: (opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsId: (id: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasName: (name: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyName: (opts?: Workflo.IWDIOParamsInterval) => boolean;
-        containsName: (name: string, opts?: Workflo.IWDIOParamsInterval) => boolean;
+        exists: (opts?: Workflo.ITimeout) => boolean;
+        isVisible: (opts?: Workflo.ITimeout) => boolean;
+        isEnabled: (opts?: Workflo.ITimeout) => boolean;
+        isSelected: (opts?: Workflo.ITimeout) => boolean;
+        isChecked: (opts?: Workflo.ITimeoutInterval) => boolean;
+        hasText: (text: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsText: (text: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyAttribute: (attributeName: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyClass: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyId: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsId: (id: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasName: (name: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyName: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsName: (name: string, opts?: Workflo.ITimeoutInterval) => boolean;
         hasLocation: (coordinates: Workflo.ICoordinates, opts?: {
             tolerances?: Partial<Workflo.ICoordinates>;
-        } & Workflo.IWDIOParamsInterval) => boolean;
+        } & Workflo.ITimeoutInterval) => boolean;
         hasX: (x: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => boolean;
+        } & Workflo.ITimeoutInterval) => boolean;
         hasY: (y: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => boolean;
+        } & Workflo.ITimeoutInterval) => boolean;
         hasSize: (size: Workflo.ISize, opts?: {
             tolerances?: Partial<Workflo.ISize>;
-        } & Workflo.IWDIOParamsInterval) => boolean;
+        } & Workflo.ITimeoutInterval) => boolean;
         hasWidth: (width: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => boolean;
+        } & Workflo.ITimeoutInterval) => boolean;
         hasHeight: (height: number, opts?: {
             tolerance?: number;
-        } & Workflo.IWDIOParamsInterval) => boolean;
+        } & Workflo.ITimeoutInterval) => boolean;
     };
 }

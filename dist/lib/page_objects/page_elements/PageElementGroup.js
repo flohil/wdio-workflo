@@ -465,6 +465,11 @@ class PageElementGroupEventually extends PageNode_1.PageNodeEventually {
 }
 exports.PageElementGroupEventually = PageElementGroupEventually;
 // type guards
+/**
+ * Returns true if the passed node supports all functions defined in IElementNode.
+ *
+ * @param node a PageNode
+ */
 function isIElementNode(node) {
     return typeof node['getText'] === 'function' &&
         typeof node.currently['hasText'] === 'function' &&

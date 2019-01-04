@@ -3,23 +3,22 @@ import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
-export declare type WdioElements = WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
 export interface IPageElementListIdentifier<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
     mappingObject: {
         [key: string]: string;
     };
     func: (element: PageElementType) => string;
 }
-export interface IPageElementListWaitEmptyReverseParams extends Workflo.IWDIOParamsInterval {
+export interface IPageElementListWaitEmptyReverseParams extends Workflo.ITimeoutInterval {
     reverse?: boolean;
 }
-export interface IPageElementListWaitLengthParams extends Workflo.IWDIOParamsInterval {
+export interface IPageElementListWaitLengthParams extends Workflo.ITimeoutInterval {
     comparator?: Workflo.Comparator;
 }
 export interface IPageElementListWaitLengthReverseParams extends IPageElementListWaitLengthParams {
     reverse?: boolean;
 }
-export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store>, Workflo.IWDIOParamsInterval {
+export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     elementOptions: PageElementOptions;
     waitType?: Workflo.WaitType;
@@ -203,31 +202,31 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
     readonly any: PageElementType["wait"];
     readonly none: PageElementType['wait']['not'];
-    exists(opts?: Workflo.IWDIOParams & {
+    exists(opts?: Workflo.ITimeout & {
         filterMask?: boolean;
     }): ListType;
-    isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): ListType;
-    isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): ListType;
-    hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
-    hasAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): ListType;
-    containsText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
-    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): ListType;
-    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): ListType;
+    isVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): ListType;
+    isEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): ListType;
+    hasText(text: string | string[], opts?: Workflo.ITimeoutInterval): ListType;
+    hasAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): ListType;
+    containsText(text: string | string[], opts?: Workflo.ITimeoutInterval): ListType;
+    hasDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): ListType;
+    hasAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): ListType;
+    containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): ListType;
     readonly not: {
-        isEmpty: (opts?: Workflo.IWDIOParamsInterval) => ListType;
+        isEmpty: (opts?: Workflo.ITimeoutInterval) => ListType;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => ListType;
-        exists: (opts?: Workflo.IWDIOParams & {
+        exists: (opts?: Workflo.ITimeout & {
             filterMask?: boolean;
         }) => ListType;
-        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => ListType;
-        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => ListType;
-        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask) => ListType;
-        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
-        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask) => ListType;
-        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => ListType;
+        isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask) => ListType;
+        isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask) => ListType;
+        hasText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => ListType;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => ListType;
+        containsText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => ListType;
+        hasDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => ListType;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => ListType;
+        containsDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => ListType;
     };
 }
 export declare class PageElementListEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeEventually<Store, ListType> {
@@ -235,30 +234,30 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
     readonly none: PageElementType['eventually']['not'];
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
-    exists(opts?: Workflo.IWDIOParams & {
+    exists(opts?: Workflo.ITimeout & {
         filterMask?: boolean;
     }): boolean;
-    isVisible(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean;
-    isEnabled(opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask): boolean;
-    hasText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean;
-    containsText(text: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
-    hasAnyDirectText(opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask): boolean;
-    containsDirectText(directText: string | string[], opts?: Workflo.IWDIOParamsInterval): boolean;
+    isVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
+    isEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
+    hasText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
+    containsText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
+    hasDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
+    hasAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
+    containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     readonly not: {
-        isEmpty: (opts?: Workflo.IWDIOParamsInterval) => boolean;
+        isEmpty: (opts?: Workflo.ITimeoutInterval) => boolean;
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
-        exists: (opts?: Workflo.IWDIOParams & {
+        exists: (opts?: Workflo.ITimeout & {
             filterMask?: boolean;
         }) => boolean;
-        isVisible: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => boolean;
-        isEnabled: (opts?: Workflo.IWDIOParams & Workflo.PageNode.IListFilterMask) => boolean;
-        hasText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask) => boolean;
-        containsText: (text: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
-        hasAnyDirectText: (opts?: Workflo.IWDIOParamsInterval & Workflo.PageNode.IListFilterMask) => boolean;
-        containsDirectText: (directText: string | string[], opts?: Workflo.IWDIOParamsInterval) => boolean;
+        isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask) => boolean;
+        isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask) => boolean;
+        hasText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => boolean;
+        containsText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
+        hasDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => boolean;
+        containsDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
     };
 }

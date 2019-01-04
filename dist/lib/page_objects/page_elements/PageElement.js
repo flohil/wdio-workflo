@@ -189,6 +189,10 @@ class PageElement extends _1.PageElementBase {
      * is fulfilled. (eg. element is visible)
      * In this case, postCondition function will be
      */
+    // * By default, webdriver tries to scroll an element which should be clicked in to view.
+    // * However, if the element is obscured by another element or if scrolling into view
+    // * failed for another reason, you can pass customScroll parameters to click to force
+    // * a custom scrolling behavior before clicking on the PageElement.
     click(options = {}) {
         this.initialWait();
         let errorMessage = '';
@@ -416,7 +420,7 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
     }
     /**
      * Gets text that resides on the level directly below the selected page element.
-     * Does not include text of the page element's nested children elements.
+     * Does not include any text of the page element's nested children elements.
      *
      * Overwriting this function will affect the behaviour of the functions
      * getDirectText, hasDirectText, containsDirectText and hasDirectAnyText in PageElement base class and its
@@ -1175,11 +1179,15 @@ class PageElementEventually extends _1.PageElementBaseEventually {
 }
 exports.PageElementEventually = PageElementEventually;
 // TYPE GUARDS
+/**
+ * Returns true if the passed result is an instance of Workflo.IJSError.
+ *
+ * @param result an arbitrary value/object
+ */
 function isJsError(result) {
     if (!result) {
         return false;
     }
     return result.notFound !== undefined;
 }
-// HELPER FUNCTIONS
 //# sourceMappingURL=PageElement.js.map

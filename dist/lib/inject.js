@@ -6,7 +6,6 @@ const Functions = require("./api");
 const objectFunctions = require("./utility_functions/object");
 const arrayFunctions = require("./utility_functions/array");
 const classFunctions = require("./utility_functions/class");
-const stringFunctions = require("./utility_functions/string");
 const utilFunctions = require("./utility_functions/util");
 const matchers_1 = require("./matchers");
 function safeAdd(context, key, obj) {
@@ -40,7 +39,6 @@ function inject(config) {
     };
     safeAddAll(context.Workflo.Object, [objectFunctions]);
     safeAddAll(context.Workflo.Array, [arrayFunctions]);
-    safeAddAll(context.Workflo.String, [stringFunctions]);
     safeAddAll(context.Workflo.Class, [classFunctions]);
     safeAddAll(context.Workflo.Util, [utilFunctions]);
     context.expectElement = matchers_1.expectElement;
