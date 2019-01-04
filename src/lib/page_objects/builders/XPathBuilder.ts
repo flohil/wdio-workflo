@@ -45,7 +45,7 @@ export class XPathBuilder {
   /**
    * Appends a plain XPath string to the currently constructed XPath expression.
    *
-   * @param appendedXPath the appended plan XPath string
+   * @param appendedXPath the appended plain XPath string
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   append(appendedXPath: string) {

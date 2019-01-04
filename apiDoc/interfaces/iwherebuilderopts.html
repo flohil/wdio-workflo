@@ -64,6 +64,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Defines the opts parameter passed to the constructor of ListWhereBuilder.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -114,9 +121,19 @@
 					<div class="tsd-signature tsd-kind-icon">clone<wbr>Func<span class="tsd-signature-symbol">:</span> <a href="../globals.html#clonefunc" class="tsd-signature-type">CloneFunc</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ListType</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/ListWhereBuilder.ts#L14">lib/page_objects/builders/ListWhereBuilder.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/page_objects/builders/ListWhereBuilder.ts#L35">lib/page_objects/builders/ListWhereBuilder.ts:35</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Creates a copy of ListWhereBuilder&#39;s PageElementList which manages a subset of the original list&#39;s PageElements.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>template</dt>
+							<dd><p>ListType the type of the cloned PageElementList</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="elementoptions" class="tsd-anchor"></a>
@@ -124,9 +141,14 @@
 					<div class="tsd-signature tsd-kind-icon">element<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageElementOptions</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/ListWhereBuilder.ts#L13">lib/page_objects/builders/ListWhereBuilder.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/page_objects/builders/ListWhereBuilder.ts#L29">lib/page_objects/builders/ListWhereBuilder.ts:29</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Opts passed to the constructor of PageElements created via ListWhereBuilder&#39;s PageElementStore.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="elementstorefunc" class="tsd-anchor"></a>
@@ -134,15 +156,29 @@
 					<div class="tsd-signature tsd-kind-icon">element<wbr>Store<wbr>Func<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/ListWhereBuilder.ts#L12">lib/page_objects/builders/ListWhereBuilder.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/page_objects/builders/ListWhereBuilder.ts#L25">lib/page_objects/builders/ListWhereBuilder.ts:25</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A function that returns instances of a PageElements managed by ListWhereBuilder&#39;s PageElementList
+							from the ListWhereBuilder&#39;s PageElementStore.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>the selector of a created PageElement</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>passed to the constructor of the created PageElements</p>
+							</dd>
+						</dl>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -152,7 +188,7 @@
 												<h5>selector: <span class="tsd-signature-type">string</span></h5>
 											</li>
 											<li>
-												<h5>options: <span class="tsd-signature-type">PageElementOptions</span></h5>
+												<h5>opts: <span class="tsd-signature-type">PageElementOptions</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
@@ -168,9 +204,19 @@
 					<div class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Func<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/ListWhereBuilder.ts#L15">lib/page_objects/builders/ListWhereBuilder.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/page_objects/builders/ListWhereBuilder.ts#L41">lib/page_objects/builders/ListWhereBuilder.ts:41</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Returns all PageElements manages by ListWhereBuilder&#39;s PageElementList.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>an instance of PageElementList for which all managed PageElements should be returned</p>
+							</dd>
+						</dl>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
@@ -199,9 +245,14 @@
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Store</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/1650264/src/lib/page_objects/builders/ListWhereBuilder.ts#L11">lib/page_objects/builders/ListWhereBuilder.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/8332553/src/lib/page_objects/builders/ListWhereBuilder.ts#L17">lib/page_objects/builders/ListWhereBuilder.ts:17</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An instance of PageElementStore used by PageNodes which are returned by ListWhereBuilder.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
