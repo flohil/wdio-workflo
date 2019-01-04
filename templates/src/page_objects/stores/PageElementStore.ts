@@ -10,9 +10,13 @@ export class PageElementStore extends core.stores.PageElementStore {
 // ELEMENTS
 
   /**
+   * Retrieves an instance of a PageElement from the store.
    *
-   * @param selector
-   * @param options
+   * The waitType of the PageElement is set to 'visible' by default.
+   *
+   * @param selector the XPath selector of the retrieved PageElement
+   * @param opts the publicly available options used to configure the retrieved PageElement
+   * @returns an instance of the retrieved PageElement
    */
   Element(
     selector: Workflo.XPath,
@@ -28,6 +32,15 @@ export class PageElementStore extends core.stores.PageElementStore {
     )
   }
 
+  /**
+   * Retrieves an instance of a PageElement from the store.
+   *
+   * The waitType of the retrieved PageElement is set to 'exist' and cannot be overwritten.
+   *
+   * @param selector the XPath selector of the retrieved PageElement
+   * @param opts the publicly available options used to configure the retrieved PageElement
+   * @returns an instance of the retrieved PageElement
+   */
   ExistElement(
     selector: Workflo.XPath,
     options?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
@@ -43,6 +56,17 @@ export class PageElementStore extends core.stores.PageElementStore {
 
 // LISTS
 
+  /**
+   * Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
+   * PageElement.
+   *
+   * The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to
+   * 'visible' by default.
+   *
+   * @param selector the XPath selector of the retrieved PageElementList
+   * @param opts the publicly available options used to configure the retrieved PageElementList
+   * @returns an instance of the retrieved PageElementList
+   */
   ElementList(
     selector: Workflo.XPath,
     options?: Workflo.PickPartial<
@@ -63,6 +87,17 @@ export class PageElementStore extends core.stores.PageElementStore {
     )
   }
 
+  /**
+   * Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
+   * PageElement.
+   *
+   * The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to 'exist'
+   * by default.
+   *
+   * @param selector the XPath selector of the retrieved PageElementList
+   * @param opts the publicly available options used to configure the retrieved PageElementList
+   * @returns an instance of the retrieved PageElementList
+   */
   ExistElementList(
     selector: Workflo.XPath,
     options?: Workflo.PickPartial<
@@ -84,6 +119,17 @@ export class PageElementStore extends core.stores.PageElementStore {
 
 // MAPS
 
+  /**
+   * Retrieves an instance of a PageElementMap from the store that manages PageElement instances of the type
+   * PageElement.
+   *
+   * The waitType of PageElements managed by PageElementMap is set to 'visible' by default.
+   *
+   * @template K the names of all PageElements managed by PageElementMap
+   * @param selector the XPath selector of the retrieved PageElementMap
+   * @param opts the publicly available options used to configure the retrieved PageElementMap
+   * @returns an instance of the retrieved PageElementMap
+   */
   ElementMap<K extends string>(
     selector: Workflo.XPath,
     options: Workflo.PickPartial<
@@ -104,6 +150,17 @@ export class PageElementStore extends core.stores.PageElementStore {
     )
   }
 
+  /**
+   * Retrieves an instance of a PageElementMap from the store that manages PageElement instances of the type
+   * PageElement.
+   *
+   * The waitType of PageElements managed by PageElementMap is set to 'exist' by default.
+   *
+   * @template K the names of all PageElements managed by PageElementMap
+   * @param selector the XPath selector of the retrieved PageElementMap
+   * @param opts the publicly available options used to configure the retrieved PageElementMap
+   * @returns an instance of the retrieved PageElementMap
+   */
   ExistElementMap<K extends string>(
     selector: Workflo.XPath,
     options: Workflo.PickPartial<
