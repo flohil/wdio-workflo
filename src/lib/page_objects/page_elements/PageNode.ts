@@ -172,7 +172,7 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
    * @param errorMessage an errorMessage that describes the condition which did not become true within a specific
    * timeout
    * @param timeout the timeout used to wait for the result of the passed func to return true
-   * @returns PageNode
+   * @returns this (an instance of PageNode)
    */
   __wait(func: () => boolean, errorMessage: string, timeout: number) {
     try {
@@ -197,7 +197,7 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
    * true within a specific timeout
    * @param timeout the timeout used to wait for the result of the waitFunc to return true
    * @param interval the interval used to check for the result of the waitFunc to return true
-   * @returns PageNode
+   * @returns this (an instance of PageNode)
    */
   __waitUntil(
     waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number, interval?: number

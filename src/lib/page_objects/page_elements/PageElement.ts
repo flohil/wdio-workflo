@@ -460,7 +460,7 @@ export class PageElement<
    * returns true or until a specific timeout is reached.
    *
    * @param options configures the scrolling behavior
-   * @returns PageElement
+   * @returns this (an instance of PageElement)
    */
   click(
     options: Workflo.IClickOpts = {}
@@ -572,7 +572,7 @@ export class PageElement<
    * Does not perform the initial waiting condition.
    *
    * @param params configures the scrolling behavior
-   * @returns PageElement
+   * @returns this (an instance of PageElement)
    */
   protected _scrollTo(
     params: Workflo.IScrollParams
@@ -682,7 +682,7 @@ export class PageElement<
    * condition.
    *
    * @param params configures the scrolling behavior
-   * @returns PageElement
+   * @returns this (an instance of PageElement)
    */
   scrollTo(
     params: Workflo.IScrollParams
@@ -1514,7 +1514,7 @@ export class PageElementWait<
 > extends PageElementBaseWait<Store, PageElementType> {
 
   /**
-   * Waits for a PageElement to exist.
+   * Waits for PageElement to exist.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1522,6 +1522,8 @@ export class PageElementWait<
    * set to true, checks for the condition NOT to be met instead
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   exists(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
@@ -1529,7 +1531,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to be visible.
+   * Waits for PageElement to be visible.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1537,6 +1539,8 @@ export class PageElementWait<
    * set to true, checks for the condition NOT to be met instead
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   isVisible(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
@@ -1544,7 +1548,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to be enabled.
+   * Waits for PageElement to be enabled.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1552,6 +1556,8 @@ export class PageElementWait<
    * set to true, checks for the condition NOT to be met instead
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   isEnabled(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
@@ -1559,7 +1565,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to be selected.
+   * Waits for PageElement to be selected.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1567,6 +1573,8 @@ export class PageElementWait<
    * set to true, checks for the condition NOT to be met instead
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   isSelected(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
@@ -1574,15 +1582,18 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to be checked within.
+   * Waits for PageElement to be checked.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
-  * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
-  * some or all managed PageElements, the `timeout` within which the condition is expected to be met and a
-  * `reverse` flag that, if set to true, checks for the condition NOT to be met instead
-  *
-  * If no `timeout` is specified, PageNode's default timeout is used.
+   * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
+  * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+   *
+   * If no `timeout` is specified, PageNode's default timeout is used.
+   * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   isChecked(opts: Workflo.ITimeoutReverseInterval = {}) {
     const timeout = opts.timeout || this._node.getTimeout()
@@ -1605,7 +1616,7 @@ export class PageElementWait<
     return this._node
   }
   /**
-   * Waits for a PageElement to have an actual text which equals the expected text.
+   * Waits for PageElement to have an actual text which equals the expected text.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1615,6 +1626,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasText(text: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1622,7 +1635,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have any text.
+   * Waits for PageElement to have any text.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1631,6 +1644,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAnyText(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
@@ -1638,7 +1653,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have an actual text which contains the expected text.
+   * Waits for PageElement to have an actual text which contains the expected text.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1648,6 +1663,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   containsText(text: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1655,7 +1672,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have an actual HTML value which equals the expected HTML value.
+   * Waits for PageElement to have an actual HTML value which equals the expected HTML value.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1665,6 +1682,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasHTML(html: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1672,7 +1691,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have any HTML value.
+   * Waits for PageElement to have any HTML value.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1681,6 +1700,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAnyHTML(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
@@ -1688,7 +1709,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have an actual HTML value which contains the expected HTML value.
+   * Waits for PageElement to have an actual HTML value which contains the expected HTML value.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1698,6 +1719,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   containsHTML(html: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
@@ -1705,7 +1728,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have an actual direct text which equals the expected direct text.
+   * Waits for PageElement to have an actual direct text which equals the expected direct text.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1718,6 +1741,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasDirectText(directText: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1725,7 +1750,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have any direct text.
+   * Waits for PageElement to have any direct text.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1737,6 +1762,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAnyDirectText(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
@@ -1744,7 +1771,7 @@ export class PageElementWait<
     )
   }
   /**
-   * Waits for a PageElement to have an actual direct text which contains the expected direct text.
+   * Waits for PageElement to have an actual direct text which contains the expected direct text.
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -1757,6 +1784,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   containsDirectText(directText: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
@@ -1775,6 +1804,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1793,6 +1824,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
@@ -1811,6 +1844,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
@@ -1831,6 +1866,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasClass(className: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1847,6 +1884,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAnyClass(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
@@ -1865,6 +1904,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   containsClass(className: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
@@ -1882,6 +1923,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasId(id: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1898,6 +1941,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAnyId(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
@@ -1916,6 +1961,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   containsId(id: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
@@ -1933,6 +1980,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasName(name: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
@@ -1949,6 +1998,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasAnyName(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
@@ -1967,6 +2018,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   containsName(name: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
@@ -1985,6 +2038,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasLocation(
     coordinates: Workflo.ICoordinates,
@@ -2021,6 +2076,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasX(
     x: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
@@ -2055,6 +2112,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasY(
     y: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
@@ -2089,6 +2148,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasSize(
     size: Workflo.ISize,
@@ -2125,6 +2186,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasWidth(
     width: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
@@ -2159,6 +2222,8 @@ export class PageElementWait<
    *
    * If no `timeout` is specified, PageNode's default timeout is used.
    * If no `interval` is specified, PageNode's default interval is used.
+   *
+   * @returns this (an instance of PageElement)
    */
   hasHeight(
     height: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
@@ -2190,6 +2255,8 @@ export class PageElementWait<
    * @param condition the function which checks if a certain condition is met
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it
+   *
+   * @returns this (an instance of PageElement)
    */
   untilElement(
     description: string,
@@ -2208,84 +2275,460 @@ export class PageElementWait<
 
   get not() {
     return {
+      /**
+       * Waits for a PageElement not to exist.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       exists: (opts?: Workflo.ITimeout) => {
         return this.exists(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for a PageElement not to be visible.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       isVisible: (opts?: Workflo.ITimeout) => {
         return this.isVisible(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for a PageElement not to be enabled.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       isEnabled: (opts?: Workflo.ITimeout) => {
         return this.isEnabled(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for a PageElement not to be selected.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       isSelected: (opts?: Workflo.ITimeout) => {
         return this.isSelected(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement not to be checked.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+       * `interval` used to check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       isChecked: (opts?: Workflo.ITimeoutInterval) => {
         return this.isChecked(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement to have an actual text which does not equal the expected text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param text the expected text which is supposed not to equal the actual text
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasText: (text: string, opts?: Workflo.ITimeoutInterval) => {
         return this.hasText(text, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement not to have any text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAnyText: (opts?: Workflo.ITimeoutInterval) => {
         return this.hasAnyText(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement to have an actual text which does not contain the expected text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param text the expected text which is supposed not to be contained in the actual text
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       containsText: (text: string, opts?: Workflo.ITimeoutInterval) => {
         return this.containsText(text, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement to have an actual HTML value which does not equal the expected HTML value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param html the expected html which is supposed not to equal the actual html
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => {
         return this.hasHTML(html, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement not to have any HTML value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => {
         return this.hasAnyHTML(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement to have an actual HTML value which does not contain the expected HTML value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param html the expected html which is supposed not to be contained in the actual html
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => {
         return this.containsHTML(html, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement to have an actual direct text which does not equal the expected direct text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children elements.
+       *
+       * @param text the expected direct text which is supposed not to equal the actual direct text
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => {
         return this.hasDirectText(directText, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement not to have any direct text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children elements.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAnyDirectText: (opts?: Workflo.ITimeoutInterval) => {
         return this.hasAnyDirectText(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement to have an actual direct text which does not contain the expected direct text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children elements.
+       *
+       * @param text the expected direct text which is supposed not to be contained in the actual direct text
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       containsDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => {
         return this.containsDirectText(directText, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of the specified HTML attribute of PageElement not to equal an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value
+       * it is expected not to have
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => {
         return this.hasAttribute(attribute, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of the specified HTML attribute of PageElement not to have any value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAnyAttribute: (attributeName: string, opts?: Workflo.ITimeoutInterval) => {
         return this.hasAnyAttribute(attributeName, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of the specified HTML attribute of PageElement not to contain an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value
+       * it is expected not to contain
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => {
         return this.containsAttribute(attribute, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of PageElement's HTML 'class' attribute not to equal an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
+       * attribute
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => {
         return this.hasClass(className, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement's HTML 'class' attribute not to have any value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAnyClass: (opts?: Workflo.ITimeoutInterval) => {
         return this.hasAnyClass(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of the PageElement's HTML 'class' attribute not to contain an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param className the expected value which is supposed not to be contained in the actual value of PageElement's 
+       * HTML 'class' attribute
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => {
         return this.containsClass(className, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of PageElement's HTML 'id' attribute not to equal an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param id the expected value which is supposed not to equal the actual value of PageElement's HTML 'id' attribute
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasId: (id: string, opts?: Workflo.ITimeoutInterval) => {
         return this.hasId(id, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement's HTML 'id' attribute not to have any value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAnyId: (opts?: Workflo.ITimeoutInterval) => {
         return this.hasAnyId(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of PageElement's HTML 'id' attribute not to contain an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML 'id'
+       * attribute
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       containsId: (id: string, opts?: Workflo.ITimeoutInterval) => {
         return this.containsId(id, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of PageElement's HTML 'name' attribute not to equal an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param name the expected value which is supposed not to equal the actual value of PageElement's HTML 'name' 
+       * attribute
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasName: (name: string, opts?: Workflo.ITimeoutInterval) => {
         return this.hasName(name, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for PageElement's HTML 'name' attribute not to have any value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasAnyName: (opts?: Workflo.ITimeoutInterval) => {
         return this.hasAnyName(this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the actual value of PageElement's HTML 'name' attribute not to contain an expected value.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param name the expected value which is supposed not to be contained in the actual value of PageElement's HTML 
+       * 'name' attribute
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       containsName: (name: string, opts?: Workflo.ITimeoutInterval) => {
         return this.containsName(name, this._makeReverseParams(opts))
       },
+      /**
+       * Waits for the location of PageElement not to equal the expected coordinates.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param coordinates the not-expected coordinates of PageElement
+       * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
+       * the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasLocation: (
         coordinates: Workflo.ICoordinates,
         opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval =
@@ -2293,16 +2736,58 @@ export class PageElementWait<
       ) => this.hasLocation(
         coordinates, {tolerances: opts.tolerances, timeout: opts.timeout, reverse: true}
       ),
+      /**
+       * Waits for the x-location of PageElement not to equal the expected x-location.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param x the not-expected x-location of PageElement
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected x-location,
+       * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasX: (
         x: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
       ) => this.hasX(
         x, {tolerance: opts.tolerance, timeout: opts.timeout, reverse: true}
       ),
+      /**
+       * Waits for the y-location of PageElement not to equal the expected y-location.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param y the not-expected y-location of PageElement
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected y-location,
+       * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasY: (
         y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
       ) => this.hasY(
         y, {tolerance: opts.tolerance, timeout: opts.timeout, reverse: true}
       ),
+      /**
+       * Waits for the size of PageElement not to equal the expected size.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param size the not-expected size of PageElement
+       * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected size,
+       * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasSize: (
         size: Workflo.ISize,
         opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.ITimeoutInterval =
@@ -2310,11 +2795,39 @@ export class PageElementWait<
       ) => this.hasSize(
         size, {tolerances: opts.tolerances, timeout: opts.timeout, reverse: true}
       ),
+      /**
+       * Waits for the width of PageElement not to equal the expected width.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param width the not-expected width of PageElement
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected width,
+       * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasWidth: (
         width: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
       ) => this.hasWidth(
         width, {tolerance: opts.tolerance, timeout: opts.timeout, reverse: true}
       ),
+      /**
+       * Waits for the height of PageElement not to equal the expected height.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param height the not-expected height of PageElement
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected height,
+       * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+       *
+       * If no `timeout` is specified, PageNode's default timeout is used.
+       * If no `interval` is specified, PageNode's default interval is used.
+       *
+       * @returns this (an instance of PageElement)
+       */
       hasHeight: (
         height: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
       ) => this.hasHeight(
