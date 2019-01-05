@@ -2238,7 +2238,8 @@ declare global {
          * Throws an error if the condition is not met within the specific timeout.
          *
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
-         * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+         * some or all managed PageElements, the `timeout` within which the condition is expected to be met and a
+         * `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
@@ -2250,7 +2251,8 @@ declare global {
          * Throws an error if the condition is not met within the specific timeout.
          *
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
-         * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+         * some or all managed PageElements, the `timeout` within which the condition is expected to be met and a
+         * `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
@@ -2262,7 +2264,8 @@ declare global {
          * Throws an error if the condition is not met within the specific timeout.
          *
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
-         * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+         * some or all managed PageElements, the `timeout` within which the condition is expected to be met and a
+         * `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
@@ -2274,8 +2277,8 @@ declare global {
          * Throws an error if the condition is not met within the specific timeout.
          *
          * @param text the expected text which is supposed to equal the actual text
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2287,8 +2290,8 @@ declare global {
          *
          * Throws an error if the condition is not met within the specific timeout.
          *
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2301,8 +2304,8 @@ declare global {
          * Throws an error if the condition is not met within the specific timeout.
          *
          * @param text the expected text which is supposed to be contained in the actual text
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2318,8 +2321,8 @@ declare global {
          * It does not include any text of the HTML element's nested children elements.
          *
          * @param text the expected direct text which is supposed to equal the actual direct text
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2334,8 +2337,8 @@ declare global {
          * A direct text is a text that resides on the level directly below the selected HTML element.
          * It does not include any text of the HTML element's nested children elements.
          *
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2351,8 +2354,8 @@ declare global {
          * It does not include any text of the HTML element's nested children elements.
          *
          * @param text the expected direct text which is supposed to be contained in the actual direct text
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2730,8 +2733,8 @@ declare global {
          * Throws an error if the condition is not met within the specific timeout.
          *
          * @param value the expected value which is supposed to equal the actual value
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2743,8 +2746,8 @@ declare global {
          *
          * Throws an error if the condition is not met within the specific timeout.
          *
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2757,8 +2760,8 @@ declare global {
          * Throws an error if the condition is not met within the specific timeout.
          *
          * @param value the expected value which is supposed to be contained in the actual value
-         * @param opts includes the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
+         * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+         * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
@@ -2811,7 +2814,7 @@ declare global {
        */
       interface ICheckValueEventually<ValueType, FilterType> {
         /**
-         * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap 
+         * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
          * or ValuePageElementGroup eventually have an actual value which equals the expected value within a
          * specific timeout.
          *
@@ -2824,7 +2827,7 @@ declare global {
          */
         hasValue(value: ValueType, opts?: ITimeoutInterval): boolean
         /**
-         * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap 
+         * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
          * or ValuePageElementGroup eventually have any value within a specific timeout.
          *
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
@@ -2836,7 +2839,7 @@ declare global {
          */
         hasAnyValue(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean
         /**
-         * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap 
+         * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
          * or ValuePageElementGroup eventually have an actual value which contains the expected value within a specific
          * timeout.
          *
