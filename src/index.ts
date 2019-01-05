@@ -111,51 +111,51 @@ interface ICustomElementMatchers {
    */
   toContainAttribute(attribute: Workflo.IAttribute): boolean
   /**
-   * Checks if the HTML attribute 'class' of PageElement currently has the specified className.
+   * Checks if the 'class' HTML attribute of PageElement currently has the specified className.
    *
-   * @param className the className which the HTML attribute 'class' of PageElement is supposed to have
+   * @param className the className which the 'class' HTML attribute of PageElement is supposed to have
    */
   toHaveClass(className: string): boolean
   /**
-   * Checks if the HTML attribute 'class' of PageElement currently has any className.
+   * Checks if the 'class' HTML attribute of PageElement currently has any className.
    */
   toHaveAnyClass(): boolean
   /**
-   * Checks if the HTML attribute 'class' of PageElement currently contains the specified className.
+   * Checks if the 'class' HTML attribute of PageElement currently contains the specified className.
    *
-   * @param className the className which the HTML attribute 'class' of PageElement is supposed to contain
+   * @param className the className which the 'class' HTML attribute of PageElement is supposed to contain
    */
   toContainClass(className: string): boolean
   /**
-   * Checks if the HTML attribute 'id' of PageElement currently has the specified value.
+   * Checks if the 'id' HTML attribute of PageElement currently has the specified value.
    *
-   * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
+   * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
    */
   toHaveId(id: string): boolean
   /**
-   * Checks if the HTML attribute 'id' of PageElement currently has any value.
+   * Checks if the 'id' HTML attribute of PageElement currently has any value.
    */
   toHaveAnyId(): boolean
   /**
-   * Checks if the HTML attribute 'id' of PageElement currently contains the specified value.
+   * Checks if the 'id' HTML attribute of PageElement currently contains the specified value.
    *
-   * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
+   * @param id the value which the 'id' HTML attribute of PageElement is supposed to contain
    */
   toContainId(id: string): boolean
   /**
-   * Checks if the HTML attribute 'name' of PageElement currently has the specified value.
+   * Checks if the 'name' HTML attribute of PageElement currently has the specified value.
    *
-   * @param name the value which the HTML attribute 'name' of PageElement is supposed to have
+   * @param name the value which the 'name' HTML attribute of PageElement is supposed to have
    */
   toHaveName(name: string): boolean
   /**
-   * Checks if the HTML attribute 'name' of PageElement currently has any value.
+   * Checks if the 'name' HTML attribute of PageElement currently has any value.
    */
   toHaveAnyName(): boolean
   /**
-   * Checks if the HTML attribute 'name' of PageElement currently contains the specified value.
+   * Checks if the 'name' HTML attribute of PageElement currently contains the specified value.
    *
-   * @param name the value which the HTML attribute 'name' of PageElement is supposed to contain
+   * @param name the value which the 'name' HTML attribute of PageElement is supposed to contain
    */
   toContainName(name: string): boolean
   /**
@@ -387,10 +387,10 @@ interface ICustomElementMatchers {
    */
   toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'class' of PageElement eventually has the specified className within a specific
+   * Checks if the 'class' HTML attribute of PageElement eventually has the specified className within a specific
    * timeout.
    *
-   * @param className the className which the HTML attribute 'class' of PageElement is supposed to have
+   * @param className the className which the 'class' HTML attribute of PageElement is supposed to have
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
@@ -398,7 +398,7 @@ interface ICustomElementMatchers {
    */
   toEventuallyHaveClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'class' of PageElement eventually has any className within a specific timeout.
+   * Checks if the 'class' HTML attribute of PageElement eventually has any className within a specific timeout.
    *
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
@@ -407,10 +407,10 @@ interface ICustomElementMatchers {
    */
   toEventuallyHaveAnyClass(opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'class' of PageElement eventually contains the specified className within a specific
+   * Checks if the 'class' HTML attribute of PageElement eventually contains the specified className within a specific
    * timeout.
    *
-   * @param className the className which the HTML attribute 'class' of PageElement is supposed to contain
+   * @param className the className which the 'class' HTML attribute of PageElement is supposed to contain
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
@@ -418,9 +418,9 @@ interface ICustomElementMatchers {
    */
   toEventuallyContainClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'id' of PageElement eventually has the specified value within a specific timeout.
+   * Checks if the 'id' HTML attribute of PageElement eventually has the specified value within a specific timeout.
    *
-   * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
+   * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
@@ -428,7 +428,7 @@ interface ICustomElementMatchers {
    */
   toEventuallyHaveId(id: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'id' of PageElement eventually has any value within a specific timeout.
+   * Checks if the 'id' HTML attribute of PageElement eventually has any value within a specific timeout.
    *
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
@@ -437,9 +437,9 @@ interface ICustomElementMatchers {
    */
   toEventuallyHaveAnyId(opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'id' of PageElement eventually contains the specified value within a specific timeout.
+   * Checks if the 'id' HTML attribute of PageElement eventually contains the specified value within a specific timeout.
    *
-   * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
+   * @param id the value which the 'id' HTML attribute of PageElement is supposed to contain
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
@@ -447,9 +447,9 @@ interface ICustomElementMatchers {
    */
   toEventuallyContainId(id: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'name' of PageElement eventually has the specified value within a specific timeout.
+   * Checks if the 'name' HTML attribute of PageElement eventually has the specified value within a specific timeout.
    *
-   * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
+   * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
@@ -457,7 +457,7 @@ interface ICustomElementMatchers {
    */
   toEventuallyHaveName(name: string, opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'name' of PageElement eventually has any value within a specific timeout.
+   * Checks if the 'name' HTML attribute of PageElement eventually has any value within a specific timeout.
    *
    * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it.
@@ -467,7 +467,7 @@ interface ICustomElementMatchers {
    */
   toEventuallyHaveAnyName(opts?: Workflo.ITimeoutInterval): boolean
   /**
-   * Checks if the HTML attribute 'name' of PageElement eventually contains the specified value within a specific
+   * Checks if the 'name' HTML attribute of PageElement eventually contains the specified value within a specific
    * timeout.
    *
    * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
@@ -2246,7 +2246,7 @@ declare global {
         exists(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
-         * PageElementGroup to become visible.
+         * PageElementGroup to be visible.
          *
          * Throws an error if the condition is not met within the specific timeout.
          *
@@ -2259,7 +2259,7 @@ declare global {
         isVisible(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
-         * PageElementGroup to become enabled.
+         * PageElementGroup to be enabled.
          *
          * Throws an error if the condition is not met within the specific timeout.
          *
