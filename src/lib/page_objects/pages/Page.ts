@@ -41,11 +41,12 @@ export abstract class Page<
   protected _interval: number
 
   /**
-   * defines all functions of Page which wait for a condition to become true within a specified timeout
+   * defines an api for all functions of Page which wait for a condition to become true within a specified timeout
    */
   wait: PageWait<Store, this, IsOpenOpts, IsClosedOpts>
   /**
-   * defines all functions of Page which check if a condition eventually becomes true within a specified timeout
+   * defines an api for all functions of Page which check if a condition eventually becomes true within a specified
+   * timeout
    */
   eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>
 
@@ -185,7 +186,7 @@ class PageWait<
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
    *
-   * @returns an instance of Page
+   * @returns Page
    */
   isOpen(opts: IsOpenOpts & Workflo.ITimeoutInterval = Object.create(null)) {
     return this._wait(() => this._page.isOpen(opts), " to be open", opts)
@@ -200,7 +201,7 @@ class PageWait<
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
    *
-   * @returns an instance of Page
+   * @returns Page
    */
   isClosed(opts: IsClosedOpts & Workflo.ITimeoutInterval = Object.create(null)) {
     return this._wait(() => this._page.isClosed(opts), " to be closed", opts)

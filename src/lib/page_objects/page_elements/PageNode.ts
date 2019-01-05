@@ -44,16 +44,17 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
   protected _interval: number
 
   /**
-   * defines all functions of PageNode which check if a condition is currently true or which retrieve a current value
-   * from the tested application's state
+   * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
+   * current value from the tested application's state
    */
   abstract readonly currently: PageNodeCurrently<Store, this>
   /**
-   * defines all functions of PageNode which wait for a condition to become true within a specified timeout
+   * defines an api for all functions of PageNode which wait for a condition to become true within a specified timeout
    */
   abstract readonly wait: PageNodeWait<Store, this>
   /**
-   * defines all functions of PageNode which check if a condition eventually becomes true within a specified timeout
+   * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
+   * timeout
    */
   abstract readonly eventually: PageNodeEventually<Store, this>
 
@@ -171,7 +172,7 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
    * @param errorMessage an errorMessage that describes the condition which did not become true within a specific
    * timeout
    * @param timeout the timeout used to wait for the result of the passed func to return true
-   * @returns an instance of PageNode
+   * @returns PageNode
    */
   __wait(func: () => boolean, errorMessage: string, timeout: number) {
     try {
@@ -196,7 +197,7 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
    * true within a specific timeout
    * @param timeout the timeout used to wait for the result of the waitFunc to return true
    * @param interval the interval used to check for the result of the waitFunc to return true
-   * @returns an instance of PageNode
+   * @returns PageNode
    */
   __waitUntil(
     waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number, interval?: number

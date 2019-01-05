@@ -11,22 +11,100 @@ import { PageElementStore } from '../stores'
 import * as htmlParser from 'htmlparser2'
 import { tolerancesToString, isNullOrUndefined, isEmpty } from '../../helpers'
 
+/**
+ * Describes the opts parameter passed to the constructor function of PageElement.
+ */
 export interface IPageElementOpts<
   Store extends PageElementStore
-  > extends IPageElementBaseOpts<Store> {
+> extends IPageElementBaseOpts<Store> {
+  /**
+   * This interface is used in the parameters of scrollTo and click actions of PageElement.
+   * It allows you to scroll a PageElement that resides inside a scrollable container into view.
+   */
   customScroll?: Workflo.IScrollParams
 }
 
+/**
+ * PageElement serves as the main building block for all page objects.
+ *
+ * Modern websites are usually built with reusable components (eg. in React or Angular) which provide a consistent
+ * structure of the component's HTML elements and their behavior.
+ *
+ * The goal of PageElements is to also benefit from these advantages by recreating website components as testing
+ * components. To do so, PageElement maps the structure of a website's components and provides an api to interact
+ * with them.
+ *
+ * A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
+ * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
+ * for elements of a page to be loaded and rendered or for certain conditions to be met.
+ *
+ * PageElements try to overcome these hurdles be performing an "initial waiting condition" before interacting with
+ * elements on the page. The supported initial wait conditions include:
+ *
+ * - 'exist' to wait for an element to exist in the DOM
+ * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
+ * 'hidden', not outside of the viewport...)
+ * - 'text' to wait for an element to have any text
+ *
+ * All public functions/actions defined on the PageElement class that interact with an element on the page or that
+ * retrieve or check an element's state automatically wait for this initial wait condition to become true before
+ * proceeding with any other functionality.
+ *
+ * PageElement furthermore provides three apis to:
+ *
+ * - `.currently`: retrieve or check the current state
+ * - `.wait`: wait for a certain state
+ * - `.eventually`: check if a certain state is eventually reached within a specific timeout.
+ */
 export class PageElement<
   Store extends PageElementStore
 > extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, boolean> {
 
+  /**
+   * stores the default custom scrolling behaviour
+   */
   protected _customScroll: Workflo.IScrollParams
 
   readonly currently: PageElementCurrently<Store, this>
   readonly wait: PageElementWait<Store, this>
   readonly eventually: PageElementEventually<Store, this>
 
+  /**
+    * PageElement serves as the main building block for all page objects.
+    *
+    * Modern websites are usually built with reusable components (eg. in React or Angular) which provide a consistent
+    * structure of the component's HTML elements and their behavior.
+    *
+    * The goal of PageElements is to also benefit from these advantages by recreating website components as testing
+    * components. To do so, PageElement maps the structure of a website's components and provides an api to interact
+    * with them.
+    *
+    * A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
+    * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
+    * for elements of a page to be loaded and rendered or for certain conditions to be met.
+    *
+    * PageElements try to overcome these hurdles be performing an "initial waiting condition" before interacting with
+    * elements on the page. The supported initial wait conditions include:
+    *
+    * - 'exist' to wait for an element to exist in the DOM
+    * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
+    * 'hidden', not outside of the viewport...)
+    * - 'text' to wait for an element to have any text
+    * - 'value' to wait for an element to have any value
+    *
+    * Functions/actions defined on the PageElement class that interact with an element on the page or that retrieve or
+    * check an element's state automatically wait for this initial wait condition to become true before proceeding with
+    * any other functionality.
+    *
+    * PageElement furthermore provides three apis to:
+    *
+    * - `.currently`: retrieve or check the current state
+    * - `.wait`: wait for a certain state
+    * - `.eventually`: check if a certain state is eventually reached within a specific timeout.
+    *
+    * @param selector the XPath selector used to identify PageElement on the page
+    * @param opts the options used to configure PageElement
+    */
   constructor(
     selector: string,
     {
@@ -45,6 +123,8 @@ export class PageElement<
 
   /**
    * For internal use only in order to retrieve an Element's Store type!
+   *
+   * @ignore
    */
   get __$(): Store {
     return this._$
@@ -52,6 +132,16 @@ export class PageElement<
 
 // ABSTRACT BASE CLASS IMPLEMENTATIONS
 
+  /**
+   * Returns true if `actual` equals `expected`.
+   *
+   * By default, the comparison is only implemented for the type `string`.
+   * If the comparison is not implemented for the type of `actual` and `expected`, an error will be thrown.
+   *
+   * @template T the type of both `actual` and `expected`
+   * @param actual an actual value retrieved from the page's state
+   * @param expected an expected value
+   */
   __equals<T>(actual: T, expected: T): boolean {
     if(isEmpty(actual) && isEmpty(expected)) {
       return true
@@ -64,6 +154,15 @@ export class PageElement<
     }
   }
 
+  /**
+   * Returns true if `actual` has any value.
+   *
+   * By default, the comparison is only implemented for the type `string`.
+   * If the comparison is not implemented for the type of `actual`, an error will be thrown.
+   *
+   * @template T the type of `actual`
+   * @param actual an actual value retrieved from the page's state
+   */
   __any<T>(actual: T): boolean {
     if (isEmpty(actual)) {
       return false
@@ -76,6 +175,16 @@ export class PageElement<
     }
   }
 
+  /**
+   * Returns true if `actual` contains `expected`.
+   *
+   * By default, the comparison is only implemented for the type `string`.
+   * If the comparison is not implemented for the type of `actual` and `expected`, an error will be thrown.
+   *
+   * @template T the type of both `actual` and `expected`
+   * @param actual an actual value retrieved from the page's state
+   * @param expected an expected value
+   */
   __contains<T>(actual: T, expected: T) {
     if(isEmpty(actual) && isEmpty(expected)) {
       return true
@@ -95,6 +204,15 @@ export class PageElement<
     }
   }
 
+  /**
+   * Converts `value` to the type `string`.
+   *
+   * By default, the comparison is only implemented for the types `string`, `number` and `undefined` and for the value
+   * `null`.
+   * If the comparison is not implemented for the type of `value`, an error will be thrown.
+   *
+   * @param value the value whose type should be converted
+   */
   __typeToString<T>(value: T) {
     if (isNullOrUndefined(value)) {
       return ''
@@ -117,7 +235,8 @@ export class PageElement<
   }
 
   /**
-   * Return WdioElement after performing an initial wait.
+   * Fetches the first webdriverio element from the HTML page that is identified by PageNode's XPath selector after
+   * performing PageElement's initial wait condition.
    */
   get element() {
     this.initialWait()
@@ -125,6 +244,9 @@ export class PageElement<
     return this.__element
   }
 
+  /**
+   * Performs PageElement's initial wait condition.
+   */
   initialWait() {
     switch (this._waitType) {
       case Workflo.WaitType.exist:
@@ -151,14 +273,26 @@ export class PageElement<
 
 // Public GETTER FUNCTIONS (return state after initial wait)
 
+  /**
+   * Returns true if the PageElement is enabled after performing the initial waiting condition.
+   */
   getIsEnabled() {
     return this._executeAfterInitialWait( () => this.currently.isEnabled() )
   }
 
+  /**
+   * Returns PageElement's HTML after performing the initial waiting condition.
+   */
   getHTML() {
     return this._executeAfterInitialWait( () => this.currently.getHTML() )
   }
 
+  /**
+   * Returns PageElement's direct text after performing the initial waiting condition.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children elements.
+   */
   getDirectText() {
     return this._executeAfterInitialWait( () => this.currently.getDirectText() )
   }
@@ -233,21 +367,23 @@ export class PageElement<
 
 // INTERACTION FUNCTIONS (interact with state after initial wait)
 
-  /**
+/**
+   * Clicks on PageElement after performing PageElement's initial waiting condition.
    *
-   * @param postCondition Sometimes javascript that is to be executed after a click
-   * is not loaded right at the moment that the element wait condition
-   * is fulfilled. (eg. element is visible)
-   * In this case, postCondition function will be
+   * Before clicking on PageElement, it is scrolled into the viewport.
+   *
+   * If the clicked HTML element is obscured by another HTML element, the click will be repeated
+   * until the clicked HTML element is no longer obscured and can therefore receive the click or until a specific
+   * timeout is reached.
+   *
+   * If a postCondition is defined in `click`'s options, the click will be repeated until the postCondition function
+   * returns true or until a specific timeout is reached.
+   *
+   * @param options configures the scrolling behavior
+   * @returns PageElement
    */
-
-
-  // * By default, webdriver tries to scroll an element which should be clicked in to view.
-  // * However, if the element is obscured by another element or if scrolling into view
-  // * failed for another reason, you can pass customScroll parameters to click to force
-  // * a custom scrolling behavior before clicking on the PageElement.
   click(
-    options: { postCondition?: () => boolean, customScroll?: Workflo.IScrollParams } & Workflo.ITimeoutInterval = {}
+    options: Workflo.IClickOpts = {}
   ) {
     this.initialWait()
 
@@ -269,15 +405,17 @@ export class PageElement<
     }
 
     const clickFunc = !options.customScroll ? () => this.__element.click() : () => {
-      const result: Workflo.IJSError = browser.selectorExecute(this.getSelector(), function (elems: HTMLElement[], selector) {
-        if (elems.length === 0) {
-          return {
-            notFound: [selector]
+      const result: Workflo.IJSError = browser.selectorExecute(
+        this.getSelector(), function (elems: HTMLElement[], selector) {
+          if (elems.length === 0) {
+            return {
+              notFound: [selector]
+            }
           }
-        }
 
-        elems[0].click()
-      }, this.getSelector())
+          elems[0].click()
+        }, this.getSelector()
+      )
 
       if (isJsError(result)) {
         throw new Error(`${this.constructor.name} could not be clicked: ${result.notFound.join(', ')}\n( ${this._selector} )`)
@@ -348,6 +486,14 @@ export class PageElement<
     return this
   }
 
+  /**
+   * Scrolls PageElement into view if PageElement resides in a scrollable container.
+   *
+   * Does not perform the initial waiting condition.
+   *
+   * @param params configures the scrolling behavior
+   * @returns PageElement
+   */
   protected _scrollTo(
     params: Workflo.IScrollParams
   ): Workflo.IScrollResult {
@@ -451,6 +597,13 @@ export class PageElement<
     }
   }
 
+  /**
+   * Scrolls PageElement into view if PageElement resides in a scrollable container after performing the initial waiting
+   * condition.
+   *
+   * @param params configures the scrolling behavior
+   * @returns PageElement
+   */
   scrollTo(
     params: Workflo.IScrollParams
   ) {
@@ -465,7 +618,9 @@ export class PageElement<
   /**
    * Executes func after initial wait and, if an error occurs during execution of func,
    * throws a custom error message that the page element could not be located on the page.
-   * @param func
+   *
+   * @template ResultType the type of the executed function's result
+   * @param func the function to be executed after performing the initial wait condition
    */
   protected _executeAfterInitialWait<ResultType>(func: () => ResultType) {
     this.initialWait()

@@ -11,6 +11,8 @@ export interface IValuePageElementOpts<
   Store extends PageElementStore
 > extends IPageElementOpts<Store> {}
 
+ // intial wait condition also supports 'value'
+
 export abstract class ValuePageElement<
   Store extends PageElementStore,
   ValueType

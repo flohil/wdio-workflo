@@ -43,19 +43,8 @@ export abstract class PageElementBase<
    */
   protected _$: Store
 
-  /**
-   * defines all functions of PageElementBase which check if a condition is currently true or which retrieve a current
-   * value from the tested application's state
-   */
   abstract readonly currently: PageElementBaseCurrently<Store, this>
-  /**
-   * defines all functions of PageElementBase which wait for a condition to become true within a specified timeout
-   */
   abstract readonly wait: PageElementBaseWait<Store, this>
-  /**
-   * defines all functions of PageElementBase which check if a condition eventually becomes true within a specified
-   * timeout
-   */
   abstract readonly eventually: PageElementBaseEventually<Store, this>
 
   /**
@@ -166,7 +155,7 @@ export abstract class PageElementBaseCurrently<
 > extends PageNodeCurrently<Store, PageElementType> {
 
   /**
-   * Fetches the first webdriverio element from the tested application's page which matches PageNode's XPath selector.
+   * Fetches the first webdriverio element from the HTML page that is identified by PageNode's XPath selector.
    */
   get element() {
     return browser.element(this._node.getSelector())
