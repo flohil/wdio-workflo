@@ -2170,6 +2170,8 @@ declare global {
          * Returns the 'hasAnyText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
          *
+         * A PageElement's 'hasAnyText' status is set to true if it has any actual text.
+         *
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
@@ -2199,6 +2201,8 @@ declare global {
         /**
          * Returns the 'hasAnyDirectText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
+         *
+         * A PageElement's 'hasAnyDirectText' status is set to true if it has any actual text.
          *
          * A direct text is a text that resides on the level directly below the selected HTML element.
          * It does not include any text of the HTML element's nested children elements.
