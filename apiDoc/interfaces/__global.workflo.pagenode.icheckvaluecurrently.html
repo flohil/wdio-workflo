@@ -76,8 +76,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used by IElementNode to describe currently state check functions supported by ValuePageElement,
-						ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.</p>
+						<p>Used by IValueElementNode to describe <code>currently</code> state check and state retrieval functions supported by
+						ValuePageElement, ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.</p>
 					</div>
 				</div>
 			</section>
@@ -129,9 +129,14 @@
 					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="../modules/__global.workflo.html#omit" class="tsd-signature-type">Omit</a><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.icheckvaluecurrently.html" class="tsd-signature-type">ICheckValueCurrently</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"not"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2258">index.ts:2258</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2808">index.ts:2808</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>returns the negated variants of ICheckValueCurrently&#39;s state check functions</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -146,13 +151,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2256">index.ts:2256</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2803">index.ts:2803</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+									or ValuePageElementGroup currently have an actual value which contains the expected value.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to be contained in the actual value</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -169,9 +183,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2255">index.ts:2255</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2796">index.ts:2796</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+									or ValuePageElementGroup currently have any value.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -192,13 +212,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2254">index.ts:2254</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2788">index.ts:2788</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+									or ValuePageElementGroup currently have an actual value which equals the expected value.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to equal the actual value</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>

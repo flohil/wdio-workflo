@@ -76,7 +76,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used by IElementNode to describe eventually state check functions supported by ValuePageElement,
+						<p>Used by IValueElementNode to describe <code>eventually</code> state check functions supported by ValuePageElement,
 						ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.</p>
 					</div>
 				</div>
@@ -129,9 +129,14 @@
 					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="../modules/__global.workflo.html#omit" class="tsd-signature-type">Omit</a><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.icheckvalueeventually.html" class="tsd-signature-type">ICheckValueEventually</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"not"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2270">index.ts:2270</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2858">index.ts:2858</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>returns the negated variants of ICheckValueEventually&#39;s state check functions</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -146,16 +151,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2268">index.ts:2268</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2853">index.ts:2853</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+										or ValuePageElementGroup eventually have an actual value which contains the expected value within a specific
+									timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to be contained in the actual value</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and the
+										<code>interval</code> used to check it</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -172,13 +193,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2267">index.ts:2267</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2840">index.ts:2840</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+									or ValuePageElementGroup eventually have any value within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes <code>filterMask</code> which can be used to skip the invocation of the state check function for
+											some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and the
+										<code>interval</code> used to check it</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -195,16 +229,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2266">index.ts:2266</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2828">index.ts:2828</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+										or ValuePageElementGroup eventually have an actual value which equals the expected value within a
+									specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to equal the actual value</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and the
+										<code>interval</code> used to check it</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>

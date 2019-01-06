@@ -33,11 +33,11 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
   /**
    * the XPath selector of PageNode
    */
-  protected _selector: string
+   protected _selector: string
   /**
    * the default timeout used by PageNode for all functions that operate with timeouts (eg. `wait` and `eventually`)
    */
-  protected _timeout: number
+   protected _timeout: number
   /**
    * the default interval used by PageNode for all functions that operate with intervals (eg. `wait` and `eventually`)
    */
@@ -263,6 +263,7 @@ export abstract class PageNodeCurrently<
   Store extends PageElementStore,
   PageElementType extends PageNode<Store>
 > {
+
   /**
    * the PageNode for which PageNodeCurrently defines all `currently` functions
    */
@@ -293,6 +294,7 @@ export abstract class PageNodeWait<
   Store extends PageElementStore,
   PageElementType extends PageNode<Store>
 > {
+
   /**
    * the PageNode for which PageNodeWait defines all `wait` functions
    */
@@ -323,6 +325,7 @@ export abstract class PageNodeEventually<
   Store extends PageElementStore,
   PageElementType extends PageNode<Store>
 > {
+
   /**
    * the PageNode for which PageNodeEventually defines all `eventually` functions
    */

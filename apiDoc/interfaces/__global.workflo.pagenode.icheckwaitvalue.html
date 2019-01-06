@@ -76,7 +76,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used by IElementNode to describe wait state check functions supported by ValuePageElement,
+						<p>Used by IValueElementNode to describe <code>wait</code> state check functions supported by ValuePageElement,
 						ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.</p>
 					</div>
 				</div>
@@ -132,9 +132,14 @@
 					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="../modules/__global.workflo.html#omit" class="tsd-signature-type">Omit</a><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.icheckwaitvalue.html" class="tsd-signature-type">ICheckWaitValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">, </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"not"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2246">index.ts:2246</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2774">index.ts:2774</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>returns the negated variants of ICheckWaitValue&#39;s state check functions</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -143,22 +148,38 @@
 					<a name="containsvalue" class="tsd-anchor"></a>
 					<h3>contains<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">contains<wbr>Value<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueType</span>, opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-signature-type">IValueElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">contains<wbr>Value<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueType</span>, opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-signature-type">IValueElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2244">index.ts:2244</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2769">index.ts:2769</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
+									ValuePageElementMap or ValuePageElementGroup to have an actual value which contains the expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>text: <span class="tsd-signature-type">ValueType</span></h5>
+									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to be contained in the actual value</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-signature-type">IValueElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -175,13 +196,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2243">index.ts:2243</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2755">index.ts:2755</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
+									ValuePageElementMap or ValuePageElementGroup to have any value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-signature-type">IValueElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -192,22 +226,38 @@
 					<a name="hasvalue" class="tsd-anchor"></a>
 					<h3>has<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">has<wbr>Value<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueType</span>, opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-signature-type">IValueElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Value<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueType</span>, opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-signature-type">IValueElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2242">index.ts:2242</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2742">index.ts:2742</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
+									ValuePageElementMap or ValuePageElementGroup to have an actual value which equals the expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>text: <span class="tsd-signature-type">ValueType</span></h5>
+									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to equal the actual value</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-signature-type">IValueElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>

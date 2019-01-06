@@ -64,6 +64,43 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>PageElement serves as the main building block for all page objects.</p>
+					</div>
+					<p>Modern websites are usually built with reusable components (eg. in React or Angular) which provide a consistent
+					structure of the component&#39;s HTML elements and their behavior.</p>
+					<p>The goal of PageElements is to also benefit from these advantages by recreating website components as testing
+						components. To do so, PageElement maps the structure of a website&#39;s components and provides an api to interact
+					with them.</p>
+					<p>A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
+						before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
+					for elements of a page to be loaded and rendered or for certain conditions to be met.</p>
+					<p>PageElements try to overcome these hurdles be performing an &quot;initial waiting condition&quot; before interacting with
+					elements on the page. The supported initial wait conditions include:</p>
+					<ul>
+						<li>&#39;exist&#39; to wait for an element to exist in the DOM</li>
+						<li>&#39;visible&#39; to wait for an element to become visible in the viewport (not obscured by other elements, not set to
+						&#39;hidden&#39;, not outside of the viewport...)</li>
+						<li>&#39;text&#39; to wait for an element to have any text</li>
+					</ul>
+					<p>All public functions/actions defined on the PageElement class that interact with an element on the page or that
+						retrieve or check an element&#39;s state automatically wait for this initial wait condition to become true before
+					proceeding with any other functionality.</p>
+					<p>PageElement furthermore provides three apis to:</p>
+					<ul>
+						<li><code>.currently</code>: retrieve or check the current state</li>
+						<li><code>.wait</code>: wait for a certain state</li>
+						<li><code>.eventually</code>: check if a certain state is eventually reached within a specific timeout.</li>
+					</ul>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -127,7 +164,6 @@
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="pageelement.html#_" class="tsd-kind-icon">$</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="pageelement.html#___" class="tsd-kind-icon">__$</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected"><a href="pageelement.html#__element" class="tsd-kind-icon">__element</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="pageelement.html#__lastdiff" class="tsd-kind-icon">__last<wbr>Diff</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="pageelement.html#element" class="tsd-kind-icon">element</a></li>
@@ -194,13 +230,49 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L28">lib/page_objects/page_elements/PageElement.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L74">lib/page_objects/page_elements/PageElement.ts:74</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>PageElement serves as the main building block for all page objects.</p>
+								</div>
+								<p>Modern websites are usually built with reusable components (eg. in React or Angular) which provide a consistent
+								structure of the component&#39;s HTML elements and their behavior.</p>
+								<p>The goal of PageElements is to also benefit from these advantages by recreating website components as testing
+									components. To do so, PageElement maps the structure of a website&#39;s components and provides an api to interact
+								with them.</p>
+								<p>A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
+									before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
+								for elements of a page to be loaded and rendered or for certain conditions to be met.</p>
+								<p>PageElements try to overcome these hurdles be performing an &quot;initial waiting condition&quot; before interacting with
+								elements on the page. The supported initial wait conditions include:</p>
+								<ul>
+									<li>&#39;exist&#39; to wait for an element to exist in the DOM</li>
+									<li>&#39;visible&#39; to wait for an element to become visible in the viewport (not obscured by other elements, not set to
+									&#39;hidden&#39;, not outside of the viewport...)</li>
+									<li>&#39;text&#39; to wait for an element to have any text</li>
+									<li>&#39;value&#39; to wait for an element to have any value</li>
+								</ul>
+								<p>Functions/actions defined on the PageElement class that interact with an element on the page or that retrieve or
+									check an element&#39;s state automatically wait for this initial wait condition to become true before proceeding with
+								any other functionality.</p>
+								<p>PageElement furthermore provides three apis to:</p>
+								<ul>
+									<li><code>.currently</code>: retrieve or check the current state</li>
+									<li><code>.wait</code>: wait for a certain state</li>
+									<li><code>.eventually</code>: check if a certain state is eventually reached within a specific timeout.</li>
+								</ul>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>selector: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the XPath selector used to identify PageElement on the page</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>__namedParameters: <span class="tsd-signature-type">object</span></h5>
@@ -228,7 +300,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__">_$</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L44">lib/page_objects/page_elements/PageElementBase.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L43">lib/page_objects/page_elements/PageElementBase.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -244,9 +316,14 @@
 					<div class="tsd-signature tsd-kind-icon">_custom<wbr>Scroll<span class="tsd-signature-symbol">:</span> <a href="../interfaces/__global.workflo.iscrollparams.html" class="tsd-signature-type">IScrollParams</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L24">lib/page_objects/page_elements/PageElement.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L70">lib/page_objects/page_elements/PageElement.ts:70</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>stores the default custom scrolling behaviour</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_interval" class="tsd-anchor"></a>
@@ -255,7 +332,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_interval">_interval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L44">lib/page_objects/page_elements/PageNode.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L44">lib/page_objects/page_elements/PageNode.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -271,7 +348,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_lastdiff">_lastDiff</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L32">lib/page_objects/page_elements/PageNode.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L32">lib/page_objects/page_elements/PageNode.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -288,7 +365,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_selector">_selector</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L36">lib/page_objects/page_elements/PageNode.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L36">lib/page_objects/page_elements/PageNode.ts:36</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -304,7 +381,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_store">_store</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L26">lib/page_objects/page_elements/PageNode.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L26">lib/page_objects/page_elements/PageNode.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -320,7 +397,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_timeout">_timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L40">lib/page_objects/page_elements/PageNode.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L40">lib/page_objects/page_elements/PageNode.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -336,7 +413,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#_waittype">_waitType</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L39">lib/page_objects/page_elements/PageElementBase.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L38">lib/page_objects/page_elements/PageElementBase.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -355,7 +432,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#currently">currently</a></p>
 						<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#currently">currently</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L26">lib/page_objects/page_elements/PageElement.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L72">lib/page_objects/page_elements/PageElement.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -367,7 +444,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#eventually">eventually</a></p>
 						<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#eventually">eventually</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L28">lib/page_objects/page_elements/PageElement.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L74">lib/page_objects/page_elements/PageElement.ts:74</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -379,7 +456,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#wait">wait</a></p>
 						<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#wait">wait</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L27">lib/page_objects/page_elements/PageElement.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L73">lib/page_objects/page_elements/PageElement.ts:73</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -397,35 +474,13 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#_">$</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L112">lib/page_objects/page_elements/PageElementBase.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L100">lib/page_objects/page_elements/PageElementBase.ts:100</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><code>$</code> provides access to the PageNode retrieval functions of PageElementBase&#39;s PageElementStore and prefixes the
 									selectors of all PageNodes retrieved via <code>$</code> with the selector of PageElementBase.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Store</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="___" class="tsd-anchor"></a>
-					<h3>__$</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __$<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Store</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L49">lib/page_objects/page_elements/PageElement.ts:49</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>For internal use only in order to retrieve an Element&#39;s Store type!</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Store</span></h4>
@@ -442,7 +497,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L115">lib/page_objects/page_elements/PageElement.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L237">lib/page_objects/page_elements/PageElement.ts:237</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -468,7 +523,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__lastdiff">__lastDiff</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L82">lib/page_objects/page_elements/PageNode.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L83">lib/page_objects/page_elements/PageNode.ts:83</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a></h4>
@@ -485,12 +540,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L122">lib/page_objects/page_elements/PageElement.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L245">lib/page_objects/page_elements/PageElement.ts:245</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Return WdioElement after performing an initial wait.</p>
+									<p>Fetches the first webdriverio element from the HTML page that is identified by PageNode&#39;s XPath selector after
+									performing PageElement&#39;s initial wait condition.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RawResult</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
@@ -514,9 +570,21 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__any">__any</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L67">lib/page_objects/page_elements/PageElement.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L170">lib/page_objects/page_elements/PageElement.ts:170</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if <code>actual</code> has any value.</p>
+								</div>
+								<p>By default, the comparison is only implemented for the type <code>string</code>.
+								If the comparison is not implemented for the type of <code>actual</code>, an error will be thrown.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>T the type of <code>actual</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -527,6 +595,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>actual: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an actual value retrieved from the page&#39;s state</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -544,9 +615,21 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__contains">__contains</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L79">lib/page_objects/page_elements/PageElement.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L192">lib/page_objects/page_elements/PageElement.ts:192</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if <code>actual</code> contains <code>expected</code>.</p>
+								</div>
+								<p>By default, the comparison is only implemented for the type <code>string</code>.
+								If the comparison is not implemented for the type of <code>actual</code> and <code>expected</code>, an error will be thrown.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>T the type of both <code>actual</code> and <code>expected</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -557,9 +640,15 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>actual: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an actual value retrieved from the page&#39;s state</p>
+									</div>
 								</li>
 								<li>
 									<h5>expected: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an expected value</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -577,9 +666,21 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__equals">__equals</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L55">lib/page_objects/page_elements/PageElement.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L149">lib/page_objects/page_elements/PageElement.ts:149</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if <code>actual</code> equals <code>expected</code>.</p>
+								</div>
+								<p>By default, the comparison is only implemented for the type <code>string</code>.
+								If the comparison is not implemented for the type of <code>actual</code> and <code>expected</code>, an error will be thrown.</p>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>T the type of both <code>actual</code> and <code>expected</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -590,9 +691,15 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>actual: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an actual value retrieved from the page&#39;s state</p>
+									</div>
 								</li>
 								<li>
 									<h5>expected: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an expected value</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -610,7 +717,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__eventually">__eventually</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L148">lib/page_objects/page_elements/PageNode.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L149">lib/page_objects/page_elements/PageNode.ts:149</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -655,7 +762,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__execute">__execute</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L125">lib/page_objects/page_elements/PageNode.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L126">lib/page_objects/page_elements/PageNode.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -714,7 +821,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#__getnodeid">__getNodeId</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__getnodeid">__getNodeId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L78">lib/page_objects/page_elements/PageNode.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L79">lib/page_objects/page_elements/PageNode.ts:79</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -732,7 +839,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__setlastdiff">__setLastDiff</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L90">lib/page_objects/page_elements/PageNode.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L91">lib/page_objects/page_elements/PageNode.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -756,9 +863,17 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#__typetostring">__typeToString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L98">lib/page_objects/page_elements/PageElement.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L220">lib/page_objects/page_elements/PageElement.ts:220</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Converts <code>value</code> to the type <code>string</code>.</p>
+								</div>
+								<p>By default, the comparison is only implemented for the types <code>string</code>, <code>number</code> and <code>undefined</code> and for the value
+									<code>null</code>.
+								If the comparison is not implemented for the type of <code>value</code>, an error will be thrown.</p>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -769,6 +884,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the value whose type should be converted</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -786,7 +904,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__wait">__wait</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L176">lib/page_objects/page_elements/PageNode.ts:176</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L177">lib/page_objects/page_elements/PageNode.ts:177</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -832,7 +950,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-							<p>an instance of PageNode</p>
+							<p>this (an instance of PageNode)</p>
 						</li>
 					</ul>
 				</section>
@@ -847,7 +965,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__waituntil">__waitUntil</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L201">lib/page_objects/page_elements/PageNode.ts:201</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L202">lib/page_objects/page_elements/PageNode.ts:202</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -911,7 +1029,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-							<p>an instance of PageNode</p>
+							<p>this (an instance of PageNode)</p>
 						</li>
 					</ul>
 				</section>
@@ -925,7 +1043,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L470">lib/page_objects/page_elements/PageElement.ts:470</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L716">lib/page_objects/page_elements/PageElement.ts:716</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -933,6 +1051,11 @@
 									<p>Executes func after initial wait and, if an error occurs during execution of func,
 									throws a custom error message that the page element could not be located on the page.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>template</dt>
+									<dd><p>ResultType the type of the executed function&#39;s result</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -945,6 +1068,7 @@
 								<li>
 									<h5>func: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>the function to be executed after performing the initial wait condition</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -975,7 +1099,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_handlewaiterror">_handleWaitError</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L235">lib/page_objects/page_elements/PageNode.ts:235</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L236">lib/page_objects/page_elements/PageNode.ts:236</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1018,16 +1142,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L351">lib/page_objects/page_elements/PageElement.ts:351</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L588">lib/page_objects/page_elements/PageElement.ts:588</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scrolls PageElement into view if PageElement resides in a scrollable container.</p>
+								</div>
+								<p>Does not perform the initial waiting condition.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>params: <a href="../interfaces/__global.workflo.iscrollparams.html" class="tsd-signature-type">IScrollParams</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>configures the scrolling behavior</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.iscrollresult.html" class="tsd-signature-type">IScrollResult</a></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1035,24 +1169,37 @@
 					<a name="click" class="tsd-anchor"></a>
 					<h3>click</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">click<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">click<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.iclickopts.html" class="tsd-signature-type">IClickOpts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L249">lib/page_objects/page_elements/PageElement.ts:249</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L476">lib/page_objects/page_elements/PageElement.ts:476</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Clicks on PageElement after performing PageElement&#39;s initial waiting condition.</p>
+								</div>
+								<p>Before clicking on PageElement, it is scrolled into the viewport.</p>
+								<p>If the clicked HTML element is obscured by another HTML element, the click will be repeated
+									until the clicked HTML element is no longer obscured and can therefore receive the click or until a specific
+								timeout is reached.</p>
+								<p>If a postCondition is defined in <code>click</code>&#39;s options, the click will be repeated until the postCondition function
+								returns true or until a specific timeout is reached.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/__global.workflo.iclickopts.html" class="tsd-signature-type">IClickOpts</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>configures the scrolling behavior</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1066,13 +1213,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L170">lib/page_objects/page_elements/PageElement.ts:170</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L323">lib/page_objects/page_elements/PageElement.ts:323</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns PageElement&#39;s HTML attribute with the passed attribute name after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>attributeName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name of the HTML attribute whose value should be returned</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1089,9 +1244,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L174">lib/page_objects/page_elements/PageElement.ts:174</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L330">lib/page_objects/page_elements/PageElement.ts:330</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the value of PageElement&#39;s &#39;class&#39; HTML attribute after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1106,13 +1266,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L230">lib/page_objects/page_elements/PageElement.ts:230</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L455">lib/page_objects/page_elements/PageElement.ts:455</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a PageElement&#39;s &#39;containsDirectText&#39; status after performing the initial waiting condition.</p>
+								</div>
+								<p>A PageElement&#39;s &#39;containsDirectText&#39; status is set to true if its actual direct text contains the expected direct
+								text.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>directText: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected direct text used in the comparison which sets the &#39;containsDirectText&#39; status</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1129,13 +1301,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L218">lib/page_objects/page_elements/PageElement.ts:218</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L417">lib/page_objects/page_elements/PageElement.ts:417</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a PageElement&#39;s &#39;containsText&#39; status after performing the initial waiting condition.</p>
+								</div>
+								<p>A PageElement&#39;s &#39;containsText&#39; status is set to true if its actual text contains the expected text.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text used in the comparison which sets the &#39;containsText&#39; status</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1152,9 +1333,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L162">lib/page_objects/page_elements/PageElement.ts:162</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L307">lib/page_objects/page_elements/PageElement.ts:307</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns PageElement&#39;s direct text after performing the initial waiting condition.</p>
+								</div>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1169,9 +1357,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L158">lib/page_objects/page_elements/PageElement.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L297">lib/page_objects/page_elements/PageElement.ts:297</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns PageElement&#39;s HTML after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1186,9 +1379,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L226">lib/page_objects/page_elements/PageElement.ts:226</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L440">lib/page_objects/page_elements/PageElement.ts:440</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a PageElement&#39;s &#39;hasAnyDirectText&#39; status after performing the initial waiting condition.</p>
+								</div>
+								<p>A PageElement&#39;s &#39;hasAnyDirectText&#39; status is set to true if it has any direct text.</p>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
@@ -1203,9 +1402,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L214">lib/page_objects/page_elements/PageElement.ts:214</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L406">lib/page_objects/page_elements/PageElement.ts:406</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a PageElement&#39;s &#39;hasAnyText&#39; status after performing the initial waiting condition.</p>
+								</div>
+								<p>A PageElement&#39;s &#39;hasAnyText&#39; status is set to true if it has any text.</p>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
@@ -1220,13 +1425,24 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L222">lib/page_objects/page_elements/PageElement.ts:222</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L431">lib/page_objects/page_elements/PageElement.ts:431</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a PageElement&#39;s &#39;hasDirectText&#39; status after performing the initial waiting condition.</p>
+								</div>
+								<p>A PageElement&#39;s &#39;hasDirectText&#39; status is set to true if its actual direct text equals the expected direct text.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>directText: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected direct text used in the comparison which sets the &#39;hasDirectText&#39; status</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1243,13 +1459,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L210">lib/page_objects/page_elements/PageElement.ts:210</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L397">lib/page_objects/page_elements/PageElement.ts:397</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a PageElement&#39;s &#39;hasText&#39; status after performing the initial waiting condition.</p>
+								</div>
+								<p>A PageElement&#39;s &#39;hasText&#39; status is set to true if its actual text equals the expected text.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text used in the comparison which sets the &#39;hasText&#39; status</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1266,9 +1491,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L206">lib/page_objects/page_elements/PageElement.ts:206</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L386">lib/page_objects/page_elements/PageElement.ts:386</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the height of PageElement in pixels after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -1283,9 +1513,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L178">lib/page_objects/page_elements/PageElement.ts:178</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L337">lib/page_objects/page_elements/PageElement.ts:337</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the value of PageElement&#39;s &#39;id&#39; HTML attribute after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1302,7 +1537,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#getinterval">getInterval</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#getinterval">getInterval</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L100">lib/page_objects/page_elements/PageNode.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L101">lib/page_objects/page_elements/PageNode.ts:101</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1319,9 +1554,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L154">lib/page_objects/page_elements/PageElement.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L290">lib/page_objects/page_elements/PageElement.ts:290</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if the PageElement is enabled after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
@@ -1336,9 +1576,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L186">lib/page_objects/page_elements/PageElement.ts:186</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L351">lib/page_objects/page_elements/PageElement.ts:351</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the location of PageElement in pixels after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.icoordinates.html" class="tsd-signature-type">ICoordinates</a></h4>
 						</li>
 					</ul>
@@ -1353,9 +1598,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L182">lib/page_objects/page_elements/PageElement.ts:182</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L344">lib/page_objects/page_elements/PageElement.ts:344</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the value of PageElement&#39;s &#39;name&#39; HTML attribute after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1371,7 +1621,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbase.html">PageElementBase</a>.<a href="pageelementbase.html#getselector">getSelector</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L119">lib/page_objects/page_elements/PageElementBase.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L107">lib/page_objects/page_elements/PageElementBase.ts:107</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1393,9 +1643,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L198">lib/page_objects/page_elements/PageElement.ts:198</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L372">lib/page_objects/page_elements/PageElement.ts:372</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the size of PageElement in pixels after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.isize.html" class="tsd-signature-type">ISize</a></h4>
 						</li>
 					</ul>
@@ -1410,9 +1665,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L166">lib/page_objects/page_elements/PageElement.ts:166</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L314">lib/page_objects/page_elements/PageElement.ts:314</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns PageElement&#39;s text after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1429,7 +1689,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#gettimeout">getTimeout</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#gettimeout">getTimeout</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L96">lib/page_objects/page_elements/PageNode.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L97">lib/page_objects/page_elements/PageNode.ts:97</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1446,9 +1706,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L202">lib/page_objects/page_elements/PageElement.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L379">lib/page_objects/page_elements/PageElement.ts:379</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the width of PageElement in pixels after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -1463,9 +1728,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L190">lib/page_objects/page_elements/PageElement.ts:190</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L358">lib/page_objects/page_elements/PageElement.ts:358</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the X-location of PageElement in pixels after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -1480,9 +1750,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L194">lib/page_objects/page_elements/PageElement.ts:194</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L365">lib/page_objects/page_elements/PageElement.ts:365</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the Y-location of PageElement in pixels after performing the initial waiting condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -1497,9 +1772,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L128">lib/page_objects/page_elements/PageElement.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L261">lib/page_objects/page_elements/PageElement.ts:261</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Performs PageElement&#39;s initial waiting condition.</p>
+								</div>
+								<p>Supports the following waiting types:</p>
+								<ul>
+									<li>&#39;exist&#39; to wait for an element to exist in the DOM</li>
+									<li>&#39;visible&#39; to wait for an element to become visible in the viewport (not obscured by other elements, not set to
+									&#39;hidden&#39;, not outside of the viewport...)</li>
+									<li>&#39;text&#39; to wait for an element to have any text</li>
+								</ul>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -1514,16 +1801,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L454">lib/page_objects/page_elements/PageElement.ts:454</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L698">lib/page_objects/page_elements/PageElement.ts:698</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scrolls PageElement into view if PageElement resides in a scrollable container after performing the initial waiting
+									condition.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>params: <a href="../interfaces/__global.workflo.iscrollparams.html" class="tsd-signature-type">IScrollParams</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>configures the scrolling behavior</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1539,7 +1836,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#tojson">toJSON</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L106">lib/page_objects/page_elements/PageNode.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L107">lib/page_objects/page_elements/PageNode.ts:107</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.ielementjson.html" class="tsd-signature-type">IElementJSON</a></h4>
@@ -1601,9 +1898,6 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 								<a href="pageelement.html#_" class="tsd-kind-icon">$</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="pageelement.html#___" class="tsd-kind-icon">__$</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected">
 								<a href="pageelement.html#__element" class="tsd-kind-icon">__element</a>

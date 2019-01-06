@@ -76,8 +76,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used by IElementNode to describe currently state check functions supported by PageElement, PageElementList,
-						PageElementMap and PageElementGroup.</p>
+						<p>Used by IElementNode to describe <code>currently</code> state check and state retrieval functions supported by PageElement,
+						PageElementList, PageElementMap and PageElementGroup.</p>
 					</div>
 				</div>
 			</section>
@@ -141,9 +141,14 @@
 					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="../modules/__global.workflo.html#omit" class="tsd-signature-type">Omit</a><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.icheckcurrently.html" class="tsd-signature-type">ICheckCurrently</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"not"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getExists"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getIsVisible"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getIsEnabled"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2149">index.ts:2149</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2481">index.ts:2481</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>returns the negated variants of ICheckCurrently&#39;s state check functions</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -158,13 +163,24 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2147">index.ts:2147</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2476">index.ts:2476</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently have an actual direct text which contains the expected direct text.</p>
+								</div>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>directText: <span class="tsd-signature-type">TextType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected direct text which is supposed to be contained in the actual direct text</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -181,13 +197,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2144">index.ts:2144</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2445">index.ts:2445</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently have an actual text which contains the expected text.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">TextType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text which is supposed to be contained in the actual text</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -204,9 +229,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2139">index.ts:2139</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2407">index.ts:2407</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently exist.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -227,13 +258,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2136">index.ts:2136</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2383">index.ts:2383</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the current &#39;exists&#39; status of a PageElement or of the PageElements managed by a PageElementList,
+									PageElementMap or PageElementGroup.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filterMask: <span class="tsd-signature-type">FilterType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>can be used to skip the invocation of the state retrieval function for some or all managed
+										PageElements and not include the skipped results in the total result</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">BooleanType</span></h4>
@@ -250,13 +291,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2138">index.ts:2138</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2399">index.ts:2399</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the current &#39;enabled&#39; status of a PageElement or of the PageElements managed by a PageElementList,
+									PageElementMap or PageElementGroup.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filterMask: <span class="tsd-signature-type">FilterType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>can be used to skip the invocation of the state retrieval function for some or all managed
+										PageElements and not include the skipped results in the total result</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">BooleanType</span></h4>
@@ -273,13 +324,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2137">index.ts:2137</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2391">index.ts:2391</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the current &#39;visible&#39; status of a PageElement or of the PageElements managed by a PageElementList,
+									PageElementMap or PageElementGroup.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filterMask: <span class="tsd-signature-type">FilterType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>can be used to skip the invocation of the state retrieval function for some or all managed
+										PageElements and not include the skipped results in the total result</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">BooleanType</span></h4>
@@ -296,9 +357,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2146">index.ts:2146</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2466">index.ts:2466</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently have any direct text.</p>
+								</div>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -319,9 +388,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2143">index.ts:2143</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2438">index.ts:2438</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently have any text.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -342,13 +417,24 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2145">index.ts:2145</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2455">index.ts:2455</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently have an actual direct text which equals the expected direct text.</p>
+								</div>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>directText: <span class="tsd-signature-type">TextType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected direct text which is supposed to equal the actual direct text</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -365,13 +451,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2142">index.ts:2142</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2430">index.ts:2430</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently have an actual text which equals the expected text.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">TextType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text which is supposed to equal the actual text</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -388,9 +483,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2141">index.ts:2141</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2423">index.ts:2423</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently is enabled.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -411,9 +512,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2140">index.ts:2140</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2415">index.ts:2415</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+									currently is visible.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>

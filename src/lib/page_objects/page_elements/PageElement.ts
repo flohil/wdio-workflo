@@ -13,6 +13,8 @@ import { tolerancesToString, isNullOrUndefined, isEmpty } from '../../helpers'
 
 /**
  * Describes the opts parameter passed to the constructor function of PageElement.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
  */
 export interface IPageElementOpts<
   Store extends PageElementStore
@@ -55,6 +57,8 @@ export interface IPageElementOpts<
  * - `.currently`: retrieve or check the current state
  * - `.wait`: wait for a certain state
  * - `.eventually`: check if a certain state is eventually reached within a specific timeout.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
  */
 export class PageElement<
   Store extends PageElementStore
@@ -245,7 +249,14 @@ export class PageElement<
   }
 
   /**
-   * Performs PageElement's initial wait condition.
+   * Performs PageElement's initial waiting condition.
+   *
+   * Supports the following waiting types:
+   *
+   * - 'exist' to wait for an element to exist in the DOM
+   * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
+   * 'hidden', not outside of the viewport...)
+   * - 'text' to wait for an element to have any text
    */
   initialWait() {
     switch (this._waitType) {
@@ -1011,6 +1022,7 @@ export class PageElementCurrently<
   exists(): boolean {
     return this.element.isExisting()
   }
+
   /**
    * Returns true if PageElement is currently visible.
    *
@@ -1020,6 +1032,7 @@ export class PageElementCurrently<
   isVisible(): boolean {
     return this.element.isVisible()
   }
+
   /**
    * Returns true if PageElement is currently enabled.
    *
@@ -1029,6 +1042,7 @@ export class PageElementCurrently<
   isEnabled(): boolean {
     return this._node.__execute(() => this.element.isEnabled())
   }
+
   /**
    * Returns true if PageElement is currently selected.
    *
@@ -1038,6 +1052,7 @@ export class PageElementCurrently<
   isSelected(): boolean {
     return this._node.__execute(() => this.element.isSelected())
   }
+
   /**
    * Returns true if PageElement is currently checked.
    *
@@ -1047,6 +1062,7 @@ export class PageElementCurrently<
   isChecked(): boolean {
     return this.hasAnyAttribute('checked')
   }
+
   /**
    * Returns true if the PageElement's actual text currently equals the expected text.
    *
@@ -1055,12 +1071,14 @@ export class PageElementCurrently<
   hasText(text: string) {
     return this._compareHas(text, this.getText())
   }
+
   /**
    * Returns true if the PageElement currently has any Text.
    */
   hasAnyText() {
     return this._compareHasAny(this.getText())
   }
+
   /**
    * Returns true if the PageElement's actual text currently contains the expected text.
    *
@@ -1069,6 +1087,7 @@ export class PageElementCurrently<
   containsText(text: string) {
     return this._compareContains(text, this.getText())
   }
+
   /**
    * Returns true if the PageElement's actual HTML currently equals the expected HTML.
    *
@@ -1077,12 +1096,14 @@ export class PageElementCurrently<
   hasHTML(html: string) {
     return this._compareHas(html, this.getHTML())
   }
+
   /**
    * Returns true if the PageElement currently has any HTML.
    */
   hasAnyHTML() {
     return this._compareHasAny(this.getHTML())
   }
+
   /**
    * Returns true if the PageElement's actual HTML currently contains the expected HTML.
    *
@@ -1091,6 +1112,7 @@ export class PageElementCurrently<
   containsHTML(html: string) {
     return this._compareContains(html, this.getHTML())
   }
+
   /**
    * Returns true if the PageElement's actual direct text currently equals the expected direct text.
    *
@@ -1102,6 +1124,7 @@ export class PageElementCurrently<
   hasDirectText(directText: string) {
     return this._compareHas(directText, this.getDirectText())
   }
+
   /**
    * Returns true if the PageElement currently has any direct text.
    *
@@ -1111,6 +1134,7 @@ export class PageElementCurrently<
   hasAnyDirectText() {
     return this._compareHasAny(this.getDirectText())
   }
+
   /**
    * Returns true if the PageElement's actual direct text currently contains the expected direct text.
    *
@@ -1122,6 +1146,7 @@ export class PageElementCurrently<
   containsDirectText(directText: string) {
     return this._compareContains(directText, this.getDirectText())
   }
+
   /**
    * Returns true if the specified HTML attribute of PageElement currently has the expected value.
    *
@@ -1131,6 +1156,7 @@ export class PageElementCurrently<
   hasAttribute(attribute: Workflo.IAttribute) {
     return this._compareHas(attribute.value, this.getAttribute(attribute.name))
   }
+
   /**
    * Returns true if the HTML attribute with the specified attributeName of PageElement currently has any value.
    *
@@ -1139,6 +1165,7 @@ export class PageElementCurrently<
   hasAnyAttribute(attributeName: string) {
     return this._compareHasAny(this.getAttribute(attributeName))
   }
+
   /**
    * Returns true if the specified HTML attribute of PageElement currently contains the expected value.
    *
@@ -1148,6 +1175,7 @@ export class PageElementCurrently<
   containsAttribute(attribute: Workflo.IAttribute) {
     return this._compareContains(attribute.value, this.getAttribute(attribute.name))
   }
+
   /**
    * Returns true if the HTML attribute 'class' of PageElement currently has the specified className.
    *
@@ -1156,12 +1184,14 @@ export class PageElementCurrently<
   hasClass(className: string) {
     return this._compareHas(className, this.getClass())
   }
+
   /**
    * Returns true if the HTML attribute 'class' of PageElement currently has any className.
    */
   hasAnyClass() {
     return this._compareHasAny(this.getClass())
   }
+
   /**
   * Returns true if the HTML attribute 'class' of PageElement currently contains the specified className.
   *
@@ -1170,6 +1200,7 @@ export class PageElementCurrently<
   containsClass(className: string) {
     return this._compareContains(className, this.getClass())
   }
+
   /**
    * Returns true if the HTML attribute 'id' of PageElement currently has the specified value.
    *
@@ -1178,12 +1209,14 @@ export class PageElementCurrently<
   hasId(id: string) {
     return this._compareHas(id, this.getId())
   }
+
   /**
    * Returns true if the HTML attribute 'id' of PageElement currently has any value.
    */
   hasAnyId() {
     return this._compareHasAny(this.getId())
   }
+
   /**
    * Returns true if the HTML attribute 'id' of PageElement currently contains the specified value.
    *
@@ -1192,6 +1225,7 @@ export class PageElementCurrently<
   containsId(id: string) {
     return this._compareContains(id, this.getId())
   }
+
   /**
    * Returns true if the HTML attribute 'name' of PageElement currently has the specified value.
    *
@@ -1200,12 +1234,14 @@ export class PageElementCurrently<
   hasName(name: string) {
     return this._compareHas(name, this.getName())
   }
+
   /**
    * Returns true if the HTML attribute 'name' of PageElement currently has any value.
    */
   hasAnyName() {
     return this._compareHasAny(this.getName())
   }
+
   /**
    * Returns true if the HTML attribute 'name' of PageElement currently contains the specified value.
    *
@@ -1214,6 +1250,7 @@ export class PageElementCurrently<
   containsName(name: string) {
     return this._compareContains(name, this.getName())
   }
+
   /**
    * Returns true if - currently - the location of PageElement matches the specified coordinates or if its location deviates
    * no more than the specified tolerances from the specified coordinates.
@@ -1228,6 +1265,7 @@ export class PageElementCurrently<
     return this._withinTolerance(coordinates.x, actualCoords.x, tolerances.x)
       && this._withinTolerance(coordinates.y, actualCoords.y, tolerances.y)
   }
+
   /**
    * Returns true if - currently - the x-location of PageElement matches the specified x-location or if PageElement's
    * x-location deviates no more than the specified tolerance from the specified x-location.
@@ -1241,6 +1279,7 @@ export class PageElementCurrently<
 
     return this._withinTolerance(x, actual, tolerance)
   }
+
   /**
    * Returns true if - currently - the y-location of PageElement matches the specified y-location or if PageElement's
    * y-location deviates no more than the specified tolerance from the specified y-location.
@@ -1254,6 +1293,7 @@ export class PageElementCurrently<
 
     return this._withinTolerance(y, actual, tolerance)
   }
+
   /**
   * Returns true if - currently - the size of PageElement matches the specified size or if PageElement's size deviates no
   * more than the specified tolerances from the specified size.
@@ -1268,6 +1308,7 @@ export class PageElementCurrently<
     return this._withinTolerance(size.width, actualSize.width, tolerances.width)
       && this._withinTolerance(size.height, actualSize.height, tolerances.height)
   }
+
   /**
    * Returns true if - currently - the width of PageElement matches the specified width or if PageElement's width deviates no
    * more than the specified tolerance from the specified width.
@@ -1281,6 +1322,7 @@ export class PageElementCurrently<
 
     return this._withinTolerance(width, actual, tolerance)
   }
+
   /**
    * Returns true if - currently - the height of PageElement matches the specified height or if PageElement's height deviates no
    * more than the specified tolerance from the specified height.
@@ -1327,7 +1369,7 @@ export class PageElementCurrently<
        */
       hasText: (text: string) => !this.hasText(text),
       /**
-       * Returns true if the PageElement currently does not have any Text.
+       * Returns true if the PageElement currently does not have any text.
        */
       hasAnyText: () => !this.hasAnyText(),
       /**
@@ -1528,6 +1570,7 @@ export class PageElementWait<
       'existed', opts => this._node.currently.element.waitForExist(opts.timeout, opts.reverse), opts
     )
   }
+
   /**
    * Waits for PageElement to be visible.
    *
@@ -1545,6 +1588,7 @@ export class PageElementWait<
       'became visible', opts => this._node.currently.element.waitForVisible(opts.timeout, opts.reverse), opts
     )
   }
+
   /**
    * Waits for PageElement to be enabled.
    *
@@ -1562,6 +1606,7 @@ export class PageElementWait<
       'became enabled', opts => this._node.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts
     )
   }
+
   /**
    * Waits for PageElement to be selected.
    *
@@ -1579,6 +1624,7 @@ export class PageElementWait<
       'became selected', opts => this._node.currently.element.waitForSelected(opts.timeout, opts.reverse), opts
     )
   }
+
   /**
    * Waits for PageElement to be checked.
    *
@@ -1613,6 +1659,7 @@ export class PageElementWait<
 
     return this._node
   }
+
   /**
    * Waits for PageElement's actual text to equal the expected text.
    *
@@ -1632,6 +1679,7 @@ export class PageElementWait<
       'text', text, () => this._node.currently.hasText(text), opts
     )
   }
+
   /**
    * Waits for PageElement to have any text.
    *
@@ -1650,6 +1698,7 @@ export class PageElementWait<
       'text', () => this._node.currently.hasAnyText(), opts
     )
   }
+
   /**
    * Waits for PageElement's actual text to contain the expected text.
    *
@@ -1669,6 +1718,7 @@ export class PageElementWait<
       'text', text, () => this._node.currently.containsText(text), opts
     )
   }
+
   /**
    * Waits for PageElement's actual HTML value to equal the expected HTML value.
    *
@@ -1688,6 +1738,7 @@ export class PageElementWait<
       'HTML', html, () => this._node.currently.hasHTML(html), opts
     )
   }
+
   /**
    * Waits for PageElement to have any HTML value.
    *
@@ -1706,6 +1757,7 @@ export class PageElementWait<
       'HTML', () => this._node.currently.hasAnyHTML(), opts
     )
   }
+
   /**
    * Waits for PageElement's actual HTML value to contain the expected HTML value.
    *
@@ -1725,6 +1777,7 @@ export class PageElementWait<
       'HTML', html, () => this._node.currently.containsHTML(html), opts
     )
   }
+
   /**
    * Waits for PageElement's actual direct text to equal the expected direct text.
    *
@@ -1747,6 +1800,7 @@ export class PageElementWait<
       'direct text', directText, () => this._node.currently.hasDirectText(directText), opts
     )
   }
+
   /**
    * Waits for PageElement to have any direct text.
    *
@@ -1768,6 +1822,7 @@ export class PageElementWait<
       'direct text', () => this._node.currently.hasAnyDirectText(), opts
     )
   }
+
   /**
    * Waits for PageElement's actual direct text to contain the expected direct text.
    *
@@ -1790,6 +1845,7 @@ export class PageElementWait<
       'direct text', directText, () => this._node.currently.containsDirectText(directText), opts
     )
   }
+
   /**
    * Waits for the actual value of the specified HTML attribute of PageElement to equal an expected value.
    *
@@ -1812,6 +1868,7 @@ export class PageElementWait<
       () => this._node.currently.hasAttribute(attribute), opts
     )
   }
+
   /**
    * Waits for the actual value of the specified HTML attribute of PageElement to have any value.
    *
@@ -1831,6 +1888,7 @@ export class PageElementWait<
       `Attribute '${attributeName}'`, () => this._node.currently.hasAnyAttribute(attributeName), opts
     )
   }
+
   /**
    * Waits for the actual value of the specified HTML attribute of PageElement to contain an expected value.
    *
@@ -1853,6 +1911,7 @@ export class PageElementWait<
       () => this._node.currently.containsAttribute(attribute), opts
     )
   }
+
   /**
    * Waits for the actual value of PageElement's 'class' HTML attribute to equal an expected value.
    *
@@ -1873,6 +1932,7 @@ export class PageElementWait<
       `class`, className, () => this._node.currently.hasClass(className), opts
     )
   }
+
   /**
    * Waits for PageElement's 'class' HTML attribute to have any value.
    *
@@ -1891,6 +1951,7 @@ export class PageElementWait<
       `class`, () => this._node.currently.hasAnyClass(), opts
     )
   }
+
   /**
    * Waits for the actual value of the PageElement's 'class' HTML attribute to contain an expected value.
    *
@@ -1911,6 +1972,7 @@ export class PageElementWait<
       `class`, className, () => this._node.currently.containsClass(className), opts
     )
   }
+
   /**
    * Waits for the actual value of PageElement's 'id' HTML attribute to equal an expected value.
    *
@@ -1930,6 +1992,7 @@ export class PageElementWait<
       `id`, id, () => this._node.currently.hasId(id), opts
     )
   }
+
   /**
    * Waits for PageElement's 'id' HTML attribute to have any value.
    *
@@ -1948,6 +2011,7 @@ export class PageElementWait<
       `id`, () => this._node.currently.hasAnyId(), opts
     )
   }
+
   /**
    * Waits for the actual value of PageElement's 'id' HTML attribute to contain an expected value.
    *
@@ -1968,6 +2032,7 @@ export class PageElementWait<
       `id`, id, () => this._node.currently.containsId(id), opts
     )
   }
+
   /**
    * Waits for the actual value of PageElement's 'name' HTML attribute to equal an expected value.
    *
@@ -1987,6 +2052,7 @@ export class PageElementWait<
       `name`, name, () => this._node.currently.hasName(name), opts
     )
   }
+
   /**
    * Waits for PageElement's 'name' HTML attribute to have any value.
    *
@@ -2005,6 +2071,7 @@ export class PageElementWait<
       `id`, () => this._node.currently.hasAnyName(), opts
     )
   }
+
   /**
    * Waits for the actual value of PageElement's 'name' HTML attribute to contain an expected value.
    *
@@ -2025,6 +2092,7 @@ export class PageElementWait<
       `name`, name, () => this._node.currently.containsName(name), opts
     )
   }
+
   /**
    * Waits for the location of PageElement to equal the expected coordinates or to deviate no more than the specified
    * tolerances from the expected coordinates.
@@ -2064,6 +2132,7 @@ export class PageElementWait<
       )
     }
   }
+
   /**
    * Waits for the x-location of PageElement to equal the expected x-location or to deviate no more than the specified
    * tolerance from the expected x-location.
@@ -2101,6 +2170,7 @@ export class PageElementWait<
       )
     }
   }
+
   /**
    * Waits for the y-location of PageElement to equal the expected y-location or to deviate no more than the specified
    * tolerance from the expected y-location.
@@ -2138,6 +2208,7 @@ export class PageElementWait<
       )
     }
   }
+
   /**
    * Waits for the size of PageElement to equal the expected size or to deviate no more than the specified
    * tolerances from the expected size.
@@ -2177,6 +2248,7 @@ export class PageElementWait<
       )
     }
   }
+
   /**
    * Waits for the width of PageElement to equal the expected width or to deviate no more than the specified
    * tolerance from the expected width.
@@ -2214,6 +2286,7 @@ export class PageElementWait<
       )
     }
   }
+
   /**
    * Waits for the height of PageElement to equal the expected height or to deviate no more than the specified
    * tolerance from the expected height.
@@ -2251,6 +2324,7 @@ export class PageElementWait<
       )
     }
   }
+
   /**
    * Wait for PageElement to meet a certain condition.
    *
@@ -2607,7 +2681,7 @@ export class PageElementWait<
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param className the expected value which is supposed not to be contained in the actual value of PageElement's 
+       * @param className the expected value which is supposed not to be contained in the actual value of PageElement's
        * 'class' HTML attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
@@ -2676,7 +2750,7 @@ export class PageElementWait<
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param name the expected value which is supposed not to equal the actual value of PageElement's HTML 'name' 
+       * @param name the expected value which is supposed not to equal the actual value of PageElement's HTML 'name'
        * attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
@@ -2710,7 +2784,7 @@ export class PageElementWait<
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param name the expected value which is supposed not to be contained in the actual value of PageElement's HTML 
+       * @param name the expected value which is supposed not to be contained in the actual value of PageElement's HTML
        * 'name' attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
@@ -2867,6 +2941,7 @@ export class PageElementEventually<
   exists(opts?: Workflo.ITimeout) {
     return this._node.__eventually(() => this._node.wait.exists(opts))
   }
+
   /**
    * Returns true if PageElement eventually is visible within a specific timeout.
    *
@@ -2877,6 +2952,7 @@ export class PageElementEventually<
   isVisible(opts?: Workflo.ITimeout) {
     return this._node.__eventually(() => this._node.wait.isVisible(opts))
   }
+
   /**
    * Returns true if PageElement eventually is enabled within a specific timeout.
    *
@@ -2887,6 +2963,7 @@ export class PageElementEventually<
   isEnabled(opts?: Workflo.ITimeout) {
     return this._node.__eventually(() => this._node.wait.isEnabled(opts))
   }
+
   /**
    * Returns true if PageElement eventually is selected within a specific timeout.
    *
@@ -2897,6 +2974,7 @@ export class PageElementEventually<
   isSelected(opts?: Workflo.ITimeout) {
     return this._node.__eventually(() => this._node.wait.isSelected(opts))
   }
+
   /**
    * Returns true if PageElement eventually is checked within a specific timeout.
    *
@@ -2909,6 +2987,7 @@ export class PageElementEventually<
   isChecked(opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.isChecked(opts))
   }
+
   /**
    * Returns true if PageElement's actual text eventually equals the expected text within a specific timeout.
    *
@@ -2922,6 +3001,7 @@ export class PageElementEventually<
   hasText(text: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasText(text, opts))
   }
+
   /**
    * Returns true if PageElement eventually has any text within a specific timeout.
    *
@@ -2934,6 +3014,7 @@ export class PageElementEventually<
   hasAnyText(opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyText(opts))
   }
+
   /**
    * Returns true if PageElement's actual text eventually contains the expected text within a specific timeout.
    *
@@ -2947,6 +3028,7 @@ export class PageElementEventually<
   containsText(text: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.containsText(text, opts))
   }
+
   /**
    * Returns true if PageElement's actual HTML eventually equals the expected HTML within a specific timeout.
    *
@@ -2960,6 +3042,7 @@ export class PageElementEventually<
   hasHTML(html: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasHTML(html, opts))
   }
+
   /**
    * Returns true if PageElement eventually has any HTML within a specific timeout.
    *
@@ -2972,6 +3055,7 @@ export class PageElementEventually<
   hasAnyHTML(opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyHTML(opts))
   }
+
   /**
    * Returns true if PageElement's actual HTML eventually contains the expected HTML within a specific timeout.
    *
@@ -2985,6 +3069,7 @@ export class PageElementEventually<
   containsHTML(html: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.containsHTML(html, opts))
   }
+
   /**
    * Returns true if PageElement's actual direct text eventually equals the expected direct text within a specific
    * timeout.
@@ -3002,6 +3087,7 @@ export class PageElementEventually<
   hasDirectText(directText: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasDirectText(directText, opts))
   }
+
   /**
    * Returns true if PageElement eventually has any direct text within a specific timeout.
    *
@@ -3017,6 +3103,7 @@ export class PageElementEventually<
   hasAnyDirectText(opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyDirectText(opts))
   }
+
   /**
    * Returns true if PageElement's actual direct text eventually contains the expected direct text within a specific
    * timeout.
@@ -3034,6 +3121,7 @@ export class PageElementEventually<
   containsDirectText(directText: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.containsDirectText(directText, opts))
   }
+
   /**
    * Returns true if the actual value of the specified HTML attribute of PageElement eventually equals an expected value
    * within a specific timeout.
@@ -3049,6 +3137,7 @@ export class PageElementEventually<
   hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAttribute(attribute, opts))
   }
+
   /**
    * Returns true if the specified HTML attribute of PageElement eventually has any value within a specific timeout.
    *
@@ -3062,8 +3151,9 @@ export class PageElementEventually<
   hasAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts))
   }
+
   /**
-   * Returns true if the actual value of the specified HTML attribute of PageElement eventually contains an expected 
+   * Returns true if the actual value of the specified HTML attribute of PageElement eventually contains an expected
    * value within a specific timeout.
    *
    * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value
@@ -3077,6 +3167,7 @@ export class PageElementEventually<
   containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.containsAttribute(attribute, opts))
   }
+
   /**
    * Returns true if the actual value of PageElement's 'class' HTML attribute eventually equals an expected value
    * within a specific timeout.
@@ -3092,6 +3183,7 @@ export class PageElementEventually<
   hasClass(className: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasClass(className, opts))
   }
+
   /**
    * Returns true if PageElement's 'class' HTML attribute eventually has any value within a specific timeout.
    *
@@ -3104,11 +3196,12 @@ export class PageElementEventually<
   hasAnyClass(opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyClass(opts))
   }
+
   /**
    * Returns true if the actual value of PageElement's 'class' HTML attribute eventually contains an expected value
    * within a specific timeout.
    *
-   * @param className the expected value which is supposed to be contained in the actual value of PageElement's HTML 
+   * @param className the expected value which is supposed to be contained in the actual value of PageElement's HTML
    * 'class' attribute
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it
@@ -3119,6 +3212,7 @@ export class PageElementEventually<
   containsClass(className: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.containsClass(className, opts))
   }
+
   /**
    * Returns true if the actual value of PageElement's 'id' HTML attribute eventually equals an expected value
    * within a specific timeout.
@@ -3133,6 +3227,7 @@ export class PageElementEventually<
   hasId(id: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasId(id, opts))
   }
+
   /**
    * Returns true if PageElement's 'id' HTML attribute eventually has any value within a specific timeout.
    *
@@ -3145,6 +3240,7 @@ export class PageElementEventually<
   hasAnyId(opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyId(opts))
   }
+
   /**
    * Returns true if the actual value of PageElement's 'id' HTML attribute eventually contains an expected value
    * within a specific timeout.
@@ -3160,6 +3256,7 @@ export class PageElementEventually<
   containsId(id: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.containsId(id, opts))
   }
+
   /**
    * Returns true if the actual value of PageElement's 'name' HTML attribute eventually equals an expected value
    * within a specific timeout.
@@ -3174,6 +3271,7 @@ export class PageElementEventually<
   hasName(name: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasName(name, opts))
   }
+
   /**
    * Returns true if PageElement's 'name' HTML attribute eventually has any value within a specific timeout.
    *
@@ -3186,11 +3284,12 @@ export class PageElementEventually<
   hasAnyName(opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.hasAnyName(opts))
   }
+
   /**
    * Returns true if the actual value of PageElement's 'name' HTML attribute eventually contains an expected value
    * within a specific timeout.
    *
-   * @param name the expected value which is supposed to be contained in the actual value of PageElement's 'name' HTML 
+   * @param name the expected value which is supposed to be contained in the actual value of PageElement's 'name' HTML
    * attribute
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it
@@ -3201,8 +3300,9 @@ export class PageElementEventually<
   containsName(name: string, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(() => this._node.wait.containsName(name, opts))
   }
+
   /**
-   * Returns true if PageElement's location eventually equals the expected coordinates or if it deviates no more than 
+   * Returns true if PageElement's location eventually equals the expected coordinates or if it deviates no more than
    * the specified tolerances from the expected coordinates within a specific timeout.
    *
    * @param coordinates the expected coordinates of PageElement in pixels
@@ -3220,6 +3320,7 @@ export class PageElementEventually<
       () => this._node.wait.hasLocation(coordinates, {tolerances: opts.tolerances, timeout: opts.timeout})
     )
   }
+
   /**
    * Returns true if PageElement's x-location eventually equals the expected x-location or if it deviates no more
    * than the specified tolerance from the expected x-location within a specific timeout.
@@ -3238,7 +3339,18 @@ export class PageElementEventually<
       () => this._node.wait.hasX(x, {tolerance: opts.tolerance, timeout: opts.timeout})
     )
   }
-  D
+
+  /**
+   * Returns true if PageElement's y-location eventually equals the expected y-location or if it deviates no more
+   * than the specified tolerance from the expected y-location within a specific timeout.
+   *
+   * @param y the expected y-location of PageElement in pixels
+   * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected y-location,
+   * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+   *
+   * If no `timeout` is specified, PageElement's default timeout is used.
+   * If no `interval` is specified, PageElement's default interval is used.
+   */
   hasY(
     y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
   ) {
@@ -3246,6 +3358,7 @@ export class PageElementEventually<
       () => this._node.wait.hasY(y, {tolerance: opts.tolerance, timeout: opts.timeout})
     )
   }
+
   /**
    * Returns true if PageElement's size eventually equals the expected size or if it deviates no more than
    * the specified tolerances from the expected size within a specific timeout.
@@ -3265,6 +3378,7 @@ export class PageElementEventually<
       () => this._node.wait.hasSize(size, {tolerances: opts.tolerances, timeout: opts.timeout})
     )
   }
+
   /**
    * Returns true if PageElement's width eventually equals the expected width or if it deviates no more
    * than the specified tolerance from the expected width within a specific timeout.
@@ -3283,6 +3397,7 @@ export class PageElementEventually<
       () => this._node.wait.hasWidth(width, {tolerance: opts.tolerance, timeout: opts.timeout})
     )
   }
+
   /**
    * Returns true if PageElement's height eventually equals the expected height or if it deviates no more
    * than the specified tolerance from the expected height within a specific timeout.
@@ -3306,7 +3421,7 @@ export class PageElementEventually<
    * Returns true if the passed condition is eventually met within a specific timeout.
    *
    * @param condition a function which is supposed to return true if the specified condition is met
-   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to 
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
    * check it
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
@@ -3454,7 +3569,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.containsHTML(html, opts))
       },
       /**
-       * Returns true if PageElement's actual direct text eventually does not equal the expected direct text within a 
+       * Returns true if PageElement's actual direct text eventually does not equal the expected direct text within a
        * specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -3503,7 +3618,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts))
       },
       /**
-       * Returns true if the actual value of the specified HTML attribute of PageElement eventually does not equal an 
+       * Returns true if the actual value of the specified HTML attribute of PageElement eventually does not equal an
        * expected value within a specific timeout.
        *
        * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value
@@ -3518,7 +3633,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.hasAttribute(attribute, opts))
       },
       /**
-       * Returns true if the specified HTML attribute of PageElement eventually does not have any value within a 
+       * Returns true if the specified HTML attribute of PageElement eventually does not have any value within a
        * specific timeout.
        *
        * @param attributeName the name of a PageElement's HTML attribute which is supposed not to have any value
@@ -3532,7 +3647,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts))
       },
       /**
-       * Returns true if the actual value of the specified HTML attribute of PageElement eventually does not contain an 
+       * Returns true if the actual value of the specified HTML attribute of PageElement eventually does not contain an
        * expected value within a specific timeout.
        *
        * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value
@@ -3547,7 +3662,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.containsAttribute(attribute, opts))
       },
       /**
-       * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not equal an expected 
+       * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not equal an expected
        * value within a specific timeout.
        *
        * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
@@ -3575,10 +3690,10 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.hasAnyClass(opts))
       },
       /**
-       * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not contain an 
+       * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not contain an
        * expected value within a specific timeout.
        *
-       * @param className the expected value which is supposed not to be contained in the actual value of PageElement's 
+       * @param className the expected value which is supposed not to be contained in the actual value of PageElement's
        * HTML 'class' attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
@@ -3590,7 +3705,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.containsClass(className, opts))
       },
       /**
-       * Returns true if the actual value of PageElement's 'id' HTML attribute eventually does not equal an expected 
+       * Returns true if the actual value of PageElement's 'id' HTML attribute eventually does not equal an expected
        * value within a specific timeout.
        *
        * @param id the expected value which is supposed not to equal the actual value of PageElement's 'id' HTML
@@ -3617,7 +3732,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.hasAnyId(opts))
       },
       /**
-       * Returns true if the actual value of PageElement's 'id' HTML attribute eventually does not contain an expected 
+       * Returns true if the actual value of PageElement's 'id' HTML attribute eventually does not contain an expected
        * value within a specific timeout.
        *
        * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML
@@ -3632,10 +3747,10 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.containsId(id, opts))
       },
       /**
-       * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not equal an expected 
+       * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not equal an expected
        * value within a specific timeout.
        *
-       * @param name the expected value which is supposed not to equal the actual value of PageElement's 'name' HTML 
+       * @param name the expected value which is supposed not to equal the actual value of PageElement's 'name' HTML
        * attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
@@ -3659,7 +3774,7 @@ export class PageElementEventually<
         return this._node.__eventually(() => this._node.wait.not.hasAnyName(opts))
       },
       /**
-       * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not contain an expected 
+       * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not contain an expected
        * value within a specific timeout.
        *
        * @param name the expected value which is supposed not to be contained in the actual value of PageElement's 'name'
@@ -3692,11 +3807,11 @@ export class PageElementEventually<
         () => this._node.wait.not.hasLocation(coordinates, {tolerances: opts.tolerances, timeout: opts.timeout})
       ),
       /**
-       * Returns true if PageElement's x-location eventually does not equal the expected x-location or if it deviates 
+       * Returns true if PageElement's x-location eventually does not equal the expected x-location or if it deviates
        * more than the specified tolerance from the expected x-location within a specific timeout.
        *
        * @param x the not-expected x-location of PageElement in pixels
-       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected 
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
        * x-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
        *
        * If no `timeout` is specified, PageElement's default timeout is used.
@@ -3708,11 +3823,11 @@ export class PageElementEventually<
         () => this._node.wait.not.hasX(x, {tolerance: opts.tolerance, timeout: opts.timeout})
       ),
       /**
-       * Returns true if PageElement's y-location eventually does not equal the expected y-location or if it deviates 
+       * Returns true if PageElement's y-location eventually does not equal the expected y-location or if it deviates
        * more than the specified tolerance from the expected y-location within a specific timeout.
        *
        * @param x the not-expected x-location of PageElement in pixels
-       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected 
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
        * y-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
        *
        * If no `timeout` is specified, PageElement's default timeout is used.
@@ -3742,11 +3857,11 @@ export class PageElementEventually<
         () => this._node.wait.not.hasSize(size, {tolerances: opts.tolerances, timeout: opts.timeout})
       ),
       /**
-       * Returns true if PageElement's width eventually does not equal the expected width or if it deviates 
+       * Returns true if PageElement's width eventually does not equal the expected width or if it deviates
        * more than the specified tolerance from the expected width within a specific timeout.
        *
        * @param width the not-expected width of PageElement in pixels
-       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected 
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
        * width, the `timeout` within which the condition is expected to be met and the `interval` used to check it
        *
        * If no `timeout` is specified, PageElement's default timeout is used.
@@ -3758,11 +3873,11 @@ export class PageElementEventually<
         () => this._node.wait.not.hasWidth(width, {tolerance: opts.tolerance, timeout: opts.timeout})
       ),
       /**
-       * Returns true if PageElement's height eventually does not equal the expected height or if it deviates 
+       * Returns true if PageElement's height eventually does not equal the expected height or if it deviates
        * more than the specified tolerance from the expected height within a specific timeout.
        *
        * @param height the not-expected height of PageElement in pixels
-       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected 
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
        * height, the `timeout` within which the condition is expected to be met and the `interval` used to check it
        *
        * If no `timeout` is specified, PageElement's default timeout is used.

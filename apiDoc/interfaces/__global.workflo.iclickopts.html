@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IGroupFilterMaskExists | wdio-workflo</title>
+	<title>IClickOpts | wdio-workflo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,13 +60,10 @@
 					<a href="../modules/__global.workflo.html">Workflo</a>
 				</li>
 				<li>
-					<a href="../modules/__global.workflo.pagenode.html">PageNode</a>
-				</li>
-				<li>
-					<a href="__global.workflo.pagenode.igroupfiltermaskexists.html">IGroupFilterMaskExists</a>
+					<a href="__global.workflo.iclickopts.html">IClickOpts</a>
 				</li>
 			</ul>
-			<h1>Interface IGroupFilterMaskExists&lt;Content&gt;</h1>
+			<h1>Interface IClickOpts</h1>
 		</div>
 	</div>
 </header>
@@ -76,23 +73,20 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used to merge a filter mask into the opts parameter of a PageElementGroup&#39;s exist functions.</p>
+						<p>Describes the opts parameter passed to PageElement&#39;s click function.</p>
 					</div>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>Content<span class="tsd-signature-symbol">: </span><a href="../modules/__global.workflo.pagenode.html#groupcontent" class="tsd-signature-type">GroupContent</a></h4>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IGroupFilterMaskExists</span>
+						<a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">IClickOpts</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -103,7 +97,10 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.igroupfiltermaskexists.html#filtermask" class="tsd-kind-icon">filter<wbr>Mask</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.iclickopts.html#customscroll" class="tsd-kind-icon">custom<wbr>Scroll</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="__global.workflo.iclickopts.html#interval" class="tsd-kind-icon">interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.iclickopts.html#postcondition" class="tsd-kind-icon">post<wbr>Condition</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="__global.workflo.iclickopts.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
 						</section>
 					</div>
@@ -112,14 +109,85 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="filtermask" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> filter<wbr>Mask</h3>
-					<div class="tsd-signature tsd-kind-icon">filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/__global.workflo.pagenode.html#extractexistsfiltermask" class="tsd-signature-type">ExtractExistsFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="customscroll" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> custom<wbr>Scroll</h3>
+					<div class="tsd-signature tsd-kind-icon">custom<wbr>Scroll<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.iscrollparams.html" class="tsd-signature-type">IScrollParams</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2973">index.ts:2973</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L1838">index.ts:1838</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Before clicking on PageElement, the PageElement will be scrolled into the viewport.</p>
+						</div>
+						<p>By defining customScroll, PageElement&#39;s default custom scrolling behavior can be overwritten.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="interval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> interval</h3>
+					<div class="tsd-signature tsd-kind-icon">interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="__global.workflo.itimeoutinterval.html">ITimeoutInterval</a>.<a href="__global.workflo.itimeoutinterval.html#interval">interval</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L1868">index.ts:1868</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An interval in milliseconds.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="postcondition" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> post<wbr>Condition</h3>
+					<div class="tsd-signature tsd-kind-icon">post<wbr>Condition<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L1832">index.ts:1832</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If defined, the click on PageElement will be repeated until the result of <code>postCondition</code> returns true or until
+							a specific timeout is reached.</p>
+						</div>
+						<p>This can be useful, for example, if an HTML element does not react to clicks until a certain async code is
+						finished executing.</p>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="timeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="__global.workflo.itimeout.html">ITimeout</a>.<a href="__global.workflo.itimeout.html#timeout">timeout</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L1856">index.ts:1856</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A timeout in milliseconds.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -147,7 +215,7 @@
 									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
 										<a href="../modules/__global.workflo.object.html">Object</a>
 									</li>
-									<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
+									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
 										<a href="../modules/__global.workflo.pagenode.html">Page<wbr>Node</a>
 									</li>
 									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
@@ -167,102 +235,27 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckcurrently.html" class="tsd-kind-icon">ICheck<wbr>Currently</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckeventually.html" class="tsd-kind-icon">ICheck<wbr>Eventually</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckvaluecurrently.html" class="tsd-kind-icon">ICheck<wbr>Value<wbr>Currently</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckvalueeventually.html" class="tsd-kind-icon">ICheck<wbr>Value<wbr>Eventually</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckwait.html" class="tsd-kind-icon">ICheck<wbr>Wait</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckwaitvalue.html" class="tsd-kind-icon">ICheck<wbr>Wait<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ielementnode.html" class="tsd-kind-icon">IElement<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igetelement.html" class="tsd-kind-icon">IGet<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igetvalueelement.html" class="tsd-kind-icon">IGet<wbr>Value<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-kind-icon">IGroup<wbr>Filter<wbr>Mask</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igroupfiltermaskexists.html" class="tsd-kind-icon">IGroup<wbr>Filter<wbr>Mask<wbr>Exists</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="__global.workflo.iclickopts.html" class="tsd-kind-icon">IClick<wbr>Opts</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.pagenode.igroupfiltermaskexists.html#filtermask" class="tsd-kind-icon">filter<wbr>Mask</a>
+								<a href="__global.workflo.iclickopts.html#customscroll" class="tsd-kind-icon">custom<wbr>Scroll</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="__global.workflo.iclickopts.html#interval" class="tsd-kind-icon">interval</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="__global.workflo.iclickopts.html#postcondition" class="tsd-kind-icon">post<wbr>Condition</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="__global.workflo.iclickopts.html#timeout" class="tsd-kind-icon">timeout</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ilistfiltermask.html" class="tsd-kind-icon">IList<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.imapfiltermask.html" class="tsd-kind-icon">IMap<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.inode.html" class="tsd-kind-icon">INode</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-kind-icon">IValue<wbr>Element<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ivaluegroupfiltermask.html" class="tsd-kind-icon">IValue<wbr>Group<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractboolean" class="tsd-kind-icon">Extract<wbr>Boolean</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractexistsfiltermask" class="tsd-kind-icon">Extract<wbr>Exists<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-kind-icon">Extract<wbr>Text</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractvalue" class="tsd-kind-icon">Extract<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractvalueboolean" class="tsd-kind-icon">Extract<wbr>Value<wbr>Boolean</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractvaluebooleanwn" class="tsd-kind-icon">Extract<wbr>Value<wbr>BooleanWN</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#groupcontent" class="tsd-kind-icon">Group<wbr>Content</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#groupfiltermask" class="tsd-kind-icon">Group<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#groupfiltermaskexists" class="tsd-kind-icon">Group<wbr>Filter<wbr>Mask<wbr>Exists</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#listfiltermask" class="tsd-kind-icon">List<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#mapfiltermask" class="tsd-kind-icon">Map<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#valuegroupfiltermask" class="tsd-kind-icon">Value<wbr>Group<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#valuegroupfiltermaskwn" class="tsd-kind-icon">Value<wbr>Group<wbr>Filter<wbr>MaskWN</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

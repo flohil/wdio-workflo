@@ -29,7 +29,6 @@ export interface IPageElementBaseOpts<
 export abstract class PageElementBase<
   Store extends PageElementStore,
 > extends PageNode<Store> {
-
   /**
    * Defines the kind of wait condition performed when `initialWait` is invoked.
    *
@@ -117,6 +116,7 @@ export abstract class PageElementBase<
    * @param expected the expected value to be compared
    */
   abstract __equals<T>(actual: T, expected: T): boolean
+
   /**
    * Return true if `actual` has any value.
    *
@@ -124,6 +124,7 @@ export abstract class PageElementBase<
    * @param actual the actual value which is supposed to have any value
    */
   abstract __any<T>(actual: T): boolean
+
   /**
    * Compares the values of `actual` and `expected` and returns true if `actual` contains `expected`.
    *

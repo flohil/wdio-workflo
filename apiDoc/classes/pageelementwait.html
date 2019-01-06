@@ -64,6 +64,21 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This class defines all <code>wait</code> functions of PageElement.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>PageElementType type of the PageElement for which PageElementWait defines all <code>wait</code> functions</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -176,7 +191,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenodewait.html">PageNodeWait</a>.<a href="pagenodewait.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L298">lib/page_objects/page_elements/PageNode.ts:298</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L301">lib/page_objects/page_elements/PageNode.ts:301</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -209,7 +224,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenodewait.html">PageNodeWait</a>.<a href="pagenodewait.html#_node">_node</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageNode.ts#L298">lib/page_objects/page_elements/PageNode.ts:298</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L301">lib/page_objects/page_elements/PageNode.ts:301</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -232,9 +247,14 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pagenodewait.html">PageNodeWait</a>.<a href="pagenodewait.html#not">not</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1203">lib/page_objects/page_elements/PageElement.ts:1203</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2358">lib/page_objects/page_elements/PageElement.ts:2358</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>returns the negated variants of PageElementWait&#39;s state check functions</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter">
@@ -246,19 +266,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1253">lib/page_objects/page_elements/PageElement.ts:1253</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2642">lib/page_objects/page_elements/PageElement.ts:2642</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of the specified HTML attribute of PageElement not to contain an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>attribute: <a href="../interfaces/__global.workflo.iattribute.html" class="tsd-signature-type">IAttribute</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the specified HTML attribute of PageElement, consisting of the attribute&#39;s name and the value
+															it is expected not to contain</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -270,19 +311,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1262">lib/page_objects/page_elements/PageElement.ts:1262</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2694">lib/page_objects/page_elements/PageElement.ts:2694</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of the PageElement&#39;s &#39;class&#39; HTML attribute not to contain an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>className: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected value which is supposed not to be contained in the actual value of PageElement&#39;s
+															&#39;class&#39; HTML attribute</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -294,9 +356,17 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1244">lib/page_objects/page_elements/PageElement.ts:1244</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2589">lib/page_objects/page_elements/PageElement.ts:2589</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s actual direct text not to contain the expected direct text.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+												<p>A direct text is a text that resides on the level directly below the selected HTML element.
+												It does not include any text of the HTML element&#39;s nested children elements.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
@@ -304,9 +374,18 @@
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -318,19 +397,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1235">lib/page_objects/page_elements/PageElement.ts:1235</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2530">lib/page_objects/page_elements/PageElement.ts:2530</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s actual HTML value not to contain the expected HTML value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>html: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected html which is supposed not to be contained in the actual html</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -342,19 +441,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1271">lib/page_objects/page_elements/PageElement.ts:1271</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2745">lib/page_objects/page_elements/PageElement.ts:2745</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of PageElement&#39;s &#39;id&#39; HTML attribute not to contain an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>id: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected value which is supposed not to be contained in the actual value of PageElement&#39;s HTML &#39;id&#39;
+															attribute</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -366,19 +486,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1280">lib/page_objects/page_elements/PageElement.ts:1280</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2797">lib/page_objects/page_elements/PageElement.ts:2797</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of PageElement&#39;s &#39;name&#39; HTML attribute not to contain an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>name: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected value which is supposed not to be contained in the actual value of PageElement&#39;s HTML
+															&#39;name&#39; attribute</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -390,19 +531,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1226">lib/page_objects/page_elements/PageElement.ts:1226</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2480">lib/page_objects/page_elements/PageElement.ts:2480</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s actual text not to contain the expected text.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>text: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected text which is supposed not to be contained in the actual text</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -414,16 +575,29 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1205">lib/page_objects/page_elements/PageElement.ts:1205</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2371">lib/page_objects/page_elements/PageElement.ts:2371</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for a PageElement not to exist.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -435,19 +609,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1250">lib/page_objects/page_elements/PageElement.ts:1250</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2624">lib/page_objects/page_elements/PageElement.ts:2624</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of the specified HTML attribute of PageElement not to have any value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>attributeName: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the name of a PageElement&#39;s HTML attribute which is supposed to have any value</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -459,16 +653,31 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1259">lib/page_objects/page_elements/PageElement.ts:1259</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2676">lib/page_objects/page_elements/PageElement.ts:2676</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s &#39;class&#39; HTML attribute not to have any value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -480,16 +689,33 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1241">lib/page_objects/page_elements/PageElement.ts:1241</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2569">lib/page_objects/page_elements/PageElement.ts:2569</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement not to have any direct text.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+												<p>A direct text is a text that resides on the level directly below the selected HTML element.
+												It does not include any text of the HTML element&#39;s nested children elements.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -501,16 +727,31 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1232">lib/page_objects/page_elements/PageElement.ts:1232</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2513">lib/page_objects/page_elements/PageElement.ts:2513</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement not to have any HTML value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -522,16 +763,31 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1268">lib/page_objects/page_elements/PageElement.ts:1268</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2727">lib/page_objects/page_elements/PageElement.ts:2727</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s &#39;id&#39; HTML attribute not to have any value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -543,16 +799,31 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1277">lib/page_objects/page_elements/PageElement.ts:1277</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2779">lib/page_objects/page_elements/PageElement.ts:2779</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s &#39;name&#39; HTML attribute not to have any value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -564,16 +835,31 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1223">lib/page_objects/page_elements/PageElement.ts:1223</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2463">lib/page_objects/page_elements/PageElement.ts:2463</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement not to have any text.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -585,19 +871,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1247">lib/page_objects/page_elements/PageElement.ts:1247</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2607">lib/page_objects/page_elements/PageElement.ts:2607</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of the specified HTML attribute of PageElement not to equal an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>attribute: <a href="../interfaces/__global.workflo.iattribute.html" class="tsd-signature-type">IAttribute</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the specified HTML attribute of PageElement, consisting of the attribute&#39;s name and the value
+															it is expected not to have</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -609,19 +916,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1256">lib/page_objects/page_elements/PageElement.ts:1256</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2660">lib/page_objects/page_elements/PageElement.ts:2660</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of PageElement&#39;s &#39;class&#39; HTML attribute not to equal an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>className: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected value which is supposed not to equal the actual value of PageElement&#39;s HTML &#39;class&#39;
+															attribute</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -633,9 +961,17 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1238">lib/page_objects/page_elements/PageElement.ts:1238</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2550">lib/page_objects/page_elements/PageElement.ts:2550</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s actual direct text not to equal the expected direct text.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+												<p>A direct text is a text that resides on the level directly below the selected HTML element.
+												It does not include any text of the HTML element&#39;s nested children elements.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
@@ -643,9 +979,18 @@
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -657,19 +1002,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1229">lib/page_objects/page_elements/PageElement.ts:1229</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2497">lib/page_objects/page_elements/PageElement.ts:2497</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s actual HTML value not to equal the expected HTML value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>html: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected html which is supposed not to equal the actual html</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -681,19 +1046,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1312">lib/page_objects/page_elements/PageElement.ts:1312</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2914">lib/page_objects/page_elements/PageElement.ts:2914</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the height of PageElement not to equal the expected height.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>height: <span class="tsd-signature-type">number</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the not-expected height of PageElement in pixels</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected height,
+															the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -705,19 +1090,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1265">lib/page_objects/page_elements/PageElement.ts:1265</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2711">lib/page_objects/page_elements/PageElement.ts:2711</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of PageElement&#39;s &#39;id&#39; HTML attribute not to equal an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>id: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected value which is supposed not to equal the actual value of PageElement&#39;s &#39;id&#39; HTML attribute</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -729,19 +1134,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1283">lib/page_objects/page_elements/PageElement.ts:1283</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2815">lib/page_objects/page_elements/PageElement.ts:2815</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the location of PageElement not to equal the expected coordinates.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>coordinates: <a href="../interfaces/__global.workflo.icoordinates.html" class="tsd-signature-type">ICoordinates</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the not-expected coordinates of PageElement in pixels</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerances: { x: 0, y: 0 } }</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>tolerances</code> used to calculate the maximal allowed deviations from the expected coordinates,
+																the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -753,19 +1179,40 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1274">lib/page_objects/page_elements/PageElement.ts:1274</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2763">lib/page_objects/page_elements/PageElement.ts:2763</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the actual value of PageElement&#39;s &#39;name&#39; HTML attribute not to equal an expected value.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>name: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected value which is supposed not to equal the actual value of PageElement&#39;s HTML &#39;name&#39;
+															attribute</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -777,19 +1224,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1300">lib/page_objects/page_elements/PageElement.ts:1300</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2874">lib/page_objects/page_elements/PageElement.ts:2874</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the size of PageElement not to equal the expected size.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>size: <a href="../interfaces/__global.workflo.isize.html" class="tsd-signature-type">ISize</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the not-expected size of PageElement in pixels</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerances: { width: 0, height: 0 } }</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>tolerances</code> used to calculate the maximal allowed deviations from the expected size,
+															the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -801,19 +1268,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1220">lib/page_objects/page_elements/PageElement.ts:1220</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2447">lib/page_objects/page_elements/PageElement.ts:2447</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement&#39;s actual text not to equal the expected text.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>text: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected text which is supposed not to equal the actual text</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to
+															check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -825,19 +1312,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1307">lib/page_objects/page_elements/PageElement.ts:1307</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2895">lib/page_objects/page_elements/PageElement.ts:2895</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the width of PageElement not to equal the expected width.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>width: <span class="tsd-signature-type">number</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the not-expected width of PageElement in pixels</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected width,
+															the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -849,19 +1356,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1290">lib/page_objects/page_elements/PageElement.ts:1290</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2836">lib/page_objects/page_elements/PageElement.ts:2836</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the x-location of PageElement not to equal the expected x-location.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>x: <span class="tsd-signature-type">number</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the not-expected x-location of PageElement in pixels</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected x-location,
+															the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -873,19 +1400,39 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1295">lib/page_objects/page_elements/PageElement.ts:1295</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2855">lib/page_objects/page_elements/PageElement.ts:2855</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for the y-location of PageElement not to equal the expected y-location.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5>y: <span class="tsd-signature-type">number</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the not-expected y-location of PageElement in pixels</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected y-location,
+															the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -897,16 +1444,32 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1217">lib/page_objects/page_elements/PageElement.ts:1217</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2430">lib/page_objects/page_elements/PageElement.ts:2430</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for PageElement not to be checked.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes <code>filterMask</code> which can be used to skip the invocation of the state check function for
+																some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and the
+															<code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -918,16 +1481,29 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1211">lib/page_objects/page_elements/PageElement.ts:1211</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2399">lib/page_objects/page_elements/PageElement.ts:2399</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for a PageElement not to be enabled.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -939,16 +1515,29 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1214">lib/page_objects/page_elements/PageElement.ts:1214</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2413">lib/page_objects/page_elements/PageElement.ts:2413</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for a PageElement not to be selected.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 								<li class="tsd-parameter">
@@ -960,16 +1549,29 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1208">lib/page_objects/page_elements/PageElement.ts:1208</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2385">lib/page_objects/page_elements/PageElement.ts:2385</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Waits for a PageElement not to be visible.</p>
+												</div>
+												<p>Throws an error if the condition is not met within a specific timeout.</p>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met</p>
+															<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+											<p>this (an instance of PageElement)</p>
 										</li>
 								</ul>        </li>
 							</ul>
@@ -990,7 +1592,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#_makereverseparams">_makeReverseParams</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L450">lib/page_objects/page_elements/PageElementBase.ts:450</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L440">lib/page_objects/page_elements/PageElementBase.ts:440</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1022,7 +1624,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#_waitcontainsproperty">_waitContainsProperty</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L436">lib/page_objects/page_elements/PageElementBase.ts:436</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L426">lib/page_objects/page_elements/PageElementBase.ts:426</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1101,7 +1703,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#_waithasanyproperty">_waitHasAnyProperty</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L413">lib/page_objects/page_elements/PageElementBase.ts:413</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L403">lib/page_objects/page_elements/PageElementBase.ts:403</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1174,7 +1776,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#_waithasproperty">_waitHasProperty</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L390">lib/page_objects/page_elements/PageElementBase.ts:390</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L380">lib/page_objects/page_elements/PageElementBase.ts:380</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1253,7 +1855,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#_waitproperty">_waitProperty</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L314">lib/page_objects/page_elements/PageElementBase.ts:314</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L304">lib/page_objects/page_elements/PageElementBase.ts:304</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1347,7 +1949,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#_waitwdiocheckfunc">_waitWdioCheckFunc</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L285">lib/page_objects/page_elements/PageElementBase.ts:285</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L275">lib/page_objects/page_elements/PageElementBase.ts:275</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1420,7 +2022,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#_waitwithinproperty">_waitWithinProperty</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElementBase.ts#L366">lib/page_objects/page_elements/PageElementBase.ts:366</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementBase.ts#L356">lib/page_objects/page_elements/PageElementBase.ts:356</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1498,19 +2100,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1006">lib/page_objects/page_elements/PageElement.ts:1006</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1907">lib/page_objects/page_elements/PageElement.ts:1907</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of the specified HTML attribute of PageElement to contain an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>attribute: <a href="../interfaces/__global.workflo.iattribute.html" class="tsd-signature-type">IAttribute</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the specified HTML attribute of PageElement, consisting of the attribute&#39;s name and the value
+										it is expected to contain</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1524,19 +2143,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1023">lib/page_objects/page_elements/PageElement.ts:1023</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1970">lib/page_objects/page_elements/PageElement.ts:1970</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of the PageElement&#39;s &#39;class&#39; HTML attribute to contain an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>className: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to be contained in the actual value of PageElement&#39;s HTML
+										&#39;class&#39; attribute</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1550,9 +2186,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L989">lib/page_objects/page_elements/PageElement.ts:989</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1843">lib/page_objects/page_elements/PageElement.ts:1843</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s actual direct text to contain the expected direct text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -1560,9 +2204,16 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1576,19 +2227,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L974">lib/page_objects/page_elements/PageElement.ts:974</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1775">lib/page_objects/page_elements/PageElement.ts:1775</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s actual HTML value to contain the expected HTML value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>html: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected html which is supposed to be contained in the actual html</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1602,19 +2269,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1038">lib/page_objects/page_elements/PageElement.ts:1038</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2030">lib/page_objects/page_elements/PageElement.ts:2030</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of PageElement&#39;s &#39;id&#39; HTML attribute to contain an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to be contained in the actual value of PageElement&#39;s HTML &#39;id&#39;
+										attribute</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1628,19 +2312,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1053">lib/page_objects/page_elements/PageElement.ts:1053</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2090">lib/page_objects/page_elements/PageElement.ts:2090</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of PageElement&#39;s &#39;name&#39; HTML attribute to contain an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to be contained in the actual value of PageElement&#39;s HTML &#39;name&#39;
+										attribute</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1654,19 +2355,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L959">lib/page_objects/page_elements/PageElement.ts:959</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1716">lib/page_objects/page_elements/PageElement.ts:1716</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s actual text to contain the expected text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text which is supposed to be contained in the actual text</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1681,16 +2398,28 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pageelementbasewait.html">PageElementBaseWait</a>.<a href="pageelementbasewait.html#exists">exists</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L909">lib/page_objects/page_elements/PageElement.ts:909</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1568">lib/page_objects/page_elements/PageElement.ts:1568</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to exist.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverse.html" class="tsd-signature-type">ITimeoutReverse</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and a <code>reverse</code> flag that, if
+										set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1704,19 +2433,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1001">lib/page_objects/page_elements/PageElement.ts:1001</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1886">lib/page_objects/page_elements/PageElement.ts:1886</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of the specified HTML attribute of PageElement to have any value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>attributeName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the name of a PageElement&#39;s HTML attribute which is supposed to have any value</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1730,16 +2475,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1018">lib/page_objects/page_elements/PageElement.ts:1018</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1949">lib/page_objects/page_elements/PageElement.ts:1949</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s &#39;class&#39; HTML attribute to have any value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1753,16 +2511,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L984">lib/page_objects/page_elements/PageElement.ts:984</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1820">lib/page_objects/page_elements/PageElement.ts:1820</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to have any direct text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1776,16 +2549,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L969">lib/page_objects/page_elements/PageElement.ts:969</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1755">lib/page_objects/page_elements/PageElement.ts:1755</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to have any HTML value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1799,16 +2585,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1033">lib/page_objects/page_elements/PageElement.ts:1033</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2009">lib/page_objects/page_elements/PageElement.ts:2009</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s &#39;id&#39; HTML attribute to have any value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1822,16 +2621,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1048">lib/page_objects/page_elements/PageElement.ts:1048</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2069">lib/page_objects/page_elements/PageElement.ts:2069</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s &#39;name&#39; HTML attribute to have any value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1845,16 +2657,29 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L954">lib/page_objects/page_elements/PageElement.ts:954</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1696">lib/page_objects/page_elements/PageElement.ts:1696</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to have any text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1868,19 +2693,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L994">lib/page_objects/page_elements/PageElement.ts:994</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1864">lib/page_objects/page_elements/PageElement.ts:1864</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of the specified HTML attribute of PageElement to equal an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>attribute: <a href="../interfaces/__global.workflo.iattribute.html" class="tsd-signature-type">IAttribute</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the specified HTML attribute of PageElement, consisting of the attribute&#39;s name and the value
+										it is expected to have</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1894,19 +2736,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1013">lib/page_objects/page_elements/PageElement.ts:1013</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1930">lib/page_objects/page_elements/PageElement.ts:1930</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of PageElement&#39;s &#39;class&#39; HTML attribute to equal an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>className: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to equal the actual value of PageElement&#39;s HTML &#39;class&#39;
+										attribute</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1920,9 +2779,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L979">lib/page_objects/page_elements/PageElement.ts:979</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1798">lib/page_objects/page_elements/PageElement.ts:1798</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s actual direct text to equal the expected direct text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -1930,9 +2797,16 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1946,19 +2820,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L964">lib/page_objects/page_elements/PageElement.ts:964</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1736">lib/page_objects/page_elements/PageElement.ts:1736</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s actual HTML value to equal the expected HTML value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>html: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected html which is supposed to equal the actual html</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1972,19 +2862,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1167">lib/page_objects/page_elements/PageElement.ts:1167</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2306">lib/page_objects/page_elements/PageElement.ts:2306</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the height of PageElement to equal the expected height or to deviate no more than the specified
+									tolerance from the expected height.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>height: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected height of PageElement in pixels</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected height,
+											the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -1998,19 +2906,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1028">lib/page_objects/page_elements/PageElement.ts:1028</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1990">lib/page_objects/page_elements/PageElement.ts:1990</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of PageElement&#39;s &#39;id&#39; HTML attribute to equal an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to equal the actual value of PageElement&#39;s &#39;id&#39; HTML attribute</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2024,19 +2948,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1058">lib/page_objects/page_elements/PageElement.ts:1058</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2112">lib/page_objects/page_elements/PageElement.ts:2112</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the location of PageElement to equal the expected coordinates or to deviate no more than the specified
+									tolerances from the expected coordinates.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>coordinates: <a href="../interfaces/__global.workflo.icoordinates.html" class="tsd-signature-type">ICoordinates</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected coordinates of PageElement in pixels</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerances: { x: 0, y: 0 } }</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>tolerances</code> used to calculate the maximal allowed deviations from the expected coordinates,
+											the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2050,19 +2992,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1043">lib/page_objects/page_elements/PageElement.ts:1043</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2050">lib/page_objects/page_elements/PageElement.ts:2050</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the actual value of PageElement&#39;s &#39;name&#39; HTML attribute to equal an expected value.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value which is supposed to equal the actual value of PageElement&#39;s &#39;name&#39; HTML attribute</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2076,19 +3034,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1123">lib/page_objects/page_elements/PageElement.ts:1123</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2228">lib/page_objects/page_elements/PageElement.ts:2228</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the size of PageElement to equal the expected size or to deviate no more than the specified
+									tolerances from the expected size.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>size: <a href="../interfaces/__global.workflo.isize.html" class="tsd-signature-type">ISize</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected size of PageElement in pixels</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerances: { width: 0, height: 0 } }</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>tolerances</code> used to calculate the maximal allowed deviations from the expected size,
+											the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2102,19 +3078,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L949">lib/page_objects/page_elements/PageElement.ts:949</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1677">lib/page_objects/page_elements/PageElement.ts:1677</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement&#39;s actual text to equal the expected text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text which is supposed to equal the actual text</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2128,19 +3120,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1146">lib/page_objects/page_elements/PageElement.ts:1146</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2268">lib/page_objects/page_elements/PageElement.ts:2268</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the width of PageElement to equal the expected width or to deviate no more than the specified
+									tolerance from the expected width.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>width: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected width of PageElement in pixels</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected width,
+											the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2154,19 +3164,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1081">lib/page_objects/page_elements/PageElement.ts:1081</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2152">lib/page_objects/page_elements/PageElement.ts:2152</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the x-location of PageElement to equal the expected x-location or to deviate no more than the specified
+									tolerance from the expected x-location.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected x-location of PageElement in pixels</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected x-location,
+											the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2180,19 +3208,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1102">lib/page_objects/page_elements/PageElement.ts:1102</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2190">lib/page_objects/page_elements/PageElement.ts:2190</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for the y-location of PageElement to equal the expected y-location or to deviate no more than the specified
+									tolerance from the expected y-location.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected y-location of PageElement in pixels</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerance: 0 }</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>tolerance</code> used to calculate the maximal allowed deviation from the expected y-location,
+											the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2206,16 +3252,30 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L929">lib/page_objects/page_elements/PageElement.ts:929</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1642">lib/page_objects/page_elements/PageElement.ts:1642</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to be checked.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverseinterval.html" class="tsd-signature-type">ITimeoutReverseInterval</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes <code>filterMask</code> which can be used to skip the invocation of the state check function for
+											some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met, the
+										<code>interval</code> used to check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2229,16 +3289,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L919">lib/page_objects/page_elements/PageElement.ts:919</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1604">lib/page_objects/page_elements/PageElement.ts:1604</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to be enabled.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverse.html" class="tsd-signature-type">ITimeoutReverse</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and a <code>reverse</code> flag that, if
+										set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2252,16 +3324,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L924">lib/page_objects/page_elements/PageElement.ts:924</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1622">lib/page_objects/page_elements/PageElement.ts:1622</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to be selected.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverse.html" class="tsd-signature-type">ITimeoutReverse</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and a <code>reverse</code> flag that, if
+										set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2275,16 +3359,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L914">lib/page_objects/page_elements/PageElement.ts:914</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L1586">lib/page_objects/page_elements/PageElement.ts:1586</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for PageElement to be visible.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutreverse.html" class="tsd-signature-type">ITimeoutReverse</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and a <code>reverse</code> flag that, if
+										set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>
@@ -2298,16 +3394,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/lib/page_objects/page_elements/PageElement.ts#L1188">lib/page_objects/page_elements/PageElement.ts:1188</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElement.ts#L2340">lib/page_objects/page_elements/PageElement.ts:2340</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Wait for PageElement to meet a certain condition.</p>
+								</div>
+								<p>Throws an error if the condition is not met within a specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>description: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>describes the condition that the PageElement is expected to meet</p>
+									</div>
 								</li>
 								<li>
 									<h5>condition: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the function which checks if a certain condition is met</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -2340,6 +3448,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
+							<p>this (an instance of PageElement)</p>
 						</li>
 					</ul>
 				</section>

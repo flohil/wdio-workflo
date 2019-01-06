@@ -76,7 +76,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used by IElementNode to describe wait state check functions supported by PageElement, PageElementList,
+						<p>Used by IElementNode to describe <code>wait</code> state check functions supported by PageElement, PageElementList,
 						PageElementMap and PageElementGroup.</p>
 					</div>
 				</div>
@@ -141,9 +141,14 @@
 					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="../modules/__global.workflo.html#omit" class="tsd-signature-type">Omit</a><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.icheckwait.html" class="tsd-signature-type">ICheckWait</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">, </span><a href="__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"not"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2128">index.ts:2128</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2368">index.ts:2368</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>returns the negated variants of ICheckWait&#39;s state check functions</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -158,9 +163,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2126">index.ts:2126</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2363">index.ts:2363</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to have an actual direct text which contains the expected direct text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -168,6 +182,12 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -184,16 +204,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2123">index.ts:2123</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2313">index.ts:2313</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to have an actual text which contains the expected text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">TextType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text which is supposed to be contained in the actual text</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -210,13 +246,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2118">index.ts:2118</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2246">index.ts:2246</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to exist within a specific timeout.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes <code>filterMask</code> which can be used to skip the invocation of the state check function for
+											some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and a
+										<code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -233,13 +282,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2125">index.ts:2125</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2346">index.ts:2346</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to have any direct text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -256,13 +320,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2122">index.ts:2122</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2299">index.ts:2299</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to have any text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -279,9 +356,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2124">index.ts:2124</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2330">index.ts:2330</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to have an actual direct text which equals the expected direct text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+								<p>A direct text is a text that resides on the level directly below the selected HTML element.
+								It does not include any text of the HTML element&#39;s nested children elements.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -289,6 +375,12 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -305,16 +397,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2121">index.ts:2121</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2286">index.ts:2286</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to have an actual text which equals the expected text.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>text: <span class="tsd-signature-type">TextType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected text which is supposed to equal the actual text</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met, the <code>interval</code> used to
+										check it and a <code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.
+										If no <code>interval</code> is specified, PageNode&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -331,13 +439,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2120">index.ts:2120</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2272">index.ts:2272</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to be enabled.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes <code>filterMask</code> which can be used to skip the invocation of the state check function for
+											some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and a
+										<code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -354,13 +475,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2119">index.ts:2119</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2259">index.ts:2259</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+									PageElementGroup to be visible.</p>
+								</div>
+								<p>Throws an error if the condition is not met within the specific timeout.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">OptsType</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes <code>filterMask</code> which can be used to skip the invocation of the state check function for
+											some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and a
+										<code>reverse</code> flag that, if set to true, checks for the condition NOT to be met instead</p>
+										<p>If no <code>timeout</code> is specified, PageNode&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="__global.workflo.pagenode.ielementnode.html" class="tsd-signature-type">IElementNode</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TextType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">BooleanType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span></h4>

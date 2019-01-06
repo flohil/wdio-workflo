@@ -73,6 +73,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Used by IValueElementNode to describe state retrieval functions supported by ValuePageElement,
+						ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -125,13 +133,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2234">index.ts:2234</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2721">index.ts:2721</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the &#39;containsValue&#39; status of a ValuePageElement or of the ValuePageElements managed by
+									ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.</p>
+								</div>
+								<p>A ValuePageElement&#39;s &#39;hasValue&#39; status is set to true if its actual value contains the expected value.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">GetType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value used in the comparison which sets the &#39;containsValue&#39; status</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FilterType</span></h4>
@@ -148,13 +166,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2233">index.ts:2233</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2712">index.ts:2712</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the &#39;hasAnyValue&#39; status of a ValuePageElement or of the ValuePageElements managed by
+									ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filterMask: <span class="tsd-signature-type">FilterType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>can be used to skip the invocation of the state retrieval function for some or all managed
+										PageElements and not include the skipped results in the total result</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FilterType</span></h4>
@@ -171,13 +199,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2232">index.ts:2232</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2704">index.ts:2704</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the &#39;hasValue&#39; status of a ValuePageElement or of the ValuePageElements managed by
+									ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.</p>
+								</div>
+								<p>A ValuePageElement&#39;s &#39;hasValue&#39; status is set to true if its actual value equals the expected value.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">GetType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected value used in the comparison which sets the &#39;hasValue&#39; status</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">FilterType</span></h4>
@@ -194,13 +232,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/e14b3a8/src/index.ts#L2230">index.ts:2230</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L2694">index.ts:2694</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the value of a ValuePageElement or of the ValuePageElements managed by a ValuePageElementList,
+									ValuePageElementMap or ValuePageElementGroup.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filterMask: <span class="tsd-signature-type">FilterType</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>can be used to skip the invocation of the state retrieval function for some or all managed
+										PageElements and not include the skipped results in the total result</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">GetType</span></h4>
