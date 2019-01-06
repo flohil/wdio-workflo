@@ -8,8 +8,8 @@ import { PageElementStore, CloneFunc } from '../stores'
 export interface IWhereBuilderOpts<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions,
-  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
+  PageElementOpts,
+  ListType extends PageElementList<Store, PageElementType, PageElementOpts>
 > {
   /**
    * An instance of PageElementStore used by PageNodes which are returned by ListWhereBuilder.
@@ -22,11 +22,11 @@ export interface IWhereBuilderOpts<
    * @param selector the selector of a created PageElement
    * @param opts passed to the constructor of the created PageElements
    */
-  elementStoreFunc: (selector: string, opts: PageElementOptions) => PageElementType
+  elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType
   /**
    * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageElementStore.
    */
-  elementOptions: PageElementOptions,
+  elementOpts: PageElementOpts,
   /**
    * Creates a copy of ListWhereBuilder's PageElementList which manages a subset of the original list's PageElements.
    *
@@ -48,15 +48,15 @@ export interface IWhereBuilderOpts<
  * @template Store type of the instance of PageElementStore that is used by PageNodes returned by ListWhereBuilder
  * @template PageElementType type of instances of PageElements returned by ListWhereBuilder's retrieval functions
  * (getXXX)
- * @template PageElementOptions type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
+ * @template PageElementOpts type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
  * retrieval functions
  * @template ListType type of the PageElementList on which ListWhereBuilder operates
  */
 export class ListWhereBuilder<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions,
-  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
+  PageElementOpts,
+  ListType extends PageElementList<Store, PageElementType, PageElementOpts>
 > {
   /**
    * Stores the root selector for all XPath modifications performed with ListWhereBuilder.
@@ -73,11 +73,11 @@ export class ListWhereBuilder<
    * @param selector the selector of a created PageElement
    * @param opts passed to the constructor of the created PageElements
    */
-  protected _elementStoreFunc: (selector: string, opts: PageElementOptions) => PageElementType
+  protected _elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType
   /**
    * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageElementStore.
    */
-  protected _elementOptions: PageElementOptions
+  protected _elementOpts: PageElementOpts
   /**
    * Creates a copy of ListWhereBuilder's PageElementList which manages a subset of the original list's PageElements.
    *
@@ -103,11 +103,11 @@ export class ListWhereBuilder<
  * ListWhereBuilder. It is appended to the selector of the PageElementList handled by ListWhereBuilder.
  * @param opts opts parameter passed to the constructor of ListWhereBuilder
  */
-  constructor(selector: string, opts: IWhereBuilderOpts<Store, PageElementType, PageElementOptions, ListType>) {
+  constructor(selector: string, opts: IWhereBuilderOpts<Store, PageElementType, PageElementOpts, ListType>) {
     this._selector = selector
     this._store = opts.store
     this._elementStoreFunc = opts.elementStoreFunc
-    this._elementOptions = opts.elementOptions
+    this._elementOpts = opts.elementOpts
     this._cloneFunc = opts.cloneFunc
     this._getAllFunc = opts.getAllFunc
 
@@ -606,7 +606,7 @@ export class ListWhereBuilder<
    */
   getFirst(): PageElementType {
     return this._elementStoreFunc.apply(
-      this._store, [ this._xPathBuilder.build(), this._elementOptions ]
+      this._store, [ this._xPathBuilder.build(), this._elementOpts ]
     )
   }
 

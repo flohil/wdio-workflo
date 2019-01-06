@@ -1,13 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("..");
+/**
+ * This class serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
+ *
+ * @template Store type of the PageElementStore used by PageNode to retrieve PageNodes from the store
+ */
 class PageNode {
-    // available options:
-    // - wait -> initial wait operation: exist, visible, text, value
+    /**
+     * PageNode serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
+     *
+     * @param selector the raw XPath selector of the PageNode
+     * @param opts the options required to create an instance of PageNode
+     */
     constructor(selector, opts) {
         this._selector = selector;
         this._store = opts.store;
         this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
+        this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
     }
     // INTERNAL GETTERS AND SETTERS
     __getNodeId() {
@@ -26,6 +36,9 @@ class PageNode {
     getTimeout() {
         return this._timeout;
     }
+    getInterval() {
+        return this._interval;
+    }
     // PUBLIC ACTIONS
     toJSON() {
         return {
@@ -35,9 +48,14 @@ class PageNode {
     }
     // COMMON HELPER FUNCTIONS
     /**
-     * Executes func and, if an error occurs during execution of func,
-     * throws a custom error message that the page element could not be located on the page.
-     * @param func
+     * Executes func and trows any errors that occur during its execution.
+     *
+     * If an error occurs because an element could not be located on the page, throws a custom 'could not be located'
+     * error message.
+     *
+     * @template ResultType the result type of the executed function
+     * @param func the function to be executed
+     * @returns the result value of the executed function
      */
     __execute(func) {
         try {
@@ -54,6 +72,13 @@ class PageNode {
             }
         }
     }
+    /**
+     * Provides custom error handling of 'could not be located' and 'WaitUntilTimeoutError' errors for functions that
+     * check if a condition returns true within a specific timeout.
+     *
+     *
+     * @param func the function which is supposed to return true within a specific timeout
+     */
     __eventually(func) {
         try {
             func();
@@ -71,6 +96,19 @@ class PageNode {
             }
         }
     }
+    /**
+     * Provides custom error handling of 'could not be located' and 'WaitUntilTimeoutError' errors for functions that
+     * wait for a condition to become true within a specific timeout and throw an error if the condition does not become
+     * true.
+     *
+     *
+     * @param func the function which is supposed to return true within a specific timeout and throws an error if the
+     * condition does not become true
+     * @param errorMessage an errorMessage that describes the condition which did not become true within a specific
+     * timeout
+     * @param timeout the timeout used to wait for the result of the passed func to return true
+     * @returns this (an instance of PageNode)
+     */
     __wait(func, errorMessage, timeout) {
         try {
             func();
@@ -80,6 +118,21 @@ class PageNode {
         }
         return this;
     }
+    /**
+     * This function executes a waitFunc until it returns true or a specific timeout is reached.
+     * If the return value of waitFunc does not become true within the timeout, this function throws a
+     * 'WaitUntilTimeoutError'.
+     *
+     * __waitUntil also provides custom error handling for 'could not be located' errors.
+     *
+     *
+     * @param waitFunc the function which is supposed to return true within a specific timeout
+     * @param errorMessageFunc a function that returns an errorMessage which describes the condition that did not become
+     * true within a specific timeout
+     * @param timeout the timeout used to wait for the result of the waitFunc to return true
+     * @param interval the interval used to check for the result of the waitFunc to return true
+     * @returns this (an instance of PageNode)
+     */
     __waitUntil(waitFunc, errorMessageFunc, timeout, interval) {
         let error;
         try {
@@ -100,6 +153,13 @@ class PageNode {
         }
         return this;
     }
+    /**
+     * This function implements custom error handling for 'could not be located' and 'WaitUntilTimeoutError' errors.
+     *
+     * @param error an arbitrary type of error
+     * @param errorMessage used to describe the failed condition check which caused a WaitUntilTimeoutError
+     * @param timeout the timeout used to wait for an element to be located or for a wait condition to return true
+     */
     _handleWaitError(error, errorMessage, timeout) {
         if (error.message.includes('could not be located on the page')) {
             throw new Error(`${this.constructor.name} could not be located on the page within ${timeout}ms.\n` +
@@ -116,19 +176,52 @@ class PageNode {
     }
 }
 exports.PageNode = PageNode;
+/**
+ * This class defines all `currently` functions of PageNode.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the Page for which PageNodeCurrently defines all `currently` functions
+ */
 class PageNodeCurrently {
+    /**
+     * PageNodeCurrently defines all `currently` functions of PageNode.
+     *
+     * @param node PageNode for which PageNodeCurrently defines all `currently` functions
+     */
     constructor(node) {
         this._node = node;
     }
 }
 exports.PageNodeCurrently = PageNodeCurrently;
+/**
+ * This class defines all `wait` functions of PageNode.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the Page for which PageNodeWait defines all `wait` functions
+ */
 class PageNodeWait {
+    /**
+     * PageNodeWait defines all `wait` functions of PageNode.
+     *
+     * @param node PageNode for which PageNodeWait defines all `wait` functions
+     */
     constructor(node) {
         this._node = node;
     }
 }
 exports.PageNodeWait = PageNodeWait;
+/**
+ * This class defines all `eventually` functions of PageNode.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the Page for which PageNodeEventually defines all `eventually` functions
+ */
 class PageNodeEventually {
+    /**
+     * PageNodeEventually defines all `eventually` functions of PageNode.
+     *
+     * @param node PageNode for which PageNodeEventually defines all `eventually` functions
+     */
     constructor(node) {
         this._node = node;
     }

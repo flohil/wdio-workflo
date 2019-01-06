@@ -46,12 +46,41 @@ export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementTy
  * @template ListType type of the PageElementList on which ListWhereBuilder operates
  */
 export declare class ListWhereBuilder<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+    /**
+     * Stores the root selector for all XPath modifications performed with ListWhereBuilder.
+     */
     protected _selector: string;
+    /**
+     * An instance of PageElementStore used by PageNodes which are returned by ListWhereBuilder.
+     */
     protected _store: Store;
+    /**
+     * A function that returns instances of a PageElements managed by ListWhereBuilder's PageElementList
+     * from the ListWhereBuilder's PageElementStore.
+     *
+     * @param selector the selector of a created PageElement
+     * @param opts passed to the constructor of the created PageElements
+     */
     protected _elementStoreFunc: (selector: string, opts: PageElementOptions) => PageElementType;
+    /**
+     * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageElementStore.
+     */
     protected _elementOptions: PageElementOptions;
+    /**
+     * Creates a copy of ListWhereBuilder's PageElementList which manages a subset of the original list's PageElements.
+     *
+     * @template ListType the type of the cloned PageElementList
+     */
     protected _cloneFunc: CloneFunc<ListType>;
+    /**
+     * Returns all PageElements manages by ListWhereBuilder's PageElementList.
+     *
+     * @param list an instance of PageElementList for which all managed PageElements should be returned
+     */
     protected _getAllFunc: (list: ListType) => PageElementType[];
+    /**
+     * An instance of XPathBuilder used by ListWhereBuilder to perform XPath modifications.
+     */
     protected _xPathBuilder: XPathBuilder;
     /**
      * ListWhereBuilder allows to select subsets of a PageElementList (subsets of its managed PageElements) by modifying the

@@ -12,7 +12,13 @@
  * XPathBuilder's singleton instance.
  */
 export declare class XPathBuilder {
+    /**
+     * Stores the singleton instance of XPathBuilder.
+     */
     private static _instance;
+    /**
+     * Stores the currently constructed XPath expression.
+     */
     private _selector;
     /**
      * Returns a singleton instance of XPathBuilder.

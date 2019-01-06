@@ -24,7 +24,7 @@ export declare class PageElementGroup<Store extends PageElementStore, Content ex
     readonly currently: PageElementGroupCurrently<Store, Content, this>;
     readonly wait: PageElementGroupWait<Store, Content, this>;
     readonly eventually: PageElementGroupEventually<Store, Content, this>;
-    constructor(id: string, { store, timeout, content }: IPageElementGroupOpts<Store, Content>);
+    constructor(id: string, { store, timeout, interval, content }: IPageElementGroupOpts<Store, Content>);
     readonly $: Content;
     readonly __getLastDiff: Workflo.IDiff;
     toJSON(): Workflo.IElementJSON;

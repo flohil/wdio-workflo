@@ -1990,10 +1990,10 @@ declare global {
       type GroupConstructorKeys = GroupPublicKeys | "content" | "store"
       type ElementPublicKeys = BaseKeys | "customScroll"
       type ListPublicKeys = BaseKeys | "disableCache" | "identifier"
-      type ListPublicPartialKeys = "elementOptions"
+      type ListPublicPartialKeys = "elementOpts"
       type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | "elementStoreFunc"
       type MapPublicKeys = "identifier" | "timeout"
-      type MapPublicPartialKeys = "elementOptions"
+      type MapPublicPartialKeys = "elementOpts"
       type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc"
     }
 

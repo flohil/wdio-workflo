@@ -12,7 +12,7 @@ import { isNullOrUndefined } from '../../helpers';
  */
 export interface IPageElementMapIdentifier<K extends string> {
   mappingObject: Record<K, string>,
-  func: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string
+  mappingFunc: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string
 }
 
 // use disableCache for a "dynamic" list whose structure changes over time
@@ -26,7 +26,7 @@ export interface IPageElementMapOpts<
   store: Store,
   identifier: IPageElementMapIdentifier<K>,
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
-  elementOptions: PageElementOptions
+  elementOpts: PageElementOptions
 }
 
 // holds several PageElement instances of the same type
@@ -56,7 +56,7 @@ implements Workflo.PageNode.IElementNode<
     {
       identifier,
       elementStoreFunc,
-      elementOptions,
+      elementOpts: elementOptions,
       ...superOpts
     } : IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>
   ) {
@@ -71,7 +71,7 @@ implements Workflo.PageNode.IElementNode<
       this._identifier.mappingObject,
       (value, key) => <PageElementType> this._elementStoreFunc.apply(
         this._store, [
-          this._identifier.func(this._selector, value),
+          this._identifier.mappingFunc(this._selector, value),
           this._elementOptions
         ]
       )
@@ -95,7 +95,7 @@ implements Workflo.PageNode.IElementNode<
       mappingObject,
       (value, key) => <PageElementType> this._elementStoreFunc.apply(
         this._store, [
-          this._identifier.func(this._selector, value),
+          this._identifier.mappingFunc(this._selector, value),
           this._elementOptions
         ]
       )

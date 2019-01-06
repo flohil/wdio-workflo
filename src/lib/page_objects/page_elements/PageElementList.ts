@@ -10,46 +10,149 @@ import {
 } from '.'
 import { PageElementStore } from '../stores'
 import { ListWhereBuilder, XPathBuilder } from '../builders'
-import { DEFAULT_INTERVAL } from '../'
 import { isArray } from 'util';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
 import { isNullOrUndefined } from '../../helpers';
 
+/**
+ * Describes the opts parameter passed to the PageElementList's `identify` function.
+ *
+ * A list identifier allows for PageElements managed by PageElementList to be accessed via the key names of a
+ * `mappingObject`'s properties. To do so, an "identification process" needs to be performed which matches the
+ * values of `mappingObject`'s properties to the return values of a `mappingFunc` that is executed on each managed
+ * PageElement.
+ *
+ * Be aware that this form of PageElement identification can be quite slow because PageElementList needs to fetch all
+ * managed PageElements from the page before `mappingFunc` can be executed on them.
+ *
+ * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of managed
+ * PageElements. The only exception to this rule are cases in which the identification of PageElements cannot be
+ * described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates on
+ * the page).
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the PageElement managed by PageElementList
+ */
 export interface IPageElementListIdentifier<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>
 > {
+  /**
+   * An object whose keys are the names by which identified PageElements can be accessed
+   * and whose values are used to identify these PageElements when invoking `mappingFunc`.
+   */
   mappingObject: {[key: string] : string},
-  func: ( element: PageElementType ) => string
+  /**
+   * A function which is executed on each PageElement mapped by PageElementList.
+   *
+   * The return value of this function is compared to the values of mappingObject's properties and if there is a match,
+   * the PageElement can be accessed via the key of the matching property from now on.
+   */
+  mappingFunc: ( element: PageElementType ) => string
 }
 
+/**
+ * Describes the opts parameter passed to the `isEmpty` function of PageElementList's `wait` and `eventually` APIs.
+ */
 export interface IPageElementListWaitEmptyReverseParams extends Workflo.ITimeoutInterval {
   reverse?: boolean,
 }
 
+/**
+ * Describes the opts parameter passed to the `hasLength` function of PageElementList's `wait.not` and `eventually.not`
+ * APIs.
+ */
 export interface IPageElementListWaitLengthParams extends Workflo.ITimeoutInterval {
   comparator?: Workflo.Comparator,
 }
 
+/**
+ * Describes the opts parameter passed to the `hasLength` function of PageElementList's `wait` and `eventually` APIs.
+ */
 export interface IPageElementListWaitLengthReverseParams extends IPageElementListWaitLengthParams {
   reverse?: boolean,
 }
 
-// use disableCache for a "dynamic" list whose structure changes over time
-// alternatively, call refresh() when the times of structure changes are known
+
+/**
+ * Describes the opts parameter passed to the constructor function of PageElementList.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the PageElement managed by PageElementList
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+ * by PageElementList
+ */
 export interface IPageElementListOpts<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends Partial<IPageElementOpts<Store>>
+  PageElementOpts extends Partial<IPageElementOpts<Store>>
 > extends IPageNodeOpts<Store> {
-  elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  elementOptions: PageElementOptions
+  /**
+   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageElementStore.
+   *
+   * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
+   * @param opts the options used to configure the retrieved PageElement
+   */
+  elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType
+  /**
+   * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
+   */
+  elementOpts: PageElementOpts
+  /**
+   * `waitType` defines the kind of waiting condition performed when `initialWait` is invoked.
+   *
+   * The initial waiting condition is performed every time before an interaction with the tested application takes place
+   * via a PageElementList's action (eg. identify).
+   */
   waitType?: Workflo.WaitType
+  /**
+   * By default, the results of an "identification process" (the last invocation of PageElementList's `identify`
+   * function) are cached for future invocations of PageElementList's `identify` function.
+   *
+   * If `disableCache` is set to true, this caching of identification results will be disabled and a new "identification
+   * process" will be performed on each invocation of PageElementList's `identify` function.
+   *
+   * Disabling the identification results cache can be useful if the contents of a PageElementList change often.
+   * If the contents of a PageElementList rarely change, PageElementList's `identify` function can be invoked with the
+   * `resetCache` option set to true in order to repeat the "identification process" for a changed page content.
+   */
   disableCache?: boolean
+  /**
+   * This is the default `identifier` used to identify a PageElementList's managed PageElements via the key names
+   * defined in `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of identifier's
+   * `mappingFunc`.
+   *
+   * This default `identifier` can be overwritten by passing a custom `identifier` in the function parameters of
+   * PageElementList's `identify` function.
+   */
   identifier?: IPageElementListIdentifier<Store, PageElementType>
 }
 
-// holds several PageElement instances of the same type
+/**
+ * PageElementList provides a way to manage multiple PageElements which all have the same type and selector.
+ *
+ * By default, PageElements mapped by PageElementList can only be accessed via their index of occurrence in the DOM
+ * using the following accessor methods:
+ *
+ * - `.first` to retrieve the first PageElement found in the DOM that is identified by PageElementList's XPath selector
+ * - `.at` to retrieve the PageElement found in the DOM at the defined index of occurrence that is identified by
+ * PageElementList's XPath selector
+ * - `.all` to retrieve all PageElements found in the DOM that are identified by PageElementList's XPath selector
+ *
+ * However, PageElementList also features two other methods to access managed PageElements which are not restricted
+ * to index-based access:
+ *
+ * - The `where` accessor modifies the XPath expression used to identify PageElements by adding additional
+ * constraints to PageElementList's XPath selector.
+ * - The `identify` method can be used to access managed PageElements via the key names of a `mappingObject` whose
+ * values are matched with the return values of a `mappingFunc` that is executed on each managed PageElement. Be aware
+ * that this form of PageElement identification can be quite slow because PageElementList needs to fetch all managed
+ * PageElements from the page before `mappingFunc` can be executed on them.
+ *
+ * Therefore, always prefer `where` to `identify` for the identification of managed PageElements. The only exception
+ * to this rule are cases in which the identification of PageElements cannot be described by the modification of an
+ * XPath selector (eg. identifying PageElements via their location coordinates on the page).
+ */
 export class PageElementList<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
@@ -57,14 +160,58 @@ export class PageElementList<
 > extends PageNode<Store>
 implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
+  /**
+   * `_$` provides access to the PageNode retrieval functions of PageElementList's PageElementStore and prefixes the
+   * selectors of all PageNodes retrieved via `_$` with the selector of PageElementList.
+   */
   protected _$: Store
+  /**
+   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageElementStore.
+   *
+   * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
+   * @param opts the options used to configure the retrieved PageElement
+   */
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
+  /**
+   * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
+   */
   protected _elementOptions: PageElementOptions
+  /**
+   * defines the kind of waiting condition performed when `initialWait` is invoked
+   *
+   * The initial waiting condition is performed every time before an interaction with the tested application takes place
+   * via a PageElementList's action (eg. identify).
+   */
   protected _waitType: Workflo.WaitType
-
+  /**
+   * By default, the results of an "identification process" (the last invocation of PageElementList's `identify`
+   * function) are cached for future invocations of PageElementList's `identify` function.
+   *
+   * If `_disableCache` is set to true, this caching of identification results will be disabled and a new "identification
+   * process" will be performed on each invocation of PageElementList's `identify` function.
+   *
+   * Disabling the identification results cache can be useful if the contents of a PageElementList change often.
+   * If the contents of a PageElementList rarely change, PageElementList's `identify` function can be invoked with the
+   * `resetCache` option set to true in order to repeat the "identification process" for a changed page content.
+   */
   protected _disableCache: boolean
+  /**
+   * This is the default `identifier` used to identify a PageElementList's managed PageElements via the key names
+   * defined in `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of identifier's
+   * `mappingFunc`.
+   *
+   * This default `identifier` can be overwritten by passing a custom `identifier` in the function parameters of
+   * PageElementList's `identify` function.
+   */
   protected _identifier: IPageElementListIdentifier<Store, PageElementType>
+  /**
+   * caches the last result of PageElementList's `identify` function for future invocations of the function
+   */
   protected _identifiedObjCache: {[key: string] : {[key: string] : PageElementType}}
+  /**
+   * Stores an instance of ListWhereBuilder which allows to select subsets of the PageElements managed by PageElementList
+   * by modifying the list's selector using XPath modification functions.
+   */
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
 
   readonly currently: PageElementListCurrently<
@@ -77,6 +224,36 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     Store, PageElementType, PageElementOptions, this
   >
 
+  /**
+   * PageElementList provides a way to manage multiple PageElements which all have the same type and selector.
+   *
+   * By default, PageElements mapped by PageElementList can only be accessed via their index of occurrence in the DOM
+   * using the following accessor methods:
+   *
+   * - `.first` to retrieve the PageElement which maps to the first HTML element found in the DOM that is identified by
+   * PageElementList's selector
+   * - `.at` to retrieve the PageElement which maps to the HTML element found in the DOM at the defined index that is
+   * identified by PageElementList's selector
+   * - `.all` to retrieve all PageElements which map to HTML elements found in the DOM that are identified by
+   * PageElementList's selector
+   *
+   * However, PageElementList also features two other methods to access managed PageElements which are not restricted
+   * to index-based access:
+   *
+   * - The `where` accessor modifies the XPath expression used to identify PageElements by adding additional
+   * constraints to PageElementList's XPath selector.
+   * - The `identify` method can be used to access managed PageElements via the key names of a `mappingObject` whose
+   * values are matched with the return values of a `mappingFunc` that is executed on each managed PageElement. Be aware
+   * that this form of PageElement identification can be quite slow because PageElementList needs to fetch all managed
+   * PageElements from the page before `mappingFunc` can be executed on them.
+   *
+   * Therefore, always prefer `where` to `identify` for the identification of managed PageElements. The only exception
+   * to this rule are cases in which the identification of PageElements cannot be described by the modification of an
+   * XPath selector (eg. identifying PageElements via their location coordinates on the page).
+   *
+   * @param selector an XPath expression which identifies all PageElements managed by PageElementList
+   * @param opts the options used to configure PageElementList
+   */
   constructor(
     protected selector: string,
     opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>
@@ -86,7 +263,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     this._waitType = opts.waitType || Workflo.WaitType.visible
     this._disableCache = opts.disableCache || false
 
-    this._elementOptions = opts.elementOptions
+    this._elementOptions = opts.elementOpts
     this._elementStoreFunc = opts.elementStoreFunc
     this._identifier = opts.identifier
     this._identifiedObjCache = {}
@@ -121,18 +298,17 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Use this method to initialize properties that rely on the this type
-   * which is not available in the constructor.
+   * Use this method to initialize properties that rely on the this type which is not available in the constructor.
    *
-   * Make sure that this method is invoked immediatly after construction.
+   * Make sure that this method is invoked immediately after construction.
    *
-   * @param cloneFunc
+   * @param cloneFunc creates a copy of PageElementList which manages a subset of the original list's PageElements
    */
   init(cloneFunc: (selector: Workflo.XPath) => this) {
     this._whereBuilder = new ListWhereBuilder(this._selector, {
       store: this._store,
       elementStoreFunc: this._elementStoreFunc,
-      elementOptions: this._elementOptions,
+      elementOpts: this._elementOptions,
       cloneFunc: cloneFunc,
       getAllFunc: list => list.all
     })
@@ -140,6 +316,16 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     this.currently.init(cloneFunc)
   }
 
+  /**
+   * This function performs PageElementList's initial waiting condition.
+   *
+   * It supports the following waiting types:
+   *
+   * - 'exist' to wait for at least one of PageElementList's managed elements to exist in the DOM
+   * - 'visible' to wait for at least one of PageElementList's managed elements to become visible in the viewport
+   * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
+   * - 'text' to wait for at least one of PageElementList's managed elements to have any text
+   */
   initialWait() {
     switch(this._waitType) {
       case Workflo.WaitType.exist:
@@ -160,10 +346,19 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
   // typescript bugs 3.3.0:
   // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
+
+  /**
+   * `$` provides access to the PageNode retrieval functions of PageElementList's PageElementStore and prefixes the
+   * selectors of all PageNodes retrieved via `$` with the selector of PageElementList.
+   */
   get $() /*: Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>*/ {
     return this._$
   }
 
+  /**
+   * Fetches all webdriverio elements identified by PageElementList's XPath selector from the HTML page after
+   * performing PageElementList's initial waiting condition.
+   */
   get elements() {
     this.initialWait()
 
@@ -177,21 +372,26 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the first page element found in the DOM that matches the list selector.
+   * Retrieves the first PageElement found in the DOM that is identified by PageElementList's XPath selector after
+   * performing PageElementList's initial waiting condition.
    */
   get first() {
     return this.where.getFirst()
   }
 
   /**
-   * @param index starts at 0
+   * Retrieves the PageElement found in the DOM at the defined index of occurrence that is identified by
+   * PageElementList's XPath selector after performing PageElementList's initial waiting condition.
+   *
+   * @param index the index of occurrence of the retrieved PageElement - STARTS AT 0
    */
-  at( index: number ) {
+  at(index: number) {
     return this.where.getAt( index )
   }
 
   /**
-   * Returns all page elements found in the DOM that match the list selector after initial wait.
+   * Retrieves all PageElements found in the DOM that are identified by PageElementList's XPath selector after
+   * performing PageElementList's initial waiting condition.
    */
   get all() {
     const _elements: PageElementType[] = []
@@ -220,6 +420,12 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
 // INTERACTION functions
 
+  /**
+   * Sets a new default `identifier` for PageElementList's `identify` function.
+   *
+   * @param identifier used to identify a PageElementList's managed PageElements via the key names defined in `identifier`
+   * 's `mappingObject` by matching `mappingObject`'s values with the return values of `identifier`'s `mappingFunc`
+   */
   setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>) {
     this._identifier = identifier
 
@@ -227,28 +433,51 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns an object consisting of this._identifier.object's keys
-   * as keys and the elements mapped by this._identifier.func()
-   * as values.
+   * This function identifies PageElements managed by PageElementList with the aid of an `identifier`'s `mappingObject`
+   * and `mappingFunc`.
    *
-   * If this.identifier is undefined, the mapped object's keys will be defined
-   * by the index of an element's occurence in the element list (first element -> 0, seconed element -> 1...)
+   * It returns an identification results object which allows for PageElements managed by PageElementList to be accessed
+   * via the key names of `mappingObject`'s properties. To create this results object, an "identification process" needs
+   * to be performed:
    *
-   * If cached option is set to true, returns cached identified elements object
-   * if it exists and otherwise fetches new identified elements object.
-   * Per default, returns a cached version of this identifier was already
-   * used unless resetCache is set to true.
-   * This means that the returned structure of the list may reflect an earlier state,
-   * while its contents are still guaranteed to be refreshed on each access!
+   * - At first, PageElementList needs to fetch all managed PageElements from the page.
+   * - Then, a `mappingFunc` is executed on each fetched PageElement and its return value is compared to the values of
+   * `mappingObject`'s properties.
+   * - If there is a match between a `mappingFunc`'s return value and the value of a `mappingObject`'s property,
+   * a new property is written to the results object whose key name is taken from the matched `mappingObject`'s property
+   * and whose value is the PageElement on which `mappingFunc` was invoked.
    *
-   * Attention: this may take a long time, try to avoid: if only single elements of list
-   * are needed, use get() or where instead.
-   **/
+   * By default, the identification results object is cached for future invocations of the `identify` method. This
+   * behavior can be overwritten by passing a `resetCache` flag to the `identify` method.
+   *
+   * Disabling the identification results cache can be useful if the contents of a PageElementList change often.
+   * If the contents of a PageElementList rarely change, PageElementList's `identify` function can be invoked with the
+   * `resetCache` flag set to true in order to repeat the "identification process" for a changed page content.
+   *
+   * Be aware that the invocation of `identify` can be quite slow (if no identification result is cached yet) because
+   * PageElementList needs to fetch all managed PageElements from the page before `mappingFunc` can be executed on them.
+   *
+   * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of managed
+   * PageElements. The only exception to this rule are cases in which the identification of PageElements cannot be
+   * described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates on
+   * the page).
+   *
+   * @param opts includes the `identifier` which provides the `mappingObject` and the `mappingFunc` for the
+   * identification process and a `resetCache` flag that, if set to true, deletes any previously cached identification
+   * results
+   *
+   * If no `identifier` is passed to the `identify` method, PageElementList's default `identifier` is used. If no
+   * default `identifier` is provided either, the elements' indexes of occurrence will be used as keys in the
+   * identification results object.
+   *
+   * If no `resetCache` flag is provided, the PageElementList's `disabledCache` property is used to determine if
+   * identification results should be cached. The `disabledCache` property is set to `false` by default.
+   */
   identify(
     {identifier = this._identifier, resetCache = false}:
     {identifier?: IPageElementListIdentifier<Store, PageElementType>, resetCache?: boolean} = {}
   ) {
-    const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index'
+    const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.mappingFunc.toString()}` : 'index'
 
     if (this._disableCache || resetCache || !(cacheKey in this._identifiedObjCache)) {
       const listElements = this.all
@@ -262,7 +491,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
         // and list element is value
         listElements.forEach(
           ( element ) => {
-            const resultKey = identifier.func( element )
+            const resultKey = identifier.mappingFunc( element )
             queryResults[ resultKey ] = element
           }
         )
@@ -586,25 +815,24 @@ export class PageElementListCurrently<
 
     this._selector = node.getSelector()
     this._store = opts.store
-    this._elementOptions = opts.elementOptions
+    this._elementOptions = opts.elementOpts
     this._elementStoreFunc = opts.elementStoreFunc
 
     this._node = node
   }
 
   /**
-   * Use this method to initialize properties that rely on the this type
-   * which is not available in the constructor.
+   * Use this method to initialize properties that rely on the this type which is not available in the constructor.
    *
-   * Make sure that this method is invoked immediatly after construction.
+   * Make sure that this method is invoked immediately after construction.
    *
-   * @param cloneFunc
+   * @param cloneFunc creates a copy of PageElementList which manages a subset of the original list's PageElements
    */
   init(cloneFunc: (selector: Workflo.XPath) => ListType) {
     this._whereBuilder = new ListWhereBuilder(this._selector, {
       store: this._store,
       elementStoreFunc: this._elementStoreFunc,
-      elementOptions: this._elementOptions,
+      elementOpts: this._elementOptions,
       cloneFunc: cloneFunc,
       getAllFunc: list => list.all
     })

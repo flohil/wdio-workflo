@@ -143,7 +143,14 @@ class Step {
         }
     }
 }
+/**
+ * Indicates whether browser object was already patched to create stacktrace which can be displayed on selenium errors
+ * and show the line number in the testcase where the error occurred.
+ */
 Step._patchedBrowser = false;
+/**
+ * Defines for which functions of the browser object no patched stacktrace should be created.
+ */
 Step._commandBlacklist = {
     'isExecuted': true,
     'isMultiremote': true,

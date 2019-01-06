@@ -14,7 +14,7 @@ const helpers_1 = require("../../helpers");
 // holds several PageElement instances of the same type
 class PageElementMap extends _1.PageNode {
     constructor(_selector, _a) {
-        var { identifier, elementStoreFunc, elementOptions } = _a, superOpts = __rest(_a, ["identifier", "elementStoreFunc", "elementOptions"]);
+        var { identifier, elementStoreFunc, elementOpts: elementOptions } = _a, superOpts = __rest(_a, ["identifier", "elementStoreFunc", "elementOpts"]);
         super(_selector, superOpts);
         this._selector = _selector;
         this._selector = _selector;
@@ -22,7 +22,7 @@ class PageElementMap extends _1.PageNode {
         this._elementStoreFunc = elementStoreFunc;
         this._identifier = identifier;
         this._$ = Workflo.Object.mapProperties(this._identifier.mappingObject, (value, key) => this._elementStoreFunc.apply(this._store, [
-            this._identifier.func(this._selector, value),
+            this._identifier.mappingFunc(this._selector, value),
             this._elementOptions
         ]));
         this.currently = new PageElementMapCurrently(this);
@@ -38,7 +38,7 @@ class PageElementMap extends _1.PageNode {
      */
     changeMappingObject(mappingObject) {
         this._$ = Workflo.Object.mapProperties(mappingObject, (value, key) => this._elementStoreFunc.apply(this._store, [
-            this._identifier.func(this._selector, value),
+            this._identifier.mappingFunc(this._selector, value),
             this._elementOptions
         ]));
     }

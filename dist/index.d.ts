@@ -109,51 +109,51 @@ interface ICustomElementMatchers {
      */
     toContainAttribute(attribute: Workflo.IAttribute): boolean;
     /**
-     * Checks if the HTML attribute 'class' of PageElement currently has the specified className.
+     * Checks if the 'class' HTML attribute of PageElement currently has the specified className.
      *
-     * @param className the className which the HTML attribute 'class' of PageElement is supposed to have
+     * @param className the className which the 'class' HTML attribute of PageElement is supposed to have
      */
     toHaveClass(className: string): boolean;
     /**
-     * Checks if the HTML attribute 'class' of PageElement currently has any className.
+     * Checks if the 'class' HTML attribute of PageElement currently has any className.
      */
     toHaveAnyClass(): boolean;
     /**
-     * Checks if the HTML attribute 'class' of PageElement currently contains the specified className.
+     * Checks if the 'class' HTML attribute of PageElement currently contains the specified className.
      *
-     * @param className the className which the HTML attribute 'class' of PageElement is supposed to contain
+     * @param className the className which the 'class' HTML attribute of PageElement is supposed to contain
      */
     toContainClass(className: string): boolean;
     /**
-     * Checks if the HTML attribute 'id' of PageElement currently has the specified value.
+     * Checks if the 'id' HTML attribute of PageElement currently has the specified value.
      *
-     * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
+     * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
      */
     toHaveId(id: string): boolean;
     /**
-     * Checks if the HTML attribute 'id' of PageElement currently has any value.
+     * Checks if the 'id' HTML attribute of PageElement currently has any value.
      */
     toHaveAnyId(): boolean;
     /**
-     * Checks if the HTML attribute 'id' of PageElement currently contains the specified value.
+     * Checks if the 'id' HTML attribute of PageElement currently contains the specified value.
      *
-     * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
+     * @param id the value which the 'id' HTML attribute of PageElement is supposed to contain
      */
     toContainId(id: string): boolean;
     /**
-     * Checks if the HTML attribute 'name' of PageElement currently has the specified value.
+     * Checks if the 'name' HTML attribute of PageElement currently has the specified value.
      *
-     * @param name the value which the HTML attribute 'name' of PageElement is supposed to have
+     * @param name the value which the 'name' HTML attribute of PageElement is supposed to have
      */
     toHaveName(name: string): boolean;
     /**
-     * Checks if the HTML attribute 'name' of PageElement currently has any value.
+     * Checks if the 'name' HTML attribute of PageElement currently has any value.
      */
     toHaveAnyName(): boolean;
     /**
-     * Checks if the HTML attribute 'name' of PageElement currently contains the specified value.
+     * Checks if the 'name' HTML attribute of PageElement currently contains the specified value.
      *
-     * @param name the value which the HTML attribute 'name' of PageElement is supposed to contain
+     * @param name the value which the 'name' HTML attribute of PageElement is supposed to contain
      */
     toContainName(name: string): boolean;
     /**
@@ -209,7 +209,7 @@ interface ICustomElementMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
      */
     toEventuallyExist(opts?: Workflo.ITimeout): boolean;
     /**
@@ -217,7 +217,7 @@ interface ICustomElementMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
      */
     toEventuallyBeVisible(opts?: Workflo.ITimeout): boolean;
     /**
@@ -225,7 +225,7 @@ interface ICustomElementMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
      */
     toEventuallyBeEnabled(opts?: Workflo.ITimeout): boolean;
     /**
@@ -233,7 +233,7 @@ interface ICustomElementMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
      */
     toEventuallyBeSelected(opts?: Workflo.ITimeout): boolean;
     /**
@@ -242,8 +242,8 @@ interface ICustomElementMatchers {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyBeChecked(opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -252,8 +252,8 @@ interface ICustomElementMatchers {
      * @param text the text which the PageElement is supposed to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveText(text: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -261,8 +261,8 @@ interface ICustomElementMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -271,8 +271,8 @@ interface ICustomElementMatchers {
      * @param text the text which the PageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyContainText(text: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -281,8 +281,8 @@ interface ICustomElementMatchers {
      * @param html the HTML which the PageElement is supposed to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -290,8 +290,8 @@ interface ICustomElementMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAnyHTML(opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -300,8 +300,8 @@ interface ICustomElementMatchers {
      * @param html the HTML which the PageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyContainHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -313,8 +313,8 @@ interface ICustomElementMatchers {
      * @param directText the direct text which the PageElement is supposed to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -325,8 +325,8 @@ interface ICustomElementMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -338,8 +338,8 @@ interface ICustomElementMatchers {
      * @param directText the direct text which the PageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyContainDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -349,8 +349,8 @@ interface ICustomElementMatchers {
      * is expected to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -361,8 +361,8 @@ interface ICustomElementMatchers {
      * value
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -373,100 +373,100 @@ interface ICustomElementMatchers {
      * is expected to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'class' of PageElement eventually has the specified className within a specific
+     * Checks if the 'class' HTML attribute of PageElement eventually has the specified className within a specific
      * timeout.
      *
-     * @param className the className which the HTML attribute 'class' of PageElement is supposed to have
+     * @param className the className which the 'class' HTML attribute of PageElement is supposed to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveClass(className: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'class' of PageElement eventually has any className within a specific timeout.
+     * Checks if the 'class' HTML attribute of PageElement eventually has any className within a specific timeout.
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAnyClass(opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'class' of PageElement eventually contains the specified className within a specific
+     * Checks if the 'class' HTML attribute of PageElement eventually contains the specified className within a specific
      * timeout.
      *
-     * @param className the className which the HTML attribute 'class' of PageElement is supposed to contain
+     * @param className the className which the 'class' HTML attribute of PageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyContainClass(className: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'id' of PageElement eventually has the specified value within a specific timeout.
+     * Checks if the 'id' HTML attribute of PageElement eventually has the specified value within a specific timeout.
      *
-     * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
+     * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveId(id: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'id' of PageElement eventually has any value within a specific timeout.
+     * Checks if the 'id' HTML attribute of PageElement eventually has any value within a specific timeout.
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAnyId(opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'id' of PageElement eventually contains the specified value within a specific timeout.
+     * Checks if the 'id' HTML attribute of PageElement eventually contains the specified value within a specific timeout.
      *
-     * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
+     * @param id the value which the 'id' HTML attribute of PageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyContainId(id: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'name' of PageElement eventually has the specified value within a specific timeout.
+     * Checks if the 'name' HTML attribute of PageElement eventually has the specified value within a specific timeout.
      *
-     * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
+     * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveName(name: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'name' of PageElement eventually has any value within a specific timeout.
+     * Checks if the 'name' HTML attribute of PageElement eventually has any value within a specific timeout.
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveAnyName(opts?: Workflo.ITimeoutInterval): boolean;
     /**
-     * Checks if the HTML attribute 'name' of PageElement eventually contains the specified value within a specific
+     * Checks if the 'name' HTML attribute of PageElement eventually contains the specified value within a specific
      * timeout.
      *
      * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyContainName(name: string, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -477,8 +477,8 @@ interface ICustomElementMatchers {
      * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveLocation(coordinates: Workflo.ICoordinates, opts?: {
         tolerances?: Partial<Workflo.ICoordinates>;
@@ -491,8 +491,8 @@ interface ICustomElementMatchers {
      * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected x-location,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveX(x: number, opts?: {
         tolerance?: number;
@@ -505,8 +505,8 @@ interface ICustomElementMatchers {
      * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected y-location,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveY(y: number, opts?: {
         tolerance?: number;
@@ -519,8 +519,8 @@ interface ICustomElementMatchers {
      * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected size,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveSize(size: Workflo.ISize, opts?: {
         tolerances?: Partial<Workflo.ISize>;
@@ -533,8 +533,8 @@ interface ICustomElementMatchers {
      * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected width,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveWidth(width: number, opts?: {
         tolerance?: number;
@@ -547,8 +547,8 @@ interface ICustomElementMatchers {
      * @param opts Includes the `tolerance` used to calculate the maximal allowed deviation from the expected height,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      */
     toEventuallyHaveHeight(height: number, opts?: {
         tolerance?: number;
@@ -577,8 +577,8 @@ interface ICustomListMatchers {
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyBeEmpty(opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -590,8 +590,8 @@ interface ICustomListMatchers {
      * list (equals, not equals, less than, greater than), the `timeout` within which the condition is expected to be met
      * and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
     /**
@@ -667,7 +667,7 @@ interface ICustomListMatchers {
      * matcher to return true. Furthermore opts also includes the `timeout` within which the condition is expected to be
      * met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
      */
     toEventuallyExist(opts?: Workflo.ITimeout & {
         filterMask?: boolean;
@@ -678,7 +678,7 @@ interface ICustomListMatchers {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
      */
     toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -687,7 +687,7 @@ interface ICustomListMatchers {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
      */
     toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -698,8 +698,8 @@ interface ICustomListMatchers {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyHaveText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -708,8 +708,8 @@ interface ICustomListMatchers {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -721,8 +721,8 @@ interface ICustomListMatchers {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyContainText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -737,8 +737,8 @@ interface ICustomListMatchers {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyHaveDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -751,8 +751,8 @@ interface ICustomListMatchers {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -767,8 +767,8 @@ interface ICustomListMatchers {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementList's default timeout is used.
+     * If no `interval` is specified, PageElementList's default interval is used.
      */
     toEventuallyContainDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
 }
@@ -849,7 +849,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
      */
     toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean;
     /**
@@ -858,7 +858,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
      */
     toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean;
     /**
@@ -867,7 +867,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
      */
     toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean;
     /**
@@ -878,8 +878,8 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `interval` is specified, PageElementMap's default interval is used.
      */
     toEventuallyHaveText(text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -889,8 +889,8 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `interval` is specified, PageElementMap's default interval is used.
      */
     toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
     /**
@@ -902,8 +902,8 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `interval` is specified, PageElementMap's default interval is used.
      */
     toEventuallyContainText(text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -915,8 +915,8 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `interval` is specified, PageElementMap's default interval is used.
      */
     toEventuallyHaveDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -926,8 +926,8 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `interval` is specified, PageElementMap's default interval is used.
      */
     toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
     /**
@@ -939,8 +939,8 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `interval` is specified, PageElementMap's default interval is used.
      */
     toEventuallyContainDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
 }
@@ -1030,7 +1030,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
      */
     toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     /**
@@ -1040,7 +1040,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
      */
     toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     /**
@@ -1050,7 +1050,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements and the
      * `timeout` within which the condition is expected to be met.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
      */
     toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     /**
@@ -1061,8 +1061,8 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
+     * If no `interval` is specified, PageElementGroup's default interval is used.
      */
     toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1072,8 +1072,8 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
+     * If no `interval` is specified, PageElementGroup's default interval is used.
      */
     toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     /**
@@ -1085,8 +1085,8 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
+     * If no `interval` is specified, PageElementGroup's default interval is used.
      */
     toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1101,8 +1101,8 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
+     * If no `interval` is specified, PageElementGroup's default interval is used.
      */
     toEventuallyHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1115,8 +1115,8 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageNodes, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
+     * If no `interval` is specified, PageElementGroup's default interval is used.
      */
     toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     /**
@@ -1131,8 +1131,8 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, PageElementGroup's default timeout is used.
+     * If no `interval` is specified, PageElementGroup's default interval is used.
      */
     toEventuallyContainDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
 }
@@ -1167,8 +1167,8 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElement's default timeout is used.
+     * If no `interval` is specified, ValuePageElement's default interval is used.
      */
     toEventuallyHaveValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1176,8 +1176,8 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElement's default timeout is used.
+     * If no `interval` is specified, ValuePageElement's default interval is used.
      */
     toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1186,8 +1186,8 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
      * @param value the value which the ValuePageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElement's default timeout is used.
+     * If no `interval` is specified, ValuePageElementList's default interval is used.
      */
     toEventuallyContainValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean;
 }
@@ -1226,8 +1226,8 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
+     * If no `interval` is specified, ValuePageElementList's default interval is used.
      */
     toEventuallyHaveValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1237,8 +1237,8 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed ValuePageElements,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
+     * If no `interval` is specified, ValuePageElementList's default interval is used.
      */
     toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -1250,8 +1250,8 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
+     * If no `interval` is specified, ValuePageElementList's default interval is used.
      */
     toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean;
 }
@@ -1293,8 +1293,8 @@ interface ICustomValueMapMatchers<K extends string | number | symbol, ValueType>
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
+     * If no `interval` is specified, ValuePageElementMap's default interval is used.
      */
     toEventuallyHaveValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1304,8 +1304,8 @@ interface ICustomValueMapMatchers<K extends string | number | symbol, ValueType>
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed ValuePageElements,
      * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
+     * If no `interval` is specified, ValuePageElementMap's default interval is used.
      */
     toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
     /**
@@ -1317,8 +1317,8 @@ interface ICustomValueMapMatchers<K extends string | number | symbol, ValueType>
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
+     * If no `interval` is specified, ValuePageElementMap's default interval is used.
      */
     toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
 }
@@ -1358,8 +1358,8 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
+     * If no `interval` is specified, ValuePageElementGroup's default interval is used.
      */
     toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1369,8 +1369,8 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
     * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageNodes, the
     * `timeout` within which the condition is expected to be met and the `interval` used to check it.
     *
-    * If no `timeout` is specified, the PageNode's default timeout is used.
-    * If no `interval` is specified, the PageNode's default interval is used.
+    * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
+    * If no `interval` is specified, ValuePageElementGroup's default interval is used.
     */
     toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     /**
@@ -1382,8 +1382,8 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
      * check it.
      *
-     * If no `timeout` is specified, the PageNode's default timeout is used.
-     * If no `interval` is specified, the PageNode's default interval is used.
+     * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
+     * If no `interval` is specified, ValuePageElementGroup's default interval is used.
      */
     toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
 }
@@ -1727,6 +1727,25 @@ declare global {
             closestContainerIncludesHidden?: boolean;
         }
         /**
+         * Describes the opts parameter passed to PageElement's click function.
+         */
+        interface IClickOpts extends ITimeoutInterval {
+            /**
+             * If defined, the click on PageElement will be repeated until the result of `postCondition` returns true or until
+             * a specific timeout is reached.
+             *
+             * This can be useful, for example, if an HTML element does not react to clicks until a certain async code is
+             * finished executing.
+             */
+            postCondition?: () => boolean;
+            /**
+             * Before clicking on PageElement, the PageElement will be scrolled into the viewport.
+             *
+             * By defining customScroll, PageElement's default custom scrolling behavior can be overwritten.
+             */
+            customScroll?: Workflo.IScrollParams;
+        }
+        /**
          * Allows you to build an recursively nested object whose values are of type Type.
          */
         interface IRecObj<Type> {
@@ -1815,7 +1834,7 @@ declare global {
          */
         interface ILastDiff {
             /**
-             * Retries the last differences of a PageNode's check state functions.
+             * Retrieves the last differences of a PageNode's check state functions.
              *
              * Intended for framework-internal usage only.
              */
@@ -1869,10 +1888,10 @@ declare global {
             type GroupConstructorKeys = GroupPublicKeys | "content" | "store";
             type ElementPublicKeys = BaseKeys | "customScroll";
             type ListPublicKeys = BaseKeys | "disableCache" | "identifier";
-            type ListPublicPartialKeys = "elementOptions";
+            type ListPublicPartialKeys = "elementOpts";
             type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | "elementStoreFunc";
             type MapPublicKeys = "identifier" | "timeout";
-            type MapPublicPartialKeys = "elementOptions";
+            type MapPublicPartialKeys = "elementOpts";
             type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc";
         }
         namespace PageNode {
@@ -1881,7 +1900,7 @@ declare global {
              */
             interface INode extends ILastDiff {
                 /**
-                 * Returns the id of the PageNode.
+                 * Retrieves the id used to identify a PageNode in the instance cache of PageElementStore.
                  *
                  * Intended for framework-internal usage only.
                  */
@@ -1891,6 +1910,11 @@ declare global {
                  * is passed to a function that operates with timeouts (eg. wait, eventually)
                  */
                 getTimeout(): number;
+                /**
+                 * Returns the default interval that a PageNode uses if no other explicit interval
+                 * is passed to a function that operates with intervals (eg. wait, eventually)
+                 */
+                getInterval(): number;
                 /**
                  * Returns a JSON representation of the PageNode.
                  */
@@ -1973,8 +1997,20 @@ declare global {
              * - containsDirectText
              */
             interface IElementNode<TextType, BooleanType, FilterType = any> extends INode, IGetElement<TextType, BooleanType, FilterType> {
+                /**
+                 * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
+                 * current value from the tested application's state
+                 */
                 currently: IGetElement<TextType, BooleanType, FilterType> & ICheckCurrently<TextType, BooleanType, FilterType>;
+                /**
+                 * defines an api for all functions of PageNode which wait for a condition to become true within a specified
+                 * timeout
+                 */
                 wait: ICheckWait<TextType, BooleanType, FilterType>;
+                /**
+                 * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
+                 * timeout
+                 */
                 eventually: ICheckEventually<TextType, BooleanType, FilterType>;
             }
             /**
@@ -1982,85 +2018,491 @@ declare global {
              * PageElementMap and PageElementGroup.
              */
             interface IGetElement<TextType, BooleanType, FilterType> {
+                /**
+                 * Returns the 'enabled' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getIsEnabled(filterMask?: FilterType): BooleanType;
+                /**
+                 * Returns the text of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getText(filterMask?: FilterType): TextType;
+                /**
+                 * Returns the direct text of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getDirectText(filterMask?: FilterType): TextType;
+                /**
+                 * Returns the 'hasText' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
+                 *
+                 * @param text the expected text used in the comparison which sets the 'hasText' status
+                 */
                 getHasText(text: TextType): BooleanType;
+                /**
+                 * Returns the 'hasAnyText' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * A PageElement's 'hasAnyText' status is set to true if it has any actual text.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getHasAnyText(filterMask?: FilterType): BooleanType;
+                /**
+                 * Returns the 'containsText' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
+                 *
+                 * @param text the expected text used in the comparison which sets the 'containsText' status
+                 */
                 getContainsText(text: TextType): BooleanType;
+                /**
+                 * Returns the 'hasDirectText' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct
+                 * text.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param text the expected direct text used in the comparison which sets the 'hasDirectText' status
+                 */
                 getHasDirectText(text: TextType): BooleanType;
+                /**
+                 * Returns the 'hasAnyDirectText' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * A PageElement's 'hasAnyDirectText' status is set to true if it has any actual text.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getHasAnyDirectText(filterMask?: FilterType): BooleanType;
+                /**
+                 * Returns the 'containsDirectText' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * A PageElement's 'containsDirectText' status is set to true if its actual direct text equals the expected
+                 * direct text.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param text the expected direct text used in the comparison which sets the 'containsDirectText' status
+                 */
                 getContainsDirectText(text: TextType): BooleanType;
             }
             /**
-             * Used by IElementNode to describe wait state check functions supported by PageElement, PageElementList,
+             * Used by IElementNode to describe `wait` state check functions supported by PageElement, PageElementList,
              * PageElementMap and PageElementGroup.
              */
             interface ICheckWait<TextType, BooleanType, FilterType, OptsType = ITimeoutReverseInterval> {
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to exist within a specific timeout.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements, the `timeout` within which the condition is expected to be met and a
+                 * `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 */
                 exists(opts?: OptsType & {
                     filterMask?: FilterType;
                 }): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to be visible.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements, the `timeout` within which the condition is expected to be met and a
+                 * `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 */
                 isVisible(opts?: OptsType & {
                     filterMask?: FilterType;
                 }): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to be enabled.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements, the `timeout` within which the condition is expected to be met and a
+                 * `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 */
                 isEnabled(opts?: OptsType & {
                     filterMask?: FilterType;
                 }): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to have an actual text which equals the expected text.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param text the expected text which is supposed to equal the actual text
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to have any text.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasAnyText(opts?: OptsType & {
                     filterMask?: FilterType;
                 }): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to have an actual text which contains the expected text.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param text the expected text which is supposed to be contained in the actual text
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 containsText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to have an actual direct text which equals the expected direct text.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param text the expected direct text which is supposed to equal the actual direct text
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to have any direct text.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasAnyDirectText(opts?: OptsType & {
                     filterMask?: FilterType;
                 }): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
+                 * PageElementGroup to have an actual direct text which contains the expected direct text.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param text the expected direct text which is supposed to be contained in the actual direct text
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
+                /**
+                 * returns the negated variants of ICheckWait's state check functions
+                 */
                 not: Omit<ICheckWait<TextType, BooleanType, FilterType, ITimeoutInterval>, 'not'>;
             }
             /**
-             * Used by IElementNode to describe currently state check functions supported by PageElement, PageElementList,
-             * PageElementMap and PageElementGroup.
+             * Used by IElementNode to describe `currently` state check and state retrieval functions supported by PageElement,
+             * PageElementList, PageElementMap and PageElementGroup.
              */
             interface ICheckCurrently<TextType, BooleanType, FilterType> {
+                /**
+                 * Returns the current 'exists' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getExists(filterMask?: FilterType): BooleanType;
+                /**
+                 * Returns the current 'visible' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getIsVisible(filterMask?: FilterType): BooleanType;
+                /**
+                 * Returns the current 'enabled' status of a PageElement or of the PageElements managed by a PageElementList,
+                 * PageElementMap or PageElementGroup.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getIsEnabled(filterMask?: FilterType): BooleanType;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently exist.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements
+                 */
                 exists(filterMask?: FilterType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently is visible.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements
+                 */
                 isVisible(filterMask?: FilterType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently is enabled.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements
+                 */
                 isEnabled(filterMask?: FilterType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently have an actual text which equals the expected text.
+                 *
+                 * @param text the expected text which is supposed to equal the actual text
+                 */
                 hasText(text: TextType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently have any text.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements
+                 */
                 hasAnyText(filterMask?: FilterType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently have an actual text which contains the expected text.
+                 *
+                 * @param text the expected text which is supposed to be contained in the actual text
+                 */
                 containsText(text: TextType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently have an actual direct text which equals the expected direct text.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param directText the expected direct text which is supposed to equal the actual direct text
+                 */
                 hasDirectText(directText: TextType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently have any direct text.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements
+                 */
                 hasAnyDirectText(filterMask?: FilterType): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * currently have an actual direct text which contains the expected direct text.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param directText the expected direct text which is supposed to be contained in the actual direct text
+                 */
                 containsDirectText(directText: TextType): boolean;
+                /**
+                 * returns the negated variants of ICheckCurrently's state check functions
+                 */
                 not: Omit<ICheckCurrently<TextType, BooleanType, FilterType>, 'not' | 'getExists' | 'getIsVisible' | 'getIsEnabled'>;
             }
             /**
-             * Used by IElementNode to describe eventually state check functions supported by PageElement, PageElementList,
+             * Used by IElementNode to describe `eventually` state check functions supported by PageElement, PageElementList,
              * PageElementMap and PageElementGroup.
              */
             interface ICheckEventually<TextType, BooleanType, FilterType> {
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually exist within a specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 */
                 exists(opts?: ITimeout & {
                     filterMask?: FilterType;
                 }): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually becomes visible within a specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 */
                 isVisible(opts?: ITimeout & {
                     filterMask?: FilterType;
                 }): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually becomes enabled within a specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 */
                 isEnabled(opts?: ITimeout & {
                     filterMask?: FilterType;
                 }): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually have an actual text which equals the expected text within a specific timeout.
+                 *
+                 * @param text the expected text which is supposed to equal the actual text
+                 * @param opts includes the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasText(text: TextType, opts?: ITimeoutInterval): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually have any text within a specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasAnyText(opts?: ITimeoutInterval & {
                     filterMask?: FilterType;
                 }): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually have an actual text which contains the expected text within a specific timeout.
+                 *
+                 * @param text the expected text which is supposed to be contained in the actual text
+                 * @param opts includes the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 containsText(text: TextType, opts?: ITimeoutInterval): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually have an actual direct text which equals the expected direct text within a specific timeout.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param directText the expected direct text which is supposed to equal the actual direct text
+                 * @param opts includes the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasDirectText(text: TextType, opts?: ITimeoutInterval): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually have any direct text within a specific timeout.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasAnyDirectText(opts?: ITimeoutInterval & {
                     filterMask?: FilterType;
                 }): boolean;
+                /**
+                 * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
+                 * eventually have an actual direct text which contains the expected direct text within a specific timeout.
+                 *
+                 * A direct text is a text that resides on the level directly below the selected HTML element.
+                 * It does not include any text of the HTML element's nested children elements.
+                 *
+                 * @param directText the expected direct text which is supposed to be contained in the actual direct text
+                 * @param opts includes the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 containsDirectText(text: TextType, opts?: ITimeoutInterval): boolean;
+                /**
+                 * returns the negated variants of ICheckEventually's state check functions
+                 */
                 not: Omit<ICheckEventually<TextType, BooleanType, FilterType>, 'not'>;
             }
             /**
@@ -2108,49 +2550,200 @@ declare global {
              * - containsValue
              */
             interface IValueElementNode<GetType, FilterType = any, SetType = GetType> extends INode, IGetValueElement<GetType, FilterType> {
+                /**
+                 * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
+                 * current value from the tested application's state
+                 */
                 currently: IGetValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>;
+                /**
+                 * defines an api for all functions of PageNode which wait for a condition to become true within a specified
+                 * timeout
+                 */
                 wait: ICheckWaitValue<GetType, FilterType>;
+                /**
+                 * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
+                 * timeout
+                 */
                 eventually: ICheckValueEventually<GetType, FilterType>;
+                /**
+                 * Sets the value of a ValuePageElement or of all ValuePageElements managed by ValuePageElementList,
+                 * ValuePageElementMap or ValuePageElementGroup.
+                 */
                 setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>;
             }
+            /**
+             * Used by IValueElementNode to describe state retrieval functions supported by ValuePageElement,
+             * ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
+             */
             interface IGetValueElement<GetType, FilterType> {
+                /**
+                 * Returns the value of a ValuePageElement or of the ValuePageElements managed by a ValuePageElementList,
+                 * ValuePageElementMap or ValuePageElementGroup.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getValue(filterMask?: FilterType): GetType;
+                /**
+                 * Returns the 'hasValue' status of a ValuePageElement or of the ValuePageElements managed by
+                 * ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.
+                 *
+                 * A ValuePageElement's 'hasValue' status is set to true if its actual value equals the expected value.
+                 *
+                 * @param value the expected value used in the comparison which sets the 'hasValue' status
+                 */
                 getHasValue(value: GetType): FilterType;
+                /**
+                 * Returns the 'hasAnyValue' status of a ValuePageElement or of the ValuePageElements managed by
+                 * ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.
+                 *
+                 * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
+                 * PageElements and not include the skipped results in the total result
+                 */
                 getHasAnyValue(filterMask?: FilterType): FilterType;
+                /**
+                 * Returns the 'containsValue' status of a ValuePageElement or of the ValuePageElements managed by
+                 * ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.
+                 *
+                 * A ValuePageElement's 'hasValue' status is set to true if its actual value contains the expected value.
+                 *
+                 * @param value the expected value used in the comparison which sets the 'containsValue' status
+                 */
                 getContainsValue(value: GetType): FilterType;
             }
             /**
-             * Used by IElementNode to describe wait state check functions supported by ValuePageElement,
+             * Used by IValueElementNode to describe `wait` state check functions supported by ValuePageElement,
              * ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
              */
             interface ICheckWaitValue<ValueType, FilterType, OptsType = ITimeoutReverseInterval> {
-                hasValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
+                /**
+                 * Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
+                 * ValuePageElementMap or ValuePageElementGroup to have an actual value which equals the expected value.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param value the expected value which is supposed to equal the actual value
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
+                hasValue(value: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
+                /**
+                 * Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
+                 * ValuePageElementMap or ValuePageElementGroup to have any value.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasAnyValue(opts?: OptsType & {
                     filterMask?: FilterType;
                 }): IValueElementNode<ValueType, FilterType>;
-                containsValue(text: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
+                /**
+                 * Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
+                 * ValuePageElementMap or ValuePageElementGroup to have an actual value which contains the expected value.
+                 *
+                 * Throws an error if the condition is not met within the specific timeout.
+                 *
+                 * @param value the expected value which is supposed to be contained in the actual value
+                 * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+                 * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
+                containsValue(value: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
+                /**
+                 * returns the negated variants of ICheckWaitValue's state check functions
+                 */
                 not: Omit<ICheckWaitValue<ValueType, FilterType, ITimeoutInterval>, 'not'>;
             }
             /**
-             * Used by IElementNode to describe currently state check functions supported by ValuePageElement,
-             * ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
+             * Used by IValueElementNode to describe `currently` state check and state retrieval functions supported by
+             * ValuePageElement, ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
              */
             interface ICheckValueCurrently<ValueType, FilterType> {
+                /**
+                 * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+                 * or ValuePageElementGroup currently have an actual value which equals the expected value.
+                 *
+                 * @param value the expected value which is supposed to equal the actual value
+                 */
                 hasValue(value: ValueType): boolean;
+                /**
+                 * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+                 * or ValuePageElementGroup currently have any value.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed ValuePageElements
+                 */
                 hasAnyValue(filterMask?: FilterType): boolean;
+                /**
+                 * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+                 * or ValuePageElementGroup currently have an actual value which contains the expected value.
+                 *
+                 * @param value the expected value which is supposed to be contained in the actual value
+                 */
                 containsValue(value: ValueType): boolean;
+                /**
+                 * returns the negated variants of ICheckValueCurrently's state check functions
+                 */
                 not: Omit<ICheckValueCurrently<ValueType, FilterType>, 'not'>;
             }
             /**
-             * Used by IElementNode to describe eventually state check functions supported by ValuePageElement,
+             * Used by IValueElementNode to describe `eventually` state check functions supported by ValuePageElement,
              * ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.
              */
             interface ICheckValueEventually<ValueType, FilterType> {
+                /**
+                 * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+                 * or ValuePageElementGroup eventually have an actual value which equals the expected value within a
+                 * specific timeout.
+                 *
+                 * @param value the expected value which is supposed to equal the actual value
+                 * @param opts includes the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasValue(value: ValueType, opts?: ITimeoutInterval): boolean;
+                /**
+                 * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+                 * or ValuePageElementGroup eventually have any value within a specific timeout.
+                 *
+                 * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+                 * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 hasAnyValue(opts?: ITimeoutInterval & {
                     filterMask?: FilterType;
                 }): boolean;
+                /**
+                 * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
+                 * or ValuePageElementGroup eventually have an actual value which contains the expected value within a specific
+                 * timeout.
+                 *
+                 * @param value the expected value which is supposed to be contained in the actual value
+                 * @param opts includes the `timeout` within which the condition is expected to be met and the
+                 * `interval` used to check it
+                 *
+                 * If no `timeout` is specified, PageNode's default timeout is used.
+                 * If no `interval` is specified, PageNode's default interval is used.
+                 */
                 containsValue(value: ValueType, opts?: ITimeoutInterval): boolean;
+                /**
+                 * returns the negated variants of ICheckValueEventually's state check functions
+                 */
                 not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>;
             }
             /**

@@ -232,15 +232,16 @@ export class PageElement<
 // RETRIEVE ELEMENT FUNCTIONS
 
   /**
-   * Return WdioElement from current state, not performing an initial wait.
+   * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector without
+   * performing PageElement's initial waiting condition.
    */
   protected get __element() {
     return browser.element(this._selector)
   }
 
   /**
-   * Fetches the first webdriverio element from the HTML page that is identified by PageNode's XPath selector after
-   * performing PageElement's initial wait condition.
+   * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector after
+   * performing PageElement's initial waiting condition.
    */
   get element() {
     this.initialWait()
@@ -249,9 +250,9 @@ export class PageElement<
   }
 
   /**
-   * Performs PageElement's initial waiting condition.
+   * This function performs PageElement's initial waiting condition.
    *
-   * Supports the following waiting types:
+   * It supports the following waiting types:
    *
    * - 'exist' to wait for an element to exist in the DOM
    * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to

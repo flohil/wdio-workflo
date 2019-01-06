@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("../");
 /**
- * This class is supposed to be used as base class for all Pages.
+ * This class serves as the base class for all Pages.
  *
  * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
  * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`, `wait.isOpen` and
@@ -11,6 +11,11 @@ const __1 = require("../");
  * `eventually.isClosed`
  */
 class Page {
+    /**
+     * Page serves as the base class for all Pages.
+     *
+     * @param opts the options required to create an instance of Page
+     */
     constructor(opts) {
         this._store = opts.store;
         this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
@@ -18,21 +23,55 @@ class Page {
         this.wait = new PageWait(this);
         this.eventually = new PageEventually(this);
     }
+    /**
+     * Returns an instance of PageElementStore which can be used to retrieve/create PageNodes via Page
+     */
     getStore() {
         return this._store;
     }
+    /**
+     * Returns the default timeout in milliseconds used by Page for its `wait` and `eventually` functions.
+     */
     getTimeout() {
         return this._timeout;
     }
+    /**
+     * Returns the default interval in milliseconds used by Page for its `wait` and `eventually` functions.
+     */
     getInterval() {
         return this._interval;
     }
 }
 exports.Page = Page;
+/**
+ * This class defines all `wait` functions of Page.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template PageType type of the Page for which PageWait defines all `wait` functions
+ * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`
+ * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
+ */
 class PageWait {
+    /**
+     * PageWait defines all `wait` functions of Page.
+     *
+     * @param page the Page for which PageWait defines all `wait` functions
+     */
     constructor(page) {
         this._page = page;
     }
+    /**
+     * A function which provides common functionality to wait for a certain conditionFunc to return true
+     * within a specific timeout.
+     *
+     * @param conditionFunc the condition which is expected to return true within a specific timeout
+     * @param conditionMessage a message used to describe the checked condition in error messages
+     * @param opts includes the `timeout` within which the condition is expected to return true and
+     * the `interval` used to check for this condition.
+     *
+     * If no `timeout` is specified, the Page's default timeout is used instead.
+     * If no `interval` is specified, the Page's default interval is used instead.
+     */
     _wait(conditionFunc, conditionMessage, opts = Object.create(null)) {
         const timeout = opts.timeout || this._page.getTimeout();
         const interval = opts.interval || this._page.getInterval();
@@ -60,17 +99,63 @@ class PageWait {
         }
         return this._page;
     }
+    /**
+     * Waits for Page to become open and throws an error of the Page does not become open within a specific timeout.
+     *
+     * @param opts includes the options defined in `IsOpenOpts`, the `timeout` within which the Page must become open and
+     * the `interval` used to check for this condition.
+     *
+     * If no `timeout` is specified, the Page's default timeout is used instead.
+     * If no `interval` is specified, the Page's default interval is used instead.
+     *
+     * @returns Page
+     */
     isOpen(opts = Object.create(null)) {
         return this._wait(() => this._page.isOpen(opts), " to be open", opts);
     }
+    /**
+     * Waits for Page to become closed and throws an error of the Page does not become closed within a specific timeout.
+     *
+     * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed
+     * and the `interval` used to check for this condition.
+     *
+     * If no `timeout` is specified, the Page's default timeout is used instead.
+     * If no `interval` is specified, the Page's default interval is used instead.
+     *
+     * @returns Page
+     */
     isClosed(opts = Object.create(null)) {
         return this._wait(() => this._page.isClosed(opts), " to be closed", opts);
     }
 }
+/**
+ * This class defines all `eventually` functions of Page.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template PageType type of the Page for which PageEventually defines all `eventually` functions
+ * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
+ * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
+ */
 class PageEventually {
+    /**
+     * PageEventually defines all `eventually` functions of Page.
+     *
+     * @param page the Page for which PageEventually defines all `eventually` functions
+     */
     constructor(page) {
         this._page = page;
     }
+    /**
+     * A function which provides common functionality to check if certain conditionFunc eventually returns true
+     * within a specific timeout.
+     *
+     * @param conditionFunc the condition which is expected to return true within a specific timeout
+     * @param opts includes the `timeout` within which the condition is expected to return true and
+     * the `interval` used to check for this condition.
+     *
+     * If no `timeout` is specified, the Page's default timeout is used instead.
+     * If no `interval` is specified, the Page's default interval is used instead.
+     */
     _eventually(conditionFunc, opts = Object.create(null)) {
         const timeout = opts.timeout || this._page.getTimeout();
         const interval = opts.interval || this._page.getInterval();
@@ -96,9 +181,27 @@ class PageEventually {
             }
         }
     }
+    /**
+     * Checks if Page eventually becomes open within a specific timeout.
+     *
+     * @param opts includes the options defined in `IsOpenOpts`, the `timeout` within which the Page must become open and
+     * the `interval` used to check for this condition.
+     *
+     * If no `timeout` is specified, the Page's default timeout is used instead.
+     * If no `interval` is specified, the Page's default interval is used instead.
+     */
     isOpen(opts = Object.create(null)) {
         return this._eventually(() => this._page.isOpen(opts), opts);
     }
+    /**
+     * Checks if Page eventually becomes closed within a specific timeout.
+     *
+     * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed
+     * and the `interval` used to check for this condition.
+     *
+     * If no `timeout` is specified, the Page's default timeout is used instead.
+     * If no `interval` is specified, the Page's default interval is used instead.
+     */
     isClosed(opts = Object.create(null)) {
         return this._eventually(() => this._page.isClosed(opts), opts);
     }

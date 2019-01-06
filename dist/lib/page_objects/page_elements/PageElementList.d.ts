@@ -3,24 +3,74 @@ import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
 import { PageElementStore } from '../stores';
 import { ListWhereBuilder } from '../builders';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
+/**
+ * Describes the opts parameter passed to the PageElementList's `identify` function.
+ *
+ * By default, the PageElements mapped by PageElementList can only be accessed via their index of occurrence in the DOM.
+ *
+ * A list identifier allows for PageElements mapped by PageElementList to be accessed via the key names of a
+ * `mappingObject`'s properties too. To do so, an "identification process" needs to be performed once which matches the
+ * values of `mappingObject`'s properties to the return values of a `mappingFunc` that is executed on each managed
+ * PageElement.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the PageElement managed by PageElementList
+ */
 export interface IPageElementListIdentifier<Store extends PageElementStore, PageElementType extends PageElement<Store>> {
+    /**
+     * An object whose keys are the names by which identified PageElements can be accessed
+     * and whose values are used to identify these PageElements when invoking `mappingFunc`.
+     */
     mappingObject: {
         [key: string]: string;
     };
-    func: (element: PageElementType) => string;
+    /**
+     * A function which is executed on each PageElement mapped by PageElementList.
+     *
+     * The return value of this function is compared to the values of mappingObject's properties and if there is a match,
+     * the PageElement can be accessed via the key of the matching property from now on.
+     */
+    mappingFunc: (element: PageElementType) => string;
 }
+/**
+ * Describes the opts parameter passed to the `isEmpty` function of PageElementList's `wait` and `eventually` APIs.
+ */
 export interface IPageElementListWaitEmptyReverseParams extends Workflo.ITimeoutInterval {
     reverse?: boolean;
 }
+/**
+ * Describes the opts parameter passed to the `hasLength` function of PageElementList's `wait.not` and `eventually.not`
+ * APIs.
+ */
 export interface IPageElementListWaitLengthParams extends Workflo.ITimeoutInterval {
     comparator?: Workflo.Comparator;
 }
+/**
+ * Describes the opts parameter passed to the `hasLength` function of PageElementList's `wait` and `eventually` APIs.
+ */
 export interface IPageElementListWaitLengthReverseParams extends IPageElementListWaitLengthParams {
     reverse?: boolean;
 }
-export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
-    elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    elementOptions: PageElementOptions;
+/**
+ * Describes the opts parameter passed to the constructor function of PageElementList.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the PageElement managed by PageElementList
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+ * by PageElementList
+ */
+export interface IPageElementListOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOpts extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store> {
+    /**
+     * This function retrieves a PageElement mapped by PageElementList from a PageElementStore.
+     *
+     * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
+     * @param opts the options used to configure the retrieved PageElement
+     */
+    elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType;
+    /**
+     *
+     */
+    elementOpts: PageElementOpts;
     waitType?: Workflo.WaitType;
     disableCache?: boolean;
     identifier?: IPageElementListIdentifier<Store, PageElementType>;
@@ -31,7 +81,6 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     protected _elementOptions: PageElementOptions;
     protected _waitType: Workflo.WaitType;
-    protected _interval: number;
     protected _disableCache: boolean;
     protected _identifier: IPageElementListIdentifier<Store, PageElementType>;
     protected _identifiedObjCache: {

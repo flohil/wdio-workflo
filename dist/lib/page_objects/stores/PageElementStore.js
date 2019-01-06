@@ -3,8 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const page_elements_1 = require("../page_elements");
 const builders_1 = require("../builders");
 const ValuePageElementMap_1 = require("../page_elements/ValuePageElementMap");
-// Stores singleton instances of page elements to avoid creating new
-// elements on each invocation of a page element.
+/**
+ * PageElementStore serves as a facade for the creation and retrieval of Page Nodes.
+ * Basically, Page Nodes should only be created or retrieved via PageElementStores and never by "manually" invoking
+ * their constructor functions.
+ *
+ * PageElementStore caches instances of Page Nodes with the same type and selector to avoid creating new Page Nodes on each
+ * invocation of a retrieval function.
+ *
+ * Furthermore, PageElementStore allows you to define default opts parameters and provide pre-configured variants of
+ * PageNodes (eg. Element and ExistElement).
+ */
 class PageElementStore {
     constructor() {
         this._instanceCache = Object.create(null);
@@ -12,86 +21,206 @@ class PageElementStore {
     }
     // ELEMENTS
     /**
+     * Retrieves an instance of a PageElement from the store.
      *
-     * @param selector
-     * @param options
+     * The waitType of the PageElement is set to 'visible' by default.
+     *
+     * @param selector the XPath selector of the retrieved PageElement
+     * @param opts the publicly available options used to configure the retrieved PageElement
+     * @returns an instance of the retrieved PageElement
      */
-    Element(selector, options) {
-        return this._getElement(selector, page_elements_1.PageElement, Object.assign({ store: this }, options));
+    Element(selector, opts) {
+        return this._getElement(selector, page_elements_1.PageElement, Object.assign({ store: this }, opts));
     }
-    ExistElement(selector, options) {
-        return this.Element(selector, Object.assign({ waitType: "exist" /* exist */ }, options));
+    /**
+     * Retrieves an instance of a PageElement from the store.
+     *
+     * The waitType of the retrieved PageElement is set to 'exist' and cannot be overwritten.
+     *
+     * @param selector the XPath selector of the retrieved PageElement
+     * @param opts the publicly available options used to configure the retrieved PageElement
+     * @returns an instance of the retrieved PageElement
+     */
+    ExistElement(selector, opts) {
+        return this.Element(selector, Object.assign({ waitType: "exist" /* exist */ }, opts));
     }
     // LISTS
-    List(selector, options) {
-        return this._getList(selector, page_elements_1.PageElementList, Object.assign({ store: this }, options));
+    /**
+     * Retrieves an instance of a PageElementList from the store that manages any instance of PageElement which inherits
+     * from the PageElement class.
+     *
+     * The waitType of PageElements managed by PageElementList and the waitType of the list itself are set to 'visible' by
+     * default.
+     *
+     * @template PageElementType the type of PageElement managed by PageElementList
+     * @template PageElementOpts the type of the opts parameter passed to the constructor function of PageElements managed
+     * by PageElementList
+     * @param selector the XPath selector of the retrieved PageElementList
+     * @param opts the publicly available options used to configure the retrieved PageElementList
+     * @returns an instance of the retrieved PageElementList
+     */
+    List(selector, opts) {
+        return this._getList(selector, page_elements_1.PageElementList, Object.assign({ store: this }, opts));
     }
-    ValueList(selector, options) {
-        return this._getList(selector, page_elements_1.ValuePageElementList, Object.assign({ store: this }, options));
+    /**
+     * Retrieves an instance of a ValuePageElementList from the store that manages any instance of ValuePageElement which
+     * inherits from the ValuePageElement class.
+     *
+     * The waitType of PageElements managed by ValuePageElementList and the waitType of the list itself are set to
+     * 'visible' by default.
+     *
+     * @template PageElementType the type of ValuePageElement managed by ValuePageElementList
+     * @template PageElementOpts the type of the opts parameter passed to the constructor function of ValuePageElements
+     * managed by ValuePageElementList
+     * @param selector the XPath selector of the retrieved ValuePageElementList
+     * @param opts the publicly available options used to configure the retrieved ValuePageElementList
+     * @returns an instance of the retrieved ValuePageElementList
+     */
+    ValueList(selector, opts) {
+        return this._getList(selector, page_elements_1.ValuePageElementList, Object.assign({ store: this }, opts));
     }
-    ElementList(selector, options) {
-        return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.Element }, options));
+    /**
+     * Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
+     * PageElement.
+     *
+     * The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to
+     * 'visible' by default.
+     *
+     * @param selector the XPath selector of the retrieved PageElementList
+     * @param opts the publicly available options used to configure the retrieved PageElementList
+     * @returns an instance of the retrieved PageElementList
+     */
+    ElementList(selector, opts) {
+        return this.List(selector, Object.assign({ elementOpts: {}, elementStoreFunc: this.Element }, opts));
     }
-    ExistElementList(selector, options) {
-        return this.List(selector, Object.assign({ elementOptions: {}, elementStoreFunc: this.ExistElement, waitType: "exist" /* exist */ }, options));
+    /**
+     * Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
+     * PageElement.
+     *
+     * The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to 'exist'
+     * by default.
+     *
+     * @param selector the XPath selector of the retrieved PageElementList
+     * @param opts the publicly available options used to configure the retrieved PageElementList
+     * @returns an instance of the retrieved PageElementList
+     */
+    ExistElementList(selector, opts) {
+        return this.List(selector, Object.assign({ elementOpts: {}, elementStoreFunc: this.ExistElement, waitType: "exist" /* exist */ }, opts));
     }
     // MAPS
-    Map(selector, options) {
-        return this._getMap(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
+    /**
+     * Retrieves an instance of a PageElementMap from the store that manages any instance of PageElement which inherits
+     * from the PageElement class.
+     *
+     * The waitType of PageElements managed by PageElementMap is set to 'visible' by default.
+     *
+     * @template K the names of all PageElements managed by PageElementMap
+     * @template PageElementType the type of PageElement managed by PageElementMap
+     * @template PageElementOpts the type of the opts parameter passed to the constructor function of PageElements managed
+     * by PageElementMap
+     * @param selector the XPath selector of the retrieved PageElementMap
+     * @param opts the publicly available options used to configure the retrieved PageElementMap
+     * @returns an instance of the retrieved PageElementMap
+     */
+    Map(selector, opts) {
+        return this._getMap(selector, page_elements_1.PageElementMap, Object.assign({ store: this, elementStoreFunc: opts.elementStoreFunc }, opts));
     }
-    ValueMap(selector, options) {
-        return this._getMap(selector, ValuePageElementMap_1.ValuePageElementMap, Object.assign({ store: this, elementStoreFunc: options.elementStoreFunc }, options));
+    /**
+     * Retrieves an instance of a ValuePageElementMap from the store that manages any instance of ValuePageElement which
+     * inherits from the ValuePageElement class.
+     *
+     * The waitType of ValuePageElements managed by ValuePageElementMap is set to 'visible' by default.
+     *
+     * @template K the names of all ValuePageElements managed by ValuePageElementMap
+     * @template PageElementType the type of ValuePageElement managed by ValuePageElementMap
+     * @template PageElementOpts the type of the opts parameter passed to the constructor function of ValuePageElements
+     * managed by ValuePageElementMap
+     * @param selector the XPath selector of the retrieved ValuePageElementMap
+     * @param opts the publicly available options used to configure the retrieved ValuePageElementMap
+     * @returns an instance of the retrieved ValuePageElementMap
+     */
+    ValueMap(selector, opts) {
+        return this._getMap(selector, ValuePageElementMap_1.ValuePageElementMap, Object.assign({ store: this, elementStoreFunc: opts.elementStoreFunc }, opts));
     }
-    ElementMap(selector, options) {
-        return this.Map(selector, Object.assign({ elementStoreFunc: this.Element, elementOptions: {} }, options));
+    /**
+     * Retrieves an instance of a PageElementMap from the store that manages PageElement instances of the type
+     * PageElement.
+     *
+     * The waitType of PageElements managed by PageElementMap is set to 'visible' by default.
+     *
+     * @template K the names of all PageElements managed by PageElementMap
+     * @param selector the XPath selector of the retrieved PageElementMap
+     * @param opts the publicly available options used to configure the retrieved PageElementMap
+     * @returns an instance of the retrieved PageElementMap
+     */
+    ElementMap(selector, opts) {
+        return this.Map(selector, Object.assign({ elementStoreFunc: this.Element, elementOpts: {} }, opts));
     }
-    ExistElementMap(selector, options) {
-        return this.Map(selector, Object.assign({ elementStoreFunc: this.ExistElement, elementOptions: {} }, options));
+    /**
+     * Retrieves an instance of a PageElementMap from the store that manages PageElement instances of the type
+     * PageElement.
+     *
+     * The waitType of PageElements managed by PageElementMap is set to 'exist' by default.
+     *
+     * @template K the names of all PageElements managed by PageElementMap
+     * @param selector the XPath selector of the retrieved PageElementMap
+     * @param opts the publicly available options used to configure the retrieved PageElementMap
+     * @returns an instance of the retrieved PageElementMap
+     */
+    ExistElementMap(selector, opts) {
+        return this.Map(selector, Object.assign({ elementStoreFunc: this.ExistElement, elementOpts: {} }, opts));
     }
     // GROUPS
-    // Encapsulates arbitrary page element types.
-    // Returns all nodes passed in content as its own members,
-    // so that they can be accessed via dot notation.
-    //
-    // content is a collection of node getters, where each node
-    // can be any form of page element defined in PageElementStore.
-    //
-    // walkerClass is optional and allows for passing a
-    // custom group walker class.
-    // Per default, ElementGroupWalker will be used as a walker.
-    //
-    // functions is an optional array of group function names that
-    // defines the functions this group is supposed to support.
-    //
-    // id is a string to uniquely identify a group.
-    // If id is not defined, the group instance will be identified
-    // by a concatenated string of its node key names and types.
-    ElementGroup(content, options) {
-        return this._getGroup(page_elements_1.PageElementGroup, Object.assign({ store: this, content: content }, options));
-    }
-    ValueGroup(content, options) {
-        return this._getGroup(page_elements_1.ValuePageElementGroup, Object.assign({ store: this, content: content }, options));
-    }
-    // Functions to retrieve element instances
     /**
-     * Returns a page element with the given selector, type and options.
+     * Retrieves an instance of a PageElementGroup from the store.
+     *
+     * The group functions (state check -> hasXXX/hasAnyXXX/containsXXX, state retrieval -> getXXX) supported by the
+     * retrieved PageElementGroup are defined in Workflo.IElementNode.
+     *
+     * @param content an object whose keys are the names of PageNodes managed by the PageElementGroup and whose values
+     * are instances of these PageNodes
+     * @param opts the publicly available options used to configure the retrieved PageElementGroup
+     * @returns an instance of the retrieved PageElementGroup
+     */
+    ElementGroup(content, opts) {
+        return this._getGroup(page_elements_1.PageElementGroup, Object.assign({ store: this, content: content }, opts));
+    }
+    /**
+     * Retrieves an instance of a ValuePageElementGroup from the store.
+     *
+     * The group functions (state check -> hasXXX/hasAnyXXX/containsXXX, state retrieval -> getXXX) supported by the
+     * retrieved ValuePageElementGroup are defined in Workflo.IValueElementNode.
+     *
+     * @param content an object whose keys are the names of PageNodes managed by the ValuePageElementGroup and whose values
+     * are instances of these PageNodes
+     * @param opts the publicly available options used to configure the retrieved ValuePageElementGroup
+     * @returns an instance of the retrieved PageElementGroup
+     */
+    ValueGroup(content, opts) {
+        return this._getGroup(page_elements_1.ValuePageElementGroup, Object.assign({ store: this, content: content }, opts));
+    }
+    // Functions to retrieve PageNode instances
+    /**
+     * Creates or retrieves a cached version of a PageNode instance with the given selector, type and opts.
      *
      * If a page element with identical parameters already exists in this store,
      * a cached instance of this page element will be returned.
      *
-     * @param selector
-     * @param type
-     * @param options
+     * @template Type type of the retrieved PageElement instance
+     * @template Opts type of the opts parameter passed to the constructor of the retrieved PageNode instance
+     * @param selector the selector of the retrieved PageNode
+     * @param type the constructor function of the retrieved PageNode instance
+     * @param opts the opts parameter passed to the constructor of the retrieved PageNode instance
      */
-    _get(selector, type, options = Object.create(Object.prototype), afterConstruction) {
+    _get(selector, type, opts = Object.create(Object.prototype), afterConstruction) {
         const _selector = (selector instanceof builders_1.XPathBuilder) ? this._xPathBuilder.build() : selector;
         // catch: selector must not contain |
         if (_selector.indexOf('|||') > -1) {
             throw new Error(`Selector must not contain character sequence '|||': ${_selector}`);
         }
-        const id = `${_selector}|||${type}|||${options.toString()}`;
+        const id = `${_selector}|||${type}|||${opts.toString()}`;
         if (!(id in this._instanceCache)) {
-            const result = new type(_selector, options);
+            const result = new type(_selector, opts);
             if (typeof afterConstruction !== 'undefined') {
                 afterConstruction(result);
             }
@@ -99,36 +228,73 @@ class PageElementStore {
         }
         return this._instanceCache[id];
     }
-    _getElement(selector, type, options = Object.create(Object.prototype)) {
-        return this._get(selector, type, options);
+    /**
+     * Creates or retrieves a cached version of a PageElement instance.
+     *
+     * @template ElementType type of the retrieved PageElement instance
+     * @template ElementOpts type of the opts parameter passed to the constructor of the retrieved PageElement instance
+     * @param selector the XPath selector of the retrieved PageElement instance
+     * @param type the constructor function of the retrieved PageElement instance
+     * @param opts the opts parameter passed to the constructor of the retrieved PageElement instance
+     */
+    _getElement(selector, type, opts = Object.create(Object.prototype)) {
+        return this._get(selector, type, opts);
     }
-    _getList(selector, type, options = Object.create(Object.prototype)) {
-        return this._get(selector, type, options, instance => {
+    /**
+     * Creates or retrieves a cached version of a PageElementList instance.
+     *
+     * @template ListType type of the retrieved PageElementList instance
+     * @template ListOptions type of the opts parameter passed to the constructor of the retrieved PageElementList instance
+     * @param selector the XPath selector of the retrieved PageElementList instance
+     * @param type the constructor function of the retrieved PageElementList instance
+     * @param opts the opts parameter passed to the constructor of the retrieved PageElementList instance
+     */
+    _getList(selector, type, opts = Object.create(Object.prototype)) {
+        return this._get(selector, type, opts, instance => {
             const cloneFunc = cloneSelector => {
                 if (!cloneSelector) {
                     cloneSelector = selector;
                 }
-                return this._getList(cloneSelector, type, options);
+                return this._getList(cloneSelector, type, opts);
             };
             instance.init(cloneFunc);
         });
     }
-    _getMap(selector, type, options = Object.create(Object.prototype)) {
-        return this._get(selector, type, options);
+    /**
+     * Creates or retrieves a cached version of a PageElementMap instance.
+     *
+     * @template MapType type of the retrieved PageElementMap instance
+     * @template MapOptions type of the opts parameter passed to the constructor of the retrieved PageElementMap instance
+     * @param selector the XPath selector of the retrieved PageElementMap instance
+     * @param type the constructor function of the retrieved PageElementMap instance
+     * @param opts the opts parameter passed to the constructor of the retrieved PageElementMap instance
+     */
+    _getMap(selector, type, opts = Object.create(Object.prototype)) {
+        return this._get(selector, type, opts);
     }
-    _getGroup(groupType, groupOptions) {
+    /**
+     * Creates or retrieves a cached version of a PageElementGroup instance.
+     *
+     * @template Store type of the PageElementGroup's PageElementStore
+     * @template GroupType type of the retrieved PageElementGroup instance
+     * @template GroupOptions type of the opts parameter passed to the constructor of the retrieved PageElementGroup
+     * instance
+     * @param type the constructor function of the retrieved PageElementGroup instance
+     * @param opts the opts parameter passed to the constructor of the retrieved PageElementGroup instance
+     */
+    _getGroup(type, opts) {
         // Build id from group's elements' ids.
         // If two groups have the same content,
         // they are the same.
         let idStr = '';
-        for (const key in groupOptions.content) {
-            if (groupOptions.content.hasOwnProperty(key)) {
-                idStr += `${groupOptions.content[key].__getNodeId()};`;
+        for (const key in opts.content) {
+            if (opts.content.hasOwnProperty(key)) {
+                idStr += `${opts.content[key].__getNodeId()};`;
             }
         }
-        const key = `${groupType.name}:${idStr}`;
+        const key = `${type.name}:${idStr}`;
         if (!(key in this._instanceCache)) {
-            this._instanceCache[key] = new groupType(idStr, groupOptions);
+            this._instanceCache[key] = new type(idStr, opts);
         }
         return this._instanceCache[key];
     }
@@ -164,20 +330,20 @@ exports.PageElementStore = PageElementStore;
 // class InputStore extends pageObjects.stores.PageElementStore {
 //   Input(
 //     selector: Workflo.XPath,
-//     options?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
+//     opts?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
 //   ) {
 //     return this._getElement<Input<this>, IInputOpts<this>>(
 //       selector,
 //       Input,
 //       {
 //         store: this,
-//         ...options
+//         ...opts
 //       }
 //     )
 //   }
 //   InputList(
 //     selector: Workflo.XPath,
-//     options?: Workflo.PickPartial<
+//     opts?: Workflo.PickPartial<
 //       pageObjects.elements.IValuePageElementListOpts<
 //         this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
 //       >,
@@ -190,13 +356,13 @@ exports.PageElementStore = PageElementStore;
 //       {
 //         elementOptions: {},
 //         elementStoreFunc: this.Input,
-//         ...options
+//         ...opts
 //       }
 //     )
 //   }
 //   InputMap<K extends string>(
 //     selector: Workflo.XPath,
-//     options: Workflo.PickPartial<
+//     opts: Workflo.PickPartial<
 //       pageObjects.elements.IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>>,
 //       Workflo.Store.MapPublicKeys,
 //       Workflo.Store.MapPublicPartialKeys
@@ -207,7 +373,7 @@ exports.PageElementStore = PageElementStore;
 //       {
 //         elementStoreFunc: this.Input,
 //         elementOptions: {},
-//         ...options
+//         ...opts
 //       }
 //     )
 //   }
@@ -318,27 +484,27 @@ exports.PageElementStore = PageElementStore;
 // class MyStore extends PageElementStore {
 //   Element(
 //     selector: Workflo.XPath,
-//     options?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
+//     opts?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
 //   ) {
 //     return this._getElement<MyElement<this>, IMyElementOpts<this>>(
 //       selector,
 //       MyElement,
 //       {
 //         store: this,
-//         ...options
+//         ...opts
 //       }
 //     )
 //   }
 //   Input(
 //     selector: Workflo.XPath,
-//     options?: Pick<IMyInputOpts<this>, Workflo.Store.ElementPublicKeys | "testInputProp">
+//     opts?: Pick<IMyInputOpts<this>, Workflo.Store.ElementPublicKeys | "testInputProp">
 //   ) {
 //     return this._getElement<MyInput<this>, IMyInputOpts<this>>(
 //       selector,
 //       MyInput,
 //       {
 //         store: this,
-//         ...options
+//         ...opts
 //       }
 //     )
 //   }

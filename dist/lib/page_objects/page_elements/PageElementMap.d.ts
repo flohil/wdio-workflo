@@ -7,13 +7,13 @@ import { XPathBuilder } from '../builders';
  */
 export interface IPageElementMapIdentifier<K extends string> {
     mappingObject: Record<K, string>;
-    func: (mapSelector: string, mappingValue: string) => XPathBuilder | string;
+    mappingFunc: (mapSelector: string, mappingValue: string) => XPathBuilder | string;
 }
 export interface IPageElementMapOpts<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store> {
     store: Store;
     identifier: IPageElementMapIdentifier<K>;
     elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
-    elementOptions: PageElementOptions;
+    elementOpts: PageElementOptions;
 }
 export declare class PageElementMap<Store extends PageElementStore, K extends string, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>> extends PageNode<Store> implements Workflo.PageNode.IElementNode<Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, boolean>>> {
     protected _selector: string;
@@ -25,7 +25,7 @@ export declare class PageElementMap<Store extends PageElementStore, K extends st
     readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>;
     readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOptions, this>;
     readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOptions, this>;
-    constructor(_selector: string, { identifier, elementStoreFunc, elementOptions, ...superOpts }: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
+    constructor(_selector: string, { identifier, elementStoreFunc, elementOpts: elementOptions, ...superOpts }: IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>);
     readonly $: Record<K, PageElementType>;
     /**
      * In case of language changes, for example, change values of mappingObject while keys must stay the same.

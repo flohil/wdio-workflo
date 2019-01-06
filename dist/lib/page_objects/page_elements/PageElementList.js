@@ -13,7 +13,6 @@ const _ = require("lodash");
 const util_1 = require("../../utility_functions/util");
 const _1 = require(".");
 const builders_1 = require("../builders");
-const __1 = require("../");
 const util_2 = require("util");
 const PageNode_1 = require("./PageNode");
 const helpers_1 = require("../../helpers");
@@ -24,11 +23,10 @@ class PageElementList extends _1.PageNode {
         this.selector = selector;
         this._waitType = opts.waitType || "visible" /* visible */;
         this._disableCache = opts.disableCache || false;
-        this._elementOptions = opts.elementOptions;
+        this._elementOptions = opts.elementOpts;
         this._elementStoreFunc = opts.elementStoreFunc;
         this._identifier = opts.identifier;
         this._identifiedObjCache = {};
-        this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
         this.currently = new PageElementListCurrently(this, opts);
         this.wait = new PageElementListWait(this);
         this.eventually = new PageElementListEventually(this);
@@ -152,7 +150,7 @@ class PageElementList extends _1.PageNode {
      * are needed, use get() or where instead.
      **/
     identify({ identifier = this._identifier, resetCache = false } = {}) {
-        const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.func.toString()}` : 'index';
+        const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.mappingFunc.toString()}` : 'index';
         if (this._disableCache || resetCache || !(cacheKey in this._identifiedObjCache)) {
             const listElements = this.all;
             const mappedObj = {};
@@ -161,7 +159,7 @@ class PageElementList extends _1.PageNode {
                 // create hash where result of identifier func is key
                 // and list element is value
                 listElements.forEach((element) => {
-                    const resultKey = identifier.func(element);
+                    const resultKey = identifier.mappingFunc(element);
                     queryResults[resultKey] = element;
                 });
                 // Assign each key in identifier's object a list element by
@@ -389,7 +387,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         super(node);
         this._selector = node.getSelector();
         this._store = opts.store;
-        this._elementOptions = opts.elementOptions;
+        this._elementOptions = opts.elementOpts;
         this._elementStoreFunc = opts.elementStoreFunc;
         this._node = node;
     }

@@ -197,7 +197,7 @@ export class PageElementStore {
     return this.List(
       selector,
       {
-        elementOptions: {},
+        elementOpts: {},
         elementStoreFunc: this.Element,
         ...opts
       }
@@ -226,7 +226,7 @@ export class PageElementStore {
     return this.List(
       selector,
       {
-        elementOptions: {},
+        elementOpts: {},
         elementStoreFunc: this.ExistElement,
         waitType: Workflo.WaitType.exist,
         ...opts
@@ -339,7 +339,7 @@ export class PageElementStore {
       selector,
       {
         elementStoreFunc: this.Element,
-        elementOptions: {},
+        elementOpts: {},
         ...opts
       }
     )
@@ -370,7 +370,7 @@ export class PageElementStore {
       selector,
       {
         elementStoreFunc: this.ExistElement,
-        elementOptions: {},
+        elementOpts: {},
         ...opts
       }
     )
