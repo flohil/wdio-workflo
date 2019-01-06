@@ -647,9 +647,11 @@ class PageElementList extends _1.PageNode {
      * first parameter and the value to be set as second parameter.
      * @param values a single setter value or an array of setter values
      *
-     * If `values` is a single value, this value is set to all PageElements in the `elements` array.
-     * If `values` is an array of values, its length must match the length of `elements` and the values of its
-     * array elements are set to the array of PageElements by matching array indexes.
+     * If `values` is a single value, all PageElements in the `elements` array are set to this value.
+     * If `values` is an array of values, its length must match the length of `elements` and all PageElements
+     * in the `elements` array are set to the values of the `values` array in the order that the PageElements were
+     * retrieved from the DOM.
+     *
      * @returns this (an instance of PageElementList)
      */
     eachSet(elements, setFunc, values) {

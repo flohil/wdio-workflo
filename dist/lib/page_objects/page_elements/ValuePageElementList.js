@@ -120,14 +120,20 @@ class ValuePageElementList extends _1.PageElementList {
     }
     // SETTER FUNCTIONS
     /**
-     * Sets values on all list elements after the initial wait was performed.
+     * This function sets the passed value(s) to all ValuePageElements managed by ValuePageElementList
+     * after performing ValuePageElementList's initial waiting condition.
      *
      * If values is an array, the number of list elements must match the number of passed values.
      * The values will be assigned in the order that the list elements were retrieved from the DOM.
      *
-     * If values is a single value, the same value will be set on all list elements.
+     * @param values a single value or an array of values
      *
-     * @param values
+     * If `values` is a single value, all managed ValuePageElements are set to this value.
+     * If `values` is an array of values, its length must match the length of ValuePageElementList and the managed
+     * ValuePageElements are set to the values of the `values` array in the order that the ValuePageElements were
+     * retrieved from the DOM.
+     *
+     * @returns this (an instance of PageElementList)
      */
     setValue(values) {
         return this.eachSet(this.all, (element, value) => element.setValue(value), values);
