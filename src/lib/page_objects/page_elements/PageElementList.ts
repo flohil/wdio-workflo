@@ -73,7 +73,6 @@ export interface IPageElementListWaitLengthReverseParams extends IPageElementLis
   reverse?: boolean,
 }
 
-
 /**
  * Describes the opts parameter passed to the constructor function of PageElementList.
  *
@@ -175,7 +174,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   /**
    * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
    */
-  protected _elementOptions: PageElementOptions
+  protected _elementOpts: PageElementOptions
   /**
    * defines the kind of waiting condition performed when `initialWait` is invoked
    *
@@ -263,7 +262,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     this._waitType = opts.waitType || Workflo.WaitType.visible
     this._disableCache = opts.disableCache || false
 
-    this._elementOptions = opts.elementOpts
+    this._elementOpts = opts.elementOpts
     this._elementStoreFunc = opts.elementStoreFunc
     this._identifier = opts.identifier
     this._identifiedObjCache = {}
@@ -308,7 +307,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     this._whereBuilder = new ListWhereBuilder(this._selector, {
       store: this._store,
       elementStoreFunc: this._elementStoreFunc,
-      elementOpts: this._elementOptions,
+      elementOpts: this._elementOpts,
       cloneFunc: cloneFunc,
       getAllFunc: list => list.all
     })
@@ -365,6 +364,11 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     return browser.elements( this._selector )
   }
 
+  /**
+   * The `.where` accessor allows to - after performing PageElementList's initial waiting condition - select and
+   * retrieve subsets of the PageElements managed by PageElementList by constraining the list's selector using XPath
+   * modification functions.
+   */
   get where() {
     this.initialWait()
 
@@ -383,7 +387,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * Retrieves the PageElement found in the DOM at the defined index of occurrence that is identified by
    * PageElementList's XPath selector after performing PageElementList's initial waiting condition.
    *
-   * @param index the index of occurrence of the retrieved PageElement - STARTS AT 0
+   * @param index the index of occurrence in the DOM of the retrieved PageElement - STARTS AT 0
    */
   at(index: number) {
     return this.where.getAt( index )
@@ -405,7 +409,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
           // make each list element individually selectable via xpath
           const selector = `(${this._selector})[${i + 1}]`
 
-          const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
+          const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOpts ] )
 
           _elements.push( listElement )
         }
@@ -434,7 +438,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
   /**
    * This function identifies PageElements managed by PageElementList with the aid of an `identifier`'s `mappingObject`
-   * and `mappingFunc`.
+   * and `mappingFunc` after performing PageElementList's initial waiting condition.
    *
    * It returns an identification results object which allows for PageElements managed by PageElementList to be accessed
    * via the key names of `mappingObject`'s properties. To create this results object, an "identification process" needs
@@ -517,14 +521,17 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
 // PUBLIC GETTER FUNCTIONS
 
+  /**
+   * Returns the XPath selector that identifies all PageElements managed by PageElementList.
+   */
   getSelector() {
     return this._selector
   }
 
-  getInterval() {
-    return this._interval
-  }
-
+  /**
+   * Returns the number of PageElements managed by PageElementList (the number of PageElements found in the DOM which
+   * are identified by PageElementList's XPath selector) after performing PageElementList's initial waiting condition.
+   */
   getLength() {
     try {
       const value = this.elements.value
@@ -540,40 +547,135 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     }
   }
 
+  /**
+   * Returns the texts of all PageElements managed by PageElementList as an array after performing PageElementList's
+   * initial waiting condition.
+   *
+   * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this.eachGet(this.all, element => element.getText(), filterMask)
   }
 
+  /**
+   * Returns the direct texts of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `getDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this.eachGet(this.all, element => element.getDirectText(), filterMask)
   }
 
+  /**
+   * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this.eachGet(this.all, element => element.currently.isEnabled(), filterMask)
   }
 
+  /**
+   * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
+   *
+   * @param text the expected text used in the comparisons which set the 'hasText' status
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   */
   getHasText(text: string | string[]) {
     return this.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text)
   }
 
+  /**
+   * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true)
   }
 
+  /**
+   * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
+   *
+   * @param text the expected text used in the comparisons which set the 'containsText' status.
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   */
   getContainsText(text: string | string[]) {
     return this.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text)
   }
 
+  /**
+   * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
+   *
+   * @param directText the expected direct text used in the comparisons which set the 'hasDirectText' status.
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+   * array elements are compared to the array of actual values of all PageElements.
+   */
   getHasDirectText(directText: string | string[]) {
     return this.eachCompare(
       this.all, (element, expected) => element.currently.hasDirectText(expected), directText
     )
   }
 
+  /**
+   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true)
   }
 
+  /**
+   * Returns the 'containsDirectText' status of all PageElements managed by PageElementList as an array after performing
+   * PageElementList's initial waiting condition.
+   *
+   * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
+   * text.
+   *
+   * @param directText the expected direct text used in the comparisons which set the 'containsDirectText' status.
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+   * array elements are compared to the array of actual values of all PageElements.
+   */
   getContainsDirectText(directText: string | string[]) {
     return this.eachCompare(
       this.all, (element, expected) => element.currently.containsDirectText(expected), directText
@@ -582,10 +684,34 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
   // HELPER FUNCTIONS
 
+  /**
+   * Used to determine if a function of a managed PageElement should be invoked or if its invocation should be skipped
+   * because the PageElement is not included by a filterMask.
+   *
+   * @param filter a filterMask entry that refers to a corresponding managed PageElement
+   */
   protected _includedInFilter(filter: any) {
     return (typeof filter === 'boolean' && filter === true)
   }
 
+  /**
+   * Invokes a state check function for each PageElement in a passed `elements` array and returns an array of state
+   * check function results.
+   *
+   * @template T the type of a single expected value or the type of an array element in an expected values array
+   * @param elements an array containing all PageElements for which `checkFunc` should be executed
+   * @param checkFunc a state check function executed for each PageElement in `elements`. It is passed a PageElement as
+   * first parameter and an expected value used by the state check condition as an optional second parameter.
+   * @param expected a single expected value or an array of expected values used for the state check conditions
+   *
+   * If `expected` is a single value, this value is compared to each element in the array of actual values.
+   * If `expected` is an array of values, its length must match the length of `elements` and the values of its
+   * array elements are compared to the array of actual values.
+   * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
+   * invocation of the state check function for some or all PageElements.
+   * The results of skipped function invocations are not included in the total results array.
+   * @returns an array of results of a state check function executed for each PageElement of `elements`
+   */
   eachCompare<T>(
     elements: PageElementType[],
     checkFunc: (element: PageElementType, expected?: T) => boolean,
@@ -619,12 +745,24 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * If the list is empty (no elements could be located matching the list selector),
-   * this function will always return true.
+   * Invokes a state check function for each PageElement in a passed `elements` array and returns true if the result of
+   * each state check function invocation was true.
    *
-   * @param elements
-   * @param checkFunc
-   * @param expected
+   * If the passed `elements` array was empty, this function will always return true.
+   *
+   * @template T the type of a single expected value or the type of an array element in an expected values array
+   * @param elements an array containing all PageElements for which `checkFunc` should be executed
+   * @param checkFunc a state check function executed for each PageElement in `elements`. It is passed a PageElement as
+   * first parameter and an expected value used by the state check condition as an optional second parameter.
+   * @param expected a single expected value or an array of expected values used for the state check conditions
+   *
+   * If `expected` is a single value, this value is compared to each element in the array of actual values.
+   * If `expected` is an array of values, its length must match the length of `elements` and the values of its
+   * array elements are compared to the array of actual values.
+   * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
+   * invocation of the state check function for some or all PageElements
+   * @returns true if the state check functions of all checked PageElements returned true or if no state check functions
+   * were invoked at all
    */
   eachCheck<T>(
     elements: PageElementType[],
@@ -666,6 +804,18 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     return Object.keys(diffs).length === 0
   }
 
+  /**
+   * Invokes a state retrieval function for each PageElement in a passed `elements` array and returns an array of state
+   * retrieval function results.
+   *
+   * @template T the type of an element of the results array
+   * @param elements an array containing all PageElements for which `getFunc` should be executed
+   * @param getFunc a state retrieval function executed for each PageElement in `elements`. It is passed a PageElement
+   * as first parameter.
+   * @param filterMask can be used to skip the invocation of the state retrieval function for some or all PageElements.
+   * The results of skipped function invocations are not included in the total results array.
+   * @returns an array of results of a state retrieval function executed for each PageElement of `elements`
+   */
   eachGet<T>(
     elements: PageElementType[],
     getFunc: (element: PageElementType) => T,
@@ -700,11 +850,22 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Uses default interval and default timeout of each element contained in this list.
+   * Invokes a wait function for each PageElement in a passed `elements` array.
    *
-   * @param elements
-   * @param waitFunc
-   * @param expected
+   * Throws an error if the wait condition of an invoked wait function was not met within a specific timeout.
+   *
+   * @template T the type of a single expected value or the type of an array element in an expected values array
+   * @param elements an array containing all PageElements for which `waitFunc` should be executed
+   * @param waitFunc a wait function executed for each PageElement in `elements`. It is passed a PageElement as
+   * first parameter and an expected value used by the wait condition as an optional second parameter.
+   * @param expected a single expected value or an array of expected values used for the wait conditions
+   *
+   * If `expected` is a single value, this value is compared to each element in the array of actual values.
+   * If `expected` is an array of values, its length must match the length of `elements` and the values of its
+   * array elements are compared to the array of actual values.
+   * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
+   * invocation of the state check function for some or all PageElements
+   * @returns this (an instance of PageElementList)
    */
   eachWait<T>(
     elements: PageElementType[],
@@ -736,6 +897,13 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     return this
   }
 
+  /**
+   * Executes an action for each of PageElementList's managed PageElements.
+   *
+   * @param doFunc an action executed for each of PageElementList's managed PageElements
+   * @param filterMask can be used to skip the execution of an action for some or all PageElements
+   * @returns this (an instance of PageElementList)
+   */
   eachDo(
     doFunc: (element: PageElementType) => any,
     filterMask?: Workflo.PageNode.ListFilterMask
@@ -766,6 +934,20 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     return this
   }
 
+  /**
+   * Invokes a setter function for each PageElement in a passed `elements` array.
+   *
+   * @template T the type of a single setter value or the type of an array element in a setter values array
+   * @param elements an array containing all PageElements for which `setFunc` should be executed
+   * @param setFunc a setter function executed for each PageElement in `elements`. It is passed a PageElement as
+   * first parameter and the value to be set as second parameter.
+   * @param values a single setter value or an array of setter values
+   *
+   * If `values` is a single value, this value is set to all PageElements in the `elements` array.
+   * If `values` is an array of values, its length must match the length of `elements` and the values of its
+   * array elements are set to the array of PageElements by matching array indexes.
+   * @returns this (an instance of PageElementList)
+   */
   eachSet<T>(
     elements: PageElementType[],
     setFunc: (element: PageElementType, value: T) => PageElementType,
@@ -792,30 +974,63 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 }
 
+/**
+ * This class defines all `currently` functions of PageElementList.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the PageElement managed by PageElementList
+ * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
+ * @template ListType type of the PageElementList for which PageElementListCurrently defines all `currently` functions
+ */
 export class PageElementListCurrently<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  ListType extends PageElementList<Store, PageElementType, PageElementOptions>
+  PageElementOpts extends Partial<IPageElementOpts<Store>>,
+  ListType extends PageElementList<Store, PageElementType, PageElementOpts>
 > extends PageNodeCurrently<Store, ListType> {
 
   protected readonly _node: ListType
 
+  /**
+   * the XPath selector that identifies all PageElements managed by PageElementList
+   */
   protected _selector: string
+  /**
+   * an instance of PageElementStore which can be used to retrieve/create PageNodes
+   */
   protected _store: Store
-  protected _elementOptions: PageElementOptions
-  protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, ListType>
+  /**
+   * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
+   */
+  protected _elementOpts: PageElementOpts
+  /**
+   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageElementStore.
+   *
+   * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
+   * @param opts the options used to configure the retrieved PageElement
+   */
+  protected _elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType
+  /**
+   * Stores an instance of ListWhereBuilder which allows to select subsets of the PageElements managed by PageElementList
+   * by modifying the list's selector using XPath modification functions.
+   */
+  protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOpts, ListType>
 
+  /**
+   * This class defines all `currently` functions of PageElementList.
+   *
+   * @param node an instance of the PageElementList for which PageElementListCurrently defines all `currently` functions
+   * @param opts the opts used to configure PageElementList
+   */
   constructor(
     node: ListType,
-    opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>,
+    opts: IPageElementListOpts<Store, PageElementType, PageElementOpts>,
   ) {
     super(node)
 
     this._selector = node.getSelector()
     this._store = opts.store
-    this._elementOptions = opts.elementOpts
+    this._elementOpts = opts.elementOpts
     this._elementStoreFunc = opts.elementStoreFunc
 
     this._node = node
@@ -832,7 +1047,7 @@ export class PageElementListCurrently<
     this._whereBuilder = new ListWhereBuilder(this._selector, {
       store: this._store,
       elementStoreFunc: this._elementStoreFunc,
-      elementOpts: this._elementOptions,
+      elementOpts: this._elementOpts,
       cloneFunc: cloneFunc,
       getAllFunc: list => list.all
     })
@@ -840,30 +1055,40 @@ export class PageElementListCurrently<
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
 
+  /**
+   * Immediatly fetches all webdriverio elements identified by PageElementList's XPath selector from the HTML page.
+   */
   get elements() {
     return browser.elements( this._selector )
   }
 
+  /**
+   * The `.where` accessor allows to select and retrieve subsets of the PageElements managed by PageElementList by
+   * constraining the list's selector using XPath modification functions.
+   */
   get where() {
     return this._whereBuilder.reset()
   }
 
   /**
-   * Returns the first page element found in the DOM that matches the list selector.
+   * Retrieves the first PageElement found in the DOM that is identified by PageElementList's XPath selector.
    */
   get first() {
     return this.where.getFirst()
   }
 
   /**
-   * @param index starts at 0
+   * Retrieves the PageElement found in the DOM at the defined index of occurrence that is identified by
+   * PageElementList's XPath selector.
+   *
+   * @param index the index of occurrence in the DOM of the retrieved PageElement - STARTS AT 0
    */
   at( index: number ) {
     return this.where.getAt( index )
   }
 
   /**
-   * Returns all page elements found in the DOM that match the list selector after initial wait.
+   * Retrieves all PageElements found in the DOM that are identified by PageElementList's XPath selector.
    */
   get all() {
     const elements: PageElementType[] = []
@@ -875,7 +1100,7 @@ export class PageElementListCurrently<
         // make each list element individually selectable via xpath
         const selector = `(${this._selector})[${i + 1}]`
 
-        const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOptions ] )
+        const listElement = this._elementStoreFunc.apply( this._store, [ selector, this._elementOpts ] )
 
         elements.push( listElement )
       }
@@ -886,6 +1111,10 @@ export class PageElementListCurrently<
 
 // PUBLIC GETTER FUNCTIONS
 
+  /**
+   * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM which
+   * are identified by PageElementList's XPath selector).
+   */
   getLength() {
     try {
       const value = this.elements.value
@@ -901,48 +1130,146 @@ export class PageElementListCurrently<
     }
   }
 
+  /**
+   * Returns the current texts of all PageElements managed by PageElementList as an array.
+   *
+   * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachGet(this.all, element => element.currently.getText(), filterMask)
   }
 
+  /**
+   * Returns the current direct texts of all PageElements managed by PageElementList as an array.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `getDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachGet(this.all, element => element.currently.getDirectText(), filterMask)
   }
 
+  /**
+   * Returns the current 'exists' status of all PageElements managed by PageElementList as an array.
+   *
+   * @param filterMask can be used to skip the invocation of the `getExists` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getExists(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachGet(this.all, element => element.currently.exists(), filterMask)
   }
 
+  /**
+   * Returns the current 'visible' status of all PageElements managed by PageElementList as an array.
+   *
+   * @param filterMask can be used to skip the invocation of the `getIsVisible` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getIsVisible(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachGet(this.all, element => element.currently.isVisible(), filterMask)
   }
 
+  /**
+   * Returns the current 'enabled' status of all PageElements managed by PageElementList as an array.
+   *
+   * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachGet(this.all, element => element.currently.isEnabled(), filterMask)
   }
 
+  /**
+   * Returns the current 'hasText' status of all PageElements managed by PageElementList as an array.
+   *
+   * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
+   *
+   * @param text the expected text used in the comparisons which set the 'hasText' status
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   */
   getHasText(text: string | string[]) {
     return this._node.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text)
   }
 
+  /**
+   * Returns the current 'hasAnyText' status of all PageElements managed by PageElementList as an array.
+   *
+   * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true)
   }
 
+  /**
+   * Returns the current 'containsText' status of all PageElements managed by PageElementList as an array.
+   *
+   * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
+   *
+   * @param text the expected text used in the comparisons which set the 'containsText' status
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   */
   getContainsText(text: string | string[]) {
     return this._node.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text)
   }
 
+  /**
+   * Returns the current 'hasDirectText' status of all PageElements managed by PageElementList as an array.
+   *
+   * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
+   *
+   * @param directText the expected direct text used in the comparisons which set the 'hasDirectText' status.
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+   * array elements are compared to the array of actual values of all PageElements.
+   */
   getHasDirectText(directText: string | string[]) {
     return this._node.eachCompare(
       this.all, (element, expected) => element.currently.hasDirectText(expected), directText
     )
   }
 
+  /**
+   * Returns the current 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array.
+   *
+   * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results array.
+   */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true)
   }
 
+  /**
+   * Returns the current 'containsDirectText' status of all PageElements managed by PageElementList as an array.
+   *
+   * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
+   * text.
+   *
+   * @param directText the expected direct text used in the comparisons which set the 'containsDirectText' status.
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+   * array elements are compared to the array of actual values of all PageElements.
+   */
   getContainsDirectText(directText: string | string[]) {
     return this._node.eachCompare(
       this.all, (element, expected) => element.currently.containsDirectText(expected), directText
@@ -951,6 +1278,9 @@ export class PageElementListCurrently<
 
 // CHECK STATE FUNCTIONS
 
+  /**
+   * Returns true if PageElementList is currently empty.
+   */
   isEmpty() {
     const actualLength = this.getLength()
 
@@ -961,6 +1291,20 @@ export class PageElementListCurrently<
     return actualLength === 0
   }
 
+  /**
+   * Returns the result of the comparison between PageElementList's actual length and an expected length using the
+   * comparison method defined in `comparator`.
+   *
+   * The following comparison methods are supported:
+   *
+   * - "==" to check if the actual length equals the expected length
+   * - "!=" to check if the actual length does not equal the expected length
+   * - "<" to check if the actual length is less than the expected length
+   * - ">" to check if the actual length is greater than the expected length
+   *
+   * @param length the expected length
+   * @param comparator defines the method used to compare the actual and the expected length of PageElementList
+   */
   hasLength(
     length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
   ) {
@@ -973,6 +1317,11 @@ export class PageElementListCurrently<
     return compare(actualLength, length, comparator)
   }
 
+  /**
+   * Returns true if at least one of the PageElements managed by PageElementList exists.
+   *
+   * @param filterMask if set to false, the existence check is skipped and `true` is returned
+   */
   exists(filterMask?: boolean) {
     if (filterMask === false) {
       return true
@@ -981,48 +1330,148 @@ export class PageElementListCurrently<
     }
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList are currently visible.
+   *
+   * @param filterMask can be used to skip the invocation of the `isVisible` function for some or all managed
+   * PageElements
+   */
   isVisible(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachCheck(this.all, element => element.currently.isVisible(), filterMask, true)
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList are currently enabled.
+   *
+   * @param filterMask can be used to skip the invocation of the `isEnabled` function for some or all managed
+   * PageElements
+   */
   isEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachCheck(this.all, element => element.currently.isEnabled(), filterMask, true)
   }
 
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementList equal the expected text(s).
+   *
+   * @param text the expected text(s) supposed to equal the actual texts
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   */
   hasText(text: string | string[]) {
     return this._node.eachCheck(this.all, (element, expected) => element.currently.hasText(expected), text)
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList have any text.
+   *
+   * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
+   * PageElements
+   */
   hasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText(), filterMask, true)
   }
 
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementList contain the expected text(s).
+   *
+   * @param text the expected text(s) supposed to be contained in the actual texts
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   */
   containsText(text: string | string[]) {
     return this._node.eachCheck(this.all, (element, expected) => element.currently.containsText(expected), text)
   }
 
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList equal the expected direct
+   * text(s).
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directText the expected direct text(s) supposed to equal the actual direct texts
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+   * array elements are compared to the array of actual values of all PageElements.
+   */
   hasDirectText(directText: string | string[]) {
     return this._node.eachCheck(
       this.all, (element, expected) => element.currently.hasDirectText(expected), directText
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList have any direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `hasAnyDirectText` function for some or all managed
+   * PageElements
+   */
   hasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
     return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true)
   }
 
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList contain the expected direct
+   * text(s).
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directText the expected direct text(s) supposed to be contained in the actual direct texts
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+   * array elements are compared to the array of actual values of all PageElements.
+   */
   containsDirectText(directText: string | string[]) {
     return this._node.eachCheck(
       this.all, (element, expected) => element.currently.containsDirectText(expected), directText
     )
   }
 
+  /**
+   * returns the negated variants of PageElementListCurrently's state check functions
+   */
   get not() {
     return {
+      /**
+       * Returns true if PageElementList is currently not empty.
+       */
       isEmpty: () => !this.isEmpty(),
+      /**
+       * Returns the negated result of the comparison between PageElementList's actual length and an expected length
+       * using the comparison method defined in `comparator`.
+       *
+       * The following comparison methods are supported:
+       *
+       * - "==" to check if the actual length equals the expected length
+       * - "!=" to check if the actual length does not equal the expected length
+       * - "<" to check if the actual length is less than the expected length
+       * - ">" to check if the actual length is greater than the expected length
+       *
+       * @param length the not-expected length
+       * @param comparator defines the method used to compare the actual and the expected length of PageElementList
+       */
       hasLength: (
         length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
       ) => !this.hasLength(length, comparator),
+      /**
+       * Returns true if none of the PageElements managed by PageElementList exist.
+       *
+       * @param filterMask if set to false, the existence check is skipped and `true` is returned
+       */
       exists: (filterMask?: boolean) => {
         if (filterMask === false) {
           return true
@@ -1030,29 +1479,105 @@ export class PageElementListCurrently<
           return this.isEmpty()
         }
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList are currently not visible.
+       *
+       * @param filterMask can be used to skip the invocation of the `isVisible` function for some or all managed
+       * PageElements
+       */
       isVisible: (filterMask?: Workflo.PageNode.ListFilterMask) => {
         return this._node.eachCheck(this.all, element => element.currently.not.isVisible(), filterMask, true)
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList are currently not enabled.
+       *
+       * @param filterMask can be used to skip the invocation of the `isEnabled` function for some or all managed
+       * PageElements
+       */
       isEnabled: (filterMask?: Workflo.PageNode.ListFilterMask) => {
         return this._node.eachCheck(this.all, element => element.currently.not.isEnabled(), filterMask, true)
       },
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementList do not equal the expected text(s).
+       *
+       * @param text the expected text(s) supposed not to equal the actual texts
+       *
+       * If `text` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       */
       hasText: (text: string | string[]) => {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text)
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList do not have any text.
+       *
+       * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
+       * PageElements
+       */
       hasAnyText: (filterMask?: Workflo.PageNode.ListFilterMask) => {
         return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText(), filterMask, true)
       },
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementList do not contain the expected
+       * text(s).
+       *
+       * @param text the expected text(s) supposed not to be contained in the actual texts
+       *
+       * If `text` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       */
       containsText: (text: string | string[]) => {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text)
       },
+      /**
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not equal the 
+       * expected direct text(s).
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param directText the expected direct text(s) supposed not to equal the actual direct texts
+       *
+       * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `directText` is an array of values, its length must match the length of PageElementList and the values of 
+       * its array elements are compared to the array of actual values of all PageElements.
+       */
       hasDirectText: (directText: string | string[]) => {
         return this._node.eachCheck(
           this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList not hot have any direct text.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param filterMask can be used to skip the invocation of the `hasAnyDirectText` function for some or all managed
+       * PageElements
+       */
       hasAnyDirectText: (filterMask?: Workflo.PageNode.ListFilterMask) => {
         return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true)
       },
+      /**
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not contain the 
+       * expected direct text(s).
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param directText the expected direct text(s) not supposed to be contained in the actual direct texts
+       *
+       * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+       * array elements are compared to the array of actual values of all PageElements.
+       */
       containsDirectText: (directText: string | string[]) => {
         return this._node.eachCheck(
           this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText
@@ -1062,6 +1587,14 @@ export class PageElementListCurrently<
   }
 }
 
+/**
+ * This class defines all `wait` functions of PageElementList.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the PageElement managed by PageElementList
+ * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
+ * @template ListType type of the PageElementList for which PageElementListCurrently defines all `wait` functions
+ */
 export class PageElementListWait<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,
@@ -1257,6 +1790,14 @@ export class PageElementListWait<
   }
 }
 
+/**
+ * This class defines all `eventually` functions of PageElementList.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template PageElementType type of the PageElement managed by PageElementList
+ * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
+ * @template ListType type of the PageElementList for which PageElementListCurrently defines all `eventually` functions
+ */
 export class PageElementListEventually<
   Store extends PageElementStore,
   PageElementType extends PageElement<Store>,

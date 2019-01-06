@@ -303,7 +303,7 @@ export class PageElement<
    * Returns PageElement's direct text after performing the initial waiting condition.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    */
   getDirectText() {
     return this._executeAfterInitialWait( () => this.currently.getDirectText() )
@@ -425,7 +425,7 @@ export class PageElement<
    * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    *@param directText the expected direct text used in the comparison which sets the 'hasDirectText' status
    */
@@ -449,7 +449,7 @@ export class PageElement<
    * text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text used in the comparison which sets the 'containsDirectText' status
    */
@@ -794,7 +794,7 @@ export class PageElementCurrently<
    * Returns PageElement's current direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * Overwriting this function affects the behavior of the functions `getDirectText`, `hasDirectText`,
    * `containsDirectText` and `hasAnyDirectText` in PageElement and its `currently`, `wait` and `eventually` APIs.
@@ -977,7 +977,7 @@ export class PageElementCurrently<
    * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text used in the comparison which sets the 'hasDirectText' status
    */
@@ -991,7 +991,7 @@ export class PageElementCurrently<
    * A PageElement's 'hasAnyDirectText' status is set to true if it has any direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    */
   getHasAnyDirectText() {
     return this.hasAnyDirectText()
@@ -1004,7 +1004,7 @@ export class PageElementCurrently<
    * text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text used in the comparison which sets the 'containsDirectText' status
    */
@@ -1118,7 +1118,7 @@ export class PageElementCurrently<
    * Returns true if the PageElement's actual direct text currently equals the expected direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text which is supposed to equal the actual direct text
    */
@@ -1130,7 +1130,7 @@ export class PageElementCurrently<
    * Returns true if the PageElement currently has any direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    */
   hasAnyDirectText() {
     return this._compareHasAny(this.getDirectText())
@@ -1140,7 +1140,7 @@ export class PageElementCurrently<
    * Returns true if the PageElement's actual direct text currently contains the expected direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text which is supposed to be contained in the actual direct text
    */
@@ -1383,7 +1383,7 @@ export class PageElementCurrently<
        * Returns true if the PageElement's actual direct text currently does not equal the expected direct text.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param directText the expected direct text which is supposed not to equal the actual direct text
        */
@@ -1392,14 +1392,14 @@ export class PageElementCurrently<
        * Returns true if the PageElement currently does not have any direct text.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        */
       hasAnyDirectText: () => !this.hasAnyDirectText(),
       /**
        * Returns true if the PageElement's actual direct text currently does not contain the expected direct text.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param directText the expected direct text which is supposed not to be contained in the actual direct text
        */
@@ -1785,7 +1785,7 @@ export class PageElementWait<
    * Throws an error if the condition is not met within a specific timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param text the expected direct text which is supposed to equal the actual direct text
    * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
@@ -1808,7 +1808,7 @@ export class PageElementWait<
    * Throws an error if the condition is not met within a specific timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
    * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
@@ -1830,7 +1830,7 @@ export class PageElementWait<
    * Throws an error if the condition is not met within a specific timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param text the expected direct text which is supposed to be contained in the actual direct text
    * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
@@ -2537,7 +2537,7 @@ export class PageElementWait<
        * Throws an error if the condition is not met within a specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param text the expected direct text which is supposed not to equal the actual direct text
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
@@ -2557,7 +2557,7 @@ export class PageElementWait<
        * Throws an error if the condition is not met within a specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
@@ -2576,7 +2576,7 @@ export class PageElementWait<
        * Throws an error if the condition is not met within a specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param text the expected direct text which is supposed not to be contained in the actual direct text
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
@@ -3076,7 +3076,7 @@ export class PageElementEventually<
    * timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text which is supposed to equal PageElement's actual direct text
    * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -3093,7 +3093,7 @@ export class PageElementEventually<
    * Returns true if PageElement eventually has any direct text within a specific timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param opts includes the `timeout` within which the condition is expected to be met and the
    * `interval` used to check it
@@ -3110,7 +3110,7 @@ export class PageElementEventually<
    * timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
-   * It does not include any text of the HTML element's nested children elements.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text which is supposed to be contained in PageElement's actual direct text
    * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -3574,7 +3574,7 @@ export class PageElementEventually<
        * specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param directText the expected direct text which is supposed not to equal PageElement's actual direct text
        * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -3590,7 +3590,7 @@ export class PageElementEventually<
        * Returns true if PageElement eventually does not have any direct text within a specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param opts includes the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
@@ -3606,7 +3606,7 @@ export class PageElementEventually<
        * specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
-       * It does not include any text of the HTML element's nested children elements.
+       * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param directText the expected direct text which is supposed not to be contained in PageElement's actual direct text
        * @param opts includes the `timeout` within which the condition is expected to be met and the
