@@ -64,8 +64,8 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
         hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => ListType;
         hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => ListType;
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => ListType;
-        isEmpty: (opts?: Workflo.ITimeoutInterval) => ListType;
         hasLength: (length: number, opts?: import("./PageElementList").IPageElementListWaitLengthParams) => ListType;
+        isEmpty: (opts?: Workflo.ITimeoutInterval) => ListType;
         exists: (opts?: Workflo.ITimeout & {
             filterMask?: boolean;
         }) => ListType;
@@ -87,8 +87,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
         hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => boolean;
         hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => boolean;
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => boolean;
-        isEmpty: (opts?: Workflo.ITimeoutInterval) => boolean;
         hasLength: (length: number, opts?: import("./PageElementList").IPageElementListWaitLengthParams) => boolean;
+        isEmpty: (opts?: Workflo.ITimeoutInterval) => boolean;
         exists: (opts?: Workflo.ITimeout & {
             filterMask?: boolean;
         }) => boolean;

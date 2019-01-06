@@ -66,7 +66,7 @@ interface ICustomElementMatchers {
      * Checks if the PageElement currently has the specified text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the directText which the PageElement is supposed to have
      */
@@ -75,14 +75,14 @@ interface ICustomElementMatchers {
      * Checks if the PageElement currently has any direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      */
     toHaveAnyDirectText(): boolean;
     /**
      * Checks if the PageElement currently contains the specified HTML.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the directText which the PageElement is supposed to contain
      */
@@ -308,7 +308,7 @@ interface ICustomElementMatchers {
      * Checks if the PageElement eventually has the specified direct text within a specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the direct text which the PageElement is supposed to have
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
@@ -321,7 +321,7 @@ interface ICustomElementMatchers {
      * Checks if the PageElement eventually has any direct text within a specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
@@ -333,7 +333,7 @@ interface ICustomElementMatchers {
      * Checks if the PageElement eventually contains the specified direct text within a specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the direct text which the PageElement is supposed to contain
      * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
@@ -635,7 +635,7 @@ interface ICustomListMatchers {
      * Checks if all of the PageElements managed by PageElementList currently have the expected direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText A single value (used for all managed PageElements) or an array of values with the expected direct
      * text(s).
@@ -645,7 +645,7 @@ interface ICustomListMatchers {
      * Checks if all of the PageElements managed by PageElementList currently have any direc text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param filterMask Can be used to skip the check for some or all managed PageElements.
      */
@@ -654,7 +654,7 @@ interface ICustomListMatchers {
      * Checks if all of the PageElements managed by PageElementList currently contain the expected direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText A single value (used for all managed PageElements) or an array of values with the expected
      * contained direct text(s).
@@ -730,7 +730,7 @@ interface ICustomListMatchers {
      * specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText A single value (used for all managed PageElements) or an array of values with the expected direct
      * text(s).
@@ -746,7 +746,7 @@ interface ICustomListMatchers {
      * timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageElements, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
@@ -760,7 +760,7 @@ interface ICustomListMatchers {
      * specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText A single value (used for all managed PageElements) or an array of values with the expected
      * contained direct text(s).
@@ -821,7 +821,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * Checks if all of the PageElements managed by PageElementMap currently have the expected direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText An object with the names of the corresponding PageElements as keys and the expected direct texts
      * as values.
@@ -837,7 +837,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
      * Checks if all of the PageElements managed by PageElementMap currently contain the expected direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText An object with the names of the corresponding PageElements as keys and the expected contained
      * direct texts as values.
@@ -997,7 +997,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * Checks if all of the PageNodes managed by PageElementGroup currently have the expected direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText An object with the names of the corresponding PageNodes as keys and the expected direct texts as
      * values.
@@ -1007,7 +1007,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * Checks if all of the PageNodes managed by PageElementGroup currently have any direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
      * PageElementGroup.
@@ -1017,7 +1017,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * Checks if all of the PageNodes managed by PageElementGroup currently contain the expected direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText An object with the names of the corresponding PageNodes as keys and the expected contained direct
      * texts as values.
@@ -1094,7 +1094,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * text within a specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText An object with the names of the corresponding PageNodes as keys and the expected direct texts
      * as values.
@@ -1110,7 +1110,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * within a specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param opts Includes a `filterMask` that can be used to skip the check for some or all managed PageNodes, the
      * `timeout` within which the condition is expected to be met and the `interval` used to check it.
@@ -1124,7 +1124,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * direct text within a specific timeout.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
-     * It does not include any text of the HTML element's nested children elements.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText An object with the names of the corresponding PageNodes as keys and the expected contained
      * direct texts as values.
@@ -2039,7 +2039,7 @@ declare global {
                  * PageElementMap or PageElementGroup.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
                  * PageElements and not include the skipped results in the total result
@@ -2081,7 +2081,7 @@ declare global {
                  * text.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param text the expected direct text used in the comparison which sets the 'hasDirectText' status
                  */
@@ -2093,7 +2093,7 @@ declare global {
                  * A PageElement's 'hasAnyDirectText' status is set to true if it has any actual text.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
                  * PageElements and not include the skipped results in the total result
@@ -2107,7 +2107,7 @@ declare global {
                  * direct text.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param text the expected direct text used in the comparison which sets the 'containsDirectText' status
                  */
@@ -2213,7 +2213,7 @@ declare global {
                  * Throws an error if the condition is not met within the specific timeout.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param text the expected direct text which is supposed to equal the actual direct text
                  * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
@@ -2230,7 +2230,7 @@ declare global {
                  * Throws an error if the condition is not met within the specific timeout.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
                  * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
@@ -2248,7 +2248,7 @@ declare global {
                  * Throws an error if the condition is not met within the specific timeout.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param text the expected direct text which is supposed to be contained in the actual direct text
                  * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
@@ -2343,7 +2343,7 @@ declare global {
                  * currently have an actual direct text which equals the expected direct text.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param directText the expected direct text which is supposed to equal the actual direct text
                  */
@@ -2353,7 +2353,7 @@ declare global {
                  * currently have any direct text.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
                  * some or all managed PageElements
@@ -2364,7 +2364,7 @@ declare global {
                  * currently have an actual direct text which contains the expected direct text.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param directText the expected direct text which is supposed to be contained in the actual direct text
                  */
@@ -2458,7 +2458,7 @@ declare global {
                  * eventually have an actual direct text which equals the expected direct text within a specific timeout.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param directText the expected direct text which is supposed to equal the actual direct text
                  * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -2473,7 +2473,7 @@ declare global {
                  * eventually have any direct text within a specific timeout.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
                  * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
@@ -2490,7 +2490,7 @@ declare global {
                  * eventually have an actual direct text which contains the expected direct text within a specific timeout.
                  *
                  * A direct text is a text that resides on the level directly below the selected HTML element.
-                 * It does not include any text of the HTML element's nested children elements.
+                 * It does not include any text of the HTML element's nested children HTML elements.
                  *
                  * @param directText the expected direct text which is supposed to be contained in the actual direct text
                  * @param opts includes the `timeout` within which the condition is expected to be met and the

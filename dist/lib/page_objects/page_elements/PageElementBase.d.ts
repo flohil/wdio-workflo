@@ -8,9 +8,9 @@ import { PageElementStore } from '../stores';
  */
 export interface IPageElementBaseOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
     /**
-     * Defines the kind of wait condition performed when `initialWait` is invoked.
+     * Defines the kind of waiting condition performed when `initialWait` is invoked.
      *
-     * The initial wait condition is performed every time before an interaction with the tested application takes place
+     * The initial waiting condition is performed every time before an interaction with the tested application takes place
      * via a PageElement's action (eg. click).
      */
     waitType?: Workflo.WaitType;
@@ -92,7 +92,7 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
  */
 export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeCurrently<Store, PageElementType> {
     /**
-     * Fetches the first webdriverio element from the HTML page that is identified by PageNode's XPath selector.
+     * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector.
      */
     readonly element: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element>> & WebdriverIO.RawResult<WebdriverIO.Element>;
     /**

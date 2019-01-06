@@ -74,7 +74,7 @@ exports.PageElementBase = PageElementBase;
  */
 class PageElementBaseCurrently extends _1.PageNodeCurrently {
     /**
-     * Fetches the first webdriverio element from the HTML page that is identified by PageNode's XPath selector.
+     * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector.
      */
     get element() {
         return browser.element(this._node.getSelector());

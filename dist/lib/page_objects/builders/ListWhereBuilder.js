@@ -8,7 +8,7 @@ const XPathBuilder_1 = require("./XPathBuilder");
  * @template Store type of the instance of PageElementStore that is used by PageNodes returned by ListWhereBuilder
  * @template PageElementType type of instances of PageElements returned by ListWhereBuilder's retrieval functions
  * (getXXX)
- * @template PageElementOptions type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
+ * @template PageElementOpts type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
  * retrieval functions
  * @template ListType type of the PageElementList on which ListWhereBuilder operates
  */
@@ -25,7 +25,7 @@ class ListWhereBuilder {
         this._selector = selector;
         this._store = opts.store;
         this._elementStoreFunc = opts.elementStoreFunc;
-        this._elementOptions = opts.elementOptions;
+        this._elementOpts = opts.elementOpts;
         this._cloneFunc = opts.cloneFunc;
         this._getAllFunc = opts.getAllFunc;
         this._xPathBuilder = XPathBuilder_1.XPathBuilder.getInstance();
@@ -482,7 +482,7 @@ class ListWhereBuilder {
      * @returns an instance of PageElement
      */
     getFirst() {
-        return this._elementStoreFunc.apply(this._store, [this._xPathBuilder.build(), this._elementOptions]);
+        return this._elementStoreFunc.apply(this._store, [this._xPathBuilder.build(), this._elementOpts]);
     }
     /**
      * Retrieves a PageElement that refers to the HTML element in the DOM at the passed index (starting at 0) which is

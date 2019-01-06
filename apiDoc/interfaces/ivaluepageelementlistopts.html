@@ -102,7 +102,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ivaluepageelementlistopts.html#disablecache" class="tsd-kind-icon">disable<wbr>Cache</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ivaluepageelementlistopts.html#elementoptions" class="tsd-kind-icon">element<wbr>Options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ivaluepageelementlistopts.html#elementopts" class="tsd-kind-icon">element<wbr>Opts</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ivaluepageelementlistopts.html#elementstorefunc" class="tsd-kind-icon">element<wbr>Store<wbr>Func</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ivaluepageelementlistopts.html#identifier" class="tsd-kind-icon">identifier</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ivaluepageelementlistopts.html#interval" class="tsd-kind-icon">interval</a></li>
@@ -123,20 +123,36 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ipageelementlistopts.html">IPageElementListOpts</a>.<a href="ipageelementlistopts.html#disablecache">disableCache</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementList.ts#L48">lib/page_objects/page_elements/PageElementList.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/lib/page_objects/page_elements/PageElementList.ts#L118">lib/page_objects/page_elements/PageElementList.ts:118</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>By default, the results of an &quot;identification process&quot; (the last invocation of PageElementList&#39;s <code>identify</code>
+							function) are cached for future invocations of PageElementList&#39;s <code>identify</code> function.</p>
+						</div>
+						<p>If <code>disableCache</code> is set to true, this caching of identification results will be disabled and a new &quot;identification
+						process&quot; will be performed on each invocation of PageElementList&#39;s <code>identify</code> function.</p>
+						<p>Disabling the identification results cache can be useful if the contents of a PageElementList change often.
+							If the contents of a PageElementList rarely change, PageElementList&#39;s <code>identify</code> function can be invoked with the
+						<code>resetCache</code> option set to true in order to repeat the &quot;identification process&quot; for a changed page content.</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="elementoptions" class="tsd-anchor"></a>
-					<h3>element<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">element<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageElementOptions</span></div>
+					<a name="elementopts" class="tsd-anchor"></a>
+					<h3>element<wbr>Opts</h3>
+					<div class="tsd-signature tsd-kind-icon">element<wbr>Opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageElementOptions</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="ipageelementlistopts.html">IPageElementListOpts</a>.<a href="ipageelementlistopts.html#elementoptions">elementOptions</a></p>
+						<p>Inherited from <a href="ipageelementlistopts.html">IPageElementListOpts</a>.<a href="ipageelementlistopts.html#elementopts">elementOpts</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementList.ts#L46">lib/page_objects/page_elements/PageElementList.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/lib/page_objects/page_elements/PageElementList.ts#L99">lib/page_objects/page_elements/PageElementList.ts:99</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the options passed to <code>elementStoreFunc</code> to configure the retrieved PageElement instance</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="elementstorefunc" class="tsd-anchor"></a>
@@ -145,15 +161,28 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ipageelementlistopts.html">IPageElementListOpts</a>.<a href="ipageelementlistopts.html#elementstorefunc">elementStoreFunc</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementList.ts#L45">lib/page_objects/page_elements/PageElementList.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/lib/page_objects/page_elements/PageElementList.ts#L95">lib/page_objects/page_elements/PageElementList.ts:95</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>This function retrieves an instance of a PageElement mapped by PageElementList from the list&#39;s PageElementStore.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>the XPath expression used to identify the retrieved PageElement in the DOM</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>the options used to configure the retrieved PageElement</p>
+							</dd>
+						</dl>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -163,7 +192,7 @@
 												<h5>selector: <span class="tsd-signature-type">string</span></h5>
 											</li>
 											<li>
-												<h5>options: <span class="tsd-signature-type">PageElementOptions</span></h5>
+												<h5>opts: <span class="tsd-signature-type">PageElementOptions</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
@@ -180,9 +209,18 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ipageelementlistopts.html">IPageElementListOpts</a>.<a href="ipageelementlistopts.html#identifier">identifier</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementList.ts#L49">lib/page_objects/page_elements/PageElementList.ts:49</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/lib/page_objects/page_elements/PageElementList.ts#L127">lib/page_objects/page_elements/PageElementList.ts:127</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>This is the default <code>identifier</code> used to identify a PageElementList&#39;s managed PageElements via the key names
+								defined in <code>identifier</code>&#39;s <code>mappingObject</code> by matching <code>mappingObject</code>&#39;s values with the return values of identifier&#39;s
+							<code>mappingFunc</code>.</p>
+						</div>
+						<p>This default <code>identifier</code> can be overwritten by passing a custom <code>identifier</code> in the function parameters of
+						PageElementList&#39;s <code>identify</code> function.</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="interval" class="tsd-anchor"></a>
@@ -191,7 +229,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeoutinterval.html">ITimeoutInterval</a>.<a href="__global.workflo.itimeoutinterval.html#interval">interval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L1868">index.ts:1868</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/index.ts#L1868">index.ts:1868</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -207,7 +245,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ipagenodeopts.html">IPageNodeOpts</a>.<a href="ipagenodeopts.html#store">store</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageNode.ts#L14">lib/page_objects/page_elements/PageNode.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/lib/page_objects/page_elements/PageNode.ts#L14">lib/page_objects/page_elements/PageNode.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -223,7 +261,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeout.html">ITimeout</a>.<a href="__global.workflo.itimeout.html#timeout">timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/index.ts#L1856">index.ts:1856</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/index.ts#L1856">index.ts:1856</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -239,9 +277,16 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ipageelementlistopts.html">IPageElementListOpts</a>.<a href="ipageelementlistopts.html#waittype">waitType</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/7543f18/src/lib/page_objects/page_elements/PageElementList.ts#L47">lib/page_objects/page_elements/PageElementList.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/252291e/src/lib/page_objects/page_elements/PageElementList.ts#L106">lib/page_objects/page_elements/PageElementList.ts:106</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><code>waitType</code> defines the kind of waiting condition performed when <code>initialWait</code> is invoked.</p>
+						</div>
+						<p>The initial waiting condition is performed every time before an interaction with the tested application takes place
+						via a PageElementList&#39;s action (eg. identify).</p>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -264,7 +309,7 @@
 								<a href="ivaluepageelementlistopts.html#disablecache" class="tsd-kind-icon">disable<wbr>Cache</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="ivaluepageelementlistopts.html#elementoptions" class="tsd-kind-icon">element<wbr>Options</a>
+								<a href="ivaluepageelementlistopts.html#elementopts" class="tsd-kind-icon">element<wbr>Opts</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="ivaluepageelementlistopts.html#elementstorefunc" class="tsd-kind-icon">element<wbr>Store<wbr>Func</a>

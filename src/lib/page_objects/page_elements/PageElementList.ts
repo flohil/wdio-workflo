@@ -1399,7 +1399,7 @@ export class PageElementListCurrently<
    *
    * If `directText` is a single value, this value is compared to each element in the array of actual values of all
    * PageElements.
-   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
    * array elements are compared to the array of actual values of all PageElements.
    */
   hasDirectText(directText: string | string[]) {
@@ -1432,7 +1432,7 @@ export class PageElementListCurrently<
    *
    * If `directText` is a single value, this value is compared to each element in the array of actual values of all
    * PageElements.
-   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
    * array elements are compared to the array of actual values of all PageElements.
    */
   containsDirectText(directText: string | string[]) {
@@ -1534,7 +1534,7 @@ export class PageElementListCurrently<
         return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text)
       },
       /**
-       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not equal the 
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not equal the
        * expected direct text(s).
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -1544,7 +1544,7 @@ export class PageElementListCurrently<
        *
        * If `directText` is a single value, this value is compared to each element in the array of actual values of all
        * PageElements.
-       * If `directText` is an array of values, its length must match the length of PageElementList and the values of 
+       * If `directText` is an array of values, its length must match the length of PageElementList and the values of
        * its array elements are compared to the array of actual values of all PageElements.
        */
       hasDirectText: (directText: string | string[]) => {
@@ -1565,7 +1565,7 @@ export class PageElementListCurrently<
         return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true)
       },
       /**
-       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not contain the 
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not contain the
        * expected direct text(s).
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -1575,7 +1575,7 @@ export class PageElementListCurrently<
        *
        * If `directText` is a single value, this value is compared to each element in the array of actual values of all
        * PageElements.
-       * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+       * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
        * array elements are compared to the array of actual values of all PageElements.
        */
       containsDirectText: (directText: string | string[]) => {
@@ -1602,7 +1602,52 @@ export class PageElementListWait<
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
 > extends PageNodeWait<Store, ListType> {
 
-  // waits until list has given length
+  /**
+   * Provides an API to wait for any PageElement managed by PageElementList to reach a certain state within a
+   * specific timeout.
+   */
+  get any() {
+    return this._node.currently.first.wait as any as PageElementType['wait']
+  }
+
+  // Typescript has a bug that prevents Exclude from working with generic extended types:
+  // https://github.com/Microsoft/TypeScript/issues/24791
+  // Bug will be fixed in Typescript 3.3.0
+  // get any() {
+  //   return excludeNot(this._list.currently.first.wait)
+  // }
+
+  /**
+   * Provides an API to wait for none of PageElementList's managed PageElements to reach a certain state within a
+   * specific timeout.
+   */
+  get none(): PageElementType['wait']['not'] {
+    return this._node.currently.first.wait.not
+  }
+
+  /**
+   * Waits for the result of the comparison between PageElementList's actual length and an expected length using the
+   * comparison method defined in `comparator` to return true.
+   *
+   * Throws an error if the comparison does not return true within a specific timeout.
+   *
+   * The following comparison methods are supported:
+   *
+   * - "==" to check if the actual length equals the expected length
+   * - "!=" to check if the actual length does not equal the expected length
+   * - "<" to check if the actual length is less than the expected length
+   * - ">" to check if the actual length is greater than the expected length
+   *
+   * @param length the expected length
+   * @param opts includes a `comparator` which defines the method used to compare the actual and the expected length of
+   * PageElementList, the `timeout` within which the comparison is expected to return true, the `interval` used to
+   * check it and a `reverse` flag that, if set to true, checks for the comparison to return `false` instead of `true`
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasLength( length: number, {
     timeout = this._node.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
@@ -1625,6 +1670,19 @@ export class PageElementListWait<
     )
   }
 
+  /**
+   * Waits for PageElementList to be empty.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+   * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   isEmpty({
     timeout = this._node.getTimeout(),
     interval = this._node.getInterval(),
@@ -1646,21 +1704,18 @@ export class PageElementListWait<
     )
   }
 
-  get any() {
-    return this._node.currently.first.wait as any as PageElementType['wait']
-  }
-
-  // Typescript has a bug that prevents Exclude from working with generic extended types:
-  // https://github.com/Microsoft/TypeScript/issues/24791
-  // Bug will be fixed in Typescript 3.3.0
-  // get any() {
-  //   return excludeNot(this._list.currently.first.wait)
-  // }
-
-  get none(): PageElementType['wait']['not'] {
-    return this._node.currently.first.wait.not
-  }
-
+  /**
+   * Waits for at least one of the PageElements managed by PageElementList to exist.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
+   * all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   exists(opts: Workflo.ITimeout & {filterMask?: boolean} = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1671,24 +1726,81 @@ export class PageElementListWait<
     return this._node
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementList to be visible.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait(this._node.all, element => element.wait.isVisible(otherOpts), filterMask, true)
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementList to be enabled.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachWait(this._node.all, element => element.wait.isEnabled(otherOpts), filterMask, true)
   }
 
+  /**
+   * Waits for the actual texts of all PageElements managed by PageElementList to equal the expected text(s).
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param text the expected text(s) supposed to equal the actual texts
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasText(text: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
       this._node.all, (element, expected) => element.wait.hasText(expected, opts), text,
     )
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementList to have any text.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
+   * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1697,18 +1809,77 @@ export class PageElementListWait<
     )
   }
 
+  /**
+   * Waits for the actual texts of all PageElements managed by PageElementList to contain the expected text(s).
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param text the expected text(s) supposed to be contained in the actual texts
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   containsText(text: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
       this._node.all, (element, expected) => element.wait.containsText(expected, opts), text,
     )
   }
 
+  /**
+   * Waits for the actual direct texts of all PageElements managed by PageElementList to equal the expected direct
+   * text(s).
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directText the expected direct text(s) supposed to equal the actual direct texts
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
       this._node.all, (element, expected) => element.wait.hasDirectText(expected, opts), directText,
     )
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementList to have any direct text.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for 
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` 
+   * used to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1717,6 +1888,29 @@ export class PageElementListWait<
     )
   }
 
+  /**
+   * Waits for the actual direct texts of all PageElements managed by PageElementList to contain the expected direct 
+   * text(s).
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directText the expected direct text(s) supposed to be contained in the actual direct texts
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
       this._node.all, (element, expected) => element.wait.containsDirectText(expected, opts), directText,
@@ -1725,14 +1919,62 @@ export class PageElementListWait<
 
   get not() {
     return {
-      isEmpty: (opts: Workflo.ITimeoutInterval = {}) => this.isEmpty({
-        timeout: opts.timeout, interval: opts.interval, reverse: true
-      }),
+      /**
+       * Waits for the result of the comparison between PageElementList's actual length and an expected length using the
+       * comparison method defined in `comparator` to return false.
+       *
+       * Throws an error if the comparison does not return false within a specific timeout.
+       *
+       * The following comparison methods are supported:
+       *
+       * - "==" to check if the actual length equals the expected length
+       * - "!=" to check if the actual length does not equal the expected length
+       * - "<" to check if the actual length is less than the expected length
+       * - ">" to check if the actual length is greater than the expected length
+       *
+       * @param length the not-expected length
+       * @param opts includes a `comparator` which defines the method used to compare the actual and the expected length
+       * of PageElementList, the `timeout` within which the comparison is expected to return false and the `interval` 
+       * used to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasLength: (
         length: number, opts: IPageElementListWaitLengthParams = {}
       ) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
+      /**
+       * Waits for PageElementList not to be empty.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
+      isEmpty: (opts: Workflo.ITimeoutInterval = {}) => this.isEmpty({
+        timeout: opts.timeout, interval: opts.interval, reverse: true
+      }),
+      /**
+       * Waits for none of the PageElements managed by PageElementList to exist.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
+       * all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       exists: (opts: Workflo.ITimeout & {filterMask?: boolean} = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1742,21 +1984,78 @@ export class PageElementListWait<
 
         return this._node
       },
+      /**
+       * Waits for all PageElements managed by PageElementList not to be visible.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for 
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait(this._node.all, element => element.wait.not.isVisible(otherOpts), filterMask, true)
       },
+      /**
+       * Waits for all PageElements managed by PageElementList not to be enabled.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for 
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
         return this._node.eachWait(this._node.all, element => element.wait.not.isEnabled(otherOpts), filterMask, true)
       },
+      /**
+       * Waits for the actual texts of all PageElements managed by PageElementList not to equal the expected text(s).
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param text the expected text(s) supposed not to equal the actual texts
+       *
+       * If `text` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
           this._node.all, (element, expected) => element.wait.not.hasText(expected, opts), text
         )
       },
+      /**
+       * Waits for all PageElements managed by PageElementList not to have any text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for 
+       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the 
+       * `interval` used to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1764,16 +2063,75 @@ export class PageElementListWait<
           this._node.all, (element) => element.wait.not.hasAnyText(otherOpts), filterMask, true
         )
       },
+      /**
+       * Waits for the actual texts of all PageElements managed by PageElementList not to contain the expected text(s).
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param text the expected text(s) supposed not to be contained in the actual texts
+       *
+       * If `text` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       containsText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
           this._node.all, (element, expected) => element.wait.not.containsText(expected, opts), text
         )
       },
+      /**
+       * Waits for the actual direct texts of all PageElements managed by PageElementList not to equal the expected 
+       * direct text(s).
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param directText the expected direct text(s) supposed not to equal the actual direct texts
+       *
+       * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
           this._node.all, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText
         )
       },
+      /**
+       * Waits for all PageElements managed by PageElementList not to have any direct text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function
+       * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the 
+       * `interval` used to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1781,6 +2139,29 @@ export class PageElementListWait<
           this._node.all, (element) => element.wait.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
+      /**
+       * Waits for the actual direct texts of all PageElements managed by PageElementList not to contain the expected 
+       * direct text(s).
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param directText the expected direct text(s) supposed not to be contained in the actual direct texts
+       *
+       * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       containsDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
           this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText
@@ -1812,14 +2193,43 @@ export class PageElementListEventually<
   //   return excludeNot(this._list.currently.first.eventually)
   // }
 
+  /**
+   * Provides an API to check if any PageElement managed by PageElementList eventually has a certain state within a
+   * specific timeout.
+   */
   get any() {
     return this._node.currently.first.eventually as any as PageElementType['eventually']
   }
 
+  /**
+   * Provides an API to check if none of the PageElements managed by PageElementList eventually have a certain state
+   * within a specific timeout.
+   */
   get none(): PageElementType['eventually']['not'] {
     return this._node.currently.first.eventually.not
   }
 
+  /**
+   * Returns true if the result of the comparison between PageElementList's actual length and an expected length using 
+   * the comparison method defined in `comparator` eventually returns true within a specific timeout.
+   *
+   * The following comparison methods are supported:
+   *
+   * - "==" to check if the actual length equals the expected length
+   * - "!=" to check if the actual length does not equal the expected length
+   * - "<" to check if the actual length is less than the expected length
+   * - ">" to check if the actual length is greater than the expected length
+   *
+   * @param length the expected length
+   * @param opts includes a `comparator` which defines the method used to compare the actual and the expected length of
+   * PageElementList, the `timeout` within which the comparison is expected to return true, the `interval` used to
+   * check it and a `reverse` flag that, if set to true, checks for the comparison to return `false` instead of `true`
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasLength( length: number, {
     timeout = this._node.getTimeout(),
     comparator = Workflo.Comparator.equalTo,
@@ -1831,6 +2241,17 @@ export class PageElementListEventually<
     )
   }
 
+  /**
+   * Returns true if PageElementList eventually is empty within a specific timeout.
+   *
+   * @param opts includes the `timeout` within which the condition is expected to be met, the `interval` used to
+   * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   isEmpty({
     timeout = this._node.getTimeout(),
     interval = this._node.getInterval(),
@@ -1839,6 +2260,17 @@ export class PageElementListEventually<
     return this._node.__eventually( () => this._node.wait.isEmpty( { timeout, interval, reverse } ) )
   }
 
+  /**
+   * Returns true if at least one of the PageElements managed by PageElementList eventually exists within a specific
+   * timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
+   * all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   exists(opts: Workflo.ITimeout & {filterMask?: boolean} = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1849,24 +2281,74 @@ export class PageElementListEventually<
     }
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList eventually are visible within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck(this._node.all, element => element.eventually.isVisible(otherOpts), filterMask, true)
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList eventually are enabled within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
     return this._node.eachCheck(this._node.all, element => element.eventually.isEnabled(otherOpts), filterMask, true)
   }
 
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementList eventually equal the expected 
+   * text(s) within a specific timeout.
+   *
+   * @param text the expected text(s) supposed to equal the actual texts
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasText(text: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
       this._node.all, (element, expected) => element.eventually.hasText(expected, opts), text
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList eventually have any text within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
+   * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1875,18 +2357,73 @@ export class PageElementListEventually<
     )
   }
 
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementList eventually contain the expected 
+   * text(s) within a specific timeout.
+   *
+   * @param text the expected text(s) supposed to be contained in the actual texts
+   *
+   * If `text` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   containsText(text: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
       this._node.all, (element, expected) => element.eventually.containsText(expected, opts), text
     )
   }
 
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually equal the 
+   * expected direct text(s) within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directText the expected direct text(s) supposed to equal the actual direct texts
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+   * array elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
       this._node.all, (element, expected) => element.eventually.hasDirectText(expected, opts), directText
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementList eventually have any direct text within a specific
+   * timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for 
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` 
+   * used to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1895,6 +2432,27 @@ export class PageElementListEventually<
     )
   }
 
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually contain the 
+   * expected direct text(s) within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directText the expected direct text(s) supposed to be contained in the actual direct texts
+   *
+   * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+   * PageElements.
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
+   * elements are compared to the array of actual values of all PageElements.
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `interval` is specified, PageElementList's default interval is used.
+   *
+   * @returns this (an instance of PageElementList)
+   */
   containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
       this._node.all, (element, expected) => element.eventually.containsDirectText(expected, opts), directText
@@ -1903,12 +2461,55 @@ export class PageElementListEventually<
 
   get not() {
     return {
-      isEmpty: (opts: Workflo.ITimeoutInterval = {}) => this.isEmpty({
-        timeout: opts.timeout, interval: opts.interval, reverse: true
-      }),
+      /**
+       * Returns true if the result of the comparison between PageElementList's actual length and an expected length using 
+       * the comparison method defined in `comparator` eventually returns false within a specific timeout.
+       *
+       * The following comparison methods are supported:
+       *
+       * - "==" to check if the actual length equals the expected length
+       * - "!=" to check if the actual length does not equal the expected length
+       * - "<" to check if the actual length is less than the expected length
+       * - ">" to check if the actual length is greater than the expected length
+       *
+       * @param length the not-expected length
+       * @param opts includes a `comparator` which defines the method used to compare the actual and the expected length 
+       * of PageElementList, the `timeout` within which the comparison is expected to return false and the `interval` 
+       * used to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasLength: (length: number, opts: IPageElementListWaitLengthParams = {}) => this.hasLength(length, {
         timeout: opts.timeout, interval: opts.interval, reverse: true
       }),
+      /**
+       * Returns true if PageElementList eventually is not empty within a specific timeout.
+       *
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
+       * check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
+      isEmpty: (opts: Workflo.ITimeoutInterval = {}) => this.isEmpty({
+        timeout: opts.timeout, interval: opts.interval, reverse: true
+      }),
+      /**
+       * Returns true if none of the PageElements managed by PageElementList eventually exist within a specific
+       * timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
+       * all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       exists: (opts: Workflo.ITimeout & {filterMask?: boolean} = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1918,6 +2519,17 @@ export class PageElementListEventually<
           return this.isEmpty(otherOpts)
         }
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList eventually are not visible within a specific 
+       * timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for 
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1925,6 +2537,17 @@ export class PageElementListEventually<
           this._node.all, element => element.eventually.not.isVisible(otherOpts), filterMask, true
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList eventually are not enabled within a specific
+       * timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
+       * or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1932,11 +2555,42 @@ export class PageElementListEventually<
           this._node.all, element => element.eventually.not.isEnabled(otherOpts), filterMask, true
         )
       },
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementList eventually do not equal the 
+       * expected text(s) within a specific timeout.
+       *
+       * @param text the expected text(s) supposed not to equal the actual texts
+       *
+       * If `text` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
           this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList eventually do not have any text within a specific 
+       * timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
+       * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1944,16 +2598,71 @@ export class PageElementListEventually<
           this._node.all, (element) => element.eventually.not.hasAnyText(otherOpts), filterMask, true
         )
       },
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementList eventually do not contain the 
+       * expected text(s) within a specific timeout.
+       *
+       * @param text the expected text(s) supposed not to be contained in the actual texts
+       *
+       * If `text` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       containsText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
           this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text
         )
       },
+      /**
+      * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually do not equal 
+      * the expected direct text(s) within a specific timeout.
+      *
+      * A direct text is a text that resides on the level directly below the selected HTML element.
+      * It does not include any text of the HTML element's nested children HTML elements.
+      *
+      * @param directText the expected direct text(s) supposed not to equal the actual direct texts
+      *
+      * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+      * PageElements.
+      * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
+      * elements are compared to the array of actual values of all PageElements.
+      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+      * to check it
+      *
+      * If no `timeout` is specified, PageElementList's default timeout is used.
+      * If no `interval` is specified, PageElementList's default interval is used.
+      *
+      * @returns this (an instance of PageElementList)
+      */
       hasDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
           this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementList eventually do not have any direct text within a 
+       * specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for 
+       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` 
+       * used to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1961,6 +2670,27 @@ export class PageElementListEventually<
           this._node.all, (element) => element.eventually.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
+      /**
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually do not 
+       * contain the expected direct text(s) within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param directText the expected direct text(s) supposed not to be contained in the actual direct texts
+       *
+       * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+       * PageElements.
+       * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
+       * elements are compared to the array of actual values of all PageElements.
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `interval` is specified, PageElementList's default interval is used.
+       *
+       * @returns this (an instance of PageElementList)
+       */
       containsDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
           this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText

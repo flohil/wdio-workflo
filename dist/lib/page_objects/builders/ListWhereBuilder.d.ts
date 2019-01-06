@@ -4,7 +4,7 @@ import { PageElementStore, CloneFunc } from '../stores';
 /**
  * Defines the opts parameter passed to the constructor of ListWhereBuilder.
  */
-export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOpts, ListType extends PageElementList<Store, PageElementType, PageElementOpts>> {
     /**
      * An instance of PageElementStore used by PageNodes which are returned by ListWhereBuilder.
      */
@@ -16,11 +16,11 @@ export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementTy
      * @param selector the selector of a created PageElement
      * @param opts passed to the constructor of the created PageElements
      */
-    elementStoreFunc: (selector: string, opts: PageElementOptions) => PageElementType;
+    elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType;
     /**
      * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageElementStore.
      */
-    elementOptions: PageElementOptions;
+    elementOpts: PageElementOpts;
     /**
      * Creates a copy of ListWhereBuilder's PageElementList which manages a subset of the original list's PageElements.
      *
@@ -41,11 +41,11 @@ export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementTy
  * @template Store type of the instance of PageElementStore that is used by PageNodes returned by ListWhereBuilder
  * @template PageElementType type of instances of PageElements returned by ListWhereBuilder's retrieval functions
  * (getXXX)
- * @template PageElementOptions type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
+ * @template PageElementOpts type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
  * retrieval functions
  * @template ListType type of the PageElementList on which ListWhereBuilder operates
  */
-export declare class ListWhereBuilder<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOptions, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> {
+export declare class ListWhereBuilder<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOpts, ListType extends PageElementList<Store, PageElementType, PageElementOpts>> {
     /**
      * Stores the root selector for all XPath modifications performed with ListWhereBuilder.
      */
@@ -61,11 +61,11 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
      * @param selector the selector of a created PageElement
      * @param opts passed to the constructor of the created PageElements
      */
-    protected _elementStoreFunc: (selector: string, opts: PageElementOptions) => PageElementType;
+    protected _elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType;
     /**
      * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageElementStore.
      */
-    protected _elementOptions: PageElementOptions;
+    protected _elementOpts: PageElementOpts;
     /**
      * Creates a copy of ListWhereBuilder's PageElementList which manages a subset of the original list's PageElements.
      *
@@ -90,7 +90,7 @@ export declare class ListWhereBuilder<Store extends PageElementStore, PageElemen
      * ListWhereBuilder. It is appended to the selector of the PageElementList handled by ListWhereBuilder.
      * @param opts opts parameter passed to the constructor of ListWhereBuilder
      */
-    constructor(selector: string, opts: IWhereBuilderOpts<Store, PageElementType, PageElementOptions, ListType>);
+    constructor(selector: string, opts: IWhereBuilderOpts<Store, PageElementType, PageElementOpts, ListType>);
     /**
      * Resets the currently processed XPath expression to the root XPath selector passed to ListWhereBuilder's
      * constructor.
