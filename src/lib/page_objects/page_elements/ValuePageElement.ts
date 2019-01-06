@@ -16,8 +16,6 @@ export interface IValuePageElementOpts<
   Store extends PageElementStore
 > extends IPageElementOpts<Store> {}
 
- // intial wait condition also supports 'value'
-
 /**
  * ValuePageElement extends PageElement with the possibility to set, retrieve and check a PageElement's value.
  *
@@ -72,6 +70,8 @@ export abstract class ValuePageElement<
    * 'hidden', not outside of the viewport...)
    * - 'text' to wait for an element to have any text
    * - 'value' to wait for an element to have any value
+   *
+   * @returns this (an instance of ValuePageElement)
    */
   initialWait() {
     if (this._waitType === Workflo.WaitType.value) {

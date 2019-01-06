@@ -49,6 +49,8 @@ export declare abstract class ValuePageElement<Store extends PageElementStore, V
      * 'hidden', not outside of the viewport...)
      * - 'text' to wait for an element to have any text
      * - 'value' to wait for an element to have any value
+     *
+     * @returns this (an instance of ValuePageElement)
      */
     initialWait(): this;
     /**

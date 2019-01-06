@@ -241,6 +241,8 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * - 'visible' to wait for at least one of PageElementList's managed elements to become visible in the viewport
      * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
      * - 'text' to wait for at least one of PageElementList's managed elements to have any text
+     *
+     * @returns this (an instance of PageElementList)
      */
     initialWait(): void;
     /**
@@ -1175,6 +1177,9 @@ export declare class PageElementListWait<Store extends PageElementStore, PageEle
      * @returns this (an instance of PageElementList)
      */
     containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): ListType;
+    /**
+     * returns the negated variants of PageElementListWait's state check functions
+     */
     readonly not: {
         /**
          * Waits for the result of the comparison between PageElementList's actual length and an expected length using the
@@ -1579,6 +1584,9 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      * @returns this (an instance of PageElementList)
      */
     containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
+    /**
+     * returns the negated variants of PageElementListEventually's state check functions
+     */
     readonly not: {
         /**
          * Returns true if the result of the comparison between PageElementList's actual length and an expected length using

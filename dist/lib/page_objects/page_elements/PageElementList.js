@@ -124,6 +124,8 @@ class PageElementList extends _1.PageNode {
      * - 'visible' to wait for at least one of PageElementList's managed elements to become visible in the viewport
      * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
      * - 'text' to wait for at least one of PageElementList's managed elements to have any text
+     *
+     * @returns this (an instance of PageElementList)
      */
     initialWait() {
         switch (this._waitType) {
@@ -1465,6 +1467,9 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     containsDirectText(directText, opts) {
         return this._node.eachWait(this._node.all, (element, expected) => element.wait.containsDirectText(expected, opts), directText);
     }
+    /**
+     * returns the negated variants of PageElementListWait's state check functions
+     */
     get not() {
         return {
             /**
@@ -1940,6 +1945,9 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     containsDirectText(directText, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsDirectText(expected, opts), directText);
     }
+    /**
+     * returns the negated variants of PageElementListEventually's state check functions
+     */
     get not() {
         return {
             /**

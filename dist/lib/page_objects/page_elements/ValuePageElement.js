@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const PageElement_1 = require("./PageElement");
-// intial wait condition also supports 'value'
 /**
  * ValuePageElement extends PageElement with the possibility to set, retrieve and check a PageElement's value.
  *
@@ -38,6 +37,8 @@ class ValuePageElement extends PageElement_1.PageElement {
      * 'hidden', not outside of the viewport...)
      * - 'text' to wait for an element to have any text
      * - 'value' to wait for an element to have any value
+     *
+     * @returns this (an instance of ValuePageElement)
      */
     initialWait() {
         if (this._waitType === "value" /* value */) {

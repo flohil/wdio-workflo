@@ -159,6 +159,8 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
      * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
      * 'hidden', not outside of the viewport...)
      * - 'text' to wait for an element to have any text
+     *
+     * @returns this (an instance of PageElement)
      */
     initialWait(): this;
     /**

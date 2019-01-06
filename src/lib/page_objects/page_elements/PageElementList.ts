@@ -324,6 +324,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * - 'visible' to wait for at least one of PageElementList's managed elements to become visible in the viewport
    * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
    * - 'text' to wait for at least one of PageElementList's managed elements to have any text
+   *
+   * @returns this (an instance of PageElementList)
    */
   initialWait() {
     switch(this._waitType) {
@@ -1917,6 +1919,9 @@ export class PageElementListWait<
     )
   }
 
+  /**
+   * returns the negated variants of PageElementListWait's state check functions
+   */
   get not() {
     return {
       /**
@@ -2459,6 +2464,9 @@ export class PageElementListEventually<
     )
   }
 
+  /**
+   * returns the negated variants of PageElementListEventually's state check functions
+   */
   get not() {
     return {
       /**
