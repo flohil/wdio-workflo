@@ -3593,8 +3593,9 @@ declare global {
   function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
 
   /**
-   * A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
-   * It also contains acceptance criteria that validate the state following a state change.
+   * A Story describes functional requirements of the tested application as a series of application states and state
+   * changes triggered by a user or a system. It contains acceptance criteria that validate the state following a state
+   * change to check if the functional requirements are met.
    *
    * Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.
    *
@@ -3615,8 +3616,9 @@ declare global {
    * If one or more Stories in a Feature are marked as "fStory",
    * the test runner will execute only these Stories and ignore all other Stories defined in the same Feature.
    *
-   * A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
-   * It also contains acceptance criteria that validate the state following a state change.
+   * A Story describes functional requirements of the tested application as a series of application states and state
+   * changes triggered by a user or a system. It contains acceptance criteria that validate the state following a state
+   * change to check if the functional requirements are met.
    *
    * Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.
    *
@@ -3636,8 +3638,9 @@ declare global {
   /**
    * All Stories marked as "xStory" will not be executed by the test runner.
    *
-   * A Story in wdio-workflo represents a series of application states and state changes triggered by a user or a system.
-   * It also contains acceptance criteria that validate the state following a state change.
+   * A Story describes functional requirements of the tested application as a series of application states and state
+   * changes triggered by a user or a system. It contains acceptance criteria that validate the state following a state
+   * change to check if the functional requirements are met.
    *
    * Wdio-workflo evaluates all acceptance criteria defined within a Story and sets their result status accordingly.
    *
@@ -3685,8 +3688,8 @@ declare global {
   function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen
 
   /**
-   * Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
-   * state.
+   * Then represents an acceptance criteria that validates an application state to check if a functional requirement
+   * was fulfilled.
    *
    * An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story's id and its
    * own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
@@ -3710,8 +3713,8 @@ declare global {
    * If one or more acceptance criteria in a Story are marked as "fThen",
    * the test runner will execute only these acceptance criteria and ignore all others defined in the same Story.
    *
-   * Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
-   * state.
+   * Then represents an acceptance criteria that validates an application state to check if a functional requirement
+   * was fulfilled.
    *
    * An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story's id and its
    * own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria
@@ -3734,8 +3737,8 @@ declare global {
   /**
    * All acceptance criteria marked as "xThen" will not be executed by the test runner.
    *
-   * Then represents an acceptance criteria that is used to validate the correctness and completeness of an application
-   * state.
+   * Then represents an acceptance criteria that validates an application state to check if a functional requirement
+   * was fulfilled.
    *
    * An acceptance criteria needs to be uniquely identifiable by a combination of its surrounding Story's id and its
    * own id (eg. 2.4.5 [1], 2.4.5 [2], 1.1 [1]). The resulting id can be used to reference an acceptance criteria

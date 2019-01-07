@@ -90,8 +90,8 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
 // GETTER FUNCTIONS
 
   /**
-   * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing
-   * ValuePageElementList's initial waiting condition.
+   * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing the 
+   * initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
    * ValuePageElements. The results of skipped function invocations are not included in the total results array.
@@ -101,8 +101,8 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
   }
 
   /**
-   * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementList as an array after performing
-   * ValuePageElementList's initial waiting condition.
+   * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementList as an array after performing 
+   * the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * A ValuePageElement's 'hasValue' status is set to true if its actual value equals the expected value.
    *
@@ -120,8 +120,8 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
   }
 
   /**
-   * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementList as an array after
-   * performing ValuePageElementList's initial waiting condition.
+   * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementList as an array after 
+   * performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any value.
    *
@@ -133,8 +133,8 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
   }
 
   /**
-   * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementList as an array after
-   * performing ValuePageElementList's initial waiting condition.
+   * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementList as an array after 
+   * performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * A ValuePageElement's 'containsValue' status is set to true if its actual value contains the expected value.
    *
@@ -155,7 +155,7 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
 
   /**
    * This function sets the passed value(s) to all ValuePageElements managed by ValuePageElementList
-   * after performing ValuePageElementList's initial waiting condition.
+   * after performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * If values is an array, the number of list elements must match the number of passed values.
    * The values will be assigned in the order that the list elements were retrieved from the DOM.
@@ -254,8 +254,8 @@ class ValuePageElementListCurrently<
   // CHECK STATE
 
   /**
-   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList equal the expected
-   * value(s).
+   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently equal the 
+   * expected value(s).
    *
    * @param value the expected value(s) supposed to equal the actual values
    *
@@ -271,7 +271,7 @@ class ValuePageElementListCurrently<
   }
 
   /**
-   * Returns true if all ValuePageElements managed by ValuePageElementList have any value.
+   * Returns true if all ValuePageElements managed by ValuePageElementList currently have any value.
    *
    * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
    * ValuePageElements
@@ -281,8 +281,8 @@ class ValuePageElementListCurrently<
   }
 
   /**
-   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList contain the expected
-   * value(s).
+   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently contain the 
+   * expected value(s).
    *
    * @param value the expected value(s) supposed to be contained in the actual values
    *
@@ -303,8 +303,8 @@ class ValuePageElementListCurrently<
   get not() {
     return {...super.not,
       /**
-       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList do not equal the
-       * expected value(s).
+       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not 
+       * equal the expected value(s).
        *
        * @param value the expected value(s) supposed not to equal the actual values
        *
@@ -319,7 +319,7 @@ class ValuePageElementListCurrently<
         )
       },
       /**
-       * Returns true if all ValuePageElements managed by ValuePageElementList do not have any value.
+       * Returns true if all ValuePageElements managed by ValuePageElementList currently do not have any value.
        *
        * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
        * ValuePageElements
@@ -328,8 +328,8 @@ class ValuePageElementListCurrently<
         return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue(), filterMask, true)
       },
       /**
-       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList do not contain the
-       * expected value(s).
+       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not 
+       * contain the expected value(s).
        *
        * @param value the expected value(s) supposed not to be contained in the actual values
        *

@@ -128,7 +128,11 @@ export interface IPageElementListOpts<
 }
 
 /**
- * PageElementList provides a way to manage multiple PageElements which all have the same type and selector.
+ * A PageElementList provides a way to manage multiple related "dynamic" PageElements which all have the same type and
+ * the same "base" selector.
+ *
+ * Typically, the PageElements managed by PageElementList are not known in advance and often change (eg. the entries of
+ * a news feed). In order to access certain PageElements, they therefore need to be dynamically identified at runtime.
  *
  * By default, PageElements mapped by PageElementList can only be accessed via their index of occurrence in the DOM
  * using the following accessor methods:
@@ -172,7 +176,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    */
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
   /**
-   * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
+   * the options passed to `_elementStoreFunc` to configure a managed  PageElement instance
    */
   protected _elementOpts: PageElementOptions
   /**
@@ -550,8 +554,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the texts of all PageElements managed by PageElementList as an array after performing PageElementList's
-   * initial waiting condition.
+   * Returns the texts of all PageElements managed by PageElementList as an array after performing the initial
+   * waiting condition of PageElementList and each managed PageElement.
    *
    * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
    * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -561,8 +565,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the direct texts of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the direct texts of all PageElements managed by PageElementList as an array after performing the initial
+   * waiting condition of PageElementList and each managed PageElement.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
@@ -575,8 +579,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing the 
+   * initial waiting condition of PageElementList and each managed PageElement.
    *
    * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
    * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -586,8 +590,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing the 
+   * initial waiting condition of PageElementList and each managed PageElement.
    *
    * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
    *
@@ -603,8 +607,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing the 
+   * initial waiting condition of PageElementList and each managed PageElement.
    *
    * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
    *
@@ -616,8 +620,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing the 
+   * initial waiting condition of PageElementList and each managed PageElement.
    *
    * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
    *
@@ -633,10 +637,13 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing the 
+   * initial waiting condition of PageElementList and each managed PageElement.
    *
    * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text used in the comparisons which set the 'hasDirectText' status.
    *
@@ -652,10 +659,13 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array after performing 
+   * the initial waiting condition of PageElementList and each managed PageElement.
    *
    * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
    * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -665,11 +675,14 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   }
 
   /**
-   * Returns the 'containsDirectText' status of all PageElements managed by PageElementList as an array after performing
-   * PageElementList's initial waiting condition.
+   * Returns the 'containsDirectText' status of all PageElements managed by PageElementList as an array after performing 
+   * the initial waiting condition of PageElementList and each managed PageElement.
    *
    * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
    * text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the expected direct text used in the comparisons which set the 'containsDirectText' status.
    *
@@ -866,7 +879,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * If `expected` is an array of values, its length must match the length of `elements` and the values of its
    * array elements are compared to the array of actual values.
    * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
-   * invocation of the state check function for some or all PageElements
+   * invocation of the wait function for some or all PageElements
    * @returns this (an instance of PageElementList)
    */
   eachWait<T>(
@@ -947,7 +960,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    *
    * If `values` is a single value, all PageElements in the `elements` array are set to this value.
    * If `values` is an array of values, its length must match the length of `elements` and all PageElements
-   * in the `elements` array are set to the values of the `values` array in the order that the PageElements were 
+   * in the `elements` array are set to the values of the `values` array in the order that the PageElements were
    * retrieved from the DOM.
    *
    * @returns this (an instance of PageElementList)
@@ -1296,8 +1309,8 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns the result of the comparison between PageElementList's actual length and an expected length using the
-   * comparison method defined in `comparator`.
+   * Returns the current result of the comparison between PageElementList's actual length and an expected length using 
+   * the comparison method defined in `comparator`.
    *
    * The following comparison methods are supported:
    *
@@ -1322,7 +1335,7 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns true if at least one of the PageElements managed by PageElementList exists.
+   * Returns true if at least one of the PageElements managed by PageElementList currently exists.
    *
    * @param filterMask if set to false, the existence check is skipped and `true` is returned
    */
@@ -1355,7 +1368,7 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns true if the actual texts of all PageElements managed by PageElementList equal the expected text(s).
+   * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected text(s).
    *
    * @param text the expected text(s) supposed to equal the actual texts
    *
@@ -1369,7 +1382,7 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns true if all PageElements managed by PageElementList have any text.
+   * Returns true if all PageElements managed by PageElementList currently have any text.
    *
    * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
    * PageElements
@@ -1379,7 +1392,8 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns true if the actual texts of all PageElements managed by PageElementList contain the expected text(s).
+   * Returns true if the actual texts of all PageElements managed by PageElementList currently contain the expected 
+   * text(s).
    *
    * @param text the expected text(s) supposed to be contained in the actual texts
    *
@@ -1393,8 +1407,8 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns true if the actual direct texts of all PageElements managed by PageElementList equal the expected direct
-   * text(s).
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList currently equal the expected 
+   * direct text(s).
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
@@ -1413,7 +1427,7 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns true if all PageElements managed by PageElementList have any direct text.
+   * Returns true if all PageElements managed by PageElementList currently have any direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
@@ -1426,8 +1440,8 @@ export class PageElementListCurrently<
   }
 
   /**
-   * Returns true if the actual direct texts of all PageElements managed by PageElementList contain the expected direct
-   * text(s).
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList currently contain the 
+   * expected direct text(s).
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
@@ -1455,8 +1469,8 @@ export class PageElementListCurrently<
        */
       isEmpty: () => !this.isEmpty(),
       /**
-       * Returns the negated result of the comparison between PageElementList's actual length and an expected length
-       * using the comparison method defined in `comparator`.
+       * Returns the current negated result of the comparison between PageElementList's actual length and an expected 
+       * length using the comparison method defined in `comparator`.
        *
        * The following comparison methods are supported:
        *
@@ -1472,7 +1486,7 @@ export class PageElementListCurrently<
         length: number, comparator: Workflo.Comparator = Workflo.Comparator.equalTo
       ) => !this.hasLength(length, comparator),
       /**
-       * Returns true if none of the PageElements managed by PageElementList exist.
+       * Returns true if none of the PageElements managed by PageElementList currently exist.
        *
        * @param filterMask if set to false, the existence check is skipped and `true` is returned
        */
@@ -1502,7 +1516,8 @@ export class PageElementListCurrently<
         return this._node.eachCheck(this.all, element => element.currently.not.isEnabled(), filterMask, true)
       },
       /**
-       * Returns true if the actual texts of all PageElements managed by PageElementList do not equal the expected text(s).
+       * Returns true if the actual texts of all PageElements managed by PageElementList currently do not equal the
+       * expected text(s).
        *
        * @param text the expected text(s) supposed not to equal the actual texts
        *
@@ -1515,7 +1530,7 @@ export class PageElementListCurrently<
         return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text)
       },
       /**
-       * Returns true if all PageElements managed by PageElementList do not have any text.
+       * Returns true if all PageElements managed by PageElementList currently do not have any text.
        *
        * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
        * PageElements
@@ -1524,8 +1539,8 @@ export class PageElementListCurrently<
         return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText(), filterMask, true)
       },
       /**
-       * Returns true if the actual texts of all PageElements managed by PageElementList do not contain the expected
-       * text(s).
+       * Returns true if the actual texts of all PageElements managed by PageElementList currently do not contain the 
+       * expected text(s).
        *
        * @param text the expected text(s) supposed not to be contained in the actual texts
        *
@@ -1538,8 +1553,8 @@ export class PageElementListCurrently<
         return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text)
       },
       /**
-       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not equal the
-       * expected direct text(s).
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not equal
+       * the expected direct text(s).
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
        * It does not include any text of the HTML element's nested children HTML elements.
@@ -1557,7 +1572,7 @@ export class PageElementListCurrently<
         )
       },
       /**
-       * Returns true if all PageElements managed by PageElementList not hot have any direct text.
+       * Returns true if all PageElements managed by PageElementList currently do not have any direct text.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
        * It does not include any text of the HTML element's nested children HTML elements.
@@ -1569,8 +1584,8 @@ export class PageElementListCurrently<
         return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true)
       },
       /**
-       * Returns true if the actual direct texts of all PageElements managed by PageElementList do not contain the
-       * expected direct text(s).
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not contain 
+       * the expected direct text(s).
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
        * It does not include any text of the HTML element's nested children HTML elements.
@@ -1875,8 +1890,8 @@ export class PageElementListWait<
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
    *
-   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for 
-   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` 
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
    * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -1893,7 +1908,7 @@ export class PageElementListWait<
   }
 
   /**
-   * Waits for the actual direct texts of all PageElements managed by PageElementList to contain the expected direct 
+   * Waits for the actual direct texts of all PageElements managed by PageElementList to contain the expected direct
    * text(s).
    *
    * Throws an error if the condition is not met within a specific timeout.
@@ -1941,7 +1956,7 @@ export class PageElementListWait<
        *
        * @param length the not-expected length
        * @param opts includes a `comparator` which defines the method used to compare the actual and the expected length
-       * of PageElementList, the `timeout` within which the comparison is expected to return false and the `interval` 
+       * of PageElementList, the `timeout` within which the comparison is expected to return false and the `interval`
        * used to check it
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -1996,7 +2011,7 @@ export class PageElementListWait<
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for 
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2013,7 +2028,7 @@ export class PageElementListWait<
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for 
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2054,8 +2069,8 @@ export class PageElementListWait<
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for 
-       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the 
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for
+       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2095,7 +2110,7 @@ export class PageElementListWait<
         )
       },
       /**
-       * Waits for the actual direct texts of all PageElements managed by PageElementList not to equal the expected 
+       * Waits for the actual direct texts of all PageElements managed by PageElementList not to equal the expected
        * direct text(s).
        *
        * Throws an error if the condition is not met within a specific timeout.
@@ -2131,7 +2146,7 @@ export class PageElementListWait<
        * It does not include any text of the HTML element's nested children HTML elements.
        *
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function
-       * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the 
+       * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2147,7 +2162,7 @@ export class PageElementListWait<
         )
       },
       /**
-       * Waits for the actual direct texts of all PageElements managed by PageElementList not to contain the expected 
+       * Waits for the actual direct texts of all PageElements managed by PageElementList not to contain the expected
        * direct text(s).
        *
        * Throws an error if the condition is not met within a specific timeout.
@@ -2217,7 +2232,7 @@ export class PageElementListEventually<
   }
 
   /**
-   * Returns true if the result of the comparison between PageElementList's actual length and an expected length using 
+   * Returns true if the result of the comparison between PageElementList's actual length and an expected length using
    * the comparison method defined in `comparator` eventually returns true within a specific timeout.
    *
    * The following comparison methods are supported:
@@ -2321,7 +2336,7 @@ export class PageElementListEventually<
   }
 
   /**
-   * Returns true if the actual texts of all PageElements managed by PageElementList eventually equal the expected 
+   * Returns true if the actual texts of all PageElements managed by PageElementList eventually equal the expected
    * text(s) within a specific timeout.
    *
    * @param text the expected text(s) supposed to equal the actual texts
@@ -2365,7 +2380,7 @@ export class PageElementListEventually<
   }
 
   /**
-   * Returns true if the actual texts of all PageElements managed by PageElementList eventually contain the expected 
+   * Returns true if the actual texts of all PageElements managed by PageElementList eventually contain the expected
    * text(s) within a specific timeout.
    *
    * @param text the expected text(s) supposed to be contained in the actual texts
@@ -2389,7 +2404,7 @@ export class PageElementListEventually<
   }
 
   /**
-   * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually equal the 
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually equal the
    * expected direct text(s) within a specific timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -2399,7 +2414,7 @@ export class PageElementListEventually<
    *
    * If `directText` is a single value, this value is compared to each element in the array of actual values of all
    * PageElements.
-   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its 
+   * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
    * array elements are compared to the array of actual values of all PageElements.
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
@@ -2422,8 +2437,8 @@ export class PageElementListEventually<
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
    *
-   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for 
-   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` 
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
    * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2440,7 +2455,7 @@ export class PageElementListEventually<
   }
 
   /**
-   * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually contain the 
+   * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually contain the
    * expected direct text(s) within a specific timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -2472,7 +2487,7 @@ export class PageElementListEventually<
   get not() {
     return {
       /**
-       * Returns true if the result of the comparison between PageElementList's actual length and an expected length using 
+       * Returns true if the result of the comparison between PageElementList's actual length and an expected length using
        * the comparison method defined in `comparator` eventually returns false within a specific timeout.
        *
        * The following comparison methods are supported:
@@ -2483,8 +2498,8 @@ export class PageElementListEventually<
        * - ">" to check if the actual length is greater than the expected length
        *
        * @param length the not-expected length
-       * @param opts includes a `comparator` which defines the method used to compare the actual and the expected length 
-       * of PageElementList, the `timeout` within which the comparison is expected to return false and the `interval` 
+       * @param opts includes a `comparator` which defines the method used to compare the actual and the expected length
+       * of PageElementList, the `timeout` within which the comparison is expected to return false and the `interval`
        * used to check it
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2530,10 +2545,10 @@ export class PageElementListEventually<
         }
       },
       /**
-       * Returns true if all PageElements managed by PageElementList eventually are not visible within a specific 
+       * Returns true if all PageElements managed by PageElementList eventually are not visible within a specific
        * timeout.
        *
-       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for 
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2566,7 +2581,7 @@ export class PageElementListEventually<
         )
       },
       /**
-       * Returns true if the actual texts of all PageElements managed by PageElementList eventually do not equal the 
+       * Returns true if the actual texts of all PageElements managed by PageElementList eventually do not equal the
        * expected text(s) within a specific timeout.
        *
        * @param text the expected text(s) supposed not to equal the actual texts
@@ -2589,7 +2604,7 @@ export class PageElementListEventually<
         )
       },
       /**
-       * Returns true if all PageElements managed by PageElementList eventually do not have any text within a specific 
+       * Returns true if all PageElements managed by PageElementList eventually do not have any text within a specific
        * timeout.
        *
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
@@ -2609,7 +2624,7 @@ export class PageElementListEventually<
         )
       },
       /**
-       * Returns true if the actual texts of all PageElements managed by PageElementList eventually do not contain the 
+       * Returns true if the actual texts of all PageElements managed by PageElementList eventually do not contain the
        * expected text(s) within a specific timeout.
        *
        * @param text the expected text(s) supposed not to be contained in the actual texts
@@ -2632,7 +2647,7 @@ export class PageElementListEventually<
         )
       },
       /**
-      * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually do not equal 
+      * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually do not equal
       * the expected direct text(s) within a specific timeout.
       *
       * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -2658,14 +2673,14 @@ export class PageElementListEventually<
         )
       },
       /**
-       * Returns true if all PageElements managed by PageElementList eventually do not have any direct text within a 
+       * Returns true if all PageElements managed by PageElementList eventually do not have any direct text within a
        * specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
        * It does not include any text of the HTML element's nested children HTML elements.
        *
-       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for 
-       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` 
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
        * used to check it
        *
        * If no `timeout` is specified, PageElementList's default timeout is used.
@@ -2681,7 +2696,7 @@ export class PageElementListEventually<
         )
       },
       /**
-       * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually do not 
+       * Returns true if the actual direct texts of all PageElements managed by PageElementList eventually do not
        * contain the expected direct text(s) within a specific timeout.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.

@@ -17,7 +17,11 @@ const util_2 = require("util");
 const PageNode_1 = require("./PageNode");
 const helpers_1 = require("../../helpers");
 /**
- * PageElementList provides a way to manage multiple PageElements which all have the same type and selector.
+ * A PageElementList provides a way to manage multiple related "dynamic" PageElements which all have the same type and
+ * the same "base" selector.
+ *
+ * Typically, the PageElements managed by PageElementList are not known in advance and often change (eg. the entries of
+ * a news feed). In order to access certain PageElements, they therefore need to be dynamically identified at runtime.
  *
  * By default, PageElements mapped by PageElementList can only be accessed via their index of occurrence in the DOM
  * using the following accessor methods:

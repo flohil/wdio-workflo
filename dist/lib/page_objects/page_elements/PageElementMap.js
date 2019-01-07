@@ -12,6 +12,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 const helpers_1 = require("../../helpers");
 // holds several PageElement instances of the same type
+/**
+ * A PageElementMap manages multiple related "static" PageElements which all have the same type and the same "base"
+ * selector.
+ *
+ * The PageElements managed by PageElementMap are always known in advance and do not change (eg. navigation menu
+ * entries). They can therefore be statically identified when PageElementMap is initially created by constraining
+ * the map's "base" XPath selector using XPath modification functions.
+ *
+ * This initial identification process makes use of a `mappingObject` and a `mappingFunc` which are both defined in
+ * PageElement's `identifier` object:
+ *
+ * - For each property of `mappingObject`, `mappingFunc` is invoked with the map's "base" selector as the first and the
+ * value of the currently processed property as the second parameter.
+ * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
+ * of the currently processed properties as parameters.
+ * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageElementStore.
+ * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
+ *
+ * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
+ */
 class PageElementMap extends _1.PageNode {
     constructor(_selector, _a) {
         var { identifier, elementStoreFunc, elementOpts: elementOptions } = _a, superOpts = __rest(_a, ["identifier", "elementStoreFunc", "elementOpts"]);

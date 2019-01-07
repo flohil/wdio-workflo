@@ -7,29 +7,110 @@ import { isNullOrUndefined } from '../../helpers';
 // https://github.com/Microsoft/TypeScript/issues/14930
 
 /**
- * Provides caller with selector of the map and the value of mappingObject's current property.
- * Theses can be used to build the selector of a map's element generically to identify it.
+ * Describes the `identifier` property of the `opts` parameter passed to PageElementMap's constructor function.
+ *
+ * It provides a `mappingObject` and a `mappingFunc` which are used to constrain the "base" XPath selector of
+ * PageElementMap using XPath modification functions in order to statically identify a PageElementMap's managed
+ * PageElements when the PageElementMap is initially created.
+ *
+ * @template K the key names of `mappingObject`'s properties
  */
 export interface IPageElementMapIdentifier<K extends string> {
+  /**
+   * An object which provides the key names used to access PageElements via PageElementMap's `$` accessor and the
+   * values passed to XPath modification functions in order to constrain the map's "base" XPath selector.
+   */
   mappingObject: Record<K, string>,
-  mappingFunc: ( mapSelector: string, mappingValue: string ) => XPathBuilder | string
+  /**
+   * `mappingFunc` constrains the XPath `baseSelector` of a PageElementMap by invoking XPath modification functions
+   * with a `mappingValue` taken from the property values of `mappingObject`.
+   *
+   * @example
+   * // returns '//nav/a[.="Dashboard"]' for {baseSelector: "//nav/a", mappingValue: "Dashboard"}
+   * ( baseSelector, mappingValue ) => xpath( baseSelector ).text( mappingValue )
+   *
+   * @param baseSelector the XPath "base" selector of a PageElementMap
+   * @param mappingValue a property value taken from the `mappingObject` of IPageElementMapIdentifier
+   *
+   * @returns the constrained XPath expression
+   */
+  mappingFunc: ( baseSelector: string, mappingValue: string ) => XPathBuilder | string
 }
 
-// use disableCache for a "dynamic" list whose structure changes over time
-// alternatively, call refresh() when the times of structure changes are known
+/**
+ * Describes the opts parameter passed to the constructor function of PageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
+ * @template PageElementType type of the PageElements managed by PageElementList
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+ * by PageElementList
+ */
 export interface IPageElementMapOpts<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>
 > extends IPageNodeOpts<Store> {
-  store: Store,
+  /**
+   * This `identifier` provides a `mappingObject` and a `mappingFunc` which are used to constrain the "base"
+   * XPath selector of PageElementMap using XPath modification functions in order to statically identify a
+   * PageElementMap's managed PageElements when the PageElementMap is initially created.
+   */
   identifier: IPageElementMapIdentifier<K>,
+  /**
+   * This function retrieves an instance of a PageElement mapped by PageElementMap from the map's PageElementStore.
+   *
+   * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
+   * @param opts the options used to configure the retrieved PageElement
+   */
   elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
+  /**
+   * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
+   */
   elementOpts: PageElementOptions
 }
 
-// holds several PageElement instances of the same type
+/**
+ * A PageElementMap manages multiple related "static" PageElements which all have the same type and the same "base"
+ * selector.
+ *
+ * The PageElements managed by PageElementMap are always known in advance and do not change (eg. navigation menu
+ * entries). They can therefore be statically identified when PageElementMap is initially created by constraining
+ * the map's "base" XPath selector using XPath modification functions.
+ *
+ * This initial identification process makes use of a `mappingObject` and a `mappingFunc` which are both defined in
+ * PageElement's `identifier` object:
+ *
+ * - For each property of `mappingObject`, `mappingFunc` is invoked with the map's "base" selector as the first and the
+ * value of the currently processed property as the second parameter.
+ * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
+ * of the currently processed properties as parameters.
+ * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageElementStore.
+ * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
+ *
+ * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
+ *
+ * All of PageElementMap's state retrieval (getXXX) and state check functions (hasXXX/hasAnyXXX/containsXXX) return
+ * their result values as a "result map". This is an object whose key names or taken from PageElementMap's `$` accessor
+ * and whose values are the results of the respective function being executed on the  mapped PageElement.
+ *
+ * @example
+ * // baseSelector = "//nav/a[.="Dashboard"]"
+ * // mappingObject = {dashboard: "Dashboard"}
+ * //
+ * // returns '//nav/a[.="Dashboard"]' for this mappingFunc:
+ * ( baseSelector, mappingValue ) => xpath( baseSelector ).text( mappingValue )
+ *
+ * // returns {dashboard: PageElement("//nav/a[.="Dashboard"]")}
+ * this.$
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
+ * @template PageElementType type of the PageElements managed by PageElementList
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+ * by PageElementList
+ */
 export class PageElementMap<
   Store extends PageElementStore,
   K extends string,
@@ -40,19 +121,75 @@ implements Workflo.PageNode.IElementNode<
   Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, boolean>>
 > {
 
+  /**
+   * This function retrieves an instance of a PageElement mapped by PageElementMap from the map's PageElementStore.
+   *
+   * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
+   * @param opts the options used to configure the retrieved PageElement
+   */
   protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
-  protected _elementOptions: PageElementOptions
+  /**
+   * the options passed to `_elementStoreFunc` to configure a managed PageElement instance
+   */
+  protected _elementOpts: PageElementOptions
+  /**
+   * This `_identifier` provides a `mappingObject` and a `mappingFunc` which are used to constrain the "base"
+   * XPath selector of PageElementMap using XPath modification functions in order to statically identify a
+   * PageElementMap's managed PageElements when the PageElementMap is initially created.
+   *
+   * The identified and mapped PageElements can be accessed via PageElementMap's `$` accessor.
+   */
   protected _identifier: IPageElementMapIdentifier<K>
 
+  /**
+   * `_$` provides access to all mapped PageElements of PageElementMap.
+   */
   protected _$: Record<K, PageElementType>
-  protected _lastDiff: Workflo.IDiff
 
   readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
   readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOptions, this>
   readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOptions, this>
 
+  /**
+   * A PageElementMap manages multiple related "static" PageElements which all have the same type and the same "base"
+   * selector.
+   *
+   * The PageElements managed by PageElementMap are always known in advance and do not change (eg. navigation menu
+   * entries). They can therefore be statically identified when PageElementMap is initially created by constraining
+   * the map's "base" XPath selector using XPath modification functions.
+   *
+   * This initial identification process makes use of a `mappingObject` and a `mappingFunc` which are both defined in
+   * PageElement's `identifier` object:
+   *
+   * - For each property of `mappingObject`, `mappingFunc` is invoked with the map's "base" selector as the first and the
+   * value of the currently processed property as the second parameter.
+   * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
+   * of the currently processed properties as parameters.
+   * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageElementStore.
+   * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
+   *
+   * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
+   *
+   * All of PageElementMap's state retrieval (getXXX) and state check functions (hasXXX/hasAnyXXX/containsXXX) return
+   * their result values as a "result map". This is an object whose key names or taken from PageElementMap's `$`
+   * accessor and whose values are the results of the respective function being executed on the  mapped PageElement.
+   *
+   * @example
+   * // baseSelector = "//nav/a[.="Dashboard"]"
+   * // mappingObject = {dashboard: "Dashboard"}
+   * //
+   * // returns '//nav/a[.="Dashboard"]' for this mappingFunc:
+   * ( baseSelector, mappingValue ) => xpath( baseSelector ).text( mappingValue )
+   *
+   * // returns {dashboard: PageElement("//nav/a[.="Dashboard"]")}
+   * this.$
+   *
+   * @param selector the "base" XPath selector of PageElementMap which is constrained to identify the map's managed
+   * PageElements
+   * @opts the options used to configure an instance of PageElementMap
+   */
   constructor(
-    protected _selector: string,
+    selector: string,
     {
       identifier,
       elementStoreFunc,
@@ -60,10 +197,10 @@ implements Workflo.PageNode.IElementNode<
       ...superOpts
     } : IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>
   ) {
-    super(_selector, superOpts)
+    super(selector, superOpts)
 
-    this._selector = _selector
-    this._elementOptions = elementOptions
+    this._selector = selector
+    this._elementOpts = elementOptions
     this._elementStoreFunc = elementStoreFunc
     this._identifier = identifier
 
@@ -72,7 +209,7 @@ implements Workflo.PageNode.IElementNode<
       (value, key) => <PageElementType> this._elementStoreFunc.apply(
         this._store, [
           this._identifier.mappingFunc(this._selector, value),
-          this._elementOptions
+          this._elementOpts
         ]
       )
     )
@@ -82,12 +219,22 @@ implements Workflo.PageNode.IElementNode<
     this.eventually = new PageElementMapEventually(this)
   }
 
+  /**
+   * `$` provides access to all mapped PageElements of PageElementMap.
+   */
   get $() {
     return this._$
   }
 
   /**
-   * In case of language changes, for example, change values of mappingObject while keys must stay the same.
+   * This function changes the `mappingObject` used by PageElementMap's `identifier` object to constrain the "base"
+   * XPath selector of PageElementMap using XPath modification functions in order to statically identify a
+   * PageElementMap's managed PageElements.
+   *
+   * This can be useful if, for example, the links of a navigation menu are represented using a PageElementMap and
+   * the GUI is switched to another language: Now the values used to identify the links by text change while the keys
+   * used to access the links via tha map's `$` property stay the same.
+   *
    * @param mappingObject
    */
   changeMappingObject(mappingObject: Record<K, string>) {
@@ -96,7 +243,7 @@ implements Workflo.PageNode.IElementNode<
       (value, key) => <PageElementType> this._elementStoreFunc.apply(
         this._store, [
           this._identifier.mappingFunc(this._selector, value),
-          this._elementOptions
+          this._elementOpts
         ]
       )
     )
@@ -104,60 +251,159 @@ implements Workflo.PageNode.IElementNode<
 
   // GETTER FUNCTIONS
 
+  /**
+   * Returns the "base" XPath selector that identifies all PageElements managed by PageElementMap.
+   */
   getSelector() {
     return this._selector
   }
 
-   /**
-   * Returns texts of all list elements after performing an initial wait in the order they were retrieved from the DOM.
+  /**
+   * Returns the texts of all PageElements managed by PageElementMap as a "result map" after performing the initial
+   * waiting condition of each PageElement.
    *
-   * If passing filter, only values defined in this mask will be returned.
-   * By default (if no filter is passed), all values will be returned.
-   *
-   * @param filter a filter mask
+   * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this.eachGet(this._$, node => node.getText(), filterMask)
   }
 
+  /**
+   * Returns the direct texts of all PageElements managed by PageElementMap as a "result map" after performing the 
+   * initial waiting condition of each PageElement.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `getDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this.eachGet(this._$, node => node.getDirectText(), filterMask)
   }
 
+  /**
+   * Returns the 'enabled' status of all PageElements managed by PageElementMap as a "result map" after performing the 
+   * initial waiting condition of each PageElement.
+   *
+   * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
     return this.eachGet(this.$, node => node.getIsEnabled(), filterMask)
   }
 
-  getHasText(text: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.hasText(expected), text)
+  /**
+   * Returns the 'hasText' status of all PageElements managed by PageElementMap as a "result map" after performing the 
+   * initial waiting condition of each managed PageElement.
+   *
+   * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
+   *
+   * @param texts the expected texts used in the comparisons which set the 'hasText' status
+   */
+  getHasText(texts: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.hasText(expected), texts)
   }
 
+  /**
+   * Returns the 'hasAnyText' status of all PageElements managed by PageElementMap as a "result map" after performing 
+   * the initial waiting condition of each managed PageElement.
+   *
+   * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this.eachCompare(this.$, (element) => element.currently.hasAnyText(), filterMask, true)
   }
 
-  getContainsText(text: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.containsText(expected), text)
+  /**
+   * Returns the 'containsText' status of all PageElements managed by PageElementMap as a "result map" after performing 
+   * the initial waiting condition of each managed PageElement.
+   *
+   * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
+   *
+   * @param texts the expected texts used in the comparisons which set the 'containsText' status
+   */
+  getContainsText(texts: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.containsText(expected), texts)
   }
 
-  getHasDirectText(directText: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.hasDirectText(expected), directText)
+  /**
+   * Returns the 'hasDirectText' status of all PageElements managed by PageElementMap as a "result map" after performing
+   * the initial waiting condition of each managed PageElement.
+   *
+   * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directTexts the expected direct texts used in the comparisons which set the 'hasDirectText' status
+   */
+  getHasDirectText(directTexts: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.hasDirectText(expected), directTexts)
   }
 
+  /**
+   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a "result map" after performing 
+   * the initial waiting condition of each managed PageElement.
+   *
+   * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this.eachCompare(this.$, (element) => element.currently.hasAnyDirectText(), filterMask, true)
   }
 
-  getContainsDirectText(directText: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.containsDirectText(expected), directText)
+  /**
+   * Returns the 'containsDirectText' status of all PageElements managed by PageElementMap as a "result map" after 
+   * performing the initial waiting condition of each managed PageElement.
+   *
+   * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
+   * text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directTexts the expected direct texts used in the comparisons which set the 'containsDirectText' status
+   */
+  getContainsDirectText(directTexts: Partial<Record<K, string>>) {
+    return this.eachCompare(this.$, (element, expected) => element.currently.containsDirectText(expected), directTexts)
   }
 
   // HELPER FUNCTIONS
 
+  /**
+   * Used to determine if a function of a managed PageElement should be invoked or if its invocation should be skipped
+   * because the PageElement is not included by a filterMask.
+   *
+   * @param filter a filterMask entry that refers to a corresponding managed PageElement
+   */
   protected _includedInFilter(value: any) {
     return (typeof value === 'boolean' && value === true)
   }
 
+  /**
+   * Invokes a state check function for each PageElement in a passed `context` map and returns a map of state
+   * check function results.
+   *
+   * @template T the type of an expected value
+   * @param context a map containing all PageElements for which `checkFunc` should be executed
+   * @param checkFunc a state check function executed for each PageElement in `context`. It is passed a PageElement as
+   * first parameter and an expected value used by the state check condition as an optional second parameter.
+   * @param expected a map of expected values used for the state check conditions
+   * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
+   * invocation of the state check function for some or all PageElements.
+   * The results of skipped function invocations are not included in the total results map.
+   * @returns an map of results of a state check function executed for each PageElement in `context`
+   */
   eachCompare<T>(
     context: Record<K, PageElementType>,
     checkFunc: (element: PageElementType, expected?: T) => boolean,
@@ -187,6 +433,21 @@ implements Workflo.PageNode.IElementNode<
     return result
   }
 
+  /**
+   * Invokes a state check function for each PageElement in a passed `context` map and returns true if the result of
+   * each state check function invocation was true.
+   *
+   * @template T the type of an expected value
+   * @param context a map containing all PageElements for which `checkFunc` should be executed
+   * @param checkFunc a state check function executed for each PageElement in `context`. It is passed a PageElement as
+   * first parameter and an expected value used by the state check condition as an optional second parameter.
+   * @param expected a map of expected values used for the state check conditions
+   * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
+   * invocation of the state check function for some or all PageElements.
+   * The results of skipped function invocations are not included in the results map.
+   * @returns true if the state check functions of all checked PageElements returned true or if no state check functions
+   * were invoked at all
+   */
   eachCheck<T>(
     context: Record<K, PageElementType>,
     checkFunc: (element: PageElementType, expected?: T) => boolean,
@@ -224,14 +485,17 @@ implements Workflo.PageNode.IElementNode<
     return Object.keys(diffs).length === 0
   }
 
-  /**
-   * Helper function to map element content nodes to a value by calling a node interface function on each node.
+   /**
+   * Invokes a state retrieval function for each PageElement in a passed `context` map and returns a map of state
+   * retrieval function results.
    *
-   * If passing filter mask, only values defined in this mask will be returned.
-   * By default (if no filter mask is passed), all values will be returned.
-   *
-   * @param getFunc
-   * @param filterMask a filter mask
+   * @template T the type of a value of the results map
+   * @param context a map containing all PageElements for which `getFunc` should be executed
+   * @param getFunc a state retrieval function executed for each PageElement in `context`. It is passed a PageElement
+   * as first parameter.
+   * @param filterMask can be used to skip the invocation of the state retrieval function for some or all PageElements.
+   * The results of skipped function invocations are not included in the total results map.
+   * @returns an map of results of a state retrieval function executed for each PageElement in `context`
    */
   eachGet<
     ResultType
@@ -255,6 +519,18 @@ implements Workflo.PageNode.IElementNode<
     return result;
   }
 
+  /**
+   * Invokes a wait function for each PageElement in a passed `context` map.
+   *
+   * @template T the type of an expected value
+   * @param context a map containing all PageElements for which `checkFunc` should be executed
+   * @param waitFunc a wait function executed for each PageElement in `context`. It is passed a PageElement as
+   * first parameter and an expected value used by the wait condition as an optional second parameter.
+   * @param expected a map of expected values used for the wait conditions
+   * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
+   * invocation of the wait function for some or all PageElements.
+   * @returns this (an instance of PageElementMap)
+   */
   eachWait<ValueType>(
     context: Record<K, PageElementType>,
     waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType,
@@ -278,6 +554,13 @@ implements Workflo.PageNode.IElementNode<
     return this
   }
 
+  /**
+   * Invokes an action for each of PageElementMap's managed PageElements.
+   *
+   * @param doFunc an action executed for each of PageElementMap's managed PageElements
+   * @param filterMask can be used to skip the execution of an action for some or all PageElements
+   * @returns this (an instance of PageElementMap)
+   */
   eachDo(
     doFunc: (element: PageElementType) => any,
     filterMask?: Workflo.PageNode.MapFilterMask<K>,
@@ -297,15 +580,25 @@ implements Workflo.PageNode.IElementNode<
     return this
   }
 
-  eachSet<ValueType>(
+  /**
+   * Invokes a setter function for each PageElement in a passed `context` map.
+   *
+   * @template T the type of a single setter value
+   * @param context a map containing all PageElements for which `setFunc` should be executed
+   * @param setFunc a setter function executed for each PageElement in `context`. It is passed a PageElement as
+   * first parameter and the value to be set as second parameter.
+   * @param values a map of setter values
+   * @returns this (an instance of PageElementMap)
+   */
+  eachSet<T>(
     context: Record<K, PageElementType>,
-    setFunc: (element: PageElementType, value?: ValueType) => PageElementType,
-    values: Partial<Record<K, ValueType>>,
+    setFunc: (element: PageElementType, value?: T) => PageElementType,
+    values: Partial<Record<K, T>>,
   ): this {
     for (const key in context) {
       if (values) {
         if (typeof values[key] !== 'undefined') {
-          setFunc(context[key], values[key] as any as ValueType)
+          setFunc(context[key], values[key] as any as T)
         }
       } else {
         setFunc(context[key])
@@ -316,6 +609,16 @@ implements Workflo.PageNode.IElementNode<
   }
 }
 
+/**
+ * This class defines all `currently` functions of PageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
+ * @template PageElementType type of the PageElements managed by PageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+ * by PageElementMap
+ * @template MapType type of the PageElementMap for which PageElementMapCurrently defines all `currently` functions
+ */
 export class PageElementMapCurrently<
   Store extends PageElementStore,
   K extends string,
@@ -325,12 +628,10 @@ export class PageElementMapCurrently<
 > extends PageNodeCurrently<Store, MapType> {
 
   /**
-   * Returns texts of all list elements immediatly in the order they were retrieved from the DOM.
+   * Returns the current texts of all PageElements managed by PageElementMap as a "result map".
    *
-   * If passing filter, only values defined in this mask will be returned.
-   * By default (if no filter is passed), all values will be returned.
-   *
-   * @param filter a filter mask
+   * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachGet(
@@ -338,148 +639,356 @@ export class PageElementMapCurrently<
     )
   }
 
+  /**
+   * Returns the current direct texts of all PageElements managed by PageElementMap as a "result map".
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `getDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachGet(
       this._node.$, node => node.currently.getDirectText(), filterMask
     )
   }
 
+  /**
+   * Returns the current 'exists' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * @param filterMask can be used to skip the invocation of the `getExists` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getExists(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
     return this._node.eachGet(this._node.$, node => node.currently.exists(), filterMask)
   }
 
+  /**
+   * Returns the current 'visible' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * @param filterMask can be used to skip the invocation of the `getIsVisible` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getIsVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
     return this._node.eachGet(this._node.$, node => node.currently.isVisible(), filterMask)
   }
 
+  /**
+   * Returns the current 'enabled' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
     return this._node.eachGet(this._node.$, node => node.currently.isEnabled(), filterMask)
   }
 
-  getHasText(text: Partial<Record<K, string>>) {
-    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasText(expected), text)
+  /**
+   * Returns the current 'hasText' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
+   *
+   * @param texts the expected texts used in the comparisons which set the 'hasText' status
+   */
+  getHasText(texts: Partial<Record<K, string>>) {
+    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasText(expected), texts)
   }
 
+  /**
+   * Returns the current 'hasAnyText' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyText(), filterMask, true)
   }
 
-  getContainsText(text: Partial<Record<K, string>>) {
-    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsText(expected), text)
+  /**
+   * Returns the current 'containsText' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
+   *
+   * @param texts the expected texts used in the comparisons which set the 'containsText' status
+   */
+  getContainsText(texts: Partial<Record<K, string>>) {
+    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsText(expected), texts)
   }
 
-  getHasDirectText(directText: Partial<Record<K, string>>) {
+  /**
+   * Returns the current 'hasDirectText' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directTexts the expected direct texts used in the comparisons which set the 'hasDirectText' status
+   */
+  getHasDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCompare(
-      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directText
+      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directTexts
     )
   }
 
+  /**
+   * Returns the current 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
+   * PageElements. The results of skipped function invocations are not included in the total results object.
+   */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true)
   }
 
-  getContainsDirectText(directText: Partial<Record<K, string>>) {
+  /**
+   * Returns the current 'containsDirectText' status of all PageElements managed by PageElementMap as a "result map".
+   *
+   * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
+   * text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directTexts the expected direct texts used in the comparisons which set the 'containsDirectText' status
+   */
+  getContainsDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCompare(
-      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directText
+      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directTexts
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap currently exist.
+   *
+   * @param filterMask can be used to skip the invocation of the `exists` function for some or all managed
+   * PageElements
+   */
   exists(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
       this._node.$, element => element.currently.exists(), filterMask, true
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap are currently visible.
+   *
+   * @param filterMask can be used to skip the invocation of the `isVisible` function for some or all managed
+   * PageElements
+   */
   isVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
       this._node.$, element => element.currently.isVisible(), filterMask, true
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap are currently enabled.
+   *
+   * @param filterMask can be used to skip the invocation of the `isEnabled` function for some or all managed
+   * PageElements
+   */
   isEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
       this._node.$, element => element.currently.isEnabled(), filterMask, true
     )
   }
 
-  hasText(text: Partial<Record<K, string>>) {
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementMap currently equal the expected texts.
+   *
+   * @param texts the expected texts supposed to equal the actual texts
+   */
+  hasText(texts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.hasText(expected), text
+      this._node.$, (element, expected) => element.currently.hasText(expected), texts
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap currently have any text.
+   *
+   * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
+   * PageElements
+   */
   hasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
       this._node.$, (element) => element.currently.hasAnyText(), filterMask, true
     )
   }
 
-  containsText(text: Partial<Record<K, string>>) {
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementMap currently contain the expected texts.
+   *
+   * @param texts the expected texts supposed to be contained in the actual texts
+   */
+  containsText(texts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.containsText(expected), text
+      this._node.$, (element, expected) => element.currently.containsText(expected), texts
     )
   }
 
-  hasDirectText(directText: Partial<Record<K, string>>) {
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently equal the expected 
+   * direct texts.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directTexts the expected direct texts supposed to equal the actual direct texts
+   */
+  hasDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directText
+      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directTexts
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap currently have any direct text.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param filterMask can be used to skip the invocation of the `hasAnyDirectText` function for some or all managed
+   * PageElements
+   */
   hasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
       this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true
     )
   }
 
-  containsDirectText(directText: Partial<Record<K, string>>) {
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently contain the 
+   * expected direct texts.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   *
+   * @param directTexts the expected direct texts supposed to be contained in the actual direct texts
+   */
+  containsDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directText
+      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directTexts
     )
   }
 
+  /**
+   * returns the negated variants of PageElementMapCurrently's state check functions
+   */
   get not() {
     return {
+      /**
+       * Returns true if all PageElements managed by PageElementMap currently do not exist.
+       *
+       * @param filterMask can be used to skip the invocation of the `exists` function for some or all managed
+       * PageElements
+       */
       exists: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
           this._node.$, element => element.currently.not.exists(), filterMask, true
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap are currently not visible.
+       *
+       * @param filterMask can be used to skip the invocation of the `isVisible` function for some or all managed
+       * PageElements
+       */
       isVisible: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
           this._node.$, element => element.currently.not.isVisible(), filterMask, true
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap are currently not enabled.
+       *
+       * @param filterMask can be used to skip the invocation of the `isEnabled` function for some or all managed
+       * PageElements
+       */
       isEnabled: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
           this._node.$, element => element.currently.not.isEnabled(), filterMask, true
         )
       },
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementMap currently do not equal the 
+       * expected texts.
+       *
+       * @param texts the expected texts supposed not to equal the actual texts
+       */
       hasText: (text: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
           this._node.$, (element, expected) => element.currently.not.hasText(expected), text
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap currently do not have any text.
+       *
+       * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
+       * PageElements
+       */
       hasAnyText: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
           this._node.$, (element) => element.currently.not.hasAnyText(), filterMask, true
         )
       },
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementMap currently do not contain the
+       * expected texts.
+       *
+       * @param texts the expected texts supposed not to be contained in the actual texts
+       */
       containsText: (text: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
           this._node.$, (element, expected) => element.currently.not.containsText(expected), text
         )
       },
+      /**
+       * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not equal 
+       * the expected direct texts.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param directTexts the expected direct texts supposed not to equal the actual direct texts
+       */
       hasDirectText: (directText: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
           this._node.$, (element, expected) => element.currently.not.hasDirectText(expected), directText
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap currently do not have any direct text.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param filterMask can be used to skip the invocation of the `hasAnyDirectText` function for some or all managed
+       * PageElements
+       */
       hasAnyDirectText: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
           this._node.$, (element) => element.currently.not.hasAnyDirectText(), filterMask, true
         )
       },
+      /**
+       * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not contain 
+       * the expected direct texts.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param directTexts the expected direct texts supposed not to be contained in the actual direct texts
+       */
       containsDirectText: (directText: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
           this._node.$, (element, expected) => element.currently.not.containsDirectText(expected), directText
@@ -489,6 +998,16 @@ export class PageElementMapCurrently<
   }
 }
 
+/**
+ * This class defines all `wait` functions of PageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
+ * @template PageElementType type of the PageElements managed by PageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+ * by PageElementMap
+ * @template MapType type of the PageElementMap for which PageElementMapWait defines all `wait` functions
+ */
 export class PageElementMapWait<
   Store extends PageElementStore,
   K extends string,
@@ -561,6 +1080,9 @@ export class PageElementMapWait<
     )
   }
 
+  /**
+   * returns the negated variants of PageElementMapWait's state check functions
+   */
   get not() {
     return {
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
@@ -622,6 +1144,16 @@ export class PageElementMapWait<
   }
 }
 
+/**
+ * This class defines all `eventually` functions of PageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
+ * @template PageElementType type of the PageElements managed by PageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+ * by PageElementMap
+ * @template MapType type of the PageElementMap for which PageElementMapEventually defines all `eventually` functions
+ */
 export class PageElementMapEventually<
   Store extends PageElementStore,
   K extends string,
@@ -694,6 +1226,9 @@ export class PageElementMapEventually<
     )
   }
 
+  /**
+   * returns the negated variants of PageElementMapEventually's state check functions
+   */
   get not() {
     return {
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
