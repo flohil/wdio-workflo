@@ -2010,16 +2010,6 @@ declare global {
          */
         __getNodeId(): string
         /**
-         * Returns the default timeout that a PageNode uses if no other explicit timeout
-         * is passed to a function that operates with timeouts (eg. wait, eventually)
-         */
-        getTimeout(): number
-        /**
-         * Returns the default interval that a PageNode uses if no other explicit interval
-         * is passed to a function that operates with intervals (eg. wait, eventually)
-         */
-        getInterval(): number
-        /**
          * Returns a JSON representation of the PageNode.
          */
         toJSON(): IElementJSON
@@ -2103,6 +2093,10 @@ declare global {
        * - hasDirectText
        * - hasAnyDirectText
        * - containsDirectText
+       *
+       * @template TextType type of IElementNode's state retrieval functions (getText...)
+       * @template BooleanType type of IElementNode's state compare functions (getHasText...)
+       * @template FilterType type of IElementNode's filter mask
        */
       interface IElementNode<TextType, BooleanType, FilterType = any>
         extends INode, IGetElement<TextType, BooleanType, FilterType>
@@ -2652,6 +2646,10 @@ declare global {
        * - hasValue
        * - hasAnyValue
        * - containsValue
+       *
+       * @template GetType type of IValueElementNode's state retrieval functions (getValue)
+       * @template FilterType type of IValueElementNode's filter mask
+       * @template SetType type of a setter values structure used by a IValueElementNode's setter functions
        */
       interface IValueElementNode<GetType, FilterType = any, SetType = GetType>
       extends INode, IGetValueElement<GetType, FilterType>

@@ -3,6 +3,7 @@ import * as _ from 'lodash'
 import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually, PageElementGroup } from '.'
 import { XPathBuilder } from '../builders'
 import { PageElementStore } from '../stores'
+import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL } from '..'
 
 /**
  * Defines the opts parameter passed to the constructor function of PageElementBase.
@@ -41,6 +42,16 @@ export abstract class PageElementBase<
    * selectors of all PageNodes retrieved via `_$` with the selector of PageElementBase.
    */
   protected _$: Store
+  /**
+   * the default timeout used by PageElement for all of its functions that operate with timeouts
+   * (eg. `wait` and `eventually`)
+   */
+  protected _timeout: number
+  /**
+   * the default interval used by PageElement for all of its functions that operate with intervals
+   * (eg. `wait` and `eventually`)
+   */
+  protected _interval: number
 
   abstract readonly currently: PageElementBaseCurrently<Store, this>
   abstract readonly wait: PageElementBaseWait<Store, this>
@@ -56,12 +67,16 @@ export abstract class PageElementBase<
     selector: string,
     {
       waitType = Workflo.WaitType.visible,
+      timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
+      interval = JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL,
       ...superOpts
     }: IPageElementBaseOpts<Store>
   ) {
     super(selector, superOpts)
 
     this._$ = Object.create(null)
+    this._timeout = timeout
+    this._interval = interval
 
     for (const method of Workflo.Class.getAllMethods(this._store)) {
       if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
@@ -106,6 +121,22 @@ export abstract class PageElementBase<
    */
   getSelector() {
     return this._selector
+  }
+
+  /**
+   * Returns the default timeout that a PageElement uses if no other explicit timeout
+   * is passed to one of its functions which operates with timeouts (eg. wait, eventually)
+   */
+  getTimeout() {
+    return this._timeout;
+  }
+
+  /**
+   * Returns the default interval that a PageElement uses if no other explicit interval
+   * is passed to one of its functions which operates with intervals (eg. wait, eventually)
+   */
+  getInterval() {
+    return this._interval;
   }
 
   /**
@@ -261,7 +292,7 @@ export abstract class PageElementBaseWait<
   /**
    * This function waits for a certain condition to be met.
    *
-   * It does so by invoking a condition function which checks if a certain condition eventually becomes true within a 
+   * It does so by invoking a condition function which checks if a certain condition eventually becomes true within a
    * specific timeout.
    *
    * A `WaitUntilTimeoutError` will be thrown if the condition function's return value is `false`.

@@ -11,6 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 const builders_1 = require("../builders");
+const __1 = require("..");
 /**
  * This class provides basic functionalities for all PageElements.
  *
@@ -24,9 +25,11 @@ class PageElementBase extends _1.PageNode {
      * @param opts the options used to configure PageElementBase
      */
     constructor(selector, _a) {
-        var { waitType = "visible" /* visible */ } = _a, superOpts = __rest(_a, ["waitType"]);
+        var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT, interval = JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL } = _a, superOpts = __rest(_a, ["waitType", "timeout", "interval"]);
         super(selector, superOpts);
         this._$ = Object.create(null);
+        this._timeout = timeout;
+        this._interval = interval;
         for (const method of Workflo.Class.getAllMethods(this._store)) {
             if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
                 this._$[method] = (_selector, _options) => {
@@ -62,6 +65,20 @@ class PageElementBase extends _1.PageNode {
      */
     getSelector() {
         return this._selector;
+    }
+    /**
+     * Returns the default timeout that a PageElement uses if no other explicit timeout
+     * is passed to one of its functions which operates with timeouts (eg. wait, eventually)
+     */
+    getTimeout() {
+        return this._timeout;
+    }
+    /**
+     * Returns the default interval that a PageElement uses if no other explicit interval
+     * is passed to one of its functions which operates with intervals (eg. wait, eventually)
+     */
+    getInterval() {
+        return this._interval;
     }
 }
 exports.PageElementBase = PageElementBase;

@@ -33,6 +33,16 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
      * selectors of all PageNodes retrieved via `_$` with the selector of PageElementBase.
      */
     protected _$: Store;
+    /**
+     * the default timeout used by PageElement for all of its functions that operate with timeouts
+     * (eg. `wait` and `eventually`)
+     */
+    protected _timeout: number;
+    /**
+     * the default interval used by PageElement for all of its functions that operate with intervals
+     * (eg. `wait` and `eventually`)
+     */
+    protected _interval: number;
     abstract readonly currently: PageElementBaseCurrently<Store, this>;
     abstract readonly wait: PageElementBaseWait<Store, this>;
     abstract readonly eventually: PageElementBaseEventually<Store, this>;
@@ -42,7 +52,7 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
      * @param selector the raw XPath selector of the PageElementBase
      * @param opts the options used to configure PageElementBase
      */
-    constructor(selector: string, { waitType, ...superOpts }: IPageElementBaseOpts<Store>);
+    constructor(selector: string, { waitType, timeout, interval, ...superOpts }: IPageElementBaseOpts<Store>);
     /**
      * `$` provides access to the PageNode retrieval functions of PageElementBase's PageElementStore and prefixes the
      * selectors of all PageNodes retrieved via `$` with the selector of PageElementBase.
@@ -52,6 +62,16 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
      * Returns the XPath selector of PageElementBase.
      */
     getSelector(): string;
+    /**
+     * Returns the default timeout that a PageElement uses if no other explicit timeout
+     * is passed to one of its functions which operates with timeouts (eg. wait, eventually)
+     */
+    getTimeout(): number;
+    /**
+     * Returns the default interval that a PageElement uses if no other explicit interval
+     * is passed to one of its functions which operates with intervals (eg. wait, eventually)
+     */
+    getInterval(): number;
     /**
      * Compares the values of `actual` and `expected` and returns true if they are equal.
      *

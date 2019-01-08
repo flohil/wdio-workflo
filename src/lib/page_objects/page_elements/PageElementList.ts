@@ -13,6 +13,7 @@ import { ListWhereBuilder, XPathBuilder } from '../builders'
 import { isArray } from 'util';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
 import { isNullOrUndefined } from '../../helpers';
+import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL } from '..'
 
 /**
  * Describes the opts parameter passed to the PageElementList's `identify` function.
@@ -216,6 +217,16 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * by modifying the list's selector using XPath modification functions.
    */
   protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>
+  /**
+   * the default timeout used by PageElementList for all of its functions that operate with timeouts
+   * (eg. `wait` and `eventually`)
+   */
+  protected _timeout: number
+  /**
+   * the default interval used by PageElementList for all of its functions that operate with intervals
+   * (eg. `wait` and `eventually`)
+   */
+  protected _interval: number
 
   readonly currently: PageElementListCurrently<
     Store, PageElementType, PageElementOptions, this
@@ -262,6 +273,9 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>
   ) {
     super(selector, opts)
+
+    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
+    this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL
 
     this._waitType = opts.waitType || Workflo.WaitType.visible
     this._disableCache = opts.disableCache || false
@@ -532,6 +546,22 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    */
   getSelector() {
     return this._selector
+  }
+
+  /**
+   * Returns the default timeout that a PageElementList uses if no other explicit timeout
+   * is passed to one of its functions which operates with timeouts (eg. wait, eventually)
+   */
+  getTimeout() {
+    return this._timeout;
+  }
+
+  /**
+   * Returns the default interval that a PageElementList uses if no other explicit interval
+   * is passed to one of its functions which operates with intervals (eg. wait, eventually)
+   */
+  getInterval() {
+    return this._interval;
   }
 
   /**

@@ -5,7 +5,7 @@ import {
   PageElementList, IPageElementListOpts,
   PageElementMap, IPageElementMapOpts,
   PageElementGroup, IPageElementGroupOpts,
-  ValuePageElementGroup, IValueGroupOpts,
+  ValuePageElementGroup, IValuePageElementGroupOpts,
   ValuePageElement, IValuePageElementOpts,
   IValuePageElementListOpts, ValuePageElementList
 } from '../page_elements'
@@ -430,7 +430,7 @@ export class PageElementStore {
       this,
       Content,
       ValuePageElementGroup<this, Content>,
-      Pick<IValueGroupOpts<
+      Pick<IValuePageElementGroupOpts<
         this, Content
       >, Workflo.Store.GroupConstructorKeys>
     > (

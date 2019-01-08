@@ -115,11 +115,11 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
     )
   }
 
-  // TODO
   /**
-   * Sets values on all map elements.
+   * This function sets the passed values to all ValuePageElements managed by ValuePageElementMap
+   * after performing the initial waiting condition of each ValuePageElement.
    *
-   * @param values
+   * @param values a map of setter values
    */
   setValue(values: Partial<Record<K, ValueType>>) {
     return this.eachSet(this._$, (element, value) => element.setValue(value), values)

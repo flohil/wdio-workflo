@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const __1 = require("..");
 /**
  * This class serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
  *
@@ -16,8 +15,6 @@ class PageNode {
     constructor(selector, opts) {
         this._selector = selector;
         this._store = opts.store;
-        this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
-        this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
     }
     // INTERNAL GETTERS AND SETTERS
     __getNodeId() {
@@ -31,13 +28,6 @@ class PageNode {
     }
     __setLastDiff(diff) {
         this._lastDiff = diff;
-    }
-    // PUBLIC GETTERS
-    getTimeout() {
-        return this._timeout;
-    }
-    getInterval() {
-        return this._interval;
     }
     // PUBLIC ACTIONS
     toJSON() {

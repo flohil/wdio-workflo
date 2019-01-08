@@ -1,56 +1,174 @@
 import { PageElementMap, ValuePageElement, IValuePageElementOpts, IPageElementMapOpts, PageElementMapCurrently, PageElementMapEventually, PageElementMapWait } from './';
 import { PageElementStore } from '../stores';
-export interface IValuePageElementMapOpts<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends IPageElementMapOpts<Store, K, PageElementType, PageElementOptions> {
+/**
+ * Describes the `identifier` property of the `opts` parameter passed to ValuePageElementMap's constructor function.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
+ * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
+ * managed by ValuePageElementMap
+ * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
+ */
+export interface IValuePageElementMapOpts<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, ValueType> extends IPageElementMapOpts<Store, K, PageElementType, PageElementOpts> {
 }
-export declare class ValuePageElementMap<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementMap<Store, K, PageElementType, PageElementOptions> implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, boolean>>> {
-    readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this, ValueType>;
-    readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOptions, this, ValueType>;
-    readonly eventually: ValuePageElementMapEventually<Store, K, PageElementType, PageElementOptions, this, ValueType>;
-    constructor(selector: string, opts: IValuePageElementMapOpts<Store, K, PageElementType, PageElementOptions, ValueType>);
+/**
+ * ValuePageElementMap extends PageElementMap with the possibility to set, retrieve and check the values of
+ * ValuePageElements managed by ValuePageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
+ * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
+ * managed by ValuePageElementMap
+ * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
+ */
+export declare class ValuePageElementMap<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementMap<Store, K, PageElementType, PageElementOpts> implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, boolean>>> {
+    readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOpts, this, ValueType>;
+    readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOpts, this, ValueType>;
+    readonly eventually: ValuePageElementMapEventually<Store, K, PageElementType, PageElementOpts, this, ValueType>;
     /**
-     * Returns values of all list elements after performing an initial wait in the order they were retrieved from the DOM.
+     * ValuePageElementMap extends PageElementMap with the possibility to set, retrieve and check the values of
+     * ValuePageElements managed by ValuePageElementMap.
      *
-     * If passing filter, only values defined in this mask will be returned.
-     * By default (if no filter is passed), all values will be returned.
+     * @param selector an XPath expression which identifies all ValuePageElements managed by ValuePageElementMap
+     * @param opts the options used to configure ValuePageElementMap
+     */
+    constructor(selector: string, opts: IValuePageElementMapOpts<Store, K, PageElementType, PageElementOpts, ValueType>);
+    /**
+     * Returns the values of all ValuePageElements managed by ValuePageElementMap as a result map after performing the
+     * initial waiting condition of each ValuePageElement.
      *
-     * @param filterMask a filter mask
+     * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
+     * ValuePageElements. The results of skipped function invocations are not included in the total results object.
      */
     getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, ValueType>>;
-    getHasValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
-    getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
-    getContainsValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
     /**
-     * Sets values on all list elements.
+     * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementMap as a result map after
+     * performing the initial waiting condition of each managed ValuePageElement.
      *
-     * If values is an array, the number of list elements must match the number of passed values.
-     * The values will be assigned in the order that the list elements were retrieved from the DOM.
+     * A ValuePageElement's 'hasValue' status is set to true if its actual text equals the expected text.
      *
-     * If values is a single value, the same value will be set on all list elements.
+     * @param values the expected values used in the comparisons which set the 'hasValue' status
+     */
+    getHasValue(values: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
+    /**
+     * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementMap as a result map after
+     * performing the initial waiting condition of each managed ValuePageElement.
+     *
+     * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any text.
+     *
+     * @param filterMask can be used to skip the invocation of the `getHasAnyValue` function for some or all managed
+     * ValuePageElements. The results of skipped function invocations are not included in the total results object.
+     */
+    getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
+    /**
+     * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementMap as a result map after
+     * performing the initial waiting condition of each managed ValuePageElement.
+     *
+     * A ValuePageElement's 'containsValue' status is set to true if its actual text contains the expected text.
+     *
+     * @param values the expected values used in the comparisons which set the 'containsValue' status
+     */
+    getContainsValue(values: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
+    /**
+     * Sets values on all map elements.
      *
      * @param values
      */
     setValue(values: Partial<Record<K, ValueType>>): this;
 }
-declare class ValuePageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, MapType> {
+/**
+ * This class defines all `currently` functions of ValuePageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
+ * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
+ * managed by ValuePageElementMap
+ * @template MapType type of the ValuePageElementMap for which ValuePageElementMapCurrently defines all `currently`
+ * functions
+ * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
+ */
+declare class ValuePageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapCurrently<Store, K, PageElementType, PageElementOpts, MapType> {
     /**
-     * Returns values of all list elements immediatly in the order they were retrieved from the DOM.
+     * Returns the current values of all ValuePageElements managed by ValuePageElementMap as a result map.
      *
-     * If passing filter, only values defined in this mask will be returned.
-     * By default (if no filter is passed), all values will be returned.
-     *
-     * @param filterMask a filter mask
+     * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
+     * ValuePageElements. The results of skipped function invocations are not included in the total results object.
      */
     getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, ValueType>>;
-    getHasValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
+    /**
+     * Returns the current 'hasValue' status of all ValuePageElements managed by ValuePageElementMap as a result map.
+     *
+     * A ValuePageElement's 'hasValue' status is set to true if its actual text equals the expected text.
+     *
+     * @param values the expected values used in the comparisons which set the 'hasValue' status
+     */
+    getHasValue(values: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
+    /**
+     * Returns the current 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementMap as a result map.
+     *
+     * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any text.
+     *
+     * @param filterMask can be used to skip the invocation of the `getHasAnyValue` function for some or all managed
+     * ValuePageElements. The results of skipped function invocations are not included in the total results object.
+     */
     getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>>;
-    getContainsValue(value: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
-    hasValue(value: Partial<Record<K, ValueType>>): boolean;
+    /**
+     * Returns the current 'containsValue' status of all ValuePageElements managed by ValuePageElementMap as a result map.
+     *
+     * A ValuePageElement's 'containsValue' status is set to true if its actual text contains the expected text.
+     *
+     * @param values the expected values used in the comparisons which set the 'containsValue' status
+     */
+    getContainsValue(values: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
+    /**
+     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap currently equal the
+     * expected values.
+     *
+     * @param values the expected values supposed to equal the actual values
+     */
+    hasValue(values: Partial<Record<K, ValueType>>): boolean;
+    /**
+     * Returns true if all ValuePageElements managed by ValuePageElementMap currently have any text.
+     *
+     * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
+     * ValuePageElements
+     */
     hasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
-    containsValue(value: Partial<Record<K, ValueType>>): boolean;
+    /**
+     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap currently contain the
+     * expected values.
+     *
+     * @param values the expected values supposed to be contained in the actual values
+     */
+    containsValue(values: Partial<Record<K, ValueType>>): boolean;
+    /**
+     * returns the negated variants of ValuePageElementMapCurrently's state check functions
+     */
     readonly not: {
-        hasValue: (value: Partial<Record<K, ValueType>>) => boolean;
+        /**
+         * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap currently do not
+         * equal the expected values.
+         *
+         * @param values the expected values supposed not to equal the actual values
+         */
+        hasValue: (values: Partial<Record<K, ValueType>>) => boolean;
+        /**
+         * Returns true if all ValuePageElements managed by ValuePageElementMap currently do not have any text.
+         *
+         * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
+         * ValuePageElements
+         */
         hasAnyValue: (filterMask?: Partial<Record<K, boolean>>) => boolean;
-        containsValue: (value: Partial<Record<K, ValueType>>) => boolean;
+        /**
+         * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap currently do not
+         * contain the expected values.
+         *
+         * @param values the expected values supposed not to be contained in the actual values
+         */
+        containsValue: (values: Partial<Record<K, ValueType>>) => boolean;
         exists: (filterMask?: Partial<Record<K, boolean>>) => boolean;
         isVisible: (filterMask?: Partial<Record<K, boolean>>) => boolean;
         isEnabled: (filterMask?: Partial<Record<K, boolean>>) => boolean;
@@ -62,14 +180,115 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
         containsDirectText: (directText: Partial<Record<K, string>>) => boolean;
     };
 }
-declare class ValuePageElementMapWait<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementMapWait<Store, K, PageElementType, PageElementOptions, MapType> {
-    hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): MapType;
+/**
+ * This class defines all `wait` functions of ValuePageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
+ * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
+ * managed by ValuePageElementMap
+ * @template MapType type of the ValuePageElementMap for which ValuePageElementMapWait defines all `wait`
+ * functions
+ * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
+ */
+declare class ValuePageElementMapWait<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapWait<Store, K, PageElementType, PageElementOpts, MapType> {
+    /**
+     * Waits for the actual values of all ValuePageElements managed by ValuePageElementMap to equal the expected values.
+     *
+     * Throws an error if the condition is not met within a specific timeout.
+     *
+     * @param values the expected values supposed to equal the actual values
+     * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+     * to check it
+     *
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
+     *
+     * @returns this (an instance of ValuePageElementMap)
+     */
+    hasValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): MapType;
+    /**
+     * Waits for all ValuePageElements managed by ValuePageElementMap to have any text.
+     *
+     * Throws an error if the condition is not met within a specific timeout.
+     *
+     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyValue` function for some
+     * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
+     * used to check it
+     *
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
+     *
+     * @returns this (an instance of ValuePageElementMap)
+     */
     hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): MapType;
-    containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): MapType;
+    /**
+     * Waits for the actual values of all ValuePageElements managed by ValuePageElementMap to contain the expected values.
+     *
+     * Throws an error if the condition is not met within a specific timeout.
+     *
+     * @param values the expected values supposed to be contained in the actual values
+     * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+     * to check it
+     *
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
+     *
+     * @returns this (an instance of ValuePageElementMap)
+     */
+    containsValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): MapType;
+    /**
+     * returns the negated variants of ValuePageElementMapWait's state check functions
+     */
     readonly not: {
-        hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        /**
+         * Waits for the actual values of all ValuePageElements managed by ValuePageElementMap not to equal the expected
+         * values.
+         *
+         * Throws an error if the condition is not met within a specific timeout.
+         *
+         * @param values the expected values supposed not to equal the actual values
+         * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+         * to check it
+         *
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
+         *
+         * @returns this (an instance of ValuePageElementMap)
+         */
+        hasValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        /**
+         * Waits for all ValuePageElements managed by ValuePageElementMap not to have any text.
+         *
+         * Throws an error if the condition is not met within a specific timeout.
+         *
+         * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyValue` function for
+         * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
+         * `interval` used to check it
+         *
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
+         *
+         * @returns this (an instance of ValuePageElementMap)
+         */
         hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => MapType;
-        containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => MapType;
+        /**
+         * Waits for the actual values of all ValuePageElements managed by ValuePageElementMap not to contain the expected
+         * values.
+         *
+         * Throws an error if the condition is not met within a specific timeout.
+         *
+         * @param values the expected values supposed not to be contained in the actual values
+         * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+         * to check it
+         *
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
+         *
+         * @returns this (an instance of ValuePageElementMap)
+         */
+        containsValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => MapType;
         exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => MapType;
         isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => MapType;
         isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => MapType;
@@ -81,14 +300,95 @@ declare class ValuePageElementMapWait<Store extends PageElementStore, K extends 
         containsDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => MapType;
     };
 }
-declare class ValuePageElementMapEventually<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementMapEventually<Store, K, PageElementType, PageElementOptions, MapType> {
-    hasValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
+/**
+ * This class defines all `eventually` functions of ValuePageElementMap.
+ *
+ * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
+ * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
+ * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
+ * managed by ValuePageElementMap
+ * @template MapType type of the ValuePageElementMap for which ValuePageElementMapEventually defines all `eventually`
+ * functions
+ * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
+ */
+declare class ValuePageElementMapEventually<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapEventually<Store, K, PageElementType, PageElementOpts, MapType> {
+    /**
+     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap eventually equal the
+     * expected values within a specific timeout.
+     *
+     * @param values the expected values supposed to equal the actual values
+     * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+     * to check it
+     *
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
+     */
+    hasValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
+    /**
+     * Returns true if all ValuePageElements managed by ValuePageElementMap eventually have any text within a specific
+     * timeout.
+     *
+     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyValue` function for some
+     * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
+     * used to check it
+     *
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
+     */
     hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
-    containsValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
+    /**
+     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap eventually contain the
+     * expected values within a specific timeout.
+     *
+     * @param values the expected values supposed to be contained in the actual values
+     * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+     * to check it
+     *
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
+     */
+    containsValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
+    /**
+     * returns the negated variants of ValuePageElementMapEventually's state check functions
+     */
     readonly not: {
-        hasValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        /**
+         * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap eventually do not
+         * equal the expected values within a specific timeout.
+         *
+         * @param values the expected values supposed not to equal the actual values
+         * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+         * to check it
+         *
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
+         */
+        hasValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        /**
+         * Returns true if all ValuePageElements managed by ValuePageElementMap eventually do not have any text within a
+         * specific timeout.
+         *
+         * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyValue` function for
+         * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
+         * `interval` used to check it
+         *
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
+         */
         hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>) => boolean;
-        containsValue: (value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => boolean;
+        /**
+         * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap eventually do not
+         * contain the expected values within a specific timeout.
+         *
+         * @param values the expected values supposed not to be contained in the actual values
+         * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+         * to check it
+         *
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
+         */
+        containsValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => boolean;
         exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;
         isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;
         isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;

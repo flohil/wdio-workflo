@@ -31,14 +31,6 @@ export declare abstract class PageNode<Store extends PageElementStore> implement
      */
     protected _selector: string;
     /**
-     * the default timeout used by PageNode for all functions that operate with timeouts (eg. `wait` and `eventually`)
-     */
-    protected _timeout: number;
-    /**
-     * the default interval used by PageNode for all functions that operate with intervals (eg. `wait` and `eventually`)
-     */
-    protected _interval: number;
-    /**
      * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
      * current value from the tested application's state
      */
@@ -62,8 +54,6 @@ export declare abstract class PageNode<Store extends PageElementStore> implement
     __getNodeId(): string;
     readonly __lastDiff: Workflo.IDiff;
     __setLastDiff(diff: Workflo.IDiff): void;
-    getTimeout(): number;
-    getInterval(): number;
     toJSON(): Workflo.IElementJSON;
     /**
      * Executes func and trows any errors that occur during its execution.

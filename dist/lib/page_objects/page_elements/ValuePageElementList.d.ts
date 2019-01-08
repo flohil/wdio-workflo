@@ -274,8 +274,8 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-     * If no `interval` is specified, ValuePageElementList's default interval is used.
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
      *
      * @returns this (an instance of ValuePageElementList)
      */
@@ -289,8 +289,8 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
      * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
      * used to check it
      *
-     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-     * If no `interval` is specified, ValuePageElementList's default interval is used.
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
      *
      * @returns this (an instance of ValuePageElementList)
      */
@@ -310,8 +310,8 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-     * If no `interval` is specified, ValuePageElementList's default interval is used.
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
      *
      * @returns this (an instance of ValuePageElementList)
      */
@@ -335,8 +335,8 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
-         * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-         * If no `interval` is specified, ValuePageElementList's default interval is used.
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
          *
          * @returns this (an instance of ValuePageElementList)
          */
@@ -350,8 +350,8 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
          * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
          * `interval` used to check it
          *
-         * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-         * If no `interval` is specified, ValuePageElementList's default interval is used.
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
          *
          * @returns this (an instance of ValuePageElementList)
          */
@@ -371,8 +371,8 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
-         * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-         * If no `interval` is specified, ValuePageElementList's default interval is used.
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
          *
          * @returns this (an instance of ValuePageElementList)
          */
@@ -415,8 +415,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-     * If no `interval` is specified, ValuePageElementList's default interval is used.
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
      */
     hasValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -427,8 +427,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
      * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
      * used to check it
      *
-     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-     * If no `interval` is specified, ValuePageElementList's default interval is used.
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
      */
     hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -444,8 +444,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-     * If no `interval` is specified, ValuePageElementList's default interval is used.
+     * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+     * If no `interval` is specified, a ValuePageElement's default interval is used.
      */
     containsValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -465,8 +465,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
-         * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-         * If no `interval` is specified, ValuePageElementList's default interval is used.
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
          */
         hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => boolean;
         /**
@@ -477,8 +477,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
          * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
          * `interval` used to check it
          *
-         * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-         * If no `interval` is specified, ValuePageElementList's default interval is used.
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
          */
         hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => boolean;
         /**
@@ -494,8 +494,8 @@ declare class ValuePageElementListEventually<Store extends PageElementStore, Pag
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
-         * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-         * If no `interval` is specified, ValuePageElementList's default interval is used.
+         * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+         * If no `interval` is specified, a ValuePageElement's default interval is used.
          */
         containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => boolean;
         hasLength: (length: number, opts?: import("./PageElementList").IPageElementListWaitLengthParams) => boolean;

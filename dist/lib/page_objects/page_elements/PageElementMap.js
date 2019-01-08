@@ -32,7 +32,7 @@ const helpers_1 = require("../../helpers");
  * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
  *
  * All of PageElementMap's state retrieval (getXXX) and state check functions (hasXXX/hasAnyXXX/containsXXX) return
- * their result values as a "result map". This is an object whose key names or taken from PageElementMap's `$` accessor
+ * their result values as a result map. This is an object whose key names or taken from PageElementMap's `$` accessor
  * and whose values are the results of the respective function being executed on the  mapped PageElement.
  *
  * @example
@@ -73,7 +73,7 @@ class PageElementMap extends _1.PageNode {
      * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
      *
      * All of PageElementMap's state retrieval (getXXX) and state check functions (hasXXX/hasAnyXXX/containsXXX) return
-     * their result values as a "result map". This is an object whose key names or taken from PageElementMap's `$`
+     * their result values as a result map. This is an object whose key names or taken from PageElementMap's `$`
      * accessor and whose values are the results of the respective function being executed on the  mapped PageElement.
      *
      * @example
@@ -136,7 +136,7 @@ class PageElementMap extends _1.PageNode {
         return this._selector;
     }
     /**
-     * Returns the texts of all PageElements managed by PageElementMap as a "result map" after performing the initial
+     * Returns the texts of all PageElements managed by PageElementMap as a result map after performing the initial
      * waiting condition of each PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
@@ -146,7 +146,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachGet(this._$, node => node.getText(), filterMask);
     }
     /**
-     * Returns the direct texts of all PageElements managed by PageElementMap as a "result map" after performing the
+     * Returns the direct texts of all PageElements managed by PageElementMap as a result map after performing the
      * initial waiting condition of each PageElement.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -159,7 +159,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachGet(this._$, node => node.getDirectText(), filterMask);
     }
     /**
-     * Returns the 'enabled' status of all PageElements managed by PageElementMap as a "result map" after performing the
+     * Returns the 'enabled' status of all PageElements managed by PageElementMap as a result map after performing the
      * initial waiting condition of each PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
@@ -169,7 +169,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachGet(this.$, node => node.getIsEnabled(), filterMask);
     }
     /**
-     * Returns the 'hasText' status of all PageElements managed by PageElementMap as a "result map" after performing the
+     * Returns the 'hasText' status of all PageElements managed by PageElementMap as a result map after performing the
      * initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
@@ -180,7 +180,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachCompare(this.$, (element, expected) => element.currently.hasText(expected), texts);
     }
     /**
-     * Returns the 'hasAnyText' status of all PageElements managed by PageElementMap as a "result map" after performing
+     * Returns the 'hasAnyText' status of all PageElements managed by PageElementMap as a result map after performing
      * the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
@@ -192,7 +192,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachCompare(this.$, (element) => element.currently.hasAnyText(), filterMask, true);
     }
     /**
-     * Returns the 'containsText' status of all PageElements managed by PageElementMap as a "result map" after performing
+     * Returns the 'containsText' status of all PageElements managed by PageElementMap as a result map after performing
      * the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
@@ -203,7 +203,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachCompare(this.$, (element, expected) => element.currently.containsText(expected), texts);
     }
     /**
-     * Returns the 'hasDirectText' status of all PageElements managed by PageElementMap as a "result map" after performing
+     * Returns the 'hasDirectText' status of all PageElements managed by PageElementMap as a result map after performing
      * the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
@@ -217,7 +217,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachCompare(this.$, (element, expected) => element.currently.hasDirectText(expected), directTexts);
     }
     /**
-     * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a "result map" after performing
+     * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a result map after performing
      * the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
@@ -232,7 +232,7 @@ class PageElementMap extends _1.PageNode {
         return this.eachCompare(this.$, (element) => element.currently.hasAnyDirectText(), filterMask, true);
     }
     /**
-     * Returns the 'containsDirectText' status of all PageElements managed by PageElementMap as a "result map" after
+     * Returns the 'containsDirectText' status of all PageElements managed by PageElementMap as a result map after
      * performing the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
@@ -263,8 +263,8 @@ class PageElementMap extends _1.PageNode {
      * @template T the type of an expected value
      * @param context a map containing all PageElements for which `checkFunc` should be executed
      * @param checkFunc a state check function executed for each PageElement in `context`. It is passed a PageElement as
-     * first parameter and an expected value used by the state check condition as an optional second parameter.
-     * @param expected a map of expected values used for the state check conditions
+     * first parameter and an expected value used by the state check comparison as an optional second parameter.
+     * @param expected a map of expected values used for the state check comparisons
      * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
      * invocation of the state check function for some or all PageElements.
      * The results of skipped function invocations are not included in the total results map.
@@ -299,8 +299,8 @@ class PageElementMap extends _1.PageNode {
      * @template T the type of an expected value
      * @param context a map containing all PageElements for which `checkFunc` should be executed
      * @param checkFunc a state check function executed for each PageElement in `context`. It is passed a PageElement as
-     * first parameter and an expected value used by the state check condition as an optional second parameter.
-     * @param expected a map of expected values used for the state check conditions
+     * first parameter and an expected value used by the state check comparison as an optional second parameter.
+     * @param expected a map of expected values used for the state check comparisons
      * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
      * invocation of the state check function for some or all PageElements.
      * The results of skipped function invocations are not included in the results map.
@@ -396,19 +396,19 @@ class PageElementMap extends _1.PageNode {
     /**
      * Invokes an action for each of PageElementMap's managed PageElements.
      *
-     * @param doFunc an action executed for each of PageElementMap's managed PageElements
+     * @param action an action executed for each of PageElementMap's managed PageElements
      * @param filterMask can be used to skip the execution of an action for some or all PageElements
      * @returns this (an instance of PageElementMap)
      */
-    eachDo(doFunc, filterMask) {
+    eachDo(action, filterMask) {
         const context = this.$;
         for (const key in context) {
             if (helpers_1.isNullOrUndefined(filterMask)) {
-                doFunc(context[key]);
+                action(context[key]);
             }
             else {
                 if (this._includedInFilter(filterMask[key])) {
-                    doFunc(context[key]);
+                    action(context[key]);
                 }
             }
         }
@@ -451,7 +451,7 @@ exports.PageElementMap = PageElementMap;
  */
 class PageElementMapCurrently extends _1.PageNodeCurrently {
     /**
-     * Returns the current texts of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current texts of all PageElements managed by PageElementMap as a result map.
      *
      * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results object.
@@ -460,7 +460,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachGet(this._node.$, node => node.currently.getText(), filterMask);
     }
     /**
-     * Returns the current direct texts of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current direct texts of all PageElements managed by PageElementMap as a result map.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -472,7 +472,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachGet(this._node.$, node => node.currently.getDirectText(), filterMask);
     }
     /**
-     * Returns the current 'exists' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'exists' status of all PageElements managed by PageElementMap as a result map.
      *
      * @param filterMask can be used to skip the invocation of the `getExists` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results object.
@@ -481,7 +481,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachGet(this._node.$, node => node.currently.exists(), filterMask);
     }
     /**
-     * Returns the current 'visible' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'visible' status of all PageElements managed by PageElementMap as a result map.
      *
      * @param filterMask can be used to skip the invocation of the `getIsVisible` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results object.
@@ -490,7 +490,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachGet(this._node.$, node => node.currently.isVisible(), filterMask);
     }
     /**
-     * Returns the current 'enabled' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'enabled' status of all PageElements managed by PageElementMap as a result map.
      *
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results object.
@@ -499,7 +499,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachGet(this._node.$, node => node.currently.isEnabled(), filterMask);
     }
     /**
-     * Returns the current 'hasText' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'hasText' status of all PageElements managed by PageElementMap as a result map.
      *
      * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
      *
@@ -509,7 +509,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasText(expected), texts);
     }
     /**
-     * Returns the current 'hasAnyText' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'hasAnyText' status of all PageElements managed by PageElementMap as a result map.
      *
      * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
      *
@@ -520,7 +520,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyText(), filterMask, true);
     }
     /**
-     * Returns the current 'containsText' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'containsText' status of all PageElements managed by PageElementMap as a result map.
      *
      * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
      *
@@ -530,7 +530,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsText(expected), texts);
     }
     /**
-     * Returns the current 'hasDirectText' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'hasDirectText' status of all PageElements managed by PageElementMap as a result map.
      *
      * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
      *
@@ -543,7 +543,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasDirectText(expected), directTexts);
     }
     /**
-     * Returns the current 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a result map.
      *
      * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
      *
@@ -557,7 +557,7 @@ class PageElementMapCurrently extends _1.PageNodeCurrently {
         return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true);
     }
     /**
-     * Returns the current 'containsDirectText' status of all PageElements managed by PageElementMap as a "result map".
+     * Returns the current 'containsDirectText' status of all PageElements managed by PageElementMap as a result map.
      *
      * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
      * text.
@@ -776,7 +776,7 @@ class PageElementMapWait extends _1.PageNodeWait {
      * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -792,7 +792,7 @@ class PageElementMapWait extends _1.PageNodeWait {
      * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -808,7 +808,7 @@ class PageElementMapWait extends _1.PageNodeWait {
      * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -825,8 +825,8 @@ class PageElementMapWait extends _1.PageNodeWait {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -842,8 +842,8 @@ class PageElementMapWait extends _1.PageNodeWait {
      * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -860,8 +860,8 @@ class PageElementMapWait extends _1.PageNodeWait {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -880,8 +880,8 @@ class PageElementMapWait extends _1.PageNodeWait {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -900,8 +900,8 @@ class PageElementMapWait extends _1.PageNodeWait {
      * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -922,8 +922,8 @@ class PageElementMapWait extends _1.PageNodeWait {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      *
      * @returns this (an instance of PageElementMap)
      */
@@ -943,7 +943,7 @@ class PageElementMapWait extends _1.PageNodeWait {
              * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for
              * some or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -959,7 +959,7 @@ class PageElementMapWait extends _1.PageNodeWait {
              * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
              * some or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -975,7 +975,7 @@ class PageElementMapWait extends _1.PageNodeWait {
              * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
              * some or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -992,8 +992,8 @@ class PageElementMapWait extends _1.PageNodeWait {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -1009,8 +1009,8 @@ class PageElementMapWait extends _1.PageNodeWait {
              * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
              * `interval` used to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -1027,8 +1027,8 @@ class PageElementMapWait extends _1.PageNodeWait {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -1048,8 +1048,8 @@ class PageElementMapWait extends _1.PageNodeWait {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -1068,8 +1068,8 @@ class PageElementMapWait extends _1.PageNodeWait {
              * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
              * `interval` used to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -1090,8 +1090,8 @@ class PageElementMapWait extends _1.PageNodeWait {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              *
              * @returns this (an instance of PageElementMap)
              */
@@ -1119,7 +1119,7 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
      */
     exists(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1131,7 +1131,7 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
      */
     isVisible(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1143,7 +1143,7 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
      */
     isEnabled(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1157,8 +1157,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      */
     hasText(texts, opts) {
         return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.hasText(expected, opts), texts);
@@ -1170,8 +1170,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      */
     hasAnyText(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1185,8 +1185,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      */
     containsText(texts, opts) {
         return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.containsText(expected, opts), texts);
@@ -1199,8 +1199,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      */
     hasDirectText(directTexts, opts) {
         return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.hasDirectText(expected, opts), directTexts);
@@ -1213,8 +1213,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
      * used to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      */
     hasAnyDirectText(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1228,8 +1228,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
-     * If no `timeout` is specified, PageElementMap's default timeout is used.
-     * If no `interval` is specified, PageElementMap's default interval is used.
+     * If no `timeout` is specified, a PageElement's default timeout is used.
+     * If no `interval` is specified, a PageElement's default interval is used.
      */
     containsDirectText(directTexts, opts) {
         return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.containsDirectText(expected, opts), directTexts);
@@ -1245,7 +1245,7 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
              * or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
              */
             exists: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1257,7 +1257,7 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
              * some or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
              */
             isVisible: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1269,7 +1269,7 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
              * some or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
              */
             isEnabled: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1283,8 +1283,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              */
             hasText: (texts, opts) => {
                 return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.not.hasText(expected, opts), texts);
@@ -1297,8 +1297,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
              * `interval` used to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              */
             hasAnyText: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1312,8 +1312,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              */
             containsText: (texts, opts) => {
                 return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.not.containsText(expected, opts), texts);
@@ -1326,8 +1326,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              */
             hasDirectText: (directTexts, opts) => {
                 return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directTexts);
@@ -1340,8 +1340,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
              * `interval` used to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              */
             hasAnyDirectText: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1355,8 +1355,8 @@ class PageElementMapEventually extends _1.PageNodeEventually {
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
-             * If no `timeout` is specified, PageElementMap's default timeout is used.
-             * If no `interval` is specified, PageElementMap's default interval is used.
+             * If no `timeout` is specified, a PageElement's default timeout is used.
+             * If no `interval` is specified, a PageElement's default interval is used.
              */
             containsDirectText: (directTexts, opts) => {
                 return this._node.eachCheck(this._node.$, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directTexts);
