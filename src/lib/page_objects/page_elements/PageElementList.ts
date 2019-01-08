@@ -716,8 +716,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * @template T the type of a single expected value or the type of an array element in an expected values array
    * @param elements an array containing all PageElements for which `checkFunc` should be executed
    * @param checkFunc a state check function executed for each PageElement in `elements`. It is passed a PageElement as
-   * first parameter and an expected value used by the state check condition as an optional second parameter.
-   * @param expected a single expected value or an array of expected values used for the state check conditions
+   * first parameter and an expected value used by the state check comparison as an optional second parameter.
+   * @param expected a single expected value or an array of expected values used for the state check comparisons
    *
    * If `expected` is a single value, this value is compared to each element in the array of actual values.
    * If `expected` is an array of values, its length must match the length of `elements` and the values of its
@@ -768,8 +768,8 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * @template T the type of a single expected value or the type of an array element in an expected values array
    * @param elements an array containing all PageElements for which `checkFunc` should be executed
    * @param checkFunc a state check function executed for each PageElement in `elements`. It is passed a PageElement as
-   * first parameter and an expected value used by the state check condition as an optional second parameter.
-   * @param expected a single expected value or an array of expected values used for the state check conditions
+   * first parameter and an expected value used by the state check comparison as an optional second parameter.
+   * @param expected a single expected value or an array of expected values used for the state check comparisons
    *
    * If `expected` is a single value, this value is compared to each element in the array of actual values.
    * If `expected` is an array of values, its length must match the length of `elements` and the values of its
@@ -915,18 +915,18 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   /**
    * Executes an action for each of PageElementList's managed PageElements.
    *
-   * @param doFunc an action executed for each of PageElementList's managed PageElements
+   * @param action an action executed for each of PageElementList's managed PageElements
    * @param filterMask can be used to skip the execution of an action for some or all PageElements
    * @returns this (an instance of PageElementList)
    */
   eachDo(
-    doFunc: (element: PageElementType) => any,
+    action: (element: PageElementType) => any,
     filterMask?: Workflo.PageNode.ListFilterMask
   ) {
     const elements = this.all
 
     if (isNullOrUndefined(filterMask)) {
-      elements.map(element => doFunc(element))
+      elements.map(element => action(element))
     } else if (filterMask !== false) {
       if (isArray(filterMask) && filterMask.length !== elements.length) {
         throw new Error(
@@ -941,7 +941,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
         const element = elements[i]
 
         if (this._includedInFilter(_filterMask)) {
-          doFunc(element)
+          action(element)
         }
       }
     }
@@ -1731,7 +1731,7 @@ export class PageElementListWait<
    * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
    * all managed PageElements and the `timeout` within which the condition is expected to be met
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1753,7 +1753,7 @@ export class PageElementListWait<
    * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
    * or all managed PageElements and the `timeout` within which the condition is expected to be met
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1771,7 +1771,7 @@ export class PageElementListWait<
    * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
    * or all managed PageElements and the `timeout` within which the condition is expected to be met
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1795,8 +1795,8 @@ export class PageElementListWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1815,8 +1815,8 @@ export class PageElementListWait<
    * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1842,8 +1842,8 @@ export class PageElementListWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1871,8 +1871,8 @@ export class PageElementListWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1894,8 +1894,8 @@ export class PageElementListWait<
    * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1925,8 +1925,8 @@ export class PageElementListWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    *
    * @returns this (an instance of PageElementList)
    */
@@ -1993,7 +1993,7 @@ export class PageElementListWait<
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
        * all managed PageElements and the `timeout` within which the condition is expected to be met
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2014,7 +2014,7 @@ export class PageElementListWait<
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2031,7 +2031,7 @@ export class PageElementListWait<
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2054,8 +2054,8 @@ export class PageElementListWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2073,8 +2073,8 @@ export class PageElementListWait<
        * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2099,8 +2099,8 @@ export class PageElementListWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2127,8 +2127,8 @@ export class PageElementListWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2149,8 +2149,8 @@ export class PageElementListWait<
        * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2179,8 +2179,8 @@ export class PageElementListWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        *
        * @returns this (an instance of PageElementList)
        */
@@ -2285,7 +2285,7 @@ export class PageElementListEventually<
    * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
    * all managed PageElements and the `timeout` within which the condition is expected to be met
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   exists(opts: Workflo.ITimeout & {filterMask?: boolean} = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -2303,7 +2303,7 @@ export class PageElementListEventually<
    * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
    * or all managed PageElements and the `timeout` within which the condition is expected to be met
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -2317,7 +2317,7 @@ export class PageElementListEventually<
    * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
    * or all managed PageElements and the `timeout` within which the condition is expected to be met
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -2338,8 +2338,8 @@ export class PageElementListEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasText(text: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -2354,8 +2354,8 @@ export class PageElementListEventually<
    * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -2378,8 +2378,8 @@ export class PageElementListEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    */
   containsText(text: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -2403,8 +2403,8 @@ export class PageElementListEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -2423,8 +2423,8 @@ export class PageElementListEventually<
    * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -2450,8 +2450,8 @@ export class PageElementListEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, PageElementList's default timeout is used.
-   * If no `interval` is specified, PageElementList's default interval is used.
+   * If no `timeout` is specified, a PageElement's default timeout is used.
+   * If no `interval` is specified, a PageElement's default interval is used.
    */
   containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -2505,7 +2505,7 @@ export class PageElementListEventually<
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
        * all managed PageElements and the `timeout` within which the condition is expected to be met
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       exists: (opts: Workflo.ITimeout & {filterMask?: boolean} = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -2523,7 +2523,7 @@ export class PageElementListEventually<
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -2539,7 +2539,7 @@ export class PageElementListEventually<
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
        * or all managed PageElements and the `timeout` within which the condition is expected to be met
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -2561,8 +2561,8 @@ export class PageElementListEventually<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        */
       hasText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
@@ -2577,8 +2577,8 @@ export class PageElementListEventually<
        * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -2600,8 +2600,8 @@ export class PageElementListEventually<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        */
       containsText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
@@ -2624,8 +2624,8 @@ export class PageElementListEventually<
       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
       * to check it
       *
-      * If no `timeout` is specified, PageElementList's default timeout is used.
-      * If no `interval` is specified, PageElementList's default interval is used.
+      * If no `timeout` is specified, a PageElement's default timeout is used.
+      * If no `interval` is specified, a PageElement's default interval is used.
       */
       hasDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
@@ -2643,8 +2643,8 @@ export class PageElementListEventually<
        * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
        * used to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -2669,8 +2669,8 @@ export class PageElementListEventually<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, PageElementList's default timeout is used.
-       * If no `interval` is specified, PageElementList's default interval is used.
+       * If no `timeout` is specified, a PageElement's default timeout is used.
+       * If no `interval` is specified, a PageElement's default interval is used.
        */
       containsDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(

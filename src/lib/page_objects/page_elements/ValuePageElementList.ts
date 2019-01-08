@@ -378,8 +378,8 @@ class ValuePageElementListWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-   * If no `interval` is specified, ValuePageElementList's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    *
    * @returns this (an instance of ValuePageElementList)
    */
@@ -398,8 +398,8 @@ class ValuePageElementListWait<
    * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
-   * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-   * If no `interval` is specified, ValuePageElementList's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    *
    * @returns this (an instance of ValuePageElementList)
    */
@@ -426,8 +426,8 @@ class ValuePageElementListWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-   * If no `interval` is specified, ValuePageElementList's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    *
    * @returns this (an instance of ValuePageElementList)
    */
@@ -457,8 +457,8 @@ class ValuePageElementListWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-       * If no `interval` is specified, ValuePageElementList's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        *
        * @returns this (an instance of ValuePageElementList)
        */
@@ -476,8 +476,8 @@ class ValuePageElementListWait<
        * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
-       * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-       * If no `interval` is specified, ValuePageElementList's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        *
        * @returns this (an instance of ValuePageElementList)
        */
@@ -503,8 +503,8 @@ class ValuePageElementListWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-       * If no `interval` is specified, ValuePageElementList's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        *
        * @returns this (an instance of ValuePageElementList)
        */
@@ -549,8 +549,8 @@ class ValuePageElementListEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-   * If no `interval` is specified, ValuePageElementList's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   hasValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -566,8 +566,8 @@ class ValuePageElementListEventually<
    * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
-   * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-   * If no `interval` is specified, ValuePageElementList's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -590,8 +590,8 @@ class ValuePageElementListEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-   * If no `interval` is specified, ValuePageElementList's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   containsValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -617,8 +617,8 @@ class ValuePageElementListEventually<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-       * If no `interval` is specified, ValuePageElementList's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
@@ -633,8 +633,8 @@ class ValuePageElementListEventually<
        * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
-       * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-       * If no `interval` is specified, ValuePageElementList's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -656,8 +656,8 @@ class ValuePageElementListEventually<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementList's default timeout is used.
-       * If no `interval` is specified, ValuePageElementList's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(

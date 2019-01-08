@@ -62,7 +62,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
   }
 
   /**
-   * Returns the values of all ValuePageElements managed by ValuePageElementMap as a "result map" after performing the
+   * Returns the values of all ValuePageElements managed by ValuePageElementMap as a result map after performing the
    * initial waiting condition of each ValuePageElement.
    *
    * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
@@ -73,7 +73,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
   }
 
   /**
-   * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementMap as a "result map" after
+   * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementMap as a result map after
    * performing the initial waiting condition of each managed ValuePageElement.
    *
    * A ValuePageElement's 'hasValue' status is set to true if its actual text equals the expected text.
@@ -87,7 +87,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
   }
 
   /**
-   * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementMap as a "result map" after
+   * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementMap as a result map after
    * performing the initial waiting condition of each managed ValuePageElement.
    *
    * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any text.
@@ -102,7 +102,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
   }
 
   /**
-   * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementMap as a "result map" after
+   * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementMap as a result map after
    * performing the initial waiting condition of each managed ValuePageElement.
    *
    * A ValuePageElement's 'containsValue' status is set to true if its actual text contains the expected text.
@@ -148,7 +148,7 @@ class ValuePageElementMapCurrently<
 > extends PageElementMapCurrently<Store, K, PageElementType, PageElementOpts, MapType> {
 
   /**
-   * Returns the current values of all ValuePageElements managed by ValuePageElementMap as a "result map".
+   * Returns the current values of all ValuePageElements managed by ValuePageElementMap as a result map.
    *
    * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
    * ValuePageElements. The results of skipped function invocations are not included in the total results object.
@@ -158,7 +158,7 @@ class ValuePageElementMapCurrently<
   }
 
   /**
-   * Returns the current 'hasValue' status of all ValuePageElements managed by ValuePageElementMap as a "result map".
+   * Returns the current 'hasValue' status of all ValuePageElements managed by ValuePageElementMap as a result map.
    *
    * A ValuePageElement's 'hasValue' status is set to true if its actual text equals the expected text.
    *
@@ -171,7 +171,7 @@ class ValuePageElementMapCurrently<
   }
 
   /**
-   * Returns the current 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementMap as a "result map".
+   * Returns the current 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementMap as a result map.
    *
    * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any text.
    *
@@ -185,7 +185,7 @@ class ValuePageElementMapCurrently<
   }
 
   /**
-   * Returns the current 'containsValue' status of all ValuePageElements managed by ValuePageElementMap as a "result map".
+   * Returns the current 'containsValue' status of all ValuePageElements managed by ValuePageElementMap as a result map.
    *
    * A ValuePageElement's 'containsValue' status is set to true if its actual text contains the expected text.
    *
@@ -305,8 +305,8 @@ class ValuePageElementMapWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-   * If no `interval` is specified, ValuePageElementMap's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    *
    * @returns this (an instance of ValuePageElementMap)
    */
@@ -325,8 +325,8 @@ class ValuePageElementMapWait<
    * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
-   * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-   * If no `interval` is specified, ValuePageElementMap's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    *
    * @returns this (an instance of ValuePageElementMap)
    */
@@ -347,8 +347,8 @@ class ValuePageElementMapWait<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-   * If no `interval` is specified, ValuePageElementMap's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    *
    * @returns this (an instance of ValuePageElementMap)
    */
@@ -373,8 +373,8 @@ class ValuePageElementMapWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-       * If no `interval` is specified, ValuePageElementMap's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        *
        * @returns this (an instance of ValuePageElementMap)
        */
@@ -392,8 +392,8 @@ class ValuePageElementMapWait<
        * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
-       * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-       * If no `interval` is specified, ValuePageElementMap's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        *
        * @returns this (an instance of ValuePageElementMap)
        */
@@ -414,8 +414,8 @@ class ValuePageElementMapWait<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-       * If no `interval` is specified, ValuePageElementMap's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        *
        * @returns this (an instance of ValuePageElementMap)
        */
@@ -457,8 +457,8 @@ class ValuePageElementMapEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-   * If no `interval` is specified, ValuePageElementMap's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   hasValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -474,8 +474,8 @@ class ValuePageElementMapEventually<
    * or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the `interval`
    * used to check it
    *
-   * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-   * If no `interval` is specified, ValuePageElementMap's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -493,8 +493,8 @@ class ValuePageElementMapEventually<
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
    * to check it
    *
-   * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-   * If no `interval` is specified, ValuePageElementMap's default interval is used.
+   * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+   * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   containsValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -515,8 +515,8 @@ class ValuePageElementMapEventually<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-       * If no `interval` is specified, ValuePageElementMap's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       hasValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
@@ -531,8 +531,8 @@ class ValuePageElementMapEventually<
        * some or all managed ValuePageElements, the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
-       * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-       * If no `interval` is specified, ValuePageElementMap's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -549,8 +549,8 @@ class ValuePageElementMapEventually<
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
        * to check it
        *
-       * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
-       * If no `interval` is specified, ValuePageElementMap's default interval is used.
+       * If no `timeout` is specified, a ValuePageElement's default timeout is used.
+       * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       containsValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
