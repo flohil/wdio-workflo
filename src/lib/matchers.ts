@@ -484,7 +484,7 @@ export function createBaseMatcher<
           ((typeof opts === 'object' && opts !== null) || !!opts) ? opts : Object.create(null);
 
         if (typeof optsWithTimeout === 'object' && !optsWithTimeout['timeout'] ) {
-          optsWithTimeout.timeout = node.getTimeout()
+          optsWithTimeout.timeout = node.__lastDiff.timeout
         }
 
         const actual = node.__lastDiff.actual
