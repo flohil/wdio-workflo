@@ -904,7 +904,11 @@ export function createEventuallyNumberWithToleranceMatcher<
 // ERROR TEXT FUNCTIONS
 
 function convertDiffToMessages(
-  diff: Workflo.IDiff, actualOnly: boolean = false, comparisonLines: string[] = [], paths: string[] = []
+  diff: Workflo.IDiff,
+  actualOnly: boolean = false,
+  includeTimeouts: boolean = false,
+  comparisonLines: string[] = [],
+  paths: string[] = []
 ): string[] {
   if (diff.tree && Object.keys(diff.tree).length > 0) {
     const keys = Object.keys(diff.tree)
@@ -914,7 +918,7 @@ function convertDiffToMessages(
         const _paths = [...paths]
         _paths.push(key)
 
-        convertDiffToMessages(diff.tree[key], actualOnly, comparisonLines, _paths)
+        convertDiffToMessages(diff.tree[key], actualOnly, includeTimeouts, comparisonLines, _paths)
       }
     )
   } else {
@@ -937,7 +941,9 @@ function convertDiffToMessages(
       '' :`{actual: "${_actual}", expected: "${_expected}"}\n`
     }
 
-    comparisonLines.push(`${diff.constructorName} at path '${_paths}'\n${compareStr}( ${diff.selector} )`)
+    const timeoutStr = (includeTimeouts) ? ` within ${diff.timeout}ms` : ''
+
+    comparisonLines.push(`${diff.constructorName} at path '${_paths}'${timeoutStr}\n${compareStr}( ${diff.selector} )`)
   }
 
   return comparisonLines
@@ -1052,7 +1058,10 @@ export function createEventuallyAnyMessage(
 }
 
 export function createEachMessage(
-  node: Workflo.PageNode.INode, errorTexts: string | string[], actualOnly: boolean = false
+  node: Workflo.PageNode.INode,
+  errorTexts: string | string[],
+  actualOnly: boolean = false,
+  includeTimeouts: boolean = false
 ) {
   let errorText = undefined
   let notErrorText = undefined
@@ -1065,7 +1074,7 @@ export function createEachMessage(
     notErrorText = errorTexts
   }
 
-  const comparisonLines = convertDiffToMessages(node.__lastDiff, actualOnly)
+  const comparisonLines = convertDiffToMessages(node.__lastDiff, actualOnly, includeTimeouts)
   const comparisonList = comparisonLines.join('\n\n')
   const hrLine = `\n------------------------------------------------------------------\n`
 
@@ -1080,23 +1089,23 @@ export function createAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: s
 }
 
 export function createEventuallyEachMessage(
-  node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number
+  node: Workflo.PageNode.INode, errorTexts: string | string[]
 ) {
   const within = _.isArray(errorTexts) ?
-    errorTexts.map(errorText => `eventually ${errorText} within ${timeout}ms`) :
-    `eventually ${errorTexts} within ${timeout}ms`
+    errorTexts.map(errorText => `eventually ${errorText}`) :
+    `eventually ${errorTexts}`
 
-  return createEachMessage(node, within)
+  return createEachMessage(node, within, false, true)
 }
 
 export function createEventuallyAnyEachMessage(
-  node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number
+  node: Workflo.PageNode.INode, errorTexts: string | string[]
 ) {
   const within = _.isArray(errorTexts) ?
-    errorTexts.map(errorText => `eventually ${errorText} within ${timeout}ms`) :
-    `eventually ${errorTexts} within ${timeout}ms`
+    errorTexts.map(errorText => `eventually ${errorText}`) :
+    `eventually ${errorTexts}`
 
-  return createEachMessage(node, within, true)
+  return createEachMessage(node, within, true, true)
 }
 
 // MATCHERS
@@ -1693,13 +1702,13 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, opts}) => [
         () => node.eventually.exists(opts), () => node.eventually.not.exists(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist")
     },
     group: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.exists(opts), () => node.eventually.not.exists(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "exist")
     }
   }),
   toBeVisible: createMatcherWithoutExpected({
@@ -1731,19 +1740,19 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
     },
     list: {
       resultFunc: ({node, opts}) => [() => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be visible", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be visible")
     },
     map: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be visible", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be visible")
     },
     group: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.isVisible(opts), () => node.eventually.not.isVisible(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be visible", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be visible")
     }
   }),
   toBeEnabled: createMatcherWithoutExpected({
@@ -1775,19 +1784,19 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
     },
     list: {
       resultFunc: ({node, opts}) => [() => node.eventually.isEnabled(opts), () => node.eventually.not.isEnabled(opts)],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be enabled", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be enabled")
     },
     map: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.isEnabled(opts), () => node.eventually.not.isEnabled(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be enabled", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be enabled")
     },
     group: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.isEnabled(opts), () => node.eventually.not.isEnabled(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be enabled", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "be enabled")
     }
   }),
   toHaveText: createTextMatcher({
@@ -1829,19 +1838,19 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasText(expected, opts), () => node.eventually.not.hasText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have text')
     },
     map: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasText(expected, opts), () => node.eventually.not.hasText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have text')
     },
     group: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasText(expected, opts), () => node.eventually.not.hasText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "have text", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "have text")
     }
   }),
   toHaveAnyText: createTextMatcherWithoutExpected({
@@ -1881,19 +1890,19 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyText(opts), () => node.eventually.not.hasAnyText(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any text')
     },
     map: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyText(opts), () => node.eventually.not.hasAnyText(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any text')
     },
     group: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyText(opts), () => node.eventually.not.hasAnyText(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any text", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any text")
     }
   }),
   toContainText: createTextMatcher({
@@ -1935,19 +1944,19 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsText(expected, opts), () => node.eventually.not.containsText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain text')
     },
     map: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsText(expected, opts), () => node.eventually.not.containsText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain text')
     },
     group: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsText(expected, opts), () => node.eventually.not.containsText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain text", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain text")
     }
   }),
   toHaveDirectText: createTextMatcher({
@@ -1989,19 +1998,19 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasDirectText(expected, opts), () => node.eventually.not.hasDirectText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have direct text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have direct text')
     },
     map: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasDirectText(expected, opts), () => node.eventually.not.hasDirectText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have direct text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have direct text')
     },
     group: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasDirectText(expected, opts), () => node.eventually.not.hasDirectText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "have direct text", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "have direct text")
     }
   }),
   toHaveAnyDirectText: createTextMatcherWithoutExpected({
@@ -2043,19 +2052,19 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyDirectText(opts), () => node.eventually.not.hasAnyDirectText(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any direct text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any direct text')
     },
     map: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyDirectText(opts), () => node.eventually.not.hasAnyDirectText(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any direct text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any direct text')
     },
     group: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyDirectText(opts), () => node.eventually.not.hasAnyDirectText(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any direct text", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any direct text")
     }
   }),
   toContainDirectText: createTextMatcher({
@@ -2101,21 +2110,21 @@ export const allMatchers: jasmine.CustomMatcherFactories = {
         () => node.eventually.containsDirectText(expected, opts),
         () => node.eventually.not.containsDirectText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain direct text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain direct text')
     },
     map: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsDirectText(expected, opts),
         () => node.eventually.not.containsDirectText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain direct text', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain direct text')
     },
     group: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsDirectText(expected, opts),
         () => node.eventually.not.containsDirectText(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain direct text", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain direct text")
     }
   })
 };
@@ -2160,19 +2169,19 @@ export const valueAllMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasValue(expected, opts), () => node.eventually.not.hasValue(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have value', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have value')
     },
     map: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasValue(expected, opts), () => node.eventually.not.hasValue(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have value', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'have value')
     },
     group: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.hasValue(expected, opts), () => node.eventually.not.hasValue(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "have value", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "have value")
     }
   }),
   toHaveAnyValue: createValueMatcherWithoutExpected({
@@ -2212,19 +2221,19 @@ export const valueAllMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyValue(opts), () => node.eventually.not.hasAnyValue(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any value', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any value')
     },
     map: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyValue(opts), () => node.eventually.not.hasAnyValue(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any value', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, 'have any value')
     },
     group: {
       resultFunc: ({node, opts}) => [
         () => node.eventually.hasAnyValue(opts), () => node.eventually.not.hasAnyValue(opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any value", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyAnyEachMessage(node, "have any value")
     }
   }),
   toContainValue: createValueMatcher({
@@ -2266,19 +2275,19 @@ export const valueAllMatchers: jasmine.CustomMatcherFactories = {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsValue(expected, opts), () => node.eventually.not.containsValue(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain value', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain value')
     },
     map: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsValue(expected, opts), () => node.eventually.not.containsValue(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain value', opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, 'contain value')
     },
     group: {
       resultFunc: ({node, expected, opts}) => [
         () => node.eventually.containsValue(expected, opts), () => node.eventually.not.containsValue(expected, opts)
       ],
-      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain value", opts.timeout)
+      errorTextFunc: ({node, opts}) => createEventuallyEachMessage(node, "contain value")
     }
   })
 }
