@@ -50,7 +50,7 @@ export interface IPageElementMapOpts<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends Partial<IPageElementOpts<Store>>
+  PageElementOpts extends Partial<IPageElementOpts<Store>>
 > extends IPageNodeOpts<Store> {
   /**
    * This `identifier` provides a `mappingObject` and a `mappingFunc` which are used to constrain the "base"
@@ -64,11 +64,11 @@ export interface IPageElementMapOpts<
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
    */
-  elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType,
+  elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType,
   /**
    * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
    */
-  elementOpts: PageElementOptions
+  elementOpts: PageElementOpts
 }
 
 /**
@@ -115,7 +115,7 @@ export class PageElementMap<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends Partial<IPageElementOpts<Store>>
+  PageElementOpts extends Partial<IPageElementOpts<Store>>
 > extends PageNode<Store>
 implements Workflo.PageNode.IElementNode<
   Partial<Record<K, string>>, Partial<Record<K, boolean>>, Partial<Record<K, boolean>>
@@ -127,11 +127,11 @@ implements Workflo.PageNode.IElementNode<
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
    */
-  protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType
+  protected _elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType
   /**
    * the options passed to `_elementStoreFunc` to configure a managed PageElement instance
    */
-  protected _elementOpts: PageElementOptions
+  protected _elementOpts: PageElementOpts
   /**
    * This `_identifier` provides a `mappingObject` and a `mappingFunc` which are used to constrain the "base"
    * XPath selector of PageElementMap using XPath modification functions in order to statically identify a
@@ -146,9 +146,9 @@ implements Workflo.PageNode.IElementNode<
    */
   protected _$: Record<K, PageElementType>
 
-  readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOptions, this>
-  readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOptions, this>
-  readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOptions, this>
+  readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOpts, this>
+  readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOpts, this>
+  readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOpts, this>
 
   /**
    * A PageElementMap manages multiple related "static" PageElements which all have the same type and the same "base"
@@ -195,7 +195,7 @@ implements Workflo.PageNode.IElementNode<
       elementStoreFunc,
       elementOpts: elementOptions,
       ...superOpts
-    } : IPageElementMapOpts<Store, K, PageElementType, PageElementOptions>
+    } : IPageElementMapOpts<Store, K, PageElementType, PageElementOpts>
   ) {
     super(selector, superOpts)
 
@@ -623,8 +623,8 @@ export class PageElementMapCurrently<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
+  PageElementOpts extends Partial<IPageElementOpts<Store>>,
+  MapType extends PageElementMap<Store, K, PageElementType, PageElementOpts>
 > extends PageNodeCurrently<Store, MapType> {
 
   /**
@@ -1012,8 +1012,8 @@ export class PageElementMapWait<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
+  PageElementOpts extends Partial<IPageElementOpts<Store>>,
+  MapType extends PageElementMap<Store, K, PageElementType, PageElementOpts>
 > extends PageNodeWait<Store, MapType> {
 
   /**
@@ -1419,8 +1419,8 @@ export class PageElementMapEventually<
   Store extends PageElementStore,
   K extends string,
   PageElementType extends PageElement<Store>,
-  PageElementOptions extends Partial<IPageElementOpts<Store>>,
-  MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
+  PageElementOpts extends Partial<IPageElementOpts<Store>>,
+  MapType extends PageElementMap<Store, K, PageElementType, PageElementOpts>
 > extends PageNodeEventually<Store, MapType> {
 
   /**
