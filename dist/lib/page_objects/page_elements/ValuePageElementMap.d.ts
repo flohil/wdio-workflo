@@ -72,9 +72,10 @@ export declare class ValuePageElementMap<Store extends PageElementStore, K exten
      */
     getContainsValue(values: Partial<Record<K, ValueType>>): Partial<Record<K, boolean>>;
     /**
-     * Sets values on all map elements.
+     * This function sets the passed values to all ValuePageElements managed by ValuePageElementMap
+     * after performing the initial waiting condition of each ValuePageElement.
      *
-     * @param values
+     * @param values a map of setter values
      */
     setValue(values: Partial<Record<K, ValueType>>): this;
 }

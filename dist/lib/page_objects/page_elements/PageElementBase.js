@@ -104,7 +104,8 @@ class PageElementBaseCurrently extends _1.PageNodeCurrently {
      */
     _writeLastDiff(actual, expected) {
         const diff = {
-            actual: this._node.__typeToString(actual)
+            actual: this._node.__typeToString(actual),
+            timeout: this._node.getTimeout()
         };
         if (typeof expected !== 'undefined') {
             diff.expected = this._node.__typeToString(expected);

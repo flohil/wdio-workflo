@@ -57,13 +57,35 @@
 					<a href="ipageelementmapopts.html">IPageElementMapOpts</a>
 				</li>
 			</ul>
-			<h1>Interface IPageElementMapOpts&lt;Store, K, PageElementType, PageElementOptions&gt;</h1>
+			<h1>Interface IPageElementMapOpts&lt;Store, K, PageElementType, PageElementOpts&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Describes the opts parameter passed to the constructor function of PageElementMap.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>K the key names of PageElementMap&#39;s <code>$</code> accessor used to access the map&#39;s managed PageElements</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>PageElementType type of the PageElements managed by PageElementList</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+							by PageElementList</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -77,7 +99,7 @@
 						<h4>PageElementType<span class="tsd-signature-symbol">: </span><a href="../classes/pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 					<li>
-						<h4>PageElementOptions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4>PageElementOpts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -110,7 +132,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ipageelementmapopts.html#elementstorefunc" class="tsd-kind-icon">element<wbr>Store<wbr>Func</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ipageelementmapopts.html#identifier" class="tsd-kind-icon">identifier</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipageelementmapopts.html#interval" class="tsd-kind-icon">interval</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="ipageelementmapopts.html#store" class="tsd-kind-icon">store</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipageelementmapopts.html#store" class="tsd-kind-icon">store</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="ipageelementmapopts.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
 						</section>
@@ -122,12 +144,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="elementopts" class="tsd-anchor"></a>
 					<h3>element<wbr>Opts</h3>
-					<div class="tsd-signature tsd-kind-icon">element<wbr>Opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageElementOptions</span></div>
+					<div class="tsd-signature tsd-kind-icon">element<wbr>Opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageElementOpts</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L29">lib/page_objects/page_elements/PageElementMap.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L71">lib/page_objects/page_elements/PageElementMap.ts:71</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the options passed to <code>elementStoreFunc</code> to configure the retrieved PageElement instance</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="elementstorefunc" class="tsd-anchor"></a>
@@ -135,15 +162,28 @@
 					<div class="tsd-signature tsd-kind-icon">element<wbr>Store<wbr>Func<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L28">lib/page_objects/page_elements/PageElementMap.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L67">lib/page_objects/page_elements/PageElementMap.ts:67</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>This function retrieves an instance of a PageElement mapped by PageElementMap from the map&#39;s PageElementStore.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>the XPath expression used to identify the retrieved PageElement in the DOM</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>the options used to configure the retrieved PageElement</p>
+							</dd>
+						</dl>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>selector<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -153,7 +193,7 @@
 												<h5>selector: <span class="tsd-signature-type">string</span></h5>
 											</li>
 											<li>
-												<h5>options: <span class="tsd-signature-type">PageElementOptions</span></h5>
+												<h5>options: <span class="tsd-signature-type">PageElementOpts</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType</span></h4>
@@ -169,9 +209,16 @@
 					<div class="tsd-signature tsd-kind-icon">identifier<span class="tsd-signature-symbol">:</span> <a href="ipageelementmapidentifier.html" class="tsd-signature-type">IPageElementMapIdentifier</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L27">lib/page_objects/page_elements/PageElementMap.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L60">lib/page_objects/page_elements/PageElementMap.ts:60</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>This <code>identifier</code> provides a <code>mappingObject</code> and a <code>mappingFunc</code> which are used to constrain the &quot;base&quot;
+								XPath selector of PageElementMap using XPath modification functions in order to statically identify a
+							PageElementMap&#39;s managed PageElements when the PageElementMap is initially created.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="interval" class="tsd-anchor"></a>
@@ -180,7 +227,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeoutinterval.html">ITimeoutInterval</a>.<a href="__global.workflo.itimeoutinterval.html#interval">interval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/index.ts#L1868">index.ts:1868</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/index.ts#L1868">index.ts:1868</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -189,16 +236,21 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="store" class="tsd-anchor"></a>
 					<h3>store</h3>
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Store</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="ipagenodeopts.html">IPageNodeOpts</a>.<a href="ipagenodeopts.html#store">store</a></p>
+						<p>Inherited from <a href="ipagenodeopts.html">IPageNodeOpts</a>.<a href="ipagenodeopts.html#store">store</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L26">lib/page_objects/page_elements/PageElementMap.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageNode.ts#L13">lib/page_objects/page_elements/PageNode.ts:13</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>an instance of PageElementStore which can be used to retrieve/create PageNodes</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="timeout" class="tsd-anchor"></a>
@@ -207,7 +259,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeout.html">ITimeout</a>.<a href="__global.workflo.itimeout.html#timeout">timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/index.ts#L1856">index.ts:1856</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/index.ts#L1856">index.ts:1856</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -245,7 +297,7 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="ipageelementmapopts.html#interval" class="tsd-kind-icon">interval</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="ipageelementmapopts.html#store" class="tsd-kind-icon">store</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">

@@ -1881,6 +1881,10 @@ declare global {
              * the diffs of the PageElement's handled by PageNode are stored in tree.
              */
             tree?: IDiffTree;
+            /**
+             * timeout used to perform the last state check function in milliseconds
+             */
+            timeout?: number;
         }
         namespace Store {
             type BaseKeys = "timeout" | "waitType";
@@ -1985,6 +1989,10 @@ declare global {
              * - hasDirectText
              * - hasAnyDirectText
              * - containsDirectText
+             *
+             * @template TextType type of IElementNode's state retrieval functions (getText...)
+             * @template BooleanType type of IElementNode's state compare functions (getHasText...)
+             * @template FilterType type of IElementNode's filter mask
              */
             interface IElementNode<TextType, BooleanType, FilterType = any> extends INode, IGetElement<TextType, BooleanType, FilterType> {
                 /**
@@ -2538,6 +2546,10 @@ declare global {
              * - hasValue
              * - hasAnyValue
              * - containsValue
+             *
+             * @template GetType type of IValueElementNode's state retrieval functions (getValue)
+             * @template FilterType type of IValueElementNode's filter mask
+             * @template SetType type of a setter values structure used by a IValueElementNode's setter functions
              */
             interface IValueElementNode<GetType, FilterType = any, SetType = GetType> extends INode, IGetValueElement<GetType, FilterType> {
                 /**

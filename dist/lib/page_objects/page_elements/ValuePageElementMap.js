@@ -79,11 +79,11 @@ class ValuePageElementMap extends _1.PageElementMap {
     getContainsValue(values) {
         return this.eachCompare(this.$, (element, expected) => element.currently.containsValue(expected), values);
     }
-    // TODO
     /**
-     * Sets values on all map elements.
+     * This function sets the passed values to all ValuePageElements managed by ValuePageElementMap
+     * after performing the initial waiting condition of each ValuePageElement.
      *
-     * @param values
+     * @param values a map of setter values
      */
     setValue(values) {
         return this.eachSet(this._$, (element, value) => element.setValue(value), values);

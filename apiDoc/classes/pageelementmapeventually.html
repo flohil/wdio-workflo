@@ -57,13 +57,38 @@
 					<a href="pageelementmapeventually.html">PageElementMapEventually</a>
 				</li>
 			</ul>
-			<h1>Class PageElementMapEventually&lt;Store, K, PageElementType, PageElementOptions, MapType&gt;</h1>
+			<h1>Class PageElementMapEventually&lt;Store, K, PageElementType, PageElementOpts, MapType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This class defines all <code>eventually</code> functions of PageElementMap.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>template</dt>
+						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>K the key names of PageElementMap&#39;s <code>$</code> accessor used to access the map&#39;s managed PageElements</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>PageElementType type of the PageElements managed by PageElementMap</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
+							by PageElementMap</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>MapType type of the PageElementMap for which PageElementMapEventually defines all <code>eventually</code> functions</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -77,10 +102,10 @@
 						<h4>PageElementType<span class="tsd-signature-symbol">: </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 					<li>
-						<h4>PageElementOptions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4>PageElementOpts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ipageelementopts.html" class="tsd-signature-type">IPageElementOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 					<li>
-						<h4>MapType<span class="tsd-signature-symbol">: </span><a href="pageelementmap.html" class="tsd-signature-type">PageElementMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4>MapType<span class="tsd-signature-symbol">: </span><a href="pageelementmap.html" class="tsd-signature-type">PageElementMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOpts</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -154,7 +179,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenodeeventually.html">PageNodeEventually</a>.<a href="pagenodeeventually.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageNode.ts#L332">lib/page_objects/page_elements/PageNode.ts:332</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageNode.ts#L311">lib/page_objects/page_elements/PageNode.ts:311</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -187,7 +212,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenodeeventually.html">PageNodeEventually</a>.<a href="pagenodeeventually.html#_node">_node</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageNode.ts#L332">lib/page_objects/page_elements/PageNode.ts:332</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageNode.ts#L311">lib/page_objects/page_elements/PageNode.ts:311</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -210,30 +235,54 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pagenodeeventually.html">PageNodeEventually</a>.<a href="pagenodeeventually.html#not">not</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L697">lib/page_objects/page_elements/PageElementMap.ts:697</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1582">lib/page_objects/page_elements/PageElementMap.ts:1582</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>returns the negated variants of PageElementMapEventually&#39;s state check functions</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter">
 									<h5>contains<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">: </span>function</h5>
 									<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-not-exported">
-										<li class="tsd-signature tsd-kind-icon">contains<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directText<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+										<li class="tsd-signature tsd-kind-icon">contains<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directTexts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L749">lib/page_objects/page_elements/PageElementMap.ts:749</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1724">lib/page_objects/page_elements/PageElementMap.ts:1724</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually do not contain
+													the expected direct texts within a specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
-													<h5>directText: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<h5>directTexts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected direct texts supposed not to be contained in the actual direct texts</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+															to check it</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -242,22 +291,41 @@
 								<li class="tsd-parameter">
 									<h5>contains<wbr>Text<span class="tsd-signature-symbol">: </span>function</h5>
 									<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-not-exported">
-										<li class="tsd-signature tsd-kind-icon">contains<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+										<li class="tsd-signature tsd-kind-icon">contains<wbr>Text<span class="tsd-signature-symbol">(</span>texts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L732">lib/page_objects/page_elements/PageElementMap.ts:732</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1674">lib/page_objects/page_elements/PageElementMap.ts:1674</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if the actual texts of all PageElements managed by PageElementMap eventually do not contain the
+													expected texts within a specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
-													<h5>text: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<h5>texts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected texts supposed not to be contained in the actual texts</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+															to check it</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -272,13 +340,25 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L699">lib/page_objects/page_elements/PageElementMap.ts:699</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1592">lib/page_objects/page_elements/PageElementMap.ts:1592</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if all PageElements managed by PageElementMap eventually do not exist within a specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>exists</code> function for some
+															or all managed PageElements and the <code>timeout</code> within which the condition is expected to be met</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -293,13 +373,28 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L742">lib/page_objects/page_elements/PageElementMap.ts:742</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1706">lib/page_objects/page_elements/PageElementMap.ts:1706</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if all PageElements managed by PageElementMap eventually do not have any direct text within a
+													specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>hasAnyDirectText</code> function
+																for some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and the
+															<code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -314,13 +409,28 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L725">lib/page_objects/page_elements/PageElementMap.ts:725</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1656">lib/page_objects/page_elements/PageElementMap.ts:1656</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if all PageElements managed by PageElementMap eventually do not have any text within a specific
+													timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>hasAnyText</code> function for
+																some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and the
+															<code>interval</code> used to check it</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -329,22 +439,41 @@
 								<li class="tsd-parameter">
 									<h5>has<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">: </span>function</h5>
 									<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-not-exported">
-										<li class="tsd-signature tsd-kind-icon">has<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directText<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+										<li class="tsd-signature tsd-kind-icon">has<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directTexts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L737">lib/page_objects/page_elements/PageElementMap.ts:737</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1690">lib/page_objects/page_elements/PageElementMap.ts:1690</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually do not equal
+													the expected direct texts within a specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
-													<h5>directText: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<h5>directTexts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected direct texts supposed not to equal the actual direct texts</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+															to check it</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -353,22 +482,41 @@
 								<li class="tsd-parameter">
 									<h5>has<wbr>Text<span class="tsd-signature-symbol">: </span>function</h5>
 									<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-not-exported">
-										<li class="tsd-signature tsd-kind-icon">has<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+										<li class="tsd-signature tsd-kind-icon">has<wbr>Text<span class="tsd-signature-symbol">(</span>texts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L720">lib/page_objects/page_elements/PageElementMap.ts:720</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1640">lib/page_objects/page_elements/PageElementMap.ts:1640</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if the actual texts of all PageElements managed by PageElementMap eventually do not equal the
+													expected texts within a specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
-													<h5>text: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<h5>texts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>the expected texts supposed not to equal the actual texts</p>
+														</div>
+													</div>
 												</li>
 												<li>
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+															to check it</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+															If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -383,13 +531,25 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L713">lib/page_objects/page_elements/PageElementMap.ts:713</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1622">lib/page_objects/page_elements/PageElementMap.ts:1622</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if all PageElements managed by PageElementMap eventually are not enabled within a specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>isEnabled</code> function for
+															some or all managed PageElements and the <code>timeout</code> within which the condition is expected to be met</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -404,13 +564,25 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L706">lib/page_objects/page_elements/PageElementMap.ts:706</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1607">lib/page_objects/page_elements/PageElementMap.ts:1607</a></li>
 												</ul>
 											</aside>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns true if all PageElements managed by PageElementMap eventually are not visible within a specific timeout.</p>
+												</div>
+											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
 													<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<div class="lead">
+															<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>isVisible</code> function for
+															some or all managed PageElements and the <code>timeout</code> within which the condition is expected to be met</p>
+															<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.</p>
+														</div>
+													</div>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -427,22 +599,37 @@
 					<a name="containsdirecttext" class="tsd-anchor"></a>
 					<h3>contains<wbr>Direct<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">contains<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directText<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">contains<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directTexts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L691">lib/page_objects/page_elements/PageElementMap.ts:691</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1573">lib/page_objects/page_elements/PageElementMap.ts:1573</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually contain the
+									expected direct texts within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>directText: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>directTexts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected direct texts supposed to be contained in the actual direct texts</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+										to check it</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -453,22 +640,37 @@
 					<a name="containstext" class="tsd-anchor"></a>
 					<h3>contains<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">contains<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">contains<wbr>Text<span class="tsd-signature-symbol">(</span>texts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L671">lib/page_objects/page_elements/PageElementMap.ts:671</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1520">lib/page_objects/page_elements/PageElementMap.ts:1520</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if the actual texts of all PageElements managed by PageElementMap eventually contain the expected texts
+									within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>text: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>texts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected texts supposed to be contained in the actual texts</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+										to check it</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -485,13 +687,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L633">lib/page_objects/page_elements/PageElementMap.ts:633</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1434">lib/page_objects/page_elements/PageElementMap.ts:1434</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if all PageElements managed by PageElementMap eventually exist within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>exists</code> function for some
+										or all managed PageElements and the <code>timeout</code> within which the condition is expected to be met</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -508,13 +720,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L683">lib/page_objects/page_elements/PageElementMap.ts:683</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1554">lib/page_objects/page_elements/PageElementMap.ts:1554</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if all PageElements managed by PageElementMap eventually have any direct text within a specific
+									timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>hasAnyDirectText</code> function for
+											some or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code>
+										used to check it</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -531,13 +756,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L663">lib/page_objects/page_elements/PageElementMap.ts:663</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1501">lib/page_objects/page_elements/PageElementMap.ts:1501</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if all PageElements managed by PageElementMap eventually have any text within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>hasAnyText</code> function for some
+											or all managed PageElements, the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+										to check it</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -548,22 +785,37 @@
 					<a name="hasdirecttext" class="tsd-anchor"></a>
 					<h3>has<wbr>Direct<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">has<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directText<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Direct<wbr>Text<span class="tsd-signature-symbol">(</span>directTexts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L677">lib/page_objects/page_elements/PageElementMap.ts:677</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1537">lib/page_objects/page_elements/PageElementMap.ts:1537</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually equal the expected
+									direct texts within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>directText: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>directTexts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected direct texts supposed to equal the actual direct texts</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+										to check it</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -574,22 +826,37 @@
 					<a name="hastext" class="tsd-anchor"></a>
 					<h3>has<wbr>Text</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">has<wbr>Text<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Text<span class="tsd-signature-symbol">(</span>texts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L657">lib/page_objects/page_elements/PageElementMap.ts:657</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1485">lib/page_objects/page_elements/PageElementMap.ts:1485</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if the actual texts of all PageElements managed by PageElementMap eventually equal the expected texts
+									within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>text: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>texts: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the expected texts supposed to equal the actual texts</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used
+										to check it</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.
+										If no <code>interval</code> is specified, a PageElement&#39;s default interval is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -606,13 +873,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L649">lib/page_objects/page_elements/PageElementMap.ts:649</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1466">lib/page_objects/page_elements/PageElementMap.ts:1466</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if all PageElements managed by PageElementMap eventually are enabled within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>isEnabled</code> function for some
+										or all managed PageElements and the <code>timeout</code> within which the condition is expected to be met</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -629,13 +906,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/6c4d6ed/src/lib/page_objects/page_elements/PageElementMap.ts#L641">lib/page_objects/page_elements/PageElementMap.ts:641</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b731a0b/src/lib/page_objects/page_elements/PageElementMap.ts#L1450">lib/page_objects/page_elements/PageElementMap.ts:1450</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if all PageElements managed by PageElementMap eventually are visible within a specific timeout.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/__global.workflo.itimeout.html" class="tsd-signature-type">ITimeout</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.pagenode.imapfiltermask.html" class="tsd-signature-type">IMapFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>includes a <code>filterMask</code> which can be used to skip the invocation of the <code>isVisible</code> function for some
+										or all managed PageElements and the <code>timeout</code> within which the condition is expected to be met</p>
+										<p>If no <code>timeout</code> is specified, a PageElement&#39;s default timeout is used.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>

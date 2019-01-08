@@ -948,7 +948,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     isEmpty() {
         const actualLength = this.getLength();
         this._node.__setLastDiff({
-            actual: actualLength.toString()
+            actual: actualLength.toString(),
+            timeout: this._node.getTimeout()
         });
         return actualLength === 0;
     }
@@ -969,7 +970,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     hasLength(length, comparator = "==" /* equalTo */) {
         const actualLength = this.getLength();
         this._node.__setLastDiff({
-            actual: actualLength.toString()
+            actual: actualLength.toString(),
+            timeout: this._node.getTimeout()
         });
         return util_1.compare(actualLength, length, comparator);
     }
