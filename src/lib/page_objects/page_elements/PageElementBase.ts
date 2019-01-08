@@ -201,7 +201,8 @@ export abstract class PageElementBaseCurrently<
    */
   protected _writeLastDiff<T>(actual: T, expected?: T) {
     const diff: Workflo.IDiff = {
-      actual: this._node.__typeToString(actual)
+      actual: this._node.__typeToString(actual),
+      timeout: this._node.getTimeout()
     }
 
     if (typeof expected !== 'undefined') {

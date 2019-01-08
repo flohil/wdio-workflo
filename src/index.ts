@@ -1982,6 +1982,10 @@ declare global {
        * the diffs of the PageElement's handled by PageNode are stored in tree.
        */
       tree?: IDiffTree
+      /**
+       * timeout used to perform the last state check function in milliseconds
+       */
+      timeout?: number
     }
 
     namespace Store {

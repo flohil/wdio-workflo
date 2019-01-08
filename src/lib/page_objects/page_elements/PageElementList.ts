@@ -1332,7 +1332,8 @@ export class PageElementListCurrently<
     const actualLength = this.getLength()
 
     this._node.__setLastDiff({
-      actual: actualLength.toString()
+      actual: actualLength.toString(),
+      timeout: this._node.getTimeout()
     })
 
     return actualLength === 0
@@ -1358,7 +1359,8 @@ export class PageElementListCurrently<
     const actualLength = this.getLength()
 
     this._node.__setLastDiff({
-      actual: actualLength.toString()
+      actual: actualLength.toString(),
+      timeout: this._node.getTimeout()
     })
 
     return compare(actualLength, length, comparator)
