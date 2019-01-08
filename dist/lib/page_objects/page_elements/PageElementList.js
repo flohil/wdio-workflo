@@ -322,8 +322,8 @@ class PageElementList extends _1.PageNode {
         }
     }
     /**
-     * Returns the texts of all PageElements managed by PageElementList as an array after performing PageElementList's
-     * initial waiting condition.
+     * Returns the texts of all PageElements managed by PageElementList as an array after performing the initial
+     * waiting condition of PageElementList and each managed PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -332,8 +332,8 @@ class PageElementList extends _1.PageNode {
         return this.eachGet(this.all, element => element.getText(), filterMask);
     }
     /**
-     * Returns the direct texts of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the direct texts of all PageElements managed by PageElementList as an array after performing the initial
+     * waiting condition of PageElementList and each managed PageElement.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -345,8 +345,8 @@ class PageElementList extends _1.PageNode {
         return this.eachGet(this.all, element => element.getDirectText(), filterMask);
     }
     /**
-     * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -355,8 +355,8 @@ class PageElementList extends _1.PageNode {
         return this.eachGet(this.all, element => element.currently.isEnabled(), filterMask);
     }
     /**
-     * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
      *
@@ -371,8 +371,8 @@ class PageElementList extends _1.PageNode {
         return this.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text);
     }
     /**
-     * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
      *
@@ -383,8 +383,8 @@ class PageElementList extends _1.PageNode {
         return this.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
     }
     /**
-     * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
      *
@@ -399,10 +399,13 @@ class PageElementList extends _1.PageNode {
         return this.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text);
     }
     /**
-     * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
+     *
+     * A direct text is a text that resides on the level directly below the selected HTML element.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the expected direct text used in the comparisons which set the 'hasDirectText' status.
      *
@@ -416,9 +419,12 @@ class PageElementList extends _1.PageNode {
     }
     /**
      * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * the initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+     *
+     * A direct text is a text that resides on the level directly below the selected HTML element.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -428,10 +434,13 @@ class PageElementList extends _1.PageNode {
     }
     /**
      * Returns the 'containsDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * the initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
      * text.
+     *
+     * A direct text is a text that resides on the level directly below the selected HTML element.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the expected direct text used in the comparisons which set the 'containsDirectText' status.
      *
@@ -591,7 +600,7 @@ class PageElementList extends _1.PageNode {
      * If `expected` is an array of values, its length must match the length of `elements` and the values of its
      * array elements are compared to the array of actual values.
      * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
-     * invocation of the state check function for some or all PageElements
+     * invocation of the wait function for some or all PageElements
      * @returns this (an instance of PageElementList)
      */
     eachWait(elements, waitFunc, expected, isFilterMask = false) {
@@ -927,8 +936,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return actualLength === 0;
     }
     /**
-     * Returns the result of the comparison between PageElementList's actual length and an expected length using the
-     * comparison method defined in `comparator`.
+     * Returns the current result of the comparison between PageElementList's actual length and an expected length using
+     * the comparison method defined in `comparator`.
      *
      * The following comparison methods are supported:
      *
@@ -948,7 +957,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return util_1.compare(actualLength, length, comparator);
     }
     /**
-     * Returns true if at least one of the PageElements managed by PageElementList exists.
+     * Returns true if at least one of the PageElements managed by PageElementList currently exists.
      *
      * @param filterMask if set to false, the existence check is skipped and `true` is returned
      */
@@ -979,7 +988,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return this._node.eachCheck(this.all, element => element.currently.isEnabled(), filterMask, true);
     }
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementList equal the expected text(s).
+     * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected text(s).
      *
      * @param text the expected text(s) supposed to equal the actual texts
      *
@@ -992,7 +1001,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.hasText(expected), text);
     }
     /**
-     * Returns true if all PageElements managed by PageElementList have any text.
+     * Returns true if all PageElements managed by PageElementList currently have any text.
      *
      * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
      * PageElements
@@ -1001,7 +1010,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
     }
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementList contain the expected text(s).
+     * Returns true if the actual texts of all PageElements managed by PageElementList currently contain the expected
+     * text(s).
      *
      * @param text the expected text(s) supposed to be contained in the actual texts
      *
@@ -1014,8 +1024,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.containsText(expected), text);
     }
     /**
-     * Returns true if the actual direct texts of all PageElements managed by PageElementList equal the expected direct
-     * text(s).
+     * Returns true if the actual direct texts of all PageElements managed by PageElementList currently equal the expected
+     * direct text(s).
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -1031,7 +1041,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.hasDirectText(expected), directText);
     }
     /**
-     * Returns true if all PageElements managed by PageElementList have any direct text.
+     * Returns true if all PageElements managed by PageElementList currently have any direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -1043,8 +1053,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
     }
     /**
-     * Returns true if the actual direct texts of all PageElements managed by PageElementList contain the expected direct
-     * text(s).
+     * Returns true if the actual direct texts of all PageElements managed by PageElementList currently contain the
+     * expected direct text(s).
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -1069,8 +1079,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              */
             isEmpty: () => !this.isEmpty(),
             /**
-             * Returns the negated result of the comparison between PageElementList's actual length and an expected length
-             * using the comparison method defined in `comparator`.
+             * Returns the current negated result of the comparison between PageElementList's actual length and an expected
+             * length using the comparison method defined in `comparator`.
              *
              * The following comparison methods are supported:
              *
@@ -1084,7 +1094,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              */
             hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
             /**
-             * Returns true if none of the PageElements managed by PageElementList exist.
+             * Returns true if none of the PageElements managed by PageElementList currently exist.
              *
              * @param filterMask if set to false, the existence check is skipped and `true` is returned
              */
@@ -1115,7 +1125,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
                 return this._node.eachCheck(this.all, element => element.currently.not.isEnabled(), filterMask, true);
             },
             /**
-             * Returns true if the actual texts of all PageElements managed by PageElementList do not equal the expected text(s).
+             * Returns true if the actual texts of all PageElements managed by PageElementList currently do not equal the
+             * expected text(s).
              *
              * @param text the expected text(s) supposed not to equal the actual texts
              *
@@ -1128,7 +1139,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
             },
             /**
-             * Returns true if all PageElements managed by PageElementList do not have any text.
+             * Returns true if all PageElements managed by PageElementList currently do not have any text.
              *
              * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
              * PageElements
@@ -1137,8 +1148,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
                 return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText(), filterMask, true);
             },
             /**
-             * Returns true if the actual texts of all PageElements managed by PageElementList do not contain the expected
-             * text(s).
+             * Returns true if the actual texts of all PageElements managed by PageElementList currently do not contain the
+             * expected text(s).
              *
              * @param text the expected text(s) supposed not to be contained in the actual texts
              *
@@ -1151,8 +1162,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text);
             },
             /**
-             * Returns true if the actual direct texts of all PageElements managed by PageElementList do not equal the
-             * expected direct text(s).
+             * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not equal
+             * the expected direct text(s).
              *
              * A direct text is a text that resides on the level directly below the selected HTML element.
              * It does not include any text of the HTML element's nested children HTML elements.
@@ -1168,7 +1179,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText);
             },
             /**
-             * Returns true if all PageElements managed by PageElementList not hot have any direct text.
+             * Returns true if all PageElements managed by PageElementList currently do not have any direct text.
              *
              * A direct text is a text that resides on the level directly below the selected HTML element.
              * It does not include any text of the HTML element's nested children HTML elements.
@@ -1180,8 +1191,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
                 return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true);
             },
             /**
-             * Returns true if the actual direct texts of all PageElements managed by PageElementList do not contain the
-             * expected direct text(s).
+             * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not contain
+             * the expected direct text(s).
              *
              * A direct text is a text that resides on the level directly below the selected HTML element.
              * It does not include any text of the HTML element's nested children HTML elements.
@@ -1757,8 +1768,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
         return this._node.__eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
@@ -1771,8 +1780,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
         return this._node.__eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
@@ -1785,8 +1792,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      * all managed PageElements and the `timeout` within which the condition is expected to be met
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     exists(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1804,8 +1809,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     isVisible(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1818,8 +1821,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     isEnabled(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1840,8 +1841,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasText(text, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasText(expected, opts), text);
@@ -1855,8 +1854,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasAnyText(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1877,8 +1874,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     containsText(text, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsText(expected, opts), text);
@@ -1901,8 +1896,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasDirectText(directText, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasDirectText(expected, opts), directText);
@@ -1920,8 +1913,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasAnyDirectText(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -1945,8 +1936,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     containsDirectText(directText, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsDirectText(expected, opts), directText);
@@ -1974,8 +1963,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
              * If no `interval` is specified, PageElementList's default interval is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             hasLength: (length, opts = {}) => this.hasLength(length, {
                 timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -1988,8 +1975,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
              * If no `interval` is specified, PageElementList's default interval is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             isEmpty: (opts = {}) => this.isEmpty({
                 timeout: opts.timeout, interval: opts.interval, reverse: true
@@ -2002,8 +1987,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * all managed PageElements and the `timeout` within which the condition is expected to be met
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             exists: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -2022,8 +2005,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * some or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             isVisible: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -2037,8 +2018,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             isEnabled: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -2059,8 +2038,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
              * If no `interval` is specified, PageElementList's default interval is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             hasText: (text, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasText(expected, opts), text);
@@ -2075,8 +2052,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
              * If no `interval` is specified, PageElementList's default interval is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             hasAnyText: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -2097,8 +2072,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
              * If no `interval` is specified, PageElementList's default interval is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             containsText: (text, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsText(expected, opts), text);
@@ -2121,8 +2094,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             *
             * If no `timeout` is specified, PageElementList's default timeout is used.
             * If no `interval` is specified, PageElementList's default interval is used.
-            *
-            * @returns this (an instance of PageElementList)
             */
             hasDirectText: (directText, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText);
@@ -2140,8 +2111,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
              * If no `interval` is specified, PageElementList's default interval is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             hasAnyDirectText: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -2165,8 +2134,6 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If no `timeout` is specified, PageElementList's default timeout is used.
              * If no `interval` is specified, PageElementList's default interval is used.
-             *
-             * @returns this (an instance of PageElementList)
              */
             containsDirectText: (directText, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText);

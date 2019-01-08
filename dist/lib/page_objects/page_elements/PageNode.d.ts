@@ -56,7 +56,7 @@ export declare abstract class PageNode<Store extends PageElementStore> implement
      * PageNode serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
      *
      * @param selector the raw XPath selector of the PageNode
-     * @param opts the options required to create an instance of PageNode
+     * @param opts the options used to configure an instance of PageNode
      */
     constructor(selector: string, opts: IPageNodeOpts<Store>);
     __getNodeId(): string;

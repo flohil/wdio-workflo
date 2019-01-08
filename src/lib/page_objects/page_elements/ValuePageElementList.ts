@@ -551,8 +551,6 @@ class ValuePageElementListEventually<
    *
    * If no `timeout` is specified, ValuePageElementList's default timeout is used.
    * If no `interval` is specified, ValuePageElementList's default interval is used.
-   *
-   * @returns this (an instance of ValuePageElementList)
    */
   hasValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -570,8 +568,6 @@ class ValuePageElementListEventually<
    *
    * If no `timeout` is specified, ValuePageElementList's default timeout is used.
    * If no `interval` is specified, ValuePageElementList's default interval is used.
-   *
-   * @returns this (an instance of ValuePageElementList)
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
     const {filterMask, ...otherOpts} = opts
@@ -596,8 +592,6 @@ class ValuePageElementListEventually<
    *
    * If no `timeout` is specified, ValuePageElementList's default timeout is used.
    * If no `interval` is specified, ValuePageElementList's default interval is used.
-   *
-   * @returns this (an instance of ValuePageElementList)
    */
   containsValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
@@ -625,8 +619,6 @@ class ValuePageElementListEventually<
        *
        * If no `timeout` is specified, ValuePageElementList's default timeout is used.
        * If no `interval` is specified, ValuePageElementList's default interval is used.
-       *
-       * @returns this (an instance of ValuePageElementList)
        */
       hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
@@ -643,8 +635,6 @@ class ValuePageElementListEventually<
        *
        * If no `timeout` is specified, ValuePageElementList's default timeout is used.
        * If no `interval` is specified, ValuePageElementList's default interval is used.
-       *
-       * @returns this (an instance of ValuePageElementList)
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
         const {filterMask, ...otherOpts} = opts
@@ -668,8 +658,6 @@ class ValuePageElementListEventually<
        *
        * If no `timeout` is specified, ValuePageElementList's default timeout is used.
        * If no `interval` is specified, ValuePageElementList's default interval is used.
-       *
-       * @returns this (an instance of ValuePageElementList)
        */
       containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(

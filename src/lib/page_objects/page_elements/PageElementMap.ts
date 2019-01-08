@@ -270,7 +270,7 @@ implements Workflo.PageNode.IElementNode<
   }
 
   /**
-   * Returns the direct texts of all PageElements managed by PageElementMap as a "result map" after performing the 
+   * Returns the direct texts of all PageElements managed by PageElementMap as a "result map" after performing the
    * initial waiting condition of each PageElement.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -284,7 +284,7 @@ implements Workflo.PageNode.IElementNode<
   }
 
   /**
-   * Returns the 'enabled' status of all PageElements managed by PageElementMap as a "result map" after performing the 
+   * Returns the 'enabled' status of all PageElements managed by PageElementMap as a "result map" after performing the
    * initial waiting condition of each PageElement.
    *
    * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
@@ -295,7 +295,7 @@ implements Workflo.PageNode.IElementNode<
   }
 
   /**
-   * Returns the 'hasText' status of all PageElements managed by PageElementMap as a "result map" after performing the 
+   * Returns the 'hasText' status of all PageElements managed by PageElementMap as a "result map" after performing the
    * initial waiting condition of each managed PageElement.
    *
    * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
@@ -307,7 +307,7 @@ implements Workflo.PageNode.IElementNode<
   }
 
   /**
-   * Returns the 'hasAnyText' status of all PageElements managed by PageElementMap as a "result map" after performing 
+   * Returns the 'hasAnyText' status of all PageElements managed by PageElementMap as a "result map" after performing
    * the initial waiting condition of each managed PageElement.
    *
    * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
@@ -320,7 +320,7 @@ implements Workflo.PageNode.IElementNode<
   }
 
   /**
-   * Returns the 'containsText' status of all PageElements managed by PageElementMap as a "result map" after performing 
+   * Returns the 'containsText' status of all PageElements managed by PageElementMap as a "result map" after performing
    * the initial waiting condition of each managed PageElement.
    *
    * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
@@ -347,7 +347,7 @@ implements Workflo.PageNode.IElementNode<
   }
 
   /**
-   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a "result map" after performing 
+   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a "result map" after performing
    * the initial waiting condition of each managed PageElement.
    *
    * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
@@ -363,7 +363,7 @@ implements Workflo.PageNode.IElementNode<
   }
 
   /**
-   * Returns the 'containsDirectText' status of all PageElements managed by PageElementMap as a "result map" after 
+   * Returns the 'containsDirectText' status of all PageElements managed by PageElementMap as a "result map" after
    * performing the initial waiting condition of each managed PageElement.
    *
    * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
@@ -837,7 +837,7 @@ export class PageElementMapCurrently<
   }
 
   /**
-   * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently equal the expected 
+   * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently equal the expected
    * direct texts.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -867,7 +867,7 @@ export class PageElementMapCurrently<
   }
 
   /**
-   * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently contain the 
+   * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently contain the
    * expected direct texts.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -920,7 +920,7 @@ export class PageElementMapCurrently<
         )
       },
       /**
-       * Returns true if the actual texts of all PageElements managed by PageElementMap currently do not equal the 
+       * Returns true if the actual texts of all PageElements managed by PageElementMap currently do not equal the
        * expected texts.
        *
        * @param texts the expected texts supposed not to equal the actual texts
@@ -953,7 +953,7 @@ export class PageElementMapCurrently<
         )
       },
       /**
-       * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not equal 
+       * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not equal
        * the expected direct texts.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -981,7 +981,7 @@ export class PageElementMapCurrently<
         )
       },
       /**
-       * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not contain 
+       * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not contain
        * the expected direct texts.
        *
        * A direct text is a text that resides on the level directly below the selected HTML element.
@@ -1016,6 +1016,18 @@ export class PageElementMapWait<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
 > extends PageNodeWait<Store, MapType> {
 
+  /**
+   * Waits for all PageElements managed by PageElementMap to exist.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
   exists(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1024,6 +1036,18 @@ export class PageElementMapWait<
     )
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementMap to be visible.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1032,6 +1056,18 @@ export class PageElementMapWait<
     )
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementMap to be enabled.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1040,12 +1076,40 @@ export class PageElementMapWait<
     )
   }
 
-  hasText(text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Waits for the actual texts of all PageElements managed by PageElementMap to equal the expected texts.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param texts the expected texts supposed to equal the actual texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
+  hasText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.hasText(expected, opts), text
+      this._node.$, (element, expected) => element.wait.hasText(expected, opts), texts
     )
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementMap to have any text.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
+   * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1054,18 +1118,66 @@ export class PageElementMapWait<
     )
   }
 
-  containsText(text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Waits for the actual texts of all PageElements managed by PageElementMap to contain the expected texts.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * @param texts the expected texts supposed to be contained in the actual texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
+  containsText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.containsText(expected, opts), text
+      this._node.$, (element, expected) => element.wait.containsText(expected, opts), texts
     )
   }
 
-  hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Waits for the actual direct texts of all PageElements managed by PageElementMap to equal the expected direct texts.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   * 
+   * @param directTexts the expected direct texts supposed to equal the actual direct texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
+  hasDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.hasDirectText(expected, opts), directText
+      this._node.$, (element, expected) => element.wait.hasDirectText(expected, opts), directTexts
     )
   }
 
+  /**
+   * Waits for all PageElements managed by PageElementMap to have any direct text.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   * 
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for some
+   * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1074,9 +1186,27 @@ export class PageElementMapWait<
     )
   }
 
-  containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Waits for the actual direct texts of all PageElements managed by PageElementMap to contain the expected direct
+   * texts.
+   *
+   * Throws an error if the condition is not met within a specific timeout.
+   *
+   * A direct text is a text that resides on the level directly below the selected HTML element.
+   * It does not include any text of the HTML element's nested children HTML elements.
+   * 
+   * @param directTexts the expected direct texts supposed to be contained in the actual direct texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   *
+   * @returns this (an instance of PageElementMap)
+   */
+  containsDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.containsDirectText(expected, opts), directText
+      this._node.$, (element, expected) => element.wait.containsDirectText(expected, opts), directTexts
     )
   }
 
@@ -1085,6 +1215,18 @@ export class PageElementMapWait<
    */
   get not() {
     return {
+      /**
+       * Waits for all PageElements managed by PageElementMap not to exist.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1092,6 +1234,18 @@ export class PageElementMapWait<
           this._node.$, element => element.wait.not.exists(otherOpts), filterMask, true
         )
       },
+      /**
+       * Waits for all PageElements managed by PageElementMap not to be visible.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1099,6 +1253,18 @@ export class PageElementMapWait<
           this._node.$, element => element.wait.not.isVisible(otherOpts), filterMask, true
         )
       },
+      /**
+       * Waits for all PageElements managed by PageElementMap not to be enabled.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1106,11 +1272,39 @@ export class PageElementMapWait<
           this._node.$, element => element.wait.not.isEnabled(otherOpts), filterMask, true
         )
       },
-      hasText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Waits for the actual texts of all PageElements managed by PageElementMap not to equal the expected texts.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param texts the expected texts supposed not to equal the actual texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
+      hasText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.hasText(expected, opts), text
+          this._node.$, (element, expected) => element.wait.not.hasText(expected, opts), texts
         )
       },
+      /**
+       * Waits for all PageElements managed by PageElementMap not to have any text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for
+       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+       * `interval` used to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1118,16 +1312,65 @@ export class PageElementMapWait<
           this._node.$, (element) => element.wait.not.hasAnyText(otherOpts), filterMask, true
         )
       },
-      containsText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Waits for the actual texts of all PageElements managed by PageElementMap not to contain the expected texts.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * @param texts the expected texts supposed not to be contained in the actual texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
+      containsText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.containsText(expected, opts), text
+          this._node.$, (element, expected) => element.wait.not.containsText(expected, opts), texts
         )
       },
-      hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Waits for the actual direct texts of all PageElements managed by PageElementMap not to equal the expected
+       * direct texts.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       * 
+       * @param directTexts the expected direct texts not supposed to equal the actual direct texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
+      hasDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.hasDirectText(expected, opts), directText
+          this._node.$, (element, expected) => element.wait.not.hasDirectText(expected, opts), directTexts
         )
       },
+      /**
+       * Waits for all PageElements managed by PageElementMap not to have any direct text.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function
+       * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the 
+       * `interval` used to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1135,9 +1378,27 @@ export class PageElementMapWait<
           this._node.$, (element) => element.wait.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
-      containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Waits for the actual direct texts of all PageElements managed by PageElementMap not to contain the expected 
+       * direct texts.
+       *
+       * Throws an error if the condition is not met within a specific timeout.
+       *
+       * A direct text is a text that resides on the level directly below the selected HTML element.
+       * It does not include any text of the HTML element's nested children HTML elements.
+       * 
+       * @param directTexts the expected direct texts supposed not to be contained in the actual direct texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       *
+       * @returns this (an instance of PageElementMap)
+       */
+      containsDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText
+          this._node.$, (element, expected) => element.wait.not.containsDirectText(expected, opts), directTexts
         )
       }
     }
@@ -1162,6 +1423,14 @@ export class PageElementMapEventually<
   MapType extends PageElementMap<Store, K, PageElementType, PageElementOptions>
 > extends PageNodeEventually<Store, MapType> {
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap eventually exist within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   */
   exists(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1170,6 +1439,14 @@ export class PageElementMapEventually<
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap eventually are visible within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1178,6 +1455,14 @@ export class PageElementMapEventually<
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap eventually are enabled within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
+   * or all managed PageElements and the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1186,12 +1471,33 @@ export class PageElementMapEventually<
     )
   }
 
-  hasText(text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementMap eventually equal the expected texts
+   * within a specific timeout.
+   *
+   * @param texts the expected texts supposed to equal the actual texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   */
+  hasText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.hasText(expected, opts), text
+      this._node.$, (element, expected) => element.eventually.hasText(expected, opts), texts
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap eventually have any text within a specific timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
+   * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1200,18 +1506,51 @@ export class PageElementMapEventually<
     )
   }
 
-  containsText(text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Returns true if the actual texts of all PageElements managed by PageElementMap eventually contain the expected texts
+   * within a specific timeout.
+   *
+   * @param texts the expected texts supposed to be contained in the actual texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   */
+  containsText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.containsText(expected, opts), text
+      this._node.$, (element, expected) => element.eventually.containsText(expected, opts), texts
     )
   }
 
-  hasDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually equal the expected 
+   * direct texts within a specific timeout.
+   *
+   * @param directTexts the expected direct texts supposed to equal the actual direct texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   */
+  hasDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.hasDirectText(expected, opts), directText
+      this._node.$, (element, expected) => element.eventually.hasDirectText(expected, opts), directTexts
     )
   }
 
+  /**
+   * Returns true if all PageElements managed by PageElementMap eventually have any direct text within a specific
+   * timeout.
+   *
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for 
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
+   * used to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
     const {filterMask, ...otherOpts} = opts
 
@@ -1220,9 +1559,20 @@ export class PageElementMapEventually<
     )
   }
 
-  containsDirectText(directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
+  /**
+   * Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually contain the 
+   * expected direct texts within a specific timeout.
+   *
+   * @param directTexts the expected direct texts supposed to be contained in the actual direct texts
+   * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+   * to check it
+   *
+   * If no `timeout` is specified, PageElementMap's default timeout is used.
+   * If no `interval` is specified, PageElementMap's default interval is used.
+   */
+  containsDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.containsDirectText(expected, opts), directText
+      this._node.$, (element, expected) => element.eventually.containsDirectText(expected, opts), directTexts
     )
   }
 
@@ -1231,6 +1581,14 @@ export class PageElementMapEventually<
    */
   get not() {
     return {
+      /**
+       * Returns true if all PageElements managed by PageElementMap eventually do not exist within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
+       * or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       */
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1238,6 +1596,14 @@ export class PageElementMapEventually<
           this._node.$, element => element.eventually.not.exists(otherOpts), filterMask, true
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap eventually are not visible within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for 
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1245,6 +1611,14 @@ export class PageElementMapEventually<
           this._node.$, element => element.eventually.not.isVisible(otherOpts), filterMask, true
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap eventually are not enabled within a specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for 
+       * some or all managed PageElements and the `timeout` within which the condition is expected to be met
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1252,11 +1626,33 @@ export class PageElementMapEventually<
           this._node.$, element => element.eventually.not.isEnabled(otherOpts), filterMask, true
         )
       },
-      hasText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementMap eventually do not equal the 
+       * expected texts within a specific timeout.
+       *
+       * @param texts the expected texts supposed not to equal the actual texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       */
+      hasText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.hasText(expected, opts), text
+          this._node.$, (element, expected) => element.eventually.not.hasText(expected, opts), texts
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap eventually do not have any text within a specific
+       * timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for 
+       * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the 
+       * `interval` used to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1264,16 +1660,49 @@ export class PageElementMapEventually<
           this._node.$, (element) => element.eventually.not.hasAnyText(otherOpts), filterMask, true
         )
       },
-      containsText: (text: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Returns true if the actual texts of all PageElements managed by PageElementMap eventually do not contain the 
+       * expected texts within a specific timeout.
+       *
+       * @param texts the expected texts supposed not to be contained in the actual texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       */
+      containsText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.containsText(expected, opts), text
+          this._node.$, (element, expected) => element.eventually.not.containsText(expected, opts), texts
         )
       },
-      hasDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually do not equal 
+       * the expected direct texts within a specific timeout.
+       *
+       * @param directTexts the expected direct texts supposed not to equal the actual direct texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       */
+      hasDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directText
+          this._node.$, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directTexts
         )
       },
+      /**
+       * Returns true if all PageElements managed by PageElementMap eventually do not have any direct text within a 
+       * specific timeout.
+       *
+       * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function 
+       * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the 
+       * `interval` used to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
         const {filterMask, ...otherOpts} = opts
 
@@ -1281,9 +1710,20 @@ export class PageElementMapEventually<
           this._node.$, (element) => element.eventually.not.hasAnyDirectText(otherOpts), filterMask, true
         )
       },
-      containsDirectText: (directText: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
+      /**
+       * Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually do not contain 
+       * the expected direct texts within a specific timeout.
+       *
+       * @param directTexts the expected direct texts supposed not to be contained in the actual direct texts
+       * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+       * to check it
+       *
+       * If no `timeout` is specified, PageElementMap's default timeout is used.
+       * If no `interval` is specified, PageElementMap's default interval is used.
+       */
+      containsDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText
+          this._node.$, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directTexts
         )
       }
     }

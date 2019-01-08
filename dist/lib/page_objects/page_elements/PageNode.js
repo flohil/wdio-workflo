@@ -11,7 +11,7 @@ class PageNode {
      * PageNode serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
      *
      * @param selector the raw XPath selector of the PageNode
-     * @param opts the options required to create an instance of PageNode
+     * @param opts the options used to configure an instance of PageNode
      */
     constructor(selector, opts) {
         this._selector = selector;

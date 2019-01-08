@@ -65,8 +65,8 @@ class ValuePageElementList extends _1.PageElementList {
     }
     // GETTER FUNCTIONS
     /**
-     * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing
-     * ValuePageElementList's initial waiting condition.
+     * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing the
+     * initial waiting condition of ValuePageElementList and each managed ValuePageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
      * ValuePageElements. The results of skipped function invocations are not included in the total results array.
@@ -76,7 +76,7 @@ class ValuePageElementList extends _1.PageElementList {
     }
     /**
      * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementList as an array after performing
-     * ValuePageElementList's initial waiting condition.
+     * the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
      *
      * A ValuePageElement's 'hasValue' status is set to true if its actual value equals the expected value.
      *
@@ -92,7 +92,7 @@ class ValuePageElementList extends _1.PageElementList {
     }
     /**
      * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementList as an array after
-     * performing ValuePageElementList's initial waiting condition.
+     * performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
      *
      * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any value.
      *
@@ -104,7 +104,7 @@ class ValuePageElementList extends _1.PageElementList {
     }
     /**
      * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementList as an array after
-     * performing ValuePageElementList's initial waiting condition.
+     * performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
      *
      * A ValuePageElement's 'containsValue' status is set to true if its actual value contains the expected value.
      *
@@ -121,7 +121,7 @@ class ValuePageElementList extends _1.PageElementList {
     // SETTER FUNCTIONS
     /**
      * This function sets the passed value(s) to all ValuePageElements managed by ValuePageElementList
-     * after performing ValuePageElementList's initial waiting condition.
+     * after performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
      *
      * If values is an array, the number of list elements must match the number of passed values.
      * The values will be assigned in the order that the list elements were retrieved from the DOM.
@@ -202,8 +202,8 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
     }
     // CHECK STATE
     /**
-     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList equal the expected
-     * value(s).
+     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently equal the
+     * expected value(s).
      *
      * @param value the expected value(s) supposed to equal the actual values
      *
@@ -216,7 +216,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
         return this._node.eachCheck(this.all, (element, expected) => element.currently.hasValue(expected), value);
     }
     /**
-     * Returns true if all ValuePageElements managed by ValuePageElementList have any value.
+     * Returns true if all ValuePageElements managed by ValuePageElementList currently have any value.
      *
      * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
      * ValuePageElements
@@ -225,8 +225,8 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
         return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
     }
     /**
-     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList contain the expected
-     * value(s).
+     * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently contain the
+     * expected value(s).
      *
      * @param value the expected value(s) supposed to be contained in the actual values
      *
@@ -244,8 +244,8 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
     get not() {
         return Object.assign({}, super.not, { 
             /**
-             * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList do not equal the
-             * expected value(s).
+             * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not
+             * equal the expected value(s).
              *
              * @param value the expected value(s) supposed not to equal the actual values
              *
@@ -258,7 +258,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasValue(expected), value);
             }, 
             /**
-             * Returns true if all ValuePageElements managed by ValuePageElementList do not have any value.
+             * Returns true if all ValuePageElements managed by ValuePageElementList currently do not have any value.
              *
              * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
              * ValuePageElements
@@ -267,8 +267,8 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
                 return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue(), filterMask, true);
             }, 
             /**
-             * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList do not contain the
-             * expected value(s).
+             * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not
+             * contain the expected value(s).
              *
              * @param value the expected value(s) supposed not to be contained in the actual values
              *
@@ -452,8 +452,6 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
      *
      * If no `timeout` is specified, ValuePageElementList's default timeout is used.
      * If no `interval` is specified, ValuePageElementList's default interval is used.
-     *
-     * @returns this (an instance of ValuePageElementList)
      */
     hasValue(value, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.hasValue(expected, opts), value);
@@ -468,8 +466,6 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
      *
      * If no `timeout` is specified, ValuePageElementList's default timeout is used.
      * If no `interval` is specified, ValuePageElementList's default interval is used.
-     *
-     * @returns this (an instance of ValuePageElementList)
      */
     hasAnyValue(opts = {}) {
         const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -490,8 +486,6 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
      *
      * If no `timeout` is specified, ValuePageElementList's default timeout is used.
      * If no `interval` is specified, ValuePageElementList's default interval is used.
-     *
-     * @returns this (an instance of ValuePageElementList)
      */
     containsValue(value, opts) {
         return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.containsValue(expected, opts), value);
@@ -516,8 +510,6 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
              *
              * If no `timeout` is specified, ValuePageElementList's default timeout is used.
              * If no `interval` is specified, ValuePageElementList's default interval is used.
-             *
-             * @returns this (an instance of ValuePageElementList)
              */
             hasValue: (value, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value);
@@ -532,8 +524,6 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
              *
              * If no `timeout` is specified, ValuePageElementList's default timeout is used.
              * If no `interval` is specified, ValuePageElementList's default interval is used.
-             *
-             * @returns this (an instance of ValuePageElementList)
              */
             hasAnyValue: (opts = {}) => {
                 const { filterMask } = opts, otherOpts = __rest(opts, ["filterMask"]);
@@ -554,8 +544,6 @@ class ValuePageElementListEventually extends _1.PageElementListEventually {
              *
              * If no `timeout` is specified, ValuePageElementList's default timeout is used.
              * If no `interval` is specified, ValuePageElementList's default interval is used.
-             *
-             * @returns this (an instance of ValuePageElementList)
              */
             containsValue: (value, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value);

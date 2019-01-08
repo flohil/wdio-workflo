@@ -150,7 +150,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     protected _elementStoreFunc: (selector: string, options: PageElementOptions) => PageElementType;
     /**
-     * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
+     * the options passed to `_elementStoreFunc` to configure a managed  PageElement instance
      */
     protected _elementOpts: PageElementOptions;
     /**
@@ -346,16 +346,16 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     getLength(): number;
     /**
-     * Returns the texts of all PageElements managed by PageElementList as an array after performing PageElementList's
-     * initial waiting condition.
+     * Returns the texts of all PageElements managed by PageElementList as an array after performing the initial
+     * waiting condition of PageElementList and each managed PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getText(filterMask?: Workflo.PageNode.ListFilterMask): string[];
     /**
-     * Returns the direct texts of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the direct texts of all PageElements managed by PageElementList as an array after performing the initial
+     * waiting condition of PageElementList and each managed PageElement.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -365,16 +365,16 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     getDirectText(filterMask?: Workflo.PageNode.ListFilterMask): string[];
     /**
-     * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     /**
-     * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
      *
@@ -387,8 +387,8 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     getHasText(text: string | string[]): boolean[];
     /**
-     * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
      *
@@ -397,8 +397,8 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     /**
-     * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
      *
@@ -411,10 +411,13 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      */
     getContainsText(text: string | string[]): boolean[];
     /**
-     * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing the
+     * initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
+     *
+     * A direct text is a text that resides on the level directly below the selected HTML element.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the expected direct text used in the comparisons which set the 'hasDirectText' status.
      *
@@ -426,9 +429,12 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getHasDirectText(directText: string | string[]): boolean[];
     /**
      * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * the initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+     *
+     * A direct text is a text that resides on the level directly below the selected HTML element.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -436,10 +442,13 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
     getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     /**
      * Returns the 'containsDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * PageElementList's initial waiting condition.
+     * the initial waiting condition of PageElementList and each managed PageElement.
      *
      * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
      * text.
+     *
+     * A direct text is a text that resides on the level directly below the selected HTML element.
+     * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the expected direct text used in the comparisons which set the 'containsDirectText' status.
      *
@@ -524,7 +533,7 @@ export declare class PageElementList<Store extends PageElementStore, PageElement
      * If `expected` is an array of values, its length must match the length of `elements` and the values of its
      * array elements are compared to the array of actual values.
      * @param isFilterMask if set to true, the `expected` parameter represents a filterMask which can be used to skip the
-     * invocation of the state check function for some or all PageElements
+     * invocation of the wait function for some or all PageElements
      * @returns this (an instance of PageElementList)
      */
     eachWait<T>(elements: PageElementType[], waitFunc: (element: PageElementType, expected?: T) => PageElementType, expected?: T | T[], isFilterMask?: boolean): this;
@@ -746,8 +755,8 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      */
     isEmpty(): boolean;
     /**
-     * Returns the result of the comparison between PageElementList's actual length and an expected length using the
-     * comparison method defined in `comparator`.
+     * Returns the current result of the comparison between PageElementList's actual length and an expected length using
+     * the comparison method defined in `comparator`.
      *
      * The following comparison methods are supported:
      *
@@ -761,7 +770,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      */
     hasLength(length: number, comparator?: Workflo.Comparator): boolean;
     /**
-     * Returns true if at least one of the PageElements managed by PageElementList exists.
+     * Returns true if at least one of the PageElements managed by PageElementList currently exists.
      *
      * @param filterMask if set to false, the existence check is skipped and `true` is returned
      */
@@ -781,7 +790,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      */
     isEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementList equal the expected text(s).
+     * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected text(s).
      *
      * @param text the expected text(s) supposed to equal the actual texts
      *
@@ -792,14 +801,15 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      */
     hasText(text: string | string[]): boolean;
     /**
-     * Returns true if all PageElements managed by PageElementList have any text.
+     * Returns true if all PageElements managed by PageElementList currently have any text.
      *
      * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
      * PageElements
      */
     hasAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementList contain the expected text(s).
+     * Returns true if the actual texts of all PageElements managed by PageElementList currently contain the expected
+     * text(s).
      *
      * @param text the expected text(s) supposed to be contained in the actual texts
      *
@@ -810,8 +820,8 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      */
     containsText(text: string | string[]): boolean;
     /**
-     * Returns true if the actual direct texts of all PageElements managed by PageElementList equal the expected direct
-     * text(s).
+     * Returns true if the actual direct texts of all PageElements managed by PageElementList currently equal the expected
+     * direct text(s).
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -825,7 +835,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      */
     hasDirectText(directText: string | string[]): boolean;
     /**
-     * Returns true if all PageElements managed by PageElementList have any direct text.
+     * Returns true if all PageElements managed by PageElementList currently have any direct text.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -835,8 +845,8 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
      */
     hasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     /**
-     * Returns true if the actual direct texts of all PageElements managed by PageElementList contain the expected direct
-     * text(s).
+     * Returns true if the actual direct texts of all PageElements managed by PageElementList currently contain the
+     * expected direct text(s).
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -858,8 +868,8 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          */
         isEmpty: () => boolean;
         /**
-         * Returns the negated result of the comparison between PageElementList's actual length and an expected length
-         * using the comparison method defined in `comparator`.
+         * Returns the current negated result of the comparison between PageElementList's actual length and an expected
+         * length using the comparison method defined in `comparator`.
          *
          * The following comparison methods are supported:
          *
@@ -873,7 +883,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          */
         hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
         /**
-         * Returns true if none of the PageElements managed by PageElementList exist.
+         * Returns true if none of the PageElements managed by PageElementList currently exist.
          *
          * @param filterMask if set to false, the existence check is skipped and `true` is returned
          */
@@ -893,7 +903,8 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          */
         isEnabled: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;
         /**
-         * Returns true if the actual texts of all PageElements managed by PageElementList do not equal the expected text(s).
+         * Returns true if the actual texts of all PageElements managed by PageElementList currently do not equal the
+         * expected text(s).
          *
          * @param text the expected text(s) supposed not to equal the actual texts
          *
@@ -904,15 +915,15 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          */
         hasText: (text: string | string[]) => boolean;
         /**
-         * Returns true if all PageElements managed by PageElementList do not have any text.
+         * Returns true if all PageElements managed by PageElementList currently do not have any text.
          *
          * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
          * PageElements
          */
         hasAnyText: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;
         /**
-         * Returns true if the actual texts of all PageElements managed by PageElementList do not contain the expected
-         * text(s).
+         * Returns true if the actual texts of all PageElements managed by PageElementList currently do not contain the
+         * expected text(s).
          *
          * @param text the expected text(s) supposed not to be contained in the actual texts
          *
@@ -923,8 +934,8 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          */
         containsText: (text: string | string[]) => boolean;
         /**
-         * Returns true if the actual direct texts of all PageElements managed by PageElementList do not equal the
-         * expected direct text(s).
+         * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not equal
+         * the expected direct text(s).
          *
          * A direct text is a text that resides on the level directly below the selected HTML element.
          * It does not include any text of the HTML element's nested children HTML elements.
@@ -938,7 +949,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          */
         hasDirectText: (directText: string | string[]) => boolean;
         /**
-         * Returns true if all PageElements managed by PageElementList not hot have any direct text.
+         * Returns true if all PageElements managed by PageElementList currently do not have any direct text.
          *
          * A direct text is a text that resides on the level directly below the selected HTML element.
          * It does not include any text of the HTML element's nested children HTML elements.
@@ -948,8 +959,8 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          */
         hasAnyDirectText: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;
         /**
-         * Returns true if the actual direct texts of all PageElements managed by PageElementList do not contain the
-         * expected direct text(s).
+         * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not contain
+         * the expected direct text(s).
          *
          * A direct text is a text that resides on the level directly below the selected HTML element.
          * It does not include any text of the HTML element's nested children HTML elements.
@@ -1426,8 +1437,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
     /**
@@ -1438,8 +1447,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
     /**
@@ -1450,8 +1457,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      * all managed PageElements and the `timeout` within which the condition is expected to be met
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     exists(opts?: Workflo.ITimeout & {
         filterMask?: boolean;
@@ -1463,8 +1468,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     isVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -1474,8 +1477,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      * or all managed PageElements and the `timeout` within which the condition is expected to be met
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     isEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -1493,8 +1494,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1506,8 +1505,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -1525,8 +1522,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     containsText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1547,8 +1542,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1564,8 +1557,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     hasAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
     /**
@@ -1586,8 +1577,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
-     *
-     * @returns this (an instance of PageElementList)
      */
     containsDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
     /**
@@ -1612,8 +1601,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
          * If no `interval` is specified, PageElementList's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         hasLength: (length: number, opts?: IPageElementListWaitLengthParams) => boolean;
         /**
@@ -1624,8 +1611,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
          * If no `interval` is specified, PageElementList's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         isEmpty: (opts?: Workflo.ITimeoutInterval) => boolean;
         /**
@@ -1636,8 +1621,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          * all managed PageElements and the `timeout` within which the condition is expected to be met
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         exists: (opts?: Workflo.ITimeout & {
             filterMask?: boolean;
@@ -1650,8 +1633,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          * some or all managed PageElements and the `timeout` within which the condition is expected to be met
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask) => boolean;
         /**
@@ -1662,8 +1643,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          * or all managed PageElements and the `timeout` within which the condition is expected to be met
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask) => boolean;
         /**
@@ -1681,8 +1660,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
          * If no `interval` is specified, PageElementList's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         hasText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
         /**
@@ -1695,8 +1672,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
          * If no `interval` is specified, PageElementList's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => boolean;
         /**
@@ -1714,8 +1689,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
          * If no `interval` is specified, PageElementList's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         containsText: (text: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
         /**
@@ -1736,8 +1709,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
         *
         * If no `timeout` is specified, PageElementList's default timeout is used.
         * If no `interval` is specified, PageElementList's default interval is used.
-        *
-        * @returns this (an instance of PageElementList)
         */
         hasDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
         /**
@@ -1753,8 +1724,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
          * If no `interval` is specified, PageElementList's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask) => boolean;
         /**
@@ -1775,8 +1744,6 @@ export declare class PageElementListEventually<Store extends PageElementStore, P
          *
          * If no `timeout` is specified, PageElementList's default timeout is used.
          * If no `interval` is specified, PageElementList's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
          */
         containsDirectText: (directText: string | string[], opts?: Workflo.ITimeoutInterval) => boolean;
     };
