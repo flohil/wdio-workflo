@@ -62,8 +62,117 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="workflo">workflo</h1>
-				<p>A framework for automated functional system tests in gherkin style</p>
+				<h1 id="overview">Overview</h1>
+				<p>Wdio-workflo is a framework for writing automated functional system tests and based on a customized version of
+				webdriverio v4.13 ( <a href="https://webdriver.io/">https://webdriver.io/</a> ).</p>
+				<p>It allows you to define acceptance criteria which can by referenced in your testcases to automatically validate
+					the requirements of your tested application. The test reports created by wdio-workflo will not only show the result
+					status of your testcases, but also indicate which requirements could not be fulfilled or validated because of failed or
+				broken testcases.</p>
+				<p>Wdio-workflo wants to get you started with writing functional system tests as quickly as possible by preconfiguring
+					webdriverio and all required services. It helps you save a lot of time and work by providing boilerplate code and the
+					basic building blocks of a sophisticated page object pattern architecture. Testcases in wdio-workflo consist of
+				reusable steps formulated in natural language to make them comprehensible for all stakeholder.</p>
+				<h1 id="installation-and-configuration">Installation and Configuration</h1>
+				<ul>
+					<li>Install wdio-workflo by running <code>npm install --save-dev wdio-workflo</code> in your project folder.
+					This will automatically create wdio-workflo&#39;s configuration file <code>workflo.conf.ts</code> in the same directory.</li>
+					<li>Adapt wdio-workflo&#39;s configuration in <code>workflo.conf.ts</code> to your own needs.</li>
+					<li>Run <code>./node_modules/.bin/wdio-workflo --init</code> to create the boilerplate code for your functional system tests.</li>
+				</ul>
+				<p>You are now all set to write your first functional system test using wdio-workflo! :D</p>
+				<h1 id="writing-your-first-functional-system-test">Writing your first functional system test</h1>
+				<h2 id="goal">Goal</h2>
+				<p>This little &#39;Getting Started&#39; guide quickly walks you through all necessary steps to write functional system tests in
+				wdio-workflo.</p>
+				<p>In our example, we will browse to the public npm registry at <a href="https://www.npmjs.com/">https://www.npmjs.com/</a> and search for the wdio-workflo
+				npm package.</p>
+				<h2 id="configure-the-base-url-in-workflo-conf-ts">Configure the base url in workflo.conf.ts</h2>
+				<p>At first we set the base url for our tested web application in wdio-workflo&#39;s configuration.</p>
+				<p>To do so, open the file <code>workflo.conf.ts</code> in your project folder and set the value of its baseUrl property to
+				&quot;<a href="https://www.npmjs.com/&quot;">https://www.npmjs.com/&quot;</a>:</p>
+				<pre><code><span class="hljs-comment">// workflo.conf.ts</span>
+<span class="hljs-keyword">const</span> workfloConfig: IWorkfloConfig = {
+  <span class="hljs-comment">/* ... */</span>
+  baseUrl: <span class="hljs-symbol">'https</span>:<span class="hljs-comment">//www.npmjs.com/',</span>
+  <span class="hljs-comment">/* ... */</span>
+}</code></pre><h2 id="create-pageelements-and-a-page-to-map-the-components-of-the-tested-web-application">Create PageElements and a Page to map the components of the tested web application</h2>
+				<p>Now we need to map all HTML components required to search for the wdio-workflo npm package on <a href="https://www.npmjs.com/">https://www.npmjs.com/</a>.</p>
+				<p>To do so, create the files <code>NpmJsPage.ts</code> in the <code>src/page_objects/pages</code> folder and <code>Input.ts</code> in the
+				<code>src/page_objects/page_elements</code> folder of your system test directory.</p>
+				<pre><code><span class="hljs-comment">// Input.ts</span>
+<span class="hljs-keyword">import</span> { PageElementStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'../stores'</span>
+<span class="hljs-keyword">import</span> { ValuePageElement, ValuePageElementCurrently } <span class="hljs-keyword">from</span> <span class="hljs-string">'./ValuePageElement'</span>
+
+export <span class="hljs-keyword">class</span> <span class="hljs-symbol">Input</span>&lt;<span class="hljs-symbol">Store</span> <span class="hljs-symbol">extends</span> <span class="hljs-symbol">PageElementStore</span>&gt; <span class="hljs-symbol">extends</span> <span class="hljs-symbol">ValuePageElement</span>&lt;<span class="hljs-symbol">Store, <span class="hljs-symbol">string</span></span>&gt; {
+
+  readonly currently = new InputCurrently(<span class="hljs-keyword">this</span>)
+
+  setValue(value: <span class="hljs-built_in">string</span>): <span class="hljs-keyword">this</span> {
+    <span class="hljs-keyword">this</span>.element.setValue(value)
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+  }
+}
+
+export <span class="hljs-keyword">class</span> <span class="hljs-symbol">InputCurrently</span>&lt;
+  <span class="hljs-symbol">Store</span> <span class="hljs-symbol">extends</span> <span class="hljs-symbol">PageElementStore,
+  <span class="hljs-symbol">PageElementType</span></span> <span class="hljs-symbol">extends</span> <span class="hljs-symbol">Input</span>&lt;<span class="hljs-symbol">Store</span>&gt;
+&gt; <span class="hljs-symbol">extends</span> <span class="hljs-symbol">ValuePageElementCurrently</span>&lt;<span class="hljs-symbol">Store, <span class="hljs-symbol">PageElementType</span>, <span class="hljs-symbol">string</span></span>&gt; {
+
+  getValue(): <span class="hljs-built_in">string</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.element.getValue()
+  }
+}</code></pre><pre><code><span class="hljs-comment">// NpmJsPage.ts</span>
+<span class="hljs-keyword">const</span> workfloConfig: IWorkfloConfig = {
+  <span class="hljs-comment">/* ... */</span>
+  baseUrl: <span class="hljs-symbol">'https</span>:<span class="hljs-comment">//www.npmjs.com/',</span>
+  <span class="hljs-comment">/* ... */</span>
+}</code></pre><h2 id="create-a-spec-file-to-define-your-requirements">Create a spec file to define your requirements</h2>
+				<p>Create the file <code>npmjs.spec.ts</code> in the <code>src/specs</code> folder of your system test directory.</p>
+				<p>In this file, we will define requirements of our tested application.</p>
+				<pre><code><span class="hljs-comment">// npmjs.spec.ts</span>
+
+</code></pre><p>write spec</p>
+				<p>write testcase</p>
+				<p>write steps</p>
+				<p>show your results</p>
+				<p><code>./node_modules/.bin/wdio-workflo --report</code></p>
+				<h1 id="running-your-tests">Running your tests</h1>
+				<pre><code class="language-/node_modules/.bin/wdio-workflo```">
+can filter the tests run by testcases, specs and many more:
+
+```./node_modules/.bin/wdio-workflo --testcases &#39;[&quot;MySuite.sample test&quot;]&#39;</code></pre>
+				<p><code>./node_modules/.bin/wdio-workflo --specs &#39;[&quot;4.1.2&quot;]&#39;</code></p>
+				<h1 id="help">Help</h1>
+				<p>show all options of wdio-workflo&#39;s cli</p>
+				<p><code>./node_modules/.bin/wdio-workflo --help</code></p>
+				<h1 id="features">Features</h1>
+				<p>Wdio-workflo</p>
+				<p>Spec definitions with acceptance criteria to automatically validate requirements of tested application.
+					similar to cucumber
+					specs are written in gherkin language: Given - When - Then -&gt; subset of gherkin language which is also
+					used by cucumber (<a href="https://docs.cucumber.io/gherkin/reference/">https://docs.cucumber.io/gherkin/reference/</a>)
+					describes initial state of tested application&#39;s user story
+					when describe state change triggered by a user or a system
+				then is an acceptance criteria which can be referenced by testcases to validate requirements</p>
+				<p>testcases consisting of reusable steps</p>
+				<p>page objects: default building blocks for page object pattern -&gt; Page, PageElement, PageElementList,
+				PageElementMap and PageElementGroup</p>
+				<p>Page objects: benefits of modern wep applications which are built with reusable components to world of system testing
+				-&gt; map websites components structure and behavior</p>
+				<p>helps to avoid common pitfalls:</p>
+				<ul>
+					<li>initial waiting condition performed automatically before interacting with pageelements</li>
+				</ul>
+				<p>uses spec style reporter to output steps, results and errors in the console</p>
+				<p>generate  html test results using allure reports (link)</p>
+				<p>at the moment, only one browser can system tested concurrently</p>
+				<h1 id="guide">Guide</h1>
+				<p>learn more about wdio-workflo&#39;s features and about how to test your browser-based application using wdio-workflo</p>
+				<h1 id="documentation">Documentation</h1>
+				<p>available in apiDocs folder for wdio-workflo</p>
+				<p>docuemntation of webdriverio v4.13 -link-</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">

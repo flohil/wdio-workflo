@@ -1,7 +1,7 @@
 {
   "name": "wdio-workflo",
   "version": "0.2.30",
-  "description": "Framework for automated functional system tests in gherkin style",
+  "description": "Wdio-workflo is a framework for writing automated functional system tests. It is based on a customized version of webdriverio v4.13.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

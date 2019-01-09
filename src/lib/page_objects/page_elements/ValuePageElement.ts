@@ -66,8 +66,7 @@ export abstract class ValuePageElement<
    * Supports the following waiting types:
    *
    * - 'exist' to wait for an element to exist in the DOM
-   * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
-   * 'hidden', not outside of the viewport...)
+   * - 'visible' to wait for an element to become visible (not obscured by other elements, not set to 'hidden'...)
    * - 'text' to wait for an element to have any text
    * - 'value' to wait for an element to have any value
    *
