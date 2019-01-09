@@ -162,14 +162,14 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
  * functions
  */
 export declare abstract class PageElementBaseWait<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
-    exists(opts?: Workflo.ITimeoutReverse): PageElementType;
     /**
      * This function waits for a certain condition to be met.
      *
      * It does so by invoking a condition function which checks if a certain condition eventually becomes true within a
      * specific timeout.
      *
-     * A `WaitUntilTimeoutError` will be thrown if the condition function's return value is `false`.
+     * A `WaitUntilTimeoutError` will be thrown and the PageElement's default timeout will be written to `_lastdiff`
+     * if the condition function's return value is `false`.
      *
      * @param checkTypeStr describes what kind of check is performed by the condition function
      * @param conditionFunc a function that checks if a certain condition is eventually met within a specific timeout

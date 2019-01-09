@@ -209,10 +209,10 @@ export declare function createPropertyMessage(node: Workflo.PageNode.INode, prop
 export declare function createAnyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string): string[];
 export declare function createEventuallyPropertyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: any, timeout: number): string[];
 export declare function createEventuallyAnyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, timeout: number): string[];
-export declare function createEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], actualOnly?: boolean, includeTimeouts?: boolean): string[];
+export declare function createEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], actualOnly?: boolean, includeTimeouts?: boolean, timeout?: number): string[];
 export declare function createAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
-export declare function createEventuallyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
-export declare function createEventuallyAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]): string[];
+export declare function createEventuallyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
+export declare function createEventuallyAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number): string[];
 export declare const elementMatchers: jasmine.CustomMatcherFactories;
 export declare const listMatchers: jasmine.CustomMatcherFactories;
 export declare const allMatchers: jasmine.CustomMatcherFactories;
