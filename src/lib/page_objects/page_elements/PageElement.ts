@@ -27,7 +27,7 @@ export interface IPageElementOpts<
 }
 
 /**
- * PageElement serves as the main building block for all page objects.
+ * PageElement is the main building block for all page objects.
  *
  * Modern websites are usually built with reusable components (eg. in React or Angular) which provide a consistent
  * structure of the component's HTML elements and their behavior.
