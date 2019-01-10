@@ -2868,8 +2868,8 @@ declare global {
          * an initial wait condition will be performed before executing the specified action:
          *
          * - 'exist' waits for the PageElement to exist in the DOM
-         * - 'visible' waits for the PageElement to become (this will not be the case if the
-         * PageElement is concealed by another element, hidden, or not existing)
+         * - 'visible' waits for the PageElement to become visible (this will not be the case if the
+         * PageElement is obscured by another element, hidden or not existing )
          * - 'text' waits for the PageElement to have any text (this will not be the case if the PageElement does not exist,
          * is not visible, or has no text at all)
          * - 'value' waits for the PageElement to have any value (this will not be the case if the PageElement does not

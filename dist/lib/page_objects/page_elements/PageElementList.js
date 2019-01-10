@@ -128,8 +128,8 @@ class PageElementList extends _1.PageNode {
      * It supports the following waiting types:
      *
      * - 'exist' to wait for at least one of PageElementList's managed elements to exist in the DOM
-     * - 'visible' to wait for at least one of PageElementList's managed elements to become visible in the viewport
-     * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
+     * - 'visible' to wait for at least one of PageElementList's managed elements to become visible
+     * (not obscured by other elements, not set to 'hidden'...)
      * - 'text' to wait for at least one of PageElementList's managed elements to have any text
      *
      * @returns this (an instance of PageElementList)

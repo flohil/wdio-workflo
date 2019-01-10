@@ -30,8 +30,7 @@ const helpers_1 = require("../../helpers");
  * elements on the page. The supported initial wait conditions include:
  *
  * - 'exist' to wait for an element to exist in the DOM
- * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
- * 'hidden', not outside of the viewport...)
+ * - 'visible' to wait for an element to become visible (not obscured by other elements, not set to 'hidden')
  * - 'text' to wait for an element to have any text
  *
  * All public functions/actions defined on the PageElement class that interact with an element on the page or that
@@ -65,8 +64,7 @@ class PageElement extends _1.PageElementBase {
       * elements on the page. The supported initial wait conditions include:
       *
       * - 'exist' to wait for an element to exist in the DOM
-      * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
-      * 'hidden', not outside of the viewport...)
+      * - 'visible' to wait for an element to become visible(not obscured by other elements, not set to 'hidden'...)
       * - 'text' to wait for an element to have any text
       * - 'value' to wait for an element to have any value
       *
@@ -216,8 +214,7 @@ class PageElement extends _1.PageElementBase {
      * It supports the following waiting types:
      *
      * - 'exist' to wait for an element to exist in the DOM
-     * - 'visible' to wait for an element to become visible in the viewport (not obscured by other elements, not set to
-     * 'hidden', not outside of the viewport...)
+     * - 'visible' to wait for an element to become visible (not obscured by other elements, not set to 'hidden'...)
      * - 'text' to wait for an element to have any text
      *
      * @returns this (an instance of PageElement)

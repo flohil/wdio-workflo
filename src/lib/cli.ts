@@ -2631,12 +2631,12 @@ function ensureFolderStructure(testDir: string) {
 
         // add steps index file
         if (!fs.existsSync(stepsIndexPath)) {
-            fsExtra.copySync(path.join(templatesDir, 'src', 'steps', 'index.ts'), stepsIndexPath);
+            fsExtra.copySync(path.join(templatesDir, 'src_boilerplate', 'steps', 'index.ts'), stepsIndexPath);
         }
 
         // add base classes
         if (!pageObjectsExisted) {
-            fsExtra.copySync(path.join(templatesDir, 'src', 'page_objects'), pageObjectsDir)
+            fsExtra.copySync(path.join(templatesDir, 'src_boilerplate', 'page_objects'), pageObjectsDir)
         }
 
         console.log("\nSuccessfully initialized folder structure for wdio-workflo!")
