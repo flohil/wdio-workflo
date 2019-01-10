@@ -256,7 +256,7 @@ optimist
     .describe('consoleLogLevel', 'Defines the log level for the console output (default: "testcases")\n' +
     '\t\t\t   "results" will only output the results and errors of testcases and specs\n' +
     '\t\t\t   "testcases" will additionally print the name of the currently executed test\n' +
-    '\t\t\t   "steps" will additionally print all executed steps in the console')
+    '\t\t\t   "steps" will additionally print all executed steps in the console\n')
 
     .describe('debugSeleniumCommand', 'Outputs selenium commands in the allure report if set to true (default: true)')
     .describe('cleanStackTraces', 'Remove error stack trace lines that originate from the test framework itself (default: true)')
@@ -301,8 +301,8 @@ optimist
 
     .describe('generateReport', 'generates report for latest results or\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => generate report for given result folder\n')
-    .describe('openReport', 'opens report generated latest results or\n' +
-    '\t\t\t   \'2017-10-10_20-38-13\' => open report for given result folder\n')
+    .describe('openReport', 'opens report for latest generated allure results or\n' +
+    '\t\t\t   \'2017-10-10_20-38-13\' => open report for given generated result folder\n')
     .describe('report', 'generates and opens report for latest results or\n' +
     '\t\t\t   \'2017-10-10_20-38-13\' => generate and open report for given result folder\n')
     .describe('consoleReport', 'displays report messages written to console during latest test execution\n' +

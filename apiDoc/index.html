@@ -80,99 +80,182 @@
 					<li>Adapt wdio-workflo&#39;s configuration in <code>workflo.conf.ts</code> to your own needs.</li>
 					<li>Run <code>./node_modules/.bin/wdio-workflo --init</code> to create the boilerplate code for your functional system tests.</li>
 				</ul>
-				<p>You are now all set to write your first functional system test using wdio-workflo! :D</p>
-				<h1 id="writing-your-first-functional-system-test">Writing your first functional system test</h1>
-				<h2 id="goal">Goal</h2>
-				<p>This little &#39;Getting Started&#39; guide quickly walks you through all necessary steps to write functional system tests in
-				wdio-workflo.</p>
-				<p>In our example, we will browse to the public npm registry at <a href="https://www.npmjs.com/">https://www.npmjs.com/</a> and search for the wdio-workflo
-				npm package.</p>
-				<h2 id="configure-the-base-url-in-workflo-conf-ts">Configure the base url in workflo.conf.ts</h2>
-				<p>At first we set the base url for our tested web application in wdio-workflo&#39;s configuration.</p>
-				<p>To do so, open the file <code>workflo.conf.ts</code> in your project folder and set the value of its baseUrl property to
-				&quot;<a href="https://www.npmjs.com/&quot;">https://www.npmjs.com/&quot;</a>:</p>
-				<pre><code><span class="hljs-comment">// workflo.conf.ts</span>
-<span class="hljs-keyword">const</span> workfloConfig: IWorkfloConfig = {
-  <span class="hljs-comment">/* ... */</span>
-  baseUrl: <span class="hljs-symbol">'https</span>:<span class="hljs-comment">//www.npmjs.com/',</span>
-  <span class="hljs-comment">/* ... */</span>
-}</code></pre><h2 id="create-pageelements-and-a-page-to-map-the-components-of-the-tested-web-application">Create PageElements and a Page to map the components of the tested web application</h2>
-				<p>Now we need to map all HTML components required to search for the wdio-workflo npm package on <a href="https://www.npmjs.com/">https://www.npmjs.com/</a>.</p>
-				<p>To do so, create the files <code>NpmJsPage.ts</code> in the <code>src/page_objects/pages</code> folder and <code>Input.ts</code> in the
-				<code>src/page_objects/page_elements</code> folder of your system test directory.</p>
-				<pre><code><span class="hljs-comment">// Input.ts</span>
-<span class="hljs-keyword">import</span> { PageElementStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'../stores'</span>
-<span class="hljs-keyword">import</span> { ValuePageElement, ValuePageElementCurrently } <span class="hljs-keyword">from</span> <span class="hljs-string">'./ValuePageElement'</span>
+				<h1 id="writing-your-first-functional-system-test">Writing your first Functional System Test</h1>
+				<!--
 
-export <span class="hljs-keyword">class</span> <span class="hljs-symbol">Input</span>&lt;<span class="hljs-symbol">Store</span> <span class="hljs-symbol">extends</span> <span class="hljs-symbol">PageElementStore</span>&gt; <span class="hljs-symbol">extends</span> <span class="hljs-symbol">ValuePageElement</span>&lt;<span class="hljs-symbol">Store, <span class="hljs-symbol">string</span></span>&gt; {
+## Goal
+This little 'Getting Started' guide quickly walks you through all necessary steps to write functional system tests in
+wdio-workflo.
 
-  readonly currently = new InputCurrently(<span class="hljs-keyword">this</span>)
+In our example, we will browse to the public npm registry at https://www.npmjs.com/ and search for the wdio-workflo
+npm package.
 
-  setValue(value: <span class="hljs-built_in">string</span>): <span class="hljs-keyword">this</span> {
-    <span class="hljs-keyword">this</span>.element.setValue(value)
+## Configure the base url in workflo.conf.ts
+At first we set the base url for our tested web application in wdio-workflo's configuration.
 
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+To do so, open the file ```workflo.conf.ts``` in your project folder and set the value of its baseUrl property to
+"https://www.npmjs.com/":
+
+```
+// workflo.conf.ts
+const workfloConfig: IWorkfloConfig = {
+  /* ... */
+  baseUrl: 'https://www.npmjs.com/',
+  /* ... */
+}
+```
+
+## Create PageElements and a Page to map the components of the tested web application
+Now we need to map all HTML components required to search for the wdio-workflo npm package on https://www.npmjs.com/.
+
+To do so, create the files ```NpmJsPage.ts``` in the ```src/page_objects/pages``` folder and ```Input.ts``` in the
+```src/page_objects/page_elements``` folder of your system test directory.
+
+```
+// Input.ts
+import { PageElementStore } from '../stores'
+import { ValuePageElement, ValuePageElementCurrently } from './ValuePageElement'
+
+export class Input<Store extends PageElementStore> extends ValuePageElement<Store, string> {
+
+  readonly currently = new InputCurrently(this)
+
+  setValue(value: string): this {
+    this.element.setValue(value)
+
+    return this
   }
 }
 
-export <span class="hljs-keyword">class</span> <span class="hljs-symbol">InputCurrently</span>&lt;
-  <span class="hljs-symbol">Store</span> <span class="hljs-symbol">extends</span> <span class="hljs-symbol">PageElementStore,
-  <span class="hljs-symbol">PageElementType</span></span> <span class="hljs-symbol">extends</span> <span class="hljs-symbol">Input</span>&lt;<span class="hljs-symbol">Store</span>&gt;
-&gt; <span class="hljs-symbol">extends</span> <span class="hljs-symbol">ValuePageElementCurrently</span>&lt;<span class="hljs-symbol">Store, <span class="hljs-symbol">PageElementType</span>, <span class="hljs-symbol">string</span></span>&gt; {
+export class InputCurrently<
+  Store extends PageElementStore,
+  PageElementType extends Input<Store>
+> extends ValuePageElementCurrently<Store, PageElementType, string> {
 
-  getValue(): <span class="hljs-built_in">string</span> {
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.element.getValue()
+  getValue(): string {
+    return this.element.getValue()
   }
-}</code></pre><pre><code><span class="hljs-comment">// NpmJsPage.ts</span>
-<span class="hljs-keyword">const</span> workfloConfig: IWorkfloConfig = {
-  <span class="hljs-comment">/* ... */</span>
-  baseUrl: <span class="hljs-symbol">'https</span>:<span class="hljs-comment">//www.npmjs.com/',</span>
-  <span class="hljs-comment">/* ... */</span>
-}</code></pre><h2 id="create-a-spec-file-to-define-your-requirements">Create a spec file to define your requirements</h2>
-				<p>Create the file <code>npmjs.spec.ts</code> in the <code>src/specs</code> folder of your system test directory.</p>
-				<p>In this file, we will define requirements of our tested application.</p>
-				<pre><code><span class="hljs-comment">// npmjs.spec.ts</span>
+}
+```
 
-</code></pre><p>write spec</p>
-				<p>write testcase</p>
-				<p>write steps</p>
-				<p>show your results</p>
-				<p><code>./node_modules/.bin/wdio-workflo --report</code></p>
-				<h1 id="running-your-tests">Running your tests</h1>
-				<pre><code class="language-/node_modules/.bin/wdio-workflo```">
-can filter the tests run by testcases, specs and many more:
+```
+// NpmJsPage.ts
+const workfloConfig: IWorkfloConfig = {
+  /* ... */
+  baseUrl: 'https://www.npmjs.com/',
+  /* ... */
+}
+```
 
-```./node_modules/.bin/wdio-workflo --testcases &#39;[&quot;MySuite.sample test&quot;]&#39;</code></pre>
-				<p><code>./node_modules/.bin/wdio-workflo --specs &#39;[&quot;4.1.2&quot;]&#39;</code></p>
-				<h1 id="help">Help</h1>
-				<p>show all options of wdio-workflo&#39;s cli</p>
-				<p><code>./node_modules/.bin/wdio-workflo --help</code></p>
-				<h1 id="features">Features</h1>
-				<p>Wdio-workflo</p>
-				<p>Spec definitions with acceptance criteria to automatically validate requirements of tested application.
-					similar to cucumber
-					specs are written in gherkin language: Given - When - Then -&gt; subset of gherkin language which is also
-					used by cucumber (<a href="https://docs.cucumber.io/gherkin/reference/">https://docs.cucumber.io/gherkin/reference/</a>)
-					describes initial state of tested application&#39;s user story
-					when describe state change triggered by a user or a system
-				then is an acceptance criteria which can be referenced by testcases to validate requirements</p>
-				<p>testcases consisting of reusable steps</p>
-				<p>page objects: default building blocks for page object pattern -&gt; Page, PageElement, PageElementList,
-				PageElementMap and PageElementGroup</p>
-				<p>Page objects: benefits of modern wep applications which are built with reusable components to world of system testing
-				-&gt; map websites components structure and behavior</p>
-				<p>helps to avoid common pitfalls:</p>
+## add input to store
+
+## Create a spec file to define your requirements
+Create the file ```npmjs.spec.ts``` in the ```src/specs``` folder of your system test directory.
+
+In this file, we will define requirements of our tested application.
+
+```
+// npmjs.spec.ts
+
+
+```
+
+write spec
+
+write testcase
+
+write steps
+
+show your results
+
+```./node_modules/.bin/wdio-workflo --report```
+
+ -->
+				<h1 id="cli">CLI</h1>
+				<h2 id="running-tests">Running tests</h2>
+				<p>To start all of your testcases, run <code>./node_modules/.bin/wdio-workflo</code></p>
+				<p>You can filter the executed tests by testcases, specs and many more:</p>
+				<pre><code><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--testcases</span> '[<span class="hljs-string">"MySuite.sample test"</span>]'
+<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--specs</span> '[<span class="hljs-string">"4.1.2"</span>]'</code></pre><p>To only rerun tests which failed during the latest test run, execute</p>
+				<p><code>./node_modules/.bin/wdio-workflo --rerunFaulty</code></p>
+				<h2 id="printing-test-reports">Printing test reports</h2>
+				<p>The results of your tests are available in two different formats:</p>
 				<ul>
-					<li>initial waiting condition performed automatically before interacting with pageelements</li>
+					<li>Spec report (displayed as a textual report in a console window)</li>
+					<li>Allure report (displayed as a visual report in a browser window)</li>
 				</ul>
-				<p>uses spec style reporter to output steps, results and errors in the console</p>
-				<p>generate  html test results using allure reports (link)</p>
-				<p>at the moment, only one browser can system tested concurrently</p>
-				<h1 id="guide">Guide</h1>
-				<p>learn more about wdio-workflo&#39;s features and about how to test your browser-based application using wdio-workflo</p>
+				<p>Spec reports are shown during and after the execution of your tests in the console from where you launched your tests.
+				Allure reports need to be explicitly generated after running your tests.</p>
+				<h3 id="showing-the-results-of-the-latest-test-run">Showing the results of the latest test run</h3>
+				<p>To show the results of the latest test run in the spec format, run</p>
+				<p><code>./node_modules/.bin/wdio-workflo --consoleReport</code></p>
+				<p>To generate and open an allure report for the latest test run, you can either execute each command separately
+				or you can combine both commands:</p>
+				<pre><code><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--generateReport</span>
+<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--openReport</span>
+
+<span class="hljs-string">//</span> or combined
+
+<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--report</span></code></pre><h3 id="showing-the-results-of-a-specific-previous-test-run">Showing the results of a specific previous test run</h3>
+				<p>Each time a test run is executed, wdio-workflo writes its launch time into the file <code>latestRun</code> stored
+				in the <code>results/&lt;&lt;browserName&gt;&gt;</code> folder of wdio-workflo&#39;s system test directory.</p>
+				<p>To show the results of a specific previous test run, append the time at which the test run was launched in the format
+				YYYY-MM-DD_HH-MM-SS:</p>
+				<pre><code><span class="hljs-comment">// spec report format</span>
+./node_modules/.bin/wdio-workflo --consoleReport <span class="hljs-number">2017</span><span class="hljs-number">-10</span><span class="hljs-number">-10</span>_20<span class="hljs-number">-38</span><span class="hljs-number">-13</span>
+
+<span class="hljs-comment">// allure report format:</span>
+./node_modules/.bin/wdio-workflo --report <span class="hljs-number">2017</span><span class="hljs-number">-10</span><span class="hljs-number">-10</span>_20<span class="hljs-number">-38</span><span class="hljs-number">-13</span>
+</code></pre><h2 id="debugging">Debugging</h2>
+				<p>If you want to debug your tests, you can choose from two available options:</p>
+				<ul>
+					<li>Webdriverio&#39;s debug command</li>
+					<li>Debugging in Chrome DevTools</li>
+				</ul>
+				<h3 id="webdriverio-s-debug-command">Webdriverio&#39;s debug command</h3>
+				<p>If you simply want to inspect the current state of the browser window in which your tests are executed, you can put the <code>browser.debug()</code> command somewhere in your test case.</p>
+				<p>This will pause your tests and your commandline interface will switch into a REPL mode that allows you to interact with the tested application via webdriverio commands.</p>
+				<p>Running the command <code>.exit</code> in your CLI will exit the breakpoint and continue the test run.</p>
+				<h3 id="debugging-in-chrome-devtools">Debugging in Chrome DevTools</h3>
+				<p>In order to be able to debug your tests using the Chrome DevTools, the following preconditions need to be met:</p>
+				<ul>
+					<li>Google&#39;s chrome browser needs to be installed on your system.</li>
+					<li>The chrome extension &quot;NIM (Node-Inspector Manager)&quot; needs to be added to and enabled in your chrome browser.</li>
+					<li>The &quot;debug&quot; property of wdio-workflo&#39;s configuration object in &quot;workflo.conf.ts&quot; needs to be set to true or you need
+					to invoke your tests with the --debug cli option enabled: <code>./node_modules/.bin/wdio-workflo --debug</code></li>
+					<li>You need to open a browser window in chrome before you start your tests (so that Node-Inspector Manager can hook itself into the Chrome DevTools).</li>
+					<li>The &quot;NIM&quot; extension needs to be configured correctly. Further below you can find a list of recommended NIM settings.</li>
+				</ul>
+				<p>Now putting a <code>debugger</code> statement somewhere in your code will  pause your tests and enter a breakpoint in Chrome DevTools. You can switch to the Chrome DevTools window and step through your test code, observe the state of variables etc. or you can switch to the browser window in which your tests are run and inspect the state of the tested
+				application.</p>
+				<p>Sometimes tests might get stuck after entering a <code>debugger</code> statement. In this case, closing all chrome processes,
+					opening a new chrome window, switching &quot;Open DevTools&quot; in NIM&#39;s Main Menu to &quot;Manual&quot; and then back to &quot;Auto&quot; and finally
+				restarting your tests should resolve the problem.</p>
+				<p>These are the recommended settings for the &quot;NIM&quot; chrome extension:</p>
+				<p>(Main Menu)</p>
+				<ul>
+					<li>Host: &quot;localhost&quot;</li>
+					<li>Port: &quot;9229&quot;</li>
+					<li>Open DevTools: &quot;Auto&quot;</li>
+				</ul>
+				<p>(General Options Menu)</p>
+				<ul>
+					<li>Open in a New Window: &quot;On&quot;</li>
+					<li>Make Window Focused: &quot;On&quot;</li>
+					<li>Close Automatically: &quot;On&quot;</li>
+					<li>Select DevTools Version: &quot;On&quot; -&gt; DevTools Version (default)</li>
+					<li>Real-time Collaboration: &quot;Off&quot;</li>
+					<li>check Interval: 0.50 secondes</li>
+				</ul>
+				<p>The General Options Menu can be opened by hovering over the little circle in the right bottom of the Main Menu and then clicking on the &quot;sliders&quot; icon.</p>
+				<h2 id="help">Help</h2>
+				<p>To show all options of wdio-workflo&#39;s CLI, run</p>
+				<p><code>./node_modules/.bin/wdio-workflo --help</code></p>
 				<h1 id="documentation">Documentation</h1>
-				<p>available in apiDocs folder for wdio-workflo</p>
-				<p>docuemntation of webdriverio v4.13 -link-</p>
+				<p>Wdio-workflo&#39;s documentation comes bundled with the npm package and can be displayed by opening the file <code>node_modules/wdio-workflo/apiDoc/index.html</code></p>
+				<p>Webdriverio&#39;s api docs for version 4.13 can be found at <a href="http://v4.webdriver.io/api.html">http://v4.webdriver.io/api.html</a></p>
+				<h1 id="learn-more-about-wdio-workflo">Learn more about Wdio-workflo</h1>
+				<p>To gain a deeper insight into wdio-workflo&#39;s features and to learn more about how to test your browser-based application using this wdio-workflo, visit the framework&#39;s website at <a href="https://wdio-workflo.com">https://wdio-workflo.com</a></p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">

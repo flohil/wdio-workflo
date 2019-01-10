@@ -9,7 +9,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "declaration": true,
-        "outDir": "./dist",
+        "outDir": "./dist"
     },
     "include": [
         "index.d.ts",
@@ -43,7 +43,7 @@
             "**/Kiwi.ts",
             "**/matchers.ts",
             "**/parser.ts",
-            "**/utility_functions/*.ts",
+            "**/utility_functions/*.ts"
         ]
     }
 }
