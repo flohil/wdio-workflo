@@ -652,6 +652,8 @@ checkReport().then(() => {
         });
     args['bail'] = 0;
     args['cleanStackTraces'] = cleanStackTraces;
+    args['host'] = workfloConfig.host || '127.0.0.1';
+    args['port'] = workfloConfig.port || '4444';
     if (workfloConfig.debug === true || argv.debug === true) {
         workfloConfig.execArgv = ['--inspect'];
         workfloConfig.debug = false;
