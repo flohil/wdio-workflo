@@ -901,7 +901,7 @@ export declare class PageElementListCurrently<Store extends PageElementStore, Pa
          * @param length the not-expected length
          * @param comparator defines the method used to compare the actual and the expected length of PageElementList
          */
-        hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
+        hasLength: (length: number, comparator?: import("../../enums").Comparator) => boolean;
         /**
          * Returns true if none of the PageElements managed by PageElementList currently exist.
          *

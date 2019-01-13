@@ -25,7 +25,7 @@ class PageElementBase extends _1.PageNode {
      * @param opts the options used to configure PageElementBase
      */
     constructor(selector, _a) {
-        var { waitType = "visible" /* visible */, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT, interval = JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL } = _a, superOpts = __rest(_a, ["waitType", "timeout", "interval"]);
+        var { waitType = Workflo.WaitType.visible, timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT, interval = JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL } = _a, superOpts = __rest(_a, ["waitType", "timeout", "interval"]);
         super(selector, superOpts);
         this._$ = Object.create(null);
         this._timeout = timeout;

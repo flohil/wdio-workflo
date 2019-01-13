@@ -238,7 +238,7 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
          */
         containsValue: (value: ValueType | ValueType[]) => boolean;
         isEmpty: () => boolean;
-        hasLength: (length: number, comparator?: Workflo.Comparator) => boolean;
+        hasLength: (length: number, comparator?: import("../../enums").Comparator) => boolean;
         exists: (filterMask?: boolean) => boolean;
         isVisible: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;
         isEnabled: (filterMask?: Workflo.PageNode.ListFilterMask) => boolean;

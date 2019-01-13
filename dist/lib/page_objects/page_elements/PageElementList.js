@@ -82,7 +82,7 @@ class PageElementList extends _1.PageNode {
         this.selector = selector;
         this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
-        this._waitType = opts.waitType || "visible" /* visible */;
+        this._waitType = opts.waitType || Workflo.WaitType.visible;
         this._disableCache = opts.disableCache || false;
         this._elementOpts = opts.elementOpts;
         this._elementStoreFunc = opts.elementStoreFunc;
@@ -136,13 +136,13 @@ class PageElementList extends _1.PageNode {
      */
     initialWait() {
         switch (this._waitType) {
-            case "exist" /* exist */:
+            case Workflo.WaitType.exist:
                 this.wait.any.exists();
                 break;
-            case "visible" /* visible */:
+            case Workflo.WaitType.visible:
                 this.wait.any.isVisible();
                 break;
-            case "text" /* text */:
+            case Workflo.WaitType.text:
                 this.wait.any.hasAnyText();
                 break;
             default:
@@ -967,7 +967,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * @param length the expected length
      * @param comparator defines the method used to compare the actual and the expected length of PageElementList
      */
-    hasLength(length, comparator = "==" /* equalTo */) {
+    hasLength(length, comparator = Workflo.Comparator.equalTo) {
         const actualLength = this.getLength();
         this._node.__setLastDiff({
             actual: actualLength.toString(),
@@ -1111,7 +1111,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * @param length the not-expected length
              * @param comparator defines the method used to compare the actual and the expected length of PageElementList
              */
-            hasLength: (length, comparator = "==" /* equalTo */) => !this.hasLength(length, comparator),
+            hasLength: (length, comparator = Workflo.Comparator.equalTo) => !this.hasLength(length, comparator),
             /**
              * Returns true if none of the PageElements managed by PageElementList currently exist.
              *
@@ -1282,7 +1282,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
      *
      * @returns this (an instance of PageElementList)
      */
-    hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
+    hasLength(length, { timeout = this._node.getTimeout(), comparator = Workflo.Comparator.equalTo, interval = this._node.getInterval(), reverse } = {}) {
         const notStr = (reverse) ? 'not ' : '';
         return this._node.__waitUntil(() => {
             if (reverse) {
@@ -1788,7 +1788,7 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
      */
-    hasLength(length, { timeout = this._node.getTimeout(), comparator = "==" /* equalTo */, interval = this._node.getInterval(), reverse } = {}) {
+    hasLength(length, { timeout = this._node.getTimeout(), comparator = Workflo.Comparator.equalTo, interval = this._node.getInterval(), reverse } = {}) {
         return this._node.__eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
     }
     /**

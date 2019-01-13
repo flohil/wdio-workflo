@@ -2,6 +2,7 @@ import { InstallOpts, StartOpts  } from 'selenium-standalone'
 import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element } from 'webdriverio'
 
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli'
+import * as enums from './lib/enums'
 import * as pageObjects from './lib/page_objects'
 import * as helpers from './lib/helpers'
 import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList'
@@ -3002,26 +3003,29 @@ declare global {
      * - 'value' waits for the PageElement to have any value (this will not be the case if the PageElement does not
      * exist, is not visible, or has no value at all)
      */
-    const enum WaitType {
-      exist = 'exist',
-      visible = 'visible',
-      text = 'text',
-      value = 'value'
-    }
+    // enum WaitType {
+    //   exist = 'exist',
+    //   visible = 'visible',
+    //   text = 'text',
+    //   value = 'value'
+    // }
+
+    export import WaitType = enums.WaitType
 
     /**
      * This enum is used to perform comparisons of numbers.
      */
-    const enum Comparator {
-      equalTo = '==',
-      lessThan = '<',
-      greaterThan = '>',
-      notEqualTo = '!=',
-      ne = '!=',
-      eq = '==',
-      lt = '<',
-      gt = '>',
-    }
+    // enum Comparator {
+    //   equalTo = '==',
+    //   lessThan = '<',
+    //   greaterThan = '>',
+    //   notEqualTo = '!=',
+    //   ne = '!=',
+    //   eq = '==',
+    //   lt = '<',
+    //   gt = '>',
+    // }
+    export import Comparator = enums.Comparator
 
     /**
      * XPath can be supplied to wdio-workflo either via an XPathBuilder or as a raw XPath string

@@ -15,6 +15,7 @@ import {
   listMatchers,
   valueAllMatchers,
 } from './matchers'
+import { WaitType, Comparator } from './enums'
 
 function safeAdd( context, key, obj ) {
   if ( context.hasOwnProperty( key ) ) {
@@ -59,6 +60,10 @@ function inject( config ) {
   context.expectList = expectList
   context.expectMap = expectMap
   context.expectGroup = expectGroup
+
+  // add enum definitions
+  context.Workflo.WaitType = WaitType
+  context.Workflo.Comparator = Comparator
 }
 
 inject({})

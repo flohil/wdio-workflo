@@ -42,7 +42,7 @@ class PageElementStore {
      * @returns an instance of the retrieved PageElement
      */
     ExistElement(selector, opts) {
-        return this.Element(selector, Object.assign({ waitType: "exist" /* exist */ }, opts));
+        return this.Element(selector, Object.assign({ waitType: Workflo.WaitType.exist }, opts));
     }
     // LISTS
     /**
@@ -105,7 +105,7 @@ class PageElementStore {
      * @returns an instance of the retrieved PageElementList
      */
     ExistElementList(selector, opts) {
-        return this.List(selector, Object.assign({ elementOpts: {}, elementStoreFunc: this.ExistElement, waitType: "exist" /* exist */ }, opts));
+        return this.List(selector, Object.assign({ elementOpts: {}, elementStoreFunc: this.ExistElement, waitType: Workflo.WaitType.exist }, opts));
     }
     // MAPS
     /**

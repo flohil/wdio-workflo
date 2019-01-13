@@ -56,7 +56,7 @@ class ValuePageElementList extends _1.PageElementList {
      * @returns this (an instance of ValuePageElementList)
      */
     initialWait() {
-        if (this._waitType === "value" /* value */) {
+        if (this._waitType === Workflo.WaitType.value) {
             this.wait.any.hasAnyValue();
         }
         else {

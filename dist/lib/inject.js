@@ -8,6 +8,7 @@ const arrayFunctions = require("./utility_functions/array");
 const classFunctions = require("./utility_functions/class");
 const utilFunctions = require("./utility_functions/util");
 const matchers_1 = require("./matchers");
+const enums_1 = require("./enums");
 function safeAdd(context, key, obj) {
     if (context.hasOwnProperty(key)) {
         throw new Error(`${key} is already defined within context`);
@@ -45,6 +46,9 @@ function inject(config) {
     context.expectList = matchers_1.expectList;
     context.expectMap = matchers_1.expectMap;
     context.expectGroup = matchers_1.expectGroup;
+    // add enum definitions
+    context.Workflo.WaitType = enums_1.WaitType;
+    context.Workflo.Comparator = enums_1.Comparator;
 }
 exports.inject = inject;
 inject({});

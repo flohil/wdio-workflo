@@ -3,6 +3,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+const enums = require("./lib/enums");
 const pageObjects = require("./lib/page_objects");
 exports.pageObjects = pageObjects;
 const helpers = require("./lib/helpers");

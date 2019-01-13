@@ -40,7 +40,7 @@ class ValuePageElement extends PageElement_1.PageElement {
      * @returns this (an instance of ValuePageElement)
      */
     initialWait() {
-        if (this._waitType === "value" /* value */) {
+        if (this._waitType === Workflo.WaitType.value) {
             if (!this.currently.hasAnyValue()) {
                 this.wait.hasAnyValue();
             }

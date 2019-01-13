@@ -221,17 +221,17 @@ class PageElement extends _1.PageElementBase {
      */
     initialWait() {
         switch (this._waitType) {
-            case "exist" /* exist */:
+            case Workflo.WaitType.exist:
                 if (!this.currently.exists()) {
                     this.wait.exists();
                 }
                 break;
-            case "visible" /* visible */:
+            case Workflo.WaitType.visible:
                 if (!this.currently.isVisible()) {
                     this.wait.isVisible();
                 }
                 break;
-            case "text" /* text */:
+            case Workflo.WaitType.text:
                 if (!this.currently.hasAnyText()) {
                     this.wait.hasAnyText();
                 }

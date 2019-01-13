@@ -60,13 +60,13 @@ exports.convertToObject = convertToObject;
  */
 function compare(var1, var2, operator) {
     switch (operator) {
-        case "==" /* equalTo */ || "==" /* eq */:
+        case Workflo.Comparator.equalTo || Workflo.Comparator.eq:
             return var1 === var2;
-        case "!=" /* notEqualTo */ || "!=" /* ne */:
+        case Workflo.Comparator.notEqualTo || Workflo.Comparator.ne:
             return var1 !== var2;
-        case ">" /* greaterThan */ || ">" /* gt */:
+        case Workflo.Comparator.greaterThan || Workflo.Comparator.gt:
             return var1 > var2;
-        case "<" /* lessThan */ || "<" /* lt */:
+        case Workflo.Comparator.lessThan || Workflo.Comparator.lt:
             return var1 < var2;
     }
 }
@@ -78,13 +78,13 @@ exports.compare = compare;
  * @returns the textual representation of the passed comparison method
  */
 function comparatorStr(comparator) {
-    if (comparator === "!=" /* ne */) {
+    if (comparator === Workflo.Comparator.ne) {
         return ' other than';
     }
-    else if (comparator === ">" /* gt */) {
+    else if (comparator === Workflo.Comparator.gt) {
         return ' greater than';
     }
-    else if (comparator === "<" /* lt */) {
+    else if (comparator === Workflo.Comparator.lt) {
         return ' less than';
     }
     else {
