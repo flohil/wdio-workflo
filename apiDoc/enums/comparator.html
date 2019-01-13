@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>WaitType | wdio-workflo</title>
+	<title>Comparator | wdio-workflo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/__global.html">__global</a>
-				</li>
-				<li>
-					<a href="../modules/__global.workflo.html">Workflo</a>
-				</li>
-				<li>
-					<a href="__global.workflo.waittype.html">WaitType</a>
+					<a href="comparator.html">Comparator</a>
 				</li>
 			</ul>
-			<h1>Enumeration WaitType</h1>
+			<h1>Enumeration Comparator</h1>
 		</div>
 	</div>
 </header>
@@ -73,76 +67,109 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>This enum describes the four possible initial waiting types supported by wdio-workflo.</p>
+						<p>This enum is used to perform comparisons of numbers.</p>
 					</div>
-					<p>Every time an interaction with the tested application takes place via a PageElement&#39;s action (eg. click),
-					an initial wait condition will be performed before executing the specified action:</p>
-					<ul>
-						<li>&#39;exist&#39; waits for the PageElement to exist in the DOM</li>
-						<li>&#39;visible&#39; waits for the PageElement to become visible (this will not be the case if the
-						PageElement is obscured by another element, hidden or not existing )</li>
-						<li>&#39;text&#39; waits for the PageElement to have any text (this will not be the case if the PageElement does not exist,
-						is not visible, or has no text at all)</li>
-						<li>&#39;value&#39; waits for the PageElement to have any value (this will not be the case if the PageElement does not
-						exist, is not visible, or has no value at all)</li>
-					</ul>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="__global.workflo.waittype.html#exist" class="tsd-kind-icon">exist</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="__global.workflo.waittype.html#text" class="tsd-kind-icon">text</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="__global.workflo.waittype.html#value" class="tsd-kind-icon">value</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="__global.workflo.waittype.html#visible" class="tsd-kind-icon">visible</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#eq" class="tsd-kind-icon">eq</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#equalto" class="tsd-kind-icon">equal<wbr>To</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#greaterthan" class="tsd-kind-icon">greater<wbr>Than</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#gt" class="tsd-kind-icon">gt</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#lessthan" class="tsd-kind-icon">less<wbr>Than</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#lt" class="tsd-kind-icon">lt</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#ne" class="tsd-kind-icon">ne</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="comparator.html#notequalto" class="tsd-kind-icon">not<wbr>Equal<wbr>To</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-					<a name="exist" class="tsd-anchor"></a>
-					<h3>exist</h3>
-					<div class="tsd-signature tsd-kind-icon">exist<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;exist&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="eq" class="tsd-anchor"></a>
+					<h3>eq</h3>
+					<div class="tsd-signature tsd-kind-icon">eq<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;&#x3D;&#x3D;&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/208fab0/src/index.ts#L3006">index.ts:3006</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L31">lib/enums.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-					<a name="text" class="tsd-anchor"></a>
-					<h3>text</h3>
-					<div class="tsd-signature tsd-kind-icon">text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;text&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="equalto" class="tsd-anchor"></a>
+					<h3>equal<wbr>To</h3>
+					<div class="tsd-signature tsd-kind-icon">equal<wbr>To<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;&#x3D;&#x3D;&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/208fab0/src/index.ts#L3008">index.ts:3008</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L26">lib/enums.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-					<a name="value" class="tsd-anchor"></a>
-					<h3>value</h3>
-					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;value&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="greaterthan" class="tsd-anchor"></a>
+					<h3>greater<wbr>Than</h3>
+					<div class="tsd-signature tsd-kind-icon">greater<wbr>Than<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;&gt;&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/208fab0/src/index.ts#L3009">index.ts:3009</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L28">lib/enums.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-					<a name="visible" class="tsd-anchor"></a>
-					<h3>visible</h3>
-					<div class="tsd-signature tsd-kind-icon">visible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;visible&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="gt" class="tsd-anchor"></a>
+					<h3>gt</h3>
+					<div class="tsd-signature tsd-kind-icon">gt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;&gt;&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/208fab0/src/index.ts#L3007">index.ts:3007</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L33">lib/enums.ts:33</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="lessthan" class="tsd-anchor"></a>
+					<h3>less<wbr>Than</h3>
+					<div class="tsd-signature tsd-kind-icon">less<wbr>Than<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;&lt;&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L27">lib/enums.ts:27</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="lt" class="tsd-anchor"></a>
+					<h3>lt</h3>
+					<div class="tsd-signature tsd-kind-icon">lt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;&lt;&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L32">lib/enums.ts:32</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="ne" class="tsd-anchor"></a>
+					<h3>ne</h3>
+					<div class="tsd-signature tsd-kind-icon">ne<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;!&#x3D;&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L30">lib/enums.ts:30</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="notequalto" class="tsd-anchor"></a>
+					<h3>not<wbr>Equal<wbr>To</h3>
+					<div class="tsd-signature tsd-kind-icon">not<wbr>Equal<wbr>To<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;!&#x3D;&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L29">lib/enums.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -154,60 +181,38 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-module tsd-is-not-exported">
-						<a href="../modules/__global.html">__global</a>
-						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-								<a href="../modules/__global.webdriverio.html">WebdriverIO</a>
-							</li>
-							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-								<a href="../modules/__global.workflo.html">Workflo</a>
-								<ul>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.array.html">Array</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.class.html">Class</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.object.html">Object</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.pagenode.html">Page<wbr>Node</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.store.html">Store</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.string.html">String</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.util.html">Util</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
-						<a href="__global.workflo.waittype.html" class="tsd-kind-icon">Wait<wbr>Type</a>
+					<li class="current tsd-kind-enum">
+						<a href="comparator.html" class="tsd-kind-icon">Comparator</a>
 						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-								<a href="__global.workflo.waittype.html#exist" class="tsd-kind-icon">exist</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#eq" class="tsd-kind-icon">eq</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-								<a href="__global.workflo.waittype.html#text" class="tsd-kind-icon">text</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#equalto" class="tsd-kind-icon">equal<wbr>To</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-								<a href="__global.workflo.waittype.html#value" class="tsd-kind-icon">value</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#greaterthan" class="tsd-kind-icon">greater<wbr>Than</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
-								<a href="__global.workflo.waittype.html#visible" class="tsd-kind-icon">visible</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#gt" class="tsd-kind-icon">gt</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#lessthan" class="tsd-kind-icon">less<wbr>Than</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#lt" class="tsd-kind-icon">lt</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#ne" class="tsd-kind-icon">ne</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="comparator.html#notequalto" class="tsd-kind-icon">not<wbr>Equal<wbr>To</a>
 							</li>
 						</ul>
 					</li>

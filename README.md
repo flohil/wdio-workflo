@@ -14,7 +14,23 @@ reusable steps formulated in natural language to make them comprehensible for al
 
 # Installation and Configuration
 - Install wdio-workflo by running ```npm install --save-dev wdio-workflo``` in your project folder.
-This will automatically create wdio-workflo's configuration file ```workflo.conf.ts``` in the same directory.
+This will automatically create wdio-workflo's configuration file ```workflo.conf.ts``` and wdio-workflo's typescript
+compiler settings file ```tsconfig.workflo.json``` in the same directory.
+- Import wdio-workflo's typescript compiler settings into your project's ```tsconfig.json``` file by either copying the
+settings manually or by extending your ```tsconfig.json``` with wdio-workflo's ```tsconfig.workflo.json```:
+
+```
+// tsconfig.json
+{
+  "extends": "./tsconfig.workflo.json",
+  ...
+}
+```
+
+If you extend wdio-workflo's typescript compiler settings, be aware that any option set in your project's 
+```tsconfig.json``` file will overwrite the same option of ```tsconfig.workflo.json```. Just make sure that
+the source folder of your system tests directory is included in the compiled typescript files (add its path to the 
+"include" option's array or do not set an "include" option at all).
 - Adapt wdio-workflo's configuration in ```workflo.conf.ts``` to your own needs.
 - Run ```./node_modules/.bin/wdio-workflo --init``` to create the boilerplate code for your functional system tests.
 
@@ -126,7 +142,7 @@ To only rerun tests which failed during the latest test run, execute
 
 ```./node_modules/.bin/wdio-workflo --rerunFaulty```
 
-## Printing test reports
+## Test reports
 The results of your tests are available in two different formats:
 
 - Spec report (displayed as a textual report in a console window)
@@ -226,4 +242,5 @@ Wdio-workflo's documentation comes bundled with the npm package and can be displ
 Webdriverio's api docs for version 4.13 can be found at http://v4.webdriver.io/api.html
 
 # Learn more about Wdio-workflo
-To gain a deeper insight into wdio-workflo's features and to learn more about how to test your browser-based application using this wdio-workflo, visit the framework's website at https://wdio-workflo.com
+To gain a deeper insight into wdio-workflo's features and to learn more about how to test your browser-based application using wdio-workflo,
+visit https://wdio-workflo.com (available soon).

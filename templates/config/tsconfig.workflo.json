@@ -4,7 +4,9 @@
         "module": "commonjs"
     },
     "include": [
-        "node_modules/wdio-workflo/**/*.ts",
         "system_test/src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ILastDiff | wdio-workflo</title>
+	<title>WaitType | wdio-workflo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/__global.html">__global</a>
-				</li>
-				<li>
-					<a href="../modules/__global.workflo.html">Workflo</a>
-				</li>
-				<li>
-					<a href="__global.workflo.ilastdiff.html">ILastDiff</a>
+					<a href="waittype.html">WaitType</a>
 				</li>
 			</ul>
-			<h1>Interface ILastDiff</h1>
+			<h1>Enumeration WaitType</h1>
 		</div>
 	</div>
 </header>
@@ -73,92 +67,78 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used to get and set the last differences (actual vs expected values) of a PageNode&#39;s state check functions
-						(eg. hasText, hasAnyText, containsText) in order to use them in expectation matcher error messages.</p>
+						<p>This enum describes the four possible initial waiting types supported by wdio-workflo.</p>
 					</div>
+					<p>Every time an interaction with the tested application takes place via a PageElement&#39;s action (eg. click),
+					an initial wait condition will be performed before executing the specified action:</p>
+					<ul>
+						<li>&#39;exist&#39; waits for the PageElement to exist in the DOM</li>
+						<li>&#39;visible&#39; waits for the PageElement to become visible (this will not be the case if the
+						PageElement is obscured by another element, hidden or not existing )</li>
+						<li>&#39;text&#39; waits for the PageElement to have any text (this will not be the case if the PageElement does not exist,
+						is not visible, or has no text at all)</li>
+						<li>&#39;value&#39; waits for the PageElement to have any value (this will not be the case if the PageElement does not
+						exist, is not visible, or has no value at all)</li>
+					</ul>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">ILastDiff</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="__global.workflo.pagenode.inode.html" class="tsd-signature-type">INode</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Properties</h3>
+						<section class="tsd-index-section ">
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ilastdiff.html#__lastdiff" class="tsd-kind-icon">__last<wbr>Diff</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ilastdiff.html#__setlastdiff" class="tsd-kind-icon">__set<wbr>Last<wbr>Diff</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="waittype.html#exist" class="tsd-kind-icon">exist</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="waittype.html#text" class="tsd-kind-icon">text</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="waittype.html#value" class="tsd-kind-icon">value</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="waittype.html#visible" class="tsd-kind-icon">visible</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="__lastdiff" class="tsd-anchor"></a>
-					<h3>__last<wbr>Diff</h3>
-					<div class="tsd-signature tsd-kind-icon">__last<wbr>Diff<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a></div>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="exist" class="tsd-anchor"></a>
+					<h3>exist</h3>
+					<div class="tsd-signature tsd-kind-icon">exist<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;exist&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/index.ts#L1941">index.ts:1941</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L16">lib/enums.ts:16</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Retrieves the last differences of a PageNode&#39;s check state functions.</p>
-						</div>
-						<p>Intended for framework-internal usage only.</p>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="__setlastdiff" class="tsd-anchor"></a>
-					<h3>__set<wbr>Last<wbr>Diff</h3>
-					<div class="tsd-signature tsd-kind-icon">__set<wbr>Last<wbr>Diff<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="text" class="tsd-anchor"></a>
+					<h3>text</h3>
+					<div class="tsd-signature tsd-kind-icon">text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;text&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/index.ts#L1947">index.ts:1947</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L18">lib/enums.ts:18</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Sets the last differences of a PageNode&#39;s check state functions.</p>
-						</div>
-						<p>Intended for framework-internal usage only.</p>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>diff<span class="tsd-signature-symbol">: </span><a href="__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>diff: <a href="__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-									</li>
-								</ul>
-							</li>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="value" class="tsd-anchor"></a>
+					<h3>value</h3>
+					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;value&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L19">lib/enums.ts:19</a></li>
 						</ul>
-					</div>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="visible" class="tsd-anchor"></a>
+					<h3>visible</h3>
+					<div class="tsd-signature tsd-kind-icon">visible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;visible&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/a091034/src/lib/enums.ts#L17">lib/enums.ts:17</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -168,54 +148,26 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-module tsd-is-not-exported">
-						<a href="../modules/__global.html">__global</a>
-						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-								<a href="../modules/__global.webdriverio.html">WebdriverIO</a>
-							</li>
-							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-								<a href="../modules/__global.workflo.html">Workflo</a>
-								<ul>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.array.html">Array</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.class.html">Class</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.object.html">Object</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.pagenode.html">Page<wbr>Node</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.store.html">Store</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.string.html">String</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
-										<a href="../modules/__global.workflo.util.html">Util</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="__global.workflo.ilastdiff.html" class="tsd-kind-icon">ILast<wbr>Diff</a>
+					<li class="current tsd-kind-enum">
+						<a href="waittype.html" class="tsd-kind-icon">Wait<wbr>Type</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.ilastdiff.html#__lastdiff" class="tsd-kind-icon">__last<wbr>Diff</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="waittype.html#exist" class="tsd-kind-icon">exist</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.ilastdiff.html#__setlastdiff" class="tsd-kind-icon">__set<wbr>Last<wbr>Diff</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="waittype.html#text" class="tsd-kind-icon">text</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="waittype.html#value" class="tsd-kind-icon">value</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="waittype.html#visible" class="tsd-kind-icon">visible</a>
 							</li>
 						</ul>
 					</li>

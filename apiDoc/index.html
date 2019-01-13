@@ -76,7 +76,20 @@
 				<h1 id="installation-and-configuration">Installation and Configuration</h1>
 				<ul>
 					<li>Install wdio-workflo by running <code>npm install --save-dev wdio-workflo</code> in your project folder.
-					This will automatically create wdio-workflo&#39;s configuration file <code>workflo.conf.ts</code> in the same directory.</li>
+						This will automatically create wdio-workflo&#39;s configuration file <code>workflo.conf.ts</code> and wdio-workflo&#39;s typescript
+					compiler settings file <code>tsconfig.workflo.json</code> in the same directory.</li>
+					<li>Import wdio-workflo&#39;s typescript compiler settings into your project&#39;s <code>tsconfig.json</code> file by either copying the
+					settings manually or by extending your <code>tsconfig.json</code> with wdio-workflo&#39;s <code>tsconfig.workflo.json</code>:</li>
+				</ul>
+				<pre><code><span class="hljs-comment">// tsconfig.json</span>
+{
+  <span class="hljs-string">"extends"</span>: <span class="hljs-string">"./tsconfig.workflo.json"</span>,
+  ...
+}</code></pre><p>If you extend wdio-workflo&#39;s typescript compiler settings, be aware that any option set in your project&#39;s 
+					<code>tsconfig.json</code> file will overwrite the same option of <code>tsconfig.workflo.json</code>. Just make sure that
+					the source folder of your system tests directory is included in the compiled typescript files (add its path to the
+				&quot;include&quot; option&#39;s array or do not set an &quot;include&quot; option at all).</p>
+				<ul>
 					<li>Adapt wdio-workflo&#39;s configuration in <code>workflo.conf.ts</code> to your own needs.</li>
 					<li>Run <code>./node_modules/.bin/wdio-workflo --init</code> to create the boilerplate code for your functional system tests.</li>
 				</ul>
@@ -178,7 +191,7 @@ show your results
 				<pre><code><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--testcases</span> '[<span class="hljs-string">"MySuite.sample test"</span>]'
 <span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--specs</span> '[<span class="hljs-string">"4.1.2"</span>]'</code></pre><p>To only rerun tests which failed during the latest test run, execute</p>
 				<p><code>./node_modules/.bin/wdio-workflo --rerunFaulty</code></p>
-				<h2 id="printing-test-reports">Printing test reports</h2>
+				<h2 id="test-reports">Test reports</h2>
 				<p>The results of your tests are available in two different formats:</p>
 				<ul>
 					<li>Spec report (displayed as a textual report in a console window)</li>
@@ -255,7 +268,8 @@ show your results
 				<p>Wdio-workflo&#39;s documentation comes bundled with the npm package and can be displayed by opening the file <code>node_modules/wdio-workflo/apiDoc/index.html</code></p>
 				<p>Webdriverio&#39;s api docs for version 4.13 can be found at <a href="http://v4.webdriver.io/api.html">http://v4.webdriver.io/api.html</a></p>
 				<h1 id="learn-more-about-wdio-workflo">Learn more about Wdio-workflo</h1>
-				<p>To gain a deeper insight into wdio-workflo&#39;s features and to learn more about how to test your browser-based application using this wdio-workflo, visit the framework&#39;s website at <a href="https://wdio-workflo.com">https://wdio-workflo.com</a></p>
+				<p>To gain a deeper insight into wdio-workflo&#39;s features and to learn more about how to test your browser-based application using wdio-workflo,
+				visit <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> (available soon).</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -271,6 +285,12 @@ show your results
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="enums/comparator.html" class="tsd-kind-icon">Comparator</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/waittype.html" class="tsd-kind-icon">Wait<wbr>Type</a>
+					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/listwherebuilder.html" class="tsd-kind-icon">List<wbr>Where<wbr>Builder</a>
 					</li>
