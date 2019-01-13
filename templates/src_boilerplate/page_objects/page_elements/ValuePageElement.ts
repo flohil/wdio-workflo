@@ -51,8 +51,8 @@ implements core.elements.ValuePageElement<Store, ValueType> {
     this.eventually = new ValuePageElementEventually(this)
   }
 
+  // declarations of core.elements.ValuePageElement functions required for typescript mixin
   abstract setValue(value: ValueType): this;
-
   getValue: () => ValueType;
   getHasValue: (value: ValueType) => boolean;
   getHasAnyValue: () => boolean;
@@ -76,6 +76,7 @@ export abstract class ValuePageElementCurrently<
   ValueType
 > extends PageElementCurrently<Store, PageElementType>
 implements core.elements.ValuePageElementCurrently<Store, PageElementType, ValueType> {
+  // declarations of core.elements.ValuePageElement functions required for typescript mixin
   abstract getValue(): ValueType
   getHasValue: (value: ValueType) => boolean
   getHasAnyValue: () => boolean
@@ -105,6 +106,7 @@ export class ValuePageElementWait<
   ValueType
 > extends PageElementWait<Store, PageElementType>
 implements core.elements.ValuePageElementWait<Store, PageElementType, ValueType> {
+  // declarations of core.elements.ValuePageElement functions required for typescript mixin
   hasValue: (value: ValueType, opts?: Workflo.ITimeoutReverseInterval) => PageElementType
   hasAnyValue: (opts?: Workflo.ITimeoutReverseInterval) => PageElementType
   containsValue: (value: ValueType, opts?: Workflo.ITimeoutReverseInterval) => PageElementType
@@ -130,6 +132,7 @@ export class ValuePageElementEventually<
   ValueType
 > extends PageElementEventually<Store, PageElementType>
 implements core.elements.ValuePageElementEventually<Store, PageElementType, ValueType> {
+  // declarations of core.elements.ValuePageElement functions required for typescript mixin
   hasValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => boolean
   hasAnyValue: (opts?: Workflo.ITimeoutInterval) => boolean
   containsValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => boolean
@@ -138,7 +141,7 @@ implements core.elements.ValuePageElementEventually<Store, PageElementType, Valu
     PageElementEventually<Store, PageElementType>['not']
 }
 
-// mixin functionalities of extended PageElement base class -> https://www.typescriptlang.org/docs/handbook/mixins.html
+// mixin functionalities of core.elements.ValuePageElement class -> https://www.typescriptlang.org/docs/handbook/mixins.html
 
 helpers.applyMixins(ValuePageElement, [core.elements.ValuePageElement], ['not']);
 helpers.applyMixins(ValuePageElementCurrently, [core.elements.ValuePageElementCurrently], ['not']);

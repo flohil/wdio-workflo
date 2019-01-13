@@ -14,7 +14,7 @@ export interface IPageElementOpts<
   Store extends PageElementStore
 > extends core.elements.IPageElementOpts<Store> {}
 
- /**
+/**
  * This class can be used to extend or customize the functionality provided by wdio-workflo's PageElement class.
  * It is supposed to serve as the base PageElement class throughout your project.
  *
