@@ -153,7 +153,7 @@ class PageElementList extends _1.PageNode {
     // typescript bugs 3.3.0:
     // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
     /**
-     * `$` provides access to the PageNode retrieval functions of PageElementList's PageElementStore and prefixes the
+     * `$` provides access to the PageNode retrieval functions of PageElementList's PageNodeStore and prefixes the
      * selectors of all PageNodes retrieved via `$` with the selector of PageElementList.
      */
     get $() {
@@ -708,7 +708,7 @@ exports.PageElementList = PageElementList;
 /**
  * This class defines all `currently` functions of PageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
  * @template ListType type of the PageElementList for which PageElementListCurrently defines all `currently` functions
@@ -1233,7 +1233,7 @@ exports.PageElementListCurrently = PageElementListCurrently;
 /**
  * This class defines all `wait` functions of PageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
  * @template ListType type of the PageElementList for which PageElementListCurrently defines all `wait` functions
@@ -1743,7 +1743,7 @@ exports.PageElementListWait = PageElementListWait;
 /**
  * This class defines all `eventually` functions of PageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
  * @template ListType type of the PageElementList for which PageElementListCurrently defines all `eventually` functions

@@ -4,7 +4,7 @@ const __1 = require("../");
 /**
  * This class serves as the base class for all Pages.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`, `wait.isOpen` and
  * `eventually.isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`, `wait.isClosed` and
@@ -24,7 +24,7 @@ class Page {
         this.eventually = new PageEventually(this);
     }
     /**
-     * Returns an instance of PageElementStore which can be used to retrieve/create PageNodes via Page
+     * Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
      */
     getStore() {
         return this._store;
@@ -46,7 +46,7 @@ exports.Page = Page;
 /**
  * This class defines all `wait` functions of Page.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageWait defines all `wait` functions
  * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
@@ -131,7 +131,7 @@ class PageWait {
 /**
  * This class defines all `eventually` functions of Page.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageEventually defines all `eventually` functions
  * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`

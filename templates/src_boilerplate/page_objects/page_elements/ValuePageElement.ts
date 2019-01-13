@@ -1,6 +1,6 @@
 import { pageObjects as core, helpers } from 'wdio-workflo'
 
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 import {
   PageElement,
   PageElementCurrently,
@@ -15,10 +15,10 @@ import {
  *
  * IValuePageElementOpts the opts parameter passed to the constructor function of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  */
 export interface IValuePageElementOpts<
-  Store extends PageElementStore
+  Store extends PageNodeStore
 > extends core.elements.IValuePageElementOpts<Store>, IPageElementOpts<Store> {}
 
 /**
@@ -31,11 +31,11 @@ export interface IValuePageElementOpts<
  *
  * - 'value' to wait for an element to have any value
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template ValueType the type of PageElement's value
  */
 export abstract class ValuePageElement<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   ValueType
 > extends PageElement<Store>
 implements core.elements.ValuePageElement<Store, ValueType> {
@@ -65,13 +65,13 @@ implements core.elements.ValuePageElement<Store, ValueType> {
  *
  * ValuePageElementCurrently defines all `currently` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementCurrently defines all `currently`
  * functions
  * @template ValueType the type of ValuePageElement's value
  */
 export abstract class ValuePageElementCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
 > extends PageElementCurrently<Store, PageElementType>
@@ -95,13 +95,13 @@ implements core.elements.ValuePageElementCurrently<Store, PageElementType, Value
  *
  * ValuePageElementWait defines all `wait` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementWait defines all `wait`
  * functions
  * @template ValueType the type of ValuePageElement's value
  */
 export class ValuePageElementWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
 > extends PageElementWait<Store, PageElementType>
@@ -121,13 +121,13 @@ implements core.elements.ValuePageElementWait<Store, PageElementType, ValueType>
  *
  * ValuePageElementEventually defines all `eventually` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementEventually defines all `eventually`
  * functions
  * @template ValueType the type of ValuePageElement's value
  */
 export class ValuePageElementEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends ValuePageElement<Store, ValueType>,
   ValueType
 > extends PageElementEventually<Store, PageElementType>

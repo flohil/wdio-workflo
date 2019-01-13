@@ -1,4 +1,4 @@
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 import {
   PageElementGroup,
   IPageElementGroupOpts,
@@ -43,12 +43,12 @@ Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValu
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  */
 export interface IValuePageElementGroupOpts<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends IPageElementGroupOpts<
   Store, Content
@@ -58,12 +58,12 @@ export interface IValuePageElementGroupOpts<
  * ValuePageElementGroup extends PageElementGroup with the possibility to set, retrieve and check the values of
  * ValuePageElements, ValuePageElementLists and ValuePageElementMaps managed by ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  */
 export class ValuePageElementGroup<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends PageElementGroup<Store, Content>
 implements ValueElementNode<Content> {
@@ -76,7 +76,7 @@ implements ValueElementNode<Content> {
    * ValuePageElementGroup extends PageElementGroup with the possibility to set, retrieve and check the values of
    * ValuePageElements, ValuePageElementLists and ValuePageElementMaps managed by ValuePageElementGroup.
    *
-   * @param id a string which uniquely identifies a ValuePageElementGroup in a PageElementStore
+   * @param id a string which uniquely identifies a ValuePageElementGroup in a PageNodeStore
    * @param opts the options used to configure ValuePageElementGroup
    */
   constructor(id: string, {
@@ -165,14 +165,14 @@ implements ValueElementNode<Content> {
 /**
  * This class defines all `currently` functions of ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all `currently`
  * functions
  */
 class ValuePageElementGroupCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupCurrently<Store, Content, GroupType> {
@@ -312,13 +312,13 @@ class ValuePageElementGroupCurrently<
 /**
  * This class defines all `wait` functions of ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait` functions
  */
 class ValuePageElementGroupWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupWait<Store, Content, GroupType> {
@@ -462,14 +462,14 @@ class ValuePageElementGroupWait<
 /**
  * This class defines all `eventually` functions of ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all `eventually`
  * functions
  */
 class ValuePageElementGroupEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupEventually<Store, Content, GroupType> {

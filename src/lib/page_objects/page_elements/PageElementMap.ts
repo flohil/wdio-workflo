@@ -1,5 +1,5 @@
 import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageNodeEventually, PageNodeCurrently, PageNodeWait } from '.'
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 import { XPathBuilder } from '../builders'
 import _ = require('lodash');
 import { isNullOrUndefined } from '../../helpers';
@@ -40,14 +40,14 @@ export interface IPageElementMapIdentifier<K extends string> {
 /**
  * Describes the opts parameter passed to the constructor function of PageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementList
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
  * by PageElementList
  */
 export interface IPageElementMapOpts<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>
@@ -59,7 +59,7 @@ export interface IPageElementMapOpts<
    */
   identifier: IPageElementMapIdentifier<K>,
   /**
-   * This function retrieves an instance of a PageElement mapped by PageElementMap from the map's PageElementStore.
+   * This function retrieves an instance of a PageElement mapped by PageElementMap from the map's PageNodeStore.
    *
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
@@ -86,7 +86,7 @@ export interface IPageElementMapOpts<
  * value of the currently processed property as the second parameter.
  * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
  * of the currently processed properties as parameters.
- * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageElementStore.
+ * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageNodeStore.
  * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
  *
  * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
@@ -105,14 +105,14 @@ export interface IPageElementMapOpts<
  * // returns {dashboard: PageElement("//nav/a[.="Dashboard"]")}
  * this.$
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementList
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
  * by PageElementList
  */
 export class PageElementMap<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>
@@ -122,7 +122,7 @@ implements Workflo.PageNode.IElementNode<
 > {
 
   /**
-   * This function retrieves an instance of a PageElement mapped by PageElementMap from the map's PageElementStore.
+   * This function retrieves an instance of a PageElement mapped by PageElementMap from the map's PageNodeStore.
    *
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
@@ -165,7 +165,7 @@ implements Workflo.PageNode.IElementNode<
    * value of the currently processed property as the second parameter.
    * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
    * of the currently processed properties as parameters.
-   * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageElementStore.
+   * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageNodeStore.
    * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
    *
    * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
@@ -612,7 +612,7 @@ implements Workflo.PageNode.IElementNode<
 /**
  * This class defines all `currently` functions of PageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
@@ -620,7 +620,7 @@ implements Workflo.PageNode.IElementNode<
  * @template MapType type of the PageElementMap for which PageElementMapCurrently defines all `currently` functions
  */
 export class PageElementMapCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>,
@@ -1001,7 +1001,7 @@ export class PageElementMapCurrently<
 /**
  * This class defines all `wait` functions of PageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
@@ -1009,7 +1009,7 @@ export class PageElementMapCurrently<
  * @template MapType type of the PageElementMap for which PageElementMapWait defines all `wait` functions
  */
 export class PageElementMapWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>,
@@ -1408,7 +1408,7 @@ export class PageElementMapWait<
 /**
  * This class defines all `eventually` functions of PageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
@@ -1416,7 +1416,7 @@ export class PageElementMapWait<
  * @template MapType type of the PageElementMap for which PageElementMapEventually defines all `eventually` functions
  */
 export class PageElementMapEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>,

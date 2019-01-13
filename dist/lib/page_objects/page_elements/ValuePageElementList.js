@@ -18,7 +18,7 @@ const _1 = require("./");
  *
  * - 'value' to wait for at least one of ValuePageElementList's managed elements to have any value
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
  * managed by ValuePageElementList
@@ -143,7 +143,7 @@ exports.ValuePageElementList = ValuePageElementList;
 /**
  * This class defines all `currently` functions of ValuePageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed ValuePageElements
  * @template ListType type of the ValuePageElementList for which ValuePageElementListCurrently defines all `currently`
@@ -285,7 +285,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
 /**
  * This class defines all `wait` functions of ValuePageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed ValuePageElements
  * @template ListType type of the ValuePageElementList for which ValuePageElementListWait defines all `wait`
@@ -429,7 +429,7 @@ class ValuePageElementListWait extends _1.PageElementListWait {
 /**
  * This class defines all `eventually` functions of ValuePageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed ValuePageElements
  * @template ListType type of the ValuePageElementList for which ValuePageElementListCurrently defines all `eventually`

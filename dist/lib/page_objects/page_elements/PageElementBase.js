@@ -15,7 +15,7 @@ const __1 = require("..");
 /**
  * This class provides basic functionalities for all PageElements.
  *
- * @template Store type of the PageElementStore used by PageElementBase to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageElementBase to retrieve PageNodes from the store
  */
 class PageElementBase extends _1.PageNode {
     /**
@@ -54,7 +54,7 @@ class PageElementBase extends _1.PageNode {
     // typescript bugs 3.3.0:
     // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
     /**
-     * `$` provides access to the PageNode retrieval functions of PageElementBase's PageElementStore and prefixes the
+     * `$` provides access to the PageNode retrieval functions of PageElementBase's PageNodeStore and prefixes the
      * selectors of all PageNodes retrieved via `$` with the selector of PageElementBase.
      */
     get $() {
@@ -85,7 +85,7 @@ exports.PageElementBase = PageElementBase;
 /**
  * This class defines all `currently` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseCurrently defines all `currently`
  * functions
  */
@@ -167,7 +167,7 @@ exports.PageElementBaseCurrently = PageElementBaseCurrently;
 /**
  * This class defines all `wait` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseWait defines all `wait`
  * functions
  */
@@ -325,7 +325,7 @@ exports.PageElementBaseWait = PageElementBaseWait;
 /**
  * This class defines all `eventually` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseEventually defines all `eventually`
  * functions
  */

@@ -1,14 +1,14 @@
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 import _ = require('lodash');
 
 /**
  * Defines the opts parameter passed to the constructor function of PageNode.
  *
- * @template Store type of the PageElementStore used by PageNode to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageNode to retrieve PageNodes from the store
  */
-export interface IPageNodeOpts<Store extends PageElementStore> extends Workflo.ITimeoutInterval {
+export interface IPageNodeOpts<Store extends PageNodeStore> extends Workflo.ITimeoutInterval {
   /**
-   * an instance of PageElementStore which can be used to retrieve/create PageNodes
+   * an instance of PageNodeStore which can be used to retrieve/create PageNodes
    */
   store: Store
 }
@@ -16,11 +16,11 @@ export interface IPageNodeOpts<Store extends PageElementStore> extends Workflo.I
 /**
  * This class serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
  *
- * @template Store type of the PageElementStore used by PageNode to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageNode to retrieve PageNodes from the store
  */
-export abstract class PageNode<Store extends PageElementStore> implements Workflo.PageNode.INode {
+export abstract class PageNode<Store extends PageNodeStore> implements Workflo.PageNode.INode {
   /**
-   * an instance of PageElementStore which can be used to retrieve/create PageNodes
+   * an instance of PageNodeStore which can be used to retrieve/create PageNodes
    */
   protected _store: Store
   /**
@@ -235,11 +235,11 @@ export abstract class PageNode<Store extends PageElementStore> implements Workfl
 /**
  * This class defines all `currently` functions of PageNode.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the Page for which PageNodeCurrently defines all `currently` functions
  */
 export abstract class PageNodeCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageNode<Store>
 > {
 
@@ -266,11 +266,11 @@ export abstract class PageNodeCurrently<
 /**
  * This class defines all `wait` functions of PageNode.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the Page for which PageNodeWait defines all `wait` functions
  */
 export abstract class PageNodeWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageNode<Store>
 > {
 
@@ -297,11 +297,11 @@ export abstract class PageNodeWait<
 /**
  * This class defines all `eventually` functions of PageNode.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the Page for which PageNodeEventually defines all `eventually` functions
  */
 export abstract class PageNodeEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageNode<Store>
 > {
 

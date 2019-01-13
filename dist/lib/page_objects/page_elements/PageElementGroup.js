@@ -29,7 +29,7 @@ const helpers_1 = require("../../helpers");
  * (PageNodes) with the result value or the parameter value of the function executed on PageNode. The keys of the
  * `Content` structure are never changed.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  */
@@ -51,7 +51,7 @@ class PageElementGroup extends _1.PageNode {
      * (PageNodes) with the result value or the parameter value of the function executed on PageNode. The keys of the
      * `Content` structure are never changed.
      *
-     * @param id a string which uniquely identifies a PageElementGroup in a PageElementStore
+     * @param id a string which uniquely identifies a PageElementGroup in a PageNodeStore
      * @param opts the options used to configure PageElementGroup
      */
     constructor(id, { store, timeout, interval, content }) {
@@ -429,7 +429,7 @@ exports.PageElementGroup = PageElementGroup;
 /**
  * This class defines all `currently` functions of PageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the PageElementGroup for which PageElementGroupCurrently defines all `currently`
@@ -746,7 +746,7 @@ exports.PageElementGroupCurrently = PageElementGroupCurrently;
 /**
  * This class defines all `wait` functions of PageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the PageElementGroup for which PageElementGroupWait defines all `wait` functions
@@ -1089,7 +1089,7 @@ exports.PageElementGroupWait = PageElementGroupWait;
 /**
  * This class defines all `eventually` functions of PageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the PageElementGroup for which PageElementGroupEventually defines all `eventually`

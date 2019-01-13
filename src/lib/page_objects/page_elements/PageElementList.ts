@@ -8,7 +8,7 @@ import {
   IPageElementOpts,
   IPageElementBaseOpts
 } from '.'
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 import { ListWhereBuilder, XPathBuilder } from '../builders'
 import { isArray } from 'util';
 import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
@@ -31,11 +31,11 @@ import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL } from '..'
  * described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates on
  * the page).
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  */
 export interface IPageElementListIdentifier<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>
 > {
   /**
@@ -77,18 +77,18 @@ export interface IPageElementListWaitLengthReverseParams extends IPageElementLis
 /**
  * Describes the opts parameter passed to the constructor function of PageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
  * by PageElementList
  */
 export interface IPageElementListOpts<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>
 > extends IPageNodeOpts<Store> {
   /**
-   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageElementStore.
+   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageNodeStore.
    *
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
@@ -158,19 +158,19 @@ export interface IPageElementListOpts<
  * XPath selector (eg. identifying PageElements via their location coordinates on the page).
  */
 export class PageElementList<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
 > extends PageNode<Store>
 implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 
   /**
-   * `_$` provides access to the PageNode retrieval functions of PageElementList's PageElementStore and prefixes the
+   * `_$` provides access to the PageNode retrieval functions of PageElementList's PageNodeStore and prefixes the
    * selectors of all PageNodes retrieved via `_$` with the selector of PageElementList.
    */
   protected _$: Store
   /**
-   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageElementStore.
+   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageNodeStore.
    *
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
@@ -367,7 +367,7 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
   // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
 
   /**
-   * `$` provides access to the PageNode retrieval functions of PageElementList's PageElementStore and prefixes the
+   * `$` provides access to the PageNode retrieval functions of PageElementList's PageNodeStore and prefixes the
    * selectors of all PageNodes retrieved via `$` with the selector of PageElementList.
    */
   get $() /*: Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>*/ {
@@ -1024,13 +1024,13 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
 /**
  * This class defines all `currently` functions of PageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
  * @template ListType type of the PageElementList for which PageElementListCurrently defines all `currently` functions
  */
 export class PageElementListCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOpts>
@@ -1043,7 +1043,7 @@ export class PageElementListCurrently<
    */
   protected _selector: string
   /**
-   * an instance of PageElementStore which can be used to retrieve/create PageNodes
+   * an instance of PageNodeStore which can be used to retrieve/create PageNodes
    */
   protected _store: Store
   /**
@@ -1051,7 +1051,7 @@ export class PageElementListCurrently<
    */
   protected _elementOpts: PageElementOpts
   /**
-   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageElementStore.
+   * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageNodeStore.
    *
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
@@ -1641,13 +1641,13 @@ export class PageElementListCurrently<
 /**
  * This class defines all `wait` functions of PageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
  * @template ListType type of the PageElementList for which PageElementListCurrently defines all `wait` functions
  */
 export class PageElementListWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>
@@ -2228,13 +2228,13 @@ export class PageElementListWait<
 /**
  * This class defines all `eventually` functions of PageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement managed by PageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed PageElements
  * @template ListType type of the PageElementList for which PageElementListCurrently defines all `eventually` functions
  */
 export class PageElementListEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>,
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
   ListType extends PageElementList<Store, PageElementType, PageElementOptions>

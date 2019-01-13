@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * This class serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
  *
- * @template Store type of the PageElementStore used by PageNode to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageNode to retrieve PageNodes from the store
  */
 class PageNode {
     /**
@@ -169,7 +169,7 @@ exports.PageNode = PageNode;
 /**
  * This class defines all `currently` functions of PageNode.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the Page for which PageNodeCurrently defines all `currently` functions
  */
 class PageNodeCurrently {
@@ -186,7 +186,7 @@ exports.PageNodeCurrently = PageNodeCurrently;
 /**
  * This class defines all `wait` functions of PageNode.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the Page for which PageNodeWait defines all `wait` functions
  */
 class PageNodeWait {
@@ -203,7 +203,7 @@ exports.PageNodeWait = PageNodeWait;
 /**
  * This class defines all `eventually` functions of PageNode.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the Page for which PageNodeEventually defines all `eventually` functions
  */
 class PageNodeEventually {

@@ -1,11 +1,11 @@
 import { PageElement, IPageElementOpts, PageElementCurrently, PageElementWait, PageElementEventually } from './PageElement';
-import { PageElementStore } from '../stores';
+import { PageNodeStore } from '../stores';
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  */
-export interface IValuePageElementOpts<Store extends PageElementStore> extends IPageElementOpts<Store> {
+export interface IValuePageElementOpts<Store extends PageNodeStore> extends IPageElementOpts<Store> {
 }
 /**
  * ValuePageElement extends PageElement with the possibility to set, retrieve and check a PageElement's value.
@@ -14,10 +14,10 @@ export interface IValuePageElementOpts<Store extends PageElementStore> extends I
  *
  * - 'value' to wait for an element to have any value
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template ValueType the type of PageElement's value
  */
-export declare abstract class ValuePageElement<Store extends PageElementStore, ValueType> extends PageElement<Store> implements Workflo.PageNode.IValueElementNode<ValueType, boolean> {
+export declare abstract class ValuePageElement<Store extends PageNodeStore, ValueType> extends PageElement<Store> implements Workflo.PageNode.IValueElementNode<ValueType, boolean> {
     readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>;
     readonly wait: ValuePageElementWait<Store, this, ValueType>;
     readonly eventually: ValuePageElementEventually<Store, this, ValueType>;
@@ -78,12 +78,12 @@ export declare abstract class ValuePageElement<Store extends PageElementStore, V
 /**
  * This class defines all `currently` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementCurrently defines all `currently`
  * functions
  * @template ValueType the type of ValuePageElement's value
  */
-export declare abstract class ValuePageElementCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> {
+export declare abstract class ValuePageElementCurrently<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementCurrently<Store, PageElementType> {
     /**
      * Returns the current value of ValuePageElement.
      */
@@ -183,12 +183,12 @@ export declare abstract class ValuePageElementCurrently<Store extends PageElemen
 /**
  * This class defines all `wait` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementWait defines all `wait`
  * functions
  * @template ValueType the type of ValuePageElement's value
  */
-export declare class ValuePageElementWait<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementWait<Store, PageElementType> {
+export declare class ValuePageElementWait<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementWait<Store, PageElementType> {
     /**
      * Waits for ValuePageElement's actual value to equal the expected value.
      *
@@ -330,12 +330,12 @@ export declare class ValuePageElementWait<Store extends PageElementStore, PageEl
 /**
  * This class defines all `eventually` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementEventually defines all `eventually`
  * functions
  * @template ValueType the type of ValuePageElement's value
  */
-export declare class ValuePageElementEventually<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementEventually<Store, PageElementType> {
+export declare class ValuePageElementEventually<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, ValueType> extends PageElementEventually<Store, PageElementType> {
     /**
      * Returns true if PageElement's actual value eventually equals the expected value within a specific timeout.
      *

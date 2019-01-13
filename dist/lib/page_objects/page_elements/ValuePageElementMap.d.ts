@@ -1,29 +1,29 @@
 import { PageElementMap, ValuePageElement, IValuePageElementOpts, IPageElementMapOpts, PageElementMapCurrently, PageElementMapEventually, PageElementMapWait } from './';
-import { PageElementStore } from '../stores';
+import { PageNodeStore } from '../stores';
 /**
  * Describes the `identifier` property of the `opts` parameter passed to ValuePageElementMap's constructor function.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
  * managed by ValuePageElementMap
  * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
  */
-export interface IValuePageElementMapOpts<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, ValueType> extends IPageElementMapOpts<Store, K, PageElementType, PageElementOpts> {
+export interface IValuePageElementMapOpts<Store extends PageNodeStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, ValueType> extends IPageElementMapOpts<Store, K, PageElementType, PageElementOpts> {
 }
 /**
  * ValuePageElementMap extends PageElementMap with the possibility to set, retrieve and check the values of
  * ValuePageElements managed by ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
  * managed by ValuePageElementMap
  * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
  */
-export declare class ValuePageElementMap<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementMap<Store, K, PageElementType, PageElementOpts> implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, boolean>>> {
+export declare class ValuePageElementMap<Store extends PageNodeStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementMap<Store, K, PageElementType, PageElementOpts> implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, boolean>>> {
     readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOpts, this, ValueType>;
     readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOpts, this, ValueType>;
     readonly eventually: ValuePageElementMapEventually<Store, K, PageElementType, PageElementOpts, this, ValueType>;
@@ -82,7 +82,7 @@ export declare class ValuePageElementMap<Store extends PageElementStore, K exten
 /**
  * This class defines all `currently` functions of ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
@@ -91,7 +91,7 @@ export declare class ValuePageElementMap<Store extends PageElementStore, K exten
  * functions
  * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
  */
-declare class ValuePageElementMapCurrently<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapCurrently<Store, K, PageElementType, PageElementOpts, MapType> {
+declare class ValuePageElementMapCurrently<Store extends PageNodeStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapCurrently<Store, K, PageElementType, PageElementOpts, MapType> {
     /**
      * Returns the current values of all ValuePageElements managed by ValuePageElementMap as a result map.
      *
@@ -184,7 +184,7 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
 /**
  * This class defines all `wait` functions of ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
@@ -193,7 +193,7 @@ declare class ValuePageElementMapCurrently<Store extends PageElementStore, K ext
  * functions
  * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
  */
-declare class ValuePageElementMapWait<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapWait<Store, K, PageElementType, PageElementOpts, MapType> {
+declare class ValuePageElementMapWait<Store extends PageNodeStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapWait<Store, K, PageElementType, PageElementOpts, MapType> {
     /**
      * Waits for the actual values of all ValuePageElements managed by ValuePageElementMap to equal the expected values.
      *
@@ -304,7 +304,7 @@ declare class ValuePageElementMapWait<Store extends PageElementStore, K extends 
 /**
  * This class defines all `eventually` functions of ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
@@ -313,7 +313,7 @@ declare class ValuePageElementMapWait<Store extends PageElementStore, K extends 
  * functions
  * @template ValueType type of the values of ValuePageElements managed by ValuePageElementMap
  */
-declare class ValuePageElementMapEventually<Store extends PageElementStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapEventually<Store, K, PageElementType, PageElementOpts, MapType> {
+declare class ValuePageElementMapEventually<Store extends PageNodeStore, K extends string, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOpts extends Partial<IValuePageElementOpts<Store>>, MapType extends ValuePageElementMap<Store, K, PageElementType, PageElementOpts, ValueType>, ValueType> extends PageElementMapEventually<Store, K, PageElementType, PageElementOpts, MapType> {
     /**
      * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap eventually equal the
      * expected values within a specific timeout.

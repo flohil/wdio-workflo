@@ -1,8 +1,8 @@
-import { PageElementStore, CloneFunc } from './PageElementStore'
+import { PageNodeStore, CloneFunc } from './PageNodeStore'
 
 /**
- * An instance of PageElementStore.
+ * An instance of PageNodeStore.
  */
-export const pageElement = new PageElementStore()
+export const pageElement = new PageNodeStore()
 
-export { PageElementStore, CloneFunc }
+export { PageNodeStore as PageNodeStore, CloneFunc }

@@ -31,66 +31,66 @@ export interface ErrorFuncWithoutExpected<NodeType extends Workflo.PageNode.INod
 export declare type ErrorTextFunction<NodeType extends Workflo.PageNode.INode, OptsType, ExpectedType> = (args: ErrorFuncArgs<NodeType, OptsType, ExpectedType>) => string[];
 export declare type ErrorTextWithoutExpectedFunction<NodeType extends Workflo.PageNode.INode, OptsType> = (args: ErrorFuncWithoutExpected<NodeType, OptsType>) => string[];
 export interface ICompareElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = never, ListOptsType = Workflo.PageNode.ListFilterMask, MapOptsType = Workflo.PageNode.MapFilterMask<string>, GroupOptsType = Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>> {
-    element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, ElementOptsType>;
-    list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, ListOptsType>;
-    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, MapOptsType>;
-    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, GroupOptsType>;
+    element?: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, ElementExpectedType, ElementOptsType>;
+    list?: IMatcherArgs<elements.PageElementList<stores.PageNodeStore, elements.PageElement<stores.PageNodeStore>, elements.IPageElementOpts<stores.PageNodeStore>>, ListExpectedType, ListOptsType>;
+    map?: IMatcherArgs<elements.PageElementMap<stores.PageNodeStore, string, elements.PageElement<stores.PageNodeStore>, elements.IPageElementOpts<stores.PageNodeStore>>, MapExpectedType, MapOptsType>;
+    group?: IMatcherArgs<elements.PageElementGroup<stores.PageNodeStore, Workflo.PageNode.GroupContent>, GroupExpectedType, GroupOptsType>;
 }
 export interface ICompareEventuallyElementFuncs<ElementExpectedType = never, ListExpectedType = never, MapExpectedType = never, GroupExpectedType = never, ElementOptsType = Workflo.ITimeoutInterval, ListOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask, MapOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>, GroupOptsType = Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>> {
-    element?: IMatcherArgs<elements.PageElement<stores.PageElementStore>, ElementExpectedType, Workflo.ITimeoutInterval>;
-    list?: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, ListExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask>;
-    map?: IMatcherArgs<elements.PageElementMap<stores.PageElementStore, string, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, MapExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>>;
-    group?: IMatcherArgs<elements.PageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
+    element?: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, ElementExpectedType, Workflo.ITimeoutInterval>;
+    list?: IMatcherArgs<elements.PageElementList<stores.PageNodeStore, elements.PageElement<stores.PageNodeStore>, elements.IPageElementOpts<stores.PageNodeStore>>, ListExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask>;
+    map?: IMatcherArgs<elements.PageElementMap<stores.PageNodeStore, string, elements.PageElement<stores.PageNodeStore>, elements.IPageElementOpts<stores.PageNodeStore>>, MapExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>>;
+    group?: IMatcherArgs<elements.PageElementGroup<stores.PageNodeStore, Workflo.PageNode.GroupContent>, GroupExpectedType, Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
 export interface ICompareValueElementFuncs<ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>> extends ICompareElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType, never, Workflo.PageNode.ListFilterMask, Workflo.PageNode.MapFilterMask<string>, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>> {
-    element?: IMatcherArgs<elements.ValuePageElement<stores.PageElementStore, ElementValueType>, ElementValueType, never>;
-    list?: IMatcherArgs<elements.ValuePageElementList<stores.PageElementStore, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IValuePageElementOpts<stores.PageElementStore>, ElementValueType>, ListValueType, Workflo.PageNode.ListFilterMask>;
-    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.PageNode.MapFilterMask<string>>;
-    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>>;
+    element?: IMatcherArgs<elements.ValuePageElement<stores.PageNodeStore, ElementValueType>, ElementValueType, never>;
+    list?: IMatcherArgs<elements.ValuePageElementList<stores.PageNodeStore, elements.ValuePageElement<stores.PageNodeStore, ElementValueType>, elements.IValuePageElementOpts<stores.PageNodeStore>, ElementValueType>, ListValueType, Workflo.PageNode.ListFilterMask>;
+    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageNodeStore, string, elements.ValuePageElement<stores.PageNodeStore, ElementValueType>, elements.IPageElementOpts<stores.PageNodeStore>, ElementValueType>, MapValueType, Workflo.PageNode.MapFilterMask<string>>;
+    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageNodeStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
 export interface ICompareEventuallyValueElementFuncs<ElementValueType = any, ListValueType = any | any[], MapValueType = Partial<Record<string, any>>, GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>> extends ICompareElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType, Workflo.ITimeoutInterval, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask, Workflo.ITimeoutInterval & Workflo.PageNode.MapFilterMask<string>, Workflo.ITimeoutInterval & Workflo.PageNode.GroupFilterMask<Workflo.PageNode.GroupContent>> {
-    element?: IMatcherArgs<elements.ValuePageElement<stores.PageElementStore, ElementValueType>, ElementValueType, Workflo.ITimeoutInterval>;
-    list?: IMatcherArgs<elements.ValuePageElementList<stores.PageElementStore, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IValuePageElementOpts<stores.PageElementStore>, ElementValueType>, ListValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask>;
-    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageElementStore, string, elements.ValuePageElement<stores.PageElementStore, ElementValueType>, elements.IPageElementOpts<stores.PageElementStore>, ElementValueType>, MapValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>>;
-    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageElementStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
+    element?: IMatcherArgs<elements.ValuePageElement<stores.PageNodeStore, ElementValueType>, ElementValueType, Workflo.ITimeoutInterval>;
+    list?: IMatcherArgs<elements.ValuePageElementList<stores.PageNodeStore, elements.ValuePageElement<stores.PageNodeStore, ElementValueType>, elements.IValuePageElementOpts<stores.PageNodeStore>, ElementValueType>, ListValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask>;
+    map?: IMatcherArgs<elements.ValuePageElementMap<stores.PageNodeStore, string, elements.ValuePageElement<stores.PageNodeStore, ElementValueType>, elements.IPageElementOpts<stores.PageNodeStore>, ElementValueType>, MapValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<string>>;
+    group?: IMatcherArgs<elements.ValuePageElementGroup<stores.PageNodeStore, Workflo.PageNode.GroupContent>, GroupValueType, Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Workflo.PageNode.GroupContent>>;
 }
 export interface ICompareListLengthElementFuncs extends ICompareElementFuncs<never, number, never, never, never, Workflo.Comparator, never, never> {
-    list: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, number, Workflo.Comparator>;
+    list: IMatcherArgs<elements.PageElementList<stores.PageNodeStore, elements.PageElement<stores.PageNodeStore>, elements.IPageElementOpts<stores.PageNodeStore>>, number, Workflo.Comparator>;
 }
 export interface ICompareEventuallyListLengthElementFuncs extends ICompareEventuallyElementFuncs<never, number, never, never, never, Workflo.ITimeoutInterval & {
     comparator?: Workflo.Comparator;
 }, never, never> {
-    list: IMatcherArgs<elements.PageElementList<stores.PageElementStore, elements.PageElement<stores.PageElementStore>, elements.IPageElementOpts<stores.PageElementStore>>, number, Workflo.ITimeoutInterval & {
+    list: IMatcherArgs<elements.PageElementList<stores.PageNodeStore, elements.PageElement<stores.PageNodeStore>, elements.IPageElementOpts<stores.PageNodeStore>>, number, Workflo.ITimeoutInterval & {
         comparator?: Workflo.Comparator;
     }>;
 }
 export interface ICompareAttributeElementFuncs extends ICompareElementFuncs<Workflo.IAttribute> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.IAttribute, never>;
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, Workflo.IAttribute, never>;
 }
 export interface ICompareEventuallyAttributeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.IAttribute> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.IAttribute, Workflo.ITimeoutInterval>;
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, Workflo.IAttribute, Workflo.ITimeoutInterval>;
 }
 export interface ICompareLocationElementFuncs extends ICompareElementFuncs<Workflo.ICoordinates> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ICoordinates, Partial<Workflo.ICoordinates>>;
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, Workflo.ICoordinates, Partial<Workflo.ICoordinates>>;
 }
 export interface ICompareEventuallyLocationElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ICoordinates> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ICoordinates, Workflo.ITimeoutInterval & {
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, Workflo.ICoordinates, Workflo.ITimeoutInterval & {
         tolerances?: Partial<Workflo.ICoordinates>;
     }>;
 }
 export interface ICompareSizeElementFuncs extends ICompareElementFuncs<Workflo.ISize> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ISize, Partial<Workflo.ISize>>;
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, Workflo.ISize, Partial<Workflo.ISize>>;
 }
 export interface ICompareEventuallySizeElementFuncs extends ICompareEventuallyElementFuncs<Workflo.ISize> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, Workflo.ISize, Workflo.ITimeoutInterval & {
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, Workflo.ISize, Workflo.ITimeoutInterval & {
         tolerances?: Partial<Workflo.ISize>;
     }>;
 }
 export interface ICompareNumberWithToleranceElementFuncs extends ICompareElementFuncs<number> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, number, number>;
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, number, number>;
 }
 export interface ICompareEventuallyNumberWithToleranceElementFuncs extends ICompareEventuallyElementFuncs<number> {
-    element: IMatcherArgs<elements.PageElement<stores.PageElementStore>, number, Workflo.ITimeoutInterval & {
+    element: IMatcherArgs<elements.PageElement<stores.PageNodeStore>, number, Workflo.ITimeoutInterval & {
         tolerance?: number;
     }>;
 }
@@ -217,10 +217,10 @@ export declare const elementMatchers: jasmine.CustomMatcherFactories;
 export declare const listMatchers: jasmine.CustomMatcherFactories;
 export declare const allMatchers: jasmine.CustomMatcherFactories;
 export declare const valueAllMatchers: jasmine.CustomMatcherFactories;
-export declare function expectElement<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>>(element: PageElementType): jasmine.Matchers<PageElementType>;
-export declare function expectList<Store extends stores.PageElementStore, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): jasmine.Matchers<PageElementListType>;
-export declare function expectMap<Store extends stores.PageElementStore, K extends string, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementMapType extends elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): jasmine.Matchers<PageElementMapType>;
-export declare function expectGroup<Store extends stores.PageElementStore, Content extends {
+export declare function expectElement<Store extends stores.PageNodeStore, PageElementType extends elements.PageElement<Store>>(element: PageElementType): jasmine.Matchers<PageElementType>;
+export declare function expectList<Store extends stores.PageNodeStore, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementListType extends elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): jasmine.Matchers<PageElementListType>;
+export declare function expectMap<Store extends stores.PageNodeStore, K extends string, PageElementType extends elements.PageElement<Store>, PageElementOptions, PageElementMapType extends elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): jasmine.Matchers<PageElementMapType>;
+export declare function expectGroup<Store extends stores.PageNodeStore, Content extends {
     [K in keyof Content]: Workflo.PageNode.INode;
 }, PageElementGroupType extends elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): jasmine.Matchers<PageElementGroupType>;
 export {};

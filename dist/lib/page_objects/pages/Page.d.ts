@@ -1,27 +1,27 @@
-import { PageElementStore } from '../stores';
+import { PageNodeStore } from '../stores';
 /**
  * Defines the opts parameter passed to the constructor of Page.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  */
-export interface IPageOpts<Store extends PageElementStore> extends Workflo.ITimeoutInterval {
+export interface IPageOpts<Store extends PageNodeStore> extends Workflo.ITimeoutInterval {
     /**
-     * an instance of PageElementStore which can be used to retrieve/create PageNodes via Page
+     * an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
      */
     store: Store;
 }
 /**
  * This class serves as the base class for all Pages.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`, `wait.isOpen` and
  * `eventually.isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`, `wait.isClosed` and
  * `eventually.isClosed`
  */
-export declare abstract class Page<Store extends PageElementStore, IsOpenOpts = {}, IsClosedOpts = IsOpenOpts> {
+export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {}, IsClosedOpts = IsOpenOpts> {
     /**
-     * an instance of PageElementStore which can be used to retrieve/create PageNodes via Page
+     * an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
      */
     protected _store: Store;
     /**
@@ -48,7 +48,7 @@ export declare abstract class Page<Store extends PageElementStore, IsOpenOpts = 
      */
     constructor(opts: IPageOpts<Store>);
     /**
-     * Returns an instance of PageElementStore which can be used to retrieve/create PageNodes via Page
+     * Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
      */
     getStore(): Store;
     /**
@@ -75,12 +75,12 @@ export declare abstract class Page<Store extends PageElementStore, IsOpenOpts = 
 /**
  * This class defines all `wait` functions of Page.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageWait defines all `wait` functions
  * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
  */
-declare class PageWait<Store extends PageElementStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
+declare class PageWait<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
     /**
      * the Page for which PageWait defines all `wait` functions
      */
@@ -132,12 +132,12 @@ declare class PageWait<Store extends PageElementStore, PageType extends Page<Sto
 /**
  * This class defines all `eventually` functions of Page.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes via Page
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageEventually defines all `eventually` functions
  * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
  */
-declare class PageEventually<Store extends PageElementStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
+declare class PageEventually<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
     /**
      * the Page for which PageEventually defines all `eventually` functions
      */

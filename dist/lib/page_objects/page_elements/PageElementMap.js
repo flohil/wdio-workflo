@@ -26,7 +26,7 @@ const helpers_1 = require("../../helpers");
  * value of the currently processed property as the second parameter.
  * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
  * of the currently processed properties as parameters.
- * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageElementStore.
+ * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageNodeStore.
  * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
  *
  * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
@@ -45,7 +45,7 @@ const helpers_1 = require("../../helpers");
  * // returns {dashboard: PageElement("//nav/a[.="Dashboard"]")}
  * this.$
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementList
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
@@ -67,7 +67,7 @@ class PageElementMap extends _1.PageNode {
      * value of the currently processed property as the second parameter.
      * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
      * of the currently processed properties as parameters.
-     * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageElementStore.
+     * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageNodeStore.
      * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
      *
      * The resulting object of mapped PageElements can be accessed via PageElementMap's `$` accessor.
@@ -442,7 +442,7 @@ exports.PageElementMap = PageElementMap;
 /**
  * This class defines all `currently` functions of PageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
@@ -760,7 +760,7 @@ exports.PageElementMapCurrently = PageElementMapCurrently;
 /**
  * This class defines all `wait` functions of PageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
@@ -1105,7 +1105,7 @@ exports.PageElementMapWait = PageElementMapWait;
 /**
  * This class defines all `eventually` functions of PageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of PageElementMap's `$` accessor used to access the map's managed PageElements
  * @template PageElementType type of the PageElements managed by PageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed

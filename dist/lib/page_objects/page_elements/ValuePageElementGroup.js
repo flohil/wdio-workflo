@@ -14,7 +14,7 @@ const _1 = require(".");
  * ValuePageElementGroup extends PageElementGroup with the possibility to set, retrieve and check the values of
  * ValuePageElements, ValuePageElementLists and ValuePageElementMaps managed by ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  */
@@ -23,7 +23,7 @@ class ValuePageElementGroup extends _1.PageElementGroup {
      * ValuePageElementGroup extends PageElementGroup with the possibility to set, retrieve and check the values of
      * ValuePageElements, ValuePageElementLists and ValuePageElementMaps managed by ValuePageElementGroup.
      *
-     * @param id a string which uniquely identifies a ValuePageElementGroup in a PageElementStore
+     * @param id a string which uniquely identifies a ValuePageElementGroup in a PageNodeStore
      * @param opts the options used to configure ValuePageElementGroup
      */
     constructor(id, _a) {
@@ -91,7 +91,7 @@ exports.ValuePageElementGroup = ValuePageElementGroup;
 /**
  * This class defines all `currently` functions of ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all `currently`
@@ -200,7 +200,7 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
 /**
  * This class defines all `wait` functions of ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait` functions
@@ -320,7 +320,7 @@ class ValuePageElementGroupWait extends _1.PageElementGroupWait {
 /**
  * This class defines all `eventually` functions of ValuePageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all `eventually`

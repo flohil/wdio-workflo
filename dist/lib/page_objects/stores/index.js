@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const PageElementStore_1 = require("./PageElementStore");
-exports.PageElementStore = PageElementStore_1.PageElementStore;
+const PageNodeStore_1 = require("./PageNodeStore");
+exports.PageNodeStore = PageNodeStore_1.PageNodeStore;
 /**
- * An instance of PageElementStore.
+ * An instance of PageNodeStore.
  */
-exports.pageElement = new PageElementStore_1.PageElementStore();
+exports.pageElement = new PageNodeStore_1.PageNodeStore();
 //# sourceMappingURL=index.js.map

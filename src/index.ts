@@ -1515,7 +1515,7 @@ declare global {
    *
    * All template type parameters can be inferred automatically.
    *
-   * @template Store type of PageElementStore used by the passed element
+   * @template Store type of PageNodeStore used by the passed element
    * @template PageElementType type of the passed element
    * @template ValueType If the passed element is an instance of ValuePageElement, this is the type of the values
    * handled in element's xxxValue functions.
@@ -1524,7 +1524,7 @@ declare global {
    * @returns the expectation matchers for PageElement or ValuePageElement
    */
   function expectElement<
-    Store extends pageObjects.stores.PageElementStore,
+    Store extends pageObjects.stores.PageNodeStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     ValueType
   >(element: PageElementType): (typeof element) extends (infer ElementType) ?
@@ -1537,7 +1537,7 @@ declare global {
    *
    * All template type parameters can be inferred automatically.
    *
-   * @template Store type of PageElementStore used by the passed list and its elements
+   * @template Store type of PageNodeStore used by the passed list and its elements
    * @template PageElementType type of the element's handled by the passed list
    * @template PageElementOptions options type of the element's handled by the passed list
    * @template PageElementListType type of the passed list
@@ -1546,7 +1546,7 @@ declare global {
    * @returns the expectation matchers for PageElementList or ValuePageElementList
    */
   function expectList<
-    Store extends pageObjects.stores.PageElementStore,
+    Store extends pageObjects.stores.PageNodeStore,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
     PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>,
@@ -1561,7 +1561,7 @@ declare global {
    *
    * All template type parameters can be inferred automatically.
    *
-   * @template Store type of PageElementStore used by the passed map and its elements
+   * @template Store type of PageNodeStore used by the passed map and its elements
    * @template K the names of the elements stored in the map (the map's keys) as string literals
    * @template PageElementType type of the element's handled by the passed map
    * @template PageElementOptions options type of the element's handled by the passed map
@@ -1571,7 +1571,7 @@ declare global {
    * @returns the expectation matchers for PageElementMap or ValuePageElementMap
    */
   function expectMap<
-    Store extends pageObjects.stores.PageElementStore,
+    Store extends pageObjects.stores.PageNodeStore,
     K extends string,
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
@@ -1588,7 +1588,7 @@ declare global {
    *
    * All template type parameters can be inferred automatically.
    *
-   * @template Store type of PageElementStore used by the passed group
+   * @template Store type of PageNodeStore used by the passed group
    * @template Content type of the content managed by the passed group
    * @template PageElementGroupType type of the passed group
    *
@@ -1596,7 +1596,7 @@ declare global {
    * @returns the expectation matchers for PageElementGroup or ValuePageElementGroup
    */
   function expectGroup<
-    Store extends pageObjects.stores.PageElementStore,
+    Store extends pageObjects.stores.PageNodeStore,
     Content extends Workflo.PageNode.GroupContent,
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
   >(group: PageElementGroupType): (typeof group) extends (infer GroupType) ?
@@ -2009,7 +2009,7 @@ declare global {
        */
       interface INode extends ILastDiff {
         /**
-         * Retrieves the id used to identify a PageNode in the instance cache of PageElementStore.
+         * Retrieves the id used to identify a PageNode in the instance cache of PageNodeStore.
          *
          * Intended for framework-internal usage only.
          */

@@ -1481,7 +1481,7 @@ declare global {
      *
      * All template type parameters can be inferred automatically.
      *
-     * @template Store type of PageElementStore used by the passed element
+     * @template Store type of PageNodeStore used by the passed element
      * @template PageElementType type of the passed element
      * @template ValueType If the passed element is an instance of ValuePageElement, this is the type of the values
      * handled in element's xxxValue functions.
@@ -1489,13 +1489,13 @@ declare global {
      * @param element an instance of PageElement or an instance of ValuePageElement
      * @returns the expectation matchers for PageElement or ValuePageElement
      */
-    function expectElement<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): (typeof element) extends (infer ElementType) ? ElementType extends pageObjects.elements.ValuePageElement<any, ValueType> ? IValueElementMatchers<ReturnType<ElementType['getValue']>> : IElementMatchers : IElementMatchers;
+    function expectElement<Store extends pageObjects.stores.PageNodeStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): (typeof element) extends (infer ElementType) ? ElementType extends pageObjects.elements.ValuePageElement<any, ValueType> ? IValueElementMatchers<ReturnType<ElementType['getValue']>> : IElementMatchers : IElementMatchers;
     /**
      * This function provides expectation matchers for PageElementLists or ValuePageElementLists.
      *
      * All template type parameters can be inferred automatically.
      *
-     * @template Store type of PageElementStore used by the passed list and its elements
+     * @template Store type of PageNodeStore used by the passed list and its elements
      * @template PageElementType type of the element's handled by the passed list
      * @template PageElementOptions options type of the element's handled by the passed list
      * @template PageElementListType type of the passed list
@@ -1503,13 +1503,13 @@ declare global {
      * @param list an instance of PageElementList or an instance of ValuePageElementList
      * @returns the expectation matchers for PageElementList or ValuePageElementList
      */
-    function expectList<Store extends pageObjects.stores.PageElementStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): (typeof list) extends (infer ListType) ? ListType extends pageObjects.elements.ValuePageElementList<any, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
+    function expectList<Store extends pageObjects.stores.PageNodeStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): (typeof list) extends (infer ListType) ? ListType extends pageObjects.elements.ValuePageElementList<any, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
     /**
      * This function provides expectation matchers for PageElementMaps or ValuePageElementMaps.
      *
      * All template type parameters can be inferred automatically.
      *
-     * @template Store type of PageElementStore used by the passed map and its elements
+     * @template Store type of PageNodeStore used by the passed map and its elements
      * @template K the names of the elements stored in the map (the map's keys) as string literals
      * @template PageElementType type of the element's handled by the passed map
      * @template PageElementOptions options type of the element's handled by the passed map
@@ -1518,20 +1518,20 @@ declare global {
      * @param map an instance of PageElementMap or an instance of ValuePageElementMap
      * @returns the expectation matchers for PageElementMap or ValuePageElementMap
      */
-    function expectMap<Store extends pageObjects.stores.PageElementStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): (typeof map) extends (infer MapType) ? MapType extends pageObjects.elements.ValuePageElementMap<any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> : IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>;
+    function expectMap<Store extends pageObjects.stores.PageNodeStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): (typeof map) extends (infer MapType) ? MapType extends pageObjects.elements.ValuePageElementMap<any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> : IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>;
     /**
      * This function provides expectation matchers for PageElementGroups or ValuePageElementGroups.
      *
      * All template type parameters can be inferred automatically.
      *
-     * @template Store type of PageElementStore used by the passed group
+     * @template Store type of PageNodeStore used by the passed group
      * @template Content type of the content managed by the passed group
      * @template PageElementGroupType type of the passed group
      *
      * @param group an instance of PageElementGroup or an instance of ValuePageElementGroup
      * @returns the expectation matchers for PageElementGroup or ValuePageElementGroup
      */
-    function expectGroup<Store extends pageObjects.stores.PageElementStore, Content extends Workflo.PageNode.GroupContent, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): (typeof group) extends (infer GroupType) ? GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ? IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
+    function expectGroup<Store extends pageObjects.stores.PageNodeStore, Content extends Workflo.PageNode.GroupContent, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): (typeof group) extends (infer GroupType) ? GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ? IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
     namespace WebdriverIO {
         interface Client<T> {
             /**
@@ -1905,7 +1905,7 @@ declare global {
              */
             interface INode extends ILastDiff {
                 /**
-                 * Retrieves the id used to identify a PageNode in the instance cache of PageElementStore.
+                 * Retrieves the id used to identify a PageNode in the instance cache of PageNodeStore.
                  *
                  * Intended for framework-internal usage only.
                  */

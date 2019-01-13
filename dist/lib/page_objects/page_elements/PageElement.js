@@ -43,7 +43,7 @@ const helpers_1 = require("../../helpers");
  * - `.wait`: wait for a certain state
  * - `.eventually`: check if a certain state is eventually reached within a specific timeout.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  */
 class PageElement extends _1.PageElementBase {
     /**
@@ -617,7 +617,7 @@ exports.PageElement = PageElement;
 /**
  * This class defines all `currently` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementCurrently defines all `currently` functions
  */
 class PageElementCurrently extends _1.PageElementBaseCurrently {
@@ -1361,7 +1361,7 @@ exports.PageElementCurrently = PageElementCurrently;
 /**
  * This class defines all `wait` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementWait defines all `wait` functions
  */
 class PageElementWait extends _1.PageElementBaseWait {
@@ -2528,7 +2528,7 @@ exports.PageElementWait = PageElementWait;
 /**
  * This class defines all `eventually` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementEventually defines all `eventually` functions
  */
 class PageElementEventually extends _1.PageElementBaseEventually {

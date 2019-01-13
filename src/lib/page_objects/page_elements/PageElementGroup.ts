@@ -1,4 +1,4 @@
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 import { PageNodeCurrently, PageNode } from '.';
 import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
 import { isNullOrUndefined } from '../../helpers';
@@ -50,12 +50,12 @@ Workflo.PageNode.IElementNode<ExtractText<Content>, ExtractBoolean<Content>, Wor
 /**
  * Describes the opts parameter passed to the constructor function of PageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  */
 export interface IPageElementGroupOpts<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends IPageNodeOpts<Store> {
   content: Content
@@ -78,12 +78,12 @@ export interface IPageElementGroupOpts<
  * (PageNodes) with the result value or the parameter value of the function executed on PageNode. The keys of the
  * `Content` structure are never changed.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  */
 export class PageElementGroup<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 > extends PageNode<Store>
 implements ElementNode<Content> {
@@ -112,7 +112,7 @@ implements ElementNode<Content> {
    * (PageNodes) with the result value or the parameter value of the function executed on PageNode. The keys of the
    * `Content` structure are never changed.
    *
-   * @param id a string which uniquely identifies a PageElementGroup in a PageElementStore
+   * @param id a string which uniquely identifies a PageElementGroup in a PageNodeStore
    * @param opts the options used to configure PageElementGroup
    */
   constructor(id: string, {
@@ -607,14 +607,14 @@ implements ElementNode<Content> {
 /**
  * This class defines all `currently` functions of PageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the PageElementGroup for which PageElementGroupCurrently defines all `currently`
  * functions
  */
 export class PageElementGroupCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeCurrently<Store, GroupType> {
@@ -1011,13 +1011,13 @@ export class PageElementGroupCurrently<
 /**
  * This class defines all `wait` functions of PageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the PageElementGroup for which PageElementGroupWait defines all `wait` functions
  */
 export class PageElementGroupWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeWait<Store, GroupType> {
@@ -1433,14 +1433,14 @@ export class PageElementGroupWait<
 /**
  * This class defines all `eventually` functions of PageElementGroup.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
  * @template GroupType type of the PageElementGroup for which PageElementGroupEventually defines all `eventually`
  * functions
  */
 export class PageElementGroupEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeEventually<Store, GroupType> {

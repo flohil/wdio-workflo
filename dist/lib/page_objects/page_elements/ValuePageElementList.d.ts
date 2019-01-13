@@ -1,15 +1,15 @@
 import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts, PageElementListCurrently, PageElementListEventually, PageElementListWait } from './';
-import { PageElementStore } from '../stores';
+import { PageNodeStore } from '../stores';
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
  * managed by ValuePageElementList
  * @template ValueType type of the value of the ValuePageElements managed by ValuePageElementList
  */
-export interface IValuePageElementListOpts<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends IPageElementListOpts<Store, PageElementType, PageElementOptions> {
+export interface IValuePageElementListOpts<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends IPageElementListOpts<Store, PageElementType, PageElementOptions> {
 }
 /**
  * ValuePageElementList extends PageElementList with the possibility to set, retrieve and check the values of
@@ -19,13 +19,13 @@ export interface IValuePageElementListOpts<Store extends PageElementStore, PageE
  *
  * - 'value' to wait for at least one of ValuePageElementList's managed elements to have any value
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
  * managed by ValuePageElementList
  * @template ValueType type of the value of the ValuePageElements managed by ValuePageElementList
  */
-export declare class ValuePageElementList<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementList<Store, PageElementType, PageElementOptions> implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[] | ValueType> {
+export declare class ValuePageElementList<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ValueType> extends PageElementList<Store, PageElementType, PageElementOptions> implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[] | ValueType> {
     readonly currently: ValuePageElementListCurrently<Store, PageElementType, PageElementOptions, this, ValueType>;
     readonly wait: ValuePageElementListWait<Store, PageElementType, PageElementOptions, this, ValueType>;
     readonly eventually: ValuePageElementListEventually<Store, PageElementType, PageElementOptions, this, ValueType>;
@@ -122,13 +122,13 @@ export declare class ValuePageElementList<Store extends PageElementStore, PageEl
 /**
  * This class defines all `currently` functions of ValuePageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed ValuePageElements
  * @template ListType type of the ValuePageElementList for which ValuePageElementListCurrently defines all `currently`
  * functions
  */
-declare class ValuePageElementListCurrently<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType> {
+declare class ValuePageElementListCurrently<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListCurrently<Store, PageElementType, PageElementOptions, ListType> {
     /**
      * Returns the current values of all ValuePageElements managed by ValuePageElementList as an array.
      *
@@ -253,13 +253,13 @@ declare class ValuePageElementListCurrently<Store extends PageElementStore, Page
 /**
  * This class defines all `wait` functions of ValuePageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed ValuePageElements
  * @template ListType type of the ValuePageElementList for which ValuePageElementListWait defines all `wait`
  * functions
  */
-declare class ValuePageElementListWait<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListWait<Store, PageElementType, PageElementOptions, ListType> {
+declare class ValuePageElementListWait<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListWait<Store, PageElementType, PageElementOptions, ListType> {
     /**
      * Waits for the actual values of all ValuePageElements managed by ValuePageElementList to equal the expected value(s).
      *
@@ -395,13 +395,13 @@ declare class ValuePageElementListWait<Store extends PageElementStore, PageEleme
 /**
  * This class defines all `eventually` functions of ValuePageElementList.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementList
  * @template PageElementOpts type of the opts paramter passed to the constructor function of managed ValuePageElements
  * @template ListType type of the ValuePageElementList for which ValuePageElementListCurrently defines all `eventually`
  * functions
  */
-declare class ValuePageElementListEventually<Store extends PageElementStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListEventually<Store, PageElementType, PageElementOptions, ListType> {
+declare class ValuePageElementListEventually<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListEventually<Store, PageElementType, PageElementOptions, ListType> {
     /**
      * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList eventually equal the
      * expected value(s) within a specific timeout.

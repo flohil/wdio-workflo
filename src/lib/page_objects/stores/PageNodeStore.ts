@@ -26,17 +26,17 @@ export type CloneFunc<Type> = (
 ) => Type
 
 /**
- * PageElementStore serves as a facade for the creation and retrieval of Page Nodes.
- * Basically, Page Nodes should only be created or retrieved via PageElementStores and never by "manually" invoking
+ * PageNodeStore serves as a facade for the creation and retrieval of Page Nodes.
+ * Basically, Page Nodes should only be created or retrieved via PageNodeStores and never by "manually" invoking
  * their constructor functions.
  *
- * PageElementStore caches instances of Page Nodes with the same type and selector to avoid creating new Page Nodes on each
+ * PageNodeStore caches instances of Page Nodes with the same type and selector to avoid creating new Page Nodes on each
  * invocation of a retrieval function.
  *
- * Furthermore, PageElementStore allows you to define default opts parameters and provide pre-configured variants of
+ * Furthermore, PageNodeStore allows you to define default opts parameters and provide pre-configured variants of
  * PageNodes (eg. Element and ExistElement).
  */
-export class PageElementStore {
+export class PageNodeStore {
 
   /**
    * Caches instances of PageNodes.
@@ -562,7 +562,7 @@ export class PageElementStore {
   /**
    * Creates or retrieves a cached version of a PageElementGroup instance.
    *
-   * @template Store type of the PageElementGroup's PageElementStore
+   * @template Store type of the PageElementGroup's PageNodeStore
    * @template GroupType type of the retrieved PageElementGroup instance
    * @template GroupOptions type of the opts parameter passed to the constructor of the retrieved PageElementGroup
    * instance
@@ -570,7 +570,7 @@ export class PageElementStore {
    * @param opts the opts parameter passed to the constructor of the retrieved PageElementGroup instance
    */
   protected _getGroup<
-    Store extends PageElementStore,
+    Store extends PageNodeStore,
     Content extends {[key: string] : Workflo.PageNode.INode},
     GroupType extends PageElementGroup<
       Store,
@@ -608,12 +608,12 @@ export class PageElementStore {
 
 // REMOVE THIS - just for testing
 
-// interface IInputOpts<Store extends PageElementStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
+// interface IInputOpts<Store extends PageNodeStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
 
 // }
 
 // class Input<
-//   Store extends pageObjects.stores.PageElementStore,
+//   Store extends pageObjects.stores.PageNodeStore,
 // > extends pageObjects.elements.ValuePageElement<
 //   Store, string
 // > {
@@ -634,7 +634,7 @@ export class PageElementStore {
 // }
 
 // class InputCurrently<
-//   Store extends pageObjects.stores.PageElementStore,
+//   Store extends pageObjects.stores.PageNodeStore,
 //   PageElementType extends Input<Store>
 // > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
 //   getValue(): string {
@@ -644,7 +644,7 @@ export class PageElementStore {
 
 // // achieved mapping type to input value!!!
 
-// class InputStore extends pageObjects.stores.PageElementStore {
+// class InputStore extends pageObjects.stores.PageNodeStore {
 //   Input(
 //     selector: Workflo.XPath,
 //     opts?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
@@ -815,7 +815,7 @@ export class PageElementStore {
 //   }
 // }
 
-// class MyStore extends PageElementStore {
+// class MyStore extends PageNodeStore {
 //   Element(
 //     selector: Workflo.XPath,
 //     opts?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
@@ -862,7 +862,7 @@ export class PageElementStore {
 //   testProp: string
 // }
 
-// interface IMyInputOpts<Store extends PageElementStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
+// interface IMyInputOpts<Store extends PageNodeStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
 //   testInputProp: string
 // }
 

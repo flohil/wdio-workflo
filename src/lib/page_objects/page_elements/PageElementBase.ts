@@ -2,16 +2,16 @@ import * as _ from 'lodash'
 
 import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually, PageElementGroup } from '.'
 import { XPathBuilder } from '../builders'
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL } from '..'
 
 /**
  * Defines the opts parameter passed to the constructor function of PageElementBase.
  *
- * @template Store type of the PageElementStore used by PageElementBase to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageElementBase to retrieve PageNodes from the store
  */
 export interface IPageElementBaseOpts<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
 > extends IPageNodeOpts<Store> {
   /**
    * Defines the kind of waiting condition performed when `initialWait` is invoked.
@@ -25,10 +25,10 @@ export interface IPageElementBaseOpts<
 /**
  * This class provides basic functionalities for all PageElements.
  *
- * @template Store type of the PageElementStore used by PageElementBase to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageElementBase to retrieve PageNodes from the store
  */
 export abstract class PageElementBase<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
 > extends PageNode<Store> {
   /**
    * Defines the kind of wait condition performed when `initialWait` is invoked.
@@ -38,7 +38,7 @@ export abstract class PageElementBase<
    */
   protected _waitType: Workflo.WaitType
   /**
-   * `_$` provides access to the PageNode retrieval functions of PageElementBase's PageElementStore and prefixes the
+   * `_$` provides access to the PageNode retrieval functions of PageElementBase's PageNodeStore and prefixes the
    * selectors of all PageNodes retrieved via `_$` with the selector of PageElementBase.
    */
   protected _$: Store
@@ -109,7 +109,7 @@ export abstract class PageElementBase<
   // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
 
   /**
-   * `$` provides access to the PageNode retrieval functions of PageElementBase's PageElementStore and prefixes the
+   * `$` provides access to the PageNode retrieval functions of PageElementBase's PageNodeStore and prefixes the
    * selectors of all PageNodes retrieved via `$` with the selector of PageElementBase.
    */
   get $() /*: Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>*/ {
@@ -177,12 +177,12 @@ export abstract class PageElementBase<
 /**
  * This class defines all `currently` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseCurrently defines all `currently`
  * functions
  */
 export abstract class PageElementBaseCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElementBase<Store>
 > extends PageNodeCurrently<Store, PageElementType> {
 
@@ -275,12 +275,12 @@ export abstract class PageElementBaseCurrently<
 /**
  * This class defines all `wait` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseWait defines all `wait`
  * functions
  */
 export abstract class PageElementBaseWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElementBase<Store>,
 > extends PageNodeWait<Store, PageElementType> {
 
@@ -478,11 +478,11 @@ export abstract class PageElementBaseWait<
 /**
  * This class defines all `eventually` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseEventually defines all `eventually`
  * functions
  */
 export abstract class PageElementBaseEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElementBase<Store>
 > extends PageNodeEventually<Store, PageElementType> {}

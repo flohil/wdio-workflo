@@ -1,24 +1,24 @@
 import { XPathBuilder } from './XPathBuilder';
 import { PageElement, PageElementList } from '../page_elements';
-import { PageElementStore, CloneFunc } from '../stores';
+import { PageNodeStore, CloneFunc } from '../stores';
 /**
  * Defines the opts parameter passed to the constructor of ListWhereBuilder.
  */
-export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOpts, ListType extends PageElementList<Store, PageElementType, PageElementOpts>> {
+export interface IWhereBuilderOpts<Store extends PageNodeStore, PageElementType extends PageElement<Store>, PageElementOpts, ListType extends PageElementList<Store, PageElementType, PageElementOpts>> {
     /**
-     * An instance of PageElementStore used by PageNodes which are returned by ListWhereBuilder.
+     * An instance of PageNodeStore used by PageNodes which are returned by ListWhereBuilder.
      */
     store: Store;
     /**
      * A function that returns instances of a PageElements managed by ListWhereBuilder's PageElementList
-     * from the ListWhereBuilder's PageElementStore.
+     * from the ListWhereBuilder's PageNodeStore.
      *
      * @param selector the selector of a created PageElement
      * @param opts passed to the constructor of the created PageElements
      */
     elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType;
     /**
-     * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageElementStore.
+     * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageNodeStore.
      */
     elementOpts: PageElementOpts;
     /**
@@ -38,32 +38,32 @@ export interface IWhereBuilderOpts<Store extends PageElementStore, PageElementTy
  * ListWhereBuilder allows to select subsets of a PageElementList (subsets of its managed PageElements) by modifying the
  * list's selector using XPath modification functions.
  *
- * @template Store type of the instance of PageElementStore that is used by PageNodes returned by ListWhereBuilder
+ * @template Store type of the instance of PageNodeStore that is used by PageNodes returned by ListWhereBuilder
  * @template PageElementType type of instances of PageElements returned by ListWhereBuilder's retrieval functions
  * (getXXX)
  * @template PageElementOpts type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
  * retrieval functions
  * @template ListType type of the PageElementList on which ListWhereBuilder operates
  */
-export declare class ListWhereBuilder<Store extends PageElementStore, PageElementType extends PageElement<Store>, PageElementOpts, ListType extends PageElementList<Store, PageElementType, PageElementOpts>> {
+export declare class ListWhereBuilder<Store extends PageNodeStore, PageElementType extends PageElement<Store>, PageElementOpts, ListType extends PageElementList<Store, PageElementType, PageElementOpts>> {
     /**
      * Stores the root selector for all XPath modifications performed with ListWhereBuilder.
      */
     protected _selector: string;
     /**
-     * An instance of PageElementStore used by PageNodes which are returned by ListWhereBuilder.
+     * An instance of PageNodeStore used by PageNodes which are returned by ListWhereBuilder.
      */
     protected _store: Store;
     /**
      * A function that returns instances of a PageElements managed by ListWhereBuilder's PageElementList
-     * from the ListWhereBuilder's PageElementStore.
+     * from the ListWhereBuilder's PageNodeStore.
      *
      * @param selector the selector of a created PageElement
      * @param opts passed to the constructor of the created PageElements
      */
     protected _elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType;
     /**
-     * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageElementStore.
+     * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageNodeStore.
      */
     protected _elementOpts: PageElementOpts;
     /**

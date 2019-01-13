@@ -1,12 +1,12 @@
 /// <reference types="webdriverio" />
 import { PageElementBase, IPageElementBaseOpts, PageElementBaseCurrently, PageElementBaseWait, PageElementBaseEventually } from '.';
-import { PageElementStore } from '../stores';
+import { PageNodeStore } from '../stores';
 /**
  * Describes the opts parameter passed to the constructor function of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  */
-export interface IPageElementOpts<Store extends PageElementStore> extends IPageElementBaseOpts<Store> {
+export interface IPageElementOpts<Store extends PageNodeStore> extends IPageElementBaseOpts<Store> {
     /**
      * This interface is used in the parameters of scrollTo and click actions of PageElement.
      * It allows you to scroll a PageElement that resides inside a scrollable container into view.
@@ -44,9 +44,9 @@ export interface IPageElementOpts<Store extends PageElementStore> extends IPageE
  * - `.wait`: wait for a certain state
  * - `.eventually`: check if a certain state is eventually reached within a specific timeout.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  */
-export declare class PageElement<Store extends PageElementStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, boolean> {
+export declare class PageElement<Store extends PageNodeStore> extends PageElementBase<Store> implements Workflo.PageNode.IElementNode<string, boolean, boolean> {
     /**
      * stores the default custom scrolling behaviour
      */
@@ -317,10 +317,10 @@ export declare class PageElement<Store extends PageElementStore> extends PageEle
 /**
  * This class defines all `currently` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementCurrently defines all `currently` functions
  */
-export declare class PageElementCurrently<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> {
+export declare class PageElementCurrently<Store extends PageNodeStore, PageElementType extends PageElement<Store>> extends PageElementBaseCurrently<Store, PageElementType> {
     /**
      * Returns true if PageElement currently exists.
      */
@@ -894,10 +894,10 @@ export declare class PageElementCurrently<Store extends PageElementStore, PageEl
 /**
  * This class defines all `wait` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementWait defines all `wait` functions
  */
-export declare class PageElementWait<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseWait<Store, PageElementType> {
+export declare class PageElementWait<Store extends PageNodeStore, PageElementType extends PageElement<Store>> extends PageElementBaseWait<Store, PageElementType> {
     /**
      * Waits for PageElement to exist.
      *
@@ -1916,10 +1916,10 @@ export declare class PageElementWait<Store extends PageElementStore, PageElement
 /**
  * This class defines all `eventually` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementEventually defines all `eventually` functions
  */
-export declare class PageElementEventually<Store extends PageElementStore, PageElementType extends PageElement<Store>> extends PageElementBaseEventually<Store, PageElementType> {
+export declare class PageElementEventually<Store extends PageNodeStore, PageElementType extends PageElement<Store>> extends PageElementBaseEventually<Store, PageElementType> {
     /**
      * Returns true if PageElement eventually exists within a specific timeout.
      *

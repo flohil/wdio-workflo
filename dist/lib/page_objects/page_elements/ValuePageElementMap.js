@@ -14,7 +14,7 @@ const _1 = require("./");
  * ValuePageElementMap extends PageElementMap with the possibility to set, retrieve and check the values of
  * ValuePageElements managed by ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
@@ -93,7 +93,7 @@ exports.ValuePageElementMap = ValuePageElementMap;
 /**
  * This class defines all `currently` functions of ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
@@ -207,7 +207,7 @@ class ValuePageElementMapCurrently extends _1.PageElementMapCurrently {
 /**
  * This class defines all `wait` functions of ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements
@@ -333,7 +333,7 @@ class ValuePageElementMapWait extends _1.PageElementMapWait {
 /**
  * This class defines all `eventually` functions of ValuePageElementMap.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template K the key names of ValuePageElementMap's `$` accessor used to access the map's managed ValuePageElements
  * @template PageElementType type of the ValuePageElement managed by ValuePageElementMap
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the ValuePageElements

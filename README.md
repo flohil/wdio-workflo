@@ -12,7 +12,37 @@ webdriverio and all required services. It helps you save a lot of time and work 
 basic building blocks of a sophisticated page object pattern architecture. Testcases in wdio-workflo consist of
 reusable steps formulated in natural language to make them comprehensible for all stakeholder.
 
-# Installation and Configuration
+# Getting Started
+The rest of this document shows you:
+
+ - Where you can learn more about wdio-workflo's features and motivation
+ - Where you can find the full API documentation for wdio-workflo and webdriverio v4.13
+ - Where you can find code examples for the usage of wdio-workflo
+ - How to install and configure wdio-workflo
+ - How to write your first functional system test using wdio-workflo
+ - How to run your tests
+ - How to debug your tests
+ - How to show the results of your tests in a graphical report
+ - How to show all options of wdio-workflo's Command Line Interface
+
+## Learn more about wdio-workflo
+Visit https://wdio-workflo.com (available soon) to
+
+- gain a deeper insight into wdio-workflo's features and motivation
+- find a detailed explanation of the framework's components
+- learn from examples that show you how to effectively test your browser-based application and validate its requirements 
+using wdio-workflo.
+
+## API Documentation
+Wdio-workflo's API documentation comes bundled with the npm package and can be displayed by opening the file ```node_modules/wdio-workflo/apiDoc/index.html```
+
+Webdriverio's API docs for version 4.13 can be found at http://v4.webdriver.io/api.html
+
+## Examples
+The code for this 'Getting Started' guide and for all examples found at https://wdio-workflo.com is available at
+https://github.com/flohil/wdio-workflo-example.
+
+## Installation and Configuration
 - Install wdio-workflo by running ```npm install --save-dev wdio-workflo``` in your project folder.
 This will automatically create wdio-workflo's configuration file ```workflo.conf.ts``` and wdio-workflo's typescript
 compiler settings file ```tsconfig.workflo.json``` in the same directory.
@@ -34,30 +64,40 @@ the source folder of your system tests directory is included in the compiled typ
 - Adapt wdio-workflo's configuration in ```workflo.conf.ts``` to your own needs.
 - Run ```./node_modules/.bin/wdio-workflo --init``` to create the boilerplate code for your functional system tests.
 
-# Writing your first Functional System Test
-<!-- 
-
-## Goal
+## Writing your first Functional System Test
+### Overview
 This little 'Getting Started' guide quickly walks you through all necessary steps to write functional system tests in
 wdio-workflo.
 
 In our example, we will browse to the public npm registry at https://www.npmjs.com/ and search for the wdio-workflo
 npm package.
 
-## Configure the base url in workflo.conf.ts
-At first we set the base url for our tested web application in wdio-workflo's configuration.
+All code for this 'Getting Started' guide can also be found at https://github.com/flohil/wdio-workflo-example.
 
-To do so, open the file ```workflo.conf.ts``` in your project folder and set the value of its baseUrl property to
-"https://www.npmjs.com/":
+### Configuring the Base URL
+At first we need to set the base url for our tested web application in wdio-workflo's configuration.
 
-```
-// workflo.conf.ts
-const workfloConfig: IWorkfloConfig = {
-  /* ... */
-  baseUrl: 'https://www.npmjs.com/',
-  /* ... */
-}
-```
+To do so, open the file ```workflo.conf.ts``` in your project folder and set the value of its ```baseUrl``` property to
+"https://www.npmjs.com/"
+
+### Defining the Requirements
+Added shortly
+
+### Creating Page Objects
+#### PageNodes
+Added shortly
+#### Pages
+Added shortly
+#### PageNodeStores
+Added shortly
+
+### Implementing Steps
+Added shortly
+
+### Writing Testcases
+Added shortly
+
+<!-- 
 
 ## Create PageElements and a Page to map the components of the tested web application
 Now we need to map all HTML components required to search for the wdio-workflo npm package on https://www.npmjs.com/.
@@ -126,10 +166,8 @@ show your results
 
  -->
 
-
-# CLI
-## Running tests
-To start all of your testcases, run ```./node_modules/.bin/wdio-workflo```
+## Running your tests
+To start all of your tests, run ```./node_modules/.bin/wdio-workflo```
 
 You can filter the executed tests by testcases, specs and many more:
 
@@ -231,16 +269,12 @@ These are the recommended settings for the "NIM" chrome extension:
 
 The General Options Menu can be opened by hovering over the little circle in the right bottom of the Main Menu and then clicking on the "sliders" icon.
 
-## Help
-To show all options of wdio-workflo's CLI, run
+## Show all CLI options
+There are many more options available via wdio-workflo's Command Line Interface than the ones already mentioned in this 
+document.
+
+To show all of them, run
 
 ```./node_modules/.bin/wdio-workflo --help```
 
-# Documentation
-Wdio-workflo's documentation comes bundled with the npm package and can be displayed by opening the file ```node_modules/wdio-workflo/apiDoc/index.html```
 
-Webdriverio's api docs for version 4.13 can be found at http://v4.webdriver.io/api.html
-
-# Learn more about Wdio-workflo
-To gain a deeper insight into wdio-workflo's features and to learn more about how to test your browser-based application using wdio-workflo,
-visit https://wdio-workflo.com (available soon).

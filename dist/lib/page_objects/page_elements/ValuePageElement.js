@@ -8,7 +8,7 @@ const PageElement_1 = require("./PageElement");
  *
  * - 'value' to wait for an element to have any value
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template ValueType the type of PageElement's value
  */
 class ValuePageElement extends PageElement_1.PageElement {
@@ -85,7 +85,7 @@ exports.ValuePageElement = ValuePageElement;
 /**
  * This class defines all `currently` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementCurrently defines all `currently`
  * functions
  * @template ValueType the type of ValuePageElement's value
@@ -168,7 +168,7 @@ exports.ValuePageElementCurrently = ValuePageElementCurrently;
 /**
  * This class defines all `wait` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementWait defines all `wait`
  * functions
  * @template ValueType the type of ValuePageElement's value
@@ -285,7 +285,7 @@ exports.ValuePageElementWait = ValuePageElementWait;
 /**
  * This class defines all `eventually` functions of ValuePageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the ValuePageElement for which ValuePageElementEventually defines all `eventually`
  * functions
  * @template ValueType the type of ValuePageElement's value

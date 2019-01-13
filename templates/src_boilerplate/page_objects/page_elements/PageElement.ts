@@ -1,6 +1,6 @@
 import { pageObjects as core } from 'wdio-workflo'
 
-import { PageElementStore } from '../stores'
+import { PageNodeStore } from '../stores'
 
 /**
  * This interface can be used to extend wdio-workflo's IPageElementOpts interface.
@@ -8,10 +8,10 @@ import { PageElementStore } from '../stores'
  *
  * IPageElementOpts describes the opts parameter passed to the constructor function of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  */
 export interface IPageElementOpts<
-  Store extends PageElementStore
+  Store extends PageNodeStore
 > extends core.elements.IPageElementOpts<Store> {}
 
 /**
@@ -48,9 +48,9 @@ export interface IPageElementOpts<
  * - `.wait`: wait for a certain state
  * - `.eventually`: check if a certain state is eventually reached within a specific timeout.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  */
-export class PageElement<Store extends PageElementStore> extends core.elements.PageElement<Store> {
+export class PageElement<Store extends PageNodeStore> extends core.elements.PageElement<Store> {
 
   readonly currently: PageElementCurrently<Store, this>
   readonly wait: PageElementWait<Store, this>
@@ -106,11 +106,11 @@ export class PageElement<Store extends PageElementStore> extends core.elements.P
  *
  * PageElementCurrently defines all `currently` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementCurrently defines all `currently` functions
  */
 export class PageElementCurrently<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>
 > extends core.elements.PageElementCurrently<Store, PageElementType> {}
 
@@ -120,11 +120,11 @@ export class PageElementCurrently<
  *
  * PageElementWait defines all `wait` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementWait defines all `wait` functions
  */
 export class PageElementWait<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>
 > extends core.elements.PageElementWait<Store, PageElementType> {}
 
@@ -134,10 +134,10 @@ export class PageElementWait<
  *
  * PageElementEventually defines all `eventually` functions of PageElement.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementEventually defines all `eventually` functions
  */
 export class PageElementEventually<
-  Store extends PageElementStore,
+  Store extends PageNodeStore,
   PageElementType extends PageElement<Store>
 > extends core.elements.PageElementEventually<Store, PageElementType> {}

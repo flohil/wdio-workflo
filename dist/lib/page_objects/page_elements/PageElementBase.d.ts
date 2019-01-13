@@ -1,12 +1,12 @@
 /// <reference types="webdriverio" />
 import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually } from '.';
-import { PageElementStore } from '../stores';
+import { PageNodeStore } from '../stores';
 /**
  * Defines the opts parameter passed to the constructor function of PageElementBase.
  *
- * @template Store type of the PageElementStore used by PageElementBase to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageElementBase to retrieve PageNodes from the store
  */
-export interface IPageElementBaseOpts<Store extends PageElementStore> extends IPageNodeOpts<Store> {
+export interface IPageElementBaseOpts<Store extends PageNodeStore> extends IPageNodeOpts<Store> {
     /**
      * Defines the kind of waiting condition performed when `initialWait` is invoked.
      *
@@ -18,9 +18,9 @@ export interface IPageElementBaseOpts<Store extends PageElementStore> extends IP
 /**
  * This class provides basic functionalities for all PageElements.
  *
- * @template Store type of the PageElementStore used by PageElementBase to retrieve PageNodes from the store
+ * @template Store type of the PageNodeStore used by PageElementBase to retrieve PageNodes from the store
  */
-export declare abstract class PageElementBase<Store extends PageElementStore> extends PageNode<Store> {
+export declare abstract class PageElementBase<Store extends PageNodeStore> extends PageNode<Store> {
     /**
      * Defines the kind of wait condition performed when `initialWait` is invoked.
      *
@@ -29,7 +29,7 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
      */
     protected _waitType: Workflo.WaitType;
     /**
-     * `_$` provides access to the PageNode retrieval functions of PageElementBase's PageElementStore and prefixes the
+     * `_$` provides access to the PageNode retrieval functions of PageElementBase's PageNodeStore and prefixes the
      * selectors of all PageNodes retrieved via `_$` with the selector of PageElementBase.
      */
     protected _$: Store;
@@ -54,7 +54,7 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
      */
     constructor(selector: string, { waitType, timeout, interval, ...superOpts }: IPageElementBaseOpts<Store>);
     /**
-     * `$` provides access to the PageNode retrieval functions of PageElementBase's PageElementStore and prefixes the
+     * `$` provides access to the PageNode retrieval functions of PageElementBase's PageNodeStore and prefixes the
      * selectors of all PageNodes retrieved via `$` with the selector of PageElementBase.
      */
     readonly $: Store;
@@ -106,11 +106,11 @@ export declare abstract class PageElementBase<Store extends PageElementStore> ex
 /**
  * This class defines all `currently` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseCurrently defines all `currently`
  * functions
  */
-export declare abstract class PageElementBaseCurrently<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeCurrently<Store, PageElementType> {
+export declare abstract class PageElementBaseCurrently<Store extends PageNodeStore, PageElementType extends PageElementBase<Store>> extends PageNodeCurrently<Store, PageElementType> {
     /**
      * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector.
      */
@@ -157,11 +157,11 @@ export declare abstract class PageElementBaseCurrently<Store extends PageElement
 /**
  * This class defines all `wait` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseWait defines all `wait`
  * functions
  */
-export declare abstract class PageElementBaseWait<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
+export declare abstract class PageElementBaseWait<Store extends PageNodeStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
     /**
      * This function waits for a certain condition to be met.
      *
@@ -268,9 +268,9 @@ export declare abstract class PageElementBaseWait<Store extends PageElementStore
 /**
  * This class defines all `eventually` functions of PageElementBase.
  *
- * @template Store type of the PageElementStore instance which can be used to retrieve/create PageNodes
+ * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template PageElementType type of the PageElement for which PageElementBaseEventually defines all `eventually`
  * functions
  */
-export declare abstract class PageElementBaseEventually<Store extends PageElementStore, PageElementType extends PageElementBase<Store>> extends PageNodeEventually<Store, PageElementType> {
+export declare abstract class PageElementBaseEventually<Store extends PageNodeStore, PageElementType extends PageElementBase<Store>> extends PageNodeEventually<Store, PageElementType> {
 }

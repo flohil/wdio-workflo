@@ -5,7 +5,7 @@ const XPathBuilder_1 = require("./XPathBuilder");
  * ListWhereBuilder allows to select subsets of a PageElementList (subsets of its managed PageElements) by modifying the
  * list's selector using XPath modification functions.
  *
- * @template Store type of the instance of PageElementStore that is used by PageNodes returned by ListWhereBuilder
+ * @template Store type of the instance of PageNodeStore that is used by PageNodes returned by ListWhereBuilder
  * @template PageElementType type of instances of PageElements returned by ListWhereBuilder's retrieval functions
  * (getXXX)
  * @template PageElementOpts type of opts passed to the constructors of PageElements returned by ListWhereBuilder's
