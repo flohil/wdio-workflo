@@ -10,7 +10,7 @@ broken testcases.
 Wdio-workflo wants to get you started with writing functional system tests as quickly as possible by preconfiguring
 webdriverio and all required services. It helps you save a lot of time and work by providing boilerplate code and the
 basic building blocks of a sophisticated page object pattern architecture. Testcases in wdio-workflo consist of
-reusable steps formulated in natural language to make them comprehensible for all stakeholder.
+reusable steps formulated in natural language to make them comprehensible for all stakeholders.
 
 # Getting Started
 The rest of this document shows you:
