@@ -3003,28 +3003,11 @@ declare global {
      * - 'value' waits for the PageElement to have any value (this will not be the case if the PageElement does not
      * exist, is not visible, or has no value at all)
      */
-    // enum WaitType {
-    //   exist = 'exist',
-    //   visible = 'visible',
-    //   text = 'text',
-    //   value = 'value'
-    // }
-
     export import WaitType = enums.WaitType
 
     /**
      * This enum is used to perform comparisons of numbers.
      */
-    // enum Comparator {
-    //   equalTo = '==',
-    //   lessThan = '<',
-    //   greaterThan = '>',
-    //   notEqualTo = '!=',
-    //   ne = '!=',
-    //   eq = '==',
-    //   lt = '<',
-    //   gt = '>',
-    // }
     export import Comparator = enums.Comparator
 
     /**
@@ -4174,9 +4157,9 @@ export interface IWorkfloCommonConfig {
   /**
    * Path to the uidStore.json file which is used to generate unique ids during test execution.
    *
-   * The generated ids will be preversed for future test runs until the uidStore.json file is deleted.
+   * The generated ids will be preserved for future test runs until the uidStore.json file is deleted.
    */
-  uidStorePath: string
+  uidStorePath?: string
   /**
    * Arguments for start command of selenium-standalone service.
    *
@@ -4490,26 +4473,6 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @default {default: 500}
    */
   intervals?: IIntervals
-  /**
-   * Defines which testcase files should run. The pattern is relative to the directory
-   * from which `wdio-workflo` was called.
-   */
-  testcaseFiles?: string[]
-  /**
-   * Defines which spec files should run. The pattern is relative to the directory
-   * from which `wdio-workflo` was called.
-   */
-  specFiles?: string[]
-  /**
-   * Defines which manual testcase result files should run. The pattern is relative to the directory
-   * from which `wdio-workflo` was called.
-   */
-  manualResultFiles?: string[]
-  /**
-   * Restricts test execution to the testcases, specs, testcaseFiles, specFiles and lists defined within these files.
-   * The pattern is relative to the directory from which `wdio-workflo` was called.
-   */
-  listFiles?: string[]
 
   /**
    * Restricts test execution to these testcases.

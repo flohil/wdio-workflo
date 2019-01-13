@@ -11,7 +11,7 @@ export declare function defineSteps<StepDefinitions extends Workflo.StepDefiniti
  * @param stepDefinitions the merged step definitions
  * @returns the proxified steps
  */
-export declare function proxifySteps(stepDefinitions: Workflo.StepDefinitions): Record<string, (params?: Workflo.IStepParams<any, any> | Workflo.IOptStepParams<any, any>) => Workflo.IStep>;
+export declare function proxifySteps<StepDefinitions extends Workflo.StepDefinitions>(stepDefinitions: StepDefinitions): StepDefinitions;
 /**
    * Steps consist of a description and an execution function.
    * The execution function performs changes to the state of the tested application and the description briefly summarizes

@@ -1,11 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES6",
-        "module": "commonjs",
-        "paths": {
-            "~/*": ["./*"],
-            "?/*": ["./system_test/src/*"]
-        }
+        "module": "commonjs"
     },
     "include": [
         "system_test/src/**/*"

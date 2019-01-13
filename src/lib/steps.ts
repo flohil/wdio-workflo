@@ -63,7 +63,9 @@ export function defineSteps<StepDefinitions extends Workflo.StepDefinitions>(ste
  * @param stepDefinitions the merged step definitions
  * @returns the proxified steps
  */
-export function proxifySteps(stepDefinitions: Workflo.StepDefinitions) {
+export function proxifySteps<StepDefinitions extends Workflo.StepDefinitions>(
+  stepDefinitions: StepDefinitions
+): StepDefinitions {
   return new Proxy(stepDefinitions, {
     get: (target, name, receiver) => stepsGetter(target, name, receiver),
     set: (target, name, value) => stepsSetter(target, name, value)

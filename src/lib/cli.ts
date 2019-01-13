@@ -495,7 +495,7 @@ checkReport().then(() => {
     fsExtra.ensureDirSync(allureResultsPath)
 
     // check workflo config properties
-    const mandatoryProperties = ['testDir', 'baseUrl', 'specFiles', 'testcaseFiles', 'manualResultFiles', 'uidStorePath']
+    const mandatoryProperties = ['testDir', 'baseUrl']
 
     for(const property of mandatoryProperties) {
         if (!(property in workfloConfig)) {
@@ -514,6 +514,8 @@ checkReport().then(() => {
     const listsDir = path.join(srcDir, 'lists')
     const manDir = path.join(srcDir, 'manual_results')
     const testInfoFilePath = path.join(process.env.WDIO_WORKFLO_RUN_PATH, 'testinfo.json')
+
+    workfloConfig.uidStorePath = workfloConfig.uidStorePath || path.join(testDir, 'data', 'uidStore.json')
 
     const filters: IExecutionFilters = {}
     const mergedFilters: IExecutionFilters = {}
