@@ -1,6 +1,6 @@
 # Overview
-Wdio-workflo is a framework for writing automated functional system tests and based on a customized version of
-webdriverio v4.13 ( https://webdriver.io/ ).
+Wdio-workflo is a framework for writing automated functional system tests in TypeScript and based on a
+customized version of webdriverio v4.13 ( https://webdriver.io/ ).
 
 It allows you to define acceptance criteria which can by referenced in your testcases to automatically validate
 the requirements of your tested application. The test reports created by wdio-workflo will not only show the result
