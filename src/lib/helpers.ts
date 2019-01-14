@@ -6,41 +6,41 @@
  */
 export function tolerancesToString(
   values: number | Record<string, number>,
-  tolerances?: number | Record<string, number>
+  tolerances?: number | Record<string, number>,
 ) {
-  var str = '{';
-  var props = []
+  let str = '{';
+  const props = [];
 
   if (typeof values !== 'object' && typeof values !== 'undefined') {
     if (typeof tolerances === 'undefined') {
-      return values
+      return values;
     } else if (typeof tolerances !== 'object') {
-      const tolerance = Math.abs(tolerances)
+      const tolerance = Math.abs(tolerances);
 
-      return `[${Math.max(values - tolerance, 0)}, ${Math.max(values + tolerance, 0)}]`
+      return `[${Math.max(values - tolerance, 0)}, ${Math.max(values + tolerance, 0)}]`;
     }
   } else {
-    for (var p in values) {
+    for (const p in values) {
       if (values.hasOwnProperty(p)) {
-        const value = values[p]
-        let valueStr = ''
+        const value = values[p];
+        let valueStr = '';
 
         if (tolerances && typeof tolerances[p] !== 'undefined' && tolerances[p] !== 0) {
-          const tolerance = Math.abs(tolerances[p])
+          const tolerance = Math.abs(tolerances[p]);
 
-          valueStr = `[${Math.max(value - tolerance, 0)}, ${Math.max(value + tolerance, 0)}]`
+          valueStr = `[${Math.max(value - tolerance, 0)}, ${Math.max(value + tolerance, 0)}]`;
         } else {
-          valueStr = `${value}`
+          valueStr = `${value}`;
         }
 
-        props.push(`${p}: ${valueStr}`)
+        props.push(`${p}: ${valueStr}`);
       }
     }
   }
 
-  str += props.join(', ')
+  str += props.join(', ');
 
-  return str + '}';
+  return `${str}}`;
 }
 
 /**
@@ -49,7 +49,7 @@ export function tolerancesToString(
  * @param value an arbitrary value
  */
 export function isNullOrUndefined(value: any) {
-  return value === null || typeof value === 'undefined'
+  return value === null || typeof value === 'undefined';
 }
 
 /**
@@ -58,7 +58,7 @@ export function isNullOrUndefined(value: any) {
  * @param value an arbitrary value
  */
 export function notIsNullOrUndefined(value: any) {
-  return value !== null || typeof value !== 'undefined'
+  return value !== null || typeof value !== 'undefined';
 }
 
 /**
@@ -72,10 +72,10 @@ export function notIsNullOrUndefined(value: any) {
  */
 export function isEmpty(value: any) {
   if (typeof value === 'string') {
-    return value.length === 0
+    return value.length === 0;
   }
 
-  return isNullOrUndefined(value)
+  return isNullOrUndefined(value);
 }
 
 /**
@@ -94,37 +94,37 @@ export function isEmpty(value: any) {
 export function applyMixins(derivedCtor: any, baseCtors: any[], mergeObjectKeys: string[] = []) {
   baseCtors.forEach(baseCtor => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-      const baseValue = baseCtor.prototype[name]
-      const derivedValue = derivedCtor.prototype[name]
+      const baseValue = baseCtor.prototype[name];
+      const derivedValue = derivedCtor.prototype[name];
 
       try {
         if (
           (typeof baseValue === 'object' && typeof derivedValue === 'object') && mergeObjectKeys.indexOf(name) >= 0
         ) {
-          derivedCtor.prototype[name] = {...baseValue, ...derivedValue}
+          derivedCtor.prototype[name] = { ...baseValue, ...derivedValue };
         } else {
-          derivedCtor.prototype[name] = baseValue
+          derivedCtor.prototype[name] = baseValue;
         }
-      } catch ( error ) {
-        if ( error.message.includes('which has only a getter') ) {
+      } catch (error) {
+        if (error.message.includes('which has only a getter')) {
 
-          let result = undefined
+          let result = undefined;
 
           if (
             (typeof baseValue === 'object' && typeof derivedValue === 'object') && mergeObjectKeys.indexOf(name) >= 0
           ) {
-            result = {...baseValue, ...derivedValue}
+            result = { ...baseValue, ...derivedValue };
           } else {
-            result = baseValue
+            result = baseValue;
           }
 
           Object.defineProperty(derivedCtor, name, {
-            get: function () {
-              return result
-            }
+            get () {
+              return result;
+            },
           });
         } else {
-          throw error
+          throw error;
         }
       }
     });

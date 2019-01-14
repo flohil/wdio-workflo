@@ -1,6 +1,6 @@
-import { XPathBuilder } from './XPathBuilder'
-import { PageElement, PageElementList } from '../page_elements'
-import { PageNodeStore, CloneFunc } from '../stores'
+import { PageElement, PageElementList } from '../page_elements';
+import { CloneFunc, PageNodeStore } from '../stores';
+import { XPathBuilder } from './XPathBuilder';
 
 /**
  * Defines the opts parameter passed to the constructor of ListWhereBuilder.
@@ -14,7 +14,7 @@ export interface IWhereBuilderOpts<
   /**
    * An instance of PageNodeStore used by PageNodes which are returned by ListWhereBuilder.
    */
-  store: Store
+  store: Store;
   /**
    * A function that returns instances of a PageElements managed by ListWhereBuilder's PageElementList
    * from the ListWhereBuilder's PageNodeStore.
@@ -22,23 +22,23 @@ export interface IWhereBuilderOpts<
    * @param selector the selector of a created PageElement
    * @param opts passed to the constructor of the created PageElements
    */
-  elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType
+  elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType;
   /**
    * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageNodeStore.
    */
-  elementOpts: PageElementOpts,
+  elementOpts: PageElementOpts;
   /**
    * Creates a copy of ListWhereBuilder's PageElementList which manages a subset of the original list's PageElements.
    *
    * @template ListType the type of the cloned PageElementList
    */
-  cloneFunc: CloneFunc<ListType>,
+  cloneFunc: CloneFunc<ListType>;
   /**
    * Returns all PageElements manages by ListWhereBuilder's PageElementList.
    *
    * @param list an instance of PageElementList for which all managed PageElements should be returned
    */
-  getAllFunc: (list: ListType) => PageElementType[]
+  getAllFunc: (list: ListType) => PageElementType[];
 }
 
 /**
@@ -61,11 +61,11 @@ export class ListWhereBuilder<
   /**
    * Stores the root selector for all XPath modifications performed with ListWhereBuilder.
    */
-  protected _selector: string
+  protected _selector: string;
   /**
    * An instance of PageNodeStore used by PageNodes which are returned by ListWhereBuilder.
    */
-  protected _store: Store
+  protected _store: Store;
   /**
    * A function that returns instances of a PageElements managed by ListWhereBuilder's PageElementList
    * from the ListWhereBuilder's PageNodeStore.
@@ -73,27 +73,27 @@ export class ListWhereBuilder<
    * @param selector the selector of a created PageElement
    * @param opts passed to the constructor of the created PageElements
    */
-  protected _elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType
+  protected _elementStoreFunc: (selector: string, opts: PageElementOpts) => PageElementType;
   /**
    * Opts passed to the constructor of PageElements created via ListWhereBuilder's PageNodeStore.
    */
-  protected _elementOpts: PageElementOpts
+  protected _elementOpts: PageElementOpts;
   /**
    * Creates a copy of ListWhereBuilder's PageElementList which manages a subset of the original list's PageElements.
    *
    * @template ListType the type of the cloned PageElementList
    */
-  protected _cloneFunc: CloneFunc<ListType>
+  protected _cloneFunc: CloneFunc<ListType>;
   /**
    * Returns all PageElements manages by ListWhereBuilder's PageElementList.
    *
    * @param list an instance of PageElementList for which all managed PageElements should be returned
    */
-  protected _getAllFunc: (list: ListType) => PageElementType[]
+  protected _getAllFunc: (list: ListType) => PageElementType[];
   /**
    * An instance of XPathBuilder used by ListWhereBuilder to perform XPath modifications.
    */
-  protected _xPathBuilder: XPathBuilder
+  protected _xPathBuilder: XPathBuilder;
 
 /**
  * ListWhereBuilder allows to select subsets of a PageElementList (subsets of its managed PageElements) by modifying the
@@ -104,14 +104,14 @@ export class ListWhereBuilder<
  * @param opts opts parameter passed to the constructor of ListWhereBuilder
  */
   constructor(selector: string, opts: IWhereBuilderOpts<Store, PageElementType, PageElementOpts, ListType>) {
-    this._selector = selector
-    this._store = opts.store
-    this._elementStoreFunc = opts.elementStoreFunc
-    this._elementOpts = opts.elementOpts
-    this._cloneFunc = opts.cloneFunc
-    this._getAllFunc = opts.getAllFunc
+    this._selector = selector;
+    this._store = opts.store;
+    this._elementStoreFunc = opts.elementStoreFunc;
+    this._elementOpts = opts.elementOpts;
+    this._cloneFunc = opts.cloneFunc;
+    this._getAllFunc = opts.getAllFunc;
 
-    this._xPathBuilder = XPathBuilder.getInstance()
+    this._xPathBuilder = XPathBuilder.getInstance();
   }
 
 // XPathBuilder facade
@@ -123,8 +123,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   reset() {
-    this._xPathBuilder.reset(this._selector)
-    return this
+    this._xPathBuilder.reset(this._selector);
+    return this;
   }
 
   /**
@@ -134,8 +134,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   append(appendedXPath: string) {
-    this._xPathBuilder.append(appendedXPath)
-    return this
+    this._xPathBuilder.append(appendedXPath);
+    return this;
   }
 
   /**
@@ -148,8 +148,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   child(childSelector: string) {
-    this._xPathBuilder.append(childSelector)
-    return this
+    this._xPathBuilder.append(childSelector);
+    return this;
   }
 
   /**
@@ -164,8 +164,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   constraint(constraintSelector: string, builderFunc?: (xPath: XPathBuilder) => XPathBuilder) {
-    this._xPathBuilder.constraint(constraintSelector, builderFunc)
-    return this
+    this._xPathBuilder.constraint(constraintSelector, builderFunc);
+    return this;
   }
 
   /**
@@ -173,16 +173,16 @@ export class ListWhereBuilder<
    * the passed childSelector.
    *
    * Optionally, a builderFunc can be used to apply XPath modification functions to the child selector instead of
-   * the "outer" selector. To do so, builderFunc is passed an XPathBuilder instance configured to use the `childSelector`
-   * as a new root for the currently constructed XPath expression.
+   * the "outer" selector. To do so, builderFunc is passed an XPathBuilder instance configured to use the
+   * `childSelector` as a new root for the currently constructed XPath expression.
    *
    * @param childSelector a plain XPath constraint appended to the currently constructed XPath expression
    * @param builderFunc can be used to apply XPath modification functions to `childSelector`
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   hasChild(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder) {
-    this._xPathBuilder.hasChild(`.${childSelector}`, builderFunc)
-    return this
+    this._xPathBuilder.hasChild(`.${childSelector}`, builderFunc);
+    return this;
   }
 
   /**
@@ -193,8 +193,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   text(text: string) {
-    this._xPathBuilder.text(text)
-    return this
+    this._xPathBuilder.text(text);
+    return this;
   }
 
   /**
@@ -205,8 +205,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notText(text: string) {
-    this._xPathBuilder.notText(text)
-    return this
+    this._xPathBuilder.notText(text);
+    return this;
   }
 
   /**
@@ -217,8 +217,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   textContains(text: string) {
-    this._xPathBuilder.textContains(text)
-    return this
+    this._xPathBuilder.textContains(text);
+    return this;
   }
 
   /**
@@ -229,8 +229,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notTextContains(text: string) {
-    this._xPathBuilder.notTextContains(text)
-    return this
+    this._xPathBuilder.notTextContains(text);
+    return this;
   }
 
   /**
@@ -245,8 +245,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   attribute(name: string, value?: string) {
-    this._xPathBuilder.attribute(name, value)
-    return this
+    this._xPathBuilder.attribute(name, value);
+    return this;
   }
 
   /**
@@ -261,8 +261,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notAttribute(name: string, value?: string) {
-    this._xPathBuilder.notAttribute(name, value)
-    return this
+    this._xPathBuilder.notAttribute(name, value);
+    return this;
   }
 
   /**
@@ -277,8 +277,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   attributeContains(name: string, value: string) {
-    this._xPathBuilder.attributeContains(name, value)
-    return this
+    this._xPathBuilder.attributeContains(name, value);
+    return this;
   }
 
   /**
@@ -293,8 +293,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notAttributeContains(name: string, value: string) {
-    this._xPathBuilder.notAttributeContains(name, value)
-    return this
+    this._xPathBuilder.notAttributeContains(name, value);
+    return this;
   }
 
   /**
@@ -308,7 +308,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   id(id?: string) {
-    return this.attribute('id', id)
+    return this.attribute('id', id);
   }
 
   /**
@@ -322,7 +322,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notId(id?: string) {
-    return this.notAttribute('id', id)
+    return this.notAttribute('id', id);
   }
 
   /**
@@ -334,7 +334,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   idContains(id: string) {
-    return this.attributeContains('id', id)
+    return this.attributeContains('id', id);
   }
 
   /**
@@ -346,7 +346,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notIdContains(id: string) {
-    return this.notAttributeContains('id', id)
+    return this.notAttributeContains('id', id);
   }
 
   /**
@@ -360,11 +360,12 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   class(className?: string) {
-    return this.attribute('class', className)
+    return this.attribute('class', className);
   }
 
   /**
-   * Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called 'class'.
+   * Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called
+   * 'class'.
    *
    * Optionally, if also passing a class name, the currently constructed XPath expression is restricted to elements
    * which have an HTML 'class' attribute with a value that does not equal the passed class name.
@@ -374,7 +375,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notClass(className?: string) {
-    return this.notAttribute('class', className)
+    return this.notAttribute('class', className);
   }
 
   /**
@@ -386,7 +387,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   classContains(className: string) {
-    return this.attributeContains('class', className)
+    return this.attributeContains('class', className);
   }
 
   /**
@@ -398,7 +399,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notClassContains(className: string) {
-    return this.notAttributeContains('class', className)
+    return this.notAttributeContains('class', className);
   }
 
   /**
@@ -412,7 +413,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   name(name?: string) {
-    return this.attribute('name', name)
+    return this.attribute('name', name);
   }
 
   /**
@@ -421,12 +422,12 @@ export class ListWhereBuilder<
    * Optionally, if also passing a name, the currently constructed XPath expression is restricted to elements
    * which have an HTML 'name' attribute with a value that does not equal the passed name.
    *
-   * @param name a name which must not equal the value of the HTML 'name' attribute of elements selected by the currently
-   * constructed XPath expression
+   * @param name a name which must not equal the value of the HTML 'name' attribute of elements selected by the
+   * currently constructed XPath expression
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notName(name?: string) {
-    return this.notAttribute('name', name)
+    return this.notAttribute('name', name);
   }
 
   /**
@@ -438,7 +439,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   nameContains(name: string) {
-    return this.attributeContains('name', name)
+    return this.attributeContains('name', name);
   }
 
   /**
@@ -450,7 +451,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notNameContains(name: string) {
-    return this.notAttributeContains('name', name)
+    return this.notAttributeContains('name', name);
   }
 
   /**
@@ -464,7 +465,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   type(type?: string) {
-    return this.attribute('type', type)
+    return this.attribute('type', type);
   }
 
   /**
@@ -478,7 +479,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notType(type?: string) {
-    return this.notAttribute('type', type)
+    return this.notAttribute('type', type);
   }
 
   /**
@@ -490,7 +491,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   typeContains(type: string) {
-    return this.attributeContains('type', type)
+    return this.attributeContains('type', type);
   }
 
   /**
@@ -502,7 +503,7 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notTypeContains(type: string) {
-    return this.notAttributeContains('type', type)
+    return this.notAttributeContains('type', type);
   }
 
   /**
@@ -511,8 +512,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   checked() {
-    this._xPathBuilder.attribute('checked')
-    return this
+    this._xPathBuilder.attribute('checked');
+    return this;
   }
 
   /**
@@ -522,8 +523,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notChecked() {
-    this._xPathBuilder.notAttribute('checked')
-    return this
+    this._xPathBuilder.notAttribute('checked');
+    return this;
   }
 
   /**
@@ -532,8 +533,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   disabled() {
-    this._xPathBuilder.attribute('disabled')
-    return this
+    this._xPathBuilder.attribute('disabled');
+    return this;
   }
 
   /**
@@ -543,8 +544,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notDisabled() {
-    this._xPathBuilder.notAttribute('disabled')
-    return this
+    this._xPathBuilder.notAttribute('disabled');
+    return this;
   }
 
   /**
@@ -553,8 +554,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   selected() {
-    this._xPathBuilder.attribute('selected')
-    return this
+    this._xPathBuilder.attribute('selected');
+    return this;
   }
 
   /**
@@ -564,8 +565,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   notSelected() {
-    this._xPathBuilder.notAttribute('selected')
-    return this
+    this._xPathBuilder.notAttribute('selected');
+    return this;
   }
 
   /**
@@ -579,8 +580,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   levelIndex(levelIndex: number) {
-    this._xPathBuilder.levelIndex(levelIndex)
-    return this
+    this._xPathBuilder.levelIndex(levelIndex);
+    return this;
   }
 
   /**
@@ -592,8 +593,8 @@ export class ListWhereBuilder<
    * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
    */
   index(index: number) {
-    this._xPathBuilder.index( index )
-    return this
+    this._xPathBuilder.index(index);
+    return this;
   }
 
 // Result retrieval functions
@@ -606,8 +607,8 @@ export class ListWhereBuilder<
    */
   getFirst(): PageElementType {
     return this._elementStoreFunc.apply(
-      this._store, [ this._xPathBuilder.build(), this._elementOpts ]
-    )
+      this._store, [this._xPathBuilder.build(), this._elementOpts],
+    );
   }
 
   /**
@@ -618,10 +619,10 @@ export class ListWhereBuilder<
    * constructed XPath expression (starting at 0)
    * @returns an instance of PageElement
    */
-  getAt( index: number ) {
-    this.index( index + 1)
+  getAt(index: number) {
+    this.index(index + 1);
 
-    return this.getFirst()
+    return this.getFirst();
   }
 
   /**
@@ -631,7 +632,7 @@ export class ListWhereBuilder<
    * @returns an array of instances of PageElement
    */
   getAll() {
-    return this._getAllFunc(this.getList())
+    return this._getAllFunc(this.getList());
   }
 
   /**
@@ -641,6 +642,6 @@ export class ListWhereBuilder<
    * @returns an instance of PageElementList that manages a subset of the original list's PageElements
    */
   getList() {
-    return this._cloneFunc( this._xPathBuilder.build() )
+    return this._cloneFunc(this._xPathBuilder.build());
   }
 }

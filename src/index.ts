@@ -1,11 +1,13 @@
-import { InstallOpts, StartOpts  } from 'selenium-standalone'
-import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element } from 'webdriverio'
+/* tslint:disable:max-line-length */
 
-import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli'
-import * as enums from './lib/enums'
-import * as pageObjects from './lib/page_objects'
-import * as helpers from './lib/helpers'
-import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList'
+import { InstallOpts, StartOpts  } from 'selenium-standalone';
+import { Client, DesiredCapabilities, Element, Options, RawResult, Suite, Test } from 'webdriverio';
+
+import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli';
+import * as enums from './lib/enums';
+import * as helpers from './lib/helpers';
+import * as pageObjects from './lib/page_objects';
+import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList';
 
 /**
  * This interface describes custom expectation matchers for PageElements.
@@ -16,55 +18,55 @@ interface ICustomElementMatchers {
   /**
    * Checks if the PageElement currently exists.
    */
-  toExist(): boolean
+  toExist(): boolean;
   /**
    * Checks if the PageElement is currently visible.
    */
-  toBeVisible(): boolean
+  toBeVisible(): boolean;
   /**
    * Checks if the PageElement is currently enabled.
    */
-  toBeEnabled(): boolean
+  toBeEnabled(): boolean;
   /**
    * Checks if the PageElement is currently selected.
    */
-  toBeSelected(): boolean
+  toBeSelected(): boolean;
   /**
    * Checks if the PageElement is currently checked.
    */
-  toBeChecked(): boolean
+  toBeChecked(): boolean;
   /**
    * Checks if the PageElement currently has the specified text.
    *
    * @param text the text which the PageElement is supposed to have
    */
-  toHaveText(text: string): boolean
+  toHaveText(text: string): boolean;
   /**
    * Checks if the PageElement currently has any text.
    */
-  toHaveAnyText(): boolean
+  toHaveAnyText(): boolean;
   /**
    * Checks if the PageElement currently contains the specified text.
    *
    * @param text the text which the PageElement is supposed to contain
    */
-  toContainText(text: string): boolean
+  toContainText(text: string): boolean;
   /**
    * Checks if the PageElement currently has the specified HTML.
    *
    * @param html the HTML which the PageElement is supposed to have
    */
-  toHaveHTML(html: string): boolean
+  toHaveHTML(html: string): boolean;
   /**
    * Checks if the PageElement currently has any HTML.
    */
-  toHaveAnyHTML(): boolean
+  toHaveAnyHTML(): boolean;
   /**
    * Checks if the PageElement currently contains the specified HTML.
    *
    * @param html the HTML which the PageElement is supposed to contain
    */
-  toContainHTML(html: string): boolean
+  toContainHTML(html: string): boolean;
   /**
    * Checks if the PageElement currently has the specified text.
    *
@@ -73,14 +75,14 @@ interface ICustomElementMatchers {
    *
    * @param directText the directText which the PageElement is supposed to have
    */
-  toHaveDirectText(directText: string): boolean
+  toHaveDirectText(directText: string): boolean;
   /**
    * Checks if the PageElement currently has any direct text.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
    */
-  toHaveAnyDirectText(): boolean
+  toHaveAnyDirectText(): boolean;
   /**
    * Checks if the PageElement currently contains the specified HTML.
    *
@@ -89,76 +91,76 @@ interface ICustomElementMatchers {
    *
    * @param directText the directText which the PageElement is supposed to contain
    */
-  toContainDirectText(directText: string): boolean
+  toContainDirectText(directText: string): boolean;
   /**
    * Checks if the specified HTML attribute of PageElement currently has the expected value.
    *
    * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
    * is expected to have
    */
-  toHaveAttribute(attribute: Workflo.IAttribute): boolean
+  toHaveAttribute(attribute: Workflo.IAttribute): boolean;
   /**
    * Checks if the HTML attribute with the specified attributeName of PageElement currently has any value.
    *
    * @param attributeName the specified attributeName of an HTML attribute of PageElement which is supposed to have any
    * value
    */
-  toHaveAnyAttribute(attributeName: string): boolean
+  toHaveAnyAttribute(attributeName: string): boolean;
   /**
    * Checks if the specified HTML attribute of PageElement currently contains the expected value.
    *
    * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
    * is expected to contain
    */
-  toContainAttribute(attribute: Workflo.IAttribute): boolean
+  toContainAttribute(attribute: Workflo.IAttribute): boolean;
   /**
    * Checks if the 'class' HTML attribute of PageElement currently has the specified className.
    *
    * @param className the className which the 'class' HTML attribute of PageElement is supposed to have
    */
-  toHaveClass(className: string): boolean
+  toHaveClass(className: string): boolean;
   /**
    * Checks if the 'class' HTML attribute of PageElement currently has any className.
    */
-  toHaveAnyClass(): boolean
+  toHaveAnyClass(): boolean;
   /**
    * Checks if the 'class' HTML attribute of PageElement currently contains the specified className.
    *
    * @param className the className which the 'class' HTML attribute of PageElement is supposed to contain
    */
-  toContainClass(className: string): boolean
+  toContainClass(className: string): boolean;
   /**
    * Checks if the 'id' HTML attribute of PageElement currently has the specified value.
    *
    * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
    */
-  toHaveId(id: string): boolean
+  toHaveId(id: string): boolean;
   /**
    * Checks if the 'id' HTML attribute of PageElement currently has any value.
    */
-  toHaveAnyId(): boolean
+  toHaveAnyId(): boolean;
   /**
    * Checks if the 'id' HTML attribute of PageElement currently contains the specified value.
    *
    * @param id the value which the 'id' HTML attribute of PageElement is supposed to contain
    */
-  toContainId(id: string): boolean
+  toContainId(id: string): boolean;
   /**
    * Checks if the 'name' HTML attribute of PageElement currently has the specified value.
    *
    * @param name the value which the 'name' HTML attribute of PageElement is supposed to have
    */
-  toHaveName(name: string): boolean
+  toHaveName(name: string): boolean;
   /**
    * Checks if the 'name' HTML attribute of PageElement currently has any value.
    */
-  toHaveAnyName(): boolean
+  toHaveAnyName(): boolean;
   /**
    * Checks if the 'name' HTML attribute of PageElement currently contains the specified value.
    *
    * @param name the value which the 'name' HTML attribute of PageElement is supposed to contain
    */
-  toContainName(name: string): boolean
+  toContainName(name: string): boolean;
   /**
    * Checks if - currently - the location of PageElement matches the specified coordinates or if its location deviates
    * no more than the specified tolerances from the specified coordinates.
@@ -168,8 +170,8 @@ interface ICustomElementMatchers {
    */
   toHaveLocation(
     coordinates: Workflo.ICoordinates,
-    tolerances?: Partial<Workflo.ICoordinates>
-  ): boolean
+    tolerances?: Partial<Workflo.ICoordinates>,
+  ): boolean;
   /**
    * Checks if - currently - the x-location of PageElement matches the specified x-location or if PageElement's
    * x-location deviates no more than the specified tolerance from the specified x-location.
@@ -177,7 +179,7 @@ interface ICustomElementMatchers {
    * @param x the expected x-location of PageElement
    * @param tolerance used to calculate the maximal allowed deviation from the expected x-location
    */
-  toHaveX(x: number, tolerance?: number): boolean
+  toHaveX(x: number, tolerance?: number): boolean;
   /**
    * Checks if - currently - the y-location of PageElement matches the specified y-location or if PageElement's
    * y-location deviates no more than the specified tolerance from the specified y-location.
@@ -185,7 +187,7 @@ interface ICustomElementMatchers {
    * @param y the expected y-location of PageElement
    * @param tolerance used to calculate the maximal allowed deviation from the expected y-location
    */
-  toHaveY(y: number, tolerance?: number): boolean
+  toHaveY(y: number, tolerance?: number): boolean;
   /**
    * Checks if - currently - the size of PageElement matches the specified size or if PageElement's size deviates no
    * more than the specified tolerances from the specified size.
@@ -195,8 +197,8 @@ interface ICustomElementMatchers {
    */
   toHaveSize(
     size: Workflo.ISize,
-    tolerances?: Partial<Workflo.ISize>
-  ): boolean
+    tolerances?: Partial<Workflo.ISize>,
+  ): boolean;
   /**
    * Checks if - currently - the width of PageElement matches the specified width or if PageElement's width deviates no
    * more than the specified tolerance from the specified width.
@@ -204,15 +206,15 @@ interface ICustomElementMatchers {
    * @param width the expected width of PageElement
    * @param tolerance used to calculate the maximal allowed deviation from the expected width
    */
-  toHaveWidth(width: number, tolerance?: number): boolean,
+  toHaveWidth(width: number, tolerance?: number): boolean;
   /**
-   * Checks if - currently - the height of PageElement matches the specified height or if PageElement's height deviates no
-   * more than the specified tolerance from the specified height.
+   * Checks if - currently - the height of PageElement matches the specified height or if PageElement's height deviates
+   * no more than the specified tolerance from the specified height.
    *
    * @param height the expected height of PageElement
    * @param tolerance used to calculate the maximal allowed deviation from the expected height
    */
-  toHaveHeight(height: number, tolerance?: number): boolean,
+  toHaveHeight(height: number, tolerance?: number): boolean;
 
   /**
    * Checks if the PageElement eventually exists within a specific timeout.
@@ -221,7 +223,7 @@ interface ICustomElementMatchers {
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
-  toEventuallyExist(opts?: Workflo.ITimeout): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout): boolean;
   /**
    * Checks if the PageElement eventually becomes visible within a specific timeout.
    *
@@ -229,7 +231,7 @@ interface ICustomElementMatchers {
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
-  toEventuallyBeVisible(opts?: Workflo.ITimeout): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout): boolean;
   /**
    * Checks if the PageElement eventually becomes enabled within a specific timeout.
    *
@@ -237,7 +239,7 @@ interface ICustomElementMatchers {
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
-  toEventuallyBeEnabled(opts?: Workflo.ITimeout): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout): boolean;
   /**
    * Checks if the PageElement eventually becomes selected within a specific timeout.
    *
@@ -245,7 +247,7 @@ interface ICustomElementMatchers {
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
-  toEventuallyBeSelected(opts?: Workflo.ITimeout): boolean
+  toEventuallyBeSelected(opts?: Workflo.ITimeout): boolean;
   /**
    * Checks if the PageElement eventually becomes checked within a specific timeout.
    *
@@ -255,65 +257,71 @@ interface ICustomElementMatchers {
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyBeChecked(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyBeChecked(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually has the specified text within a specific timeout.
    *
    * @param text the text which the PageElement is supposed to have
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveText(text: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveText(text: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually has any text within a specific timeout.
    *
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually contains the specified text within a specific timeout.
    *
    * @param text the text which the PageElement is supposed to contain
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyContainText(text: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainText(text: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually has the specified HTML within a specific timeout.
    *
    * @param html the HTML which the PageElement is supposed to have
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually has any HTML within a specific timeout.
    *
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAnyHTML(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyHTML(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually contains the specified HTML within a specific timeout.
    *
    * @param html the HTML which the PageElement is supposed to contain
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyContainHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainHTML(html: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually has the specified direct text within a specific timeout.
    *
@@ -321,24 +329,26 @@ interface ICustomElementMatchers {
    * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the direct text which the PageElement is supposed to have
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually has any direct text within a specific timeout.
    *
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
    *
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the PageElement eventually contains the specified direct text within a specific timeout.
    *
@@ -346,117 +356,128 @@ interface ICustomElementMatchers {
    * It does not include any text of the HTML element's nested children HTML elements.
    *
    * @param directText the direct text which the PageElement is supposed to contain
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyContainDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainDirectText(directText: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the specified HTML attribute of PageElement eventually has the expected value within a specific timeout.
    *
    * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
    * is expected to have
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the HTML attribute with the specified attributeName of PageElement eventually has any value within a
    * specific timeout.
    *
    * @param attributeName the specified attributeName of an HTML attribute of PageElement which is supposed to have any
    * value
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the specified HTML attribute of PageElement eventually contains the expected value within a specific
    * timeout.
    *
    * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
    * is expected to contain
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'class' HTML attribute of PageElement eventually has the specified className within a specific
    * timeout.
    *
    * @param className the className which the 'class' HTML attribute of PageElement is supposed to have
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveClass(className: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'class' HTML attribute of PageElement eventually has any className within a specific timeout.
    *
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAnyClass(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyClass(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'class' HTML attribute of PageElement eventually contains the specified className within a specific
    * timeout.
    *
    * @param className the className which the 'class' HTML attribute of PageElement is supposed to contain
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyContainClass(className: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainClass(className: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'id' HTML attribute of PageElement eventually has the specified value within a specific timeout.
    *
    * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveId(id: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveId(id: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'id' HTML attribute of PageElement eventually has any value within a specific timeout.
    *
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAnyId(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyId(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'id' HTML attribute of PageElement eventually contains the specified value within a specific timeout.
    *
    * @param id the value which the 'id' HTML attribute of PageElement is supposed to contain
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyContainId(id: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainId(id: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'name' HTML attribute of PageElement eventually has the specified value within a specific timeout.
    *
    * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveName(name: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveName(name: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'name' HTML attribute of PageElement eventually has any value within a specific timeout.
    *
@@ -466,7 +487,7 @@ interface ICustomElementMatchers {
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveAnyName(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyName(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the 'name' HTML attribute of PageElement eventually contains the specified value within a specific
    * timeout.
@@ -478,22 +499,22 @@ interface ICustomElementMatchers {
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyContainName(name: string, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainName(name: string, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if - eventually within a specific timeout - the location of PageElement matches the specified coordinates or
    * if its location deviates no more than the specified tolerances from the specified coordinates.
    *
    * @param coordinates the expected coordinates of PageElement
-   * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-   * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+   * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to check it.
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
   toEventuallyHaveLocation(
     coordinates: Workflo.ICoordinates,
-    opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval
-  ): boolean
+    opts?: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval,
+  ): boolean;
   /**
    * Checks if - eventually within a specific timeout - the x-location of PageElement matches the specified x-location
    * or if PageElement's x-location deviates no more than the specified tolerance from the specified x-location.
@@ -505,7 +526,7 @@ interface ICustomElementMatchers {
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveX(x: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if - eventually within a specific timeout - the y-location of PageElement matches the specified y-location
    * or if PageElement's y-location deviates no more than the specified tolerance from the specified y-location.
@@ -517,7 +538,7 @@ interface ICustomElementMatchers {
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveY(y: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if - eventually within a specific timeout - the size of PageElement matches the specified size or if
    * PageElement's size deviates no more than the specified tolerances from the specified size.
@@ -531,8 +552,8 @@ interface ICustomElementMatchers {
    */
   toEventuallyHaveSize(
     size: Workflo.ISize,
-    opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.ITimeoutInterval
-  ): boolean
+    opts?: { tolerances?: Partial<Workflo.ISize> } & Workflo.ITimeoutInterval,
+  ): boolean;
   /**
    * Checks if - eventually within a specific timeout - the width of PageElement matches the specified width or if
    * PageElement's width deviates no more than the specified tolerance from the specified width.
@@ -544,7 +565,7 @@ interface ICustomElementMatchers {
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean,
+  toEventuallyHaveWidth(width: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if - eventually within a specific timeout - the height of PageElement matches the specified height or if
    * PageElement's height deviates no more than the specified tolerance from the specified height.
@@ -556,7 +577,7 @@ interface ICustomElementMatchers {
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
-  toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveHeight(height: number, opts?: {tolerance?: number} & Workflo.ITimeoutInterval): boolean;
 }
 
 /**
@@ -568,7 +589,7 @@ interface ICustomListMatchers {
   /**
    * Checks if the PageElementList currently is empty.
    */
-  toBeEmpty(): boolean
+  toBeEmpty(): boolean;
   /**
    * Checks if the length of the PageElementList currently has/not has/is less or is greater than the specified length.
    *
@@ -576,16 +597,17 @@ interface ICustomListMatchers {
    * @param opts A comparator that defines how to compare the actual length and the expected length of the list
    * (equals, not equals, less than, greater than).
    */
-  toHaveLength(length: number, opts?: Workflo.Comparator): boolean
+  toHaveLength(length: number, opts?: Workflo.Comparator): boolean;
   /**
    * Checks if the PageElementList eventually is empty within a specific timeout.
    *
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyBeEmpty(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyBeEmpty(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the length of the PageElementList eventually has/not has/is less or is greater than the specified length
    * within a specific timeout.
@@ -598,45 +620,45 @@ interface ICustomListMatchers {
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean
+  toEventuallyHaveLength(length: number, opts?: IPageElementListWaitLengthParams): boolean;
 
   /**
    * Checks if at least one of the PageElements managed by PageElementList currently exists.
    *
    * @param filterMask If set to `false`, the existence check will be skipped and the matcher will return true.
    */
-  toExist(filterMask?: boolean): boolean
+  toExist(filterMask?: boolean): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList are currently visible.
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toBeVisible(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  toBeVisible(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList are currently enabled.
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toBeEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  toBeEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList currently have the expected text.
    *
    * @param text A single value (used for all managed PageElements) or an array of values with the expected text(s).
    */
-  toHaveText(text: string | string[]): boolean
+  toHaveText(text: string | string[]): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList currently have any text.
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toHaveAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  toHaveAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList currently contain the expected text.
    *
    * @param text A single value (used for all managed PageElements) or an array of values with the expected contained
    * text(s).
    */
-  toContainText(text: string | string[]): boolean
+  toContainText(text: string | string[]): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList currently have the expected direct text.
    *
@@ -646,7 +668,7 @@ interface ICustomListMatchers {
    * @param directText A single value (used for all managed PageElements) or an array of values with the expected direct
    * text(s).
    */
-  toHaveDirectText(directText: string | string[]): boolean
+  toHaveDirectText(directText: string | string[]): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList currently have any direc text.
    *
@@ -655,7 +677,7 @@ interface ICustomListMatchers {
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toHaveAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  toHaveAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList currently contain the expected direct text.
    *
@@ -665,7 +687,7 @@ interface ICustomListMatchers {
    * @param directText A single value (used for all managed PageElements) or an array of values with the expected
    * contained direct text(s).
    */
-  toContainDirectText(directText: string | string[]): boolean
+  toContainDirectText(directText: string | string[]): boolean;
 
   /**
    * Checks if at least one of the PageElements managed by PageElementList eventually exists within a specific timeout.
@@ -676,7 +698,7 @@ interface ICustomListMatchers {
    *
    * If no `timeout` is specified, PageElementList's default timeout is used.
    */
-  toEventuallyExist(opts?: Workflo.ITimeout & {filterMask?: boolean}): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout & {filterMask?: boolean}): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually become visible within a specific timeout.
    *
@@ -685,7 +707,7 @@ interface ICustomListMatchers {
    *
    * If no `timeout` is specified, PageElementList's default timeout is used.
    */
-  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually become enabled within a specific timeout.
    *
@@ -694,7 +716,7 @@ interface ICustomListMatchers {
    *
    * If no `timeout` is specified, PageElementList's default timeout is used.
    */
-  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually have the expected text within a specific
    * timeout.
@@ -706,7 +728,7 @@ interface ICustomListMatchers {
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyHaveText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually have any text within a specific timeout.
    *
@@ -716,7 +738,7 @@ interface ICustomListMatchers {
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually contain the expected text within a specific
    * timeout.
@@ -729,7 +751,7 @@ interface ICustomListMatchers {
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyContainText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainText(text: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually have the expected direct text within a
    * specific timeout.
@@ -745,7 +767,7 @@ interface ICustomListMatchers {
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyHaveDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually have any direct text within a specific
    * timeout.
@@ -759,7 +781,7 @@ interface ICustomListMatchers {
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementList eventually contain the expected direct text within a
    * specific timeout.
@@ -775,7 +797,7 @@ interface ICustomListMatchers {
    * If no `timeout` is specified, PageElementList's default timeout is used.
    * If no `interval` is specified, PageElementList's default interval is used.
    */
-  toEventuallyContainDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainDirectText(directText: string | string[], opts?: Workflo.ITimeoutInterval): boolean;
 }
 
 /**
@@ -791,38 +813,38 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toExist(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toExist(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap are currently visible.
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toBeVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toBeVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap are currently enabled.
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toBeEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toBeEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap currently have the expected text.
    *
    * @param text An object with the names of the corresponding PageElements as keys and the expected texts as values.
    */
-  toHaveText(text: Partial<Record<K, string>>): boolean
+  toHaveText(text: Partial<Record<K, string>>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap currently have any text.
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toHaveAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toHaveAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap currently contain the expected text.
    *
    * @param text An object with the names of the corresponding PageElements as keys and the expected contained texts as
    * values.
    */
-  toContainText(text: Partial<Record<K, string>>): boolean
+  toContainText(text: Partial<Record<K, string>>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap currently have the expected direct text.
    *
@@ -832,13 +854,13 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * @param directText An object with the names of the corresponding PageElements as keys and the expected direct texts
    * as values.
    */
-  toHaveDirectText(directText: Partial<Record<K, string>>): boolean
+  toHaveDirectText(directText: Partial<Record<K, string>>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap currently have any direct text.
    *
    * @param filterMask Can be used to skip the check for some or all managed PageElements.
    */
-  toHaveAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toHaveAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap currently contain the expected direct text.
    *
@@ -848,7 +870,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * @param directText An object with the names of the corresponding PageElements as keys and the expected contained
    * direct texts as values.
    */
-  toContainDirectText(directText: Partial<Record<K, string>>): boolean
+  toContainDirectText(directText: Partial<Record<K, string>>): boolean;
 
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually exist within a specific timeout.
@@ -858,7 +880,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    *
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    */
-  toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually become visible within a specific timeout.
    *
@@ -867,7 +889,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    *
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    */
-  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually become enabled within a specific timeout.
    *
@@ -876,7 +898,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    *
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    */
-  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually have the expected text within a specific
    * timeout.
@@ -888,7 +910,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    * If no `interval` is specified, PageElementMap's default interval is used.
    */
-  toEventuallyHaveText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually have any text within a specific
    * timeout.
@@ -899,7 +921,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    * If no `interval` is specified, PageElementMap's default interval is used.
    */
-  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually contain the expected text within a specific
    * timeout.
@@ -912,7 +934,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    * If no `interval` is specified, PageElementMap's default interval is used.
    */
-  toEventuallyContainText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainText(text:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually have the expected direct text within a
    * specific timeout.
@@ -925,7 +947,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    * If no `interval` is specified, PageElementMap's default interval is used.
    */
-  toEventuallyHaveDirectText(directText:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveDirectText(directText:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually have any direct text within a specific
    * timeout.
@@ -936,7 +958,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    * If no `interval` is specified, PageElementMap's default interval is used.
    */
-  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
   /**
    * Checks if all of the PageElements managed by PageElementMap eventually contain the expected direct text within a
    * specific timeout.
@@ -949,7 +971,7 @@ interface ICustomMapMatchers<K extends string | number | symbol> {
    * If no `timeout` is specified, PageElementMap's default timeout is used.
    * If no `interval` is specified, PageElementMap's default interval is used.
    */
-  toEventuallyContainDirectText(directText:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainDirectText(directText:Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval): boolean;
 }
 
 /**
@@ -966,41 +988,41 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
    * PageElementGroup.
    */
-  toExist(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toExist(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup are currently visible.
    *
    * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
    * PageElementGroup.
    */
-  toBeVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toBeVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup are currently enabled.
    *
    * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
    * PageElementGroup.
    */
-  toBeEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toBeEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by PageElementGroup currently have the expected text.
    *
    * @param text An object with the names of the corresponding PageNodes as keys and the expected texts as values.
    */
-  toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean
+  toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by PageElementGroup currently have any text.
    *
    * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
    * PageElementGroup.
    */
-  toHaveAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toHaveAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by PageElementGroup currently contain the expected text.
    *
    * @param text An object with the names of the corresponding PageNodes as keys and the expected contained texts as
    * values.
    */
-  toContainText(text: Workflo.PageNode.ExtractText<Content>): boolean
+  toContainText(text: Workflo.PageNode.ExtractText<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by PageElementGroup currently have the expected direct text.
    *
@@ -1010,7 +1032,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * @param directText An object with the names of the corresponding PageNodes as keys and the expected direct texts as
    * values.
    */
-  toHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean
+  toHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by PageElementGroup currently have any direct text.
    *
@@ -1020,7 +1042,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
    * PageElementGroup.
    */
-  toHaveAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toHaveAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by PageElementGroup currently contain the expected direct text.
    *
@@ -1030,7 +1052,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * @param directText An object with the names of the corresponding PageNodes as keys and the expected contained direct
    * texts as values.
    */
-  toContainDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean
+  toContainDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean;
 
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually exist within a specific
@@ -1041,7 +1063,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    *
    * If no `timeout` is specified, PageElementGroup's default timeout is used.
    */
-  toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyExist(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually become visible within a
    * specific timeout.
@@ -1051,7 +1073,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    *
    * If no `timeout` is specified, PageElementGroup's default timeout is used.
    */
-  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyBeVisible(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually become enabled within a
    * specific timeout.
@@ -1061,7 +1083,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    *
    * If no `timeout` is specified, PageElementGroup's default timeout is used.
    */
-  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyBeEnabled(opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have the expected text
    * within a specific timeout.
@@ -1073,7 +1095,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * If no `timeout` is specified, PageElementGroup's default timeout is used.
    * If no `interval` is specified, PageElementGroup's default interval is used.
    */
-  toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have any text within a
    * specific timeout.
@@ -1084,7 +1106,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * If no `timeout` is specified, PageElementGroup's default timeout is used.
    * If no `interval` is specified, PageElementGroup's default interval is used.
    */
-  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyHaveAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually contain the expected text
    * within a specific timeout.
@@ -1097,7 +1119,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * If no `timeout` is specified, PageElementGroup's default timeout is used.
    * If no `interval` is specified, PageElementGroup's default interval is used.
    */
-  toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have the expected direct
    * text within a specific timeout.
@@ -1114,7 +1136,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * If no `interval` is specified, PageElementGroup's default interval is used.
    */
   toEventuallyHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval):
-    boolean
+    boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have any direct text
    * within a specific timeout.
@@ -1128,7 +1150,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * If no `timeout` is specified, PageElementGroup's default timeout is used.
    * If no `interval` is specified, PageElementGroup's default interval is used.
    */
-  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyHaveAnyDirectText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of PageElementGroup eventually contain the expected
    * direct text within a specific timeout.
@@ -1145,7 +1167,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
    * If no `interval` is specified, PageElementGroup's default interval is used.
    */
   toEventuallyContainDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval):
-    boolean
+    boolean;
 }
 
 /**
@@ -1161,17 +1183,17 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
    *
    * @param value the value which the ValuePageElement is supposed to have
    */
-  toHaveValue(value: ValueType): boolean
+  toHaveValue(value: ValueType): boolean;
   /**
    * Checks if the ValuePageElement currently has any value.
    */
-  toHaveAnyValue(): boolean
+  toHaveAnyValue(): boolean;
   /**
    * Checks if the ValuePageElement currently contains the specified value.
    *
    * @param value the value which the ValuePageElement is supposed to contain
    */
-  toContainValue(value: ValueType): boolean
+  toContainValue(value: ValueType): boolean;
 
   /**
    * Checks if the ValuePageElement eventually has the specified value within a specific timeout.
@@ -1183,26 +1205,28 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
    * If no `timeout` is specified, ValuePageElement's default timeout is used.
    * If no `interval` is specified, ValuePageElement's default interval is used.
    */
-  toEventuallyHaveValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the ValuePageElement eventually has any value within a specific timeout.
    *
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, ValuePageElement's default timeout is used.
    * If no `interval` is specified, ValuePageElement's default interval is used.
    */
-  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if the ValuePageElement eventually contains the specified value within a specific timeout.
    *
    * @param value the value which the ValuePageElement is supposed to contain
-   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+   * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+   * check it.
    *
    * If no `timeout` is specified, ValuePageElement's default timeout is used.
    * If no `interval` is specified, ValuePageElementList's default interval is used.
    */
-  toEventuallyContainValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainValue(value: ValueType, opts?: Workflo.ITimeoutInterval): boolean;
 }
 
 /**
@@ -1218,20 +1242,20 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
    *
    * @param value A single expected value (used for all managed PageElements) or an array of expected values.
    */
-  toHaveValue(value: ValueType | ValueType[]): boolean
+  toHaveValue(value: ValueType | ValueType[]): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementList currently have any value.
    *
    * @param filterMask Can be used to skip the check for some or all managed ValuePageElements.
    */
-  toHaveAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean
+  toHaveAnyValue(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementList currently contain the expected value.
    *
    * @param value A single expected contained value (used for all managed ValuePageElements) or an array of expected
    * contained values.
    */
-  toContainValue(value: ValueType | ValueType[]): boolean
+  toContainValue(value: ValueType | ValueType[]): boolean;
 
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementList eventually have the expected value within a
@@ -1244,7 +1268,7 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
    * If no `timeout` is specified, ValuePageElementList's default timeout is used.
    * If no `interval` is specified, ValuePageElementList's default interval is used.
    */
-  toEventuallyHaveValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementList eventually have any value within a specific
    * timeout.
@@ -1255,7 +1279,7 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
    * If no `timeout` is specified, ValuePageElementList's default timeout is used.
    * If no `interval` is specified, ValuePageElementList's default interval is used.
    */
-  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementList eventually have the expected value within a
    * specific timeout.
@@ -1268,7 +1292,7 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
    * If no `timeout` is specified, ValuePageElementList's default timeout is used.
    * If no `interval` is specified, ValuePageElementList's default interval is used.
    */
-  toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval): boolean;
 }
 
 /**
@@ -1289,20 +1313,20 @@ interface ICustomValueMapMatchers<
    * @param value An object with the names of the corresponding ValuePageElements as keys and the expected values as
    * values.
    */
-  toHaveValue(value: Partial<Record<K, ValueType>>): boolean
+  toHaveValue(value: Partial<Record<K, ValueType>>): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementMap currently have any value.
    *
    * @param filterMask Can be used to skip the check for some or all managed ValuePageElements.
    */
-  toHaveAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean
+  toHaveAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementMap currently contain the expected value.
    *
    * @param value An object with the names of the corresponding ValuePageElements as keys and the expected contained
    * values as values.
    */
-  toContainValue(value: Partial<Record<K, ValueType>>): boolean
+  toContainValue(value: Partial<Record<K, ValueType>>): boolean;
 
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementMap eventually have the expected value within a
@@ -1316,7 +1340,7 @@ interface ICustomValueMapMatchers<
    * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
    * If no `interval` is specified, ValuePageElementMap's default interval is used.
    */
-  toEventuallyHaveValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementMap eventually have any value within a specific
    * timeout.
@@ -1327,7 +1351,7 @@ interface ICustomValueMapMatchers<
    * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
    * If no `interval` is specified, ValuePageElementMap's default interval is used.
    */
-  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
   /**
    * Checks if all of the ValuePageElements managed by ValuePageElementMap eventually contain the expected value within
    * a specific timeout.
@@ -1340,7 +1364,7 @@ interface ICustomValueMapMatchers<
    * If no `timeout` is specified, ValuePageElementMap's default timeout is used.
    * If no `interval` is specified, ValuePageElementMap's default interval is used.
    */
-  toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainValue(value: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval): boolean;
 }
 
 /**
@@ -1357,21 +1381,21 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
    *
    * @param value An object with the names of the corresponding PageNodes as keys and the expected values as values.
    */
-  toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
+  toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by ValuePageElementGroup currently have any value.
    *
    * @param filterMask Can be used to skip the check for some or all PageNodes defined within the content of
    * ValuePageElementGroup.
    */
-  toHaveAnyValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean
+  toHaveAnyValue(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes managed by ValuePageElementGroup currently contain the expected value.
    *
    * @param value An object with the names of the corresponding PageNodes as keys and the expected contained values as
    * values.
    */
-  toContainValue(value: Workflo.PageNode.ExtractValue<Content>): boolean
+  toContainValue(value: Workflo.PageNode.ExtractValue<Content>): boolean;
 
   /**
    * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually have the expected
@@ -1384,7 +1408,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
    * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
    * If no `interval` is specified, ValuePageElementGroup's default interval is used.
    */
-  toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
    /**
    * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually have any value within
    * a specific timeout.
@@ -1395,7 +1419,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
    * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
    * If no `interval` is specified, ValuePageElementGroup's default interval is used.
    */
-  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean
+  toEventuallyHaveAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
   /**
    * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually contain the expected
    * value within a specific timeout.
@@ -1408,7 +1432,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
    * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
    * If no `interval` is specified, ValuePageElementGroup's default interval is used.
    */
-  toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean
+  toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
 }
 
 /**
@@ -1418,7 +1442,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
  * PageElement.
  */
 interface IElementMatchers extends ICustomElementMatchers {
-  not: ICustomElementMatchers
+  not: ICustomElementMatchers;
 }
 
 /**
@@ -1428,7 +1452,7 @@ interface IElementMatchers extends ICustomElementMatchers {
  * PageElementList.
  */
 interface IListMatchers extends ICustomListMatchers {
-  not: ICustomListMatchers
+  not: ICustomListMatchers;
 }
 
 /**
@@ -1440,7 +1464,7 @@ interface IListMatchers extends ICustomListMatchers {
  * @template K the names of the elements stored in the map (the map's keys) as string literals
  */
 interface IMapMatchers<K extends string | number | symbol> extends ICustomMapMatchers<K> {
-  not: ICustomMapMatchers<K>
+  not: ICustomMapMatchers<K>;
 }
 
 /**
@@ -1454,7 +1478,7 @@ interface IMapMatchers<K extends string | number | symbol> extends ICustomMapMat
 interface IGroupMatchers<
   Content extends {[key: string]: Workflo.PageNode.INode}
 > extends ICustomGroupMatchers<Content> {
-  not: ICustomGroupMatchers<Content>
+  not: ICustomGroupMatchers<Content>;
 }
 
 /**
@@ -1466,7 +1490,7 @@ interface IGroupMatchers<
  * @template ValueType the type of the values handled by this elements' xxxValue functions
  */
 interface IValueElementMatchers<ValueType> extends ICustomValueElementMatchers<ValueType> {
-  not: ICustomValueElementMatchers<ValueType>
+  not: ICustomValueElementMatchers<ValueType>;
 }
 
 /**
@@ -1478,7 +1502,7 @@ interface IValueElementMatchers<ValueType> extends ICustomValueElementMatchers<V
  * @template ValueType the type of the values handled by the list's elements' xxxValue functions
  */
 interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<Workflo.ArrayElement<ValueType>> {
-  not: ICustomValueListMatchers<Workflo.ArrayElement<ValueType>>
+  not: ICustomValueListMatchers<Workflo.ArrayElement<ValueType>>;
 }
 
 /**
@@ -1492,7 +1516,7 @@ interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<Workflo
  */
 interface IValueMapMatchers<K extends string | number | symbol, ValueType>
 extends ICustomValueMapMatchers<K, ValueType> {
-  not: ICustomValueMapMatchers<K, ValueType>
+  not: ICustomValueMapMatchers<K, ValueType>;
 }
 
 /**
@@ -1505,7 +1529,7 @@ extends ICustomValueMapMatchers<K, ValueType> {
  */
 interface IValueGroupMatchers<Content extends Workflo.PageNode.GroupContent>
 extends ICustomValueGroupMatchers<Content> {
-  not: ICustomValueGroupMatchers<Content>
+  not: ICustomValueGroupMatchers<Content>;
 }
 
 declare global {
@@ -1530,7 +1554,7 @@ declare global {
   >(element: PageElementType): (typeof element) extends (infer ElementType) ?
     ElementType extends pageObjects.elements.ValuePageElement<any, ValueType> ?
     IValueElementMatchers<ReturnType<ElementType['getValue']>> :
-    IElementMatchers : IElementMatchers
+    IElementMatchers : IElementMatchers;
 
   /**
    * This function provides expectation matchers for PageElementLists or ValuePageElementLists.
@@ -1581,7 +1605,7 @@ declare global {
       any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
     > ?
     IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
-    IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>
+    IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>;
 
   /**
    * This function provides expectation matchers for PageElementGroups or ValuePageElementGroups.
@@ -1601,14 +1625,14 @@ declare global {
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
   >(group: PageElementGroupType): (typeof group) extends (infer GroupType) ?
     GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ?
-    IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>
+    IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
 
   namespace WebdriverIO {
     interface Client<T> {
       /**
        * Allows for any type of promise to be resolved in order to continue synchronous code execution.
        */
-      resolvePromise <Type> (promise: Promise<Type>): Type
+      resolvePromise <Type> (promise: Promise<Type>): Type;
     }
   }
 
@@ -1617,21 +1641,23 @@ declare global {
     /**
      * Makes all properties of Type optional, except for those whose keys are passed as K.
      */
-    type PartialRequire<Type, K extends keyof Type> = Partial<Type> & Pick<Type, K>
+    type PartialRequire<Type, K extends keyof Type> = Partial<Type> & Pick<Type, K>;
 
     /**
      * Type is the original object.
      *
      * K represents the original object's property keys to be picked from the original object unaltered.
      *
-     * KPartial represents the original object's property keys to be picked from the original object and turned into optional properties.
+     * KPartial represents the original object's property keys to be picked from the original object and turned into
+     * optional properties.
      */
-    type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>
+    type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> =
+      Pick<Type, K> & Partial<Pick<Type, KPartial>>;
 
     /**
      * Omits all properties from T whose key names are in K.
      */
-    type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+    type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
     /**
      * Returns the keys of all properties of T whose values extend U.
@@ -1655,19 +1681,19 @@ declare global {
     /**
      * Returns all properties of T whose values are not never.
      */
-    type WithoutNever<T> = Pick<T, KeysWithoutNever<T>>
+    type WithoutNever<T> = Pick<T, KeysWithoutNever<T>>;
 
     /**
      * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
      * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
      */
-    type StripNever<T> = T // Pick<T, KeysWithoutNever<T>> // Omit<T, FilteredKeys<T, never>> // T
+    type StripNever<T> = T; // Pick<T, KeysWithoutNever<T>> // Omit<T, FilteredKeys<T, never>> // T
 
     /**
      * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
      * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
      */
-    type StripNeverByReturnType<T> = T // Omit<T, FilteredKeysByReturnType<T, never>>
+    type StripNeverByReturnType<T> = T; // Omit<T, FilteredKeysByReturnType<T, never>>
 
     /**
      * If ArrayType is an array, returns the type of an array element.
@@ -1691,27 +1717,28 @@ declare global {
      * If ArrayType is an array, returns the type of an array element or the type of the array.
      * If ArrayType is not an array, returns ArrayType.
      */
-    type TryArrayOrElement<ArrayType> = ArrayType extends (infer ElementType)[] ? ElementType | ElementType[] : ArrayType;
+    type TryArrayOrElement<ArrayType> =
+      ArrayType extends (infer ElementType)[] ? ElementType | ElementType[] : ArrayType;
 
     /**
      * The type of a webdriverio element returned by `browser.element` or `browser.$`.
      *
      * @see http://v4.webdriver.io/api/protocol/element.html
      */
-    type WdioElement = Client<RawResult<Element>> & RawResult<Element>
+    type WdioElement = Client<RawResult<Element>> & RawResult<Element>;
 
     /**
      * The type of webdriverio elements returned by `browser.elements` or `browser.$$`.
      *
      * @see http://v4.webdriver.io/api/protocol/elements.html
      */
-    type WdioElements = Client<RawResult<Element[]>> & RawResult<Element[]>
+    type WdioElements = Client<RawResult<Element[]>> & RawResult<Element[]>;
 
     /**
      * @ignore
      */
     interface IJSError {
-      notFound: string[]
+      notFound: string[];
     }
 
     /**
@@ -1721,11 +1748,11 @@ declare global {
       /**
        * X-Location of the upper left corner of a PageElement on the page in pixels
        */
-      x: number,
+      x: number;
       /**
        * Y-Location of the upper left corner of a PageElement on the page in pixels
        */
-      y: number
+      y: number;
     }
 
     /**
@@ -1735,11 +1762,11 @@ declare global {
       /**
        * Width of a PageElement in pixels
        */
-      width: number,
+      width: number;
       /**
        * Height of a PageElement in pixels
        */
-      height: number
+      height: number;
     }
 
     /**
@@ -1749,11 +1776,11 @@ declare global {
       /**
        * Lower tolerances bound used for comparisons of numbers.
        */
-      lower: number,
+      lower: number;
       /**
        * Upper tolerances bound used for comparisons of numbers.
        */
-      upper: number
+      upper: number;
     }
 
     /**
@@ -1763,27 +1790,27 @@ declare global {
       /**
        * Top location of the scrolled element in pixels.
        */
-      elemTop: number
+      elemTop: number;
       /**
        * Left location of the scrolled element in pixels.
        */
-      elemLeft: number
+      elemLeft: number;
       /**
        * Top location of the scroll container in pixels.
        */
-      containerTop: number
+      containerTop: number;
       /**
        * Left location of the scrolled container in pixels.
        */
-      containerLeft: number
+      containerLeft: number;
       /**
        * Value of the HTML scrollTop property of the scroll container in pixels.
        */
-      scrollTop: number
+      scrollTop: number;
       /**
        * Value of the HTML scrollLeft property of the scroll container in pixels.
        */
-      scrollLeft: number
+      scrollLeft: number;
     }
 
     /**
@@ -1795,28 +1822,28 @@ declare global {
        * The XPath selector of the scroll container.
        * If undefined, the closest scrollable parent container is determined automatically.
        */
-      containerSelector?: string,
+      containerSelector?: string;
       /**
        * The directions for which scrolling should be performed.
        * Set values to true to enable scrolling into the given direction.
        */
       directions: {
         x?: boolean,
-        y?: boolean
-      },
+        y?: boolean,
+      };
       /**
        * Offsets that will be added to the final scroll position of the scrolled container.
        */
       offsets?: {
         x?: number,
-        y?: number
-      },
+        y?: number,
+      };
       /**
        * If no containerSelector is set explicitly, and therefore the scroll container is determined automatically,
        * setting this property to true will also detect scroll containers whose overflow property is set to "hidden".
        * Otherwise, scroll containers with an overflow property set to "hidden" will be ignored.
        */
-      closestContainerIncludesHidden?: boolean
+      closestContainerIncludesHidden?: boolean;
     }
 
     /**
@@ -1830,20 +1857,20 @@ declare global {
        * This can be useful, for example, if an HTML element does not react to clicks until a certain async code is
        * finished executing.
        */
-      postCondition?: () => boolean,
+      postCondition?: () => boolean;
       /**
        * Before clicking on PageElement, the PageElement will be scrolled into the viewport.
        *
        * By defining customScroll, PageElement's default custom scrolling behavior can be overwritten.
        */
-      customScroll?: Workflo.IScrollParams
+      customScroll?: Workflo.IScrollParams;
     }
 
     /**
      * Allows you to build an recursively nested object whose values are of type Type.
      */
     interface IRecObj<Type> {
-      [key: string] : Type | IRecObj<Type>
+      [key: string] : Type | IRecObj<Type>;
     }
 
     /**
@@ -1854,7 +1881,7 @@ declare global {
       /**
        * A timeout in milliseconds.
        */
-      timeout?: number,
+      timeout?: number;
     }
 
     /**
@@ -1866,7 +1893,7 @@ declare global {
       /**
        * An interval in milliseconds.
        */
-      interval?: number
+      interval?: number;
     }
 
     /**
@@ -1879,7 +1906,7 @@ declare global {
       /**
        * Set this flag to true to check for a condition NOT to be met.
        */
-      reverse?: boolean
+      reverse?: boolean;
     }
 
     /**
@@ -1907,11 +1934,11 @@ declare global {
       /**
        * The name of an HTML element's attribute.
        */
-      name: string,
+      name: string;
       /**
        * The value of an HTML element's attribute.
        */
-      value: string
+      value: string;
     }
 
     /**
@@ -1921,11 +1948,11 @@ declare global {
       /**
        * Type of the PageNode (usually its constructor name)
        */
-      pageNodeType: string,
+      pageNodeType: string;
       /**
        * An id to identify the PageNode.
        */
-      nodeId: string
+      nodeId: string;
     }
 
     /**
@@ -1938,13 +1965,13 @@ declare global {
        *
        * Intended for framework-internal usage only.
        */
-      __lastDiff: IDiff
+      __lastDiff: IDiff;
       /**
        * Sets the last differences of a PageNode's check state functions.
        *
        * Intended for framework-internal usage only.
        */
-      __setLastDiff: (diff: IDiff) => void
+      __setLastDiff: (diff: IDiff) => void;
     }
 
     /**
@@ -1953,7 +1980,7 @@ declare global {
      * messages.
      */
     interface IDiffTree {
-      [key: string]: IDiff
+      [key: string]: IDiff;
     }
 
     /**
@@ -1965,41 +1992,41 @@ declare global {
       /**
        * The constructor name of the PageNode.
        */
-      constructorName?: string,
+      constructorName?: string;
       /**
        * The actual value of a state check function.
        */
-      actual?: string,
+      actual?: string;
       /**
        * The expected value of a state check function.
        */
-      expected?: string,
+      expected?: string;
       /**
        * The selector of the PageNode.
        */
-      selector?: string,
+      selector?: string;
       /**
        * If the PageNode is a PageElementList, PageElementMap or a PageElementGroup,
        * the diffs of the PageElement's handled by PageNode are stored in tree.
        */
-      tree?: IDiffTree
+      tree?: IDiffTree;
       /**
        * timeout used to perform the last state check function in milliseconds
        */
-      timeout?: number
+      timeout?: number;
     }
 
     namespace Store {
-      type BaseKeys = "timeout" | "waitType"
-      type GroupPublicKeys = "timeout"
-      type GroupConstructorKeys = GroupPublicKeys | "content" | "store"
-      type ElementPublicKeys = BaseKeys | "customScroll"
-      type ListPublicKeys = BaseKeys | "disableCache" | "identifier"
-      type ListPublicPartialKeys = "elementOpts"
-      type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | "elementStoreFunc"
-      type MapPublicKeys = "identifier" | "timeout"
-      type MapPublicPartialKeys = "elementOpts"
-      type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc"
+      type BaseKeys = 'timeout' | 'waitType';
+      type GroupPublicKeys = 'timeout';
+      type GroupConstructorKeys = GroupPublicKeys | 'content' | 'store';
+      type ElementPublicKeys = BaseKeys | 'customScroll';
+      type ListPublicKeys = BaseKeys | 'disableCache' | 'identifier';
+      type ListPublicPartialKeys = 'elementOpts';
+      type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | 'elementStoreFunc';
+      type MapPublicKeys = 'identifier' | 'timeout';
+      type MapPublicPartialKeys = 'elementOpts';
+      type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | 'elementStoreFunc';
     }
 
     namespace PageNode {
@@ -2013,34 +2040,34 @@ declare global {
          *
          * Intended for framework-internal usage only.
          */
-        __getNodeId(): string
+        __getNodeId(): string;
         /**
          * Returns a JSON representation of the PageNode.
          */
-        toJSON(): IElementJSON
+        toJSON(): IElementJSON;
 
         /**
          * All functions defined inside currently, when invoked, will instantly check if a condition is met and return
          * false if the condition is not met.
          */
-        currently: {}
+        currently: {};
         /**
          * All functions defined inside wait, when invoked, will wait for a condition to be met and throw
          * an error if the condition is never met within a specified timeout.
          */
-        wait: {}
+        wait: {};
         /**
          * All functions defined inside eventually, when invoked, will wait for a condition to be met and return
          * false if the the condition is never met within a specified timeout.
          */
-        eventually: {}
+        eventually: {};
       }
 
       /**
        * The content of a PageElementGroup must be an object whose keys are arbitrary names of the PageNodes defined
        * within the content and whose values or the PageNodes themselves.
        */
-      type GroupContent = {[key: string] : Workflo.PageNode.INode}
+      type GroupContent = {[key: string] : Workflo.PageNode.INode};
 
       /**
        * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
@@ -2050,7 +2077,7 @@ declare global {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getText']>> :
         never;
-      }
+      };
 
       /**
        * Extracts the return value types of the `currently.getExists` functions of all PageNodes defined within a
@@ -2060,7 +2087,7 @@ declare global {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayElement<ReturnType<T[P]['currently']['getExists']>> :
         never;
-      }
+      };
 
       /**
        * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
@@ -2070,7 +2097,7 @@ declare global {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
         never;
-      }
+      };
 
       /**
        * This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.
@@ -2111,17 +2138,17 @@ declare global {
          * current value from the tested application's state
          */
         currently: IGetElement<TextType, BooleanType, FilterType> &
-          ICheckCurrently<TextType, BooleanType, FilterType>
+          ICheckCurrently<TextType, BooleanType, FilterType>;
         /**
          * defines an api for all functions of PageNode which wait for a condition to become true within a specified
          * timeout
          */
-        wait: ICheckWait<TextType, BooleanType, FilterType>
+        wait: ICheckWait<TextType, BooleanType, FilterType>;
         /**
-         * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
-         * timeout
+         * defines an api for all functions of PageNode which check if a condition eventually becomes true within a
+         * specified timeout
          */
-        eventually: ICheckEventually<TextType, BooleanType, FilterType>
+        eventually: ICheckEventually<TextType, BooleanType, FilterType>;
       }
 
       /**
@@ -2136,7 +2163,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getIsEnabled(filterMask?: FilterType): BooleanType
+        getIsEnabled(filterMask?: FilterType): BooleanType;
         /**
          * Returns the text of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2144,7 +2171,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getText(filterMask?: FilterType): TextType
+        getText(filterMask?: FilterType): TextType;
         /**
          * Returns the direct text of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2155,7 +2182,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getDirectText(filterMask?: FilterType): TextType
+        getDirectText(filterMask?: FilterType): TextType;
         /**
          * Returns the 'hasText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2164,7 +2191,7 @@ declare global {
          *
          * @param text the expected text used in the comparison which sets the 'hasText' status
          */
-        getHasText(text: TextType): BooleanType
+        getHasText(text: TextType): BooleanType;
         /**
          * Returns the 'hasAnyText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2174,7 +2201,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getHasAnyText(filterMask?: FilterType): BooleanType
+        getHasAnyText(filterMask?: FilterType): BooleanType;
         /**
          * Returns the 'containsText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2183,7 +2210,7 @@ declare global {
          *
          * @param text the expected text used in the comparison which sets the 'containsText' status
          */
-        getContainsText(text: TextType): BooleanType
+        getContainsText(text: TextType): BooleanType;
         /**
          * Returns the 'hasDirectText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2196,7 +2223,7 @@ declare global {
          *
          * @param text the expected direct text used in the comparison which sets the 'hasDirectText' status
          */
-        getHasDirectText(text: TextType): BooleanType
+        getHasDirectText(text: TextType): BooleanType;
         /**
          * Returns the 'hasAnyDirectText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2209,7 +2236,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getHasAnyDirectText(filterMask?: FilterType): BooleanType
+        getHasAnyDirectText(filterMask?: FilterType): BooleanType;
         /**
          * Returns the 'containsDirectText' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2222,7 +2249,7 @@ declare global {
          *
          * @param text the expected direct text used in the comparison which sets the 'containsDirectText' status
          */
-        getContainsDirectText(text: TextType): BooleanType
+        getContainsDirectText(text: TextType): BooleanType;
       }
 
       /**
@@ -2242,7 +2269,7 @@ declare global {
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
-        exists(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
+        exists(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to be visible.
@@ -2255,7 +2282,7 @@ declare global {
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
-        isVisible(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
+        isVisible(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to be enabled.
@@ -2268,7 +2295,7 @@ declare global {
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
-        isEnabled(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
+        isEnabled(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to have an actual text which equals the expected text.
@@ -2282,7 +2309,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        hasText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to have any text.
@@ -2295,7 +2322,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasAnyText(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
+        hasAnyText(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to have an actual text which contains the expected text.
@@ -2309,7 +2336,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        containsText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        containsText(text: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to have an actual direct text which equals the expected direct text.
@@ -2326,7 +2353,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        hasDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to have any direct text.
@@ -2342,7 +2369,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasAnyDirectText(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>
+        hasAnyDirectText(opts?: OptsType & {filterMask?: FilterType}): IElementNode<TextType, BooleanType, FilterType>;
         /**
          * Waits for a PageElement or for all PageElements managed by a PageElementList, PageElementMap or
          * PageElementGroup to have an actual direct text which contains the expected direct text.
@@ -2359,17 +2386,17 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>
+        containsDirectText(directText: TextType, opts?: OptsType): IElementNode<TextType, BooleanType, FilterType>;
 
         /**
          * returns the negated variants of ICheckWait's state check functions
          */
-        not: Omit<ICheckWait<TextType, BooleanType, FilterType, ITimeoutInterval>, 'not'>
+        not: Omit<ICheckWait<TextType, BooleanType, FilterType, ITimeoutInterval>, 'not'>;
       }
 
       /**
-       * Used by IElementNode to describe `currently` state check and state retrieval functions supported by PageElement,
-       * PageElementList, PageElementMap and PageElementGroup.
+       * Used by IElementNode to describe `currently` state check and state retrieval functions supported by
+       * PageElement, PageElementList, PageElementMap and PageElementGroup.
        */
       interface ICheckCurrently<TextType, BooleanType, FilterType> {
         /**
@@ -2379,7 +2406,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getExists(filterMask?: FilterType): BooleanType
+        getExists(filterMask?: FilterType): BooleanType;
         /**
          * Returns the current 'visible' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2387,7 +2414,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getIsVisible(filterMask?: FilterType): BooleanType
+        getIsVisible(filterMask?: FilterType): BooleanType;
         /**
          * Returns the current 'enabled' status of a PageElement or of the PageElements managed by a PageElementList,
          * PageElementMap or PageElementGroup.
@@ -2395,7 +2422,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getIsEnabled(filterMask?: FilterType): BooleanType
+        getIsEnabled(filterMask?: FilterType): BooleanType;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently exist.
@@ -2403,7 +2430,7 @@ declare global {
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
          * some or all managed PageElements
          */
-        exists(filterMask?: FilterType): boolean
+        exists(filterMask?: FilterType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently is visible.
@@ -2411,7 +2438,7 @@ declare global {
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
          * some or all managed PageElements
          */
-        isVisible(filterMask?: FilterType): boolean
+        isVisible(filterMask?: FilterType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently is enabled.
@@ -2419,14 +2446,14 @@ declare global {
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
          * some or all managed PageElements
          */
-        isEnabled(filterMask?: FilterType): boolean
+        isEnabled(filterMask?: FilterType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently have an actual text which equals the expected text.
          *
          * @param text the expected text which is supposed to equal the actual text
          */
-        hasText(text: TextType): boolean
+        hasText(text: TextType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently have any text.
@@ -2434,14 +2461,14 @@ declare global {
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
          * some or all managed PageElements
          */
-        hasAnyText(filterMask?: FilterType): boolean
+        hasAnyText(filterMask?: FilterType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently have an actual text which contains the expected text.
          *
          * @param text the expected text which is supposed to be contained in the actual text
          */
-        containsText(text: TextType): boolean
+        containsText(text: TextType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently have an actual direct text which equals the expected direct text.
@@ -2451,7 +2478,7 @@ declare global {
          *
          * @param directText the expected direct text which is supposed to equal the actual direct text
          */
-        hasDirectText(directText: TextType): boolean
+        hasDirectText(directText: TextType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently have any direct text.
@@ -2462,7 +2489,7 @@ declare global {
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
          * some or all managed PageElements
          */
-        hasAnyDirectText(filterMask?: FilterType): boolean
+        hasAnyDirectText(filterMask?: FilterType): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * currently have an actual direct text which contains the expected direct text.
@@ -2472,7 +2499,7 @@ declare global {
          *
          * @param directText the expected direct text which is supposed to be contained in the actual direct text
          */
-        containsDirectText(directText: TextType): boolean
+        containsDirectText(directText: TextType): boolean;
 
         /**
          * returns the negated variants of ICheckCurrently's state check functions
@@ -2480,7 +2507,7 @@ declare global {
         not: Omit<
           ICheckCurrently<TextType, BooleanType, FilterType>,
           'not' | 'getExists' | 'getIsVisible' | 'getIsEnabled'
-        >
+        >;
       }
 
       /**
@@ -2497,7 +2524,7 @@ declare global {
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
-        exists(opts?: ITimeout & {filterMask?: FilterType}): boolean
+        exists(opts?: ITimeout & {filterMask?: FilterType}): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually becomes visible within a specific timeout.
@@ -2507,7 +2534,7 @@ declare global {
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
-        isVisible(opts?: ITimeout & {filterMask?: FilterType}): boolean
+        isVisible(opts?: ITimeout & {filterMask?: FilterType}): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually becomes enabled within a specific timeout.
@@ -2517,7 +2544,7 @@ declare global {
          *
          * If no `timeout` is specified, PageNode's default timeout is used.
          */
-        isEnabled(opts?: ITimeout & {filterMask?: FilterType}): boolean
+        isEnabled(opts?: ITimeout & {filterMask?: FilterType}): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually have an actual text which equals the expected text within a specific timeout.
@@ -2529,7 +2556,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasText(text: TextType, opts?: ITimeoutInterval): boolean
+        hasText(text: TextType, opts?: ITimeoutInterval): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually have any text within a specific timeout.
@@ -2541,7 +2568,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasAnyText(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean
+        hasAnyText(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually have an actual text which contains the expected text within a specific timeout.
@@ -2553,7 +2580,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        containsText(text: TextType, opts?: ITimeoutInterval): boolean
+        containsText(text: TextType, opts?: ITimeoutInterval): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually have an actual direct text which equals the expected direct text within a specific timeout.
@@ -2568,7 +2595,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasDirectText(text: TextType, opts?: ITimeoutInterval): boolean
+        hasDirectText(text: TextType, opts?: ITimeoutInterval): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually have any direct text within a specific timeout.
@@ -2583,7 +2610,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasAnyDirectText(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean
+        hasAnyDirectText(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean;
         /**
          * Checks if a PageElement or all PageElements managed by a PageElementList, PageElementMap or PageElementGroup
          * eventually have an actual direct text which contains the expected direct text within a specific timeout.
@@ -2598,12 +2625,12 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        containsDirectText(text: TextType, opts?: ITimeoutInterval): boolean
+        containsDirectText(text: TextType, opts?: ITimeoutInterval): boolean;
 
         /**
          * returns the negated variants of ICheckEventually's state check functions
          */
-        not: Omit<ICheckEventually<TextType, BooleanType, FilterType>, 'not'>
+        not: Omit<ICheckEventually<TextType, BooleanType, FilterType>, 'not'>;
       }
 
       /**
@@ -2613,7 +2640,7 @@ declare global {
       type ExtractValue<T extends {[key: string]: INode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
           TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
-      }
+      };
 
       /**
        * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
@@ -2623,7 +2650,7 @@ declare global {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getHasValue']>> :
         never;
-      }
+      };
 
       /**
        * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
@@ -2633,7 +2660,7 @@ declare global {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
         WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> :
         never;
-      }
+      };
 
       /**
        * This interface is implemented by ValuePageElement, ValuePageElementList, ValuePageElementMap and
@@ -2663,23 +2690,23 @@ declare global {
          * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
          * current value from the tested application's state
          */
-        currently: IGetValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>
+        currently: IGetValueElement<GetType, FilterType> & ICheckValueCurrently<GetType, FilterType>;
         /**
          * defines an api for all functions of PageNode which wait for a condition to become true within a specified
          * timeout
          */
-        wait: ICheckWaitValue<GetType, FilterType>
+        wait: ICheckWaitValue<GetType, FilterType>;
         /**
-         * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
-         * timeout
+         * defines an api for all functions of PageNode which check if a condition eventually becomes true within a
+         * specified timeout
          */
-        eventually: ICheckValueEventually<GetType, FilterType>
+        eventually: ICheckValueEventually<GetType, FilterType>;
 
         /**
          * Sets the value of a ValuePageElement or of all ValuePageElements managed by ValuePageElementList,
          * ValuePageElementMap or ValuePageElementGroup.
          */
-        setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>
+        setValue(value: SetType): IValueElementNode<GetType, FilterType, SetType>;
       }
 
       /**
@@ -2694,7 +2721,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getValue(filterMask?: FilterType): GetType
+        getValue(filterMask?: FilterType): GetType;
 
         /**
          * Returns the 'hasValue' status of a ValuePageElement or of the ValuePageElements managed by
@@ -2704,7 +2731,7 @@ declare global {
          *
          * @param value the expected value used in the comparison which sets the 'hasValue' status
          */
-        getHasValue(value: GetType): FilterType
+        getHasValue(value: GetType): FilterType;
         /**
          * Returns the 'hasAnyValue' status of a ValuePageElement or of the ValuePageElements managed by
          * ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.
@@ -2712,7 +2739,7 @@ declare global {
          * @param filterMask can be used to skip the invocation of the state retrieval function for some or all managed
          * PageElements and not include the skipped results in the total result
          */
-        getHasAnyValue(filterMask?: FilterType): FilterType
+        getHasAnyValue(filterMask?: FilterType): FilterType;
         /**
          * Returns the 'containsValue' status of a ValuePageElement or of the ValuePageElements managed by
          * ValuePageElementList, ValuePageElementMap or ValuePageElementGroup.
@@ -2721,7 +2748,7 @@ declare global {
          *
          * @param value the expected value used in the comparison which sets the 'containsValue' status
          */
-        getContainsValue(value: GetType): FilterType
+        getContainsValue(value: GetType): FilterType;
       }
 
       /**
@@ -2742,7 +2769,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasValue(value: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>
+        hasValue(value: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
         /**
          * Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
          * ValuePageElementMap or ValuePageElementGroup to have any value.
@@ -2755,7 +2782,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasAnyValue(opts?: OptsType & {filterMask?: FilterType}): IValueElementNode<ValueType, FilterType>
+        hasAnyValue(opts?: OptsType & {filterMask?: FilterType}): IValueElementNode<ValueType, FilterType>;
         /**
          * Waits for a ValuePageElement or for all ValuePageElements managed by a ValuePageElementList,
          * ValuePageElementMap or ValuePageElementGroup to have an actual value which contains the expected value.
@@ -2769,12 +2796,12 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        containsValue(value: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>
+        containsValue(value: ValueType, opts?: OptsType): IValueElementNode<ValueType, FilterType>;
 
         /**
          * returns the negated variants of ICheckWaitValue's state check functions
          */
-        not: Omit<ICheckWaitValue<ValueType, FilterType, ITimeoutInterval>, 'not'>
+        not: Omit<ICheckWaitValue<ValueType, FilterType, ITimeoutInterval>, 'not'>;
       }
 
       /**
@@ -2788,7 +2815,7 @@ declare global {
          *
          * @param value the expected value which is supposed to equal the actual value
          */
-        hasValue(value: ValueType): boolean
+        hasValue(value: ValueType): boolean;
         /**
          * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
          * or ValuePageElementGroup currently have any value.
@@ -2796,19 +2823,19 @@ declare global {
          * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
          * some or all managed ValuePageElements
          */
-        hasAnyValue(filterMask?: FilterType): boolean
+        hasAnyValue(filterMask?: FilterType): boolean;
         /**
          * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
          * or ValuePageElementGroup currently have an actual value which contains the expected value.
          *
          * @param value the expected value which is supposed to be contained in the actual value
          */
-        containsValue(value: ValueType): boolean
+        containsValue(value: ValueType): boolean;
 
         /**
          * returns the negated variants of ICheckValueCurrently's state check functions
          */
-        not: Omit<ICheckValueCurrently<ValueType, FilterType>, 'not'>
+        not: Omit<ICheckValueCurrently<ValueType, FilterType>, 'not'>;
       }
 
       /**
@@ -2828,7 +2855,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasValue(value: ValueType, opts?: ITimeoutInterval): boolean
+        hasValue(value: ValueType, opts?: ITimeoutInterval): boolean;
         /**
          * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
          * or ValuePageElementGroup eventually have any value within a specific timeout.
@@ -2840,7 +2867,7 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        hasAnyValue(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean
+        hasAnyValue(opts?: ITimeoutInterval & {filterMask?: FilterType}): boolean;
         /**
          * Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
          * or ValuePageElementGroup eventually have an actual value which contains the expected value within a specific
@@ -2853,12 +2880,12 @@ declare global {
          * If no `timeout` is specified, PageNode's default timeout is used.
          * If no `interval` is specified, PageNode's default interval is used.
          */
-        containsValue(value: ValueType, opts?: ITimeoutInterval): boolean
+        containsValue(value: ValueType, opts?: ITimeoutInterval): boolean;
 
         /**
          * returns the negated variants of ICheckValueEventually's state check functions
          */
-        not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>
+        not: Omit<ICheckValueEventually<ValueType, FilterType>, 'not'>;
       }
 
       /**
@@ -2881,7 +2908,7 @@ declare global {
        * mask will not be written to the results array of the state retrieval function. The length of the results array
        * can therefore differ from the number of PageElements managed by PageElementList.
        */
-      type ListFilterMask = boolean | boolean[]
+      type ListFilterMask = boolean | boolean[];
 
       /**
        * A filter mask can be passed as a parameter to PageElementMap functions that invoke a 'child' function on each
@@ -2903,7 +2930,7 @@ declare global {
        * name matches the key name of the skipped filter mask entry will be missing from the state retrieval function's
        * result object.
        */
-      type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>
+      type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>;
 
       /**
        * A filter mask can be passed as a parameter to PageElementGroup functions that invoke a 'child' function on each
@@ -2927,18 +2954,18 @@ declare global {
        * name matches the key name of the skipped filter mask entry will be missing from the state retrieval function's
        * result object.
        */
-      type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>
+      type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>;
 
       /**
        * Type of the filter mask used by exist functions of PageElementGroup.
        */
       type GroupFilterMaskExists<Content extends GroupContent> =
-        Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
+        Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>;
 
       /**
        * Type of the filter mask used by functions of ValuePageElementGroup.
        */
-      type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
+      type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>;
 
       /**
        * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
@@ -2946,48 +2973,48 @@ declare global {
        */
       type ValueGroupFilterMaskWN<Content extends GroupContent> = WithoutNever<
         Partial<Workflo.PageNode.ExtractValueBooleanWN<Content>>
-      >
+      >;
 
       /**
        * Used to merge a filter mask into the opts parameter of a PageElementList's functions.
        */
       interface IListFilterMask {
-        filterMask?: ListFilterMask
+        filterMask?: ListFilterMask;
       }
 
       /**
        * Used to merge a filter mask into the opts parameter of a PageElementMap's functions.
        */
       interface IMapFilterMask<K extends string | number | symbol> {
-        filterMask?: Partial<Record<K, boolean>>
+        filterMask?: Partial<Record<K, boolean>>;
       }
 
       /**
        * Used to merge a filter mask into the opts parameter of a PageElementGroup's functions.
        */
       interface IGroupFilterMask<Content extends GroupContent>{
-        filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>
+        filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>;
       }
 
       /**
        * Used to merge a filter mask into the opts parameter of a PageElementGroup's exist functions.
        */
       interface IGroupFilterMaskExists<Content extends GroupContent> {
-        filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>
+        filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>;
       }
 
       /**
        * Used to merge a filter mask into the opts parameter of a ValuePageElementGroup's functions.
        */
       interface IValueGroupFilterMask<Content extends GroupContent> {
-        filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>
+        filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>;
       }
     }
 
     /**
      * @ignore
      */
-    type Value = string | boolean | number
+    type Value = string | boolean | number;
 
     /**
      * This enum describes the four possible initial waiting types supported by wdio-workflo.
@@ -3003,17 +3030,17 @@ declare global {
      * - 'value' waits for the PageElement to have any value (this will not be the case if the PageElement does not
      * exist, is not visible, or has no value at all)
      */
-    export import WaitType = enums.WaitType
+    export import WaitType = enums.WaitType;
 
     /**
      * This enum is used to perform comparisons of numbers.
      */
-    export import Comparator = enums.Comparator
+    export import Comparator = enums.Comparator;
 
     /**
      * XPath can be supplied to wdio-workflo either via an XPathBuilder or as a raw XPath string
      */
-    type XPath = pageObjects.builders.XPathBuilder | string
+    type XPath = pageObjects.builders.XPathBuilder | string;
 
    // UTILITY FUNCTIONS
 
@@ -3029,7 +3056,8 @@ declare global {
        * @param input
        * @param func
        */
-      export function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => O): Record<K, O>;
+      export function mapProperties<T, O, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => O):
+        Record<K, O>;
 
       /**
        * Iterates over all properties in an object and executes func on each.
@@ -3037,7 +3065,8 @@ declare global {
        * @param input
        * @param func
        */
-      export function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => void): Record<K, T>;
+      export function forEachProperty<T, K extends string>(input: Record<K, T>, func: (value: T, key?: K) => void):
+        Record<K, T>;
 
       /**
        * Returns a new object with the original object's keys and values inverted.
@@ -3070,7 +3099,8 @@ declare global {
        * @param value
        * @param overwrite
        */
-      export function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: K, value: T, overwrite?: boolean): Record<K, T | T[]>;
+      export function addToProp<T, K extends string>(obj: Record<K, T | T[]>, key: K, value: T, overwrite?: boolean):
+        Record<K, T | T[]>;
 
       /**
        * Creates a copy of original object in which all
@@ -3109,8 +3139,8 @@ declare global {
        * @param mapFunc
        */
       export function mapToObject<T>(input: string[], mapFunc: (element: string) => T): {
-          [key: string]: T;
-      }
+        [key: string]: T;
+      };
     }
 
     namespace String {
@@ -3122,15 +3152,15 @@ declare global {
        * @param delim
        */
       export function splitToObj(str: string, delim: string | RegExp): {
-          [part: string]: boolean;
-      }
+        [part: string]: boolean;
+      };
 
       /**
        * Removes all whitespace characters from a string.
        *
        * @param str
        */
-      export function stripWhitespaces(str: string): string
+      export function stripWhitespaces(str: string): string;
     }
 
     namespace Class {
@@ -3141,7 +3171,7 @@ declare global {
        *
        * @param obj
        */
-      export function getAllMethods(obj: any): string[]
+      export function getAllMethods(obj: any): string[];
     }
 
     namespace Util {
@@ -3163,10 +3193,10 @@ declare global {
        * @param valueFunc
        */
       export function convertToObject<T>(unknownTypedInput: {
-          [key: string]: T;
-      } | string[] | string, valueFunc?: (key: string) => T): {
-          [key: string]: T;
-      }
+        [key: string]: T;
+      } | string[] | string,             valueFunc?: (key: string) => T): {
+        [key: string]: T;
+      };
 
       /**
        * Compares two variables of same type.
@@ -3182,12 +3212,12 @@ declare global {
      * @ignore
      */
     interface FilterList {
-      listFiles?: string[]
-      specFiles?: string[]
-      testcaseFiles?: string[]
-      features?: string[]
-      specs?: string[]
-      testcases?: string[]
+      listFiles?: string[];
+      specFiles?: string[];
+      testcaseFiles?: string[];
+      features?: string[];
+      specs?: string[];
+      testcases?: string[];
     }
 
   // SPECS AND TESTCASES
@@ -3206,8 +3236,8 @@ declare global {
       [key: number] : {
         result: boolean,
         date: string,
-        comment?: string
-      }
+        comment?: string,
+      };
     }
 
     /**
@@ -3218,31 +3248,31 @@ declare global {
      * implement IManualCriteria.
      */
     interface IManualTestcaseResults {
-      [key: string] : IManualCriteria
+      [key: string] : IManualCriteria;
     }
 
     /**
      * @ignore
      */
-    type StepImpl = <ArgsType extends Object, ReturnType>(params: IStepParams<ArgsType, ReturnType>) => IStep
+    type StepImpl = <ArgsType extends Object, ReturnType>(params: IStepParams<ArgsType, ReturnType>) => IStep;
 
     /**
      * @ignore
      */
-    type StepImplMap = { [key:string]: StepImpl }
+    type StepImplMap = { [key:string]: StepImpl };
 
     /**
      * Severity describes how severe the implications of something not working correctly would be.
      */
-    type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial'
+    type Severity = 'blocker' | 'critical' | 'normal' | 'minor' | 'trivial';
     /**
      * The result status of a testcase.
      */
-    type TestcaseStatus = 'passed' | 'failed' | 'broken' | 'unknown' | 'pending'
+    type TestcaseStatus = 'passed' | 'failed' | 'broken' | 'unknown' | 'pending';
     /**
      * The result status of a validation/an acceptance criteria of a Story.
      */
-    type SpecStatus = 'passed' | 'failed' | 'broken' | 'unvalidated' | 'unknown' | 'pending'
+    type SpecStatus = 'passed' | 'failed' | 'broken' | 'unvalidated' | 'unknown' | 'pending';
 
     /**
      * This interface is implemented by the return value of a Story's `Given` function.
@@ -3252,7 +3282,8 @@ declare global {
      */
     interface ISpecGiven {
       /**
-       * Call this function to chain multiple `Given` functions together sequentially in order to create an initial state.
+       * Call this function to chain multiple `Given` functions together sequentially in order to create an initial
+       * state.
        *
        * Alternatively, if you can nest another `Given` inside the bodyFunc to express diverging "Story lines".
        *
@@ -3265,7 +3296,7 @@ declare global {
        * @param bodyFunc Use the body of this function to define acceptance criteria, nested initial states or state
        * changes.
        */
-      And: (description: string, bodyFunc?: () => void) => ISpecGiven
+      And: (description: string, bodyFunc?: () => void) => ISpecGiven;
     }
 
    /**
@@ -3279,12 +3310,13 @@ declare global {
        *
        * Alternatively, if you can nest another `When` inside the bodyFunc to express diverging "Story lines".
        *
-       * To validate the state following a state change with acceptance criteria, use `Then` inside the bodyFunc of When.
+       * To validate the state following a state change with acceptance criteria, use `Then` inside the bodyFunc of
+       * When.
        *
        * @param description a short description of an initial state
        * @param bodyFunc Use the body of this function to define acceptance criteria or nested state changes.
        */
-      And: (description: string, bodyFunc?: () => void) => ISpecWhen
+      And: (description: string, bodyFunc?: () => void) => ISpecWhen;
     }
 
   /**
@@ -3313,7 +3345,7 @@ declare global {
        *
        * @param step a step that performs a state change
        */
-      and: (step: IStep) => ITCWhen
+      and: (step: IStep) => ITCWhen;
     }
 
     /**
@@ -3330,7 +3362,7 @@ declare global {
        *
        * @param step a step that establishes the initial state
        */
-      and: (step: IStep) => ITCGiven,
+      and: (step: IStep) => ITCGiven;
       /**
        * Call this function to invoke a state change of the tested application.
        *
@@ -3338,15 +3370,15 @@ declare global {
        *
        * @param step a step that performs a state change
        */
-      when: (step: IStep) => ITCWhen
+      when: (step: IStep) => ITCWhen;
     }
 
     /**
      * @ignore
      */
     interface IDescriptionStack {
-      givens: string[]
-      whens: string[]
+      givens: string[];
+      whens: string[];
     }
 
     /**
@@ -3361,7 +3393,7 @@ declare global {
        * and for each issue concatenates allure.issuePrefix, allure.issueTrackerPattern and allure.issueAppendix and
        * substitutes '%s' in the issueTrackerPattern with the issue id.
        */
-      issues?: string[],
+      issues?: string[];
       /**
        * Ids of bugs associated with this Story in an issue tracker tool (eg. bugs in JIRA).
        *
@@ -3370,12 +3402,12 @@ declare global {
        * and for each bug concatenates allure.bugPrefix, allure.issueTrackerPattern and allure.bugAppendix and
        * substitutes '%s' in the issueTrackerPattern with the bug id.
        */
-      bugs?: string[],
+      bugs?: string[];
       /**
        * The severity of a Story describes how severe the implications of one or more acceptance criteria of the Story
        * not being fulfilled correctly would be. It defaults to 'normal'.
        */
-      severity?: Workflo.Severity
+      severity?: Workflo.Severity;
     }
 
     /**
@@ -3406,7 +3438,7 @@ declare global {
        * and for each bug concatenates allure.bugPrefix, allure.issueTrackerPattern and allure.bugAppendix and
        * substitutes '%s' in the issueTrackerPattern with the bug id.
        */
-      bugs?: string[],
+      bugs?: string[];
       /**
        * Id of this testcase in a test management tool.
        *
@@ -3414,38 +3446,38 @@ declare global {
        * To build this link, wdio-workflo examines the "allure" property in workflo.conf.ts
        * and substitutes '%s' in allure.testManagementPattern with the test id.
        */
-      testId?: string,
+      testId?: string;
       /**
        * The severity of a testcase describes how severe the implications of the testcase failing would be.
        * It defaults to 'normal'.
        */
-      severity?: Workflo.Severity
+      severity?: Workflo.Severity;
     }
 
     /**
      * @ignore
      */
     interface IStoryMapEntry {
-      descriptionStack: IDescriptionStack
-      description: string
-      metadata: IStoryMetaData
-      featureName: string,
-      storyName: string,
-      insideWhenSequence: boolean,
-      whenSequenceLengths: number[],
-      whenRecLevel: number,
-      insideGivenSequence: boolean,
-      givenSequenceLengths: number[],
-      givenRecLevel: number
+      descriptionStack: IDescriptionStack;
+      description: string;
+      metadata: IStoryMetaData;
+      featureName: string;
+      storyName: string;
+      insideWhenSequence: boolean;
+      whenSequenceLengths: number[];
+      whenRecLevel: number;
+      insideGivenSequence: boolean;
+      givenSequenceLengths: number[];
+      givenRecLevel: number;
     }
 
     /**
      * @ignore
      */
     interface IExpectationBlock {
-      testcaseName: string
-      execute: () => void
-      screenshot: any
+      testcaseName: string;
+      execute: () => void;
+      screenshot: any;
     }
 
    /**
@@ -3453,15 +3485,15 @@ declare global {
     * or an ids array (eg. [3, 4, 5]) of acceptance criteria defined within the associated Story.
     */
     type IValidateSpecObject = {
-      [specId: string]: number | number[]
-    }
+      [specId: string]: number | number[],
+    };
 
     /**
      * @ignore
      */
     type IValidateContainer = {
-      specObj: IValidateSpecObject
-    }
+      specObj: IValidateSpecObject,
+    };
 
     /**
      * IOptStepParams are supposed to be used as the parameters of a step creation function if a step does not require
@@ -3479,15 +3511,15 @@ declare global {
        * The step callback function can be used to retrieve and validate the state of the application right after
        * the execution of a step.
        */
-      cb?: (param: ReturnType) => void,
+      cb?: (param: ReturnType) => void;
       /**
        * Optional arguments that can, but do not have to be, passed to a step execution function.
        */
-      arg?: ArgsType,
+      arg?: ArgsType;
       /**
        * A short description of the interactions a step performs with the tested application.
        */
-      description?: string
+      description?: string;
     }
 
     /**
@@ -3501,7 +3533,7 @@ declare global {
       /**
        * Mandatory arguments that a step requires in order to be executed.
        */
-      arg: ArgsType,
+      arg: ArgsType;
     }
 
     /**
@@ -3512,7 +3544,8 @@ declare global {
      * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
      * execution function:
      *
-     * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+     * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution f
+     * unction.
      * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
      * with key's value retrieved from the step arguments object).
      *
@@ -3521,8 +3554,8 @@ declare global {
      *
      */
     interface IStep {
-      __description: string,
-      __execute: (prefix?: string) => void
+      __description: string;
+      __execute: (prefix?: string) => void;
     }
 
     /**
@@ -3531,7 +3564,7 @@ declare global {
      */
     type StepDefinitions = Record<
       string, (params?: Workflo.IStepParams<any, any> | Workflo.IOptStepParams<any, any>) => Workflo.IStep
-    >
+    >;
   }
 
   // API FUNCTIONS
@@ -3547,7 +3580,7 @@ declare global {
    * @param str a string for which to create a unique id
    * @returns the generated unique id
    */
-  function getUid(str: string) : string
+  function getUid(str: string) : string;
 
   /**
    * A Feature in wdio-workflo represents a collection of related Stories.
@@ -3556,7 +3589,7 @@ declare global {
    * @param metadata the metadata of the Feature
    * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
-  function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
+  function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
 
   /**
    * If one or more Features in a scope (usually a .spec.ts file) are marked as "fFeature",
@@ -3568,7 +3601,7 @@ declare global {
    * @param metadata the metadata of the Feature
    * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
-  function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
+  function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
 
   /**
    * All Features marked as "xFeature" will not be executed by the test runner.
@@ -3579,7 +3612,7 @@ declare global {
    * @param metadata the metadata of the Feature
    * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
-  function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void
+  function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
 
   /**
    * A Story describes functional requirements of the tested application as a series of application states and state
@@ -3599,7 +3632,7 @@ declare global {
    * @param metadata the metadata of the Story
    * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
-  function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
+  function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
 
   /**
    * If one or more Stories in a Feature are marked as "fStory",
@@ -3622,7 +3655,7 @@ declare global {
    * @param metadata the metadata of the Story
    * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
-  function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
+  function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
 
   /**
    * All Stories marked as "xStory" will not be executed by the test runner.
@@ -3644,7 +3677,7 @@ declare global {
    * @param metadata the metadata of the Story
    * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
-  function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void
+  function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
 
   /**
    * Given describes an initial state of a Story.
@@ -3661,7 +3694,7 @@ declare global {
    * @param bodyFunc Use the body of this function to define acceptance criteria, nested initial states or state
    * changes.
    */
-  function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven
+  function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven;
 
   /**
    * When describes a state change inside a Story that is triggered either by a user or by a system.
@@ -3674,7 +3707,7 @@ declare global {
    * @param description a short description of who did what to trigger a state change
    * @param bodyFunc Use the body of this function to define acceptance criteria or nested state changes.
    */
-  function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen
+  function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen;
 
   /**
    * Then represents an acceptance criteria that validates an application state to check if a functional requirement
@@ -3696,7 +3729,7 @@ declare global {
    * @param id the id of an acceptance criteria which must be unique within its surrounding Story
    * @param description a short description of the expected state under validation
    */
-  function Then(id: number, description: string) : void
+  function Then(id: number, description: string) : void;
 
   /**
    * If one or more acceptance criteria in a Story are marked as "fThen",
@@ -3721,7 +3754,7 @@ declare global {
    * @param id the id of an acceptance criteria which must be unique within its surrounding Story
    * @param description a short description of the expected state under validation
    */
-  function fThen(id: number, description: string) : void
+  function fThen(id: number, description: string) : void;
 
   /**
    * All acceptance criteria marked as "xThen" will not be executed by the test runner.
@@ -3745,7 +3778,7 @@ declare global {
    * @param id the id of an acceptance criteria which must be unique within its surrounding Story
    * @param description a short description of the expected state under validation
    */
-  function xThen(id: number, description: string) : void
+  function xThen(id: number, description: string) : void;
 
   /**
    * A suite is a collection of related testcases.
@@ -3754,7 +3787,7 @@ declare global {
    * @param metadata the metadata of the suite
    * @param bodyFunc define all testcases for this suite inside the body of this function
    */
-  function suite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
+  function suite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
 
   /**
    * If one or more suites in a scope (usually a .tc.ts file) are marked as "fsuite",
@@ -3766,7 +3799,7 @@ declare global {
    * @param metadata the metadata of the suite
    * @param bodyFunc define all testcases for this suite inside the body of this function
    */
-  function fsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
+  function fsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
 
   /**
    * All suites marked as "xsuite" will not be executed by the test runner.
@@ -3777,7 +3810,7 @@ declare global {
    * @param metadata the metadata of the suite
    * @param bodyFunc define all testcases for this suite inside the body of this function
    */
-  function xsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void
+  function xsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
 
   /**
    * A testcase is composed of a sequence of steps strung together in a step chain.
@@ -3804,7 +3837,7 @@ declare global {
    * @param metadata the metadata of the testcase
    * @param bodyFunc define all steps for this testcase inside the body of this function
    */
-  function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
+  function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
 
   /**
    * If one or testcases in a suite are marked as "fTestcase",
@@ -3834,7 +3867,7 @@ declare global {
    * @param metadata the metadata of the testcase
    * @param bodyFunc define all steps for this testcase inside the body of this function
    */
-  function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
+  function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
 
   /**
    * All testcases criteria marked as "xtestcase" will not be executed by the test runner.
@@ -3863,7 +3896,7 @@ declare global {
    * @param metadata the metadata of the testcase
    * @param bodyFunc define all steps for this testcase inside the body of this function
    */
-  function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void
+  function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
 
   /**
    * The `given` function establishes the initial state of a tested application by executing the passed step.
@@ -3877,7 +3910,7 @@ declare global {
    *
    * @param step a step that establishes the initial state
    */
-  function given(step: Workflo.IStep) : Workflo.ITCGiven
+  function given(step: Workflo.IStep) : Workflo.ITCGiven;
 
   /**
    * The `validate` function provides the means to validate an application state.
@@ -3903,7 +3936,7 @@ declare global {
    * @param validationFunc Define all expectation matchers that together determine the result of this validation inside
    * the body of this function.
    */
-  function validate(validateObject: Workflo.IValidateSpecObject, validationFunc: (...args : any[]) => void) : void
+  function validate(validateObject: Workflo.IValidateSpecObject, validationFunc: (...args : any[]) => void) : void;
 
   /**
    * Returns an instance of XPathBuilder to create XPath expressions using functions instead of writing the whole
@@ -3915,21 +3948,21 @@ declare global {
    * @param selector the initial XPath selector (eg. "//div", "/span")
    * @returns an instance of XPathBuilder
    */
-  function xpath(selector: string) : pageObjects.builders.XPathBuilder
+  function xpath(selector: string) : pageObjects.builders.XPathBuilder;
 }
 
 /**
  * Severity describes how severe the implications of something not working correctly would be.
  */
-export type Severity = Workflo.Severity
+export type Severity = Workflo.Severity;
 /**
  * The result status of a testcase.
  */
-export type TestcaseStatus = Workflo.TestcaseStatus
+export type TestcaseStatus = Workflo.TestcaseStatus;
 /**
  * The result status of a validation/an acceptance criteria of a Story.
  */
-export type SpecStatus = Workflo.SpecStatus
+export type SpecStatus = Workflo.SpecStatus;
 /**
  * Steps consist of a description and an execution function.
  * The execution function performs changes to the state of the tested application and the description briefly
@@ -3946,7 +3979,7 @@ export type SpecStatus = Workflo.SpecStatus
  * A step callback will be passed the return value of the execution function as its first parameter.
  *
  */
-export type IStep = Workflo.IStep
+export type IStep = Workflo.IStep;
 /**
  * IStepParams are supposed to be used as the parameters of a step creation function if a step requires mandatory
  * step arguments.
@@ -3954,7 +3987,7 @@ export type IStep = Workflo.IStep
  * @template ArgsType defines the type of the step arguments passed to the execution function.
  * @template ReturnType defines the return type of the execution function.
  */
-export type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepParams<ArgsType, ReturnType>
+export type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepParams<ArgsType, ReturnType>;
 /**
  * IOptStepParams are supposed to be used as the parameters of a step creation function if a step does not require
  * any or only optional arguments.
@@ -3962,33 +3995,33 @@ export type IStepParams<ArgsType extends Object, ReturnType> = Workflo.IStepPara
  * @template ArgsType defines the type of the step arguments passed to the execution function.
  * @template ReturnType defines the return type of the execution function.
  */
-export type IOptStepParams<ArgsType extends Object, ReturnType> = Workflo.IOptStepParams<ArgsType, ReturnType>
+export type IOptStepParams<ArgsType extends Object, ReturnType> = Workflo.IOptStepParams<ArgsType, ReturnType>;
 /**
  * Steps in wdio-workflo need to be defined in this format - on object where the keys are the step descriptions and
  * the values are step creation functions that take the step parameters as and argument and return a created Step.
  */
-export type StepDefinitions = Workflo.StepDefinitions
+export type StepDefinitions = Workflo.StepDefinitions;
 
-export * from './lib/steps'
+export * from './lib/steps';
 
-import * as objectFunctions from './lib/utility_functions/object'
-import * as arrayFunctions from './lib/utility_functions/array'
-import * as classFunctions from './lib/utility_functions/class'
-import * as utilFunctions from './lib/utility_functions/util'
+import * as arrayFunctions from './lib/utility_functions/array';
+import * as classFunctions from './lib/utility_functions/class';
+import * as objectFunctions from './lib/utility_functions/object';
+import * as utilFunctions from './lib/utility_functions/util';
 
-export { objectFunctions, arrayFunctions, classFunctions, utilFunctions }
+export { objectFunctions, arrayFunctions, classFunctions, utilFunctions };
 
-export { pageObjects, helpers }
-
-/**
- * @ignore
- */
-import Kiwi from './lib/Kiwi'
+export { pageObjects, helpers };
 
 /**
  * @ignore
  */
-export { Kiwi }
+import Kiwi from './lib/Kiwi';
+
+/**
+ * @ignore
+ */
+export { Kiwi };
 
 // CONFIG FILE TYPES SECTION
 
@@ -4003,50 +4036,50 @@ export interface Error {
  * Timeouts in milliseconds.
  */
 export interface ITimeouts {
-  [key: string]: number
-  default?: number
+  [key: string]: number;
+  default?: number;
 }
 
 /**
  * Intervals in milliseconds.
  */
 export interface IIntervals {
-  [key: string]: number
-  default?: number
+  [key: string]: number;
+  default?: number;
 }
 
 /**
  * @ignore
  */
 export interface ICountAndPercentage {
-  count?: number
-  percentage?: string
+  count?: number;
+  percentage?: string;
 }
 
 /**
  * @ignore
  */
 export interface IPrintObject {
-  'Spec Files': number,
-  'Testcase Files': number,
-  'Manual Result Files': number,
-  Features: number,
-  Specs: number,
-  Suites: number,
-  Testcases: number,
-  'Manual Results (Specs)': number,
-  'Defined Spec Criteria': ICountAndPercentage,
-  'Automated Criteria': ICountAndPercentage,
-  'Manual Criteria': ICountAndPercentage,
-  'Uncovered Criteria': ICountAndPercentage,
-  'Uncovered Criteria Object': ICountAndPercentage
+  'Spec Files': number;
+  'Testcase Files': number;
+  'Manual Result Files': number;
+  Features: number;
+  Specs: number;
+  Suites: number;
+  Testcases: number;
+  'Manual Results (Specs)': number;
+  'Defined Spec Criteria': ICountAndPercentage;
+  'Automated Criteria': ICountAndPercentage;
+  'Manual Criteria': ICountAndPercentage;
+  'Uncovered Criteria': ICountAndPercentage;
+  'Uncovered Criteria Object': ICountAndPercentage;
 }
 
 /**
  * The desired capabilities of the browser used to run the tests.
  */
 export interface ICapabilities extends DesiredCapabilities {
-  [key: string]: any,
+  [key: string]: any;
 }
 
 /**
@@ -4140,50 +4173,50 @@ export interface IWorkfloCommonConfig {
   /**
    * Root directory for all test artifacts of wdio-workflo.
    */
-  testDir: string
+  testDir: string;
   /**
    * http(s).Agent instance to use
    *
    * @default new http(s).Agent({ keepAlive: true })
    */
-  agent?: Object
+  agent?: Object;
   /**
    * An HTTP proxy to be used. Supports proxy Auth with Basic Auth, identical to support for the url
    * parameter (by embedding the auth info in the uri)
    *
    * @default undefined (no proxy used)
    */
-  proxy?: String
+  proxy?: String;
   /**
    * Path to the uidStore.json file which is used to generate unique ids during test execution.
    *
    * The generated ids will be preserved for future test runs until the uidStore.json file is deleted.
    */
-  uidStorePath?: string
+  uidStorePath?: string;
   /**
    * Arguments for start command of selenium-standalone service.
    *
    * @default {}
    */
-  seleniumStartArgs?: StartOpts
+  seleniumStartArgs?: StartOpts;
   /**
    * Arguments for install command of selenium-standalone service.
    *
    * @default {}
    */
-  seleniumInstallArgs?: InstallOpts
+  seleniumInstallArgs?: InstallOpts;
   /**
    * A key-value store of query parameters to be added to every selenium request.
    *
    * @default {}
    */
-  queryParams?: Object
+  queryParams?: Object;
   /**
    * A key-value store of headers to be added to every selenium request. Values must be strings.
    *
    * @default {}
    */
-  headers?: Object
+  headers?: Object;
   /**
    * Options for allure report.
    */
@@ -4223,20 +4256,20 @@ export interface IWorkfloCommonConfig {
      * Will be appended to bug keys displayed in allure report.
      * This can be useful as allure report provides no way to distinct issues and bugs by default.
      */
-    bugAppendix?: string
-  }
+    bugAppendix?: string,
+  };
   /**
    * Log level output in spec reporter console.
    *
    * @default testcases
    */
-  consoleLogLevel?: 'results' | 'testcases' | 'steps'
+  consoleLogLevel?: 'results' | 'testcases' | 'steps';
   /**
    * If set to true, will output errors and validation failures immediatly.
    *
    * @default false
    */
-  reportErrorsInstantly?: boolean
+  reportErrorsInstantly?: boolean;
     /**
    * Defines how many times a testcase should be rerun if it did not pass.
    * The current testcase will be aborted on the first error or failed expectation
@@ -4244,7 +4277,7 @@ export interface IWorkfloCommonConfig {
    *
    * @default 0
    */
-  retries?: number
+  retries?: number;
 }
 
 /**
@@ -4258,71 +4291,71 @@ export interface IWorkfloCallbackConfig {
    *
    * Corresponds to the "testcaseFiles" config option in the workflo config file.
    */
-  testcases?: string[]
+  testcases?: string[];
   /**
    * Defines which spec files should run. The pattern is relative to the directory
    * from which `wdio-workflo` was called.
    *
    * Corresponds to the "specFiles" config option in the workflo config file.
    */
-  specs?: string[]
+  specs?: string[];
   /**
    * Path where the testinfo.json file resides.
    */
-  testInfoFilePath: string
+  testInfoFilePath: string;
   /**
    * Path where results for the currently active browser are stored.
    */
-  resultsPath: string
+  resultsPath: string;
   /**
    * Path to the file that contains the name of the folder which stores the results of the latest test run.
    */
-  latestRunPath: string
+  latestRunPath: string;
   /**
    * Name of the browser used to run the current tests.
    */
-  browser: string
+  browser: string;
   /**
    * Date and time when the current test run was launched.
    */
-  dateTime: string
+  dateTime: string;
   /**
    * Path to the json file that stores the merged results of all previous test runs and the current test run.
    */
-  mergedResultsPath: string
+  mergedResultsPath: string;
   /**
    * Path where the spec reporter console report of the current test run is stored.
    */
-  consoleReportPath: string
+  consoleReportPath: string;
   /**
    * Path where the merged results of all previous test runs and the current test run are stored for allure.
    */
-  mergedAllureResultsPath: string
+  mergedAllureResultsPath: string;
   /**
    * Information about spec criteria of current test run.
    * Used internally by wdio-workflo.
    */
-  criteriaAnalysis: IAnalysedCriteria
+  criteriaAnalysis: IAnalysedCriteria;
   /**
    * Filters used by wdio-workflo to determine which tests and specs to execute.
    * Filters include specFiles, testcaseFiles, features, specs, testcases, suites, manualResultFiles and manualSpecs.
    */
-  executionFilters: IExecutionFilters
+  executionFilters: IExecutionFilters;
   /**
    * Parsing results of testcases and spec files used internally by wdio-workflo
    * to link specs and testcases.
    */
-  parseResults: IParseResults
+  parseResults: IParseResults;
   /**
    * Information used to trace which testcases validate which specs and which
    * specs are validated in which testcases.
    * Used internally by wdio-workflo.
    */
-  traceInfo: ITraceInfo
+  traceInfo: ITraceInfo;
   /**
    * Data used by wdio-workflo to output the results and statistics of a test run.
    */
-  printObject: IPrintObject
+  printObject: IPrintObject;
 }
 
 /**
@@ -4335,27 +4368,27 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
    * gets prepended directly.
    */
-  baseUrl: string
+  baseUrl: string;
   /**
    * Protocol to use when communicating with the Selenium standalone server (or driver)
    * @default http
    */
-  protocol?: string,
+  protocol?: string;
   /**
    * Host of your WebDriver server.
    * @default 127.0.0.1
    */
-  host?: string,
+  host?: string;
   /**
    * Port your WebDriver server is on.
    * @default 4444
    */
-  port?: number,
+  port?: number;
   /**
    * Path to WebDriver server.
    * @default  /wd/hub
    */
-  path?: string
+  path?: string;
   /**
    * WebdriverIO supports Sauce Labs, Browserstack and Testing Bot (other cloud providers
    * should work too though). These services define specific user and key (or access key)
@@ -4363,7 +4396,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    *
    * @default undefined
    */
-  user?: string
+  user?: string;
   /**
    * WebdriverIO supports Sauce Labs, Browserstack and Testing Bot (other cloud providers
    * should work too though). These services define specific user and key (or access key)
@@ -4371,15 +4404,15 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    *
    * @default undefined
    */
-  key?: string
+  key?: string;
   /**
    * Width of the browser window in pixels.
    */
-  width: number,
+  width: number;
   /**
    * Height of the browser window in pixels.
    */
-  height: number,
+  height: number;
   /**
    * Defines the capabilities you want to run in your Selenium session.
    * See https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities for a list of the available capabilities.
@@ -4387,7 +4420,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * Please be aware that wdio-workflo's reporting only supports one single instance at a time.
    * Therefore, the "maxInstance" property will always be set to 1.
    */
-  capabilities: ICapabilities
+  capabilities: ICapabilities;
   /**
    * Webdriverio Services to run for test execution.
    *
@@ -4395,7 +4428,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    *
    * @default ['selenium-standalone']
    */
-  services?: string[]
+  services?: string[];
   /**
    * If set to true, Node debugging via the chrome extension "Node-Inspector Manager" is enabled.
    * The test process will then automatically connect to chrome's dedicated dev tools and break on
@@ -4424,37 +4457,37 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    *
    * @default false
    */
-  debug?: boolean
+  debug?: boolean;
   /**
    * Execution arguments for the node process.
    * If using the debug option, execArgv will always be overwritten with the value ['--inspect']
    */
-  execArgv?: string[]
+  execArgv?: string[];
   /**
    * Outputs selenium commands in the allure report if set to true.
    *
    * @default true
    */
-  debugSeleniumCommand?: boolean
+  debugSeleniumCommand?: boolean;
   /**
    * Skip future testcases after specific amount of already executed testcases have failed.
    * By default, does not bail.
    *
    * @default 0
    */
-  bail?: number
+  bail?: number;
   /**
    * Timeout for any request to the Selenium server in milliseconds.
    *
    * @default 90000
    */
-  connectionRetryTimeout?: number
+  connectionRetryTimeout?: number;
   /**
    * Count of request retries to the Selenium server.
    *
    * @default 3
    */
-  connectionRetryCount?: number
+  connectionRetryCount?: number;
   /**
    * Timeouts (for waitXXX and eventuallyXXX actions) in milliseconds.
    *
@@ -4463,7 +4496,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    *
    * @default {default: 5000}
    */
-  timeouts?: ITimeouts
+  timeouts?: ITimeouts;
   /**
    * Intervals (for waitXXX and eventuallyXXX actions) in milliseconds.
    *
@@ -4472,7 +4505,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    *
    * @default {default: 500}
    */
-  intervals?: IIntervals
+  intervals?: IIntervals;
 
   /**
    * Restricts test execution to these testcases.
@@ -4481,7 +4514,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * ["Suite1", "Suite2.Testcase1"] => execute all testcases of Suite1 and Testcase1 of Suite2
    * ["Suite2", "-Suite2.Testcase2"] => execute all testcases of Suite2 except for Testcase2
    */
-  testcases?: string[]
+  testcases?: string[];
   /**
    * Restricts test execution to these features.
    *
@@ -4489,7 +4522,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * ["Login", "Logout"] => execute all testcases which validate specs defined within these features
    * ["-Login"] => execute all testcases except those which validate specs defined within these features
    */
-  features?: string[]
+  features?: string[];
   /**
    * Restricts test execution to these specs.
    *
@@ -4498,7 +4531,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * ["1.1*", "-1.1.2.4"] => 1.1* includes spec 1.1 and all of its sub-specs (eg. 1.1.2), -1.1.2.4 excludes spec 1.1.2.4
    * ["1.*"] => 1.* excludes spec 1 itself but includes of of its sub-specs
    */
-  specs?: string[]
+  specs?: string[];
   /**
    * Restricts specs by status of their criteria set during their last execution.
    *
@@ -4506,7 +4539,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * ["passed", "failed", "broken", "unvalidated", "unknown"] => these are all available status - combine as you see fit
    * ["faulty"] => faulty is a shortcut for failed, broken, unvalidated and unknown
    */
-  specStatus?: (SpecStatus | 'faulty')[]
+  specStatus?: (SpecStatus | 'faulty')[];
   /**
    * Restricts executed testcases by given status.
    *
@@ -4514,47 +4547,47 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * ["passed", "failed", "broken", "pending", "unknown"] => these are all available status - combine as you see fit
    * ["faulty"] => faulty is a shortcut for failed, broken and unknown
    */
-  testcaseStatus?: (TestcaseStatus | 'faulty')[]
+  testcaseStatus?: (TestcaseStatus | 'faulty')[];
   /**
    * Restricts specs by severity set during their last execution.
    *
    * @example
    * ["blocker", "critical", "normal", "minor", "trivial"] => these are all available severities - combine as you see fit
    */
-  specSeverity?: Severity[]
+  specSeverity?: Severity[];
   /**
    * Restricts testcases by severity set during their last execution.
    *
    * @example
    * ["blocker", "critical", "normal", "minor", "trivial"] => these are all available severities - combine as you see fit
    */
-  testcaseSeverity?: Severity[]
+  testcaseSeverity?: Severity[];
   /**
    * Restricts testcases and specs (oldest spec criteria) by given date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss).
    *
    * @example
- * ["(2017-03-10,2017-10-28)"] => restricts by status set between 2017-03-10 and 2017-10-28 (both at 0 pm, 0 min, 0 sec)
+   * ["(2017-03-10,2017-10-28)"] => restricts by status set between 2017-03-10 and 2017-10-28 (at 0 pm, 0 min, 0 sec)
    * ["2017-07-21", "2017-07-22T14:51:13"] => restricts by last status set on 2017-07-21 or 2017-07-22 at 2 pm, 51 min, 13 sec
    */
-  dates?: string[]
+  dates?: string[];
   /**
    * Do not run automatic testcases and consider only manual results.
    *
    * @default {default: false}
    */
-  manualOnly?: boolean
+  manualOnly?: boolean;
   /**
    * Run only automatic testcases and do not consider manual results.
    *
    * @default {default: false}
    */
-  automaticOnly?: boolean
+  automaticOnly?: boolean;
   /**
    * Remove error stack trace lines that originate from the test framework itself.
    *
    * @default {default: true}
    */
-  cleanStackTraces?: boolean
+  cleanStackTraces?: boolean;
 
 // RETYPE OBJECTS
 
@@ -4563,7 +4596,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {ICallbackConfig} config wdio-workflo configuration object
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    */
-  onPrepare?<T>(config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> | void
+  onPrepare?<T>(config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> | void;
   /**
    * Gets executed just before initialising the webdriver session and test framework. It allows you
    * to manipulate configurations depending on the capability or testcase.
@@ -4574,7 +4607,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    * @param {Array.<String>} testcaseFiles List of testcases file paths that are to be run
    */
-  beforeSession?<T>(config: ICallbackConfig, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void
+  beforeSession?<T>(config: ICallbackConfig, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void;
   /**
    * Gets executed before testcases execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
@@ -4584,33 +4617,33 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    * @param {Array.<String>} testcaseFiles List of testcases file paths that are to be run
    */
-  before?<T>(capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void
+  before?<T>(capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void;
   /**
    * Hook that gets executed before the suite starts
    * @param {Suite} suite suite details
    */
-  beforeSuite?<T>(suite: Suite): Promise<T> | void
+  beforeSuite?<T>(suite: Suite): Promise<T> | void;
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
    * beforeEach in Jasmine)
    */
-  beforeHook?<T>(): Promise<T> | void
+  beforeHook?<T>(): Promise<T> | void;
   /**
    * Hook that gets executed _after_ a hook within the suite ends (e.g. runs after calling
    * afterEach in Jasmine)
    */
-  afterHook?<T>(): Promise<T> | void
+  afterHook?<T>(): Promise<T> | void;
   /**
    * Function to be executed before a testcase starts.
    * @param {Test} test test details
    */
-  beforeTest?<T>(test: Test): Promise<T> | void
+  beforeTest?<T>(test: Test): Promise<T> | void;
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {String} commandName hook command name
    * @param {Array} args arguments that command would receive
    */
-  beforeCommand?<T>(commandName: string, args: any[]): Promise<T> | void
+  beforeCommand?<T>(commandName: string, args: any[]): Promise<T> | void;
   /**
    * Runs after a WebdriverIO command gets executed
    * @param {String} commandName hook command name
@@ -4618,17 +4651,17 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {Number} result 0 - command success, 1 - command error
    * @param {Error} error error object if any
    */
-  afterCommand?<T>(commandName: string, args: any[], result: number, error: Error): Promise<T> | void
+  afterCommand?<T>(commandName: string, args: any[], result: number, error: Error): Promise<T> | void;
   /**
    * Function to be executed after a testcase ends.
    * @param {Test} test test details
    */
-  afterTest?<T>(test: Test): Promise<T> | void
+  afterTest?<T>(test: Test): Promise<T> | void;
   /**
    * Hook that gets executed after the suite has ended
    * @param {Suite} suite suite details
    */
-  afterSuite?<T>(suite: Suite): Promise<T> | void
+  afterSuite?<T>(suite: Suite): Promise<T> | void;
   /**
    * Gets executed after all tests are done. You still have access to all global variables from
    * the test.
@@ -4636,7 +4669,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    * @param {Array.<String>} testcaseFiles List of testcases file paths that ran
    */
-  after?<T>(result: number, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void
+  after?<T>(result: number, capabilities: ICapabilities[], testcaseFiles: string[]): Promise<T> | void;
   /**
    * Gets executed right after terminating the webdriver session.
    *
@@ -4646,7 +4679,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    * @param {Array.<String>} testcaseFiles List of testcases file paths that ran
    */
-  afterSession?<T>(config: ICallbackConfig, capabilities: ICapabilities, testcaseFiles: string[]): Promise<T> | void
+  afterSession?<T>(config: ICallbackConfig, capabilities: ICapabilities, testcaseFiles: string[]): Promise<T> | void;
   /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
@@ -4656,7 +4689,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    * @param {Array.<String>} specFiles List of spec file paths that are to be run
    */
-  beforeValidator?<T>(capabilities: ICapabilities[], specFiles: string[]): Promise<T> | void
+  beforeValidator?<T>(capabilities: ICapabilities[], specFiles: string[]): Promise<T> | void;
    /**
    * Gets executed after all tests are done. You still have access to all global variables from
    * the test.
@@ -4664,17 +4697,17 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    * @param {Array.<String>} specFiles List of spec file paths that ran
    */
-  afterValidator?<T>(result: number, capabilities: ICapabilities[], specFiles: string[]): Promise<T> | void
+  afterValidator?<T>(result: number, capabilities: ICapabilities[], specFiles: string[]): Promise<T> | void;
   /**
    * Gets executed after all workers got shut down and the process is about to exit.
    * @param {Number} exitCode 0 - success, 1 - fail
    * @param {ICallbackConfig} config wdio-workflo configuration object
    * @param {Array.<ICapabilities>} capabilities list of capabilities details
    */
-  onComplete?<T>(exitCode: number, config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> | void
+  onComplete?<T>(exitCode: number, config: ICallbackConfig, capabilities: ICapabilities[]): Promise<T> | void;
   /**
   * Gets executed when an error happens, good place to take a screenshot
   * @ {Error} error
   */
-  onError?<T>(error: Error): Promise<T> | void
+  onError?<T>(error: Error): Promise<T> | void;
 }

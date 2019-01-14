@@ -1,14 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//import functions from './functions'
-//import registerSteps from './registerSteps'
 const Functions = require("./api");
-const objectFunctions = require("./utility_functions/object");
+const enums_1 = require("./enums");
+const matchers_1 = require("./matchers");
 const arrayFunctions = require("./utility_functions/array");
 const classFunctions = require("./utility_functions/class");
+const objectFunctions = require("./utility_functions/object");
 const utilFunctions = require("./utility_functions/util");
-const matchers_1 = require("./matchers");
-const enums_1 = require("./enums");
 function safeAdd(context, key, obj) {
     if (context.hasOwnProperty(key)) {
         throw new Error(`${key} is already defined within context`);
@@ -29,14 +27,14 @@ function safeAddAll(context, objArr) {
 function inject(config) {
     const context = global;
     // setup variables
-    //safeAdd( context, 'steps', {} )
+    // safeAdd( context, 'steps', {} )
     safeAddAll(context, [Functions]);
     context.Workflo = {
         Object: {},
         Array: {},
         String: {},
         Class: {},
-        Util: {}
+        Util: {},
     };
     safeAddAll(context.Workflo.Object, [objectFunctions]);
     safeAddAll(context.Workflo.Array, [arrayFunctions]);

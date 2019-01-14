@@ -1,5 +1,5 @@
-import { PageElement, IPageElementOpts, PageElementCurrently, PageElementWait, PageElementEventually } from './PageElement';
 import { PageNodeStore } from '../stores';
+import { IPageElementOpts, PageElement, PageElementCurrently, PageElementEventually, PageElementWait } from './PageElement';
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElement.
  *
@@ -373,7 +373,8 @@ export declare class ValuePageElementEventually<Store extends PageNodeStore, Pag
      */
     readonly not: {
         /**
-         * Returns true if PageElement's actual value eventually does not equal the expected value within a specific timeout.
+         * Returns true if PageElement's actual value eventually does not equal the expected value within a specific
+         * timeout.
          *
          * @param value the expected value which is supposed not to equal PageElement's actual value
          * @param opts includes the `timeout` within which the condition is expected to be met and the

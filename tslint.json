@@ -1,0 +1,51 @@
+{
+    "extends": "tslint-config-airbnb",
+    "rulesDirectory": [],
+    "rules": {
+        "no-debugger": true,
+        "max-line-length": {
+            "options": [120]
+        },
+        "one-variable-per-declaration": false,
+        "no-duplicate-variable": [true, "check-parameters"],
+        "no-empty": true,
+        "no-for-in-array": true,
+        "class-name": true,
+        "match-default-export-name": true,
+        "no-irregular-whitespace": true,
+        "ordered-imports": true,
+        "new-parens": true,
+        "no-arg": true,
+        "no-bitwise": true,
+        "no-consecutive-blank-lines": false,
+        "no-unsafe-any": true,
+        "no-console": {
+            "severity": "warning",
+            "options": [
+                "debug",
+                "info",
+                "log",
+                "time",
+                "timeEnd",
+                "trace"
+            ]
+        },
+        "import-name": false,
+        "variable-name": [false],
+        "function-name": [false],
+        "ter-arrow-parens": false,
+        "no-else-after-return": false,
+        "no-increment-decrement": false,
+        "no-this-assignment": false,
+        "no-parameter-reassignment": false,
+        "switch-default": false,
+        "ter-func-call-spacing": false,
+        "no-conditional-assignment": false,
+        "align": false
+    },
+    "jsRules": {
+        "max-line-length": {
+            "options": [120]
+        }
+    }
+}

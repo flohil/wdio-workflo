@@ -1,6 +1,6 @@
-import { pageObjects as core } from 'wdio-workflo'
+import { pageObjects as core } from 'wdio-workflo';
 
-import { PageNodeStore } from '../stores'
+import { PageNodeStore } from '../stores';
 
 /**
  * This interface can be used to extend wdio-workflo's IPageElementOpts interface.
@@ -52,9 +52,9 @@ export interface IPageElementOpts<
  */
 export class PageElement<Store extends PageNodeStore> extends core.elements.PageElement<Store> {
 
-  readonly currently: PageElementCurrently<Store, this>
-  readonly wait: PageElementWait<Store, this>
-  readonly eventually: PageElementEventually<Store, this>
+  readonly currently: PageElementCurrently<Store, this>;
+  readonly wait: PageElementWait<Store, this>;
+  readonly eventually: PageElementEventually<Store, this>;
 
  /**
   * PageElement serves as the main building block for all page objects.
@@ -92,11 +92,11 @@ export class PageElement<Store extends PageNodeStore> extends core.elements.Page
   * @param opts the options used to configure PageElement
   */
   constructor(selector: string, opts?: IPageElementOpts<Store>) {
-    super(selector, opts)
+    super(selector, opts);
 
-    this.currently = new PageElementCurrently(this)
-    this.wait = new PageElementWait(this)
-    this.eventually = new PageElementEventually(this)
+    this.currently = new PageElementCurrently(this);
+    this.wait = new PageElementWait(this);
+    this.eventually = new PageElementEventually(this);
   }
 }
 

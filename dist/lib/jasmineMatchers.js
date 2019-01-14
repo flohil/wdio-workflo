@@ -8,12 +8,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const diff = require('deep-diff').diff;
 // ADD YOUR OWN CUSTOM MATCHERS BELOW
 const customMatchers = {
-    toHaveLength: function () {
+    toHaveLength() {
         return {
-            compare: function (obj, length) {
+            compare(obj, length) {
                 const result = {
                     pass: false,
-                    message: ''
+                    message: '',
                 };
                 if (typeof length !== 'number') {
                     result.message = `${length} is not a number`;
@@ -52,16 +52,16 @@ const customMatchers = {
                     }
                     return result;
                 }
-            }
+            },
         };
     },
     // Checks if urls match (cutting off get parameters)
-    toMatchUrl: function () {
+    toMatchUrl() {
         return {
-            compare: function (obj, url) {
+            compare(obj, url) {
                 const result = {
                     pass: false,
-                    message: undefined
+                    message: undefined,
                 };
                 const baseUrl = obj.split('?')[0];
                 if (baseUrl === url) {
@@ -71,16 +71,16 @@ const customMatchers = {
                     result.message = `${obj} does not match url ${url}`;
                 }
                 return result;
-            }
+            },
         };
     },
     // Checks if string includes another string
-    toInclude: function () {
+    toInclude() {
         return {
-            compare: function (obj, substr) {
+            compare(obj, substr) {
                 const result = {
                     pass: false,
-                    message: undefined
+                    message: undefined,
                 };
                 if (obj.includes(substr)) {
                     result.pass = true;
@@ -89,17 +89,17 @@ const customMatchers = {
                     result.message = `'${obj}' does not contain substring '${substr}'`;
                 }
                 return result;
-            }
+            },
         };
     },
     // Checks if two objects match and if they don't,
     // outputs the diff of the objects in the error message.
-    toEqualObject: function () {
+    toEqualObject() {
         return {
-            compare: function (expectedObj, actualObj) {
+            compare(expectedObj, actualObj) {
                 const result = {
                     pass: false,
-                    message: undefined
+                    message: undefined,
                 };
                 let diffObj = diff(actualObj, expectedObj);
                 if (typeof diffObj === 'undefined') {
@@ -110,9 +110,9 @@ const customMatchers = {
                     result.message = `Expected object did not match actual object: \n${JSON.stringify(diffObj, null, 2)}`;
                 }
                 return result;
-            }
+            },
         };
-    }
+    },
 };
 exports.customMatchers = customMatchers;
 // DEFINE INTERNAL UTILITY FUNCTIONS BELOW

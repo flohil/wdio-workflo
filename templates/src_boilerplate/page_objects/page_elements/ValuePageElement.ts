@@ -1,13 +1,13 @@
-import { pageObjects as core, helpers } from 'wdio-workflo'
+import { helpers, pageObjects as core } from 'wdio-workflo';
 
-import { PageNodeStore } from '../stores'
 import {
+  IPageElementOpts,
   PageElement,
   PageElementCurrently,
   PageElementEventually,
   PageElementWait,
-  IPageElementOpts
-} from '../page_elements'
+} from '../page_elements';
+import { PageNodeStore } from '../stores';
 
 /**
  * This interface can be used to extend wdio-workflo's IValuePageElementOpts interface.
@@ -40,15 +40,15 @@ export abstract class ValuePageElement<
 > extends PageElement<Store>
 implements core.elements.ValuePageElement<Store, ValueType> {
 
-  readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>
-  readonly wait: ValuePageElementWait<Store, this, ValueType>
-  readonly eventually: ValuePageElementEventually<Store, this, ValueType>
+  readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>;
+  readonly wait: ValuePageElementWait<Store, this, ValueType>;
+  readonly eventually: ValuePageElementEventually<Store, this, ValueType>;
 
   constructor(selector: string, opts?: IValuePageElementOpts<Store>) {
-    super(selector, opts)
+    super(selector, opts);
 
-    this.wait = new ValuePageElementWait(this)
-    this.eventually = new ValuePageElementEventually(this)
+    this.wait = new ValuePageElementWait(this);
+    this.eventually = new ValuePageElementEventually(this);
   }
 
   // declarations of core.elements.ValuePageElement functions required for typescript mixin
@@ -60,7 +60,7 @@ implements core.elements.ValuePageElement<Store, ValueType> {
 }
 
 /**
- * This class can be used to extend or customize the functionality provided by wdio-workflo's ValuePageElementCurrently 
+ * This class can be used to extend or customize the functionality provided by wdio-workflo's ValuePageElementCurrently
  * class. It is supposed to serve as the base ValuePageElementCurrently class throughout your project.
  *
  * ValuePageElementCurrently defines all `currently` functions of ValuePageElement.
@@ -77,20 +77,20 @@ export abstract class ValuePageElementCurrently<
 > extends PageElementCurrently<Store, PageElementType>
 implements core.elements.ValuePageElementCurrently<Store, PageElementType, ValueType> {
   // declarations of core.elements.ValuePageElement functions required for typescript mixin
-  abstract getValue(): ValueType
-  getHasValue: (value: ValueType) => boolean
-  getHasAnyValue: () => boolean
-  getContainsValue: (value: ValueType) => boolean
-  hasValue: (value: ValueType) => boolean
-  hasAnyValue: () => boolean
-  containsValue: (value: ValueType) => boolean
+  abstract getValue(): ValueType;
+  getHasValue: (value: ValueType) => boolean;
+  getHasAnyValue: () => boolean;
+  getContainsValue: (value: ValueType) => boolean;
+  hasValue: (value: ValueType) => boolean;
+  hasAnyValue: () => boolean;
+  containsValue: (value: ValueType) => boolean;
 
   readonly not: core.elements.ValuePageElementCurrently<Store, PageElementType, ValueType>['not'] &
-    PageElementCurrently<Store, PageElementType>['not']
+    PageElementCurrently<Store, PageElementType>['not'];
 }
 
 /**
- * This class can be used to extend or customize the functionality provided by wdio-workflo's ValuePageElementWait 
+ * This class can be used to extend or customize the functionality provided by wdio-workflo's ValuePageElementWait
  * class. It is supposed to serve as the base ValuePageElementWait class throughout your project.
  *
  * ValuePageElementWait defines all `wait` functions of ValuePageElement.
@@ -107,12 +107,12 @@ export class ValuePageElementWait<
 > extends PageElementWait<Store, PageElementType>
 implements core.elements.ValuePageElementWait<Store, PageElementType, ValueType> {
   // declarations of core.elements.ValuePageElement functions required for typescript mixin
-  hasValue: (value: ValueType, opts?: Workflo.ITimeoutReverseInterval) => PageElementType
-  hasAnyValue: (opts?: Workflo.ITimeoutReverseInterval) => PageElementType
-  containsValue: (value: ValueType, opts?: Workflo.ITimeoutReverseInterval) => PageElementType
+  hasValue: (value: ValueType, opts?: Workflo.ITimeoutReverseInterval) => PageElementType;
+  hasAnyValue: (opts?: Workflo.ITimeoutReverseInterval) => PageElementType;
+  containsValue: (value: ValueType, opts?: Workflo.ITimeoutReverseInterval) => PageElementType;
 
   readonly not: core.elements.ValuePageElementWait<Store, PageElementType, ValueType>['not'] &
-    PageElementWait<Store, PageElementType>['not']
+    PageElementWait<Store, PageElementType>['not'];
 }
 
 /**
@@ -133,15 +133,16 @@ export class ValuePageElementEventually<
 > extends PageElementEventually<Store, PageElementType>
 implements core.elements.ValuePageElementEventually<Store, PageElementType, ValueType> {
   // declarations of core.elements.ValuePageElement functions required for typescript mixin
-  hasValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => boolean
-  hasAnyValue: (opts?: Workflo.ITimeoutInterval) => boolean
-  containsValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => boolean
+  hasValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => boolean;
+  hasAnyValue: (opts?: Workflo.ITimeoutInterval) => boolean;
+  containsValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => boolean;
 
   readonly not: core.elements.ValuePageElementEventually<Store, PageElementType, ValueType>['not'] &
-    PageElementEventually<Store, PageElementType>['not']
+    PageElementEventually<Store, PageElementType>['not'];
 }
 
-// mixin functionalities of core.elements.ValuePageElement class -> https://www.typescriptlang.org/docs/handbook/mixins.html
+// mixin functionalities of core.elements.ValuePageElement class
+// -> https://www.typescriptlang.org/docs/handbook/mixins.html
 
 helpers.applyMixins(ValuePageElement, [core.elements.ValuePageElement], ['not']);
 helpers.applyMixins(ValuePageElementCurrently, [core.elements.ValuePageElementCurrently], ['not']);

@@ -8,7 +8,13 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "declaration": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "plugins": [
+            {
+              "name": "typescript-tslint-plugin",
+              "configFile": "./tslint.json",
+            }
+        ]
     },
     "include": [
         "index.d.ts",

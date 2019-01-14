@@ -33,7 +33,7 @@ class PageNode {
     toJSON() {
         return {
             pageNodeType: this.constructor.name,
-            nodeId: this._selector
+            nodeId: this._selector,
         };
     }
     // COMMON HELPER FUNCTIONS
@@ -53,8 +53,7 @@ class PageNode {
         }
         catch (error) {
             if (error.message.includes('could not be located on the page')) {
-                const errorMsg = `${this.constructor.name} could not be located on the page.\n` +
-                    `( ${this.__getNodeId()} )`;
+                const errorMsg = `${this.constructor.name} could not be located on the page.\n( ${this.__getNodeId()} )`;
                 throw new Error(errorMsg);
             }
             else {
@@ -152,8 +151,7 @@ class PageNode {
      */
     _handleWaitError(error, errorMessage, timeout) {
         if (error.message.includes('could not be located on the page')) {
-            throw new Error(`${this.constructor.name} could not be located on the page within ${timeout}ms.\n` +
-                `( ${this.__getNodeId()} )`);
+            throw new Error(`${this.constructor.name} could not be located on the page within ${timeout}ms.\n( ${this.__getNodeId()} )`);
         }
         else if ('type' in error && error.type === 'WaitUntilTimeoutError') {
             const waitError = new Error(`${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.__getNodeId()} )`);

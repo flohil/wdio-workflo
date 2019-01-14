@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually } from '.';
+import { IPageNodeOpts, PageNode, PageNodeCurrently, PageNodeEventually, PageNodeWait } from '.';
 import { PageNodeStore } from '../stores';
 /**
  * Defines the opts parameter passed to the constructor function of PageElementBase.

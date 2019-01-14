@@ -1,8 +1,8 @@
 /// <reference types="webdriverio" />
-import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts } from '.';
-import { PageNodeStore } from '../stores';
+import { IPageElementOpts, IPageNodeOpts, PageElement, PageNode } from '.';
 import { ListWhereBuilder } from '../builders';
-import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode';
+import { PageNodeStore } from '../stores';
+import { PageNodeCurrently, PageNodeEventually, PageNodeWait } from './PageNode';
 /**
  * Describes the opts parameter passed to the PageElementList's `identify` function.
  *
@@ -14,8 +14,8 @@ import { PageNodeEventually, PageNodeWait, PageNodeCurrently } from './PageNode'
  * Be aware that this form of PageElement identification can be quite slow because PageElementList needs to fetch all
  * managed PageElements from the page before `mappingFunc` can be executed on them.
  *
- * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of managed
- * PageElements. The only exception to this rule are cases in which the identification of PageElements cannot be
+ * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of
+ * managed PageElements. The only exception to this rule are cases in which the identification of PageElements cannot be
  * described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates on
  * the page).
  *
@@ -98,8 +98,8 @@ export interface IPageElementListOpts<Store extends PageNodeStore, PageElementTy
     disableCache?: boolean;
     /**
      * This is the default `identifier` used to identify a PageElementList's managed PageElements via the key names
-     * defined in `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of identifier's
-     * `mappingFunc`.
+     * defined in `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of
+     * identifier's `mappingFunc`.
      *
      * This default `identifier` can be overwritten by passing a custom `identifier` in the function parameters of
      * PageElementList's `identify` function.
@@ -164,8 +164,8 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
      * By default, the results of an "identification process" (the last invocation of PageElementList's `identify`
      * function) are cached for future invocations of PageElementList's `identify` function.
      *
-     * If `_disableCache` is set to true, this caching of identification results will be disabled and a new "identification
-     * process" will be performed on each invocation of PageElementList's `identify` function.
+     * If `_disableCache` is set to true, this caching of identification results will be disabled and a new
+     * "identification process" will be performed on each invocation of PageElementList's `identify` function.
      *
      * Disabling the identification results cache can be useful if the contents of a PageElementList change often.
      * If the contents of a PageElementList rarely change, PageElementList's `identify` function can be invoked with the
@@ -174,8 +174,8 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     protected _disableCache: boolean;
     /**
      * This is the default `identifier` used to identify a PageElementList's managed PageElements via the key names
-     * defined in `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of identifier's
-     * `mappingFunc`.
+     * defined in `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of
+     * identifier's `mappingFunc`.
      *
      * This default `identifier` can be overwritten by passing a custom `identifier` in the function parameters of
      * PageElementList's `identify` function.
@@ -190,8 +190,8 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
         };
     };
     /**
-     * Stores an instance of ListWhereBuilder which allows to select subsets of the PageElements managed by PageElementList
-     * by modifying the list's selector using XPath modification functions.
+     * Stores an instance of ListWhereBuilder which allows to select subsets of the PageElements managed by
+     * PageElementList by modifying the list's selector using XPath modification functions.
      */
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     /**
@@ -295,8 +295,9 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     /**
      * Sets a new default `identifier` for PageElementList's `identify` function.
      *
-     * @param identifier used to identify a PageElementList's managed PageElements via the key names defined in `identifier`
-     * 's `mappingObject` by matching `mappingObject`'s values with the return values of `identifier`'s `mappingFunc`
+     * @param identifier used to identify a PageElementList's managed PageElements via the key names defined in
+     * `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of `identifier`'s
+     * `mappingFunc`
      */
     setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>): this;
     /**
@@ -324,10 +325,10 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
      * Be aware that the invocation of `identify` can be quite slow (if no identification result is cached yet) because
      * PageElementList needs to fetch all managed PageElements from the page before `mappingFunc` can be executed on them.
      *
-     * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of managed
-     * PageElements. The only exception to this rule are cases in which the identification of PageElements cannot be
-     * described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates on
-     * the page).
+     * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of
+     * managed PageElements. The only exception to this rule are cases in which the identification of PageElements cannot
+     * be described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates
+     * on the page).
      *
      * @param opts includes the `identifier` which provides the `mappingObject` and the `mappingFunc` for the
      * identification process and a `resetCache` flag that, if set to true, deletes any previously cached identification
@@ -613,8 +614,8 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
      */
     protected _elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType;
     /**
-     * Stores an instance of ListWhereBuilder which allows to select subsets of the PageElements managed by PageElementList
-     * by modifying the list's selector using XPath modification functions.
+     * Stores an instance of ListWhereBuilder which allows to select subsets of the PageElements managed by
+     * PageElementList by modifying the list's selector using XPath modification functions.
      */
     protected _whereBuilder: ListWhereBuilder<Store, PageElementType, PageElementOpts, ListType>;
     /**
@@ -657,8 +658,8 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
      */
     readonly all: PageElementType[];
     /**
-     * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM which
-     * are identified by PageElementList's XPath selector).
+     * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM
+     * which are identified by PageElementList's XPath selector).
      */
     getLength(): number;
     /**
@@ -810,7 +811,8 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
      */
     isEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean;
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected text(s).
+     * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected
+     * text(s).
      *
      * @param text the expected text(s) supposed to equal the actual texts
      *
@@ -930,8 +932,8 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
          *
          * If `text` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+         * array elements are compared to the array of actual values of all PageElements.
          */
         hasText: (text: string | string[]) => boolean;
         /**
@@ -949,8 +951,8 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
          *
          * If `text` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+         * array elements are compared to the array of actual values of all PageElements.
          */
         containsText: (text: string | string[]) => boolean;
         /**
@@ -989,8 +991,8 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
          *
          * If `directText` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
-         * array elements are compared to the array of actual values of all PageElements.
+         * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+         * its array elements are compared to the array of actual values of all PageElements.
          */
         containsDirectText: (directText: string | string[]) => boolean;
     };
@@ -1037,7 +1039,7 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
      *
      * @returns this (an instance of PageElementList)
      */
-    hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): ListType;
+    hasLength(length: number, { timeout, comparator, interval, reverse, }?: IPageElementListWaitLengthReverseParams): ListType;
     /**
      * Waits for PageElementList to be empty.
      *
@@ -1051,7 +1053,7 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
      *
      * @returns this (an instance of PageElementList)
      */
-    isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): ListType;
+    isEmpty({ timeout, interval, reverse, }?: IPageElementListWaitEmptyReverseParams): ListType;
     /**
      * Waits for at least one of the PageElements managed by PageElementList to exist.
      *
@@ -1161,8 +1163,8 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
      *
      * If `directText` is a single value, this value is compared to each element in the array of actual values of all
      * PageElements.
-     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-     * elements are compared to the array of actual values of all PageElements.
+     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+     * array elements are compared to the array of actual values of all PageElements.
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
@@ -1203,8 +1205,8 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
      *
      * If `directText` is a single value, this value is compared to each element in the array of actual values of all
      * PageElements.
-     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-     * elements are compared to the array of actual values of all PageElements.
+     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+     * array elements are compared to the array of actual values of all PageElements.
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
@@ -1261,8 +1263,8 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
          *
          * Throws an error if the condition is not met within a specific timeout.
          *
-         * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
-         * all managed PageElements and the `timeout` within which the condition is expected to be met
+         * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
+         * or all managed PageElements and the `timeout` within which the condition is expected to be met
          *
          * If no `timeout` is specified, a PageElement's default timeout is used.
          *
@@ -1306,8 +1308,8 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
          *
          * If `text` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+         * array elements are compared to the array of actual values of all PageElements.
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
@@ -1341,8 +1343,8 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
          *
          * If `text` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+         * array elements are compared to the array of actual values of all PageElements.
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
@@ -1365,8 +1367,8 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
          *
          * If `directText` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+         * its array elements are compared to the array of actual values of all PageElements.
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
@@ -1407,8 +1409,8 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
          *
          * If `directText` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+         * its array elements are compared to the array of actual values of all PageElements.
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
@@ -1458,7 +1460,7 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
      */
-    hasLength(length: number, { timeout, comparator, interval, reverse }?: IPageElementListWaitLengthReverseParams): boolean;
+    hasLength(length: number, { timeout, comparator, interval, reverse, }?: IPageElementListWaitLengthReverseParams): boolean;
     /**
      * Returns true if PageElementList eventually is empty within a specific timeout.
      *
@@ -1468,7 +1470,7 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
      */
-    isEmpty({ timeout, interval, reverse }?: IPageElementListWaitEmptyReverseParams): boolean;
+    isEmpty({ timeout, interval, reverse, }?: IPageElementListWaitEmptyReverseParams): boolean;
     /**
      * Returns true if at least one of the PageElements managed by PageElementList eventually exists within a specific
      * timeout.
@@ -1590,8 +1592,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
      *
      * If `directText` is a single value, this value is compared to each element in the array of actual values of all
      * PageElements.
-     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-     * elements are compared to the array of actual values of all PageElements.
+     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+     * array elements are compared to the array of actual values of all PageElements.
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
@@ -1604,8 +1606,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
      */
     readonly not: {
         /**
-         * Returns true if the result of the comparison between PageElementList's actual length and an expected length using
-         * the comparison method defined in `comparator` eventually returns false within a specific timeout.
+         * Returns true if the result of the comparison between PageElementList's actual length and an expected length
+         * using the comparison method defined in `comparator` eventually returns false within a specific timeout.
          *
          * The following comparison methods are supported:
          *
@@ -1637,8 +1639,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
          * Returns true if none of the PageElements managed by PageElementList eventually exist within a specific
          * timeout.
          *
-         * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
-         * all managed PageElements and the `timeout` within which the condition is expected to be met
+         * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
+         * or all managed PageElements and the `timeout` within which the condition is expected to be met
          *
          * If no `timeout` is specified, a PageElement's default timeout is used.
          */
@@ -1659,8 +1661,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
          * Returns true if all PageElements managed by PageElementList eventually are not enabled within a specific
          * timeout.
          *
-         * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
-         * or all managed PageElements and the `timeout` within which the condition is expected to be met
+         * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
+         * some or all managed PageElements and the `timeout` within which the condition is expected to be met
          *
          * If no `timeout` is specified, a PageElement's default timeout is used.
          */
@@ -1673,8 +1675,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
          *
          * If `text` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+         * array elements are compared to the array of actual values of all PageElements.
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
@@ -1686,9 +1688,9 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
          * Returns true if all PageElements managed by PageElementList eventually do not have any text within a specific
          * timeout.
          *
-         * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
-         * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
-         * to check it
+         * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for
+         * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+         * `interval` used to check it
          *
          * If no `timeout` is specified, a PageElement's default timeout is used.
          * If no `interval` is specified, a PageElement's default interval is used.
@@ -1702,8 +1704,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
          *
          * If `text` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+         * array elements are compared to the array of actual values of all PageElements.
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *
@@ -1722,8 +1724,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
         *
         * If `directText` is a single value, this value is compared to each element in the array of actual values of all
         * PageElements.
-        * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-        * elements are compared to the array of actual values of all PageElements.
+        * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+        * array elements are compared to the array of actual values of all PageElements.
         * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
         * to check it
         *
@@ -1738,9 +1740,9 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
          * A direct text is a text that resides on the level directly below the selected HTML element.
          * It does not include any text of the HTML element's nested children HTML elements.
          *
-         * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
-         * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
-         * used to check it
+         * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function
+         * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+         * `interval` used to check it
          *
          * If no `timeout` is specified, a PageElement's default timeout is used.
          * If no `interval` is specified, a PageElement's default interval is used.
@@ -1757,8 +1759,8 @@ export declare class PageElementListEventually<Store extends PageNodeStore, Page
          *
          * If `directText` is a single value, this value is compared to each element in the array of actual values of all
          * PageElements.
-         * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-         * elements are compared to the array of actual values of all PageElements.
+         * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+         * its array elements are compared to the array of actual values of all PageElements.
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
          * to check it
          *

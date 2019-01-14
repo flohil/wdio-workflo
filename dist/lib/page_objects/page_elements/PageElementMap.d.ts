@@ -1,6 +1,6 @@
-import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageNodeEventually, PageNodeCurrently, PageNodeWait } from '.';
-import { PageNodeStore } from '../stores';
+import { IPageElementOpts, IPageNodeOpts, PageElement, PageNode, PageNodeCurrently, PageNodeEventually, PageNodeWait } from '.';
 import { XPathBuilder } from '../builders';
+import { PageNodeStore } from '../stores';
 /**
  * Describes the `identifier` property of the `opts` parameter passed to PageElementMap's constructor function.
  *
@@ -137,10 +137,10 @@ export declare class PageElementMap<Store extends PageNodeStore, K extends strin
      * This initial identification process makes use of a `mappingObject` and a `mappingFunc` which are both defined in
      * PageElement's `identifier` object:
      *
-     * - For each property of `mappingObject`, `mappingFunc` is invoked with the map's "base" selector as the first and the
-     * value of the currently processed property as the second parameter.
-     * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
-     * of the currently processed properties as parameters.
+     * - For each property of `mappingObject`, `mappingFunc` is invoked with the map's "base" selector as the first and
+     * the value of the currently processed property as the second parameter.
+     * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the
+     * values of the currently processed properties as parameters.
      * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageNodeStore.
      * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
      *
@@ -253,8 +253,8 @@ export declare class PageElementMap<Store extends PageNodeStore, K extends strin
      */
     getHasDirectText(directTexts: Partial<Record<K, string>>): Partial<Record<K, boolean>>;
     /**
-     * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a result map after performing
-     * the initial waiting condition of each managed PageElement.
+     * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a result map after
+     * performing the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
      *
@@ -506,7 +506,8 @@ export declare class PageElementMapCurrently<Store extends PageNodeStore, K exte
      */
     hasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>): boolean;
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementMap currently contain the expected texts.
+     * Returns true if the actual texts of all PageElements managed by PageElementMap currently contain the expected
+     * texts.
      *
      * @param texts the expected texts supposed to be contained in the actual texts
      */
@@ -740,9 +741,9 @@ export declare class PageElementMapWait<Store extends PageNodeStore, K extends s
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
      *
-     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for some
-     * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
-     * to check it
+     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+     * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
+     * used to check it
      *
      * If no `timeout` is specified, a PageElement's default timeout is used.
      * If no `interval` is specified, a PageElement's default interval is used.
@@ -977,8 +978,8 @@ export declare class PageElementMapEventually<Store extends PageNodeStore, K ext
      */
     hasAnyText(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K>): boolean;
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementMap eventually contain the expected texts
-     * within a specific timeout.
+     * Returns true if the actual texts of all PageElements managed by PageElementMap eventually contain the expected
+     * texts within a specific timeout.
      *
      * @param texts the expected texts supposed to be contained in the actual texts
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -1038,7 +1039,8 @@ export declare class PageElementMapEventually<Store extends PageNodeStore, K ext
          */
         exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;
         /**
-         * Returns true if all PageElements managed by PageElementMap eventually are not visible within a specific timeout.
+         * Returns true if all PageElements managed by PageElementMap eventually are not visible within a specific
+         * timeout.
          *
          * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
          * some or all managed PageElements and the `timeout` within which the condition is expected to be met
@@ -1047,7 +1049,8 @@ export declare class PageElementMapEventually<Store extends PageNodeStore, K ext
          */
         isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K>) => boolean;
         /**
-         * Returns true if all PageElements managed by PageElementMap eventually are not enabled within a specific timeout.
+         * Returns true if all PageElements managed by PageElementMap eventually are not enabled within a specific
+         * timeout.
          *
          * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
          * some or all managed PageElements and the `timeout` within which the condition is expected to be met

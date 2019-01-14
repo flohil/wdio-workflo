@@ -1,6 +1,14 @@
-import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts, PageElementListCurrently, PageElementListEventually, PageElementListWait } from './'
-import { PageNodeStore } from '../stores'
 import _ = require('lodash');
+import { PageNodeStore } from '../stores';
+import {
+  IPageElementListOpts,
+  IValuePageElementOpts,
+  PageElementList,
+  PageElementListCurrently,
+  PageElementListEventually,
+  PageElementListWait,
+  ValuePageElement,
+} from './';
 
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementList.
@@ -40,9 +48,9 @@ export class ValuePageElementList<
 > extends PageElementList<Store, PageElementType, PageElementOptions>
 implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[] | ValueType> {
 
-  readonly currently: ValuePageElementListCurrently<Store, PageElementType, PageElementOptions, this, ValueType>
-  readonly wait: ValuePageElementListWait<Store, PageElementType, PageElementOptions, this, ValueType>
-  readonly eventually: ValuePageElementListEventually<Store, PageElementType, PageElementOptions, this, ValueType>
+  readonly currently: ValuePageElementListCurrently<Store, PageElementType, PageElementOptions, this, ValueType>;
+  readonly wait: ValuePageElementListWait<Store, PageElementType, PageElementOptions, this, ValueType>;
+  readonly eventually: ValuePageElementListEventually<Store, PageElementType, PageElementOptions, this, ValueType>;
 
   /**
    * ValuePageElementList extends PageElementList with the possibility to set, retrieve and check the values of
@@ -57,13 +65,13 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
    */
   constructor(
     selector: string,
-    opts: IValuePageElementListOpts<Store, PageElementType, PageElementOptions, ValueType>
+    opts: IValuePageElementListOpts<Store, PageElementType, PageElementOptions, ValueType>,
   ) {
-    super(selector, opts)
+    super(selector, opts);
 
-    this.currently = new ValuePageElementListCurrently(this, opts)
-    this.wait = new ValuePageElementListWait(this)
-    this.eventually = new ValuePageElementListEventually(this)
+    this.currently = new ValuePageElementListCurrently(this, opts);
+    this.wait = new ValuePageElementListWait(this);
+    this.eventually = new ValuePageElementListEventually(this);
   }
 
   /**
@@ -81,27 +89,27 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
    */
   initialWait() {
     if (this._waitType === Workflo.WaitType.value) {
-      this.wait.any.hasAnyValue()
+      this.wait.any.hasAnyValue();
     } else {
-      super.initialWait()
+      super.initialWait();
     }
   }
 
 // GETTER FUNCTIONS
 
   /**
-   * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing the 
+   * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing the
    * initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
    * ValuePageElements. The results of skipped function invocations are not included in the total results array.
    */
   getValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this.eachGet(this.all, element => element.getValue(), filterMask)
+    return this.eachGet(this.all, element => element.getValue(), filterMask);
   }
 
   /**
-   * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementList as an array after performing 
+   * Returns the 'hasValue' status of all ValuePageElements managed by ValuePageElementList as an array after performing
    * the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * A ValuePageElement's 'hasValue' status is set to true if its actual value equals the expected value.
@@ -115,12 +123,12 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
    */
   getHasValue(value: ValueType | ValueType[]) {
     return this.eachCompare(
-      this.all, (element, expected) => element.currently.hasValue(expected), value
-    )
+      this.all, (element, expected) => element.currently.hasValue(expected), value,
+    );
   }
 
   /**
-   * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementList as an array after 
+   * Returns the 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementList as an array after
    * performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any value.
@@ -129,11 +137,11 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
    * ValuePageElements. The results of skipped function invocations are not included in the total results array.
    */
   getHasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true)
+    return this.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
   }
 
   /**
-   * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementList as an array after 
+   * Returns the 'containsValue' status of all ValuePageElements managed by ValuePageElementList as an array after
    * performing the initial waiting condition of ValuePageElementList and each managed ValuePageElement.
    *
    * A ValuePageElement's 'containsValue' status is set to true if its actual value contains the expected value.
@@ -147,8 +155,8 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
    */
   getContainsValue(value: ValueType | ValueType[]) {
     return this.eachCompare(
-      this.all, (element, expected) => element.currently.containsValue(expected), value
-    )
+      this.all, (element, expected) => element.currently.containsValue(expected), value,
+    );
   }
 
 // SETTER FUNCTIONS
@@ -171,8 +179,8 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
    */
   setValue(values: ValueType[] | ValueType) {
     return this.eachSet<ValueType>(
-      this.all, (element, value) => element.setValue(value), values
-    )
+      this.all, (element, value) => element.setValue(value), values,
+    );
   }
 }
 
@@ -200,7 +208,7 @@ class ValuePageElementListCurrently<
    * ValuePageElements. The results of skipped function invocations are not included in the total results array.
    */
   getValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachGet(this.all, element => element.currently.getValue(), filterMask)
+    return this._node.eachGet(this.all, element => element.currently.getValue(), filterMask);
   }
 
   /**
@@ -217,8 +225,8 @@ class ValuePageElementListCurrently<
    */
   getHasValue(value: ValueType | ValueType[]) {
     return this._node.eachCompare(
-      this.all, (element, expected) => element.currently.hasValue(expected), value
-    )
+      this.all, (element, expected) => element.currently.hasValue(expected), value,
+    );
   }
 
   /**
@@ -230,7 +238,7 @@ class ValuePageElementListCurrently<
    * ValuePageElements. The results of skipped function invocations are not included in the total results array.
    */
   getHasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true)
+    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
   }
 
   /**
@@ -247,14 +255,14 @@ class ValuePageElementListCurrently<
    */
   getContainsValue(value: ValueType | ValueType[]) {
     return this._node.eachCompare(
-      this.all, (element, expected) => element.currently.containsValue(expected), value
-    )
+      this.all, (element, expected) => element.currently.containsValue(expected), value,
+    );
   }
 
   // CHECK STATE
 
   /**
-   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently equal the 
+   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently equal the
    * expected value(s).
    *
    * @param value the expected value(s) supposed to equal the actual values
@@ -266,8 +274,8 @@ class ValuePageElementListCurrently<
    */
   hasValue(value: ValueType | ValueType[]) {
     return this._node.eachCheck(
-      this.all, (element, expected) => element.currently.hasValue(expected), value
-    )
+      this.all, (element, expected) => element.currently.hasValue(expected), value,
+    );
   }
 
   /**
@@ -277,11 +285,11 @@ class ValuePageElementListCurrently<
    * ValuePageElements
    */
   hasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue(), filterMask, true)
+    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
   }
 
   /**
-   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently contain the 
+   * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently contain the
    * expected value(s).
    *
    * @param value the expected value(s) supposed to be contained in the actual values
@@ -293,8 +301,8 @@ class ValuePageElementListCurrently<
    */
   containsValue(value: ValueType | ValueType[]) {
     return this._node.eachCheck(
-      this.all, (element, expected) => element.currently.containsValue(expected), value
-    )
+      this.all, (element, expected) => element.currently.containsValue(expected), value,
+    );
   }
 
   /**
@@ -303,7 +311,7 @@ class ValuePageElementListCurrently<
   get not() {
     return {...super.not,
       /**
-       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not 
+       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not
        * equal the expected value(s).
        *
        * @param value the expected value(s) supposed not to equal the actual values
@@ -315,8 +323,8 @@ class ValuePageElementListCurrently<
        */
       hasValue: (value: ValueType | ValueType[]) => {
         return this._node.eachCheck(
-          this.all, (element, expected) => element.currently.not.hasValue(expected), value
-        )
+          this.all, (element, expected) => element.currently.not.hasValue(expected), value,
+        );
       },
       /**
        * Returns true if all ValuePageElements managed by ValuePageElementList currently do not have any value.
@@ -325,10 +333,10 @@ class ValuePageElementListCurrently<
        * ValuePageElements
        */
       hasAnyValue: (filterMask?: Workflo.PageNode.ListFilterMask) => {
-        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue(), filterMask, true)
+        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue(), filterMask, true);
       },
       /**
-       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not 
+       * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not
        * contain the expected value(s).
        *
        * @param value the expected value(s) supposed not to be contained in the actual values
@@ -340,10 +348,10 @@ class ValuePageElementListCurrently<
        */
       containsValue: (value: ValueType | ValueType[]) => {
         return this._node.eachCheck(
-          this.all, (element, expected) => element.currently.not.containsValue(expected), value
-        )
-      }
-    }
+          this.all, (element, expected) => element.currently.not.containsValue(expected), value,
+        );
+      },
+    };
   }
 }
 
@@ -365,7 +373,8 @@ class ValuePageElementListWait<
 > extends PageElementListWait<Store, PageElementType, PageElementOptions, ListType> {
 
   /**
-   * Waits for the actual values of all ValuePageElements managed by ValuePageElementList to equal the expected value(s).
+   * Waits for the actual values of all ValuePageElements managed by ValuePageElementList to equal the expected
+   * value(s).
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
@@ -385,8 +394,8 @@ class ValuePageElementListWait<
    */
   hasValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.all, (element, expected) => element.wait.hasValue(expected, opts), value
-    )
+      this._node.all, (element, expected) => element.wait.hasValue(expected, opts), value,
+    );
   }
 
   /**
@@ -404,11 +413,11 @@ class ValuePageElementListWait<
    * @returns this (an instance of ValuePageElementList)
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait(
-      this._node.all, (element) => element.wait.hasAnyValue(otherOpts), filterMask, true
-    )
+      this._node.all, (element) => element.wait.hasAnyValue(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -433,8 +442,8 @@ class ValuePageElementListWait<
    */
   containsValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.all, (element, expected) => element.wait.containsValue(expected, opts), value
-    )
+      this._node.all, (element, expected) => element.wait.containsValue(expected, opts), value,
+    );
   }
 
   /**
@@ -464,8 +473,8 @@ class ValuePageElementListWait<
        */
       hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.all, (element, expected) => element.wait.not.hasValue(expected, opts), value
-        )
+          this._node.all, (element, expected) => element.wait.not.hasValue(expected, opts), value,
+        );
       },
       /**
        * Waits for all ValuePageElements managed by ValuePageElementList not to have any value.
@@ -482,11 +491,11 @@ class ValuePageElementListWait<
        * @returns this (an instance of ValuePageElementList)
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait(
-          this._node.all, (element) => element.wait.not.hasAnyValue(otherOpts), filterMask, true
-        )
+          this._node.all, (element) => element.wait.not.hasAnyValue(otherOpts), filterMask, true,
+        );
       },
       /**
        * Waits for the actual values of all ValuePageElements managed by ValuePageElementList not to contain the
@@ -510,10 +519,10 @@ class ValuePageElementListWait<
        */
       containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.all, (element, expected) => element.wait.not.containsValue(expected, opts), value
-        )
-      }
-    }
+          this._node.all, (element, expected) => element.wait.not.containsValue(expected, opts), value,
+        );
+      },
+    };
   }
 }
 
@@ -554,8 +563,8 @@ class ValuePageElementListEventually<
    */
   hasValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.all, (element, expected) => element.eventually.hasValue(expected, opts), value
-    )
+      this._node.all, (element, expected) => element.eventually.hasValue(expected, opts), value,
+    );
   }
 
   /**
@@ -570,11 +579,11 @@ class ValuePageElementListEventually<
    * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck(
-      this._node.all, (element) => element.eventually.hasAnyValue(otherOpts), filterMask, true
-    )
+      this._node.all, (element) => element.eventually.hasAnyValue(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -595,8 +604,8 @@ class ValuePageElementListEventually<
    */
   containsValue(value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.all, (element, expected) => element.eventually.containsValue(expected, opts), value
-    )
+      this._node.all, (element, expected) => element.eventually.containsValue(expected, opts), value,
+    );
   }
 
   /**
@@ -622,8 +631,8 @@ class ValuePageElementListEventually<
        */
       hasValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value
-        )
+          this._node.all, (element, expected) => element.eventually.not.hasValue(expected, opts), value,
+        );
       },
       /**
        * Returns true if all ValuePageElements managed by ValuePageElementList eventually do not have any value within a
@@ -637,11 +646,11 @@ class ValuePageElementListEventually<
        * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IListFilterMask = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck(
-          this._node.all, (element) => element.eventually.not.hasAnyValue(otherOpts), filterMask, true
-        )
+          this._node.all, (element) => element.eventually.not.hasAnyValue(otherOpts), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList eventually do not
@@ -661,9 +670,9 @@ class ValuePageElementListEventually<
        */
       containsValue: (value: ValueType | ValueType[], opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value
-        )
-      }
-    }
+          this._node.all, (element, expected) => element.eventually.not.containsValue(expected, opts), value,
+        );
+      },
+    };
   }
 }

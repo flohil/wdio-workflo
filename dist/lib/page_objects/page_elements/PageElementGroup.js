@@ -10,8 +10,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
-const PageNode_1 = require("./PageNode");
 const helpers_1 = require("../../helpers");
+const PageNode_1 = require("./PageNode");
 /**
  * A PageElementGroup manages PageNodes of arbitrary types and structure in its `Content` which can be accessed be
  * accessed via PageElementGroup's `$` accessor.
@@ -39,12 +39,13 @@ class PageElementGroup extends _1.PageNode {
      * accessed via PageElementGroup's `$` accessor.
      *
      * It provides a convenient way to handle HTML forms, because it allows for state retrieval, state check, wait and
-     * setter functions to be executed on all of its managed PageNodes with a single function call. This can greatly reduce
-     * the code required to fill in a form.
+     * setter functions to be executed on all of its managed PageNodes with a single function call. This can greatly
+     * reduce the code required to fill in a form.
      *
-     * PageElementGroup does not force its managed PageNodes to support a certain function - it simply checks if a PageNode
-     * implements the said function before invoking it. If a PageNode does not implement a function, the invocation of
-     * this function is skipped for the affected PageNode and `undefined` will be written as the PageNode's result value.
+     * PageElementGroup does not force its managed PageNodes to support a certain function - it simply checks if a
+     * PageNode implements the said function before invoking it. If a PageNode does not implement a function, the
+     * invocation of this function is skipped for the affected PageNode and `undefined` will be written as the PageNode's
+     * result value.
      *
      * The result values returned by and the parameter values passed to functions which are executed on the managed
      * PageNodes are mapped to the structure of PageElementGroup's `Content` by replacing the `Content`'s original values
@@ -54,7 +55,7 @@ class PageElementGroup extends _1.PageNode {
      * @param id a string which uniquely identifies a PageElementGroup in a PageNodeStore
      * @param opts the options used to configure PageElementGroup
      */
-    constructor(id, { store, timeout, interval, content }) {
+    constructor(id, { store, timeout, interval, content, }) {
         super(id, { store, timeout, interval });
         this._id = id;
         this._$ = content;
@@ -71,7 +72,7 @@ class PageElementGroup extends _1.PageNode {
     toJSON() {
         return {
             pageNodeType: this.constructor.name,
-            nodeId: this._id
+            nodeId: this._id,
         };
     }
     __getNodeId() {
@@ -218,7 +219,7 @@ class PageElementGroup extends _1.PageNode {
      * `Content`
      */
     eachCompare(supportsInterface, compareFunc, expected, isFilterMask = false) {
-        let result = {};
+        const result = {};
         for (const key in this._$) {
             const node = this._$[key];
             if (supportsInterface(this._$[key])) {
@@ -288,7 +289,7 @@ class PageElementGroup extends _1.PageNode {
             }
         }
         this._lastDiff = {
-            tree: diffs
+            tree: diffs,
         };
         return Object.keys(diffs).length === 0;
     }
@@ -310,7 +311,7 @@ class PageElementGroup extends _1.PageNode {
      * `Content`
      */
     eachGet(supportsInterface, getFunc, filterMask) {
-        let result = {};
+        const result = {};
         for (const key in this.$) {
             if (supportsInterface(this.$[key])) {
                 const node = this.$[key];
@@ -738,7 +739,7 @@ class PageElementGroupCurrently extends _1.PageNodeCurrently {
              */
             containsDirectText: (directTexts) => {
                 return this._node.eachCheck(isIElementNode, ({ node, expected }) => node.currently.not.containsDirectText(expected), directTexts);
-            }
+            },
         };
     }
 }
@@ -880,9 +881,9 @@ class PageElementGroupWait extends PageNode_1.PageNodeWait {
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
      *
-     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for some
-     * or all managed PageNodes, the `timeout` within which the condition is expected to be met and the `interval` used
-     * to check it
+     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+     * some or all managed PageNodes, the `timeout` within which the condition is expected to be met and the `interval`
+     * used to check it
      *
      * If no `timeout` is specified, a PageElement's default timeout is used.
      * If no `interval` is specified, a PageElement's default interval is used.
@@ -1081,7 +1082,7 @@ class PageElementGroupWait extends PageNode_1.PageNodeWait {
              */
             containsDirectText: (directTexts, opts) => {
                 return this._node.eachWait(isIElementNode, ({ node, expected }) => node.wait.not.containsDirectText(expected, opts), directTexts);
-            }
+            },
         };
     }
 }
@@ -1343,7 +1344,7 @@ class PageElementGroupEventually extends PageNode_1.PageNodeEventually {
              */
             containsDirectText: (directTexts, opts) => {
                 return this._node.eachCheck(isIElementNode, ({ node, expected }) => node.eventually.not.containsDirectText(expected, opts), directTexts);
-            }
+            },
         };
     }
 }

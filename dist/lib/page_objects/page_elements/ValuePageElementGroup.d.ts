@@ -1,5 +1,5 @@
+import { IPageElementGroupOpts, PageElementGroup, PageElementGroupCurrently, PageElementGroupEventually, PageElementGroupWait } from '.';
 import { PageNodeStore } from '../stores';
-import { PageElementGroup, IPageElementGroupOpts, PageElementGroupCurrently, PageElementGroupEventually, PageElementGroupWait } from '.';
 /**
  * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
  * ValuePageElementGroup's content.
@@ -61,16 +61,16 @@ export declare class ValuePageElementGroup<Store extends PageNodeStore, Content 
      */
     constructor(id: string, { ...superOpts }: IValuePageElementGroupOpts<Store, Content>);
     /**
-     * Returns the values of all PageNodes managed by ValuePageElementGroup as a result structure after executing the initial
-     * waiting condition of each PageNode.
+     * Returns the values of all PageNodes managed by ValuePageElementGroup as a result structure after executing the
+     * initial waiting condition of each PageNode.
      *
      * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
     getValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>): Workflo.PageNode.ExtractValue<Content>;
     /**
-     * Returns the 'hasValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after executing
-     * the initial waiting condition of each PageNode.
+     * Returns the 'hasValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after
+     * executing the initial waiting condition of each PageNode.
      *
      * A ValuePageElement's 'hasValue' status is set to true if its actual value equals the expected value.
      *
@@ -78,8 +78,8 @@ export declare class ValuePageElementGroup<Store extends PageNodeStore, Content 
      */
     getHasValue(values: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     /**
-     * Returns the 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after performing
-     * the initial waiting condition of each PageNode.
+     * Returns the 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after
+     * performing the initial waiting condition of each PageNode.
      *
      * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any value.
      *
@@ -110,8 +110,8 @@ export declare class ValuePageElementGroup<Store extends PageNodeStore, Content 
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all `currently`
- * functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all
+ * `currently` functions
  */
 declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
@@ -149,7 +149,8 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
      */
     getContainsValue(values: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently equal the expected values.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently equal the expected
+     * values.
      *
      * @param values the expected values supposed to equal the actual values
      */
@@ -162,7 +163,8 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
      */
     hasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>): boolean;
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently contain the expected values.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently contain the expected
+     * values.
      *
      * @param values the expected values supposed to be contained in the actual values
      */
@@ -186,8 +188,8 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
          */
         hasAnyValue: (filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>) => boolean;
         /**
-         * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain the
-         * expected values.
+         * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain
+         * the expected values.
          *
          * @param values the expected values supposed not to be contained in the actual values
          */
@@ -209,7 +211,8 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait` functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait`
+ * functions
  */
 declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
@@ -294,7 +297,8 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
          */
         hasAnyValue: (opts?: Workflo.ITimeoutInterval & Partial<Workflo.PageNode.ExtractValueBoolean<Content>>) => GroupType;
         /**
-         * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected values.
+         * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected
+         * values.
          *
          * Throws an error if the condition is not met within a specific timeout.
          *
@@ -325,15 +329,15 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all `eventually`
- * functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all
+ * `eventually` functions
  */
 declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Content extends {
     [key: string]: Workflo.PageNode.INode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupEventually<Store, Content, GroupType> {
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually equal the expected values
-     * within a specific timeout.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually equal the expected
+     * values within a specific timeout.
      *
      * @param values the expected values supposed to equal the actual values
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -355,8 +359,8 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
      */
     hasAnyValue(opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>): boolean;
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually contain the expected values
-     * within a specific timeout.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually contain the expected
+     * values within a specific timeout.
      *
      * @param values the expected values supposed to be contained in the actual values
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -383,8 +387,8 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
          */
         hasValue: (values: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         /**
-         * Returns true if all PageNodes managed by ValuePageElementGroup eventually do not have any value within a specific
-         * timeout.
+         * Returns true if all PageNodes managed by ValuePageElementGroup eventually do not have any value within a
+         * specific timeout.
          *
          * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyValue` function for
          * some or all managed PageNodes, the `timeout` within which the condition is expected to be met and the
@@ -395,8 +399,8 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
          */
         hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
         /**
-         * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually do not contain the
-         * expected values within a specific timeout.
+         * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually do not contain
+         * the expected values within a specific timeout.
          *
          * @param values the expected values supposed not to be contained in the actual values
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used

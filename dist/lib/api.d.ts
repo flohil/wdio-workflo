@@ -6,10 +6,10 @@ export declare const Story: (id: string, description: string, metadata: Workflo.
 export declare const fStory: (id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) => void;
 export declare const xStory: (id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) => void;
 export declare const Given: (description: string, bodyFunc?: () => void) => {
-    "And": (description: string, bodyFunc?: () => void) => any;
+    And: (description: string, bodyFunc?: () => void) => any;
 };
 export declare const When: (description: string, bodyFunc?: () => void) => {
-    "And": (description: string, bodyFunc?: () => void) => any;
+    And: (description: string, bodyFunc?: () => void) => any;
 };
 export declare const Then: (id: number, description: string, jasmineFunc?: (description: string, bodyFunc: () => void) => void, skip?: boolean) => void;
 export declare const fThen: (id: number, description: string) => void;
@@ -21,9 +21,9 @@ export declare const testcase: (description: string, metadata: Workflo.ITestcase
 export declare const ftestcase: (description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) => void;
 export declare const xtestcase: (description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) => void;
 export declare const given: (step: Workflo.IStep) => {
-    "and": (step: any) => any;
-    "when": (step: any) => {
-        "and": (step: any) => any;
+    and: (step: any) => any;
+    when: (step: any) => {
+        and: (step: any) => any;
     };
 };
 export declare const validate: (specObj: Workflo.IValidateSpecObject, func: (...testargs: any[]) => void) => void;

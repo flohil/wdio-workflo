@@ -1,5 +1,13 @@
-import { PageElementMap, ValuePageElement, IValuePageElementOpts, IPageElementMapOpts, PageElementMapCurrently, PageElementMapEventually, PageElementMapWait } from './'
-import { PageNodeStore } from '../stores'
+import { PageNodeStore } from '../stores';
+import {
+  IPageElementMapOpts,
+  IValuePageElementOpts,
+  PageElementMap,
+  PageElementMapCurrently,
+  PageElementMapEventually,
+  PageElementMapWait,
+  ValuePageElement,
+} from './';
 
 /**
  * Describes the `identifier` property of the `opts` parameter passed to ValuePageElementMap's constructor function.
@@ -39,9 +47,9 @@ export class ValuePageElementMap<
 > extends PageElementMap<Store, K, PageElementType, PageElementOpts>
 implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Partial<Record<K, boolean>>> {
 
-  readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOpts, this, ValueType>
-  readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOpts, this, ValueType>
-  readonly eventually: ValuePageElementMapEventually<Store, K, PageElementType, PageElementOpts, this, ValueType>
+  readonly currently: ValuePageElementMapCurrently<Store, K, PageElementType, PageElementOpts, this, ValueType>;
+  readonly wait: ValuePageElementMapWait<Store, K, PageElementType, PageElementOpts, this, ValueType>;
+  readonly eventually: ValuePageElementMapEventually<Store, K, PageElementType, PageElementOpts, this, ValueType>;
 
   /**
    * ValuePageElementMap extends PageElementMap with the possibility to set, retrieve and check the values of
@@ -52,13 +60,13 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    */
   constructor(
     selector: string,
-    opts: IValuePageElementMapOpts<Store, K, PageElementType, PageElementOpts, ValueType>
+    opts: IValuePageElementMapOpts<Store, K, PageElementType, PageElementOpts, ValueType>,
   ) {
-    super(selector, opts)
+    super(selector, opts);
 
-    this.currently = new ValuePageElementMapCurrently(this)
-    this.wait = new ValuePageElementMapWait(this)
-    this.eventually = new ValuePageElementMapEventually(this)
+    this.currently = new ValuePageElementMapCurrently(this);
+    this.wait = new ValuePageElementMapWait(this);
+    this.eventually = new ValuePageElementMapEventually(this);
   }
 
   /**
@@ -69,7 +77,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    * ValuePageElements. The results of skipped function invocations are not included in the total results object.
    */
   getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this.eachGet(this._$, node => node.getValue(), filterMask)
+    return this.eachGet(this._$, node => node.getValue(), filterMask);
   }
 
   /**
@@ -82,8 +90,8 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    */
   getHasValue(values: Partial<Record<K, ValueType>>) {
     return this.eachCompare(
-      this.$, (element, expected) => element.currently.hasValue(expected), values
-    )
+      this.$, (element, expected) => element.currently.hasValue(expected), values,
+    );
   }
 
   /**
@@ -97,8 +105,8 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    */
   getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this.eachCompare(
-      this.$, (element) => element.currently.hasAnyValue(), filterMask, true
-    )
+      this.$, (element) => element.currently.hasAnyValue(), filterMask, true,
+    );
   }
 
   /**
@@ -111,8 +119,8 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    */
   getContainsValue(values: Partial<Record<K, ValueType>>) {
     return this.eachCompare(
-      this.$, (element, expected) => element.currently.containsValue(expected), values
-    )
+      this.$, (element, expected) => element.currently.containsValue(expected), values,
+    );
   }
 
   /**
@@ -122,7 +130,7 @@ implements Workflo.PageNode.IValueElementNode<Partial<Record<K, ValueType>>, Par
    * @param values a map of setter values
    */
   setValue(values: Partial<Record<K, ValueType>>) {
-    return this.eachSet(this._$, (element, value) => element.setValue(value), values)
+    return this.eachSet(this._$, (element, value) => element.setValue(value), values);
   }
 }
 
@@ -154,7 +162,7 @@ class ValuePageElementMapCurrently<
    * ValuePageElements. The results of skipped function invocations are not included in the total results object.
    */
   getValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this._node.eachGet(this._node.$, node => node.currently.getValue(), filterMask)
+    return this._node.eachGet(this._node.$, node => node.currently.getValue(), filterMask);
   }
 
   /**
@@ -166,8 +174,8 @@ class ValuePageElementMapCurrently<
    */
   getHasValue(values: Partial<Record<K, ValueType>>) {
     return this._node.eachCompare(
-      this._node.$, (element, expected) => element.currently.hasValue(expected), values
-    )
+      this._node.$, (element, expected) => element.currently.hasValue(expected), values,
+    );
   }
 
   /**
@@ -180,8 +188,8 @@ class ValuePageElementMapCurrently<
    */
   getHasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCompare(
-      this._node.$, (element) => element.currently.hasAnyValue(), filterMask, true
-    )
+      this._node.$, (element) => element.currently.hasAnyValue(), filterMask, true,
+    );
   }
 
   /**
@@ -193,8 +201,8 @@ class ValuePageElementMapCurrently<
    */
   getContainsValue(values: Partial<Record<K, ValueType>>) {
     return this._node.eachCompare(
-      this._node.$, (element, expected) => element.currently.containsValue(expected), values
-    )
+      this._node.$, (element, expected) => element.currently.containsValue(expected), values,
+    );
   }
 
   /**
@@ -205,8 +213,8 @@ class ValuePageElementMapCurrently<
    */
   hasValue(values: Partial<Record<K, ValueType>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.hasValue(expected), values
-    )
+      this._node.$, (element, expected) => element.currently.hasValue(expected), values,
+    );
   }
 
   /**
@@ -217,8 +225,8 @@ class ValuePageElementMapCurrently<
    */
   hasAnyValue(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, (element) => element.currently.hasAnyValue(), filterMask, true
-    )
+      this._node.$, (element) => element.currently.hasAnyValue(), filterMask, true,
+    );
   }
 
   /**
@@ -229,8 +237,8 @@ class ValuePageElementMapCurrently<
    */
   containsValue(values: Partial<Record<K, ValueType>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.containsValue(expected), values
-    )
+      this._node.$, (element, expected) => element.currently.containsValue(expected), values,
+    );
   }
 
   /**
@@ -246,8 +254,8 @@ class ValuePageElementMapCurrently<
        */
       hasValue: (values: Partial<Record<K, ValueType>>) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.currently.not.hasValue(expected), values
-        )
+          this._node.$, (element, expected) => element.currently.not.hasValue(expected), values,
+        );
       },
       /**
        * Returns true if all ValuePageElements managed by ValuePageElementMap currently do not have any text.
@@ -257,8 +265,8 @@ class ValuePageElementMapCurrently<
        */
       hasAnyValue: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, element => element.currently.not.hasAnyValue(), filterMask, true
-        )
+          this._node.$, element => element.currently.not.hasAnyValue(), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap currently do not
@@ -268,10 +276,10 @@ class ValuePageElementMapCurrently<
        */
       containsValue: (values: Partial<Record<K, ValueType>>) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.currently.not.containsValue(expected), values
-        )
-      }
-    }
+          this._node.$, (element, expected) => element.currently.not.containsValue(expected), values,
+        );
+      },
+    };
   }
 }
 
@@ -312,8 +320,8 @@ class ValuePageElementMapWait<
    */
   hasValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.hasValue(expected, opts), values
-    )
+      this._node.$, (element, expected) => element.wait.hasValue(expected, opts), values,
+    );
   }
 
   /**
@@ -331,11 +339,11 @@ class ValuePageElementMapWait<
    * @returns this (an instance of ValuePageElementMap)
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait(
-      this._node.$, element => element.wait.hasAnyValue(otherOpts), filterMask,  true
-    )
+      this._node.$, element => element.wait.hasAnyValue(otherOpts), filterMask,  true,
+    );
   }
 
   /**
@@ -354,8 +362,8 @@ class ValuePageElementMapWait<
    */
   containsValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.containsValue(expected, opts), values
-    )
+      this._node.$, (element, expected) => element.wait.containsValue(expected, opts), values,
+    );
   }
 
   /**
@@ -380,8 +388,8 @@ class ValuePageElementMapWait<
        */
       hasValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.hasValue(expected, opts), values
-        )
+          this._node.$, (element, expected) => element.wait.not.hasValue(expected, opts), values,
+        );
       },
       /**
        * Waits for all ValuePageElements managed by ValuePageElementMap not to have any text.
@@ -398,11 +406,11 @@ class ValuePageElementMapWait<
        * @returns this (an instance of ValuePageElementMap)
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait(
-          this._node.$, element => element.wait.not.hasAnyValue(otherOpts), filterMask,  true
-        )
+          this._node.$, element => element.wait.not.hasAnyValue(otherOpts), filterMask,  true,
+        );
       },
       /**
        * Waits for the actual values of all ValuePageElements managed by ValuePageElementMap not to contain the expected
@@ -421,10 +429,10 @@ class ValuePageElementMapWait<
        */
       containsValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.containsValue(expected, opts), values
-        )
-      }
-    }
+          this._node.$, (element, expected) => element.wait.not.containsValue(expected, opts), values,
+        );
+      },
+    };
   }
 }
 
@@ -462,8 +470,8 @@ class ValuePageElementMapEventually<
    */
   hasValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.hasValue(expected, opts), values
-    )
+      this._node.$, (element, expected) => element.eventually.hasValue(expected, opts), values,
+    );
   }
 
   /**
@@ -478,11 +486,11 @@ class ValuePageElementMapEventually<
    * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck(
-      this._node.$, element => element.eventually.hasAnyValue(otherOpts), filterMask,  true
-    )
+      this._node.$, element => element.eventually.hasAnyValue(otherOpts), filterMask,  true,
+    );
   }
 
   /**
@@ -498,8 +506,8 @@ class ValuePageElementMapEventually<
    */
   containsValue(values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.containsValue(expected, opts), values
-    )
+      this._node.$, (element, expected) => element.eventually.containsValue(expected, opts), values,
+    );
   }
 
   /**
@@ -520,8 +528,8 @@ class ValuePageElementMapEventually<
        */
       hasValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.hasValue(expected, opts), values
-        )
+          this._node.$, (element, expected) => element.eventually.not.hasValue(expected, opts), values,
+        );
       },
       /**
        * Returns true if all ValuePageElements managed by ValuePageElementMap eventually do not have any text within a
@@ -535,11 +543,11 @@ class ValuePageElementMapEventually<
        * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck(
-          this._node.$, element => element.eventually.not.hasAnyValue(otherOpts), filterMask,  true
-        )
+          this._node.$, element => element.eventually.not.hasAnyValue(otherOpts), filterMask,  true,
+        );
       },
       /**
        * Returns true if the actual values of all ValuePageElements managed by ValuePageElementMap eventually do not
@@ -554,9 +562,9 @@ class ValuePageElementMapEventually<
        */
       containsValue: (values: Partial<Record<K, ValueType>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.containsValue(expected, opts), values
-        )
-      }
-    }
+          this._node.$, (element, expected) => element.eventually.not.containsValue(expected, opts), values,
+        );
+      },
+    };
   }
 }

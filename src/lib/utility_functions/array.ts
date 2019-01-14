@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 
 /**
  * Gets an input array and maps it to an object where
@@ -9,11 +9,11 @@ import * as _ from 'lodash'
  * @param mapFunc
  */
 export function mapToObject<T>(input: string[], mapFunc: (element: string) => T) : {[key: string] : T} {
-  const obj = {}
+  const obj = {};
 
   for (const element of input) {
-    obj[element] = mapFunc(element)
+    obj[element] = mapFunc(element);
   }
 
-  return obj
+  return obj;
 }

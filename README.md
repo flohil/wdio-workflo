@@ -75,7 +75,8 @@ npm package.
 All code for this 'Getting Started' guide can also be found at https://github.com/flohil/wdio-workflo-example.
 
 ### Configuring the Base URL
-At first we need to set the base url for our tested web application in wdio-workflo's configuration.
+Before we can start writing our first functional system test, we need to set the base url for our tested web application
+in wdio-workflo's configuration.
 
 To do so, open the file ```workflo.conf.ts``` in your project folder and set the value of its ```baseUrl``` property to
 "https://www.npmjs.com/"

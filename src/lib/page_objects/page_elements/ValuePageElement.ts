@@ -1,11 +1,11 @@
+import { PageNodeStore } from '../stores';
 import {
-  PageElement,
   IPageElementOpts,
+  PageElement,
   PageElementCurrently,
-  PageElementWait,
   PageElementEventually,
-} from './PageElement'
-import { PageNodeStore } from '../stores'
+  PageElementWait,
+} from './PageElement';
 
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElement.
@@ -31,9 +31,9 @@ export abstract class ValuePageElement<
   ValueType
 > extends PageElement<Store> implements Workflo.PageNode.IValueElementNode<ValueType, boolean> {
 
-  readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>
-  readonly wait: ValuePageElementWait<Store, this, ValueType>
-  readonly eventually: ValuePageElementEventually<Store, this, ValueType>
+  readonly abstract currently: ValuePageElementCurrently<Store, this, ValueType>;
+  readonly wait: ValuePageElementWait<Store, this, ValueType>;
+  readonly eventually: ValuePageElementEventually<Store, this, ValueType>;
 
   /**
    * ValuePageElement extends PageElement with the possibility to set, retrieve and check a PageElement's value.
@@ -46,10 +46,10 @@ export abstract class ValuePageElement<
    * @param opts the options used to configure ValuePageElement
    */
   constructor(selector: string, opts: IValuePageElementOpts<Store>) {
-    super(selector, opts)
+    super(selector, opts);
 
-    this.wait = new ValuePageElementWait(this)
-    this.eventually = new ValuePageElementEventually(this)
+    this.wait = new ValuePageElementWait(this);
+    this.eventually = new ValuePageElementEventually(this);
   }
 
   /**
@@ -58,7 +58,7 @@ export abstract class ValuePageElement<
    * @param value the value which should be set for PageElement
    * @returns this (an instance of ValuePageElement)
    */
-  abstract setValue(value: ValueType): this
+  abstract setValue(value: ValueType): this;
 
   /**
    * Performs PageElement's initial waiting condition.
@@ -75,12 +75,12 @@ export abstract class ValuePageElement<
   initialWait() {
     if (this._waitType === Workflo.WaitType.value) {
       if (!this.currently.hasAnyValue()) {
-        this.wait.hasAnyValue()
+        this.wait.hasAnyValue();
       }
 
-      return this
+      return this;
     } else {
-      return super.initialWait()
+      return super.initialWait();
     }
   }
 
@@ -88,7 +88,7 @@ export abstract class ValuePageElement<
    * Returns ValuePageElement's value after performing the initial waiting condition.
    */
   getValue() {
-    return this._executeAfterInitialWait( () => this.currently.getValue() )
+    return this._executeAfterInitialWait(() => this.currently.getValue());
   }
 
   /**
@@ -98,14 +98,14 @@ export abstract class ValuePageElement<
    * @param value the expected value which is supposed to equal ValuePageElement's actual value
    */
   getHasValue(value: ValueType) {
-    return this._executeAfterInitialWait( () => this.currently.hasValue(value) )
+    return this._executeAfterInitialWait(() => this.currently.hasValue(value));
   }
 
   /**
    * Returns true if ValuePageElement has any value after performing the initial waiting condition.
    */
   getHasAnyValue() {
-    return this._executeAfterInitialWait( () => this.currently.hasAnyValue() )
+    return this._executeAfterInitialWait(() => this.currently.hasAnyValue());
   }
 
   /**
@@ -115,7 +115,7 @@ export abstract class ValuePageElement<
    * @param value the expected value which is supposed to be contained in ValuePageElement's actual value
    */
   getContainsValue(value: ValueType) {
-    return this._executeAfterInitialWait( () => this.currently.containsValue(value) )
+    return this._executeAfterInitialWait(() => this.currently.containsValue(value));
   }
 }
 
@@ -136,7 +136,7 @@ export abstract class ValuePageElementCurrently<
   /**
    * Returns the current value of ValuePageElement.
    */
-  abstract getValue(): ValueType
+  abstract getValue(): ValueType;
 
   /**
    * Returns ValuePageElement's current 'hasValue' status.
@@ -146,7 +146,7 @@ export abstract class ValuePageElementCurrently<
    * @param value the expected value used in the comparison which sets the 'hasValue' status
    */
   getHasValue(value: ValueType) {
-    return this.hasValue(value)
+    return this.hasValue(value);
   }
   /**
    * Returns ValuePageElement's current 'hasAnyValue' status.
@@ -154,7 +154,7 @@ export abstract class ValuePageElementCurrently<
    * A ValuePageElement's 'hasAnyValue' status is set to true if it has any value.
    */
   getHasAnyValue() {
-    return this.hasAnyValue()
+    return this.hasAnyValue();
   }
   /**
    * Returns ValuePageElement's current 'containsValue' status.
@@ -164,7 +164,7 @@ export abstract class ValuePageElementCurrently<
    * @param value the expected value used in the comparison which sets the 'containsValue' status
    */
   getContainsValue(value: ValueType) {
-    return this.containsValue(value)
+    return this.containsValue(value);
   }
   /**
    * Returns true if the ValuePageElement's actual value currently equals the expected value.
@@ -172,13 +172,13 @@ export abstract class ValuePageElementCurrently<
    * @param value the expected value which is supposed to equal the actual value
    */
   hasValue(value: ValueType) {
-    return this._compareHas(value, this.getValue())
+    return this._compareHas(value, this.getValue());
   }
   /**
    * Returns true if the ValuePageElement currently has any Value.
    */
   hasAnyValue() {
-    return this._compareHasAny(this.getValue())
+    return this._compareHasAny(this.getValue());
   }
   /**
    * Returns true if the ValuePageElement's actual value currently contains the expected value.
@@ -186,7 +186,7 @@ export abstract class ValuePageElementCurrently<
    * @param value the expected value which is supposed to be contained in the actual value
    */
   containsValue(value: ValueType) {
-    return this._compareContains(value, this.getValue())
+    return this._compareContains(value, this.getValue());
   }
 
   /**
@@ -210,7 +210,7 @@ export abstract class ValuePageElementCurrently<
        * @param value the expected value which is supposed not to be contained in the actual value
        */
       containsValue: (value: ValueType) => !this.containsValue(value),
-    }
+    };
   }
 }
 
@@ -244,8 +244,8 @@ export class ValuePageElementWait<
    */
   hasValue(value: ValueType, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      'value', value, () => this._node.currently.hasValue(value), opts
-    )
+      'value', value, () => this._node.currently.hasValue(value), opts,
+    );
   }
 
   /**
@@ -263,8 +263,8 @@ export class ValuePageElementWait<
    */
   hasAnyValue(opts: Workflo.ITimeoutReverseInterval = {}) {
     return this._waitHasAnyProperty(
-      'value', () => this._node.currently.hasAnyValue(), opts
-    )
+      'value', () => this._node.currently.hasAnyValue(), opts,
+    );
   }
 
   /**
@@ -283,8 +283,8 @@ export class ValuePageElementWait<
    */
   containsValue(value: ValueType, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
-      'value', value, () => this._node.currently.containsValue(value), opts
-    )
+      'value', value, () => this._node.currently.containsValue(value), opts,
+    );
   }
 
   /**
@@ -307,7 +307,7 @@ export class ValuePageElementWait<
        * @returns this (an instance of ValuePageElement)
        */
       hasValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasValue(value, this._makeReverseParams(opts))
+        return this.hasValue(value, this._makeReverseParams(opts));
       },
       /**
        * Waits for ValuePageElement not to have any value.
@@ -323,7 +323,7 @@ export class ValuePageElementWait<
        * @returns this (an instance of ValuePageElement)
        */
       hasAnyValue: (opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyValue(this._makeReverseParams(opts))
+        return this.hasAnyValue(this._makeReverseParams(opts));
       },
       /**
        * Waits for ValuePageElement's actual value not to contain the expected value.
@@ -340,9 +340,9 @@ export class ValuePageElementWait<
        * @returns this (an instance of ValuePageElement)
        */
       containsValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsValue(value, this._makeReverseParams(opts))
-      }
-    }
+        return this.containsValue(value, this._makeReverseParams(opts));
+      },
+    };
   }
 }
 
@@ -371,7 +371,7 @@ export class ValuePageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasValue(value: ValueType, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasValue(value, opts))
+    return this._node.__eventually(() => this._node.wait.hasValue(value, opts));
   }
 
   /**
@@ -384,7 +384,7 @@ export class ValuePageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyValue(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyValue(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyValue(opts));
   }
 
   /**
@@ -398,7 +398,7 @@ export class ValuePageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsValue(value: ValueType, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsValue(value, opts))
+    return this._node.__eventually(() => this._node.wait.containsValue(value, opts));
   }
 
   /**
@@ -407,7 +407,8 @@ export class ValuePageElementEventually<
   get not() {
     return {...super.not,
       /**
-       * Returns true if PageElement's actual value eventually does not equal the expected value within a specific timeout.
+       * Returns true if PageElement's actual value eventually does not equal the expected value within a specific
+       * timeout.
        *
        * @param value the expected value which is supposed not to equal PageElement's actual value
        * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -417,7 +418,7 @@ export class ValuePageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasValue(value, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasValue(value, opts));
       },
       /**
        * Returns true if PageElement eventually does not have any value within a specific timeout.
@@ -429,7 +430,7 @@ export class ValuePageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyValue: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyValue(opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyValue(opts));
       },
       /**
        * Returns true if PageElement's actual value eventually does not contain the expected value within a specific
@@ -443,8 +444,8 @@ export class ValuePageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsValue: (value: ValueType, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsValue(value, opts))
-      }
-    }
+        return this._node.__eventually(() => this._node.wait.not.containsValue(value, opts));
+      },
+    };
   }
 }

@@ -1,5 +1,5 @@
-import { PageElementMap, ValuePageElement, IValuePageElementOpts, IPageElementMapOpts, PageElementMapCurrently, PageElementMapEventually, PageElementMapWait } from './';
 import { PageNodeStore } from '../stores';
+import { IPageElementMapOpts, IValuePageElementOpts, PageElementMap, PageElementMapCurrently, PageElementMapEventually, PageElementMapWait, ValuePageElement } from './';
 /**
  * Describes the `identifier` property of the `opts` parameter passed to ValuePageElementMap's constructor function.
  *

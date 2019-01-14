@@ -1,6 +1,6 @@
-import { XPathBuilder } from './XPathBuilder';
 import { PageElement, PageElementList } from '../page_elements';
-import { PageNodeStore, CloneFunc } from '../stores';
+import { CloneFunc, PageNodeStore } from '../stores';
+import { XPathBuilder } from './XPathBuilder';
 /**
  * Defines the opts parameter passed to the constructor of ListWhereBuilder.
  */
@@ -132,8 +132,8 @@ export declare class ListWhereBuilder<Store extends PageNodeStore, PageElementTy
      * the passed childSelector.
      *
      * Optionally, a builderFunc can be used to apply XPath modification functions to the child selector instead of
-     * the "outer" selector. To do so, builderFunc is passed an XPathBuilder instance configured to use the `childSelector`
-     * as a new root for the currently constructed XPath expression.
+     * the "outer" selector. To do so, builderFunc is passed an XPathBuilder instance configured to use the
+     * `childSelector` as a new root for the currently constructed XPath expression.
      *
      * @param childSelector a plain XPath constraint appended to the currently constructed XPath expression
      * @param builderFunc can be used to apply XPath modification functions to `childSelector`
@@ -272,7 +272,8 @@ export declare class ListWhereBuilder<Store extends PageNodeStore, PageElementTy
      */
     class(className?: string): this;
     /**
-     * Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called 'class'.
+     * Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called
+     * 'class'.
      *
      * Optionally, if also passing a class name, the currently constructed XPath expression is restricted to elements
      * which have an HTML 'class' attribute with a value that does not equal the passed class name.
@@ -317,8 +318,8 @@ export declare class ListWhereBuilder<Store extends PageNodeStore, PageElementTy
      * Optionally, if also passing a name, the currently constructed XPath expression is restricted to elements
      * which have an HTML 'name' attribute with a value that does not equal the passed name.
      *
-     * @param name a name which must not equal the value of the HTML 'name' attribute of elements selected by the currently
-     * constructed XPath expression
+     * @param name a name which must not equal the value of the HTML 'name' attribute of elements selected by the
+     * currently constructed XPath expression
      * @returns the singleton instance of ListWhereBuilder storing the currently constructed XPath expression
      */
     notName(name?: string): this;

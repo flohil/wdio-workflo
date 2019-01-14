@@ -1,5 +1,5 @@
-import { PageElementList, ValuePageElement, IValuePageElementOpts, IPageElementListOpts, PageElementListCurrently, PageElementListEventually, PageElementListWait } from './';
 import { PageNodeStore } from '../stores';
+import { IPageElementListOpts, IValuePageElementOpts, PageElementList, PageElementListCurrently, PageElementListEventually, PageElementListWait, ValuePageElement } from './';
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementList.
  *
@@ -261,7 +261,8 @@ declare class ValuePageElementListCurrently<Store extends PageNodeStore, PageEle
  */
 declare class ValuePageElementListWait<Store extends PageNodeStore, PageElementType extends ValuePageElement<Store, ValueType>, PageElementOptions extends Partial<IValuePageElementOpts<Store>>, ListType extends ValuePageElementList<Store, PageElementType, PageElementOptions, ValueType>, ValueType> extends PageElementListWait<Store, PageElementType, PageElementOptions, ListType> {
     /**
-     * Waits for the actual values of all ValuePageElements managed by ValuePageElementList to equal the expected value(s).
+     * Waits for the actual values of all ValuePageElements managed by ValuePageElementList to equal the expected
+     * value(s).
      *
      * Throws an error if the condition is not met within a specific timeout.
      *

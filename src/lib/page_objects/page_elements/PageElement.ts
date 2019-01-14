@@ -1,15 +1,15 @@
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 
+import * as htmlParser from 'htmlparser2';
 import {
-  PageElementBase,
   IPageElementBaseOpts,
+  PageElementBase,
   PageElementBaseCurrently,
+  PageElementBaseEventually,
   PageElementBaseWait,
-  PageElementBaseEventually
-} from '.'
-import { PageNodeStore } from '../stores'
-import * as htmlParser from 'htmlparser2'
-import { tolerancesToString, isNullOrUndefined, isEmpty } from '../../helpers'
+} from '.';
+import { isEmpty, isNullOrUndefined, tolerancesToString } from '../../helpers';
+import { PageNodeStore } from '../stores';
 
 /**
  * Describes the opts parameter passed to the constructor function of PageElement.
@@ -23,7 +23,7 @@ export interface IPageElementOpts<
    * This interface is used in the parameters of scrollTo and click actions of PageElement.
    * It allows you to scroll a PageElement that resides inside a scrollable container into view.
    */
-  customScroll?: Workflo.IScrollParams
+  customScroll?: Workflo.IScrollParams;
 }
 
 /**
@@ -66,11 +66,11 @@ export class PageElement<
   /**
    * stores the default custom scrolling behaviour
    */
-  protected _customScroll: Workflo.IScrollParams
+  protected _customScroll: Workflo.IScrollParams;
 
-  readonly currently: PageElementCurrently<Store, this>
-  readonly wait: PageElementWait<Store, this>
-  readonly eventually: PageElementEventually<Store, this>
+  readonly currently: PageElementCurrently<Store, this>;
+  readonly wait: PageElementWait<Store, this>;
+  readonly eventually: PageElementEventually<Store, this>;
 
   /**
     * PageElement serves as the main building block for all page objects.
@@ -83,8 +83,8 @@ export class PageElement<
     * with them.
     *
     * A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
-    * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
-    * for elements of a page to be loaded and rendered or for certain conditions to be met.
+    * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to
+    * wait for elements of a page to be loaded and rendered or for certain conditions to be met.
     *
     * PageElements try to overcome these hurdles be performing an "initial waiting condition" before interacting with
     * elements on the page. The supported initial wait conditions include:
@@ -112,15 +112,15 @@ export class PageElement<
     {
       customScroll = undefined,
       ...superOpts
-    }: IPageElementOpts<Store>
+    }: IPageElementOpts<Store>,
   ) {
-    super(selector, superOpts)
+    super(selector, superOpts);
 
-    this._customScroll = customScroll
+    this._customScroll = customScroll;
 
-    this.currently = new PageElementCurrently(this)
-    this.wait = new PageElementWait(this)
-    this.eventually = new PageElementEventually(this)
+    this.currently = new PageElementCurrently(this);
+    this.wait = new PageElementWait(this);
+    this.eventually = new PageElementEventually(this);
   }
 
   /**
@@ -129,7 +129,7 @@ export class PageElement<
    * @ignore
    */
   get __$(): Store {
-    return this._$
+    return this._$;
   }
 
 // ABSTRACT BASE CLASS IMPLEMENTATIONS
@@ -145,14 +145,14 @@ export class PageElement<
    * @param expected an expected value
    */
   __equals<T>(actual: T, expected: T): boolean {
-    if(isEmpty(actual) && isEmpty(expected)) {
-      return true
+    if (isEmpty(actual) && isEmpty(expected)) {
+      return true;
     } else if (typeof actual === 'string' || typeof expected === 'string') {
-      return actual === expected
+      return actual === expected;
     } else {
       throw new Error(
-        `${this.constructor.name}.__equals is missing an implementation for type of values: ${actual}, ${expected}`
-      )
+        `${this.constructor.name}.__equals is missing an implementation for type of values: ${actual}, ${expected}`,
+      );
     }
   }
 
@@ -167,13 +167,13 @@ export class PageElement<
    */
   __any<T>(actual: T): boolean {
     if (isEmpty(actual)) {
-      return false
+      return false;
     } else if (typeof actual === 'string') {
-      return (actual) ? actual.length > 0 : false
+      return (actual) ? actual.length > 0 : false;
     } else {
       throw new Error(
-        `${this.constructor.name}.__any is missing an implementation for type of value: ${actual}`
-      )
+        `${this.constructor.name}.__any is missing an implementation for type of value: ${actual}`,
+      );
     }
   }
 
@@ -188,21 +188,21 @@ export class PageElement<
    * @param expected an expected value
    */
   __contains<T>(actual: T, expected: T) {
-    if(isEmpty(actual) && isEmpty(expected)) {
-      return true
+    if (isEmpty(actual) && isEmpty(expected)) {
+      return true;
     } else if (isEmpty(actual) && typeof expected === 'string' && expected.length > 0) {
-      return false
+      return false;
     } else if (typeof actual === 'string') {
       if (typeof expected === 'string') {
-        return (actual) ? actual.indexOf(expected) > -1 : false
+        return (actual) ? actual.indexOf(expected) > -1 : false;
       } else {
         // expected is null or undefined
-        return true
+        return true;
       }
     } else {
       throw new Error(
-        `${this.constructor.name}.__contains is missing an implementation for type of values: ${actual}, ${expected}`
-      )
+        `${this.constructor.name}.__contains is missing an implementation for type of values: ${actual}, ${expected}`,
+      );
     }
   }
 
@@ -217,13 +217,15 @@ export class PageElement<
    */
   __typeToString<T>(value: T) {
     if (isNullOrUndefined(value)) {
-      return ''
+      return '';
     } else if (typeof value === 'string') {
-      return (value.length > 0) ? value : ''
+      return (value.length > 0) ? value : '';
     } else if (typeof value === 'number') {
-      return value.toString()
+      return value.toString();
     } else {
-      throw new Error(`${this.constructor.name}.__typeToString is missing an implementation for type of value: ${value}`)
+      throw new Error(
+        `${this.constructor.name}.__typeToString is missing an implementation for type of value: ${value}`,
+      );
     }
   }
 
@@ -234,7 +236,7 @@ export class PageElement<
    * performing PageElement's initial waiting condition.
    */
   protected get __element() {
-    return browser.element(this._selector)
+    return browser.element(this._selector);
   }
 
   /**
@@ -242,9 +244,9 @@ export class PageElement<
    * performing PageElement's initial waiting condition.
    */
   get element() {
-    this.initialWait()
+    this.initialWait();
 
-    return this.__element
+    return this.__element;
   }
 
   /**
@@ -262,24 +264,24 @@ export class PageElement<
     switch (this._waitType) {
       case Workflo.WaitType.exist:
         if (!this.currently.exists()) {
-          this.wait.exists()
+          this.wait.exists();
         }
-        break
+        break;
       case Workflo.WaitType.visible:
         if (!this.currently.isVisible()) {
-          this.wait.isVisible()
+          this.wait.isVisible();
         }
-        break
+        break;
       case Workflo.WaitType.text:
         if (!this.currently.hasAnyText()) {
-          this.wait.hasAnyText()
+          this.wait.hasAnyText();
         }
-        break
+        break;
       default:
-        throw Error(`${this.constructor.name}: Unknown initial wait type '${this._waitType}'`)
+        throw Error(`${this.constructor.name}: Unknown initial wait type '${this._waitType}'`);
     }
 
-    return this
+    return this;
   }
 
 // Public GETTER FUNCTIONS (return state after initial wait)
@@ -288,14 +290,14 @@ export class PageElement<
    * Returns true if the PageElement is enabled after performing the initial waiting condition.
    */
   getIsEnabled() {
-    return this._executeAfterInitialWait( () => this.currently.isEnabled() )
+    return this._executeAfterInitialWait(() => this.currently.isEnabled());
   }
 
   /**
    * Returns PageElement's HTML after performing the initial waiting condition.
    */
   getHTML() {
-    return this._executeAfterInitialWait( () => this.currently.getHTML() )
+    return this._executeAfterInitialWait(() => this.currently.getHTML());
   }
 
   /**
@@ -305,14 +307,14 @@ export class PageElement<
    * It does not include any text of the HTML element's nested children HTML elements.
    */
   getDirectText() {
-    return this._executeAfterInitialWait( () => this.currently.getDirectText() )
+    return this._executeAfterInitialWait(() => this.currently.getDirectText());
   }
 
   /**
    * Returns PageElement's text after performing the initial waiting condition.
    */
   getText() {
-    return this._executeAfterInitialWait( () => this.currently.getText() )
+    return this._executeAfterInitialWait(() => this.currently.getText());
   }
 
   /**
@@ -321,70 +323,70 @@ export class PageElement<
    * @param attributeName the name of the HTML attribute whose value should be returned
    */
   getAttribute(attributeName: string) {
-    return this._executeAfterInitialWait( () => this.currently.getAttribute(attributeName) )
+    return this._executeAfterInitialWait(() => this.currently.getAttribute(attributeName));
   }
 
   /**
    * Returns the value of PageElement's 'class' HTML attribute after performing the initial waiting condition.
    */
   getClass() {
-    return this._executeAfterInitialWait( () => this.currently.getAttribute('class') )
+    return this._executeAfterInitialWait(() => this.currently.getAttribute('class'));
   }
 
   /**
    * Returns the value of PageElement's 'id' HTML attribute after performing the initial waiting condition.
    */
   getId() {
-    return this._executeAfterInitialWait( () => this.currently.getAttribute('id') )
+    return this._executeAfterInitialWait(() => this.currently.getAttribute('id'));
   }
 
   /**
    * Returns the value of PageElement's 'name' HTML attribute after performing the initial waiting condition.
    */
   getName() {
-    return this._executeAfterInitialWait( () => this.currently.getAttribute('name') )
+    return this._executeAfterInitialWait(() => this.currently.getAttribute('name'));
   }
 
   /**
    * Returns the location of PageElement in pixels after performing the initial waiting condition.
    */
   getLocation() {
-    return this._executeAfterInitialWait( () => this.currently.getLocation() )
+    return this._executeAfterInitialWait(() => this.currently.getLocation());
   }
 
   /**
    * Returns the X-location of PageElement in pixels after performing the initial waiting condition.
    */
   getX() {
-    return this._executeAfterInitialWait( () => this.currently.getX() )
+    return this._executeAfterInitialWait(() => this.currently.getX());
   }
 
   /**
    * Returns the Y-location of PageElement in pixels after performing the initial waiting condition.
    */
   getY() {
-    return this._executeAfterInitialWait( () => this.currently.getY() )
+    return this._executeAfterInitialWait(() => this.currently.getY());
   }
 
   /**
    * Returns the size of PageElement in pixels after performing the initial waiting condition.
    */
   getSize() {
-    return this._executeAfterInitialWait( () => this.currently.getSize() )
+    return this._executeAfterInitialWait(() => this.currently.getSize());
   }
 
   /**
    * Returns the width of PageElement in pixels after performing the initial waiting condition.
    */
   getWidth() {
-    return this._executeAfterInitialWait( () => this.currently.getWidth() )
+    return this._executeAfterInitialWait(() => this.currently.getWidth());
   }
 
   /**
    * Returns the height of PageElement in pixels after performing the initial waiting condition.
    */
   getHeight() {
-    return this._executeAfterInitialWait( () => this.currently.getHeight() )
+    return this._executeAfterInitialWait(() => this.currently.getHeight());
   }
 
   /**
@@ -395,7 +397,7 @@ export class PageElement<
    * @param text the expected text used in the comparison which sets the 'hasText' status
    */
   getHasText(text: string) {
-    return this._executeAfterInitialWait( () => this.currently.hasText(text) )
+    return this._executeAfterInitialWait(() => this.currently.hasText(text));
   }
 
   /**
@@ -404,7 +406,7 @@ export class PageElement<
    * A PageElement's 'hasAnyText' status is set to true if it has any text.
    */
   getHasAnyText() {
-    return this._executeAfterInitialWait( () => this.currently.hasAnyText() )
+    return this._executeAfterInitialWait(() => this.currently.hasAnyText());
   }
 
   /**
@@ -415,7 +417,7 @@ export class PageElement<
    * @param text the expected text used in the comparison which sets the 'containsText' status
    */
   getContainsText(text: string) {
-    return this._executeAfterInitialWait( () => this.currently.containsText(text) )
+    return this._executeAfterInitialWait(() => this.currently.containsText(text));
   }
 
   /**
@@ -429,7 +431,7 @@ export class PageElement<
    *@param directText the expected direct text used in the comparison which sets the 'hasDirectText' status
    */
   getHasDirectText(directText: string) {
-    return this._executeAfterInitialWait( () => this.currently.hasDirectText(directText) )
+    return this._executeAfterInitialWait(() => this.currently.hasDirectText(directText));
   }
 
   /**
@@ -438,7 +440,7 @@ export class PageElement<
    * A PageElement's 'hasAnyDirectText' status is set to true if it has any direct text.
    */
   getHasAnyDirectText() {
-    return this._executeAfterInitialWait( () => this.currently.hasAnyDirectText() )
+    return this._executeAfterInitialWait(() => this.currently.hasAnyDirectText());
   }
 
   /**
@@ -453,7 +455,7 @@ export class PageElement<
    * @param directText the expected direct text used in the comparison which sets the 'containsDirectText' status
    */
   getContainsDirectText(directText: string) {
-    return this._executeAfterInitialWait( () => this.currently.containsDirectText(directText) )
+    return this._executeAfterInitialWait(() => this.currently.containsDirectText(directText));
   }
 
 // INTERACTION FUNCTIONS (interact with state after initial wait)
@@ -474,47 +476,50 @@ export class PageElement<
    * @returns this (an instance of PageElement)
    */
   click(
-    options: Workflo.IClickOpts = {}
+    options: Workflo.IClickOpts = {},
   ) {
-    this.initialWait()
+    this.initialWait();
 
-    let errorMessage = ''
-    const interval = options.interval || this._interval
-    const viewPortSize = browser.getViewportSize()
-    let y = viewPortSize.height / 2
-    let x = viewPortSize.width / 2
+    let errorMessage = '';
+    const interval = options.interval || this._interval;
+    const viewPortSize = browser.getViewportSize();
+    const y = viewPortSize.height / 2;
+    const x = viewPortSize.width / 2;
     let remainingTimeout = this._timeout;
 
     if (!options) {
-      options = {}
+      options = {};
     }
 
     if (options && !options.customScroll) {
       if (this._customScroll) {
-        options.customScroll = this._customScroll
+        options.customScroll = this._customScroll;
       }
     }
 
     const clickFunc = !options.customScroll ? () => this.__element.click() : () => {
       const result: Workflo.IJSError = browser.selectorExecute(
+        // tslint:disable-next-line:ter-prefer-arrow-callback
         this.getSelector(), function (elems: HTMLElement[], selector) {
           if (elems.length === 0) {
             return {
-              notFound: [selector]
-            }
+              notFound: [selector],
+            };
           }
 
-          elems[0].click()
-        }, this.getSelector()
-      )
+          elems[0].click();
+        }, this.getSelector(),
+      );
 
       if (isJsError(result)) {
-        throw new Error(`${this.constructor.name} could not be clicked: ${result.notFound.join(', ')}\n( ${this._selector} )`)
+        throw new Error(
+          `${this.constructor.name} could not be clicked: ${result.notFound.join(', ')}\n( ${this._selector} )`,
+        );
       }
-    }
+    };
 
     if (options.customScroll) {
-      this._scrollTo(options.customScroll)
+      this._scrollTo(options.customScroll);
     }
 
     // wait for other overlapping elements to disappear
@@ -526,55 +531,54 @@ export class PageElement<
             clickFunc();
             errorMessage = undefined;
             return true;
-          }
-          catch (error) {
-            if (error.message.indexOf("is not clickable at point") > -1) {
+          } catch (error) {
+            if (error.message.indexOf('is not clickable at point') > -1) {
               errorMessage = error.message;
               return false;
             } else {
-              error.message = error.message.replace('unknown error: ', '')
-              throw error
+              error.message = error.message.replace('unknown error: ', '');
+              throw error;
             }
           }
         },
         this._timeout,
         `${this.constructor.name} did not become clickable after timeout.\n( ${this._selector} )`,
-        interval
+        interval,
       );
     } catch (waitE) {
-      waitE.message = errorMessage.replace('unknown error: ', '')
-      throw waitE
+      waitE.message = errorMessage.replace('unknown error: ', '');
+      throw waitE;
     }
 
     if (options && options.postCondition && remainingTimeout > 0) {
-      options.timeout = options.timeout || this._timeout
+      options.timeout = options.timeout || this._timeout;
 
       try {
         browser.waitUntil(
           () => {
             try {
               if (options.postCondition()) {
-                return true
+                return true;
               } else {
                 if (this.currently.isVisible() && this.currently.isEnabled()) {
-                  clickFunc()
+                  clickFunc();
                 }
               }
             } catch (error) {
-              errorMessage = error.message
+              errorMessage = error.message;
             }
           },
           remainingTimeout + options.timeout,
           `${this.constructor.name}: Postcondition for click never became true.\n( ${this._selector} )`,
-          interval
-        )
+          interval,
+        );
       } catch (waitE) {
-        waitE.message = errorMessage.replace('unknown error: ', '')
-        throw waitE
+        waitE.message = errorMessage.replace('unknown error: ', '');
+        throw waitE;
       }
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -586,51 +590,52 @@ export class PageElement<
    * @returns this (an instance of PageElement)
    */
   protected _scrollTo(
-    params: Workflo.IScrollParams
+    params: Workflo.IScrollParams,
   ): Workflo.IScrollResult {
     if (!params.offsets) {
       params.offsets = {
         x: 0,
-        y: 0
-      }
+        y: 0,
+      };
     }
     if (!params.offsets.x) {
-      params.offsets.x = 0
+      params.offsets.x = 0;
     }
     if (!params.offsets.y) {
-      params.offsets.y = 0
+      params.offsets.y = 0;
     }
     if (typeof params.closestContainerIncludesHidden === 'undefined') {
       params.closestContainerIncludesHidden = true;
     }
 
     const result: Workflo.IJSError | Workflo.IScrollResult = browser.selectorExecute(
-      [this.getSelector()], function (elems: HTMLElement[], elementSelector: string, params: Workflo.IScrollParams
+      // tslint:disable-next-line:ter-prefer-arrow-callback
+      [this.getSelector()], function (elems: HTMLElement[], elementSelector: string, params: Workflo.IScrollParams,
       ) {
-        var error: Workflo.IJSError = {
-          notFound: []
+        const error: Workflo.IJSError = {
+          notFound: [],
         };
 
         if (elems.length === 0) {
           error.notFound.push(elementSelector);
-        };
+        }
 
         if (error.notFound.length > 0) {
           return error;
         }
 
-        var elem: HTMLElement = elems[0];
-        var container: HTMLElement = undefined
+        const elem: HTMLElement = elems[0];
+        let container: HTMLElement = undefined;
 
         function getScrollParent(element, includeHidden) {
-          var style = getComputedStyle(element);
-          var excludeStaticParent = style.position === "absolute";
-          var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+          let style = getComputedStyle(element);
+          const excludeStaticParent = style.position === 'absolute';
+          const overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
 
-          if (style.position === "fixed") return document.body;
-          for (var parent = element; (parent = parent.parentElement);) {
+          if (style.position === 'fixed') return document.body;
+          for (let parent = element; (parent = parent.parentElement);) {
             style = getComputedStyle(parent);
-            if (excludeStaticParent && style.position === "static") {
+            if (excludeStaticParent && style.position === 'static') {
               continue;
             }
             if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) return parent;
@@ -640,27 +645,29 @@ export class PageElement<
         }
 
         if (typeof params.containerSelector === 'undefined') {
-          container = getScrollParent(elem, params.closestContainerIncludesHidden)
+          container = getScrollParent(elem, params.closestContainerIncludesHidden);
         } else {
-          container = <HTMLElement>document.evaluate(params.containerSelector, document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          container = <HTMLElement>document.evaluate(
+            params.containerSelector, document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null,
+          ).singleNodeValue;
 
           if (container === null) {
-            error.notFound.push(params.containerSelector)
-            return error
+            error.notFound.push(params.containerSelector);
+            return error;
           }
         }
 
-        var elemTop = elem.getBoundingClientRect().top;
-        var elemLeft = elem.getBoundingClientRect().left;
+        const elemTop = elem.getBoundingClientRect().top;
+        const elemLeft = elem.getBoundingClientRect().left;
 
-        var containerTop = container.getBoundingClientRect().top;
-        var containerLeft = container.getBoundingClientRect().left;
+        const containerTop = container.getBoundingClientRect().top;
+        const containerLeft = container.getBoundingClientRect().left;
 
-        var previousScrollTop = container.scrollTop;
-        var previousScrollLeft = container.scrollLeft;
+        const previousScrollTop = container.scrollTop;
+        const previousScrollLeft = container.scrollLeft;
 
-        var scrollTop = elemTop - containerTop + previousScrollTop + params.offsets.y;
-        var scrollLeft = elemLeft - containerLeft + previousScrollLeft + params.offsets.x;
+        const scrollTop = elemTop - containerTop + previousScrollTop + params.offsets.y;
+        const scrollLeft = elemLeft - containerLeft + previousScrollLeft + params.offsets.x;
 
         if (typeof params.directions !== 'undefined') {
           if (params.directions.y) {
@@ -672,19 +679,19 @@ export class PageElement<
         }
 
         return {
-          elemTop: elemTop,
-          elemLeft: elemLeft,
-          containerTop: containerTop,
-          containerLeft: containerLeft,
-          scrollTop: scrollTop,
-          scrollLeft: scrollLeft
+          elemTop,
+          elemLeft,
+          containerTop,
+          containerLeft,
+          scrollTop,
+          scrollLeft,
         };
-      }, this.getSelector(), params)
+      }, this.getSelector(), params);
 
     if (isJsError(result)) {
-      throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`)
+      throw new Error(`${this.constructor.name} could not be located in scrollTo.\n( ${this.getSelector()} )`);
     } else {
-      return result
+      return result;
     }
   }
 
@@ -696,12 +703,12 @@ export class PageElement<
    * @returns this (an instance of PageElement)
    */
   scrollTo(
-    params: Workflo.IScrollParams
+    params: Workflo.IScrollParams,
   ) {
-    this.initialWait()
-    this._scrollTo(params)
+    this.initialWait();
+    this._scrollTo(params);
 
-    return this
+    return this;
   }
 
 // HELPER FUNCTIONS
@@ -714,8 +721,8 @@ export class PageElement<
    * @param func the function to be executed after performing the initial wait condition
    */
   protected _executeAfterInitialWait<ResultType>(func: () => ResultType) {
-    this.initialWait()
-    return this.__execute(func)
+    this.initialWait();
+    return this.__execute(func);
   }
 }
 
@@ -736,21 +743,21 @@ export class PageElementCurrently<
    * Returns true if PageElement currently exists.
    */
   getExists() {
-    return this.exists()
+    return this.exists();
   }
 
   /**
    * Returns true if PageElement is currently visible.
    */
   getIsVisible() {
-    return this.isVisible()
+    return this.isVisible();
   }
 
   /**
    * Returns true if PageElement is currently enabled.
    */
   getIsEnabled() {
-    return this.isEnabled()
+    return this.isEnabled();
   }
 
   /**
@@ -761,31 +768,32 @@ export class PageElementCurrently<
    */
   getHTML(): string {
     const result: Workflo.IJSError | string = browser.selectorExecute(
-      [this._node.getSelector()], function (elems: HTMLElement[], elementSelector: string
+      // tslint:disable-next-line:ter-prefer-arrow-callback
+      [this._node.getSelector()], function (elems: HTMLElement[], elementSelector: string,
     ) {
-        var error: Workflo.IJSError = {
-          notFound: []
+        const error: Workflo.IJSError = {
+          notFound: [],
         };
 
         if (elems.length === 0) {
           error.notFound.push(elementSelector);
-        };
+        }
 
         if (error.notFound.length > 0) {
           return error;
         }
 
-        var elem: HTMLElement = elems[0];
+        const elem: HTMLElement = elems[0];
 
         return elem.innerHTML;
-    }, this._node.getSelector())
+      }, this._node.getSelector());
 
     if (isJsError(result)) {
       throw new Error(
-        `${this._node.constructor.name} could not be located on the page.\n( ${this._node.getSelector()} )`
-        )
+        `${this._node.constructor.name} could not be located on the page.\n( ${this._node.getSelector()} )`,
+        );
     } else {
-      return result || ''
+      return result || '';
     }
   }
 
@@ -799,22 +807,24 @@ export class PageElementCurrently<
    * `containsDirectText` and `hasAnyDirectText` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getDirectText(): string {
-    const html = this.getHTML()
+    const html = this.getHTML();
 
     if (html.length === 0) {
-      return ''
+      return '';
     }
 
-    let text = ""
-    const constructorName = this._node.constructor.name
+    let text = '';
+    const constructorName = this._node.constructor.name;
 
     const handler = new htmlParser.DomHandler(function (error, dom) {
       if (error) {
-        throw new Error(`Error creating dom for direct text in ${constructorName}: ${error}\n( ${this._pageElement.getSelector()} )`)
+        throw new Error(
+          `Error creating dom for direct text in ${constructorName}: ${error}\n( ${this._pageElement.getSelector()} )`,
+        );
       } else {
         dom.forEach(node => {
           if (node.type === 'text') {
-              text += node.data
+            text += node.data;
           }
         });
       }
@@ -824,7 +834,7 @@ export class PageElementCurrently<
     parser.write(html);
     parser.end();
 
-    return text
+    return text;
   }
 
   /**
@@ -834,7 +844,7 @@ export class PageElementCurrently<
    * `hasAnyText` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getText(): string {
-    return this._node.__execute(() => this.element.getText())
+    return this._node.__execute(() => this.element.getText());
   }
 
   /**
@@ -846,7 +856,7 @@ export class PageElementCurrently<
    * @param attributeName the name of the HTML attribute whose current value should be returned
    */
   getAttribute(attributeName: string): string {
-    return this._node.__execute(() => this.element.getAttribute(attributeName))
+    return this._node.__execute(() => this.element.getAttribute(attributeName));
   }
 
   /**
@@ -856,7 +866,7 @@ export class PageElementCurrently<
    * `hasAnyClass` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getClass() {
-    return this.getAttribute('class')
+    return this.getAttribute('class');
   }
 
   /**
@@ -866,7 +876,7 @@ export class PageElementCurrently<
    * `hasAnyId` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getId() {
-    return this.getAttribute('id')
+    return this.getAttribute('id');
   }
 
   /**
@@ -876,7 +886,7 @@ export class PageElementCurrently<
    * `hasAnyName` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getName() {
-    return this.getAttribute('name')
+    return this.getAttribute('name');
   }
 
   /**
@@ -886,7 +896,7 @@ export class PageElementCurrently<
    * and `hasAnyLocation` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getLocation() {
-    return <Workflo.ICoordinates> (<any> this._node.__execute(() => this.element.getLocation()))
+    return <Workflo.ICoordinates> (<any> this._node.__execute(() => this.element.getLocation()));
   }
 
   /**
@@ -896,7 +906,7 @@ export class PageElementCurrently<
    * and `hasAnyX` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getX() {
-    return this.getLocation().x
+    return this.getLocation().x;
   }
 
   /**
@@ -906,7 +916,7 @@ export class PageElementCurrently<
    * and `hasAnyY` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getY() {
-    return this.getLocation().y
+    return this.getLocation().y;
   }
 
   /**
@@ -916,7 +926,7 @@ export class PageElementCurrently<
    * and `hasAnySize` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getSize() {
-    return <Workflo.ISize> (<any> this._node.__execute(() => this.element.getElementSize()))
+    return <Workflo.ISize> (<any> this._node.__execute(() => this.element.getElementSize()));
   }
 
   /**
@@ -926,7 +936,7 @@ export class PageElementCurrently<
    * and `hasAnyWidth` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getWidth() {
-    return this.getSize().width
+    return this.getSize().width;
   }
 
   /**
@@ -936,7 +946,7 @@ export class PageElementCurrently<
    * and `hasAnyHeight` in PageElement and its `currently`, `wait` and `eventually` APIs.
    */
   getHeight() {
-    return this.getSize().height
+    return this.getSize().height;
   }
 
   /**
@@ -947,7 +957,7 @@ export class PageElementCurrently<
    * @param text the expected text used in the comparison which sets the 'hasText' status
    */
   getHasText(text: string) {
-    return this.hasText(text)
+    return this.hasText(text);
   }
 
   /**
@@ -956,7 +966,7 @@ export class PageElementCurrently<
    * A PageElement's 'hasAnyText' status is set to true if it has any text.
    */
   getHasAnyText() {
-    return this.hasAnyText()
+    return this.hasAnyText();
   }
 
   /**
@@ -967,7 +977,7 @@ export class PageElementCurrently<
    * @param text the expected text used in the comparison which sets the 'containsText' status
    */
   getContainsText(text: string) {
-    return this.containsText(text)
+    return this.containsText(text);
   }
 
   /**
@@ -981,7 +991,7 @@ export class PageElementCurrently<
    * @param directText the expected direct text used in the comparison which sets the 'hasDirectText' status
    */
   getHasDirectText(directText: string) {
-    return this.hasDirectText(directText)
+    return this.hasDirectText(directText);
   }
 
   /**
@@ -993,7 +1003,7 @@ export class PageElementCurrently<
    * It does not include any text of the HTML element's nested children HTML elements.
    */
   getHasAnyDirectText() {
-    return this.hasAnyDirectText()
+    return this.hasAnyDirectText();
   }
 
   /**
@@ -1008,7 +1018,7 @@ export class PageElementCurrently<
    * @param directText the expected direct text used in the comparison which sets the 'containsDirectText' status
    */
   getContainsDirectText(directText: string) {
-    return this.containsDirectText(directText)
+    return this.containsDirectText(directText);
   }
 
 // CHECK STATE
@@ -1020,7 +1030,7 @@ export class PageElementCurrently<
    * `wait` and `eventually` APIs.
    */
   exists(): boolean {
-    return this.element.isExisting()
+    return this.element.isExisting();
   }
 
   /**
@@ -1030,7 +1040,7 @@ export class PageElementCurrently<
    * `wait` and `eventually` APIs.
    */
   isVisible(): boolean {
-    return this.element.isVisible()
+    return this.element.isVisible();
   }
 
   /**
@@ -1040,7 +1050,7 @@ export class PageElementCurrently<
    * `wait` and `eventually` APIs.
    */
   isEnabled(): boolean {
-    return this._node.__execute(() => this.element.isEnabled())
+    return this._node.__execute(() => this.element.isEnabled());
   }
 
   /**
@@ -1050,7 +1060,7 @@ export class PageElementCurrently<
    * `wait` and `eventually` APIs.
    */
   isSelected(): boolean {
-    return this._node.__execute(() => this.element.isSelected())
+    return this._node.__execute(() => this.element.isSelected());
   }
 
   /**
@@ -1060,7 +1070,7 @@ export class PageElementCurrently<
    * `wait` and `eventually` APIs.
    */
   isChecked(): boolean {
-    return this.hasAnyAttribute('checked')
+    return this.hasAnyAttribute('checked');
   }
 
   /**
@@ -1069,14 +1079,14 @@ export class PageElementCurrently<
    * @param text the expected text which is supposed to equal the actual text
    */
   hasText(text: string) {
-    return this._compareHas(text, this.getText())
+    return this._compareHas(text, this.getText());
   }
 
   /**
    * Returns true if the PageElement currently has any Text.
    */
   hasAnyText() {
-    return this._compareHasAny(this.getText())
+    return this._compareHasAny(this.getText());
   }
 
   /**
@@ -1085,7 +1095,7 @@ export class PageElementCurrently<
    * @param text the expected text which is supposed to be contained in the actual text
    */
   containsText(text: string) {
-    return this._compareContains(text, this.getText())
+    return this._compareContains(text, this.getText());
   }
 
   /**
@@ -1094,14 +1104,14 @@ export class PageElementCurrently<
    * @param html the expected HTML which is supposed to equal the actual HTML
    */
   hasHTML(html: string) {
-    return this._compareHas(html, this.getHTML())
+    return this._compareHas(html, this.getHTML());
   }
 
   /**
    * Returns true if the PageElement currently has any HTML.
    */
   hasAnyHTML() {
-    return this._compareHasAny(this.getHTML())
+    return this._compareHasAny(this.getHTML());
   }
 
   /**
@@ -1110,7 +1120,7 @@ export class PageElementCurrently<
    * @param text the expected HTML which is supposed to be contained in the actual HTML
    */
   containsHTML(html: string) {
-    return this._compareContains(html, this.getHTML())
+    return this._compareContains(html, this.getHTML());
   }
 
   /**
@@ -1122,7 +1132,7 @@ export class PageElementCurrently<
    * @param directText the expected direct text which is supposed to equal the actual direct text
    */
   hasDirectText(directText: string) {
-    return this._compareHas(directText, this.getDirectText())
+    return this._compareHas(directText, this.getDirectText());
   }
 
   /**
@@ -1132,7 +1142,7 @@ export class PageElementCurrently<
    * It does not include any text of the HTML element's nested children HTML elements.
    */
   hasAnyDirectText() {
-    return this._compareHasAny(this.getDirectText())
+    return this._compareHasAny(this.getDirectText());
   }
 
   /**
@@ -1144,7 +1154,7 @@ export class PageElementCurrently<
    * @param directText the expected direct text which is supposed to be contained in the actual direct text
    */
   containsDirectText(directText: string) {
-    return this._compareContains(directText, this.getDirectText())
+    return this._compareContains(directText, this.getDirectText());
   }
 
   /**
@@ -1154,7 +1164,7 @@ export class PageElementCurrently<
    * is expected to have
    */
   hasAttribute(attribute: Workflo.IAttribute) {
-    return this._compareHas(attribute.value, this.getAttribute(attribute.name))
+    return this._compareHas(attribute.value, this.getAttribute(attribute.name));
   }
 
   /**
@@ -1163,7 +1173,7 @@ export class PageElementCurrently<
    * @param attributeName the name of a PageElement's HTML attribute which is supposed to have any value
    */
   hasAnyAttribute(attributeName: string) {
-    return this._compareHasAny(this.getAttribute(attributeName))
+    return this._compareHasAny(this.getAttribute(attributeName));
   }
 
   /**
@@ -1173,7 +1183,7 @@ export class PageElementCurrently<
    * is expected to contain
    */
   containsAttribute(attribute: Workflo.IAttribute) {
-    return this._compareContains(attribute.value, this.getAttribute(attribute.name))
+    return this._compareContains(attribute.value, this.getAttribute(attribute.name));
   }
 
   /**
@@ -1182,14 +1192,14 @@ export class PageElementCurrently<
    * @param className the className which the HTML attribute 'class' of PageElement is supposed to have
    */
   hasClass(className: string) {
-    return this._compareHas(className, this.getClass())
+    return this._compareHas(className, this.getClass());
   }
 
   /**
    * Returns true if the HTML attribute 'class' of PageElement currently has any className.
    */
   hasAnyClass() {
-    return this._compareHasAny(this.getClass())
+    return this._compareHasAny(this.getClass());
   }
 
   /**
@@ -1198,7 +1208,7 @@ export class PageElementCurrently<
   * @param className the className which the HTML attribute 'class' of PageElement is supposed to contain
   */
   containsClass(className: string) {
-    return this._compareContains(className, this.getClass())
+    return this._compareContains(className, this.getClass());
   }
 
   /**
@@ -1207,14 +1217,14 @@ export class PageElementCurrently<
    * @param id the value which the HTML attribute 'id' of PageElement is supposed to have
    */
   hasId(id: string) {
-    return this._compareHas(id, this.getId())
+    return this._compareHas(id, this.getId());
   }
 
   /**
    * Returns true if the HTML attribute 'id' of PageElement currently has any value.
    */
   hasAnyId() {
-    return this._compareHasAny(this.getId())
+    return this._compareHasAny(this.getId());
   }
 
   /**
@@ -1223,7 +1233,7 @@ export class PageElementCurrently<
    * @param id the value which the HTML attribute 'id' of PageElement is supposed to contain
    */
   containsId(id: string) {
-    return this._compareContains(id, this.getId())
+    return this._compareContains(id, this.getId());
   }
 
   /**
@@ -1232,14 +1242,14 @@ export class PageElementCurrently<
    * @param name the value which the HTML attribute 'name' of PageElement is supposed to have
    */
   hasName(name: string) {
-    return this._compareHas(name, this.getName())
+    return this._compareHas(name, this.getName());
   }
 
   /**
    * Returns true if the HTML attribute 'name' of PageElement currently has any value.
    */
   hasAnyName() {
-    return this._compareHasAny(this.getName())
+    return this._compareHasAny(this.getName());
   }
 
   /**
@@ -1248,22 +1258,22 @@ export class PageElementCurrently<
    * @param name the value which the HTML attribute 'name' of PageElement is supposed to contain
    */
   containsName(name: string) {
-    return this._compareContains(name, this.getName())
+    return this._compareContains(name, this.getName());
   }
 
   /**
-   * Returns true if - currently - the location of PageElement matches the specified coordinates or if its location deviates
-   * no more than the specified tolerances from the specified coordinates.
+   * Returns true if - currently - the location of PageElement matches the specified coordinates or if its location
+   * deviates no more than the specified tolerances from the specified coordinates.
    *
    * @param coordinates the expected coordinates of PageElement
    * @param tolerances used to calculate the maximal allowed deviations from the expected coordinates
    */
   hasLocation(coordinates: Workflo.ICoordinates, tolerances: Partial<Workflo.ICoordinates> = { x: 0, y: 0 }) {
-    const actualCoords = this.getLocation()
-    this._writeLastDiff(tolerancesToString(actualCoords))
+    const actualCoords = this.getLocation();
+    this._writeLastDiff(tolerancesToString(actualCoords));
 
     return this._withinTolerance(coordinates.x, actualCoords.x, tolerances.x)
-      && this._withinTolerance(coordinates.y, actualCoords.y, tolerances.y)
+      && this._withinTolerance(coordinates.y, actualCoords.y, tolerances.y);
   }
 
   /**
@@ -1274,10 +1284,10 @@ export class PageElementCurrently<
    * @param tolerance used to calculate the maximal allowed deviation from the expected x-location
    */
   hasX(x: number, tolerance?: number) {
-    const actual = this.getX()
-    this._writeLastDiff(tolerancesToString(actual))
+    const actual = this.getX();
+    this._writeLastDiff(tolerancesToString(actual));
 
-    return this._withinTolerance(x, actual, tolerance)
+    return this._withinTolerance(x, actual, tolerance);
   }
 
   /**
@@ -1288,53 +1298,53 @@ export class PageElementCurrently<
    * @param tolerance used to calculate the maximal allowed deviation from the expected y-location
    */
   hasY(y: number, tolerance?: number) {
-    const actual = this.getY()
-    this._writeLastDiff(tolerancesToString(actual))
+    const actual = this.getY();
+    this._writeLastDiff(tolerancesToString(actual));
 
-    return this._withinTolerance(y, actual, tolerance)
+    return this._withinTolerance(y, actual, tolerance);
   }
 
   /**
-  * Returns true if - currently - the size of PageElement matches the specified size or if PageElement's size deviates no
-  * more than the specified tolerances from the specified size.
+  * Returns true if - currently - the size of PageElement matches the specified size or if PageElement's size deviates
+  * no more than the specified tolerances from the specified size.
   *
   * @param size the expected size of PageElement
   * @param tolerances used to calculate the maximal allowed deviations from the expected size
   */
-  hasSize(size: Workflo.ISize, tolerances: Partial<Workflo.ISize> = {width: 0, height: 0}) {
-    const actualSize = this.getSize()
-    this._writeLastDiff(tolerancesToString(actualSize))
+  hasSize(size: Workflo.ISize, tolerances: Partial<Workflo.ISize> = { width: 0, height: 0 }) {
+    const actualSize = this.getSize();
+    this._writeLastDiff(tolerancesToString(actualSize));
 
     return this._withinTolerance(size.width, actualSize.width, tolerances.width)
-      && this._withinTolerance(size.height, actualSize.height, tolerances.height)
+      && this._withinTolerance(size.height, actualSize.height, tolerances.height);
   }
 
   /**
-   * Returns true if - currently - the width of PageElement matches the specified width or if PageElement's width deviates no
-   * more than the specified tolerance from the specified width.
+   * Returns true if - currently - the width of PageElement matches the specified width or if PageElement's width
+   * deviates no more than the specified tolerance from the specified width.
    *
    * @param width the expected width of PageElement
    * @param tolerance used to calculate the maximal allowed deviation from the expected width
    */
   hasWidth(width: number, tolerance?: number) {
-    const actual = this.getWidth()
-    this._writeLastDiff(tolerancesToString(actual))
+    const actual = this.getWidth();
+    this._writeLastDiff(tolerancesToString(actual));
 
-    return this._withinTolerance(width, actual, tolerance)
+    return this._withinTolerance(width, actual, tolerance);
   }
 
   /**
-   * Returns true if - currently - the height of PageElement matches the specified height or if PageElement's height deviates no
-   * more than the specified tolerance from the specified height.
+   * Returns true if - currently - the height of PageElement matches the specified height or if PageElement's height
+   * deviates no more than the specified tolerance from the specified height.
    *
    * @param height the expected height of PageElement
    * @param tolerance used to calculate the maximal allowed deviation from the expected height
    */
   hasHeight(height: number, tolerance?: number) {
-    const actual = this.getHeight()
-    this._writeLastDiff(tolerancesToString(actual))
+    const actual = this.getHeight();
+    this._writeLastDiff(tolerancesToString(actual));
 
-    return this._withinTolerance(height, actual, tolerance)
+    return this._withinTolerance(height, actual, tolerance);
   }
 
   /**
@@ -1538,7 +1548,7 @@ export class PageElementCurrently<
        * @param tolerance used to calculate the maximal allowed deviation from the expected height
        */
       hasHeight: (height: number, tolerance?: number) => !this.hasHeight(height, tolerance),
-    }
+    };
   }
 }
 
@@ -1567,8 +1577,8 @@ export class PageElementWait<
    */
   exists(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
-      'existed', opts => this._node.currently.element.waitForExist(opts.timeout, opts.reverse), opts
-    )
+      'existed', opts => this._node.currently.element.waitForExist(opts.timeout, opts.reverse), opts,
+    );
   }
 
   /**
@@ -1585,8 +1595,8 @@ export class PageElementWait<
    */
   isVisible(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
-      'became visible', opts => this._node.currently.element.waitForVisible(opts.timeout, opts.reverse), opts
-    )
+      'became visible', opts => this._node.currently.element.waitForVisible(opts.timeout, opts.reverse), opts,
+    );
   }
 
   /**
@@ -1603,8 +1613,8 @@ export class PageElementWait<
    */
   isEnabled(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
-      'became enabled', opts => this._node.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts
-    )
+      'became enabled', opts => this._node.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts,
+    );
   }
 
   /**
@@ -1621,8 +1631,8 @@ export class PageElementWait<
    */
   isSelected(opts: Workflo.ITimeoutReverse = {}) {
     return this._waitWdioCheckFunc(
-      'became selected', opts => this._node.currently.element.waitForSelected(opts.timeout, opts.reverse), opts
-    )
+      'became selected', opts => this._node.currently.element.waitForSelected(opts.timeout, opts.reverse), opts,
+    );
   }
 
   /**
@@ -1632,7 +1642,8 @@ export class PageElementWait<
    *
    * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
    * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
-  * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+   * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+   * instead
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
@@ -1640,24 +1651,24 @@ export class PageElementWait<
    * @returns this (an instance of PageElement)
    */
   isChecked(opts: Workflo.ITimeoutReverseInterval = {}) {
-    const timeout = opts.timeout || this._node.getTimeout()
-    const interval = opts.interval || this._node.getInterval()
-    const reverseStr = (opts.reverse) ? ' not' : ''
+    const timeout = opts.timeout || this._node.getTimeout();
+    const interval = opts.interval || this._node.getInterval();
+    const reverseStr = (opts.reverse) ? ' not' : '';
 
     this._node.__waitUntil(
       () => {
-        if ( opts.reverse ) {
-          return this._node.currently.not.isChecked()
+        if (opts.reverse) {
+          return this._node.currently.not.isChecked();
         } else {
-          return this._node.currently.isChecked()
+          return this._node.currently.isChecked();
         }
       },
       () => ` never${reverseStr} became checked`,
       timeout,
-      interval
-    )
+      interval,
+    );
 
-    return this._node
+    return this._node;
   }
 
   /**
@@ -1676,8 +1687,8 @@ export class PageElementWait<
    */
   hasText(text: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      'text', text, () => this._node.currently.hasText(text), opts
-    )
+      'text', text, () => this._node.currently.hasText(text), opts,
+    );
   }
 
   /**
@@ -1695,8 +1706,8 @@ export class PageElementWait<
    */
   hasAnyText(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
-      'text', () => this._node.currently.hasAnyText(), opts
-    )
+      'text', () => this._node.currently.hasAnyText(), opts,
+    );
   }
 
   /**
@@ -1715,8 +1726,8 @@ export class PageElementWait<
    */
   containsText(text: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      'text', text, () => this._node.currently.containsText(text), opts
-    )
+      'text', text, () => this._node.currently.containsText(text), opts,
+    );
   }
 
   /**
@@ -1735,8 +1746,8 @@ export class PageElementWait<
    */
   hasHTML(html: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      'HTML', html, () => this._node.currently.hasHTML(html), opts
-    )
+      'HTML', html, () => this._node.currently.hasHTML(html), opts,
+    );
   }
 
   /**
@@ -1754,8 +1765,8 @@ export class PageElementWait<
    */
   hasAnyHTML(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
-      'HTML', () => this._node.currently.hasAnyHTML(), opts
-    )
+      'HTML', () => this._node.currently.hasAnyHTML(), opts,
+    );
   }
 
   /**
@@ -1774,8 +1785,8 @@ export class PageElementWait<
    */
   containsHTML(html: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
-      'HTML', html, () => this._node.currently.containsHTML(html), opts
-    )
+      'HTML', html, () => this._node.currently.containsHTML(html), opts,
+    );
   }
 
   /**
@@ -1797,8 +1808,8 @@ export class PageElementWait<
    */
   hasDirectText(directText: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      'direct text', directText, () => this._node.currently.hasDirectText(directText), opts
-    )
+      'direct text', directText, () => this._node.currently.hasDirectText(directText), opts,
+    );
   }
 
   /**
@@ -1819,8 +1830,8 @@ export class PageElementWait<
    */
   hasAnyDirectText(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
-      'direct text', () => this._node.currently.hasAnyDirectText(), opts
-    )
+      'direct text', () => this._node.currently.hasAnyDirectText(), opts,
+    );
   }
 
   /**
@@ -1842,8 +1853,8 @@ export class PageElementWait<
    */
   containsDirectText(directText: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
-      'direct text', directText, () => this._node.currently.containsDirectText(directText), opts
-    )
+      'direct text', directText, () => this._node.currently.containsDirectText(directText), opts,
+    );
   }
 
   /**
@@ -1865,8 +1876,8 @@ export class PageElementWait<
     return this._waitHasProperty(
       `Attribute '${attribute.name}'`,
       attribute.value,
-      () => this._node.currently.hasAttribute(attribute), opts
-    )
+      () => this._node.currently.hasAttribute(attribute), opts,
+    );
   }
 
   /**
@@ -1885,8 +1896,8 @@ export class PageElementWait<
    */
   hasAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
-      `Attribute '${attributeName}'`, () => this._node.currently.hasAnyAttribute(attributeName), opts
-    )
+      `Attribute '${attributeName}'`, () => this._node.currently.hasAnyAttribute(attributeName), opts,
+    );
   }
 
   /**
@@ -1908,8 +1919,8 @@ export class PageElementWait<
     return this._waitContainsProperty(
       `Attribute '${attribute.name}'`,
       attribute.value,
-      () => this._node.currently.containsAttribute(attribute), opts
-    )
+      () => this._node.currently.containsAttribute(attribute), opts,
+    );
   }
 
   /**
@@ -1929,8 +1940,8 @@ export class PageElementWait<
    */
   hasClass(className: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      `class`, className, () => this._node.currently.hasClass(className), opts
-    )
+      'class', className, () => this._node.currently.hasClass(className), opts,
+    );
   }
 
   /**
@@ -1948,8 +1959,8 @@ export class PageElementWait<
    */
   hasAnyClass(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
-      `class`, () => this._node.currently.hasAnyClass(), opts
-    )
+      'class', () => this._node.currently.hasAnyClass(), opts,
+    );
   }
 
   /**
@@ -1969,8 +1980,8 @@ export class PageElementWait<
    */
   containsClass(className: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
-      `class`, className, () => this._node.currently.containsClass(className), opts
-    )
+      'class', className, () => this._node.currently.containsClass(className), opts,
+    );
   }
 
   /**
@@ -1989,8 +2000,8 @@ export class PageElementWait<
    */
   hasId(id: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      `id`, id, () => this._node.currently.hasId(id), opts
-    )
+      'id', id, () => this._node.currently.hasId(id), opts,
+    );
   }
 
   /**
@@ -2008,8 +2019,8 @@ export class PageElementWait<
    */
   hasAnyId(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
-      `id`, () => this._node.currently.hasAnyId(), opts
-    )
+      'id', () => this._node.currently.hasAnyId(), opts,
+    );
   }
 
   /**
@@ -2029,8 +2040,8 @@ export class PageElementWait<
    */
   containsId(id: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
-      `id`, id, () => this._node.currently.containsId(id), opts
-    )
+      'id', id, () => this._node.currently.containsId(id), opts,
+    );
   }
 
   /**
@@ -2049,8 +2060,8 @@ export class PageElementWait<
    */
   hasName(name: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasProperty(
-      `name`, name, () => this._node.currently.hasName(name), opts
-    )
+      'name', name, () => this._node.currently.hasName(name), opts,
+    );
   }
 
   /**
@@ -2068,8 +2079,8 @@ export class PageElementWait<
    */
   hasAnyName(opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitHasAnyProperty(
-      `id`, () => this._node.currently.hasAnyName(), opts
-    )
+      'id', () => this._node.currently.hasAnyName(), opts,
+    );
   }
 
   /**
@@ -2089,8 +2100,8 @@ export class PageElementWait<
    */
   containsName(name: string, opts?: Workflo.ITimeoutReverseInterval) {
     return this._waitContainsProperty(
-      `name`, name, () => this._node.currently.containsName(name), opts
-    )
+      'name', name, () => this._node.currently.containsName(name), opts,
+    );
   }
 
   /**
@@ -2100,8 +2111,8 @@ export class PageElementWait<
    * Throws an error if the condition is not met within a specific timeout.
    *
    * @param coordinates the expected coordinates of PageElement in pixels
-   * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-   * the `timeout` within which the condition is expected to be met, the `interval` used to
+   * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+   * coordinates, the `timeout` within which the condition is expected to be met, the `interval` used to
    * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
@@ -2112,24 +2123,24 @@ export class PageElementWait<
   hasLocation(
     coordinates: Workflo.ICoordinates,
     opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutReverseInterval =
-      { tolerances: { x: 0, y: 0 } }
+      { tolerances: { x: 0, y: 0 } },
   ) {
-    const { tolerances, ...otherOpts } = opts
+    const { tolerances, ...otherOpts } = opts;
 
     if (tolerances && (tolerances.x > 0 || tolerances.y > 0)) {
       return this._waitWithinProperty(
-        `location`,
+        'location',
         tolerancesToString(coordinates, tolerances),
         () => this._node.currently.hasLocation(coordinates, tolerances),
-        otherOpts
-      )
+        otherOpts,
+      );
     } else {
       return this._waitHasProperty(
-        `location`,
+        'location',
         tolerancesToString(coordinates),
         () => this._node.currently.hasLocation(coordinates),
-        otherOpts
-      )
+        otherOpts,
+      );
     }
   }
 
@@ -2150,24 +2161,24 @@ export class PageElementWait<
    * @returns this (an instance of PageElement)
    */
   hasX(
-    x: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
+    x: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 },
   ) {
-    const { tolerance, ...otherOpts } = opts
+    const { tolerance, ...otherOpts } = opts;
 
-    if ( tolerance ) {
+    if (tolerance) {
       return this._waitWithinProperty(
-        `X-location`,
+        'X-location',
         tolerancesToString(x, tolerance),
         () => this._node.currently.hasX(x, tolerance),
-        otherOpts
-      )
+        otherOpts,
+      );
     } else {
       return this._waitHasProperty(
-        `X-location`,
+        'X-location',
         x.toString(),
         () => this._node.currently.hasX(x),
-        otherOpts
-      )
+        otherOpts,
+      );
     }
   }
 
@@ -2188,24 +2199,24 @@ export class PageElementWait<
    * @returns this (an instance of PageElement)
    */
   hasY(
-    y: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
+    y: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 },
   ) {
-    const { tolerance, ...otherOpts } = opts
+    const { tolerance, ...otherOpts } = opts;
 
-    if ( tolerance ) {
+    if (tolerance) {
       return this._waitWithinProperty(
-        `Y-location`,
+        'Y-location',
         tolerancesToString(y, tolerance),
         () => this._node.currently.hasY(y, tolerance),
-        otherOpts
-      )
+        otherOpts,
+      );
     } else {
       return this._waitHasProperty(
-        `Y-location`,
+        'Y-location',
         y.toString(),
         () => this._node.currently.hasY(y),
-        otherOpts
-      )
+        otherOpts,
+      );
     }
   }
 
@@ -2228,24 +2239,24 @@ export class PageElementWait<
   hasSize(
     size: Workflo.ISize,
     opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.ITimeoutReverseInterval =
-      { tolerances: { width: 0, height: 0 } }
+      { tolerances: { width: 0, height: 0 } },
   ) {
-    const { tolerances, ...otherOpts } = opts
+    const { tolerances, ...otherOpts } = opts;
 
     if (tolerances && (tolerances.width > 0 || tolerances.height > 0)) {
       return this._waitWithinProperty(
-        `size`,
+        'size',
         tolerancesToString(size, tolerances),
         () => this._node.currently.hasSize(size, tolerances),
-        otherOpts
-      )
+        otherOpts,
+      );
     } else {
       return this._waitHasProperty(
-        `size`,
+        'size',
         tolerancesToString(size),
         () => this._node.currently.hasSize(size),
-        otherOpts
-      )
+        otherOpts,
+      );
     }
   }
 
@@ -2266,24 +2277,24 @@ export class PageElementWait<
    * @returns this (an instance of PageElement)
    */
   hasWidth(
-    width: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
+    width: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 },
   ) {
-    const { tolerance, ...otherOpts } = opts
+    const { tolerance, ...otherOpts } = opts;
 
-    if ( tolerance ) {
+    if (tolerance) {
       return this._waitWithinProperty(
-        `width`,
+        'width',
         tolerancesToString(width, tolerance),
         () => this._node.currently.hasWidth(width, tolerance),
-        otherOpts
-      )
+        otherOpts,
+      );
     } else {
       return this._waitHasProperty(
-        `width`,
+        'width',
         width.toString(),
         () => this._node.currently.hasWidth(width),
-        otherOpts
-      )
+        otherOpts,
+      );
     }
   }
 
@@ -2304,24 +2315,24 @@ export class PageElementWait<
    * @returns this (an instance of PageElement)
    */
   hasHeight(
-    height: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 }
+    height: number, opts: {tolerance?: number} & Workflo.ITimeoutReverseInterval = { tolerance: 0 },
   ) {
-    const { tolerance, ...otherOpts } = opts
+    const { tolerance, ...otherOpts } = opts;
 
-    if ( tolerance ) {
+    if (tolerance) {
       return this._waitWithinProperty(
-        `height`,
+        'height',
         tolerancesToString(height, tolerance),
         () => this._node.currently.hasHeight(height, tolerance),
-        otherOpts
-      )
+        otherOpts,
+      );
     } else {
       return this._waitHasProperty(
-        `height`,
+        'height',
         height.toString(),
         () => this._node.currently.hasHeight(height),
-        otherOpts
-      )
+        otherOpts,
+      );
     }
   }
 
@@ -2340,16 +2351,16 @@ export class PageElementWait<
   untilElement(
     description: string,
     condition: (element: PageElementType) => boolean,
-    { timeout = this._node.getTimeout(), interval = this._node.getInterval() }: Workflo.ITimeoutInterval = {}
+    { timeout = this._node.getTimeout(), interval = this._node.getInterval() }: Workflo.ITimeoutInterval = {},
   ) {
     this._node.__waitUntil(
       () => condition(this._node),
       () => `: Wait until element ${description} failed`,
       timeout,
-      interval
-    )
+      interval,
+    );
 
-    return this._node
+    return this._node;
   }
 
   /**
@@ -2369,7 +2380,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       exists: (opts?: Workflo.ITimeout) => {
-        return this.exists(this._makeReverseParams(opts))
+        return this.exists(this._makeReverseParams(opts));
       },
       /**
        * Waits for a PageElement not to be visible.
@@ -2383,7 +2394,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       isVisible: (opts?: Workflo.ITimeout) => {
-        return this.isVisible(this._makeReverseParams(opts))
+        return this.isVisible(this._makeReverseParams(opts));
       },
       /**
        * Waits for a PageElement not to be enabled.
@@ -2397,7 +2408,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       isEnabled: (opts?: Workflo.ITimeout) => {
-        return this.isEnabled(this._makeReverseParams(opts))
+        return this.isEnabled(this._makeReverseParams(opts));
       },
       /**
        * Waits for a PageElement not to be selected.
@@ -2411,7 +2422,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       isSelected: (opts?: Workflo.ITimeout) => {
-        return this.isSelected(this._makeReverseParams(opts))
+        return this.isSelected(this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement not to be checked.
@@ -2428,7 +2439,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       isChecked: (opts?: Workflo.ITimeoutInterval) => {
-        return this.isChecked(this._makeReverseParams(opts))
+        return this.isChecked(this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's actual text not to equal the expected text.
@@ -2445,7 +2456,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasText: (text: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasText(text, this._makeReverseParams(opts))
+        return this.hasText(text, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement not to have any text.
@@ -2461,7 +2472,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAnyText: (opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyText(this._makeReverseParams(opts))
+        return this.hasAnyText(this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's actual text not to contain the expected text.
@@ -2478,7 +2489,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       containsText: (text: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsText(text, this._makeReverseParams(opts))
+        return this.containsText(text, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's actual HTML value not to equal the expected HTML value.
@@ -2495,7 +2506,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasHTML(html, this._makeReverseParams(opts))
+        return this.hasHTML(html, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement not to have any HTML value.
@@ -2511,7 +2522,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyHTML(this._makeReverseParams(opts))
+        return this.hasAnyHTML(this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's actual HTML value not to contain the expected HTML value.
@@ -2528,7 +2539,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsHTML(html, this._makeReverseParams(opts))
+        return this.containsHTML(html, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's actual direct text not to equal the expected direct text.
@@ -2548,7 +2559,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasDirectText(directText, this._makeReverseParams(opts))
+        return this.hasDirectText(directText, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement not to have any direct text.
@@ -2567,7 +2578,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAnyDirectText: (opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyDirectText(this._makeReverseParams(opts))
+        return this.hasAnyDirectText(this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's actual direct text not to contain the expected direct text.
@@ -2587,7 +2598,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       containsDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsDirectText(directText, this._makeReverseParams(opts))
+        return this.containsDirectText(directText, this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of the specified HTML attribute of PageElement not to equal an expected value.
@@ -2605,7 +2616,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAttribute(attribute, this._makeReverseParams(opts))
+        return this.hasAttribute(attribute, this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of the specified HTML attribute of PageElement not to have any value.
@@ -2622,7 +2633,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAnyAttribute: (attributeName: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyAttribute(attributeName, this._makeReverseParams(opts))
+        return this.hasAnyAttribute(attributeName, this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of the specified HTML attribute of PageElement not to contain an expected value.
@@ -2640,15 +2651,15 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsAttribute(attribute, this._makeReverseParams(opts))
+        return this.containsAttribute(attribute, this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of PageElement's 'class' HTML attribute not to equal an expected value.
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
-       * attribute
+       * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML
+       * 'class' attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
        *
@@ -2658,7 +2669,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasClass(className, this._makeReverseParams(opts))
+        return this.hasClass(className, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's 'class' HTML attribute not to have any value.
@@ -2674,7 +2685,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAnyClass: (opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyClass(this._makeReverseParams(opts))
+        return this.hasAnyClass(this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of the PageElement's 'class' HTML attribute not to contain an expected value.
@@ -2692,14 +2703,15 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsClass(className, this._makeReverseParams(opts))
+        return this.containsClass(className, this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of PageElement's 'id' HTML attribute not to equal an expected value.
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param id the expected value which is supposed not to equal the actual value of PageElement's 'id' HTML attribute
+       * @param id the expected value which is supposed not to equal the actual value of PageElement's 'id' HTML
+       * attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
        *
@@ -2709,7 +2721,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasId: (id: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasId(id, this._makeReverseParams(opts))
+        return this.hasId(id, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's 'id' HTML attribute not to have any value.
@@ -2725,15 +2737,15 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAnyId: (opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyId(this._makeReverseParams(opts))
+        return this.hasAnyId(this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of PageElement's 'id' HTML attribute not to contain an expected value.
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
-       * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML 'id'
-       * attribute
+       * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML
+       * 'id' attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
        *
@@ -2743,7 +2755,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       containsId: (id: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsId(id, this._makeReverseParams(opts))
+        return this.containsId(id, this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of PageElement's 'name' HTML attribute not to equal an expected value.
@@ -2761,7 +2773,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasName: (name: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.hasName(name, this._makeReverseParams(opts))
+        return this.hasName(name, this._makeReverseParams(opts));
       },
       /**
        * Waits for PageElement's 'name' HTML attribute not to have any value.
@@ -2777,7 +2789,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasAnyName: (opts?: Workflo.ITimeoutInterval) => {
-        return this.hasAnyName(this._makeReverseParams(opts))
+        return this.hasAnyName(this._makeReverseParams(opts));
       },
       /**
        * Waits for the actual value of PageElement's 'name' HTML attribute not to contain an expected value.
@@ -2795,7 +2807,7 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       containsName: (name: string, opts?: Workflo.ITimeoutInterval) => {
-        return this.containsName(name, this._makeReverseParams(opts))
+        return this.containsName(name, this._makeReverseParams(opts));
       },
       /**
        * Waits for the location of PageElement not to equal the expected coordinates.
@@ -2803,8 +2815,8 @@ export class PageElementWait<
        * Throws an error if the condition is not met within a specific timeout.
        *
        * @param coordinates the not-expected coordinates of PageElement in pixels
-       * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-       * the `timeout` within which the condition is expected to be met and the `interval` used to
+       * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+       * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
        *
        * If no `timeout` is specified, PageElement's default timeout is used.
@@ -2815,9 +2827,9 @@ export class PageElementWait<
       hasLocation: (
         coordinates: Workflo.ICoordinates,
         opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval =
-          { tolerances: { x: 0, y: 0 } }
+          { tolerances: { x: 0, y: 0 } },
       ) => this.hasLocation(
-        coordinates, {tolerances: opts.tolerances, timeout: opts.timeout, reverse: true}
+        coordinates, { tolerances: opts.tolerances, timeout: opts.timeout, reverse: true },
       ),
       /**
        * Waits for the x-location of PageElement not to equal the expected x-location.
@@ -2825,8 +2837,8 @@ export class PageElementWait<
        * Throws an error if the condition is not met within a specific timeout.
        *
        * @param x the not-expected x-location of PageElement in pixels
-       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected x-location,
-       * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
+       * x-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
        *
        * If no `timeout` is specified, PageElement's default timeout is used.
        * If no `interval` is specified, PageElement's default interval is used.
@@ -2834,9 +2846,9 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasX: (
-        x: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        x: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this.hasX(
-        x, {tolerance: opts.tolerance, timeout: opts.timeout, reverse: true}
+        x, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true },
       ),
       /**
        * Waits for the y-location of PageElement not to equal the expected y-location.
@@ -2844,8 +2856,8 @@ export class PageElementWait<
        * Throws an error if the condition is not met within a specific timeout.
        *
        * @param y the not-expected y-location of PageElement in pixels
-       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected y-location,
-       * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+       * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
+       * y-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
        *
        * If no `timeout` is specified, PageElement's default timeout is used.
        * If no `interval` is specified, PageElement's default interval is used.
@@ -2853,9 +2865,9 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasY: (
-        y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this.hasY(
-        y, {tolerance: opts.tolerance, timeout: opts.timeout, reverse: true}
+        y, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true },
       ),
       /**
        * Waits for the size of PageElement not to equal the expected size.
@@ -2874,9 +2886,9 @@ export class PageElementWait<
       hasSize: (
         size: Workflo.ISize,
         opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.ITimeoutInterval =
-          { tolerances: { width: 0, height: 0 } }
+          { tolerances: { width: 0, height: 0 } },
       ) => this.hasSize(
-        size, {tolerances: opts.tolerances, timeout: opts.timeout, reverse: true}
+        size, { tolerances: opts.tolerances, timeout: opts.timeout, reverse: true },
       ),
       /**
        * Waits for the width of PageElement not to equal the expected width.
@@ -2893,9 +2905,9 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasWidth: (
-        width: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        width: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this.hasWidth(
-        width, {tolerance: opts.tolerance, timeout: opts.timeout, reverse: true}
+        width, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true },
       ),
       /**
        * Waits for the height of PageElement not to equal the expected height.
@@ -2912,11 +2924,11 @@ export class PageElementWait<
        * @returns this (an instance of PageElement)
        */
       hasHeight: (
-        height: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        height: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this.hasHeight(
-        height, {tolerance: opts.tolerance, timeout: opts.timeout, reverse: true}
-      )
-    }
+        height, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true },
+      ),
+    };
   }
 }
 
@@ -2939,7 +2951,7 @@ export class PageElementEventually<
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
   exists(opts?: Workflo.ITimeout) {
-    return this._node.__eventually(() => this._node.wait.exists(opts))
+    return this._node.__eventually(() => this._node.wait.exists(opts));
   }
 
   /**
@@ -2950,7 +2962,7 @@ export class PageElementEventually<
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
   isVisible(opts?: Workflo.ITimeout) {
-    return this._node.__eventually(() => this._node.wait.isVisible(opts))
+    return this._node.__eventually(() => this._node.wait.isVisible(opts));
   }
 
   /**
@@ -2961,7 +2973,7 @@ export class PageElementEventually<
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
   isEnabled(opts?: Workflo.ITimeout) {
-    return this._node.__eventually(() => this._node.wait.isEnabled(opts))
+    return this._node.__eventually(() => this._node.wait.isEnabled(opts));
   }
 
   /**
@@ -2972,7 +2984,7 @@ export class PageElementEventually<
    * If no `timeout` is specified, PageElement's default timeout is used.
    */
   isSelected(opts?: Workflo.ITimeout) {
-    return this._node.__eventually(() => this._node.wait.isSelected(opts))
+    return this._node.__eventually(() => this._node.wait.isSelected(opts));
   }
 
   /**
@@ -2985,7 +2997,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   isChecked(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.isChecked(opts))
+    return this._node.__eventually(() => this._node.wait.isChecked(opts));
   }
 
   /**
@@ -2999,7 +3011,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasText(text: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasText(text, opts))
+    return this._node.__eventually(() => this._node.wait.hasText(text, opts));
   }
 
   /**
@@ -3012,7 +3024,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyText(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyText(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyText(opts));
   }
 
   /**
@@ -3026,7 +3038,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsText(text: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsText(text, opts))
+    return this._node.__eventually(() => this._node.wait.containsText(text, opts));
   }
 
   /**
@@ -3040,7 +3052,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasHTML(html: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasHTML(html, opts))
+    return this._node.__eventually(() => this._node.wait.hasHTML(html, opts));
   }
 
   /**
@@ -3053,7 +3065,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyHTML(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyHTML(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyHTML(opts));
   }
 
   /**
@@ -3067,7 +3079,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsHTML(html: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsHTML(html, opts))
+    return this._node.__eventually(() => this._node.wait.containsHTML(html, opts));
   }
 
   /**
@@ -3085,7 +3097,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasDirectText(directText: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasDirectText(directText, opts))
+    return this._node.__eventually(() => this._node.wait.hasDirectText(directText, opts));
   }
 
   /**
@@ -3101,7 +3113,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyDirectText(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyDirectText(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyDirectText(opts));
   }
 
   /**
@@ -3119,7 +3131,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsDirectText(directText: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsDirectText(directText, opts))
+    return this._node.__eventually(() => this._node.wait.containsDirectText(directText, opts));
   }
 
   /**
@@ -3135,7 +3147,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAttribute(attribute, opts))
+    return this._node.__eventually(() => this._node.wait.hasAttribute(attribute, opts));
   }
 
   /**
@@ -3149,7 +3161,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyAttribute(attributeName: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyAttribute(attributeName, opts));
   }
 
   /**
@@ -3165,7 +3177,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsAttribute(attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsAttribute(attribute, opts))
+    return this._node.__eventually(() => this._node.wait.containsAttribute(attribute, opts));
   }
 
   /**
@@ -3181,7 +3193,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasClass(className: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasClass(className, opts))
+    return this._node.__eventually(() => this._node.wait.hasClass(className, opts));
   }
 
   /**
@@ -3194,7 +3206,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyClass(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyClass(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyClass(opts));
   }
 
   /**
@@ -3210,7 +3222,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsClass(className: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsClass(className, opts))
+    return this._node.__eventually(() => this._node.wait.containsClass(className, opts));
   }
 
   /**
@@ -3225,7 +3237,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasId(id: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasId(id, opts))
+    return this._node.__eventually(() => this._node.wait.hasId(id, opts));
   }
 
   /**
@@ -3238,7 +3250,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyId(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyId(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyId(opts));
   }
 
   /**
@@ -3254,7 +3266,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsId(id: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsId(id, opts))
+    return this._node.__eventually(() => this._node.wait.containsId(id, opts));
   }
 
   /**
@@ -3269,7 +3281,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasName(name: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasName(name, opts))
+    return this._node.__eventually(() => this._node.wait.hasName(name, opts));
   }
 
   /**
@@ -3282,7 +3294,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasAnyName(opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.hasAnyName(opts))
+    return this._node.__eventually(() => this._node.wait.hasAnyName(opts));
   }
 
   /**
@@ -3298,7 +3310,7 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   containsName(name: string, opts?: Workflo.ITimeoutInterval) {
-    return this._node.__eventually(() => this._node.wait.containsName(name, opts))
+    return this._node.__eventually(() => this._node.wait.containsName(name, opts));
   }
 
   /**
@@ -3306,19 +3318,19 @@ export class PageElementEventually<
    * the specified tolerances from the expected coordinates within a specific timeout.
    *
    * @param coordinates the expected coordinates of PageElement in pixels
-   * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-   * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+   * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+   * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to check it
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasLocation(
     coordinates: Workflo.ICoordinates,
-    opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval = { tolerances: { x: 0, y: 0 } }
+    opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval = { tolerances: { x: 0, y: 0 } },
   ) {
     return this._node.__eventually(
-      () => this._node.wait.hasLocation(coordinates, {tolerances: opts.tolerances, timeout: opts.timeout})
-    )
+      () => this._node.wait.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout }),
+    );
   }
 
   /**
@@ -3333,11 +3345,11 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasX(
-    x: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+    x: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
   ) {
     return this._node.__eventually(
-      () => this._node.wait.hasX(x, {tolerance: opts.tolerance, timeout: opts.timeout})
-    )
+      () => this._node.wait.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout }),
+    );
   }
 
   /**
@@ -3352,11 +3364,11 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasY(
-    y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+    y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
   ) {
     return this._node.__eventually(
-      () => this._node.wait.hasY(y, {tolerance: opts.tolerance, timeout: opts.timeout})
-    )
+      () => this._node.wait.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout }),
+    );
   }
 
   /**
@@ -3372,11 +3384,11 @@ export class PageElementEventually<
    */
   hasSize(
     size: Workflo.ISize,
-    opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.ITimeoutInterval = { tolerances: { width: 0, height: 0 } }
+    opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.ITimeoutInterval = { tolerances: { width: 0, height: 0 } },
   ) {
     return this._node.__eventually(
-      () => this._node.wait.hasSize(size, {tolerances: opts.tolerances, timeout: opts.timeout})
-    )
+      () => this._node.wait.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout }),
+    );
   }
 
   /**
@@ -3391,11 +3403,11 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasWidth(
-    width: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+    width: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
   ) {
     return this._node.__eventually(
-      () => this._node.wait.hasWidth(width, {tolerance: opts.tolerance, timeout: opts.timeout})
-    )
+      () => this._node.wait.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout }),
+    );
   }
 
   /**
@@ -3410,11 +3422,11 @@ export class PageElementEventually<
    * If no `interval` is specified, PageElement's default interval is used.
    */
   hasHeight(
-    height: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+    height: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
   ) {
     return this._node.__eventually(
-      () => this._node.wait.hasHeight(height, {tolerance: opts.tolerance, timeout: opts.timeout})
-    )
+      () => this._node.wait.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout }),
+    );
   }
 
   /**
@@ -3429,8 +3441,8 @@ export class PageElementEventually<
    */
   meetsCondition(condition: (element: PageElementType) => boolean, opts?: Workflo.ITimeoutInterval) {
     return this._node.__eventually(
-      () => this._node.wait.untilElement(' meets condition', () => condition(this._node), opts)
-    )
+      () => this._node.wait.untilElement(' meets condition', () => condition(this._node), opts),
+    );
   }
 
   /**
@@ -3446,7 +3458,7 @@ export class PageElementEventually<
        * If no `timeout` is specified, PageElement's default timeout is used.
        */
       exists: (opts?: Workflo.ITimeout) => {
-        return this._node.__eventually(() => this._node.wait.not.exists(opts))
+        return this._node.__eventually(() => this._node.wait.not.exists(opts));
       },
       /**
        * Returns true if PageElement eventually is not visible within a specific timeout.
@@ -3456,7 +3468,7 @@ export class PageElementEventually<
        * If no `timeout` is specified, PageElement's default timeout is used.
        */
       isVisible: (opts?: Workflo.ITimeout) => {
-        return this._node.__eventually(() => this._node.wait.not.isVisible(opts))
+        return this._node.__eventually(() => this._node.wait.not.isVisible(opts));
       },
       /**
        * Returns true if PageElement eventually is not enabled within a specific timeout.
@@ -3466,7 +3478,7 @@ export class PageElementEventually<
        * If no `timeout` is specified, PageElement's default timeout is used.
        */
       isEnabled: (opts?: Workflo.ITimeout) => {
-        return this._node.__eventually(() => this._node.wait.not.isEnabled(opts))
+        return this._node.__eventually(() => this._node.wait.not.isEnabled(opts));
       },
       /**
        * Returns true if PageElement eventually is not selected within a specific timeout.
@@ -3476,7 +3488,7 @@ export class PageElementEventually<
        * If no `timeout` is specified, PageElement's default timeout is used.
        */
       isSelected: (opts?: Workflo.ITimeout) => {
-        return this._node.__eventually(() => this._node.wait.not.isSelected(opts))
+        return this._node.__eventually(() => this._node.wait.not.isSelected(opts));
       },
       /**
        * Returns true if PageElement eventually is not checked within a specific timeout.
@@ -3488,10 +3500,11 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       isChecked: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.isChecked(opts))
+        return this._node.__eventually(() => this._node.wait.not.isChecked(opts));
       },
       /**
-       * Returns true if PageElement's actual text eventually does not equal the expected text within a specific timeout.
+       * Returns true if PageElement's actual text eventually does not equal the expected text within a specific
+       * timeout.
        *
        * @param text the expected text which is supposed not to equal PageElement's actual text
        * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -3501,7 +3514,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasText: (text: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasText(text, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasText(text, opts));
       },
       /**
        * Returns true if PageElement eventually does not have any text within a specific timeout.
@@ -3513,7 +3526,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyText: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyText(opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyText(opts));
       },
       /**
        * Returns true if PageElement's actual text eventually does not contain the expected text within a specific
@@ -3527,10 +3540,11 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsText: (text: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsText(text, opts))
+        return this._node.__eventually(() => this._node.wait.not.containsText(text, opts));
       },
       /**
-       * Returns true if PageElement's actual HTML eventually does not equal the expected HTML within a specific timeout.
+       * Returns true if PageElement's actual HTML eventually does not equal the expected HTML within a specific
+       * timeout.
        *
        * @param html the expected HTML which is supposed not to equal PageElement's actual HTML
        * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -3540,7 +3554,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasHTML(html, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasHTML(html, opts));
       },
       /**
        * Returns true if PageElement eventually does not have any HTML within a specific timeout.
@@ -3552,7 +3566,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyHTML(opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyHTML(opts));
       },
       /**
        * Returns true if PageElement's actual HTML eventually does not contain the expected HTML within a specific
@@ -3566,7 +3580,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsHTML(html, opts))
+        return this._node.__eventually(() => this._node.wait.not.containsHTML(html, opts));
       },
       /**
        * Returns true if PageElement's actual direct text eventually does not equal the expected direct text within a
@@ -3583,7 +3597,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasDirectText(directText, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasDirectText(directText, opts));
       },
       /**
        * Returns true if PageElement eventually does not have any direct text within a specific timeout.
@@ -3598,7 +3612,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyDirectText: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyDirectText(opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyDirectText(opts));
       },
       /**
        * Returns true if PageElement's actual direct text eventually does not contain the expected direct text within a
@@ -3607,7 +3621,8 @@ export class PageElementEventually<
        * A direct text is a text that resides on the level directly below the selected HTML element.
        * It does not include any text of the HTML element's nested children HTML elements.
        *
-       * @param directText the expected direct text which is supposed not to be contained in PageElement's actual direct text
+       * @param directText the expected direct text which is supposed not to be contained in PageElement's actual direct
+       * text
        * @param opts includes the `timeout` within which the condition is expected to be met and the
        * `interval` used to check it
        *
@@ -3615,7 +3630,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts))
+        return this._node.__eventually(() => this._node.wait.not.containsDirectText(directText, opts));
       },
       /**
        * Returns true if the actual value of the specified HTML attribute of PageElement eventually does not equal an
@@ -3630,7 +3645,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAttribute(attribute, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAttribute(attribute, opts));
       },
       /**
        * Returns true if the specified HTML attribute of PageElement eventually does not have any value within a
@@ -3644,7 +3659,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyAttribute: (attributeName: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyAttribute(attributeName, opts));
       },
       /**
        * Returns true if the actual value of the specified HTML attribute of PageElement eventually does not contain an
@@ -3659,14 +3674,14 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsAttribute(attribute, opts))
+        return this._node.__eventually(() => this._node.wait.not.containsAttribute(attribute, opts));
       },
       /**
        * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not equal an expected
        * value within a specific timeout.
        *
-       * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
-       * attribute
+       * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML
+       * 'class' attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
        *
@@ -3674,7 +3689,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasClass(className, opts));
       },
       /**
        * Returns true if PageElement's 'class' HTML attribute eventually does not have any value within a specific
@@ -3687,7 +3702,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyClass: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyClass(opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyClass(opts));
       },
       /**
        * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not contain an
@@ -3702,7 +3717,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsClass(className, opts))
+        return this._node.__eventually(() => this._node.wait.not.containsClass(className, opts));
       },
       /**
        * Returns true if the actual value of PageElement's 'id' HTML attribute eventually does not equal an expected
@@ -3717,7 +3732,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
       */
       hasId: (id: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasId(id, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasId(id, opts));
       },
       /**
        * Returns true if PageElement's 'id' HTML attribute eventually does not have any value within a specific timeout.
@@ -3729,7 +3744,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyId: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyId(opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyId(opts));
       },
       /**
        * Returns true if the actual value of PageElement's 'id' HTML attribute eventually does not contain an expected
@@ -3744,7 +3759,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsId: (id: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsId(id, opts))
+        return this._node.__eventually(() => this._node.wait.not.containsId(id, opts));
       },
       /**
        * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not equal an expected
@@ -3759,10 +3774,11 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasName: (name: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasName(name, opts))
+        return this._node.__eventually(() => this._node.wait.not.hasName(name, opts));
       },
       /**
-       * Returns true if PageElement's 'name' HTML attribute eventually does not have any value within a specific timeout.
+       * Returns true if PageElement's 'name' HTML attribute eventually does not have any value within a specific
+       * timeout.
        *
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
@@ -3771,14 +3787,14 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasAnyName: (opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.hasAnyName(opts))
+        return this._node.__eventually(() => this._node.wait.not.hasAnyName(opts));
       },
       /**
        * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not contain an expected
        * value within a specific timeout.
        *
-       * @param name the expected value which is supposed not to be contained in the actual value of PageElement's 'name'
-       * HTML attribute
+       * @param name the expected value which is supposed not to be contained in the actual value of PageElement's
+       * 'name' HTML attribute
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
        * check it
        *
@@ -3786,7 +3802,7 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       containsName: (name: string, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.__eventually(() => this._node.wait.not.containsName(name, opts))
+        return this._node.__eventually(() => this._node.wait.not.containsName(name, opts));
       },
       /**
        * Returns true if PageElement's location eventually does not equal the expected coordinates or if it deviates
@@ -3802,9 +3818,9 @@ export class PageElementEventually<
       hasLocation: (
         coordinates: Workflo.ICoordinates,
         opts: {tolerances?: Partial<Workflo.ICoordinates>} & Workflo.ITimeoutInterval =
-          { tolerances: { x: 0, y: 0 } }
+          { tolerances: { x: 0, y: 0 } },
       ) => this._node.__eventually(
-        () => this._node.wait.not.hasLocation(coordinates, {tolerances: opts.tolerances, timeout: opts.timeout})
+        () => this._node.wait.not.hasLocation(coordinates, { tolerances: opts.tolerances, timeout: opts.timeout }),
       ),
       /**
        * Returns true if PageElement's x-location eventually does not equal the expected x-location or if it deviates
@@ -3818,9 +3834,9 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasX: (
-        x: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        x: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this._node.__eventually(
-        () => this._node.wait.not.hasX(x, {tolerance: opts.tolerance, timeout: opts.timeout})
+        () => this._node.wait.not.hasX(x, { tolerance: opts.tolerance, timeout: opts.timeout }),
       ),
       /**
        * Returns true if PageElement's y-location eventually does not equal the expected y-location or if it deviates
@@ -3834,9 +3850,9 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasY: (
-        y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        y: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this._node.__eventually(
-        () => this._node.wait.not.hasY(y, {tolerance: opts.tolerance, timeout: opts.timeout})
+        () => this._node.wait.not.hasY(y, { tolerance: opts.tolerance, timeout: opts.timeout }),
       ),
       /**
        * Returns true if PageElement's size eventually does not equal the expected size or if it deviates
@@ -3852,9 +3868,9 @@ export class PageElementEventually<
       hasSize: (
         size: Workflo.ISize,
         opts: {tolerances?: Partial<Workflo.ISize>} & Workflo.ITimeoutInterval =
-          { tolerances: { width: 0, height: 0 } }
+          { tolerances: { width: 0, height: 0 } },
       ) => this._node.__eventually(
-        () => this._node.wait.not.hasSize(size, {tolerances: opts.tolerances, timeout: opts.timeout})
+        () => this._node.wait.not.hasSize(size, { tolerances: opts.tolerances, timeout: opts.timeout }),
       ),
       /**
        * Returns true if PageElement's width eventually does not equal the expected width or if it deviates
@@ -3868,9 +3884,9 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasWidth: (
-        width: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        width: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this._node.__eventually(
-        () => this._node.wait.not.hasWidth(width, {tolerance: opts.tolerance, timeout: opts.timeout})
+        () => this._node.wait.not.hasWidth(width, { tolerance: opts.tolerance, timeout: opts.timeout }),
       ),
       /**
        * Returns true if PageElement's height eventually does not equal the expected height or if it deviates
@@ -3884,11 +3900,11 @@ export class PageElementEventually<
        * If no `interval` is specified, PageElement's default interval is used.
        */
       hasHeight: (
-        height: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 }
+        height: number, opts: {tolerance?: number} & Workflo.ITimeoutInterval = { tolerance: 0 },
       ) => this._node.__eventually(
-        () => this._node.wait.not.hasHeight(height, {tolerance: opts.tolerance, timeout: opts.timeout})
+        () => this._node.wait.not.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout }),
       ),
-    }
+    };
   }
 }
 
@@ -3901,7 +3917,7 @@ export class PageElementEventually<
  */
 function isJsError(result: any): result is Workflo.IJSError {
   if (!result) {
-    return false
+    return false;
   }
 
   return result.notFound !== undefined;

@@ -34,8 +34,8 @@ class ValuePageElementGroup extends _1.PageElementGroup {
         this.eventually = new ValuePageElementGroupEventually(this);
     }
     /**
-     * Returns the values of all PageNodes managed by ValuePageElementGroup as a result structure after executing the initial
-     * waiting condition of each PageNode.
+     * Returns the values of all PageNodes managed by ValuePageElementGroup as a result structure after executing the
+     * initial waiting condition of each PageNode.
      *
      * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
@@ -44,8 +44,8 @@ class ValuePageElementGroup extends _1.PageElementGroup {
         return this.eachGet(isIValueElementNode, ({ node, filter }) => node.getValue(filter), filterMask);
     }
     /**
-     * Returns the 'hasValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after executing
-     * the initial waiting condition of each PageNode.
+     * Returns the 'hasValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after
+     * executing the initial waiting condition of each PageNode.
      *
      * A ValuePageElement's 'hasValue' status is set to true if its actual value equals the expected value.
      *
@@ -55,8 +55,8 @@ class ValuePageElementGroup extends _1.PageElementGroup {
         return this.eachCompare(isIValueElementNode, ({ node, expected }) => node.getHasValue(expected), values);
     }
     /**
-     * Returns the 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after performing
-     * the initial waiting condition of each PageNode.
+     * Returns the 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after
+     * performing the initial waiting condition of each PageNode.
      *
      * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any value.
      *
@@ -94,8 +94,8 @@ exports.ValuePageElementGroup = ValuePageElementGroup;
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all `currently`
- * functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all
+ * `currently` functions
  */
 class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
     /**
@@ -139,7 +139,8 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
         return this._node.eachCompare(isIValueElementNode, ({ node, expected }) => node.currently.getContainsValue(expected), values);
     }
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently equal the expected values.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently equal the expected
+     * values.
      *
      * @param values the expected values supposed to equal the actual values
      */
@@ -156,7 +157,8 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
         return this._node.eachCheck(isIValueElementNode, ({ node, filter }) => node.currently.hasAnyValue(filter), filterMask, true);
     }
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently contain the expected values.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently contain the expected
+     * values.
      *
      * @param values the expected values supposed to be contained in the actual values
      */
@@ -187,8 +189,8 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
                 return this._node.eachCheck(isIValueElementNode, ({ node, filter }) => node.currently.not.hasAnyValue(filter), filterMask, true);
             }, 
             /**
-             * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain the
-             * expected values.
+             * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain
+             * the expected values.
              *
              * @param values the expected values supposed not to be contained in the actual values
              */
@@ -203,7 +205,8 @@ class ValuePageElementGroupCurrently extends _1.PageElementGroupCurrently {
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait` functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait`
+ * functions
  */
 class ValuePageElementGroupWait extends _1.PageElementGroupWait {
     /**
@@ -299,7 +302,8 @@ class ValuePageElementGroupWait extends _1.PageElementGroupWait {
                 return this._node.eachWait(isIValueElementNode, ({ node, filter }) => node.wait.hasAnyValue(Object.assign({ filterMask: filter }, otherOpts)), filterMask, true);
             }, 
             /**
-             * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected values.
+             * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected
+             * values.
              *
              * Throws an error if the condition is not met within a specific timeout.
              *
@@ -323,13 +327,13 @@ class ValuePageElementGroupWait extends _1.PageElementGroupWait {
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all `eventually`
- * functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all
+ * `eventually` functions
  */
 class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually equal the expected values
-     * within a specific timeout.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually equal the expected
+     * values within a specific timeout.
      *
      * @param values the expected values supposed to equal the actual values
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -356,8 +360,8 @@ class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
         return this._node.eachCheck(isIValueElementNode, ({ node, filter }) => node.eventually.hasAnyValue(Object.assign({ filterMask: filter }, otherOpts)), filterMask, true);
     }
     /**
-     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually contain the expected values
-     * within a specific timeout.
+     * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually contain the expected
+     * values within a specific timeout.
      *
      * @param values the expected values supposed to be contained in the actual values
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -389,8 +393,8 @@ class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
                 return this._node.eachCheck(isIValueElementNode, ({ node, expected }) => node.eventually.not.hasValue(expected, opts), values);
             }, 
             /**
-             * Returns true if all PageNodes managed by ValuePageElementGroup eventually do not have any value within a specific
-             * timeout.
+             * Returns true if all PageNodes managed by ValuePageElementGroup eventually do not have any value within a
+             * specific timeout.
              *
              * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyValue` function for
              * some or all managed PageNodes, the `timeout` within which the condition is expected to be met and the
@@ -404,8 +408,8 @@ class ValuePageElementGroupEventually extends _1.PageElementGroupEventually {
                 return this._node.eachCheck(isIValueElementNode, ({ node, filter }) => node.eventually.not.hasAnyValue(Object.assign({ filterMask: filter }, otherOpts)), filterMask, true);
             }, 
             /**
-             * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually do not contain the
-             * expected values within a specific timeout.
+             * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually do not contain
+             * the expected values within a specific timeout.
              *
              * @param values the expected values supposed not to be contained in the actual values
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used

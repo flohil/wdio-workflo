@@ -1,4 +1,4 @@
-import {defineSteps, proxifySteps} from 'wdio-workflo'
+import { defineSteps, proxifySteps } from 'wdio-workflo';
 
 ////////////////////////////////////////////////////////////
 // EDIT THIS AREA TO CREATE A MERGED STEP DEFINITIONS OBJECT
@@ -9,7 +9,7 @@ import {defineSteps, proxifySteps} from 'wdio-workflo'
 // import {otherSteps} from '?/steps/other.step'
 
 // MERGE ALL STEP DEFINITIONS IN ONE OBJECT AS SHOWN BELOW
-const stepDefinitions = defineSteps({})
+const stepDefinitions = defineSteps({});
 
 // const stepDefinitions = defineSteps({
 //   ...demoSteps,
@@ -18,6 +18,6 @@ const stepDefinitions = defineSteps({})
 
 ////////////////////////////////////////////////////////////
 
-const steps = proxifySteps(stepDefinitions)
+const steps = proxifySteps(stepDefinitions);
 
-export {steps}
+export { steps };

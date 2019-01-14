@@ -10,13 +10,13 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
-const util_1 = require("../../utility_functions/util");
+const util_1 = require("util");
 const _1 = require(".");
-const builders_1 = require("../builders");
-const util_2 = require("util");
-const PageNode_1 = require("./PageNode");
-const helpers_1 = require("../../helpers");
 const __1 = require("..");
+const helpers_1 = require("../../helpers");
+const util_2 = require("../../utility_functions/util");
+const builders_1 = require("../builders");
+const PageNode_1 = require("./PageNode");
 /**
  * A PageElementList provides a way to manage multiple related "dynamic" PageElements which all have the same type and
  * the same "base" selector.
@@ -114,11 +114,11 @@ class PageElementList extends _1.PageNode {
      */
     init(cloneFunc) {
         this._whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
+            cloneFunc,
             store: this._store,
             elementStoreFunc: this._elementStoreFunc,
             elementOpts: this._elementOpts,
-            cloneFunc: cloneFunc,
-            getAllFunc: list => list.all
+            getAllFunc: list => list.all,
         });
         this.currently.init(cloneFunc);
     }
@@ -220,8 +220,9 @@ class PageElementList extends _1.PageNode {
     /**
      * Sets a new default `identifier` for PageElementList's `identify` function.
      *
-     * @param identifier used to identify a PageElementList's managed PageElements via the key names defined in `identifier`
-     * 's `mappingObject` by matching `mappingObject`'s values with the return values of `identifier`'s `mappingFunc`
+     * @param identifier used to identify a PageElementList's managed PageElements via the key names defined in
+     * `identifier`'s `mappingObject` by matching `mappingObject`'s values with the return values of `identifier`'s
+     * `mappingFunc`
      */
     setIdentifier(identifier) {
         this._identifier = identifier;
@@ -252,10 +253,10 @@ class PageElementList extends _1.PageNode {
      * Be aware that the invocation of `identify` can be quite slow (if no identification result is cached yet) because
      * PageElementList needs to fetch all managed PageElements from the page before `mappingFunc` can be executed on them.
      *
-     * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of managed
-     * PageElements. The only exception to this rule are cases in which the identification of PageElements cannot be
-     * described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates on
-     * the page).
+     * Therefore, always prefer PageElementList's `where` accessor to its `identify` method for the identification of
+     * managed PageElements. The only exception to this rule are cases in which the identification of PageElements cannot
+     * be described by the modification of an XPath selector (eg. identifying PageElements via their location coordinates
+     * on the page).
      *
      * @param opts includes the `identifier` which provides the `mappingObject` and the `mappingFunc` for the
      * identification process and a `resetCache` flag that, if set to true, deletes any previously cached identification
@@ -269,7 +270,8 @@ class PageElementList extends _1.PageNode {
      * identification results should be cached. The `disabledCache` property is set to `false` by default.
      */
     identify({ identifier = this._identifier, resetCache = false } = {}) {
-        const cacheKey = (identifier) ? `${identifier.mappingObject.toString()}|||${identifier.mappingFunc.toString()}` : 'index';
+        const cacheKey = (identifier) ?
+            `${identifier.mappingObject.toString()}|||${identifier.mappingFunc.toString()}` : 'index';
         if (this._disableCache || resetCache || !(cacheKey in this._identifiedObjCache)) {
             const listElements = this.all;
             const mappedObj = {};
@@ -499,13 +501,15 @@ class PageElementList extends _1.PageNode {
      */
     eachCompare(elements, checkFunc, expected, isFilterMask = false) {
         const result = [];
-        if (util_2.isArray(expected) && expected.length !== elements.length) {
-            throw new Error(`${this.constructor.name}: ` +
+        if (util_1.isArray(expected) && expected.length !== elements.length) {
+            throw new Error(
+            // tslint:disable-next-line:prefer-template
+            `${this.constructor.name}: ` +
                 `Length of expected (${expected.length}) did not match length of list (${elements.length})\n` +
                 `( ${this._selector} )`);
         }
         for (let i = 0; i < elements.length; ++i) {
-            const _expected = util_2.isArray(expected) ? expected[i] : expected;
+            const _expected = util_1.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
             if (isFilterMask) {
                 if (helpers_1.isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
@@ -540,13 +544,15 @@ class PageElementList extends _1.PageNode {
      */
     eachCheck(elements, checkFunc, expected, isFilterMask = false) {
         const diffs = {};
-        if (util_2.isArray(expected) && expected.length !== elements.length) {
-            throw new Error(`${this.constructor.name}: ` +
+        if (util_1.isArray(expected) && expected.length !== elements.length) {
+            throw new Error(
+            // tslint:disable-next-line:prefer-template
+            `${this.constructor.name}: ` +
                 `Length of expected (${expected.length}) did not match length of list (${elements.length})\n` +
                 `( ${this._selector} )`);
         }
         for (let i = 0; i < elements.length; ++i) {
-            const _expected = util_2.isArray(expected) ? expected[i] : expected;
+            const _expected = util_1.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
             if (isFilterMask) {
                 if (helpers_1.isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
@@ -562,7 +568,7 @@ class PageElementList extends _1.PageNode {
             }
         }
         this._lastDiff = {
-            tree: diffs
+            tree: diffs,
         };
         return Object.keys(diffs).length === 0;
     }
@@ -584,13 +590,15 @@ class PageElementList extends _1.PageNode {
         }
         else if (filterMask !== false) {
             const result = [];
-            if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
-                throw new Error(`${this.constructor.name}: ` +
+            if (util_1.isArray(filterMask) && filterMask.length !== elements.length) {
+                throw new Error(
+                // tslint:disable-next-line:prefer-template
+                `${this.constructor.name}: ` +
                     `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
                     `( ${this._selector} )`);
             }
             for (let i = 0; i < elements.length; ++i) {
-                const _filterMask = util_2.isArray(filterMask) ? filterMask[i] : filterMask;
+                const _filterMask = util_1.isArray(filterMask) ? filterMask[i] : filterMask;
                 const element = elements[i];
                 if (this._includedInFilter(_filterMask)) {
                     result.push(getFunc(element));
@@ -621,13 +629,15 @@ class PageElementList extends _1.PageNode {
      * @returns this (an instance of PageElementList)
      */
     eachWait(elements, waitFunc, expected, isFilterMask = false) {
-        if (util_2.isArray(expected) && expected.length !== elements.length) {
-            throw new Error(`${this.constructor.name}: ` +
+        if (util_1.isArray(expected) && expected.length !== elements.length) {
+            throw new Error(
+            // tslint:disable-next-line:prefer-template
+            `${this.constructor.name}: ` +
                 `Length of expected (${expected.length}) did not match length of list (${elements.length})\n` +
                 `( ${this._selector} )`);
         }
         for (let i = 0; i < elements.length; ++i) {
-            const _expected = util_2.isArray(expected) ? expected[i] : expected;
+            const _expected = util_1.isArray(expected) ? expected[i] : expected;
             const element = elements[i];
             if (isFilterMask) {
                 if (helpers_1.isNullOrUndefined(expected) || this._includedInFilter(_expected)) {
@@ -653,13 +663,15 @@ class PageElementList extends _1.PageNode {
             elements.map(element => action(element));
         }
         else if (filterMask !== false) {
-            if (util_2.isArray(filterMask) && filterMask.length !== elements.length) {
-                throw new Error(`${this.constructor.name}: ` +
+            if (util_1.isArray(filterMask) && filterMask.length !== elements.length) {
+                throw new Error(
+                // tslint:disable-next-line:prefer-template
+                `${this.constructor.name}: ` +
                     `Length of filterMask array (${filterMask.length}) did not match length of list (${elements.length})\n` +
                     `( ${this._selector} )`);
             }
             for (let i = 0; i < elements.length; ++i) {
-                const _filterMask = util_2.isArray(filterMask) ? filterMask[i] : filterMask;
+                const _filterMask = util_1.isArray(filterMask) ? filterMask[i] : filterMask;
                 const element = elements[i];
                 if (this._includedInFilter(_filterMask)) {
                     action(element);
@@ -687,8 +699,8 @@ class PageElementList extends _1.PageNode {
     eachSet(elements, setFunc, values) {
         if (_.isArray(values)) {
             if (elements.length !== values.length) {
-                throw new Error(`Length of values array (${values.length}) did not match length of list page elements (${elements.length})\n` +
-                    `( ${this._selector} )`);
+                throw new Error(`Length of values array (${values.length}) did not match length of list page elements (${elements.length})
+( ${this._selector} )`);
             }
             else {
                 for (let i = 0; i < elements.length; i++) {
@@ -737,11 +749,11 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      */
     init(cloneFunc) {
         this._whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
+            cloneFunc,
             store: this._store,
             elementStoreFunc: this._elementStoreFunc,
             elementOpts: this._elementOpts,
-            cloneFunc: cloneFunc,
-            getAllFunc: list => list.all
+            getAllFunc: list => list.all,
         });
     }
     // RETRIEVAL FUNCTIONS for wdio or list elements
@@ -792,8 +804,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
     }
     // PUBLIC GETTER FUNCTIONS
     /**
-     * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM which
-     * are identified by PageElementList's XPath selector).
+     * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM
+     * which are identified by PageElementList's XPath selector).
      */
     getLength() {
         try {
@@ -949,7 +961,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         const actualLength = this.getLength();
         this._node.__setLastDiff({
             actual: actualLength.toString(),
-            timeout: this._node.getTimeout()
+            timeout: this._node.getTimeout(),
         });
         return actualLength === 0;
     }
@@ -971,9 +983,9 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         const actualLength = this.getLength();
         this._node.__setLastDiff({
             actual: actualLength.toString(),
-            timeout: this._node.getTimeout()
+            timeout: this._node.getTimeout(),
         });
-        return util_1.compare(actualLength, length, comparator);
+        return util_2.compare(actualLength, length, comparator);
     }
     /**
      * Returns true if at least one of the PageElements managed by PageElementList currently exists.
@@ -1007,7 +1019,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         return this._node.eachCheck(this.all, element => element.currently.isEnabled(), filterMask, true);
     }
     /**
-     * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected text(s).
+     * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected
+     * text(s).
      *
      * @param text the expected text(s) supposed to equal the actual texts
      *
@@ -1151,8 +1164,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              *
              * If `text` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+             * array elements are compared to the array of actual values of all PageElements.
              */
             hasText: (text) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
@@ -1174,8 +1187,8 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              *
              * If `text` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+             * array elements are compared to the array of actual values of all PageElements.
              */
             containsText: (text) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text);
@@ -1220,12 +1233,12 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              *
              * If `directText` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
-             * array elements are compared to the array of actual values of all PageElements.
+             * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+             * its array elements are compared to the array of actual values of all PageElements.
              */
             containsDirectText: (directText) => {
                 return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText);
-            }
+            },
         };
     }
 }
@@ -1282,7 +1295,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
      *
      * @returns this (an instance of PageElementList)
      */
-    hasLength(length, { timeout = this._node.getTimeout(), comparator = Workflo.Comparator.equalTo, interval = this._node.getInterval(), reverse } = {}) {
+    hasLength(length, { timeout = this._node.getTimeout(), comparator = Workflo.Comparator.equalTo, interval = this._node.getInterval(), reverse, } = {}) {
         const notStr = (reverse) ? 'not ' : '';
         return this._node.__waitUntil(() => {
             if (reverse) {
@@ -1291,7 +1304,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
             else {
                 return this._node.currently.hasLength(length, comparator);
             }
-        }, () => `: Length never ${notStr}became${util_1.comparatorStr(comparator)} ${length}`, timeout, interval);
+        }, () => `: Length never ${notStr}became${util_2.comparatorStr(comparator)} ${length}`, timeout, interval);
     }
     /**
      * Waits for PageElementList to be empty.
@@ -1306,7 +1319,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
      *
      * @returns this (an instance of PageElementList)
      */
-    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
+    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse, } = {}) {
         const notStr = (reverse) ? 'not ' : '';
         return this._node.__waitUntil(() => {
             if (reverse) {
@@ -1443,8 +1456,8 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
      *
      * If `directText` is a single value, this value is compared to each element in the array of actual values of all
      * PageElements.
-     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-     * elements are compared to the array of actual values of all PageElements.
+     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+     * array elements are compared to the array of actual values of all PageElements.
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
@@ -1490,8 +1503,8 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
      *
      * If `directText` is a single value, this value is compared to each element in the array of actual values of all
      * PageElements.
-     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-     * elements are compared to the array of actual values of all PageElements.
+     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+     * array elements are compared to the array of actual values of all PageElements.
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
@@ -1532,7 +1545,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
              * @returns this (an instance of PageElementList)
              */
             hasLength: (length, opts = {}) => this.hasLength(length, {
-                timeout: opts.timeout, interval: opts.interval, reverse: true
+                timeout: opts.timeout, interval: opts.interval, reverse: true,
             }),
             /**
              * Waits for PageElementList not to be empty.
@@ -1548,15 +1561,15 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
              * @returns this (an instance of PageElementList)
              */
             isEmpty: (opts = {}) => this.isEmpty({
-                timeout: opts.timeout, interval: opts.interval, reverse: true
+                timeout: opts.timeout, interval: opts.interval, reverse: true,
             }),
             /**
              * Waits for none of the PageElements managed by PageElementList to exist.
              *
              * Throws an error if the condition is not met within a specific timeout.
              *
-             * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
-             * all managed PageElements and the `timeout` within which the condition is expected to be met
+             * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
+             * or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
              * If no `timeout` is specified, a PageElement's default timeout is used.
              *
@@ -1610,8 +1623,8 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
              *
              * If `text` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+             * array elements are compared to the array of actual values of all PageElements.
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
@@ -1650,8 +1663,8 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
              *
              * If `text` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+             * array elements are compared to the array of actual values of all PageElements.
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
@@ -1676,8 +1689,8 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
              *
              * If `directText` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+             * its array elements are compared to the array of actual values of all PageElements.
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
@@ -1723,8 +1736,8 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
              *
              * If `directText` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+             * its array elements are compared to the array of actual values of all PageElements.
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
@@ -1735,7 +1748,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
              */
             containsDirectText: (directText, opts) => {
                 return this._node.eachWait(this._node.all, (element, expected) => element.wait.not.containsDirectText(expected, opts), directText);
-            }
+            },
         };
     }
 }
@@ -1788,7 +1801,7 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
      */
-    hasLength(length, { timeout = this._node.getTimeout(), comparator = Workflo.Comparator.equalTo, interval = this._node.getInterval(), reverse } = {}) {
+    hasLength(length, { timeout = this._node.getTimeout(), comparator = Workflo.Comparator.equalTo, interval = this._node.getInterval(), reverse, } = {}) {
         return this._node.__eventually(() => this._node.wait.hasLength(length, { timeout, comparator, interval, reverse }));
     }
     /**
@@ -1800,7 +1813,7 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
      */
-    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse } = {}) {
+    isEmpty({ timeout = this._node.getTimeout(), interval = this._node.getInterval(), reverse, } = {}) {
         return this._node.__eventually(() => this._node.wait.isEmpty({ timeout, interval, reverse }));
     }
     /**
@@ -1948,8 +1961,8 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      *
      * If `directText` is a single value, this value is compared to each element in the array of actual values of all
      * PageElements.
-     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-     * elements are compared to the array of actual values of all PageElements.
+     * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+     * array elements are compared to the array of actual values of all PageElements.
      * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
      * to check it
      *
@@ -1965,8 +1978,8 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     get not() {
         return {
             /**
-             * Returns true if the result of the comparison between PageElementList's actual length and an expected length using
-             * the comparison method defined in `comparator` eventually returns false within a specific timeout.
+             * Returns true if the result of the comparison between PageElementList's actual length and an expected length
+             * using the comparison method defined in `comparator` eventually returns false within a specific timeout.
              *
              * The following comparison methods are supported:
              *
@@ -1984,7 +1997,7 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * If no `interval` is specified, PageElementList's default interval is used.
              */
             hasLength: (length, opts = {}) => this.hasLength(length, {
-                timeout: opts.timeout, interval: opts.interval, reverse: true
+                timeout: opts.timeout, interval: opts.interval, reverse: true,
             }),
             /**
              * Returns true if PageElementList eventually is not empty within a specific timeout.
@@ -1996,14 +2009,14 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * If no `interval` is specified, PageElementList's default interval is used.
              */
             isEmpty: (opts = {}) => this.isEmpty({
-                timeout: opts.timeout, interval: opts.interval, reverse: true
+                timeout: opts.timeout, interval: opts.interval, reverse: true,
             }),
             /**
              * Returns true if none of the PageElements managed by PageElementList eventually exist within a specific
              * timeout.
              *
-             * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some or
-             * all managed PageElements and the `timeout` within which the condition is expected to be met
+             * @param opts includes a `filterMask` which can be used to skip the invocation of the `exists` function for some
+             * or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
              * If no `timeout` is specified, a PageElement's default timeout is used.
              */
@@ -2033,8 +2046,8 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * Returns true if all PageElements managed by PageElementList eventually are not enabled within a specific
              * timeout.
              *
-             * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for some
-             * or all managed PageElements and the `timeout` within which the condition is expected to be met
+             * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
+             * some or all managed PageElements and the `timeout` within which the condition is expected to be met
              *
              * If no `timeout` is specified, a PageElement's default timeout is used.
              */
@@ -2050,8 +2063,8 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If `text` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+             * array elements are compared to the array of actual values of all PageElements.
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
@@ -2065,9 +2078,9 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * Returns true if all PageElements managed by PageElementList eventually do not have any text within a specific
              * timeout.
              *
-             * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for some
-             * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
-             * to check it
+             * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyText` function for
+             * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+             * `interval` used to check it
              *
              * If no `timeout` is specified, a PageElement's default timeout is used.
              * If no `interval` is specified, a PageElement's default interval is used.
@@ -2084,8 +2097,8 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If `text` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `text` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `text` is an array of values, its length must match the length of PageElementList and the values of its
+             * array elements are compared to the array of actual values of all PageElements.
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
@@ -2106,8 +2119,8 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
             *
             * If `directText` is a single value, this value is compared to each element in the array of actual values of all
             * PageElements.
-            * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-            * elements are compared to the array of actual values of all PageElements.
+            * If `directText` is an array of values, its length must match the length of PageElementList and the values of its
+            * array elements are compared to the array of actual values of all PageElements.
             * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
             * to check it
             *
@@ -2124,9 +2137,9 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              * A direct text is a text that resides on the level directly below the selected HTML element.
              * It does not include any text of the HTML element's nested children HTML elements.
              *
-             * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
-             * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
-             * used to check it
+             * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function
+             * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
+             * `interval` used to check it
              *
              * If no `timeout` is specified, a PageElement's default timeout is used.
              * If no `interval` is specified, a PageElement's default interval is used.
@@ -2146,8 +2159,8 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              *
              * If `directText` is a single value, this value is compared to each element in the array of actual values of all
              * PageElements.
-             * If `directText` is an array of values, its length must match the length of PageElementList and the values of its array
-             * elements are compared to the array of actual values of all PageElements.
+             * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+             * its array elements are compared to the array of actual values of all PageElements.
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
              * to check it
              *
@@ -2156,7 +2169,7 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
              */
             containsDirectText: (directText, opts) => {
                 return this._node.eachCheck(this._node.all, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directText);
-            }
+            },
         };
     }
 }

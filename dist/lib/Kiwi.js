@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let Kiwi;
 Kiwi = (function ($) {
     const interpolate_general = function (text, array) {
-        let stringToReturn = "", length = text.length, index = 0, array_length = array.length;
+        const length = text.length, array_length = array.length;
+        let stringToReturn = '', index = 0;
         for (let i = 0; i < length; i++) {
             const currentChar = text[i];
             let nextChar = null;
@@ -31,7 +32,7 @@ Kiwi = (function ($) {
     };
     const get_key_length = function (text, index) {
         const length = text.length;
-        let key = "";
+        let key = '';
         let i = index;
         while (i < length && text[i] !== '}') {
             key += text[i];
@@ -40,11 +41,11 @@ Kiwi = (function ($) {
         if (text[i] === '}')
             key += '}';
         else
-            throw Error("SYNTAX ERROR");
+            throw Error('SYNTAX ERROR');
         return [key.slice(2, key.length - 1), key.length];
     };
     const interpolate_key_value = function (text, json) {
-        let stringToReturn = "";
+        let stringToReturn = '';
         const length = text.length, index = 0;
         for (let i = 0; i < length; i++) {
             const currentChar = text[i];
@@ -59,7 +60,7 @@ Kiwi = (function ($) {
                 const result = get_key_length(text, i);
                 const key = result[0];
                 const key_length = result[1];
-                stringToReturn += (json[key] === undefined ? "" : json[key]);
+                stringToReturn += (json[key] === undefined ? '' : json[key]);
                 i += key_length - 1;
             }
             else {
@@ -71,7 +72,7 @@ Kiwi = (function ($) {
     const interpolate = function (text, input) {
         if (input === undefined)
             return text;
-        if (Object.prototype.toString.call(input) === "[object Array]") {
+        if (Object.prototype.toString.call(input) === '[object Array]') {
             return interpolate_general(text, input);
         }
         else {
@@ -79,7 +80,7 @@ Kiwi = (function ($) {
         }
     };
     return {
-        "compose": interpolate
+        compose: interpolate,
     };
 }(Kiwi));
 exports.default = Kiwi;

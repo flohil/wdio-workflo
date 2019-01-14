@@ -1,5 +1,5 @@
-import { PageNodeStore } from '../stores'
 import _ = require('lodash');
+import { PageNodeStore } from '../stores';
 
 /**
  * Defines the opts parameter passed to the constructor function of PageNode.
@@ -10,7 +10,7 @@ export interface IPageNodeOpts<Store extends PageNodeStore> extends Workflo.ITim
   /**
    * an instance of PageNodeStore which can be used to retrieve/create PageNodes
    */
-  store: Store
+  store: Store;
 }
 
 /**
@@ -22,32 +22,32 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
   /**
    * an instance of PageNodeStore which can be used to retrieve/create PageNodes
    */
-  protected _store: Store
+  protected _store: Store;
   /**
    * Stores the last differences of PageNode's check state functions.
    *
    * Intended for framework-internal usage only.
    */
-  protected _lastDiff: Workflo.IDiff
+  protected _lastDiff: Workflo.IDiff;
   /**
    * the XPath selector of PageNode
    */
-   protected _selector: string
+  protected _selector: string;
 
   /**
    * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
    * current value from the tested application's state
    */
-  abstract readonly currently: PageNodeCurrently<Store, this>
+  abstract readonly currently: PageNodeCurrently<Store, this>;
   /**
    * defines an api for all functions of PageNode which wait for a condition to become true within a specified timeout
    */
-  abstract readonly wait: PageNodeWait<Store, this>
+  abstract readonly wait: PageNodeWait<Store, this>;
   /**
    * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
    * timeout
    */
-  abstract readonly eventually: PageNodeEventually<Store, this>
+  abstract readonly eventually: PageNodeEventually<Store, this>;
 
   /**
    * PageNode serves as a base class for all PageElements, PageElementLists, PageElementMaps and PageElementGroups.
@@ -57,28 +57,28 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
    */
   constructor(
     selector: string,
-    opts: IPageNodeOpts<Store>
+    opts: IPageNodeOpts<Store>,
   ) {
-    this._selector = selector
-    this._store = opts.store
+    this._selector = selector;
+    this._store = opts.store;
   }
 
   // INTERNAL GETTERS AND SETTERS
 
   __getNodeId() {
-    return this._selector
+    return this._selector;
   }
 
   get __lastDiff() {
-    const lastDiff = this._lastDiff || {}
-    lastDiff.selector = this.__getNodeId()
-    lastDiff.constructorName = this.constructor.name
+    const lastDiff = this._lastDiff || {};
+    lastDiff.selector = this.__getNodeId();
+    lastDiff.constructorName = this.constructor.name;
 
-    return lastDiff
+    return lastDiff;
   }
 
   __setLastDiff(diff: Workflo.IDiff) {
-    this._lastDiff = diff
+    this._lastDiff = diff;
   }
 
   // PUBLIC ACTIONS
@@ -86,8 +86,8 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
   toJSON(): Workflo.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
-      nodeId: this._selector
-    }
+      nodeId: this._selector,
+    };
   }
 
   // COMMON HELPER FUNCTIONS
@@ -104,16 +104,15 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
    */
   __execute<ResultType>(func: () => ResultType) {
     try {
-      return func()
-    } catch ( error ) {
+      return func();
+    } catch (error) {
       if (error.message.includes('could not be located on the page')) {
         const errorMsg =
-        `${this.constructor.name} could not be located on the page.\n` +
-        `( ${this.__getNodeId()} )`
+        `${this.constructor.name} could not be located on the page.\n( ${this.__getNodeId()} )`;
 
-        throw new Error(errorMsg)
+        throw new Error(errorMsg);
       } else {
-        throw error
+        throw error;
       }
     }
   }
@@ -131,11 +130,11 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
       return true;
     } catch (error) {
       if (error.message.includes('could not be located on the page')) {
-        throw error
+        throw error;
       } else if (error.type === 'WaitUntilTimeoutError') {
         return false;
       } else {
-        throw error
+        throw error;
       }
     }
   }
@@ -157,10 +156,10 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
     try {
       func();
     } catch (error) {
-      this._handleWaitError(error, errorMessage, timeout)
+      this._handleWaitError(error, errorMessage, timeout);
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -179,30 +178,30 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
    * @returns this (an instance of PageNode)
    */
   __waitUntil(
-    waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number, interval?: number
+    waitFunc: () => boolean, errorMessageFunc: () => string, timeout: number, interval?: number,
   ) {
 
-    let error: any
+    let error: any;
 
     try {
       browser.waitUntil(() => {
         try {
-          const result = waitFunc()
+          const result = waitFunc();
 
-          error = undefined
+          error = undefined;
 
-          return result
-        } catch( funcError ) {
-          error = funcError
+          return result;
+        } catch (funcError) {
+          error = funcError;
         }
-      }, timeout, '', interval)
+      },                timeout, '', interval);
     } catch (untilError) {
-      error = error || untilError
+      error = error || untilError;
 
-      this._handleWaitError(error, errorMessageFunc(), timeout)
+      this._handleWaitError(error, errorMessageFunc(), timeout);
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -215,19 +214,18 @@ export abstract class PageNode<Store extends PageNodeStore> implements Workflo.P
   protected _handleWaitError(error: any, errorMessage: string, timeout: number) {
     if (error.message.includes('could not be located on the page')) {
       throw new Error(
-        `${this.constructor.name} could not be located on the page within ${timeout}ms.\n` +
-        `( ${this.__getNodeId()} )`
-      )
+        `${this.constructor.name} could not be located on the page within ${timeout}ms.\n( ${this.__getNodeId()} )`,
+      );
     } else if ('type' in error && error.type === 'WaitUntilTimeoutError') {
       const waitError = new Error(
-        `${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.__getNodeId()} )`
-      ) as any
+        `${this.constructor.name}${errorMessage} within ${timeout}ms.\n( ${this.__getNodeId()} )`,
+      ) as any;
 
-      waitError.type = 'WaitUntilTimeoutError'
+      waitError.type = 'WaitUntilTimeoutError';
 
-      throw waitError
+      throw waitError;
     } else {
-      throw error
+      throw error;
     }
   }
 }
@@ -246,7 +244,7 @@ export abstract class PageNodeCurrently<
   /**
    * the PageNode for which PageNodeCurrently defines all `currently` functions
    */
-  protected readonly _node: PageElementType
+  protected readonly _node: PageElementType;
 
   /**
    * PageNodeCurrently defines all `currently` functions of PageNode.
@@ -254,7 +252,7 @@ export abstract class PageNodeCurrently<
    * @param node PageNode for which PageNodeCurrently defines all `currently` functions
    */
   constructor(node: PageElementType) {
-    this._node = node
+    this._node = node;
   }
 
   /**
@@ -277,7 +275,7 @@ export abstract class PageNodeWait<
   /**
    * the PageNode for which PageNodeWait defines all `wait` functions
    */
-  protected readonly _node: PageElementType
+  protected readonly _node: PageElementType;
 
   /**
    * PageNodeWait defines all `wait` functions of PageNode.
@@ -285,7 +283,7 @@ export abstract class PageNodeWait<
    * @param node PageNode for which PageNodeWait defines all `wait` functions
    */
   constructor(node: PageElementType) {
-    this._node = node
+    this._node = node;
   }
 
   /**
@@ -308,7 +306,7 @@ export abstract class PageNodeEventually<
   /**
    * the PageNode for which PageNodeEventually defines all `eventually` functions
    */
-  protected readonly _node: PageElementType
+  protected readonly _node: PageElementType;
 
   /**
    * PageNodeEventually defines all `eventually` functions of PageNode.
@@ -316,7 +314,7 @@ export abstract class PageNodeEventually<
    * @param node PageNode for which PageNodeEventually defines all `eventually` functions
    */
   constructor(node: PageElementType) {
-    this._node = node
+    this._node = node;
   }
 
   /**

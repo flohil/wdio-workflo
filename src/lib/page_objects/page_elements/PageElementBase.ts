@@ -1,9 +1,9 @@
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 
-import { PageNode, IPageNodeOpts, PageNodeCurrently, PageNodeWait, PageNodeEventually, PageElementGroup } from '.'
-import { XPathBuilder } from '../builders'
-import { PageNodeStore } from '../stores'
-import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL } from '..'
+import { IPageNodeOpts, PageElementGroup, PageNode, PageNodeCurrently, PageNodeEventually, PageNodeWait } from '.';
+import { DEFAULT_INTERVAL, DEFAULT_TIMEOUT } from '..';
+import { XPathBuilder } from '../builders';
+import { PageNodeStore } from '../stores';
 
 /**
  * Defines the opts parameter passed to the constructor function of PageElementBase.
@@ -19,7 +19,7 @@ export interface IPageElementBaseOpts<
    * The initial waiting condition is performed every time before an interaction with the tested application takes place
    * via a PageElement's action (eg. click).
    */
-  waitType?: Workflo.WaitType
+  waitType?: Workflo.WaitType;
 }
 
 /**
@@ -36,26 +36,26 @@ export abstract class PageElementBase<
    * The initial wait condition is performed every time before an interaction with the tested application takes place
    * via a PageElement's action (eg. click).
    */
-  protected _waitType: Workflo.WaitType
+  protected _waitType: Workflo.WaitType;
   /**
    * `_$` provides access to the PageNode retrieval functions of PageElementBase's PageNodeStore and prefixes the
    * selectors of all PageNodes retrieved via `_$` with the selector of PageElementBase.
    */
-  protected _$: Store
+  protected _$: Store;
   /**
    * the default timeout used by PageElement for all of its functions that operate with timeouts
    * (eg. `wait` and `eventually`)
    */
-  protected _timeout: number
+  protected _timeout: number;
   /**
    * the default interval used by PageElement for all of its functions that operate with intervals
    * (eg. `wait` and `eventually`)
    */
-  protected _interval: number
+  protected _interval: number;
 
-  abstract readonly currently: PageElementBaseCurrently<Store, this>
-  abstract readonly wait: PageElementBaseWait<Store, this>
-  abstract readonly eventually: PageElementBaseEventually<Store, this>
+  abstract readonly currently: PageElementBaseCurrently<Store, this>;
+  abstract readonly wait: PageElementBaseWait<Store, this>;
+  abstract readonly eventually: PageElementBaseEventually<Store, this>;
 
   /**
    * PageElementBase provides basic functionalities for all PageElements.
@@ -70,39 +70,41 @@ export abstract class PageElementBase<
       timeout = JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT,
       interval = JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL,
       ...superOpts
-    }: IPageElementBaseOpts<Store>
+    }: IPageElementBaseOpts<Store>,
   ) {
-    super(selector, superOpts)
+    super(selector, superOpts);
 
-    this._$ = Object.create(null)
-    this._timeout = timeout
-    this._interval = interval
+    this._$ = Object.create(null);
+    this._timeout = timeout;
+    this._interval = interval;
 
     for (const method of Workflo.Class.getAllMethods(this._store)) {
       if (method.indexOf('_') !== 0 && /^[A-Z]/.test(method)) {
-        this._$[method] = <Options extends IPageElementBaseOpts<Store>>(_selector: Workflo.XPath, _options: Options) => {
+        this._$[method] = <Options extends IPageElementBaseOpts<Store>>(
+          _selector: Workflo.XPath, _options: Options,
+        ) => {
 
           if (_selector instanceof XPathBuilder) {
-            _selector = XPathBuilder.getInstance().build()
+            _selector = XPathBuilder.getInstance().build();
           }
 
           if (typeof _selector === 'object') {
             // Cleaner solution would be to remove PageElementGroups from public store accessor of PageElement,
             // but this does not work due to typescript bugs that prevent extended generics to work with keyof.
             // typescript bugs 3.3.0:
-            // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
-            throw new Error("Selector chaining is not supported for PageElementGroups.")
+          // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
+            throw new Error('Selector chaining is not supported for PageElementGroups.');
           }
 
           // chain selectors
-          _selector = `${selector}${_selector}`
+          _selector = `${selector}${_selector}`;
 
-          return this._store[method].apply(this._store, [_selector, _options])
-        }
+          return this._store[method].apply(this._store, [_selector, _options]);
+        };
       }
     }
 
-    this._waitType = waitType
+    this._waitType = waitType;
   }
 
   // typescript bugs 3.3.0:
@@ -113,14 +115,14 @@ export abstract class PageElementBase<
    * selectors of all PageNodes retrieved via `$` with the selector of PageElementBase.
    */
   get $() /*: Workflo.Omit<Store, Workflo.FilteredKeysByReturnType<Store, PageElementGroup<any, any>>>*/ {
-    return this._$
+    return this._$;
   }
 
   /**
    * Returns the XPath selector of PageElementBase.
    */
   getSelector() {
-    return this._selector
+    return this._selector;
   }
 
   /**
@@ -146,7 +148,7 @@ export abstract class PageElementBase<
    * @param actual the actual value to be compared
    * @param expected the expected value to be compared
    */
-  abstract __equals<T>(actual: T, expected: T): boolean
+  abstract __equals<T>(actual: T, expected: T): boolean;
 
   /**
    * Return true if `actual` has any value.
@@ -154,7 +156,7 @@ export abstract class PageElementBase<
    * @template T the type of both `actual`
    * @param actual the actual value which is supposed to have any value
    */
-  abstract __any<T>(actual: T): boolean
+  abstract __any<T>(actual: T): boolean;
 
   /**
    * Compares the values of `actual` and `expected` and returns true if `actual` contains `expected`.
@@ -163,7 +165,7 @@ export abstract class PageElementBase<
    * @param actual the actual value to be compared
    * @param expected the expected value to be compared
    */
-  abstract __contains<T>(actual: T, expected: T): boolean
+  abstract __contains<T>(actual: T, expected: T): boolean;
 
   /**
    * This function is used to write a value of an arbitrary type
@@ -171,7 +173,7 @@ export abstract class PageElementBase<
    *
    * @param value: T the value to convert to a string
    */
-  abstract __typeToString<T>(value: T): string
+  abstract __typeToString<T>(value: T): string;
 }
 
 /**
@@ -190,7 +192,7 @@ export abstract class PageElementBaseCurrently<
    * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector.
    */
   get element() {
-    return browser.element(this._node.getSelector())
+    return browser.element(this._node.getSelector());
   }
 
   /**
@@ -202,14 +204,14 @@ export abstract class PageElementBaseCurrently<
   protected _writeLastDiff<T>(actual: T, expected?: T) {
     const diff: Workflo.IDiff = {
       actual: this._node.__typeToString(actual),
-      timeout: this._node.getTimeout()
-    }
+      timeout: this._node.getTimeout(),
+    };
 
     if (typeof expected !== 'undefined') {
-      diff.expected = this._node.__typeToString(expected)
+      diff.expected = this._node.__typeToString(expected);
     }
 
-    this._node.__setLastDiff(diff)
+    this._node.__setLastDiff(diff);
   }
 
   /**
@@ -222,15 +224,16 @@ export abstract class PageElementBaseCurrently<
   protected _withinTolerance(actual: number, expected: number, tolerance?: number) {
     const tolerances: Workflo.ITolerance = {
       lower: actual,
-      upper: actual
+      upper: actual,
+    };
+
+    if (tolerance) {
+      tolerances.lower -= Math.max(tolerance, 0);
+      tolerances.upper += Math.max(tolerance, 0);
     }
 
-    if ( tolerance ) {
-      tolerances.lower -= Math.max(tolerance, 0)
-      tolerances.upper += Math.max(tolerance, 0)
-    }
-
-    return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0)
+    return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) &&
+      Math.max(expected, 0) <= Math.max(tolerances.upper, 0);
   }
 
   /**
@@ -241,9 +244,9 @@ export abstract class PageElementBaseCurrently<
    * @param actual the actual value
    */
   protected _compareHas<T>(expected: T, actual: T) {
-    this._writeLastDiff(actual, expected)
+    this._writeLastDiff(actual, expected);
 
-    return this._node.__equals(actual, expected)
+    return this._node.__equals(actual, expected);
   }
 
   /**
@@ -253,9 +256,9 @@ export abstract class PageElementBaseCurrently<
    * @param actual the actual value
    */
   protected _compareHasAny<T>(actual: T) {
-    this._writeLastDiff(actual)
+    this._writeLastDiff(actual);
 
-    return this._node.__any(actual)
+    return this._node.__any(actual);
   }
 
   /**
@@ -266,9 +269,9 @@ export abstract class PageElementBaseCurrently<
    * @param actual the actual value expected to contain the expected value
    */
   protected _compareContains<T>(expected: T, actual: T) {
-    this._writeLastDiff(actual, expected)
+    this._writeLastDiff(actual, expected);
 
-    return this._node.__contains(actual, expected)
+    return this._node.__contains(actual, expected);
   }
 }
 
@@ -303,18 +306,18 @@ export abstract class PageElementBaseWait<
     checkTypeStr: string,
     conditionFunc: (opts: Workflo.ITimeoutReverseInterval) => boolean,
     { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() }:
-      Workflo.ITimeoutReverseInterval = {}
+      Workflo.ITimeoutReverseInterval = {},
   ) {
-    const reverseStr = (reverse) ? ' not' : ''
+    const reverseStr = (reverse) ? ' not' : '';
 
     try {
       return this._node.__wait(
-        () => conditionFunc({timeout, reverse, interval}), ` never${reverseStr} ${checkTypeStr}`, timeout
-      )
-    } catch ( error ) {
-      this._node.__setLastDiff({timeout: this._node.getTimeout()})
+        () => conditionFunc({ timeout, reverse, interval }), ` never${reverseStr} ${checkTypeStr}`, timeout,
+      );
+    } catch (error) {
+      this._node.__setLastDiff({ timeout: this._node.getTimeout() });
 
-      throw error
+      throw error;
     }
   }
 
@@ -340,19 +343,19 @@ export abstract class PageElementBaseWait<
     conditionFunc: (opts: Workflo.ITimeoutReverseInterval, value?: T) => boolean,
     { timeout = this._node.getTimeout(), reverse, interval = this._node.getInterval() }:
       Workflo.ITimeoutReverseInterval = {},
-    expectedValue?: T
+    expectedValue?: T,
   ) {
-    const reverseStr = (reverse) ? ' not' : ''
-    let conditionStr = ''
+    const reverseStr = (reverse) ? ' not' : '';
+    let conditionStr = '';
 
     if (conditionType === 'has') {
-      conditionStr = 'became'
+      conditionStr = 'became';
     } else if (conditionType === 'contains') {
-      conditionStr = 'contained'
+      conditionStr = 'contained';
     } else if (conditionType === 'any') {
-      conditionStr = 'had any'
+      conditionStr = 'had any';
     } else if (conditionType === 'within') {
-      conditionStr = 'was in range'
+      conditionStr = 'was in range';
     }
 
     return this._node.__waitUntil(
@@ -360,15 +363,15 @@ export abstract class PageElementBaseWait<
       () => {
         if (conditionType === 'has' || conditionType === 'contains' || conditionType === 'within') {
           return `'s ${name} "${this._node.__lastDiff.actual}" never` +
-            `${reverseStr} ${conditionStr} "${this._node.__typeToString(expectedValue)}"`
+            `${reverseStr} ${conditionStr} "${this._node.__typeToString(expectedValue)}"`;
         } else if (conditionType === 'any') {
-          return ` never${reverseStr} ${conditionStr} ${name}`
+          return ` never${reverseStr} ${conditionStr} ${name}`;
         } else {
-          return ''
+          return '';
         }
       },
-      timeout, interval
-    )
+      timeout, interval,
+    );
   }
 
   /**
@@ -390,9 +393,9 @@ export abstract class PageElementBaseWait<
     name: string,
     expectedValue: T,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.ITimeoutReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval,
   ) {
-    return this._waitProperty(name, 'within', conditionFunc, opts, expectedValue)
+    return this._waitProperty(name, 'within', conditionFunc, opts, expectedValue);
   }
 
   /**
@@ -414,9 +417,9 @@ export abstract class PageElementBaseWait<
     name: string,
     expectedValue: T,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.ITimeoutReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval,
   ) {
-    return this._waitProperty(name, 'has', conditionFunc, opts, expectedValue)
+    return this._waitProperty(name, 'has', conditionFunc, opts, expectedValue);
   }
 
   /**
@@ -436,9 +439,9 @@ export abstract class PageElementBaseWait<
   protected _waitHasAnyProperty<T>(
     name: string,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.ITimeoutReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval,
   ) {
-    return this._waitProperty(name, 'any', conditionFunc, opts)
+    return this._waitProperty(name, 'any', conditionFunc, opts);
   }
 
   /**
@@ -460,9 +463,9 @@ export abstract class PageElementBaseWait<
     name: string,
     expectedValue: T,
     conditionFunc: (value: T) => boolean,
-    opts?: Workflo.ITimeoutReverseInterval
+    opts?: Workflo.ITimeoutReverseInterval,
   ) {
-    return this._waitProperty(name, 'contains', conditionFunc, opts, expectedValue)
+    return this._waitProperty(name, 'contains', conditionFunc, opts, expectedValue);
   }
 
   /**
@@ -471,7 +474,7 @@ export abstract class PageElementBaseWait<
    * @param opts the object which should be extended with a `reverse` property
    */
   protected _makeReverseParams(opts: Workflo.ITimeoutInterval = {}): Workflo.ITimeoutReverseInterval {
-    return {timeout: opts.timeout, reverse: true, interval: opts.interval}
+    return { timeout: opts.timeout, reverse: true, interval: opts.interval };
   }
 }
 

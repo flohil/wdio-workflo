@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 export interface SpecInfo {
     description?: string;
     metadata?: Workflo.IStoryMetaData;

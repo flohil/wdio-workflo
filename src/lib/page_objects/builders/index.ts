@@ -1,2 +1,2 @@
-export * from './XPathBuilder'
-export * from './ListWhereBuilder'
+export * from './XPathBuilder';
+export * from './ListWhereBuilder';

@@ -335,7 +335,8 @@ class ValuePageElementEventually extends PageElement_1.PageElementEventually {
     get not() {
         return Object.assign({}, super.not, { 
             /**
-             * Returns true if PageElement's actual value eventually does not equal the expected value within a specific timeout.
+             * Returns true if PageElement's actual value eventually does not equal the expected value within a specific
+             * timeout.
              *
              * @param value the expected value which is supposed not to equal PageElement's actual value
              * @param opts includes the `timeout` within which the condition is expected to be met and the

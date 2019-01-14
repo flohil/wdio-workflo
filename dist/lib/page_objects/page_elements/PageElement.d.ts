@@ -1,5 +1,5 @@
 /// <reference types="webdriverio" />
-import { PageElementBase, IPageElementBaseOpts, PageElementBaseCurrently, PageElementBaseWait, PageElementBaseEventually } from '.';
+import { IPageElementBaseOpts, PageElementBase, PageElementBaseCurrently, PageElementBaseEventually, PageElementBaseWait } from '.';
 import { PageNodeStore } from '../stores';
 /**
  * Describes the opts parameter passed to the constructor function of PageElement.
@@ -65,8 +65,8 @@ export declare class PageElement<Store extends PageNodeStore> extends PageElemen
       * with them.
       *
       * A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
-      * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
-      * for elements of a page to be loaded and rendered or for certain conditions to be met.
+      * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to
+      * wait for elements of a page to be loaded and rendered or for certain conditions to be met.
       *
       * PageElements try to overcome these hurdles be performing an "initial waiting condition" before interacting with
       * elements on the page. The supported initial wait conditions include:
@@ -644,8 +644,8 @@ export declare class PageElementCurrently<Store extends PageNodeStore, PageEleme
      */
     containsName(name: string): boolean;
     /**
-     * Returns true if - currently - the location of PageElement matches the specified coordinates or if its location deviates
-     * no more than the specified tolerances from the specified coordinates.
+     * Returns true if - currently - the location of PageElement matches the specified coordinates or if its location
+     * deviates no more than the specified tolerances from the specified coordinates.
      *
      * @param coordinates the expected coordinates of PageElement
      * @param tolerances used to calculate the maximal allowed deviations from the expected coordinates
@@ -668,24 +668,24 @@ export declare class PageElementCurrently<Store extends PageNodeStore, PageEleme
      */
     hasY(y: number, tolerance?: number): boolean;
     /**
-    * Returns true if - currently - the size of PageElement matches the specified size or if PageElement's size deviates no
-    * more than the specified tolerances from the specified size.
+    * Returns true if - currently - the size of PageElement matches the specified size or if PageElement's size deviates
+    * no more than the specified tolerances from the specified size.
     *
     * @param size the expected size of PageElement
     * @param tolerances used to calculate the maximal allowed deviations from the expected size
     */
     hasSize(size: Workflo.ISize, tolerances?: Partial<Workflo.ISize>): boolean;
     /**
-     * Returns true if - currently - the width of PageElement matches the specified width or if PageElement's width deviates no
-     * more than the specified tolerance from the specified width.
+     * Returns true if - currently - the width of PageElement matches the specified width or if PageElement's width
+     * deviates no more than the specified tolerance from the specified width.
      *
      * @param width the expected width of PageElement
      * @param tolerance used to calculate the maximal allowed deviation from the expected width
      */
     hasWidth(width: number, tolerance?: number): boolean;
     /**
-     * Returns true if - currently - the height of PageElement matches the specified height or if PageElement's height deviates no
-     * more than the specified tolerance from the specified height.
+     * Returns true if - currently - the height of PageElement matches the specified height or if PageElement's height
+     * deviates no more than the specified tolerance from the specified height.
      *
      * @param height the expected height of PageElement
      * @param tolerance used to calculate the maximal allowed deviation from the expected height
@@ -957,7 +957,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
      *
      * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
      * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
-    * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+     * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+     * instead
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -1296,8 +1297,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
      * Throws an error if the condition is not met within a specific timeout.
      *
      * @param coordinates the expected coordinates of PageElement in pixels
-     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-     * the `timeout` within which the condition is expected to be met, the `interval` used to
+     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+     * coordinates, the `timeout` within which the condition is expected to be met, the `interval` used to
      * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
@@ -1676,8 +1677,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
          *
          * Throws an error if the condition is not met within a specific timeout.
          *
-         * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
-         * attribute
+         * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML
+         * 'class' attribute
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
          * check it
          *
@@ -1722,7 +1723,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
          *
          * Throws an error if the condition is not met within a specific timeout.
          *
-         * @param id the expected value which is supposed not to equal the actual value of PageElement's 'id' HTML attribute
+         * @param id the expected value which is supposed not to equal the actual value of PageElement's 'id' HTML
+         * attribute
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
          * check it
          *
@@ -1751,8 +1753,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
          *
          * Throws an error if the condition is not met within a specific timeout.
          *
-         * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML 'id'
-         * attribute
+         * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML
+         * 'id' attribute
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
          * check it
          *
@@ -1814,8 +1816,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
          * Throws an error if the condition is not met within a specific timeout.
          *
          * @param coordinates the not-expected coordinates of PageElement in pixels
-         * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-         * the `timeout` within which the condition is expected to be met and the `interval` used to
+         * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+         * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to
          * check it
          *
          * If no `timeout` is specified, PageElement's default timeout is used.
@@ -1832,8 +1834,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
          * Throws an error if the condition is not met within a specific timeout.
          *
          * @param x the not-expected x-location of PageElement in pixels
-         * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected x-location,
-         * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+         * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
+         * x-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
          *
          * If no `timeout` is specified, PageElement's default timeout is used.
          * If no `interval` is specified, PageElement's default interval is used.
@@ -1849,8 +1851,8 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
          * Throws an error if the condition is not met within a specific timeout.
          *
          * @param y the not-expected y-location of PageElement in pixels
-         * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected y-location,
-         * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+         * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
+         * y-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
          *
          * If no `timeout` is specified, PageElement's default timeout is used.
          * If no `interval` is specified, PageElement's default interval is used.
@@ -2217,8 +2219,8 @@ export declare class PageElementEventually<Store extends PageNodeStore, PageElem
      * the specified tolerances from the expected coordinates within a specific timeout.
      *
      * @param coordinates the expected coordinates of PageElement in pixels
-     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-     * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+     * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to check it
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -2354,7 +2356,8 @@ export declare class PageElementEventually<Store extends PageNodeStore, PageElem
          */
         isChecked: (opts?: Workflo.ITimeoutInterval) => boolean;
         /**
-         * Returns true if PageElement's actual text eventually does not equal the expected text within a specific timeout.
+         * Returns true if PageElement's actual text eventually does not equal the expected text within a specific
+         * timeout.
          *
          * @param text the expected text which is supposed not to equal PageElement's actual text
          * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -2387,7 +2390,8 @@ export declare class PageElementEventually<Store extends PageNodeStore, PageElem
          */
         containsText: (text: string, opts?: Workflo.ITimeoutInterval) => boolean;
         /**
-         * Returns true if PageElement's actual HTML eventually does not equal the expected HTML within a specific timeout.
+         * Returns true if PageElement's actual HTML eventually does not equal the expected HTML within a specific
+         * timeout.
          *
          * @param html the expected HTML which is supposed not to equal PageElement's actual HTML
          * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -2454,7 +2458,8 @@ export declare class PageElementEventually<Store extends PageNodeStore, PageElem
          * A direct text is a text that resides on the level directly below the selected HTML element.
          * It does not include any text of the HTML element's nested children HTML elements.
          *
-         * @param directText the expected direct text which is supposed not to be contained in PageElement's actual direct text
+         * @param directText the expected direct text which is supposed not to be contained in PageElement's actual direct
+         * text
          * @param opts includes the `timeout` within which the condition is expected to be met and the
          * `interval` used to check it
          *
@@ -2504,8 +2509,8 @@ export declare class PageElementEventually<Store extends PageNodeStore, PageElem
          * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not equal an expected
          * value within a specific timeout.
          *
-         * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
-         * attribute
+         * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML
+         * 'class' attribute
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
          * check it
          *
@@ -2587,7 +2592,8 @@ export declare class PageElementEventually<Store extends PageNodeStore, PageElem
          */
         hasName: (name: string, opts?: Workflo.ITimeoutInterval) => boolean;
         /**
-         * Returns true if PageElement's 'name' HTML attribute eventually does not have any value within a specific timeout.
+         * Returns true if PageElement's 'name' HTML attribute eventually does not have any value within a specific
+         * timeout.
          *
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
          * check it
@@ -2600,8 +2606,8 @@ export declare class PageElementEventually<Store extends PageNodeStore, PageElem
          * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not contain an expected
          * value within a specific timeout.
          *
-         * @param name the expected value which is supposed not to be contained in the actual value of PageElement's 'name'
-         * HTML attribute
+         * @param name the expected value which is supposed not to be contained in the actual value of PageElement's
+         * 'name' HTML attribute
          * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
          * check it
          *

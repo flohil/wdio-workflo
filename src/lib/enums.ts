@@ -16,7 +16,7 @@ export enum WaitType {
   exist = 'exist',
   visible = 'visible',
   text = 'text',
-  value = 'value'
+  value = 'value',
 }
 
 /**

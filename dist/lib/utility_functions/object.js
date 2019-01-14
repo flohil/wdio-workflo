@@ -16,7 +16,7 @@ function mapProperties(obj, func) {
         throw new Error(`Input must be an object: ${obj}`);
     }
     else {
-        let resultObj = Object.create(Object.prototype);
+        const resultObj = Object.create(Object.prototype);
         for (const key in obj) {
             if (obj.hasOwnProperty(key)) {
                 resultObj[key] = func(obj[key], key);

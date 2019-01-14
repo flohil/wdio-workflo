@@ -9,8 +9,8 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require(".");
 const htmlParser = require("htmlparser2");
+const _1 = require(".");
 const helpers_1 = require("../../helpers");
 /**
  * PageElement is the main building block for all page objects.
@@ -57,8 +57,8 @@ class PageElement extends _1.PageElementBase {
       * with them.
       *
       * A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
-      * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
-      * for elements of a page to be loaded and rendered or for certain conditions to be met.
+      * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to
+      * wait for elements of a page to be loaded and rendered or for certain conditions to be met.
       *
       * PageElements try to overcome these hurdles be performing an "initial waiting condition" before interacting with
       * elements on the page. The supported initial wait conditions include:
@@ -415,8 +415,8 @@ class PageElement extends _1.PageElementBase {
         let errorMessage = '';
         const interval = options.interval || this._interval;
         const viewPortSize = browser.getViewportSize();
-        let y = viewPortSize.height / 2;
-        let x = viewPortSize.width / 2;
+        const y = viewPortSize.height / 2;
+        const x = viewPortSize.width / 2;
         let remainingTimeout = this._timeout;
         if (!options) {
             options = {};
@@ -427,10 +427,12 @@ class PageElement extends _1.PageElementBase {
             }
         }
         const clickFunc = !options.customScroll ? () => this.__element.click() : () => {
-            const result = browser.selectorExecute(this.getSelector(), function (elems, selector) {
+            const result = browser.selectorExecute(
+            // tslint:disable-next-line:ter-prefer-arrow-callback
+            this.getSelector(), function (elems, selector) {
                 if (elems.length === 0) {
                     return {
-                        notFound: [selector]
+                        notFound: [selector],
                     };
                 }
                 elems[0].click();
@@ -452,7 +454,7 @@ class PageElement extends _1.PageElementBase {
                     return true;
                 }
                 catch (error) {
-                    if (error.message.indexOf("is not clickable at point") > -1) {
+                    if (error.message.indexOf('is not clickable at point') > -1) {
                         errorMessage = error.message;
                         return false;
                     }
@@ -505,7 +507,7 @@ class PageElement extends _1.PageElementBase {
         if (!params.offsets) {
             params.offsets = {
                 x: 0,
-                y: 0
+                y: 0,
             };
         }
         if (!params.offsets.x) {
@@ -517,28 +519,29 @@ class PageElement extends _1.PageElementBase {
         if (typeof params.closestContainerIncludesHidden === 'undefined') {
             params.closestContainerIncludesHidden = true;
         }
-        const result = browser.selectorExecute([this.getSelector()], function (elems, elementSelector, params) {
-            var error = {
-                notFound: []
+        const result = browser.selectorExecute(
+        // tslint:disable-next-line:ter-prefer-arrow-callback
+        [this.getSelector()], function (elems, elementSelector, params) {
+            const error = {
+                notFound: [],
             };
             if (elems.length === 0) {
                 error.notFound.push(elementSelector);
             }
-            ;
             if (error.notFound.length > 0) {
                 return error;
             }
-            var elem = elems[0];
-            var container = undefined;
+            const elem = elems[0];
+            let container = undefined;
             function getScrollParent(element, includeHidden) {
-                var style = getComputedStyle(element);
-                var excludeStaticParent = style.position === "absolute";
-                var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
-                if (style.position === "fixed")
+                let style = getComputedStyle(element);
+                const excludeStaticParent = style.position === 'absolute';
+                const overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+                if (style.position === 'fixed')
                     return document.body;
-                for (var parent = element; (parent = parent.parentElement);) {
+                for (let parent = element; (parent = parent.parentElement);) {
                     style = getComputedStyle(parent);
-                    if (excludeStaticParent && style.position === "static") {
+                    if (excludeStaticParent && style.position === 'static') {
                         continue;
                     }
                     if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX))
@@ -556,14 +559,14 @@ class PageElement extends _1.PageElementBase {
                     return error;
                 }
             }
-            var elemTop = elem.getBoundingClientRect().top;
-            var elemLeft = elem.getBoundingClientRect().left;
-            var containerTop = container.getBoundingClientRect().top;
-            var containerLeft = container.getBoundingClientRect().left;
-            var previousScrollTop = container.scrollTop;
-            var previousScrollLeft = container.scrollLeft;
-            var scrollTop = elemTop - containerTop + previousScrollTop + params.offsets.y;
-            var scrollLeft = elemLeft - containerLeft + previousScrollLeft + params.offsets.x;
+            const elemTop = elem.getBoundingClientRect().top;
+            const elemLeft = elem.getBoundingClientRect().left;
+            const containerTop = container.getBoundingClientRect().top;
+            const containerLeft = container.getBoundingClientRect().left;
+            const previousScrollTop = container.scrollTop;
+            const previousScrollLeft = container.scrollLeft;
+            const scrollTop = elemTop - containerTop + previousScrollTop + params.offsets.y;
+            const scrollLeft = elemLeft - containerLeft + previousScrollLeft + params.offsets.x;
             if (typeof params.directions !== 'undefined') {
                 if (params.directions.y) {
                     container.scrollTop = scrollTop;
@@ -573,12 +576,12 @@ class PageElement extends _1.PageElementBase {
                 }
             }
             return {
-                elemTop: elemTop,
-                elemLeft: elemLeft,
-                containerTop: containerTop,
-                containerLeft: containerLeft,
-                scrollTop: scrollTop,
-                scrollLeft: scrollLeft
+                elemTop,
+                elemLeft,
+                containerTop,
+                containerLeft,
+                scrollTop,
+                scrollLeft,
             };
         }, this.getSelector(), params);
         if (isJsError(result)) {
@@ -647,18 +650,19 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
      * `hasAnyHTML` in PageElement and its `currently`, `wait` and `eventually` APIs.
      */
     getHTML() {
-        const result = browser.selectorExecute([this._node.getSelector()], function (elems, elementSelector) {
-            var error = {
-                notFound: []
+        const result = browser.selectorExecute(
+        // tslint:disable-next-line:ter-prefer-arrow-callback
+        [this._node.getSelector()], function (elems, elementSelector) {
+            const error = {
+                notFound: [],
             };
             if (elems.length === 0) {
                 error.notFound.push(elementSelector);
             }
-            ;
             if (error.notFound.length > 0) {
                 return error;
             }
-            var elem = elems[0];
+            const elem = elems[0];
             return elem.innerHTML;
         }, this._node.getSelector());
         if (isJsError(result)) {
@@ -682,7 +686,7 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
         if (html.length === 0) {
             return '';
         }
-        let text = "";
+        let text = '';
         const constructorName = this._node.constructor.name;
         const handler = new htmlParser.DomHandler(function (error, dom) {
             if (error) {
@@ -1082,8 +1086,8 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
         return this._compareContains(name, this.getName());
     }
     /**
-     * Returns true if - currently - the location of PageElement matches the specified coordinates or if its location deviates
-     * no more than the specified tolerances from the specified coordinates.
+     * Returns true if - currently - the location of PageElement matches the specified coordinates or if its location
+     * deviates no more than the specified tolerances from the specified coordinates.
      *
      * @param coordinates the expected coordinates of PageElement
      * @param tolerances used to calculate the maximal allowed deviations from the expected coordinates
@@ -1119,8 +1123,8 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
         return this._withinTolerance(y, actual, tolerance);
     }
     /**
-    * Returns true if - currently - the size of PageElement matches the specified size or if PageElement's size deviates no
-    * more than the specified tolerances from the specified size.
+    * Returns true if - currently - the size of PageElement matches the specified size or if PageElement's size deviates
+    * no more than the specified tolerances from the specified size.
     *
     * @param size the expected size of PageElement
     * @param tolerances used to calculate the maximal allowed deviations from the expected size
@@ -1132,8 +1136,8 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
             && this._withinTolerance(size.height, actualSize.height, tolerances.height);
     }
     /**
-     * Returns true if - currently - the width of PageElement matches the specified width or if PageElement's width deviates no
-     * more than the specified tolerance from the specified width.
+     * Returns true if - currently - the width of PageElement matches the specified width or if PageElement's width
+     * deviates no more than the specified tolerance from the specified width.
      *
      * @param width the expected width of PageElement
      * @param tolerance used to calculate the maximal allowed deviation from the expected width
@@ -1144,8 +1148,8 @@ class PageElementCurrently extends _1.PageElementBaseCurrently {
         return this._withinTolerance(width, actual, tolerance);
     }
     /**
-     * Returns true if - currently - the height of PageElement matches the specified height or if PageElement's height deviates no
-     * more than the specified tolerance from the specified height.
+     * Returns true if - currently - the height of PageElement matches the specified height or if PageElement's height
+     * deviates no more than the specified tolerance from the specified height.
      *
      * @param height the expected height of PageElement
      * @param tolerance used to calculate the maximal allowed deviation from the expected height
@@ -1432,7 +1436,8 @@ class PageElementWait extends _1.PageElementBaseWait {
      *
      * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
      * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
-    * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
+     * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+     * instead
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -1681,7 +1686,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     hasClass(className, opts) {
-        return this._waitHasProperty(`class`, className, () => this._node.currently.hasClass(className), opts);
+        return this._waitHasProperty('class', className, () => this._node.currently.hasClass(className), opts);
     }
     /**
      * Waits for PageElement's 'class' HTML attribute to have any value.
@@ -1697,7 +1702,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     hasAnyClass(opts) {
-        return this._waitHasAnyProperty(`class`, () => this._node.currently.hasAnyClass(), opts);
+        return this._waitHasAnyProperty('class', () => this._node.currently.hasAnyClass(), opts);
     }
     /**
      * Waits for the actual value of the PageElement's 'class' HTML attribute to contain an expected value.
@@ -1715,7 +1720,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     containsClass(className, opts) {
-        return this._waitContainsProperty(`class`, className, () => this._node.currently.containsClass(className), opts);
+        return this._waitContainsProperty('class', className, () => this._node.currently.containsClass(className), opts);
     }
     /**
      * Waits for the actual value of PageElement's 'id' HTML attribute to equal an expected value.
@@ -1732,7 +1737,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     hasId(id, opts) {
-        return this._waitHasProperty(`id`, id, () => this._node.currently.hasId(id), opts);
+        return this._waitHasProperty('id', id, () => this._node.currently.hasId(id), opts);
     }
     /**
      * Waits for PageElement's 'id' HTML attribute to have any value.
@@ -1748,7 +1753,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     hasAnyId(opts) {
-        return this._waitHasAnyProperty(`id`, () => this._node.currently.hasAnyId(), opts);
+        return this._waitHasAnyProperty('id', () => this._node.currently.hasAnyId(), opts);
     }
     /**
      * Waits for the actual value of PageElement's 'id' HTML attribute to contain an expected value.
@@ -1766,7 +1771,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     containsId(id, opts) {
-        return this._waitContainsProperty(`id`, id, () => this._node.currently.containsId(id), opts);
+        return this._waitContainsProperty('id', id, () => this._node.currently.containsId(id), opts);
     }
     /**
      * Waits for the actual value of PageElement's 'name' HTML attribute to equal an expected value.
@@ -1783,7 +1788,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     hasName(name, opts) {
-        return this._waitHasProperty(`name`, name, () => this._node.currently.hasName(name), opts);
+        return this._waitHasProperty('name', name, () => this._node.currently.hasName(name), opts);
     }
     /**
      * Waits for PageElement's 'name' HTML attribute to have any value.
@@ -1799,7 +1804,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     hasAnyName(opts) {
-        return this._waitHasAnyProperty(`id`, () => this._node.currently.hasAnyName(), opts);
+        return this._waitHasAnyProperty('id', () => this._node.currently.hasAnyName(), opts);
     }
     /**
      * Waits for the actual value of PageElement's 'name' HTML attribute to contain an expected value.
@@ -1817,7 +1822,7 @@ class PageElementWait extends _1.PageElementBaseWait {
      * @returns this (an instance of PageElement)
      */
     containsName(name, opts) {
-        return this._waitContainsProperty(`name`, name, () => this._node.currently.containsName(name), opts);
+        return this._waitContainsProperty('name', name, () => this._node.currently.containsName(name), opts);
     }
     /**
      * Waits for the location of PageElement to equal the expected coordinates or to deviate no more than the specified
@@ -1826,8 +1831,8 @@ class PageElementWait extends _1.PageElementBaseWait {
      * Throws an error if the condition is not met within a specific timeout.
      *
      * @param coordinates the expected coordinates of PageElement in pixels
-     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-     * the `timeout` within which the condition is expected to be met, the `interval` used to
+     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+     * coordinates, the `timeout` within which the condition is expected to be met, the `interval` used to
      * check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met instead
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
@@ -1838,10 +1843,10 @@ class PageElementWait extends _1.PageElementBaseWait {
     hasLocation(coordinates, opts = { tolerances: { x: 0, y: 0 } }) {
         const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
         if (tolerances && (tolerances.x > 0 || tolerances.y > 0)) {
-            return this._waitWithinProperty(`location`, helpers_1.tolerancesToString(coordinates, tolerances), () => this._node.currently.hasLocation(coordinates, tolerances), otherOpts);
+            return this._waitWithinProperty('location', helpers_1.tolerancesToString(coordinates, tolerances), () => this._node.currently.hasLocation(coordinates, tolerances), otherOpts);
         }
         else {
-            return this._waitHasProperty(`location`, helpers_1.tolerancesToString(coordinates), () => this._node.currently.hasLocation(coordinates), otherOpts);
+            return this._waitHasProperty('location', helpers_1.tolerancesToString(coordinates), () => this._node.currently.hasLocation(coordinates), otherOpts);
         }
     }
     /**
@@ -1863,10 +1868,10 @@ class PageElementWait extends _1.PageElementBaseWait {
     hasX(x, opts = { tolerance: 0 }) {
         const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
         if (tolerance) {
-            return this._waitWithinProperty(`X-location`, helpers_1.tolerancesToString(x, tolerance), () => this._node.currently.hasX(x, tolerance), otherOpts);
+            return this._waitWithinProperty('X-location', helpers_1.tolerancesToString(x, tolerance), () => this._node.currently.hasX(x, tolerance), otherOpts);
         }
         else {
-            return this._waitHasProperty(`X-location`, x.toString(), () => this._node.currently.hasX(x), otherOpts);
+            return this._waitHasProperty('X-location', x.toString(), () => this._node.currently.hasX(x), otherOpts);
         }
     }
     /**
@@ -1888,10 +1893,10 @@ class PageElementWait extends _1.PageElementBaseWait {
     hasY(y, opts = { tolerance: 0 }) {
         const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
         if (tolerance) {
-            return this._waitWithinProperty(`Y-location`, helpers_1.tolerancesToString(y, tolerance), () => this._node.currently.hasY(y, tolerance), otherOpts);
+            return this._waitWithinProperty('Y-location', helpers_1.tolerancesToString(y, tolerance), () => this._node.currently.hasY(y, tolerance), otherOpts);
         }
         else {
-            return this._waitHasProperty(`Y-location`, y.toString(), () => this._node.currently.hasY(y), otherOpts);
+            return this._waitHasProperty('Y-location', y.toString(), () => this._node.currently.hasY(y), otherOpts);
         }
     }
     /**
@@ -1913,10 +1918,10 @@ class PageElementWait extends _1.PageElementBaseWait {
     hasSize(size, opts = { tolerances: { width: 0, height: 0 } }) {
         const { tolerances } = opts, otherOpts = __rest(opts, ["tolerances"]);
         if (tolerances && (tolerances.width > 0 || tolerances.height > 0)) {
-            return this._waitWithinProperty(`size`, helpers_1.tolerancesToString(size, tolerances), () => this._node.currently.hasSize(size, tolerances), otherOpts);
+            return this._waitWithinProperty('size', helpers_1.tolerancesToString(size, tolerances), () => this._node.currently.hasSize(size, tolerances), otherOpts);
         }
         else {
-            return this._waitHasProperty(`size`, helpers_1.tolerancesToString(size), () => this._node.currently.hasSize(size), otherOpts);
+            return this._waitHasProperty('size', helpers_1.tolerancesToString(size), () => this._node.currently.hasSize(size), otherOpts);
         }
     }
     /**
@@ -1938,10 +1943,10 @@ class PageElementWait extends _1.PageElementBaseWait {
     hasWidth(width, opts = { tolerance: 0 }) {
         const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
         if (tolerance) {
-            return this._waitWithinProperty(`width`, helpers_1.tolerancesToString(width, tolerance), () => this._node.currently.hasWidth(width, tolerance), otherOpts);
+            return this._waitWithinProperty('width', helpers_1.tolerancesToString(width, tolerance), () => this._node.currently.hasWidth(width, tolerance), otherOpts);
         }
         else {
-            return this._waitHasProperty(`width`, width.toString(), () => this._node.currently.hasWidth(width), otherOpts);
+            return this._waitHasProperty('width', width.toString(), () => this._node.currently.hasWidth(width), otherOpts);
         }
     }
     /**
@@ -1963,10 +1968,10 @@ class PageElementWait extends _1.PageElementBaseWait {
     hasHeight(height, opts = { tolerance: 0 }) {
         const { tolerance } = opts, otherOpts = __rest(opts, ["tolerance"]);
         if (tolerance) {
-            return this._waitWithinProperty(`height`, helpers_1.tolerancesToString(height, tolerance), () => this._node.currently.hasHeight(height, tolerance), otherOpts);
+            return this._waitWithinProperty('height', helpers_1.tolerancesToString(height, tolerance), () => this._node.currently.hasHeight(height, tolerance), otherOpts);
         }
         else {
-            return this._waitHasProperty(`height`, height.toString(), () => this._node.currently.hasHeight(height), otherOpts);
+            return this._waitHasProperty('height', height.toString(), () => this._node.currently.hasHeight(height), otherOpts);
         }
     }
     /**
@@ -2280,8 +2285,8 @@ class PageElementWait extends _1.PageElementBaseWait {
              *
              * Throws an error if the condition is not met within a specific timeout.
              *
-             * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
-             * attribute
+             * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML
+             * 'class' attribute
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
              * check it
              *
@@ -2332,7 +2337,8 @@ class PageElementWait extends _1.PageElementBaseWait {
              *
              * Throws an error if the condition is not met within a specific timeout.
              *
-             * @param id the expected value which is supposed not to equal the actual value of PageElement's 'id' HTML attribute
+             * @param id the expected value which is supposed not to equal the actual value of PageElement's 'id' HTML
+             * attribute
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
              * check it
              *
@@ -2365,8 +2371,8 @@ class PageElementWait extends _1.PageElementBaseWait {
              *
              * Throws an error if the condition is not met within a specific timeout.
              *
-             * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML 'id'
-             * attribute
+             * @param id the expected value which is supposed not to be contained in the actual value of PageElement's HTML
+             * 'id' attribute
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
              * check it
              *
@@ -2436,8 +2442,8 @@ class PageElementWait extends _1.PageElementBaseWait {
              * Throws an error if the condition is not met within a specific timeout.
              *
              * @param coordinates the not-expected coordinates of PageElement in pixels
-             * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-             * the `timeout` within which the condition is expected to be met and the `interval` used to
+             * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+             * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to
              * check it
              *
              * If no `timeout` is specified, PageElement's default timeout is used.
@@ -2452,8 +2458,8 @@ class PageElementWait extends _1.PageElementBaseWait {
              * Throws an error if the condition is not met within a specific timeout.
              *
              * @param x the not-expected x-location of PageElement in pixels
-             * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected x-location,
-             * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+             * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
+             * x-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
              *
              * If no `timeout` is specified, PageElement's default timeout is used.
              * If no `interval` is specified, PageElement's default interval is used.
@@ -2467,8 +2473,8 @@ class PageElementWait extends _1.PageElementBaseWait {
              * Throws an error if the condition is not met within a specific timeout.
              *
              * @param y the not-expected y-location of PageElement in pixels
-             * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected y-location,
-             * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+             * @param opts includes the `tolerance` used to calculate the maximal allowed deviation from the expected
+             * y-location, the `timeout` within which the condition is expected to be met and the `interval` used to check it
              *
              * If no `timeout` is specified, PageElement's default timeout is used.
              * If no `interval` is specified, PageElement's default interval is used.
@@ -2520,7 +2526,7 @@ class PageElementWait extends _1.PageElementBaseWait {
              *
              * @returns this (an instance of PageElement)
              */
-            hasHeight: (height, opts = { tolerance: 0 }) => this.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true })
+            hasHeight: (height, opts = { tolerance: 0 }) => this.hasHeight(height, { tolerance: opts.tolerance, timeout: opts.timeout, reverse: true }),
         };
     }
 }
@@ -2881,8 +2887,8 @@ class PageElementEventually extends _1.PageElementBaseEventually {
      * the specified tolerances from the expected coordinates within a specific timeout.
      *
      * @param coordinates the expected coordinates of PageElement in pixels
-     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-     * the `timeout` within which the condition is expected to be met and the `interval` used to check it
+     * @param opts includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+     * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to check it
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -3031,7 +3037,8 @@ class PageElementEventually extends _1.PageElementBaseEventually {
                 return this._node.__eventually(() => this._node.wait.not.isChecked(opts));
             },
             /**
-             * Returns true if PageElement's actual text eventually does not equal the expected text within a specific timeout.
+             * Returns true if PageElement's actual text eventually does not equal the expected text within a specific
+             * timeout.
              *
              * @param text the expected text which is supposed not to equal PageElement's actual text
              * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -3070,7 +3077,8 @@ class PageElementEventually extends _1.PageElementBaseEventually {
                 return this._node.__eventually(() => this._node.wait.not.containsText(text, opts));
             },
             /**
-             * Returns true if PageElement's actual HTML eventually does not equal the expected HTML within a specific timeout.
+             * Returns true if PageElement's actual HTML eventually does not equal the expected HTML within a specific
+             * timeout.
              *
              * @param html the expected HTML which is supposed not to equal PageElement's actual HTML
              * @param opts includes the `timeout` within which the condition is expected to be met and the
@@ -3147,7 +3155,8 @@ class PageElementEventually extends _1.PageElementBaseEventually {
              * A direct text is a text that resides on the level directly below the selected HTML element.
              * It does not include any text of the HTML element's nested children HTML elements.
              *
-             * @param directText the expected direct text which is supposed not to be contained in PageElement's actual direct text
+             * @param directText the expected direct text which is supposed not to be contained in PageElement's actual direct
+             * text
              * @param opts includes the `timeout` within which the condition is expected to be met and the
              * `interval` used to check it
              *
@@ -3205,8 +3214,8 @@ class PageElementEventually extends _1.PageElementBaseEventually {
              * Returns true if the actual value of PageElement's 'class' HTML attribute eventually does not equal an expected
              * value within a specific timeout.
              *
-             * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML 'class'
-             * attribute
+             * @param className the expected value which is supposed not to equal the actual value of PageElement's HTML
+             * 'class' attribute
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
              * check it
              *
@@ -3302,7 +3311,8 @@ class PageElementEventually extends _1.PageElementBaseEventually {
                 return this._node.__eventually(() => this._node.wait.not.hasName(name, opts));
             },
             /**
-             * Returns true if PageElement's 'name' HTML attribute eventually does not have any value within a specific timeout.
+             * Returns true if PageElement's 'name' HTML attribute eventually does not have any value within a specific
+             * timeout.
              *
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
              * check it
@@ -3317,8 +3327,8 @@ class PageElementEventually extends _1.PageElementBaseEventually {
              * Returns true if the actual value of PageElement's 'name' HTML attribute eventually does not contain an expected
              * value within a specific timeout.
              *
-             * @param name the expected value which is supposed not to be contained in the actual value of PageElement's 'name'
-             * HTML attribute
+             * @param name the expected value which is supposed not to be contained in the actual value of PageElement's
+             * 'name' HTML attribute
              * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used to
              * check it
              *

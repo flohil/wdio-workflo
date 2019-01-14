@@ -111,7 +111,7 @@ class PageWait {
      * @returns Page
      */
     isOpen(opts = Object.create(null)) {
-        return this._wait(() => this._page.isOpen(opts), " to be open", opts);
+        return this._wait(() => this._page.isOpen(opts), ' to be open', opts);
     }
     /**
      * Waits for Page to become closed and throws an error of the Page does not become closed within a specific timeout.
@@ -125,7 +125,7 @@ class PageWait {
      * @returns Page
      */
     isClosed(opts = Object.create(null)) {
-        return this._wait(() => this._page.isClosed(opts), " to be closed", opts);
+        return this._wait(() => this._page.isClosed(opts), ' to be closed', opts);
     }
 }
 /**

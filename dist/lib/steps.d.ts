@@ -14,13 +14,14 @@ export declare function defineSteps<StepDefinitions extends Workflo.StepDefiniti
 export declare function proxifySteps<StepDefinitions extends Workflo.StepDefinitions>(stepDefinitions: StepDefinitions): StepDefinitions;
 /**
    * Steps consist of a description and an execution function.
-   * The execution function performs changes to the state of the tested application and the description briefly summarizes
-   * these changes in natural language.
+   * The execution function performs changes to the state of the tested application and the description briefly
+   * summarizes these changes in natural language.
    *
    * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
    * execution function:
    *
-   * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+   * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution
+   * function.
    * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
    * with key's value retrieved from the step arguments object).
    *
@@ -56,13 +57,14 @@ export declare class Step<ArgsType extends Object, ReturnType> implements Workfl
     private static _commandBlacklist;
     /**
      * Steps consist of a description and an execution function.
-     * The execution function performs changes to the state of the tested application and the description briefly summarizes
-     * these changes in natural language.
+     * The execution function performs changes to the state of the tested application and the description briefly
+     * summarizes these changes in natural language.
      *
      * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
      * execution function:
      *
-     * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+     * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution
+     * function.
      * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
      * with key's value retrieved from the step arguments object).
      *

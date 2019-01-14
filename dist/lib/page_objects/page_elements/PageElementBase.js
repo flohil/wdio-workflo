@@ -10,8 +10,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
-const builders_1 = require("../builders");
 const __1 = require("..");
+const builders_1 = require("../builders");
 /**
  * This class provides basic functionalities for all PageElements.
  *
@@ -41,7 +41,7 @@ class PageElementBase extends _1.PageNode {
                         // but this does not work due to typescript bugs that prevent extended generics to work with keyof.
                         // typescript bugs 3.3.0:
                         // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
-                        throw new Error("Selector chaining is not supported for PageElementGroups.");
+                        throw new Error('Selector chaining is not supported for PageElementGroups.');
                     }
                     // chain selectors
                     _selector = `${selector}${_selector}`;
@@ -105,7 +105,7 @@ class PageElementBaseCurrently extends _1.PageNodeCurrently {
     _writeLastDiff(actual, expected) {
         const diff = {
             actual: this._node.__typeToString(actual),
-            timeout: this._node.getTimeout()
+            timeout: this._node.getTimeout(),
         };
         if (typeof expected !== 'undefined') {
             diff.expected = this._node.__typeToString(expected);
@@ -122,13 +122,14 @@ class PageElementBaseCurrently extends _1.PageNodeCurrently {
     _withinTolerance(actual, expected, tolerance) {
         const tolerances = {
             lower: actual,
-            upper: actual
+            upper: actual,
         };
         if (tolerance) {
             tolerances.lower -= Math.max(tolerance, 0);
             tolerances.upper += Math.max(tolerance, 0);
         }
-        return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) && Math.max(expected, 0) <= Math.max(tolerances.upper, 0);
+        return Math.max(expected, 0) >= Math.max(tolerances.lower, 0) &&
+            Math.max(expected, 0) <= Math.max(tolerances.upper, 0);
     }
     /**
      * Checks if the `actual` value has/equals the `expected` value and writes both values into `this._lastDiff`.

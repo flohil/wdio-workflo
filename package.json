@@ -22,6 +22,8 @@
     "url": "https://github.com/flohil/wdio-workflo/issues"
   },
   "devDependencies": {
+    "tslint": "^5.12.1",
+    "tslint-config-airbnb": "^5.11.1",
     "typedoc": "^0.13.0"
   },
   "dependencies": {

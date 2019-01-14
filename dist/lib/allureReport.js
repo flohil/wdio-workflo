@@ -29,11 +29,15 @@ function ensureExecutable() {
     try {
         fs.chmodSync(path.join(allureBinPath, 'allure'), 0o755);
     }
-    finally { }
+    finally {
+        //
+    }
     try {
         fs.chmodSync(path.join(allureBinPath, 'allure.bat'), 0o755);
     }
-    finally { }
+    finally {
+        //
+    }
 }
 function generateReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
@@ -47,7 +51,7 @@ function generateReport(workfloConf, run) {
             path.join(runPath, 'allure-report'),
             '--clean'
         ]);
-        generation.on('exit', function (exitCode) {
+        generation.on('exit', (exitCode) => {
             console.log('Report generation finished with code:', exitCode);
             resolve(exitCode);
         });
@@ -61,9 +65,9 @@ function openReport(workfloConf, run) {
         // returns ChildProcess instance
         const open = allure([
             'open',
-            path.join(runPath, 'allure-report')
+            path.join(runPath, 'allure-report'),
         ]);
-        open.on('exit', function (exitCode) {
+        open.on('exit', (exitCode) => {
             console.log('Showing report for run:', runPath);
             resolve(exitCode);
         });

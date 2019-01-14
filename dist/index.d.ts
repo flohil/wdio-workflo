@@ -1,9 +1,9 @@
 import { InstallOpts, StartOpts } from 'selenium-standalone';
-import { DesiredCapabilities, Options, Suite, Test, Client, RawResult, Element } from 'webdriverio';
+import { Client, DesiredCapabilities, Element, Options, RawResult, Suite, Test } from 'webdriverio';
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli';
 import * as enums from './lib/enums';
-import * as pageObjects from './lib/page_objects';
 import * as helpers from './lib/helpers';
+import * as pageObjects from './lib/page_objects';
 import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList';
 /**
  * This interface describes custom expectation matchers for PageElements.
@@ -198,8 +198,8 @@ interface ICustomElementMatchers {
      */
     toHaveWidth(width: number, tolerance?: number): boolean;
     /**
-     * Checks if - currently - the height of PageElement matches the specified height or if PageElement's height deviates no
-     * more than the specified tolerance from the specified height.
+     * Checks if - currently - the height of PageElement matches the specified height or if PageElement's height deviates
+     * no more than the specified tolerance from the specified height.
      *
      * @param height the expected height of PageElement
      * @param tolerance used to calculate the maximal allowed deviation from the expected height
@@ -251,7 +251,8 @@ interface ICustomElementMatchers {
      * Checks if the PageElement eventually has the specified text within a specific timeout.
      *
      * @param text the text which the PageElement is supposed to have
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -260,7 +261,8 @@ interface ICustomElementMatchers {
     /**
      * Checks if the PageElement eventually has any text within a specific timeout.
      *
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -270,7 +272,8 @@ interface ICustomElementMatchers {
      * Checks if the PageElement eventually contains the specified text within a specific timeout.
      *
      * @param text the text which the PageElement is supposed to contain
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -280,7 +283,8 @@ interface ICustomElementMatchers {
      * Checks if the PageElement eventually has the specified HTML within a specific timeout.
      *
      * @param html the HTML which the PageElement is supposed to have
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -289,7 +293,8 @@ interface ICustomElementMatchers {
     /**
      * Checks if the PageElement eventually has any HTML within a specific timeout.
      *
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -299,7 +304,8 @@ interface ICustomElementMatchers {
      * Checks if the PageElement eventually contains the specified HTML within a specific timeout.
      *
      * @param html the HTML which the PageElement is supposed to contain
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -312,7 +318,8 @@ interface ICustomElementMatchers {
      * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the direct text which the PageElement is supposed to have
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -324,7 +331,8 @@ interface ICustomElementMatchers {
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
      *
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -337,7 +345,8 @@ interface ICustomElementMatchers {
      * It does not include any text of the HTML element's nested children HTML elements.
      *
      * @param directText the direct text which the PageElement is supposed to contain
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -348,7 +357,8 @@ interface ICustomElementMatchers {
      *
      * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
      * is expected to have
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -360,7 +370,8 @@ interface ICustomElementMatchers {
      *
      * @param attributeName the specified attributeName of an HTML attribute of PageElement which is supposed to have any
      * value
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -372,7 +383,8 @@ interface ICustomElementMatchers {
      *
      * @param attribute the specified HTML attribute of PageElement, consisting of the attribute's name and the value it
      * is expected to contain
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -383,7 +395,8 @@ interface ICustomElementMatchers {
      * timeout.
      *
      * @param className the className which the 'class' HTML attribute of PageElement is supposed to have
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -392,7 +405,8 @@ interface ICustomElementMatchers {
     /**
      * Checks if the 'class' HTML attribute of PageElement eventually has any className within a specific timeout.
      *
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -403,7 +417,8 @@ interface ICustomElementMatchers {
      * timeout.
      *
      * @param className the className which the 'class' HTML attribute of PageElement is supposed to contain
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -413,7 +428,8 @@ interface ICustomElementMatchers {
      * Checks if the 'id' HTML attribute of PageElement eventually has the specified value within a specific timeout.
      *
      * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -422,7 +438,8 @@ interface ICustomElementMatchers {
     /**
      * Checks if the 'id' HTML attribute of PageElement eventually has any value within a specific timeout.
      *
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -432,7 +449,8 @@ interface ICustomElementMatchers {
      * Checks if the 'id' HTML attribute of PageElement eventually contains the specified value within a specific timeout.
      *
      * @param id the value which the 'id' HTML attribute of PageElement is supposed to contain
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -442,7 +460,8 @@ interface ICustomElementMatchers {
      * Checks if the 'name' HTML attribute of PageElement eventually has the specified value within a specific timeout.
      *
      * @param id the value which the 'id' HTML attribute of PageElement is supposed to have
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -475,8 +494,8 @@ interface ICustomElementMatchers {
      * if its location deviates no more than the specified tolerances from the specified coordinates.
      *
      * @param coordinates the expected coordinates of PageElement
-     * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected coordinates,
-     * the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `tolerances` used to calculate the maximal allowed deviations from the expected
+     * coordinates, the `timeout` within which the condition is expected to be met and the `interval` used to check it.
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
      * If no `interval` is specified, PageElement's default interval is used.
@@ -576,7 +595,8 @@ interface ICustomListMatchers {
     /**
      * Checks if the PageElementList eventually is empty within a specific timeout.
      *
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, PageElementList's default timeout is used.
      * If no `interval` is specified, PageElementList's default interval is used.
@@ -1175,7 +1195,8 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
     /**
      * Checks if the ValuePageElement eventually has any value within a specific timeout.
      *
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, ValuePageElement's default timeout is used.
      * If no `interval` is specified, ValuePageElement's default interval is used.
@@ -1185,7 +1206,8 @@ interface ICustomValueElementMatchers<ValueType> extends ICustomElementMatchers 
      * Checks if the ValuePageElement eventually contains the specified value within a specific timeout.
      *
      * @param value the value which the ValuePageElement is supposed to contain
-     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to check it.
+     * @param opts Includes the `timeout` within which the condition is expected to be met and the `interval` used to
+     * check it.
      *
      * If no `timeout` is specified, ValuePageElement's default timeout is used.
      * If no `interval` is specified, ValuePageElementList's default interval is used.
@@ -1550,7 +1572,8 @@ declare global {
          *
          * K represents the original object's property keys to be picked from the original object unaltered.
          *
-         * KPartial represents the original object's property keys to be picked from the original object and turned into optional properties.
+         * KPartial represents the original object's property keys to be picked from the original object and turned into
+         * optional properties.
          */
         type PickPartial<Type, K extends keyof Type, KPartial extends keyof Type> = Pick<Type, K> & Partial<Pick<Type, KPartial>>;
         /**
@@ -1888,16 +1911,16 @@ declare global {
             timeout?: number;
         }
         namespace Store {
-            type BaseKeys = "timeout" | "waitType";
-            type GroupPublicKeys = "timeout";
-            type GroupConstructorKeys = GroupPublicKeys | "content" | "store";
-            type ElementPublicKeys = BaseKeys | "customScroll";
-            type ListPublicKeys = BaseKeys | "disableCache" | "identifier";
-            type ListPublicPartialKeys = "elementOpts";
-            type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | "elementStoreFunc";
-            type MapPublicKeys = "identifier" | "timeout";
-            type MapPublicPartialKeys = "elementOpts";
-            type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | "elementStoreFunc";
+            type BaseKeys = 'timeout' | 'waitType';
+            type GroupPublicKeys = 'timeout';
+            type GroupConstructorKeys = GroupPublicKeys | 'content' | 'store';
+            type ElementPublicKeys = BaseKeys | 'customScroll';
+            type ListPublicKeys = BaseKeys | 'disableCache' | 'identifier';
+            type ListPublicPartialKeys = 'elementOpts';
+            type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | 'elementStoreFunc';
+            type MapPublicKeys = 'identifier' | 'timeout';
+            type MapPublicPartialKeys = 'elementOpts';
+            type MapConstructorKeys = MapPublicKeys | MapPublicPartialKeys | 'elementStoreFunc';
         }
         namespace PageNode {
             /**
@@ -2007,8 +2030,8 @@ declare global {
                  */
                 wait: ICheckWait<TextType, BooleanType, FilterType>;
                 /**
-                 * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
-                 * timeout
+                 * defines an api for all functions of PageNode which check if a condition eventually becomes true within a
+                 * specified timeout
                  */
                 eventually: ICheckEventually<TextType, BooleanType, FilterType>;
             }
@@ -2263,8 +2286,8 @@ declare global {
                 not: Omit<ICheckWait<TextType, BooleanType, FilterType, ITimeoutInterval>, 'not'>;
             }
             /**
-             * Used by IElementNode to describe `currently` state check and state retrieval functions supported by PageElement,
-             * PageElementList, PageElementMap and PageElementGroup.
+             * Used by IElementNode to describe `currently` state check and state retrieval functions supported by
+             * PageElement, PageElementList, PageElementMap and PageElementGroup.
              */
             interface ICheckCurrently<TextType, BooleanType, FilterType> {
                 /**
@@ -2564,8 +2587,8 @@ declare global {
                  */
                 wait: ICheckWaitValue<GetType, FilterType>;
                 /**
-                 * defines an api for all functions of PageNode which check if a condition eventually becomes true within a specified
-                 * timeout
+                 * defines an api for all functions of PageNode which check if a condition eventually becomes true within a
+                 * specified timeout
                  */
                 eventually: ICheckValueEventually<GetType, FilterType>;
                 /**
@@ -3098,7 +3121,8 @@ declare global {
          */
         interface ISpecGiven {
             /**
-             * Call this function to chain multiple `Given` functions together sequentially in order to create an initial state.
+             * Call this function to chain multiple `Given` functions together sequentially in order to create an initial
+             * state.
              *
              * Alternatively, if you can nest another `Given` inside the bodyFunc to express diverging "Story lines".
              *
@@ -3124,7 +3148,8 @@ declare global {
              *
              * Alternatively, if you can nest another `When` inside the bodyFunc to express diverging "Story lines".
              *
-             * To validate the state following a state change with acceptance criteria, use `Then` inside the bodyFunc of When.
+             * To validate the state following a state change with acceptance criteria, use `Then` inside the bodyFunc of
+             * When.
              *
              * @param description a short description of an initial state
              * @param bodyFunc Use the body of this function to define acceptance criteria or nested state changes.
@@ -3342,7 +3367,8 @@ declare global {
          * A step can be parameterized by passing step arguments and a step callback (both of which are optional) to the
          * execution function:
          *
-         * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution function.
+         * Step arguments are key-value pair objects that provide dynamic values to the state changes of the execution f
+         * unction.
          * They also enable the interpolation of a step's description by replacing `%{key}` in the description string
          * with key's value retrieved from the step arguments object).
          *
@@ -3772,9 +3798,9 @@ export declare type IOptStepParams<ArgsType extends Object, ReturnType> = Workfl
  */
 export declare type StepDefinitions = Workflo.StepDefinitions;
 export * from './lib/steps';
-import * as objectFunctions from './lib/utility_functions/object';
 import * as arrayFunctions from './lib/utility_functions/array';
 import * as classFunctions from './lib/utility_functions/class';
+import * as objectFunctions from './lib/utility_functions/object';
 import * as utilFunctions from './lib/utility_functions/util';
 export { objectFunctions, arrayFunctions, classFunctions, utilFunctions };
 export { pageObjects, helpers };
@@ -4240,7 +4266,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      * Restricts testcases and specs (oldest spec criteria) by given date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss).
      *
      * @example
-   * ["(2017-03-10,2017-10-28)"] => restricts by status set between 2017-03-10 and 2017-10-28 (both at 0 pm, 0 min, 0 sec)
+     * ["(2017-03-10,2017-10-28)"] => restricts by status set between 2017-03-10 and 2017-10-28 (at 0 pm, 0 min, 0 sec)
      * ["2017-07-21", "2017-07-22T14:51:13"] => restricts by last status set on 2017-07-21 or 2017-07-22 at 2 pm, 51 min, 13 sec
      */
     dates?: string[];

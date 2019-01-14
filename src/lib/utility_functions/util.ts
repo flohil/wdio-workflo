@@ -1,5 +1,5 @@
-import * as _ from 'lodash'
-import { invert } from './object'
+import * as _ from 'lodash';
+import { invert } from './object';
 
 /**
  * Converts strings, arrays and objects into objects.
@@ -20,33 +20,32 @@ import { invert } from './object'
 export function convertToObject<T>(
   unknownTypedInput: {[key: string] : T} | string[] | string,
   valueFunc: (key: string) => T = undefined,
-) : {[key: string] : T}
-{
-  let obj: {[key: string] : T} = {}
+) : {[key: string] : T} {
+  let obj: {[key: string] : T} = {};
 
-  if ( typeof unknownTypedInput !== 'undefined' ) {
-    if ( typeof unknownTypedInput === 'string' ) {
-      unknownTypedInput = [ unknownTypedInput ]
+  if (typeof unknownTypedInput !== 'undefined') {
+    if (typeof unknownTypedInput === 'string') {
+      unknownTypedInput = [unknownTypedInput];
     }
 
-    if ( _.isArray( unknownTypedInput ) ) {
-      for ( const element of unknownTypedInput ) {
-        let value: T
+    if (_.isArray(unknownTypedInput)) {
+      for (const element of unknownTypedInput) {
+        let value: T;
 
         if (typeof valueFunc !== 'undefined') {
-          value = valueFunc( element )
+          value = valueFunc(element);
         } else {
-          value = undefined
+          value = undefined;
         }
 
-        obj[ element ] = value
+        obj[element] = value;
       }
     } else {
-      obj = _.cloneDeep(unknownTypedInput)
+      obj = _.cloneDeep(unknownTypedInput);
     }
   }
 
-  return obj
+  return obj;
 }
 
 /**
@@ -66,15 +65,15 @@ export function convertToObject<T>(
  * @returns the result of the comparison
  */
 export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparator) {
-  switch(operator) {
+  switch (operator) {
     case Workflo.Comparator.equalTo || Workflo.Comparator.eq:
-      return var1 === var2
+      return var1 === var2;
     case Workflo.Comparator.notEqualTo || Workflo.Comparator.ne:
-      return var1 !== var2
+      return var1 !== var2;
     case Workflo.Comparator.greaterThan || Workflo.Comparator.gt:
-      return var1 > var2
+      return var1 > var2;
     case Workflo.Comparator.lessThan || Workflo.Comparator.lt:
-      return var1 < var2
+      return var1 < var2;
   }
 }
 
@@ -86,12 +85,12 @@ export function compare<Type>(var1: Type, var2: Type, operator: Workflo.Comparat
  */
 export function comparatorStr(comparator: Workflo.Comparator) {
   if (comparator === Workflo.Comparator.ne) {
-    return ' other than'
+    return ' other than';
   } else if (comparator === Workflo.Comparator.gt) {
-    return ' greater than'
+    return ' greater than';
   } else if (comparator === Workflo.Comparator.lt) {
-    return ' less than'
+    return ' less than';
   } else {
-    return ''
+    return '';
   }
 }

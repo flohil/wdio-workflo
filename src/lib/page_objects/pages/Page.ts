@@ -1,5 +1,5 @@
-import { PageNodeStore } from '../stores'
-import { DEFAULT_TIMEOUT, DEFAULT_INTERVAL, stores } from '../'
+import { DEFAULT_INTERVAL, DEFAULT_TIMEOUT, stores } from '../';
+import { PageNodeStore } from '../stores';
 
 /**
  * Defines the opts parameter passed to the constructor of Page.
@@ -10,7 +10,7 @@ export interface IPageOpts<Store extends PageNodeStore> extends Workflo.ITimeout
   /**
    * an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
    */
-  store: Store
+  store: Store;
 }
 
 /**
@@ -30,25 +30,25 @@ export abstract class Page<
   /**
    * an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
    */
-  protected _store: Store
+  protected _store: Store;
   /**
    * the default timeout in milliseconds used by Page for its `wait` and `eventually` functions.
    */
-  protected _timeout: number
+  protected _timeout: number;
   /**
    * the default interval in milliseconds used by Page for its `wait` and `eventually` functions.
    */
-  protected _interval: number
+  protected _interval: number;
 
   /**
    * defines an api for all functions of Page which wait for a condition to become true within a specified timeout
    */
-  wait: PageWait<Store, this, IsOpenOpts, IsClosedOpts>
+  wait: PageWait<Store, this, IsOpenOpts, IsClosedOpts>;
   /**
    * defines an api for all functions of Page which check if a condition eventually becomes true within a specified
    * timeout
    */
-  eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>
+  eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>;
 
   /**
    * Page serves as the base class for all Pages.
@@ -56,34 +56,34 @@ export abstract class Page<
    * @param opts the options required to create an instance of Page
    */
   constructor(opts: IPageOpts<Store>) {
-    this._store = opts.store
+    this._store = opts.store;
 
-    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT
-    this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL
+    this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT;
+    this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL;
 
-    this.wait = new PageWait(this)
-    this.eventually = new PageEventually(this)
+    this.wait = new PageWait(this);
+    this.eventually = new PageEventually(this);
   }
 
   /**
    * Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
    */
   getStore() {
-    return this._store
+    return this._store;
   }
 
   /**
    * Returns the default timeout in milliseconds used by Page for its `wait` and `eventually` functions.
    */
   getTimeout() {
-    return this._timeout
+    return this._timeout;
   }
 
   /**
    * Returns the default interval in milliseconds used by Page for its `wait` and `eventually` functions.
    */
   getInterval() {
-    return this._interval
+    return this._interval;
   }
 
   /**
@@ -91,14 +91,14 @@ export abstract class Page<
    *
    * @param opts options needed to determine if the Page is currently open
    */
-  abstract isOpen(opts?: IsOpenOpts): boolean
+  abstract isOpen(opts?: IsOpenOpts): boolean;
 
   /**
    * Checks if the Page is currently closed.
    *
    * @param opts options needed to determine if the Page is currently closed
    */
-  abstract isClosed(opts?: IsClosedOpts): boolean
+  abstract isClosed(opts?: IsClosedOpts): boolean;
 }
 
 /**
@@ -119,7 +119,7 @@ class PageWait<
   /**
    * the Page for which PageWait defines all `wait` functions
    */
-  protected _page: PageType
+  protected _page: PageType;
 
   /**
    * PageWait defines all `wait` functions of Page.
@@ -143,38 +143,38 @@ class PageWait<
    * If no `interval` is specified, the Page's default interval is used instead.
    */
   protected _wait(
-    conditionFunc: () => boolean, conditionMessage: string, opts: Workflo.ITimeoutInterval = Object.create(null)
+    conditionFunc: () => boolean, conditionMessage: string, opts: Workflo.ITimeoutInterval = Object.create(null),
   ) {
-    const timeout = opts.timeout || this._page.getTimeout()
-    const interval = opts.interval || this._page.getInterval()
+    const timeout = opts.timeout || this._page.getTimeout();
+    const interval = opts.interval || this._page.getInterval();
 
-    let error = undefined
+    let error = undefined;
 
     try {
       browser.waitUntil(() => {
         try {
-          return conditionFunc()
-        } catch( _error ) {
-          error = _error
+          return conditionFunc();
+        } catch (_error) {
+          error = _error;
         }
-      }, timeout, '', interval)
+      },                timeout, '', interval);
     } catch (untilError) {
-      const _error = error || untilError
+      const _error = error || untilError;
 
       if (_error.type === 'WaitUntilTimeoutError') {
         const waitError = new Error(
-          `Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed.`
-        ) as any
+          `Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed.`,
+        ) as any;
 
-        waitError.type = 'WaitUntilTimeoutError'
+        waitError.type = 'WaitUntilTimeoutError';
 
-        throw waitError
+        throw waitError;
       } else {
-        throw _error
+        throw _error;
       }
     }
 
-    return this._page
+    return this._page;
   }
 
   /**
@@ -189,13 +189,13 @@ class PageWait<
    * @returns Page
    */
   isOpen(opts: IsOpenOpts & Workflo.ITimeoutInterval = Object.create(null)) {
-    return this._wait(() => this._page.isOpen(opts), " to be open", opts)
+    return this._wait(() => this._page.isOpen(opts), ' to be open', opts);
   }
 
   /**
    * Waits for Page to become closed and throws an error of the Page does not become closed within a specific timeout.
    *
-   * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed 
+   * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed
    * and the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
@@ -204,7 +204,7 @@ class PageWait<
    * @returns Page
    */
   isClosed(opts: IsClosedOpts & Workflo.ITimeoutInterval = Object.create(null)) {
-    return this._wait(() => this._page.isClosed(opts), " to be closed", opts)
+    return this._wait(() => this._page.isClosed(opts), ' to be closed', opts);
   }
 }
 
@@ -226,7 +226,7 @@ class PageEventually<
   /**
    * the Page for which PageEventually defines all `eventually` functions
    */
-  protected _page: PageType
+  protected _page: PageType;
 
   /**
    * PageEventually defines all `eventually` functions of Page.
@@ -249,30 +249,30 @@ class PageEventually<
    * If no `interval` is specified, the Page's default interval is used instead.
    */
   protected _eventually(
-    conditionFunc: () => boolean, opts: Workflo.ITimeoutInterval = Object.create(null)
+    conditionFunc: () => boolean, opts: Workflo.ITimeoutInterval = Object.create(null),
   ) {
-    const timeout = opts.timeout || this._page.getTimeout()
-    const interval = opts.interval || this._page.getInterval()
+    const timeout = opts.timeout || this._page.getTimeout();
+    const interval = opts.interval || this._page.getInterval();
 
-    let error = undefined
+    let error = undefined;
 
     try {
       browser.waitUntil(
         () => {
           try {
-            return conditionFunc()
-          } catch( _error ) {
-            error = _error
+            return conditionFunc();
+          } catch (_error) {
+            error = _error;
           }
-        }, timeout, '', interval)
-      return true
+        }, timeout, '', interval);
+      return true;
     } catch (untilError) {
-      const _error = error || untilError
+      const _error = error || untilError;
 
       if (_error.type === 'WaitUntilTimeoutError') {
         return false;
       } else {
-        throw _error
+        throw _error;
       }
     }
   }
@@ -287,19 +287,19 @@ class PageEventually<
    * If no `interval` is specified, the Page's default interval is used instead.
    */
   isOpen(opts: IsOpenOpts & Workflo.ITimeoutInterval = Object.create(null)) {
-    return this._eventually(() => this._page.isOpen(opts), opts)
+    return this._eventually(() => this._page.isOpen(opts), opts);
   }
 
   /**
    * Checks if Page eventually becomes closed within a specific timeout.
    *
-   * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed 
+   * @param opts includes the options defined in `IsClosedOpts`, the `timeout` within which the Page must become closed
    * and the `interval` used to check for this condition.
    *
    * If no `timeout` is specified, the Page's default timeout is used instead.
    * If no `interval` is specified, the Page's default interval is used instead.
    */
   isClosed(opts: IsClosedOpts & Workflo.ITimeoutInterval = Object.create(null)) {
-    return this._eventually(() => this._page.isClosed(opts), opts)
+    return this._eventually(() => this._page.isClosed(opts), opts);
   }
 }

@@ -1,6 +1,6 @@
+import { PageNode, PageNodeCurrently } from '.';
 import { PageNodeStore } from '../stores';
-import { PageNodeCurrently, PageNode } from '.';
-import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
+import { IPageNodeOpts, PageNodeEventually, PageNodeWait } from './PageNode';
 /**
  * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `string`.
@@ -92,12 +92,13 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * accessed via PageElementGroup's `$` accessor.
      *
      * It provides a convenient way to handle HTML forms, because it allows for state retrieval, state check, wait and
-     * setter functions to be executed on all of its managed PageNodes with a single function call. This can greatly reduce
-     * the code required to fill in a form.
+     * setter functions to be executed on all of its managed PageNodes with a single function call. This can greatly
+     * reduce the code required to fill in a form.
      *
-     * PageElementGroup does not force its managed PageNodes to support a certain function - it simply checks if a PageNode
-     * implements the said function before invoking it. If a PageNode does not implement a function, the invocation of
-     * this function is skipped for the affected PageNode and `undefined` will be written as the PageNode's result value.
+     * PageElementGroup does not force its managed PageNodes to support a certain function - it simply checks if a
+     * PageNode implements the said function before invoking it. If a PageNode does not implement a function, the
+     * invocation of this function is skipped for the affected PageNode and `undefined` will be written as the PageNode's
+     * result value.
      *
      * The result values returned by and the parameter values passed to functions which are executed on the managed
      * PageNodes are mapped to the structure of PageElementGroup's `Content` by replacing the `Content`'s original values
@@ -107,7 +108,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @param id a string which uniquely identifies a PageElementGroup in a PageNodeStore
      * @param opts the options used to configure PageElementGroup
      */
-    constructor(id: string, { store, timeout, interval, content }: IPageElementGroupOpts<Store, Content>);
+    constructor(id: string, { store, timeout, interval, content, }: IPageElementGroupOpts<Store, Content>);
     /**
      * provides access to a PageElementGroup's `Content`
      */
@@ -712,9 +713,9 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
      *
-     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for some
-     * or all managed PageNodes, the `timeout` within which the condition is expected to be met and the `interval` used
-     * to check it
+     * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+     * some or all managed PageNodes, the `timeout` within which the condition is expected to be met and the `interval`
+     * used to check it
      *
      * If no `timeout` is specified, a PageElement's default timeout is used.
      * If no `interval` is specified, a PageElement's default interval is used.

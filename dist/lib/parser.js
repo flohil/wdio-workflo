@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
-const ts = require("typescript");
 const JSON5 = require("json5");
+const ts = require("typescript");
 // stores pos of callExpression and the function to be executed after this block
 let afterFuncTable = {};
 // used to determine, if a spec is to be executed for a feature or spec filter
@@ -25,7 +25,7 @@ const specParserState = {
             const argFunc = specParserState.argFuncs.shift();
             argFunc(node);
         }
-    }
+    },
 };
 function parseSpecFiles(sourceFile) {
     parseSpecNode(sourceFile);
@@ -50,18 +50,18 @@ function parseSpecFiles(sourceFile) {
                             specParserState.addArgFunc((node) => {
                                 const featureId = node.text;
                                 if (featureId.length === 0) {
-                                    throw new Error(`Feature description must not be empty!`);
+                                    throw new Error('Feature description must not be empty!');
                                 }
                                 specParserState.activeFeature = featureId;
                                 if (!(featureId in specTree)) {
                                     specTree[featureId] = {
-                                        specHash: {}
+                                        specHash: {},
                                     };
                                 }
                                 if (!(featureId in featureTable)) {
                                     featureTable[featureId] = {
                                         specFiles: {},
-                                        specs: {}
+                                        specs: {},
                                     };
                                 }
                                 featureTable[featureId].specFiles[specParserState.activeSpecFile] = true;
@@ -75,7 +75,8 @@ function parseSpecFiles(sourceFile) {
                                     parsedMetadata = JSON5.parse(str);
                                 }
                                 catch (e) {
-                                    console.error(`Failed to parse feature metadata. Please do not use dynamic values inside feature metadata: ${parsedMetadata}\n`);
+                                    console.error(`Failed to parse feature metadata. Please do not use dynamic values inside feature
+ metadata: ${parsedMetadata}\n`);
                                     throw e;
                                 }
                                 specTree[specParserState.activeFeature].metadata = parsedMetadata;
@@ -88,7 +89,7 @@ function parseSpecFiles(sourceFile) {
                             specParserState.addArgFunc((node) => {
                                 const specId = node.text;
                                 if (specId.length === 0) {
-                                    throw new Error(`Story id must not be empty!`);
+                                    throw new Error('Story id must not be empty!');
                                 }
                                 specParserState.activeSpecId = specId;
                                 if (!(specId in specTree[specParserState.activeFeature])) {
@@ -99,7 +100,7 @@ function parseSpecFiles(sourceFile) {
                                         feature: specParserState.activeFeature,
                                         specFile: specParserState.activeSpecFile,
                                         testcases: {},
-                                        criteria: {}
+                                        criteria: {},
                                     };
                                 }
                                 featureTable[specParserState.activeFeature].specs[specId] = true;
@@ -107,7 +108,8 @@ function parseSpecFiles(sourceFile) {
                             });
                             specParserState.addArgFunc((node) => {
                                 const specDescription = node.text;
-                                specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].description = specDescription;
+                                specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].description =
+                                    specDescription;
                             }),
                                 specParserState.addArgFunc((node) => {
                                     const specMetadata = node;
@@ -117,10 +119,12 @@ function parseSpecFiles(sourceFile) {
                                         parsedMetadata = JSON5.parse(str);
                                     }
                                     catch (e) {
-                                        console.error(`Failed to parse spec metadata. Please do not use dynamic values inside spec metadata: ${parsedMetadata}\n`);
+                                        console.error(`Failed to parse spec metadata. Please do not use dynamic values inside spec
+ metadata: ${parsedMetadata}\n`);
                                         throw e;
                                     }
-                                    specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].metadata = parsedMetadata;
+                                    specTree[specParserState.activeFeature].specHash[specParserState.activeSpecId].metadata =
+                                        parsedMetadata;
                                 });
                             afterFuncTable[parentPos] = () => { specParserState.activeSpecId = undefined; };
                             break;
@@ -164,7 +168,7 @@ const testcaseParserState = {
             const argFunc = testcaseParserState.argFuncs.shift();
             argFunc(node);
         }
-    }
+    },
 };
 function parseTestcaseFiles(sourceFile) {
     parseTestcaseNode(sourceFile);
@@ -189,7 +193,7 @@ function parseTestcaseFiles(sourceFile) {
                             testcaseParserState.addArgFunc((node) => {
                                 const suiteId = node.text;
                                 if (suiteId.length === 0) {
-                                    throw new Error(`Suite description must not be empty`);
+                                    throw new Error('Suite description must not be empty');
                                 }
                                 else if (suiteId.indexOf('.') > -1) {
                                     throw new Error(`Suite description must not contain the '.' character: ${suiteId}`);
@@ -206,7 +210,7 @@ function parseTestcaseFiles(sourceFile) {
                                 const fullSuiteId = testcaseParserState.activeSuiteId;
                                 if (!(fullSuiteId in testcaseTree)) {
                                     testcaseTree[fullSuiteId] = {
-                                        testcaseHash: {}
+                                        testcaseHash: {},
                                     };
                                 }
                                 testcaseFileTable[testcaseParserState.activeTestcaseFile].testcases[fullSuiteId] = true;
@@ -219,7 +223,8 @@ function parseTestcaseFiles(sourceFile) {
                                     parsedMetadata = JSON5.parse(str);
                                 }
                                 catch (e) {
-                                    console.error(`Failed to parse suite metadata. Please do not use dynamic values inside suite metadata: ${parsedMetadata}\n`);
+                                    console.error(`Failed to parse suite metadata. Please do not use dynamic values inside suite
+ metadata: ${parsedMetadata}\n`);
                                     throw e;
                                 }
                                 testcaseTree[testcaseParserState.activeSuiteId].metadata = parsedMetadata;
@@ -243,7 +248,7 @@ function parseTestcaseFiles(sourceFile) {
                             testcaseParserState.addArgFunc((node) => {
                                 const testcaseId = node.text;
                                 if (testcaseId.length === 0) {
-                                    throw new Error(`Testcase description must not be empty`);
+                                    throw new Error('Testcase description must not be empty');
                                 }
                                 else if (testcaseId.indexOf('.') > -1) {
                                     throw new Error(`Testcase description must not contain the '.' character: ${testcaseId}`);
@@ -254,20 +259,21 @@ function parseTestcaseFiles(sourceFile) {
                                     testcaseParserState.activeTestcaseId = fullTestcaseId;
                                     if (!(fullTestcaseId in testcaseTree[testcaseParserState.activeSuiteId])) {
                                         testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[fullTestcaseId] = {
-                                            description: testcaseId
+                                            description: testcaseId,
                                         };
                                     }
                                 }
                                 catch (e) {
                                     if (!testcaseTree[testcaseParserState.activeSuiteId]) {
-                                        console.error(`Parsed testcase function outside of suite: ${testcaseId}\nAlways define testcase functions inside suites and do not use them\ninside "external" functions invoked from inside suites`);
+                                        console.error(`Parsed testcase function outside of suite: ${testcaseId}\nAlways define testcase
+ functions inside suites and do not use them\ninside "external" functions invoked from inside suites`);
                                         throw e;
                                     }
                                 }
                                 if (!(fullTestcaseId in testcaseTable)) {
                                     testcaseTable[fullTestcaseId] = {
                                         suiteId: testcaseParserState.activeSuiteId,
-                                        testcaseFile: testcaseParserState.activeTestcaseFile
+                                        testcaseFile: testcaseParserState.activeTestcaseFile,
                                     };
                                 }
                                 testcaseFileTable[testcaseParserState.activeTestcaseFile].testcases[fullTestcaseId] = true;
@@ -280,10 +286,12 @@ function parseTestcaseFiles(sourceFile) {
                                     parsedMetadata = JSON5.parse(str);
                                 }
                                 catch (e) {
-                                    console.error(`Failed to parse testcase metadata. Please do not use dynamic values inside testcase metadata: ${parsedMetadata}\n`);
+                                    console.error(`Failed to parse testcase metadata. Please do not use dynamic values inside testcase
+ metadata: ${parsedMetadata}\n`);
                                     throw e;
                                 }
-                                testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].metadata = parsedMetadata;
+                                testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId]
+                                    .metadata = parsedMetadata;
                             });
                             afterFuncTable[parentPos] = () => { testcaseParserState.activeTestcaseId = undefined; };
                             break;
@@ -296,17 +304,21 @@ function parseTestcaseFiles(sourceFile) {
                                     validateObject = JSON5.parse(str);
                                 }
                                 catch (e) {
-                                    console.error(`Failed to parse validate object. Please do not use dynamic values inside validateObject: ${str}\n`);
+                                    console.error(`Failed to parse validate object. Please do not use dynamic values inside
+ validateObject: ${str}\n`);
                                     throw e;
                                 }
                                 try {
-                                    if (!testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash) {
-                                        testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash = {};
+                                    if (!testcaseTree[testcaseParserState.activeSuiteId]
+                                        .testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash) {
+                                        testcaseTree[testcaseParserState.activeSuiteId]
+                                            .testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash = {};
                                     }
                                 }
                                 catch (e) {
                                     if (!testcaseTree[testcaseParserState.activeSuiteId] ||
-                                        !testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId]) {
+                                        !testcaseTree[testcaseParserState.activeSuiteId]
+                                            .testcaseHash[testcaseParserState.activeTestcaseId]) {
                                         console.error(`Parsed validate function outside of suite or testcase: ${str}\n
                         Always define validate functions inside suites and testcases and do not use them
                         inside "external" functions invoked from inside suites or testcases`);
@@ -322,7 +334,8 @@ function parseTestcaseFiles(sourceFile) {
                                             validateTable[spec] = {};
                                         }
                                         validateTable[spec][testcaseParserState.activeTestcaseId] = true;
-                                        const specValidateHash = testcaseTree[testcaseParserState.activeSuiteId].testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash;
+                                        const specValidateHash = testcaseTree[testcaseParserState.activeSuiteId]
+                                            .testcaseHash[testcaseParserState.activeTestcaseId].specValidateHash;
                                         if (!(spec in specValidateHash)) {
                                             specValidateHash[spec] = {};
                                         }
@@ -348,7 +361,7 @@ const compilerOptions = {
     noEmitOnError: true,
     noImplicitAny: true,
     target: ts.ScriptTarget.ES2017,
-    module: ts.ModuleKind.CommonJS
+    module: ts.ModuleKind.CommonJS,
 };
 function specFilesParse(fileNames) {
     const program = ts.createProgram(fileNames, compilerOptions);
@@ -357,19 +370,19 @@ function specFilesParse(fileNames) {
         if (!fs_1.existsSync(fileName)) {
             throw new Error(`Spec file could not be found: ${fileName}`);
         }
-        let sourceFile = program.getSourceFile(fileName);
+        const sourceFile = program.getSourceFile(fileName);
         afterFuncTable = {};
         specFileTable[fileName] = {
             features: {},
-            specs: {}
+            specs: {},
         };
         parseSpecFiles(sourceFile);
     });
     return {
-        specTree: specTree,
-        specTable: specTable,
-        featureTable: featureTable,
-        specFileTable: specFileTable
+        specTree,
+        specTable,
+        featureTable,
+        specFileTable,
     };
 }
 exports.specFilesParse = specFilesParse;
@@ -380,7 +393,7 @@ function testcaseFilesParse(fileNames) {
         if (!fs_1.existsSync(fileName)) {
             throw new Error(`Testcase file could not be found: ${fileName}`);
         }
-        let sourceFile = program.getSourceFile(fileName);
+        const sourceFile = program.getSourceFile(fileName);
         afterFuncTable = {};
         testcaseFileTable[fileName] = {
             testcases: {},
@@ -388,10 +401,10 @@ function testcaseFilesParse(fileNames) {
         parseTestcaseFiles(sourceFile);
     });
     return {
-        testcaseTable: testcaseTable,
+        testcaseTable,
+        validateTable,
+        testcaseFileTable,
         tree: testcaseTree,
-        validateTable: validateTable,
-        testcaseFileTable: testcaseFileTable
     };
 }
 exports.testcaseFilesParse = testcaseFilesParse;

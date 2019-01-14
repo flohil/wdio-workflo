@@ -5,122 +5,122 @@
 // required in system_tests.wdio.conf.js which is not being
 // babel transpiled (no ES6 support)
 
-const diff = require('deep-diff').diff
+const diff = require('deep-diff').diff;
 
 // ADD YOUR OWN CUSTOM MATCHERS BELOW
 const customMatchers = {
-  toHaveLength: function() {
+  toHaveLength() {
     return {
-      compare: function(obj, length) {
+      compare (obj, length) {
         const result = {
           pass: false,
-          message: ''
-        }
+          message: '',
+        };
         if (typeof length !== 'number') {
-          result.message = `${length} is not a number`
-          return result
+          result.message = `${length} is not a number`;
+          return result;
         } else if (typeof obj === 'undefined') {
-          result.message = 'Object is undefined'
-          return result
-        } else if ( obj === null ) {
-          result.message = 'Object is null'
-          return result
-        } else if ( typeof obj !== 'object' && typeof obj !== 'string') {
-          result.message = 'Object is neither of type object/array nor of type string'
-          return result
+          result.message = 'Object is undefined';
+          return result;
+        } else if (obj === null) {
+          result.message = 'Object is null';
+          return result;
+        } else if (typeof obj !== 'object' && typeof obj !== 'string') {
+          result.message = 'Object is neither of type object/array nor of type string';
+          return result;
         } else if (typeof obj === 'string') {
-          result.pass = (obj.length === length)
+          result.pass = (obj.length === length);
           if (!result.pass) {
-            result.message = `Expected string to have a length of ${length}`
+            result.message = `Expected string to have a length of ${length}`;
           }
-          return result
+          return result;
         } else if (Array.isArray(obj)) {
-          result.pass = (obj.length === length)
+          result.pass = (obj.length === length);
           if (!result.pass) {
-            result.message = `Expected array to have a length of ${length}`
+            result.message = `Expected array to have a length of ${length}`;
           }
-          return result
+          return result;
         } else {
-          result.pass = (Object.keys(obj).length === length)
+          result.pass = (Object.keys(obj).length === length);
           if (!result.pass) {
-            result.message = `Expected object to have ${length} keys`
+            result.message = `Expected object to have ${length} keys`;
           }
-          return result
+          return result;
         }
-      }
-    }
+      },
+    };
   },
 
   // Checks if urls match (cutting off get parameters)
-  toMatchUrl: function() {
+  toMatchUrl() {
     return {
-      compare: function(obj, url) {
+      compare(obj, url) {
         const result = {
           pass: false,
-          message: undefined
-        }
-        const baseUrl = obj.split('?')[0]
+          message: undefined,
+        };
+        const baseUrl = obj.split('?')[0];
 
         if (baseUrl === url) {
-          result.pass = true
+          result.pass = true;
         } else {
-          result.message = `${obj} does not match url ${url}`
+          result.message = `${obj} does not match url ${url}`;
         }
 
-        return result
-      }
-    }
+        return result;
+      },
+    };
   },
 
   // Checks if string includes another string
-  toInclude: function() {
+  toInclude() {
     return {
-      compare: function(obj, substr) {
+      compare(obj, substr) {
         const result = {
           pass: false,
-          message: undefined
-        }
+          message: undefined,
+        };
 
-        if ( obj.includes( substr ) ) {
-          result.pass = true
+        if (obj.includes(substr)) {
+          result.pass = true;
         } else {
-          result.message = `'${obj}' does not contain substring '${substr}'`
+          result.message = `'${obj}' does not contain substring '${substr}'`;
         }
 
-        return result
-      }
-    }
+        return result;
+      },
+    };
   },
 
   // Checks if two objects match and if they don't,
   // outputs the diff of the objects in the error message.
-  toEqualObject: function() {
+  toEqualObject() {
     return {
-      compare: function( expectedObj, actualObj ) {
+      compare(expectedObj, actualObj) {
         const result = {
           pass: false,
-          message: undefined
-        }
+          message: undefined,
+        };
 
-        let diffObj = diff( actualObj, expectedObj )
+        let diffObj = diff(actualObj, expectedObj);
 
-        if ( typeof diffObj === 'undefined' ) {
-          result.pass = true
+        if (typeof diffObj === 'undefined') {
+          result.pass = true;
         } else {
-          diffObj = prettifyDiffOutput( diffObj )
-          result.message = `Expected object did not match actual object: \n${JSON.stringify(diffObj, null, 2)}`
+          diffObj = prettifyDiffOutput(diffObj);
+          result.message = `Expected object did not match actual object: \n${JSON.stringify(diffObj, null, 2)}`;
         }
-        
-        return result
-      }
-    }
-  }
-}
+
+        return result;
+      },
+    };
+  },
+};
 
 // DEFINE INTERNAL UTILITY FUNCTIONS BELOW
 
 // makes output of a single diff more readable
-function prettifyDiffObj( diff ) {
+function prettifyDiffObj(diff) {
   const obj = {
     kind: undefined,
     path: undefined,
@@ -128,61 +128,61 @@ function prettifyDiffObj( diff ) {
     actual: undefined,
     index: undefined,
     item: undefined,
-  }
+  };
 
-  if ( diff.kind ) {
+  if (diff.kind) {
     switch (diff.kind) {
-      case 'N': 
-        obj.kind = 'New'
-        break
+      case 'N':
+        obj.kind = 'New';
+        break;
       case 'D':
-        obj.kind = 'Missing'
-        break
+        obj.kind = 'Missing';
+        break;
       case 'E':
-        obj.kind = 'Changed'
-        break
-      case 'A': 
-        obj.kind = 'Array Canged'
-        break
+        obj.kind = 'Changed';
+        break;
+      case 'A':
+        obj.kind = 'Array Canged';
+        break;
     }
   }
-  
-  if ( diff.path ) {
-    let path = diff.path[0]
-    for ( let i = 1; i < diff.path.length; i++ ) {
-      path += `/${diff.path[i]}`
+
+  if (diff.path) {
+    let path = diff.path[0];
+    for (let i = 1; i < diff.path.length; i++) {
+      path += `/${diff.path[i]}`;
     }
-    obj.path = path
-  }
-  
-  if ( typeof diff.lhs !== 'undefined' ) {
-    obj.expect = diff.lhs
+    obj.path = path;
   }
 
-  if ( typeof diff.rhs !== 'undefined' ) {
-    obj.actual = diff.rhs
+  if (typeof diff.lhs !== 'undefined') {
+    obj.expect = diff.lhs;
   }
 
-  if ( diff.index ) {
-    obj.index = diff.index
+  if (typeof diff.rhs !== 'undefined') {
+    obj.actual = diff.rhs;
   }
 
-  if ( diff.item ) {
-    obj.item = prettifyDiffObj( diff.item )
+  if (diff.index) {
+    obj.index = diff.index;
   }
 
-  return obj
+  if (diff.item) {
+    obj.item = prettifyDiffObj(diff.item);
+  }
+
+  return obj;
 }
 
 // makes output of a diff object array more readable
-function prettifyDiffOutput( diffArr ) {
-  const res = []
+function prettifyDiffOutput(diffArr) {
+  const res = [];
 
-  for ( const diff of diffArr ) {
-    res.push( prettifyDiffObj( diff ) )
+  for (const diff of diffArr) {
+    res.push(prettifyDiffObj(diff));
   }
 
-  return res
+  return res;
 }
 
-export { customMatchers }
+export { customMatchers };

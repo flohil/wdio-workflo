@@ -7,8 +7,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param tolerances a number or an object with values of type number
  */
 function tolerancesToString(values, tolerances) {
-    var str = '{';
-    var props = [];
+    let str = '{';
+    const props = [];
     if (typeof values !== 'object' && typeof values !== 'undefined') {
         if (typeof tolerances === 'undefined') {
             return values;
@@ -19,7 +19,7 @@ function tolerancesToString(values, tolerances) {
         }
     }
     else {
-        for (var p in values) {
+        for (const p in values) {
             if (values.hasOwnProperty(p)) {
                 const value = values[p];
                 let valueStr = '';
@@ -35,7 +35,7 @@ function tolerancesToString(values, tolerances) {
         }
     }
     str += props.join(', ');
-    return str + '}';
+    return `${str}}`;
 }
 exports.tolerancesToString = tolerancesToString;
 /**
@@ -108,9 +108,9 @@ function applyMixins(derivedCtor, baseCtors, mergeObjectKeys = []) {
                         result = baseValue;
                     }
                     Object.defineProperty(derivedCtor, name, {
-                        get: function () {
+                        get() {
                             return result;
-                        }
+                        },
                     });
                 }
                 else {

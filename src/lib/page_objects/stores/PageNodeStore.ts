@@ -1,18 +1,18 @@
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 
 import {
-  PageElement, IPageElementOpts,
-  PageElementList, IPageElementListOpts,
-  PageElementMap, IPageElementMapOpts,
-  PageElementGroup, IPageElementGroupOpts,
-  ValuePageElementGroup, IValuePageElementGroupOpts,
-  ValuePageElement, IValuePageElementOpts,
-  IValuePageElementListOpts, ValuePageElementList
-} from '../page_elements'
+  IPageElementGroupOpts, IPageElementListOpts,
+  IPageElementMapOpts, IPageElementOpts,
+  IValuePageElementGroupOpts, IValuePageElementListOpts,
+  IValuePageElementOpts, PageElement,
+  PageElementGroup, PageElementList,
+  PageElementMap, ValuePageElement,
+  ValuePageElementGroup, ValuePageElementList,
+} from '../page_elements';
 
 import {
-  XPathBuilder
-} from '../builders'
+  XPathBuilder,
+} from '../builders';
 import { IValuePageElementMapOpts, ValuePageElementMap } from '../page_elements/ValuePageElementMap';
 
 /**
@@ -23,7 +23,7 @@ import { IValuePageElementMapOpts, ValuePageElementMap } from '../page_elements/
  */
 export type CloneFunc<Type> = (
   selector?: Workflo.XPath,
-) => Type
+) => Type;
 
 /**
  * PageNodeStore serves as a facade for the creation and retrieval of Page Nodes.
@@ -41,15 +41,15 @@ export class PageNodeStore {
   /**
    * Caches instances of PageNodes.
    */
-  protected _instanceCache: {[id: string] : any}
+  protected _instanceCache: {[id: string] : any};
   /**
    * An instance of XPathBuilder used to build the currently constructed XPath expressions of retrieved PageNodes.
    */
-  protected _xPathBuilder: XPathBuilder
+  protected _xPathBuilder: XPathBuilder;
 
   constructor() {
-    this._instanceCache = Object.create(null)
-    this._xPathBuilder = XPathBuilder.getInstance()
+    this._instanceCache = Object.create(null);
+    this._xPathBuilder = XPathBuilder.getInstance();
   }
 
 // ELEMENTS
@@ -65,16 +65,16 @@ export class PageNodeStore {
    */
   Element(
     selector: Workflo.XPath,
-    opts?: Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>
+    opts?: Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>,
   ) {
     return this._getElement<PageElement<this>, IPageElementOpts<this>>(
       selector,
       PageElement,
       {
         store: this,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
@@ -88,15 +88,15 @@ export class PageNodeStore {
    */
   ExistElement(
     selector: Workflo.XPath,
-    opts?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
+    opts?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, 'waitType'>>,
   ) {
     return this.Element(
       selector,
       {
         waitType: Workflo.WaitType.exist,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
 // LISTS
@@ -123,7 +123,7 @@ export class PageNodeStore {
     opts: Pick<
       IPageElementListOpts<this, PageElementType, PageElementOpts>,
       Workflo.Store.ListConstructorKeys
-    >
+    >,
   ) {
     return this._getList<
       PageElementList<this, PageElementType, PageElementOpts>,
@@ -133,13 +133,13 @@ export class PageNodeStore {
       PageElementList,
       {
         store: this,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
-   * Retrieves an instance of a ValuePageElementList from the store that manages any instance of ValuePageElement which 
+   * Retrieves an instance of a ValuePageElementList from the store that manages any instance of ValuePageElement which
    * inherits from the ValuePageElement class.
    *
    * The waitType of PageElements managed by ValuePageElementList and the waitType of the list itself are set to
@@ -160,7 +160,7 @@ export class PageNodeStore {
     opts: Pick<
       IValuePageElementListOpts<this, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>,
       Workflo.Store.ListConstructorKeys
-    >
+    >,
   ) {
     return this._getList<
       ValuePageElementList<this, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>,
@@ -170,9 +170,9 @@ export class PageNodeStore {
       ValuePageElementList,
       {
         store: this,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
@@ -192,16 +192,16 @@ export class PageNodeStore {
       IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
       Workflo.Store.ListPublicKeys,
       Workflo.Store.ListPublicPartialKeys
-    >
+    >,
   ) {
     return this.List(
       selector,
       {
         elementOpts: {},
         elementStoreFunc: this.Element,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
@@ -218,10 +218,10 @@ export class PageNodeStore {
   ExistElementList(
     selector: Workflo.XPath,
     opts?: Workflo.PickPartial<
-      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
-      Exclude<Workflo.Store.ListPublicKeys, "waitType">,
+      IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>,
+      Exclude<Workflo.Store.ListPublicKeys, 'waitType'>,
       Workflo.Store.ListPublicPartialKeys
-    >
+    >,
   ) {
     return this.List(
       selector,
@@ -229,9 +229,9 @@ export class PageNodeStore {
         elementOpts: {},
         elementStoreFunc: this.ExistElement,
         waitType: Workflo.WaitType.exist,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
 // MAPS
@@ -259,7 +259,7 @@ export class PageNodeStore {
     opts: Pick<
       IPageElementMapOpts<this, K, PageElementType, PageElementOpts>,
       Workflo.Store.MapConstructorKeys
-    >
+    >,
   ) {
     return this._getMap<
       K,
@@ -271,13 +271,13 @@ export class PageNodeStore {
       {
         store: this,
         elementStoreFunc: opts.elementStoreFunc,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
-   * Retrieves an instance of a ValuePageElementMap from the store that manages any instance of ValuePageElement which 
+   * Retrieves an instance of a ValuePageElementMap from the store that manages any instance of ValuePageElement which
    * inherits from the ValuePageElement class.
    *
    * The waitType of ValuePageElements managed by ValuePageElementMap is set to 'visible' by default.
@@ -292,28 +292,28 @@ export class PageNodeStore {
    */
   protected ValueMap<
     K extends string,
-    PageElementType extends ValuePageElement<this, ReturnType<PageElementType["getValue"]>>,
+    PageElementType extends ValuePageElement<this, ReturnType<PageElementType['getValue']>>,
     PageElementOpts extends Pick<IValuePageElementOpts<this>, Workflo.Store.ElementPublicKeys>
   >(
     selector: Workflo.XPath,
     opts: Pick<
-      IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>,
+      IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>,
       Workflo.Store.MapConstructorKeys
-    >
+    >,
   ) {
     return this._getMap<
       K,
-      ValuePageElementMap<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>,
-      IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>
+      ValuePageElementMap<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>,
+      IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>
     > (
       selector,
       ValuePageElementMap,
       {
         store: this,
         elementStoreFunc: opts.elementStoreFunc,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
@@ -333,16 +333,16 @@ export class PageNodeStore {
       IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>,
       Workflo.Store.MapPublicKeys,
       Workflo.Store.MapPublicPartialKeys
-    >
+    >,
   ) {
     return this.Map(
       selector,
       {
         elementStoreFunc: this.Element,
         elementOpts: {},
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
@@ -360,20 +360,20 @@ export class PageNodeStore {
     selector: Workflo.XPath,
     opts: Workflo.PickPartial<
       IPageElementMapOpts<
-        this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
+        this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, 'waitType'>>
       >,
       Workflo.Store.MapPublicKeys,
       Workflo.Store.MapPublicPartialKeys
-    >
+    >,
   ) {
     return this.Map(
       selector,
       {
         elementStoreFunc: this.ExistElement,
         elementOpts: {},
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
 // GROUPS
@@ -391,7 +391,7 @@ export class PageNodeStore {
    */
   ElementGroup<Content extends Record<string, Workflo.PageNode.INode>> (
     content: Content,
-    opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
+    opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>,
   ) {
     return this._getGroup<
       this,
@@ -404,11 +404,11 @@ export class PageNodeStore {
     > (
       PageElementGroup,
       {
+        content,
         store: this,
-        content: content,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
   /**
@@ -417,14 +417,14 @@ export class PageNodeStore {
    * The group functions (state check -> hasXXX/hasAnyXXX/containsXXX, state retrieval -> getXXX) supported by the
    * retrieved ValuePageElementGroup are defined in Workflo.IValueElementNode.
    *
-   * @param content an object whose keys are the names of PageNodes managed by the ValuePageElementGroup and whose values
-   * are instances of these PageNodes
+   * @param content an object whose keys are the names of PageNodes managed by the ValuePageElementGroup and whose
+   * values are instances of these PageNodes
    * @param opts the publicly available options used to configure the retrieved ValuePageElementGroup
    * @returns an instance of the retrieved PageElementGroup
    */
   ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(
     content: Content,
-    opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>
+    opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>,
   ) {
     return this._getGroup<
       this,
@@ -436,11 +436,11 @@ export class PageNodeStore {
     > (
       ValuePageElementGroup,
       {
+        content,
         store: this,
-        content: content,
-        ...opts
-      }
-    )
+        ...opts,
+      },
+    );
   }
 
 // Functions to retrieve PageNode instances
@@ -464,28 +464,28 @@ export class PageNodeStore {
     selector: Workflo.XPath,
     type: { new(selector: string, opts: Opts): Type },
     opts: Opts = Object.create(Object.prototype),
-    afterConstruction?: (instance: Type) => void
+    afterConstruction?: (instance: Type) => void,
   ) : Type {
-    const _selector = (selector instanceof XPathBuilder) ? this._xPathBuilder.build() : selector
+    const _selector = (selector instanceof XPathBuilder) ? this._xPathBuilder.build() : selector;
 
     // catch: selector must not contain |
     if (_selector.indexOf('|||') > -1) {
-      throw new Error(`Selector must not contain character sequence '|||': ${_selector}`)
+      throw new Error(`Selector must not contain character sequence '|||': ${_selector}`);
     }
 
-    const id = `${_selector}|||${type}|||${opts.toString()}`
+    const id = `${_selector}|||${type}|||${opts.toString()}`;
 
-    if(!(id in this._instanceCache)) {
-      const result = new type(_selector, opts)
+    if (!(id in this._instanceCache)) {
+      const result = new type(_selector, opts);
 
       if (typeof afterConstruction !== 'undefined') {
-        afterConstruction(result)
+        afterConstruction(result);
       }
 
-      this._instanceCache[id] = result
+      this._instanceCache[id] = result;
     }
 
-    return this._instanceCache[id]
+    return this._instanceCache[id];
   }
 
   /**
@@ -505,14 +505,15 @@ export class PageNodeStore {
     type: { new(selector: string, opts: ElementOptions): ElementType },
     opts: ElementOptions = Object.create(Object.prototype),
   ) : ElementType {
-    return this._get(selector, type, opts)
+    return this._get(selector, type, opts);
   }
 
   /**
    * Creates or retrieves a cached version of a PageElementList instance.
    *
    * @template ListType type of the retrieved PageElementList instance
-   * @template ListOptions type of the opts parameter passed to the constructor of the retrieved PageElementList instance
+   * @template ListOptions type of the opts parameter passed to the constructor of the retrieved PageElementList
+   * instance
    * @param selector the XPath selector of the retrieved PageElementList instance
    * @param type the constructor function of the retrieved PageElementList instance
    * @param opts the opts parameter passed to the constructor of the retrieved PageElementList instance
@@ -527,15 +528,15 @@ export class PageNodeStore {
   ) : ListType {
     return this._get(selector, type, opts, instance => {
       const cloneFunc: CloneFunc<ListType> = cloneSelector => {
-        if ( !cloneSelector ) {
-          cloneSelector = selector
+        if (!cloneSelector) {
+          cloneSelector = selector;
         }
 
-        return this._getList<ListType, ListOptions>(cloneSelector, type, opts)
-      }
+        return this._getList<ListType, ListOptions>(cloneSelector, type, opts);
+      };
 
-      instance.init(cloneFunc)
-    })
+      instance.init(cloneFunc);
+    });
   }
 
   /**
@@ -556,7 +557,7 @@ export class PageNodeStore {
     type: { new(selector: string, opts: MapOptions): MapType },
     opts: MapOptions = Object.create(Object.prototype),
   ) : MapType {
-    return this._get(selector, type, opts)
+    return this._get(selector, type, opts);
   }
 
   /**
@@ -582,345 +583,26 @@ export class PageNodeStore {
     >, Workflo.Store.GroupConstructorKeys >
   > (
     type: { new(id: string, opts: IPageElementGroupOpts<Store, Content>): GroupType },
-    opts: GroupOptions
+    opts: GroupOptions,
   ) : GroupType {
 
     // Build id from group's elements' ids.
     // If two groups have the same content,
     // they are the same.
-    let idStr = ''
+    let idStr = '';
 
     for (const key in opts.content) {
       if (opts.content.hasOwnProperty(key)) {
-        idStr += `${opts.content[key].__getNodeId()};`
+        idStr += `${opts.content[key].__getNodeId()};`;
       }
     }
 
-    const key = `${type.name}:${idStr}`
+    const key = `${type.name}:${idStr}`;
 
     if (!(key in this._instanceCache)) {
-      this._instanceCache[key] = new type(idStr, opts)
+      this._instanceCache[key] = new type(idStr, opts);
     }
 
-    return this._instanceCache[key]
+    return this._instanceCache[key];
   }
 }
-
-// REMOVE THIS - just for testing
-
-// interface IInputOpts<Store extends PageNodeStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
-
-// }
-
-// class Input<
-//   Store extends pageObjects.stores.PageNodeStore,
-// > extends pageObjects.elements.ValuePageElement<
-//   Store, string
-// > {
-
-//   currently: InputCurrently<Store, this>;
-
-//   constructor(selector: string, opts?: IInputOpts<Store>) {
-//     super(selector, opts)
-
-//     this.currently = new InputCurrently(this)
-//   }
-
-//   setValue(value: string) {
-//     this.element.setValue(value)
-
-//     return this
-//   }
-// }
-
-// class InputCurrently<
-//   Store extends pageObjects.stores.PageNodeStore,
-//   PageElementType extends Input<Store>
-// > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
-//   getValue(): string {
-//     return this.element.getValue()
-//   }
-// }
-
-// // achieved mapping type to input value!!!
-
-// class InputStore extends pageObjects.stores.PageNodeStore {
-//   Input(
-//     selector: Workflo.XPath,
-//     opts?: Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>
-//   ) {
-//     return this._getElement<Input<this>, IInputOpts<this>>(
-//       selector,
-//       Input,
-//       {
-//         store: this,
-//         ...opts
-//       }
-//     )
-//   }
-
-//   InputList(
-//     selector: Workflo.XPath,
-//     opts?: Workflo.PickPartial<
-//       pageObjects.elements.IValuePageElementListOpts<
-//         this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
-//       >,
-//       "waitType" | "timeout" | "disableCache" | "identifier",
-//       "elementOptions"
-//     >
-//   ) {
-//     return this.ValueList(
-//       selector,
-//       {
-//         elementOptions: {},
-//         elementStoreFunc: this.Input,
-//         ...opts
-//       }
-//     )
-//   }
-
-//   InputMap<K extends string>(
-//     selector: Workflo.XPath,
-//     opts: Workflo.PickPartial<
-//       pageObjects.elements.IPageElementMapOpts<this, K, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>>,
-//       Workflo.Store.MapPublicKeys,
-//       Workflo.Store.MapPublicPartialKeys
-//     >
-//   ) {
-//     return this.ValueMap(
-//       selector,
-//       {
-//         elementStoreFunc: this.Input,
-//         elementOptions: {},
-//         ...opts
-//       }
-//     )
-//   }
-// }
-
-// const inputStore = new InputStore()
-
-// const innerGroup = pageObjects.stores.pageElement.ValueGroup({
-//   input: inputStore.Input('//input'),
-//   element: inputStore.Element('//div'),
-//   inputList: inputStore.InputList('//input'),
-//   elementList: inputStore.ElementList('//div'),
-//   inputMap: inputStore.InputMap('//input', {
-//     identifier: {
-//       mappingObject: {
-//         x: 'X',
-//         y: 'Y'
-//       },
-//       func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//     }
-//   }),
-//   elementMap: inputStore.ElementMap('//div', {
-//     identifier: {
-//       mappingObject: {
-//         x: 'X',
-//         y: 'Y'
-//       },
-//       func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//     }
-//   }),
-//   elementGroup: inputStore.ElementGroup({
-//     input: new Input('//input'),
-//     element: inputStore.Element('//div'),
-//     inputList: inputStore.InputList('//input'),
-//     elementList: inputStore.ElementList('//div'),
-//     inputMap: inputStore.InputMap('//input', {
-//       identifier: {
-//         mappingObject: {
-//           x: 'X',
-//           y: 'Y'
-//         },
-//         func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//       }
-//     }),
-//     elementMap: inputStore.ElementMap('//div', {
-//       identifier: {
-//         mappingObject: {
-//           x: 'X',
-//           y: 'Y'
-//         },
-//         func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//       }
-//     })
-//   }),
-//   inputGroup: inputStore.ValueGroup({
-//     input: new Input('//input'),
-//     element: inputStore.Element('//div'),
-//     inputList: inputStore.InputList('//input'),
-//     elementList: inputStore.ElementList('//div'),
-//     inputMap: inputStore.InputMap('//input', {
-//       identifier: {
-//         mappingObject: {
-//           x: 'X',
-//           y: 'Y'
-//         },
-//         func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//       }
-//     }),
-//     elementMap: inputStore.ElementMap('//div', {
-//       identifier: {
-//         mappingObject: {
-//           x: 'X',
-//           y: 'Y'
-//         },
-//         func: (mapSelector, mappingValue) => xpath(mapSelector).text(mappingValue)
-//       }
-//     })
-//   })
-// })
-
-// const res = innerGroup.getValue({
-
-// })
-
-// innerGroup.currently.getValue({
-
-// })
-
-// const jodel: Exclude<typeof res, never> = {
-
-// }
-
-// const jodel2: typeof res = {
-
-// }
-
-// const input = innerGroup.$.input
-// const inputList = innerGroup.$.inputList
-
-// const mask: Workflo.PageNode.ValueGroupFilterMaskWN<typeof innerGroup.$> = {
-//   input: false,
-//   inputList: false,
-//   inputMap: {
-//     x: true,
-//     y: false
-//   },
-//   inputGroup: {
-//     input: true,
-//     inputList: [true, false],
-//     inputMap: {
-//       x: true,
-//       y: false
-//     }
-//   }
-// }
-
-// const mask2: Workflo.PageNode.ExtractValueBooleanWN<typeof innerGroup.$> = {
-//   inputGroup: {
-
-//   }
-// }
-
-// class MyStore extends PageNodeStore {
-//   Element(
-//     selector: Workflo.XPath,
-//     opts?: Pick<IMyElementOpts<this>, Workflo.Store.ElementPublicKeys | "testProp">
-//   ) {
-//     return this._getElement<MyElement<this>, IMyElementOpts<this>>(
-//       selector,
-//       MyElement,
-//       {
-//         store: this,
-//         ...opts
-//       }
-//     )
-//   }
-
-//   Input(
-//     selector: Workflo.XPath,
-//     opts?: Pick<IMyInputOpts<this>, Workflo.Store.ElementPublicKeys | "testInputProp">
-//   ) {
-//     return this._getElement<MyInput<this>, IMyInputOpts<this>>(
-//       selector,
-//       MyInput,
-//       {
-//         store: this,
-//         ...opts
-//       }
-//     )
-//   }
-// }
-
-// interface IMyElementOpts<Store extends MyStore> extends IPageElementOpts<Store> {
-//   testProp: string
-// }
-
-// // constructor args structure must remain intact -> 1st arg selector, 2nd arg object with arbitrary structure
-// // that extends baseclass opts structure
-// class MyElement<Store extends MyStore> extends PageElement<Store> {
-
-//   constructor(selector: string, opts: IMyElementOpts<Store>) {
-//     super(selector, opts)
-
-//     this.testProp = opts.testProp
-//   }
-
-//   testProp: string
-// }
-
-// interface IMyInputOpts<Store extends PageNodeStore> extends pageObjects.elements.IValuePageElementOpts<Store> {
-//   testInputProp: string
-// }
-
-// class MyInput<
-//   Store extends MyStore,
-// > extends pageObjects.elements.ValuePageElement<
-//   Store, string
-// > implements MyElement<Store> {
-
-//   currently: MyInputCurrently<Store, this>;
-
-//   testInputProp: string
-//   testProp: string
-
-//   constructor(selector: string, opts?: IMyInputOpts<Store>) {
-//     super(selector, opts)
-
-//     this.testInputProp = opts.testInputProp
-
-//     this.currently = new MyInputCurrently(this)
-//   }
-
-//   setValue(value: string) {
-//     this.element.setValue(value)
-
-//     return this
-//   }
-// }
-
-// class MyInputCurrently<
-//   Store extends MyStore,
-//   PageElementType extends MyInput<Store>
-// > extends pageObjects.elements.ValuePageElementCurrently<Store, PageElementType, string> {
-//   getValue(): string {
-//     return this.element.getValue()
-//   }
-// }
-
-// applyMixins(MyInput, [MyElement]);
-
-
-// function applyMixins(derivedCtor: any, baseCtors: any[]) {
-//   baseCtors.forEach(baseCtor => {
-//       Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-//           derivedCtor.prototype[name] = baseCtor.prototype[name];
-//       });
-//   });
-// }
-
-// const myStore = new MyStore()
-// const element = myStore.Element('//asdf')
-// const input = myStore.Input('//asdf')
-
-// element.testProp = 'asdf';
-
-// input.testInputProp = 'asdf';
-// input.testProp = 'asdf';
-
-// expectElement(input).toHaveValue('asdf')
-
-

@@ -15,21 +15,21 @@ export class XPathBuilder {
   /**
    * Stores the singleton instance of XPathBuilder.
    */
-  private static _instance: XPathBuilder
+  private static _instance: XPathBuilder;
   /**
    * Stores the currently constructed XPath expression.
    */
-  private _selector: string
+  private _selector: string;
 
   /**
    * Returns a singleton instance of XPathBuilder.
    */
   static getInstance() {
     if (typeof XPathBuilder._instance === 'undefined') {
-      XPathBuilder._instance = new XPathBuilder()
+      XPathBuilder._instance = new XPathBuilder();
     }
 
-    return XPathBuilder._instance
+    return XPathBuilder._instance;
   }
 
   /**
@@ -44,8 +44,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   reset(selector: string) {
-    this._selector = selector
-    return this
+    this._selector = selector;
+    return this;
   }
 
   /**
@@ -55,8 +55,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   append(appendedXPath: string) {
-    this._selector = `${this._selector}${appendedXPath}`
-    return this
+    this._selector = `${this._selector}${appendedXPath}`;
+    return this;
   }
 
   /**
@@ -69,7 +69,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   child(childSelector: string) {
-    return this.append(childSelector)
+    return this.append(childSelector);
   }
 
   /**
@@ -84,19 +84,19 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   constraint(constraintSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder) {
-    if ( !builderFunc ) {
-      this._selector = `${this._selector}[${constraintSelector}]`
+    if (!builderFunc) {
+      this._selector = `${this._selector}[${constraintSelector}]`;
     } else {
-      const outerSelector = this.build()
+      const outerSelector = this.build();
 
-      this.reset(constraintSelector)
+      this.reset(constraintSelector);
 
-      this._selector = `${outerSelector}[${builderFunc(this).build()}]`
+      this._selector = `${outerSelector}[${builderFunc(this).build()}]`;
 
-      this.reset(this._selector)
+      this.reset(this._selector);
     }
 
-    return this
+    return this;
   }
 
    /**
@@ -104,16 +104,16 @@ export class XPathBuilder {
    * the passed childSelector.
    *
    * Optionally, a builderFunc can be used to apply XPath modification functions to the child selector instead of
-   * the "outer" selector. To do so, builderFunc is passed an XPathBuilder instance configured to use the `childSelector`
-   * as a new root for the currently constructed XPath expression.
+   * the "outer" selector. To do so, builderFunc is passed an XPathBuilder instance configured to use the
+   * `childSelector` as a new root for the currently constructed XPath expression.
    *
    * @param childSelector a plain XPath constraint appended to the currently constructed XPath expression
    * @param builderFunc can be used to apply XPath modification functions to `childSelector`
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   hasChild(childSelector: string, builderFunc?: (xpath: XPathBuilder) => XPathBuilder) {
-    this.constraint(`.${childSelector}`, builderFunc)
-    return this
+    this.constraint(`.${childSelector}`, builderFunc);
+    return this;
   }
 
   /**
@@ -124,8 +124,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   text(text: string) {
-    this._selector = `${this._selector}[. = '${text}']`
-    return this
+    this._selector = `${this._selector}[. = '${text}']`;
+    return this;
   }
 
   /**
@@ -136,8 +136,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notText(text: string) {
-    this._selector = `${this._selector}[not(. = '${text}')]`
-    return this
+    this._selector = `${this._selector}[not(. = '${text}')]`;
+    return this;
   }
 
   /**
@@ -148,8 +148,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   textContains(text: string) {
-    this._selector = `${this._selector}[contains(.,'${text}')]`
-    return this
+    this._selector = `${this._selector}[contains(.,'${text}')]`;
+    return this;
   }
 
   /**
@@ -160,8 +160,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notTextContains(text: string) {
-    this._selector = `${this._selector}[not(contains(.,'${text}'))]`
-    return this
+    this._selector = `${this._selector}[not(contains(.,'${text}'))]`;
+    return this;
   }
 
   /**
@@ -177,12 +177,12 @@ export class XPathBuilder {
    */
   attribute(name: string, value?: string) {
     if (value) {
-      this._selector = `${this._selector}[@${name}='${value}']`
+      this._selector = `${this._selector}[@${name}='${value}']`;
     } else {
-      this._selector = `${this._selector}[@${name}]`
+      this._selector = `${this._selector}[@${name}]`;
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -198,12 +198,12 @@ export class XPathBuilder {
    */
   notAttribute(name: string, value?: string) {
     if (value) {
-      this._selector = `${this._selector}[not(@${name}='${value}')]`
+      this._selector = `${this._selector}[not(@${name}='${value}')]`;
     } else {
-      this._selector = `${this._selector}[not(@${name})]`
+      this._selector = `${this._selector}[not(@${name})]`;
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -218,8 +218,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   attributeContains(name: string, value: string) {
-    this._selector = `${this._selector}[contains(@${name},'${value}')]`
-    return this
+    this._selector = `${this._selector}[contains(@${name},'${value}')]`;
+    return this;
   }
 
   /**
@@ -234,8 +234,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notAttributeContains(name: string, value: string) {
-    this._selector = `${this._selector}[not(contains(@${name},'${value}'))]`
-    return this
+    this._selector = `${this._selector}[not(contains(@${name},'${value}'))]`;
+    return this;
   }
 
   /**
@@ -249,7 +249,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   id(id?: string) {
-    return this.attribute('id', id)
+    return this.attribute('id', id);
   }
 
   /**
@@ -263,7 +263,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notId(id?: string) {
-    return this.notAttribute('id', id)
+    return this.notAttribute('id', id);
   }
 
   /**
@@ -275,7 +275,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   idContains(id: string) {
-    return this.attributeContains('id', id)
+    return this.attributeContains('id', id);
   }
 
   /**
@@ -287,7 +287,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notIdContains(id: string) {
-    return this.notAttributeContains('id', id)
+    return this.notAttributeContains('id', id);
   }
 
   /**
@@ -301,11 +301,12 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   class(className?: string) {
-    return this.attribute('class', className)
+    return this.attribute('class', className);
   }
 
   /**
-   * Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called 'class'.
+   * Restricts the currently constructed XPath expression to elements which do not have an HTML attribute called
+   * 'class'.
    *
    * Optionally, if also passing a class name, the currently constructed XPath expression is restricted to elements
    * which have an HTML 'class' attribute with a value that does not equal the passed class name.
@@ -315,7 +316,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notClass(className?: string) {
-    return this.notAttribute('class', className)
+    return this.notAttribute('class', className);
   }
 
   /**
@@ -327,7 +328,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   classContains(className: string) {
-    return this.attributeContains('class', className)
+    return this.attributeContains('class', className);
   }
 
   /**
@@ -339,7 +340,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notClassContains(className: string) {
-    return this.notAttributeContains('class', className)
+    return this.notAttributeContains('class', className);
   }
 
   /**
@@ -353,7 +354,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   name(name?: string) {
-    return this.attribute('name', name)
+    return this.attribute('name', name);
   }
 
   /**
@@ -362,12 +363,12 @@ export class XPathBuilder {
    * Optionally, if also passing a name, the currently constructed XPath expression is restricted to elements
    * which have an HTML 'name' attribute with a value that does not equal the passed name.
    *
-   * @param name a name which must not equal the value of the HTML 'name' attribute of elements selected by the currently
-   * constructed XPath expression
+   * @param name a name which must not equal the value of the HTML 'name' attribute of elements selected by the
+   * currently constructed XPath expression
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notName(name?: string) {
-    return this.notAttribute('name', name)
+    return this.notAttribute('name', name);
   }
 
   /**
@@ -379,7 +380,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   nameContains(name: string) {
-    return this.attributeContains('name', name)
+    return this.attributeContains('name', name);
   }
 
   /**
@@ -391,7 +392,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notNameContains(name: string) {
-    return this.notAttributeContains('name', name)
+    return this.notAttributeContains('name', name);
   }
 
   /**
@@ -405,7 +406,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   type(type?: string) {
-    return this.attribute('type', type)
+    return this.attribute('type', type);
   }
 
   /**
@@ -419,7 +420,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notType(type?: string) {
-    return this.notAttribute('type', type)
+    return this.notAttribute('type', type);
   }
 
   /**
@@ -431,7 +432,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   typeContains(type: string) {
-    return this.attributeContains('type', type)
+    return this.attributeContains('type', type);
   }
 
   /**
@@ -443,7 +444,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notTypeContains(type: string) {
-    return this.notAttributeContains('type', type)
+    return this.notAttributeContains('type', type);
   }
 
   /**
@@ -452,7 +453,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   checked() {
-    return this.attribute('checked')
+    return this.attribute('checked');
   }
 
   /**
@@ -462,7 +463,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notChecked() {
-    return this.notAttribute('checked')
+    return this.notAttribute('checked');
   }
 
   /**
@@ -471,7 +472,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   disabled() {
-    return this.attribute('disabled')
+    return this.attribute('disabled');
   }
 
   /**
@@ -481,7 +482,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notDisabled() {
-    return this.notAttribute('disabled')
+    return this.notAttribute('disabled');
   }
 
   /**
@@ -490,7 +491,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   selected() {
-    return this.attribute('selected')
+    return this.attribute('selected');
   }
 
   /**
@@ -500,7 +501,7 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   notSelected() {
-    return this.notAttribute('selected')
+    return this.notAttribute('selected');
   }
 
   /**
@@ -514,8 +515,8 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   levelIndex(levelIndex: number) {
-    this._selector = `${this._selector}[${levelIndex}]`
-    return this
+    this._selector = `${this._selector}[${levelIndex}]`;
+    return this;
   }
 
   /**
@@ -527,10 +528,10 @@ export class XPathBuilder {
    * @returns the singleton instance of XPathBuilder storing the currently constructed XPath expression
    */
   index(index: number) {
-    const selector = `(${this.build()})[${index}]`
-    this.reset(selector)
+    const selector = `(${this.build()})[${index}]`;
+    this.reset(selector);
 
-    return this
+    return this;
   }
 
   /**
@@ -539,7 +540,7 @@ export class XPathBuilder {
    * @returns the built XPath string
    */
   build() {
-    const selector = this._selector
-    return selector
+    const selector = this._selector;
+    return selector;
   }
 }

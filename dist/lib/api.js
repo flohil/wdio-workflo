@@ -11,10 +11,10 @@ const retries = testinfo.retries;
 const bail = testinfo.bail;
 const storyMap = new Map();
 const words = {
-    'Given': 'Given',
-    'When': 'When',
-    'Then': 'Then',
-    'And': 'And',
+    Given: 'Given',
+    When: 'When',
+    Then: 'Then',
+    And: 'And',
 };
 const STACKTRACE_FILTER = /(node_modules(\/|\\)(\w+)*|wdio-sync\/build|- - - - -)/g;
 const STACKTRACE_FILTER_2 = /    at.*:\d+:\d+/;
@@ -42,7 +42,7 @@ function shouldRunThen(story, criteria) {
     // check if spec is included in filters
     // do not execute spec if it is not in testcase filters but in validated in other testcases
     const testcases = traceInfo.specs[story].criteriaValidationFiles[criteria.toString()].testcaseIds;
-    let inSomeTestcase = false;
+    const inSomeTestcase = false;
     if (!manualOnly) {
         for (const testcase in testcases) {
             if (testcase in executionFilters.testcases) {
@@ -76,17 +76,17 @@ exports.Story = (id, description, metadata, bodyFunc, jasmineFunc = describe) =>
     const fullStoryName = `${id} - ${description}`;
     this.__currentStoryId = id;
     storyMap.set(id, {
+        description,
+        metadata,
         descriptionStack: { givens: [], whens: [] },
-        metadata: metadata,
         featureName: this.__currentFeature,
         storyName: fullStoryName,
-        description: description,
         insideWhenSequence: false,
         whenSequenceLengths: [],
         whenRecLevel: 0,
         insideGivenSequence: false,
         givenSequenceLengths: [],
-        givenRecLevel: 0
+        givenRecLevel: 0,
     });
     if (specsInclude(id)) {
         jasmineFunc(fullStoryName, bodyFunc);
@@ -137,10 +137,10 @@ exports.Given = (description, bodyFunc) => {
     // increase length of sequence in current recursion level
     story.givenSequenceLengths[story.givenSequenceLengths.length - 1]++;
     return {
-        "And": (description, bodyFunc) => {
+        And: (description, bodyFunc) => {
             story.insideGivenSequence = true;
             return exports.Given.call(this, description, bodyFunc);
-        }
+        },
     };
 };
 exports.When = (description, bodyFunc) => {
@@ -182,10 +182,10 @@ exports.When = (description, bodyFunc) => {
     // increase length of sequence in current recursion level
     story.whenSequenceLengths[story.whenSequenceLengths.length - 1]++;
     return {
-        "And": (description, bodyFunc) => {
+        And: (description, bodyFunc) => {
             story.insideWhenSequence = true;
             return exports.When.call(this, description, bodyFunc);
-        }
+        },
     };
 };
 exports.Then = (id, description, jasmineFunc = it, skip = false) => {
@@ -195,10 +195,10 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
         return;
     }
     const stepFunc = (title) => {
-        process.send({ event: 'step:start', title: title });
+        process.send({ title, event: 'step:start' });
         process.send({ event: 'step:end' });
     };
-    const reduceFunc = (acc, cur) => acc + `\n${words.And} ` + cur;
+    const reduceFunc = (acc, cur) => `${acc}\n${words.And} ${cur}`;
     const givenDescriptions = [`${words.Given} ${story.descriptionStack.givens[0]}`]
         .concat(story.descriptionStack.givens
         .slice(1, story.descriptionStack.givens.length)
@@ -213,10 +213,10 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
     const bodyFunc = () => {
         process.send({ event: 'test:setCurrentId', id: `${storyId}|${id}`, spec: true, descriptions: {
                 spec: story.description,
-                criteria: description
+                criteria: description,
             } }); // split at last | occurence
         // allure report metadata
-        process.send({ event: 'test:meta', epic: `Specs` });
+        process.send({ event: 'test:meta', epic: 'Specs' });
         process.send({ event: 'test:meta', feature: `${story.featureName}` });
         process.send({ event: 'test:meta', story: `${story.storyName}` });
         process.send({ event: 'test:meta', issue: story.metadata.issues });
@@ -227,8 +227,8 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
         // for last allure step (then), check if results where correct
         process.send({ event: 'step:start', title: allDescriptions[allDescriptions.length - 1] });
         process.send({ event: 'step:end', validate: {
+                storyId,
                 criteriaId: id,
-                storyId: storyId
             } });
     };
     const testData = {
@@ -237,8 +237,8 @@ exports.Then = (id, description, jasmineFunc = it, skip = false) => {
             feature: story.featureName,
             story: story.storyName,
             issue: story.metadata.issues,
-            severity: story.metadata.severity
-        }
+            severity: story.metadata.severity,
+        },
     };
     jasmineFunc(JSON.stringify(testData), skipFunc || bodyFunc);
 };
@@ -271,13 +271,13 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
     const fullId = `${fullSuiteId}.${description}`;
     this.__stepStack = [];
     const testData = {
-        title: description
+        title: description,
     };
     let remainingTries = retries;
     let performedTries = 0;
     const _bodyFunc = () => {
         process.send({ event: 'test:setCurrentId', id: fullId, testcase: true });
-        process.send({ event: 'test:meta', epic: `Testcases` });
+        process.send({ event: 'test:meta', epic: 'Testcases' });
         process.send({ event: 'test:meta', story: fullSuiteId });
         // allure report metadata
         if (metadata.bugs) {
@@ -313,13 +313,13 @@ exports.testcase = (description, metadata, bodyFunc, jasmineFunc = it) => {
                                 message: error.message,
                                 stack: cleanStack(error.stack),
                                 screenshotFilename: undefined,
-                                screenshotId: undefined
+                                screenshotId: undefined,
                             };
                             if (global.errorScreenshotFilename) {
                                 assertion.screenshotFilename = global.errorScreenshotFilename,
                                     assertion.screenshotId = global.screenshotId++;
                             }
-                            process.send({ event: 'retry:broken', assertion: assertion, retry: performedTries });
+                            process.send({ assertion, event: 'retry:broken', retry: performedTries });
                         }
                         remainingTries--;
                     }
@@ -346,20 +346,20 @@ exports.xtestcase = (description, metadata, bodyFunc) => {
     exports.testcase(description, metadata, () => { pending(); });
 };
 const _when = function (step, prefix) {
-    //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
+    // process.send({event: 'step:start', title: `${prefix} ${step.description}`})
     step.__execute(prefix);
-    //process.send({event: 'step:end'})
+    // process.send({event: 'step:end'})
     return {
-        "and": step => _when(step, words.And.toLowerCase())
+        and: step => _when(step, words.And.toLowerCase()),
     };
 };
 const _given = function (step, prefix) {
-    //process.send({event: 'step:start', title: `${prefix} ${step.description}`})
+    // process.send({event: 'step:start', title: `${prefix} ${step.description}`})
     step.__execute(prefix);
-    //process.send({event: 'step:end'})
+    // process.send({event: 'step:end'})
     return {
-        "and": step => _given(step, words.And.toLowerCase()),
-        "when": step => _when(step, words.When)
+        and: step => _given(step, words.And.toLowerCase()),
+        when: step => _when(step, words.When),
     };
 };
 exports.given = function (step) {
@@ -367,9 +367,9 @@ exports.given = function (step) {
 };
 exports.validate = function (specObj, func) {
     const validateContainer = {
-        specObj: specObj
+        specObj,
     };
-    process.send({ event: 'validate:start', specObj: specObj });
+    process.send({ specObj, event: 'validate:start' });
     const _process = process;
     if (typeof _process.workflo === 'undefined') {
         _process.workflo = {};
@@ -377,7 +377,7 @@ exports.validate = function (specObj, func) {
     _process.workflo.specObj = specObj;
     process.send({ event: 'step:start', title: `validate: ${JSON.stringify(specObj)}` });
     func();
-    process.send({ event: 'validate:end', specObj: specObj });
+    process.send({ specObj, event: 'validate:end' });
     process.send({ event: 'step:end', type: 'validateEnd' });
     _process.workflo.specObj = undefined;
 };

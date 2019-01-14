@@ -1,4 +1,4 @@
-import { PageElement, IPageElementOpts, PageElementList, IPageElementListOpts, PageElementMap, IPageElementMapOpts, PageElementGroup, IPageElementGroupOpts, ValuePageElementGroup, ValuePageElement, IValuePageElementOpts, IValuePageElementListOpts, ValuePageElementList } from '../page_elements';
+import { IPageElementGroupOpts, IPageElementListOpts, IPageElementMapOpts, IPageElementOpts, IValuePageElementListOpts, IValuePageElementOpts, PageElement, PageElementGroup, PageElementList, PageElementMap, ValuePageElement, ValuePageElementGroup, ValuePageElementList } from '../page_elements';
 import { XPathBuilder } from '../builders';
 import { IValuePageElementMapOpts, ValuePageElementMap } from '../page_elements/ValuePageElementMap';
 /**
@@ -50,7 +50,7 @@ export declare class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved PageElement
      * @returns an instance of the retrieved PageElement
      */
-    ExistElement(selector: Workflo.XPath, opts?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>): PageElement<this>;
+    ExistElement(selector: Workflo.XPath, opts?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, 'waitType'>>): PageElement<this>;
     /**
      * Retrieves an instance of a PageElementList from the store that manages any instance of PageElement which inherits
      * from the PageElement class.
@@ -104,7 +104,7 @@ export declare class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved PageElementList
      * @returns an instance of the retrieved PageElementList
      */
-    ExistElementList(selector: Workflo.XPath, opts?: Workflo.PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>, Exclude<Workflo.Store.ListPublicKeys, "waitType">, Workflo.Store.ListPublicPartialKeys>): PageElementList<this, PageElement<this>, {}>;
+    ExistElementList(selector: Workflo.XPath, opts?: Workflo.PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>, Exclude<Workflo.Store.ListPublicKeys, 'waitType'>, Workflo.Store.ListPublicPartialKeys>): PageElementList<this, PageElement<this>, {}>;
     /**
      * Retrieves an instance of a PageElementMap from the store that manages any instance of PageElement which inherits
      * from the PageElement class.
@@ -134,7 +134,7 @@ export declare class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved ValuePageElementMap
      * @returns an instance of the retrieved ValuePageElementMap
      */
-    protected ValueMap<K extends string, PageElementType extends ValuePageElement<this, ReturnType<PageElementType["getValue"]>>, PageElementOpts extends Pick<IValuePageElementOpts<this>, Workflo.Store.ElementPublicKeys>>(selector: Workflo.XPath, opts: Pick<IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>, Workflo.Store.MapConstructorKeys>): ValuePageElementMap<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>;
+    protected ValueMap<K extends string, PageElementType extends ValuePageElement<this, ReturnType<PageElementType['getValue']>>, PageElementOpts extends Pick<IValuePageElementOpts<this>, Workflo.Store.ElementPublicKeys>>(selector: Workflo.XPath, opts: Pick<IValuePageElementMapOpts<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType['getValue']>>, Workflo.Store.MapConstructorKeys>): ValuePageElementMap<this, K, PageElementType, PageElementOpts, ReturnType<PageElementType["getValue"]>>;
     /**
      * Retrieves an instance of a PageElementMap from the store that manages PageElement instances of the type
      * PageElement.
@@ -158,7 +158,7 @@ export declare class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved PageElementMap
      * @returns an instance of the retrieved PageElementMap
      */
-    ExistElementMap<K extends string>(selector: Workflo.XPath, opts: Workflo.PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>>, Workflo.Store.MapPublicKeys, Workflo.Store.MapPublicPartialKeys>): PageElementMap<this, K, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "customScroll">>;
+    ExistElementMap<K extends string>(selector: Workflo.XPath, opts: Workflo.PickPartial<IPageElementMapOpts<this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, 'waitType'>>>, Workflo.Store.MapPublicKeys, Workflo.Store.MapPublicPartialKeys>): PageElementMap<this, K, PageElement<this>, Pick<IPageElementOpts<this>, "timeout" | "customScroll">>;
     /**
      * Retrieves an instance of a PageElementGroup from the store.
      *
@@ -177,8 +177,8 @@ export declare class PageNodeStore {
      * The group functions (state check -> hasXXX/hasAnyXXX/containsXXX, state retrieval -> getXXX) supported by the
      * retrieved ValuePageElementGroup are defined in Workflo.IValueElementNode.
      *
-     * @param content an object whose keys are the names of PageNodes managed by the ValuePageElementGroup and whose values
-     * are instances of these PageNodes
+     * @param content an object whose keys are the names of PageNodes managed by the ValuePageElementGroup and whose
+     * values are instances of these PageNodes
      * @param opts the publicly available options used to configure the retrieved ValuePageElementGroup
      * @returns an instance of the retrieved PageElementGroup
      */
@@ -212,7 +212,8 @@ export declare class PageNodeStore {
      * Creates or retrieves a cached version of a PageElementList instance.
      *
      * @template ListType type of the retrieved PageElementList instance
-     * @template ListOptions type of the opts parameter passed to the constructor of the retrieved PageElementList instance
+     * @template ListOptions type of the opts parameter passed to the constructor of the retrieved PageElementList
+     * instance
      * @param selector the XPath selector of the retrieved PageElementList instance
      * @param type the constructor function of the retrieved PageElementList instance
      * @param opts the opts parameter passed to the constructor of the retrieved PageElementList instance

@@ -1,24 +1,24 @@
-import { PageNodeStore } from '../stores'
 import {
-  PageElementGroup,
   IPageElementGroupOpts,
+  PageElementGroup,
   PageElementGroupCurrently,
   PageElementGroupEventually,
-  PageElementGroupWait
+  PageElementGroupWait,
 } from '.';
+import { PageNodeStore } from '../stores';
 
 /**
  * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
  * ValuePageElementGroup's content.
  */
-type ExtractValue<Content extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<Content>
+type ExtractValue<Content extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<Content>;
 
 /**
  * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
  * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
  */
 type ExtractValueBoolean<Content extends {[key: string]: Workflo.PageNode.INode}> =
-Workflo.PageNode.ExtractValueBoolean<Content>
+Workflo.PageNode.ExtractValueBoolean<Content>;
 
 /**
  * This interface is implemented by ValuePageElement, ValuePageElementList, ValuePageElementMap and
@@ -38,7 +38,7 @@ Workflo.PageNode.ExtractValueBoolean<Content>
  * - containsValue
  */
 type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> =
-Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>
+Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>;
 
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementGroup.
@@ -68,9 +68,9 @@ export class ValuePageElementGroup<
 > extends PageElementGroup<Store, Content>
 implements ValueElementNode<Content> {
 
-  readonly currently: ValuePageElementGroupCurrently<Store, Content, this>
-  readonly wait: ValuePageElementGroupWait<Store, Content, this>
-  readonly eventually: ValuePageElementGroupEventually<Store, Content, this>
+  readonly currently: ValuePageElementGroupCurrently<Store, Content, this>;
+  readonly wait: ValuePageElementGroupWait<Store, Content, this>;
+  readonly eventually: ValuePageElementGroupEventually<Store, Content, this>;
 
   /**
    * ValuePageElementGroup extends PageElementGroup with the possibility to set, retrieve and check the values of
@@ -82,16 +82,16 @@ implements ValueElementNode<Content> {
   constructor(id: string, {
     ...superOpts
   }: IValuePageElementGroupOpts<Store, Content>) {
-    super(id, superOpts)
+    super(id, superOpts);
 
-    this.currently = new ValuePageElementGroupCurrently(this)
-    this.wait = new ValuePageElementGroupWait(this)
-    this.eventually = new ValuePageElementGroupEventually(this)
+    this.currently = new ValuePageElementGroupCurrently(this);
+    this.wait = new ValuePageElementGroupWait(this);
+    this.eventually = new ValuePageElementGroupEventually(this);
   }
 
   /**
-   * Returns the values of all PageNodes managed by ValuePageElementGroup as a result structure after executing the initial
-   * waiting condition of each PageNode.
+   * Returns the values of all PageNodes managed by ValuePageElementGroup as a result structure after executing the
+   * initial waiting condition of each PageNode.
    *
    * @param filterMask can be used to skip the invocation of the `getValue` function for some or all managed
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
@@ -100,13 +100,13 @@ implements ValueElementNode<Content> {
     return this.eachGet<
       ValueElementNode<Content>, ExtractValue<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>
     > (
-      isIValueElementNode, ({node, filter}) => node.getValue(filter), filterMask
-    )
+      isIValueElementNode, ({ node, filter }) => node.getValue(filter), filterMask,
+    );
   }
 
   /**
-   * Returns the 'hasValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after executing
-   * the initial waiting condition of each PageNode.
+   * Returns the 'hasValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after
+   * executing the initial waiting condition of each PageNode.
    *
    * A ValuePageElement's 'hasValue' status is set to true if its actual value equals the expected value.
    *
@@ -114,13 +114,13 @@ implements ValueElementNode<Content> {
    */
   getHasValue(values: ExtractValue<Content>) {
     return this.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
-      isIValueElementNode, ({node, expected}) => node.getHasValue(expected), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.getHasValue(expected), values,
+    );
   }
 
   /**
-   * Returns the 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after performing
-   * the initial waiting condition of each PageNode.
+   * Returns the 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after
+   * performing the initial waiting condition of each PageNode.
    *
    * A ValuePageElement's 'hasAnyValue' status is set to true if the ValuePageElement has any value.
    *
@@ -131,8 +131,8 @@ implements ValueElementNode<Content> {
     return this.eachCompare<
       ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>, ExtractValueBoolean<Content>
     > (
-      isIValueElementNode, ({node, filter}) => node.getHasAnyValue(filter), filterMask, true
-    )
+      isIValueElementNode, ({ node, filter }) => node.getHasAnyValue(filter), filterMask, true,
+    );
   }
 
   /**
@@ -145,8 +145,8 @@ implements ValueElementNode<Content> {
    */
   getContainsValue(values: ExtractValue<Content>) {
     return this.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
-      isIValueElementNode, ({node, expected}) => node.getContainsValue(expected), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.getContainsValue(expected), values,
+    );
   }
 
   /**
@@ -157,8 +157,8 @@ implements ValueElementNode<Content> {
    */
   setValue(values: ExtractValue<Content>) {
     return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, ({node, value}) => node.setValue(value), values
-    )
+      isIValueElementNode, ({ node, value }) => node.setValue(value), values,
+    );
   }
 }
 
@@ -168,8 +168,8 @@ implements ValueElementNode<Content> {
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all `currently`
- * functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupCurrently defines all
+ * `currently` functions
  */
 class ValuePageElementGroupCurrently<
   Store extends PageNodeStore,
@@ -187,8 +187,8 @@ class ValuePageElementGroupCurrently<
     return this._node.eachGet<
       ValueElementNode<Content>, ExtractValue<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>
     > (
-      isIValueElementNode, ({node, filter}) => node.currently.getValue(filter), filterMask
-    )
+      isIValueElementNode, ({ node, filter }) => node.currently.getValue(filter), filterMask,
+    );
   }
 
   /**
@@ -200,8 +200,8 @@ class ValuePageElementGroupCurrently<
    */
   getHasValue(values: ExtractValue<Content>) {
     return this._node.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
-      isIValueElementNode, ({node, expected}) => node.currently.getHasValue(expected), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.currently.getHasValue(expected), values,
+    );
   }
 
   /**
@@ -216,8 +216,8 @@ class ValuePageElementGroupCurrently<
     return this._node.eachCompare<
       ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>, ExtractValueBoolean<Content>
     > (
-      isIValueElementNode, ({node, filter}) => node.currently.getHasAnyValue(filter), filterMask, true
-    )
+      isIValueElementNode, ({ node, filter }) => node.currently.getHasAnyValue(filter), filterMask, true,
+    );
   }
 
   /**
@@ -229,19 +229,20 @@ class ValuePageElementGroupCurrently<
    */
   getContainsValue(values: ExtractValue<Content>) {
     return this._node.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
-      isIValueElementNode, ({node, expected}) => node.currently.getContainsValue(expected), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.currently.getContainsValue(expected), values,
+    );
   }
 
   /**
-   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently equal the expected values.
+   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently equal the expected
+   * values.
    *
    * @param values the expected values supposed to equal the actual values
    */
   hasValue(values: ExtractValue<Content>) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, ({node, expected}) => node.currently.hasValue(expected), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.currently.hasValue(expected), values,
+    );
   }
 
   /**
@@ -252,19 +253,20 @@ class ValuePageElementGroupCurrently<
    */
   hasAnyValue(filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) {
     return this._node.eachCheck<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
-      isIValueElementNode, ({node, filter}) => node.currently.hasAnyValue(filter), filterMask, true
-    )
+      isIValueElementNode, ({ node, filter }) => node.currently.hasAnyValue(filter), filterMask, true,
+    );
   }
 
   /**
-   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently contain the expected values.
+   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently contain the expected
+   * values.
    *
    * @param values the expected values supposed to be contained in the actual values
    */
   containsValue(values: ExtractValue<Content>) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, ({node, expected}) => node.currently.containsValue(expected), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.currently.containsValue(expected), values,
+    );
   }
 
   /**
@@ -280,8 +282,8 @@ class ValuePageElementGroupCurrently<
        */
       hasValue: (values: ExtractValue<Content>) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, ({node, expected}) => node.currently.not.hasValue(expected), values
-        )
+          isIValueElementNode, ({ node, expected }) => node.currently.not.hasValue(expected), values,
+        );
       },
       /**
        * Returns true if all PageNodes managed by ValuePageElementGroup currently do not have any value.
@@ -291,21 +293,21 @@ class ValuePageElementGroupCurrently<
        */
       hasAnyValue: (filterMask?: Workflo.PageNode.ValueGroupFilterMask<Content>) => {
         return this._node.eachCheck<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
-          isIValueElementNode, ({node, filter}) => node.currently.not.hasAnyValue(filter), filterMask, true
-        )
+          isIValueElementNode, ({ node, filter }) => node.currently.not.hasAnyValue(filter), filterMask, true,
+        );
       },
       /**
-       * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain the
-       * expected values.
+       * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain
+       * the expected values.
        *
        * @param values the expected values supposed not to be contained in the actual values
        */
       containsValue: (values: ExtractValue<Content>) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, ({node, expected}) => node.currently.not.containsValue(expected), values
-        )
-      }
-    }
+          isIValueElementNode, ({ node, expected }) => node.currently.not.containsValue(expected), values,
+        );
+      },
+    };
   }
 }
 
@@ -315,7 +317,8 @@ class ValuePageElementGroupCurrently<
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait` functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupWait defines all `wait`
+ * functions
  */
 class ValuePageElementGroupWait<
   Store extends PageNodeStore,
@@ -339,8 +342,8 @@ class ValuePageElementGroupWait<
    */
   hasValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, ({node, expected}) => node.wait.hasValue(expected, opts), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.wait.hasValue(expected, opts), values,
+    );
   }
 
   /**
@@ -358,14 +361,14 @@ class ValuePageElementGroupWait<
    * @returns this (an instance of ValuePageElementGroup)
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.ValueGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
       isIValueElementNode,
-      ({node, filter}) => node.wait.hasAnyValue({filterMask: filter, ...otherOpts}),
+      ({ node, filter }) => node.wait.hasAnyValue({ filterMask: filter, ...otherOpts }),
       filterMask,
-      true
-    )
+      true,
+    );
   }
 
   /**
@@ -384,8 +387,8 @@ class ValuePageElementGroupWait<
    */
   containsValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, ({node, expected}) => node.wait.containsValue(expected, opts), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.wait.containsValue(expected, opts), values,
+    );
   }
 
   /**
@@ -409,8 +412,8 @@ class ValuePageElementGroupWait<
        */
       hasValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, ({node, expected}) => node.wait.hasValue(expected, opts), values
-        )
+          isIValueElementNode, ({ node, expected }) => node.wait.hasValue(expected, opts), values,
+        );
       },
       /**
        * Waits for all PageNodes managed by ValuePageElementGroup not to have any value.
@@ -427,17 +430,18 @@ class ValuePageElementGroupWait<
        * @returns this (an instance of ValuePageElementGroup)
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.ValueGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait<ValueElementNode<Content>, Workflo.PageNode.ValueGroupFilterMask<Content>> (
           isIValueElementNode,
-          ({node, filter}) => node.wait.hasAnyValue({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.wait.hasAnyValue({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
-       * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected values.
+       * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected
+       * values.
        *
        * Throws an error if the condition is not met within a specific timeout.
        *
@@ -452,10 +456,10 @@ class ValuePageElementGroupWait<
        */
       containsValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, ({node, expected}) => node.wait.containsValue(expected, opts), values
-        )
-      }
-    }
+          isIValueElementNode, ({ node, expected }) => node.wait.containsValue(expected, opts), values,
+        );
+      },
+    };
   }
 }
 
@@ -465,8 +469,8 @@ class ValuePageElementGroupWait<
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes
  * @template Content an arbitrary object structure of PageNode instances as values and the names used to identify
  * these PageNodes as keys
- * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all `eventually`
- * functions
+ * @template GroupType type of the ValuePageElementGroup for which ValuePageElementGroupEventually defines all
+ * `eventually` functions
  */
 class ValuePageElementGroupEventually<
   Store extends PageNodeStore,
@@ -475,8 +479,8 @@ class ValuePageElementGroupEventually<
 > extends PageElementGroupEventually<Store, Content, GroupType> {
 
   /**
-   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually equal the expected values
-   * within a specific timeout.
+   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually equal the expected
+   * values within a specific timeout.
    *
    * @param values the expected values supposed to equal the actual values
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -487,8 +491,8 @@ class ValuePageElementGroupEventually<
    */
   hasValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, ({node, expected}) => node.eventually.hasValue(expected, opts), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.eventually.hasValue(expected, opts), values,
+    );
   }
 
   /**
@@ -502,19 +506,19 @@ class ValuePageElementGroupEventually<
    * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
   hasAnyValue(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck<ValueElementNode<Content>> (
       isIValueElementNode,
-      ({node, filter}) => node.eventually.hasAnyValue({filterMask: filter, ...otherOpts}),
+      ({ node, filter }) => node.eventually.hasAnyValue({ filterMask: filter, ...otherOpts }),
       filterMask,
-      true
-    )
+      true,
+    );
   }
 
   /**
-   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually contain the expected values
-   * within a specific timeout.
+   * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually contain the expected
+   * values within a specific timeout.
    *
    * @param values the expected values supposed to be contained in the actual values
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -525,8 +529,8 @@ class ValuePageElementGroupEventually<
    */
   containsValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-      isIValueElementNode, ({node, expected}) => node.eventually.containsValue(expected, opts), values
-    )
+      isIValueElementNode, ({ node, expected }) => node.eventually.containsValue(expected, opts), values,
+    );
   }
 
   /**
@@ -547,12 +551,12 @@ class ValuePageElementGroupEventually<
        */
       hasValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, ({node, expected}) => node.eventually.not.hasValue(expected, opts), values
-        )
+          isIValueElementNode, ({ node, expected }) => node.eventually.not.hasValue(expected, opts), values,
+        );
       },
       /**
-       * Returns true if all PageNodes managed by ValuePageElementGroup eventually do not have any value within a specific
-       * timeout.
+       * Returns true if all PageNodes managed by ValuePageElementGroup eventually do not have any value within a
+       * specific timeout.
        *
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyValue` function for
        * some or all managed PageNodes, the `timeout` within which the condition is expected to be met and the
@@ -562,18 +566,18 @@ class ValuePageElementGroupEventually<
        * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
       hasAnyValue: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck<ValueElementNode<Content>> (
           isIValueElementNode,
-          ({node, filter}) => node.eventually.not.hasAnyValue({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.eventually.not.hasAnyValue({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
-       * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually do not contain the
-       * expected values within a specific timeout.
+       * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually do not contain
+       * the expected values within a specific timeout.
        *
        * @param values the expected values supposed not to be contained in the actual values
        * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -584,10 +588,10 @@ class ValuePageElementGroupEventually<
        */
       containsValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
-          isIValueElementNode, ({node, expected}) => node.eventually.not.containsValue(expected, opts), values
-        )
-      }
-    }
+          isIValueElementNode, ({ node, expected }) => node.eventually.not.containsValue(expected, opts), values,
+        );
+      },
+    };
   }
 }
 
@@ -612,5 +616,5 @@ export function isIValueElementNode<
   typeof node.wait['containsValue'] === 'function' &&
   typeof node.eventually['hasValue'] === 'function' &&
   typeof node.eventually['hasAnyValue'] === 'function' &&
-  typeof node.eventually['containsValue'] === 'function'
+  typeof node.eventually['containsValue'] === 'function';
 }

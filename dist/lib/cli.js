@@ -1,4 +1,7 @@
 "use strict";
+/* tslint:disable:max-line-length */
+/* tslint:disable:prefer-template */
+/* tslint:disable:align */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -10,21 +13,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 require('ts-node/register');
 require('tsconfig-paths/register');
-const path = require("path");
 const fs = require("fs");
 const fsExtra = require("fs-extra");
 const jsonfile = require("jsonfile");
+const path = require("path");
 const supportsColor = require("supports-color");
-const parser_1 = require("./parser");
-const io_1 = require("./io");
 const allureReport_1 = require("./allureReport");
-const optimist = require("optimist");
+const io_1 = require("./io");
+const parser_1 = require("./parser");
 const merge = require("deepmerge");
+const optimist = require("optimist");
 const __1 = require("..");
 const webdriverio_workflo_1 = require("webdriverio-workflo");
 const table = require('text-table');
 const pkg = require('../../package.json');
-let dateTime = require('../../utils/report.js').getDateTime();
+const dateTime = require('../../utils/report.js').getDateTime();
 const VERSION = pkg.version;
 // not supported ALLOWED_ARGV:
 // 'logLevel', 'screenshotPath', 'waitforTimeout', 'framework', 'reporters', 'suite', 'spec',
@@ -38,7 +41,7 @@ const ALLOWED_ARGV = [
     'key',
     'bail',
     'testInfoFilePath',
-    'retries'
+    'retries',
 ];
 const ALLOWED_OPTS = [
     'help', 'h',
@@ -87,13 +90,13 @@ const ALLOWED_OPTS = [
     'debugSeleniumCommand',
     'cleanStackTraces',
     '_',
-    '$0'
+    '$0',
 ];
 let configFile;
 let optionsOffset = 2; // config file defined as first "parameter"
 let bail = 0;
 Date.prototype.addDays = function (days) {
-    var date = new Date(this.valueOf());
+    const date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
 };
@@ -102,7 +105,7 @@ const testcaseStatus = {
     failed: 'failed',
     broken: 'broken',
     unknown: 'unknown',
-    pending: 'pending'
+    pending: 'pending',
 };
 const specStatus = {
     passed: 'passed',
@@ -110,7 +113,7 @@ const specStatus = {
     broken: 'broken',
     unvalidated: 'unvalidated',
     unknown: 'unknown',
-    pending: 'pending'
+    pending: 'pending',
 };
 // options (not yet) supported are commented out
 optimist
@@ -227,8 +230,7 @@ optimist
     'testcaseSeverity',
     'dates',
     'rerunFaulty',
-    'retries'
-    /*, 'screenshotPath', 'framework', 'reporters', 'suite', 'spec' */
+    'retries',
 ])
     .boolean(['debug'])
     .check((arg) => {
@@ -240,7 +242,7 @@ if (process.argv.length === 2 || process.argv.length > 2 && process.argv[2].subs
     configFile = './workflo.conf.ts';
     optionsOffset = 1; // no config file specified
 }
-let argv = optimist.parse(process.argv.slice(optionsOffset));
+const argv = optimist.parse(process.argv.slice(optionsOffset));
 argv.coloredLogs = true;
 const allowedOpts = __1.arrayFunctions.mapToObject(ALLOWED_OPTS, (element) => true);
 for (const optKey in argv) {
@@ -281,7 +283,7 @@ if (argv.jasmineOpts && argv.jasmineOpts.defaultTimeoutInterval) {
 const wdioConfigFile = path.join(__dirname, '..', '..', 'config', 'wdio.conf.js');
 const workfloConfigFile = path.join(process.cwd(), configFile);
 if (!fs.existsSync(workfloConfigFile)) {
-    console.error(`Workflo config file was not specified or could not be found in its default location (<<current working directory>>/workflo.conf.js)\n`);
+    console.error('Workflo config file was not specified or could not be found in its default location (<<current working directory>>/workflo.conf.js)\n');
     optimist.showHelp();
     process.exit(1);
 }
@@ -305,21 +307,19 @@ const mergeOpts = [
     'manualOnly',
     'automaticOnly',
     'debugSeleniumCommand',
-    'cleanStackTraces'
+    'cleanStackTraces',
 ];
 mergeOpts.forEach(opt => {
     if (typeof workfloConfig[opt] !== 'undefined') {
         if (typeof argv[opt] === 'undefined') {
             argv[opt] = JSON.stringify(workfloConfig[opt]);
         }
-        else {
-        }
     }
 });
 if (argv.browserName) {
     workfloConfig.capabilities.browserName = argv.browserName;
 }
-let cleanedBrowserName = workfloConfig.capabilities.browserName.replace(' ', '-');
+const cleanedBrowserName = workfloConfig.capabilities.browserName.replace(' ', '-');
 if (typeof process.env.LATEST_RUN === 'undefined') {
     process.env.LATEST_RUN = dateTime;
 }
@@ -327,8 +327,8 @@ const resultsPath = path.join(workfloConfig.testDir, 'results', cleanedBrowserNa
 const logsPath = path.join(workfloConfig.testDir, 'logs', 'selenium', cleanedBrowserName, process.env.LATEST_RUN);
 const allureResultsPath = path.join(resultsPath, process.env.LATEST_RUN, 'allure-results');
 const latestRunPath = path.join(resultsPath, 'latestRun');
-const mergedResultsPath = path.join(resultsPath, `mergedResults.json`);
-const mergedAllureResultsPath = path.join(resultsPath, `mergedAllureResults`);
+const mergedResultsPath = path.join(resultsPath, 'mergedResults.json');
+const mergedAllureResultsPath = path.join(resultsPath, 'mergedAllureResults');
 const consoleReportPath = path.join(resultsPath, process.env.LATEST_RUN, 'consoleReport.json');
 fsExtra.ensureDirSync(resultsPath);
 process.env.WDIO_WORKFLO_RUN_PATH = path.join(resultsPath, process.env.LATEST_RUN);
@@ -346,7 +346,7 @@ checkReport().then(() => {
         }
     }
     if (typeof workfloConfig.testDir === 'undefined') {
-        throw new Error(`Please specify option 'testDir' in workflo.conf.js file!`);
+        throw new Error("Please specify option 'testDir' in workflo.conf.js file!");
     }
     const testDir = workfloConfig.testDir;
     const srcDir = path.join(testDir, 'src');
@@ -361,7 +361,7 @@ checkReport().then(() => {
     const mergeKeys = ['features', 'specs', 'testcases', 'specFiles', 'testcaseFiles'];
     let mergedResults = {
         specs: {},
-        testcases: {}
+        testcases: {},
     };
     if (fs.existsSync(mergedResultsPath)) {
         const mergedResultsStr = fs.readFileSync(mergedResultsPath, 'utf8');
@@ -374,7 +374,7 @@ checkReport().then(() => {
     // merge filters defined in cli lists and sublists
     if (argv.listFiles) {
         mergeLists({
-            listFiles: JSON.parse(argv.listFiles)
+            listFiles: JSON.parse(argv.listFiles),
         }, mergedFilters);
     }
     // complete cli specFiles and testcaseFiles paths
@@ -384,7 +384,7 @@ checkReport().then(() => {
     const completedTestcaseFiles = completeTestcaseFiles(argv, mergedFilters);
     const parseResults = {
         specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
-        testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles))
+        testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles)),
     };
     // check if all defined filters exist
     checkFiltersExist();
@@ -458,9 +458,12 @@ checkReport().then(() => {
     }
     cleanResultsStatus();
     criteriaAnalysis = analyseCriteria();
-    const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
-    const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
-    const uncoveredCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ? criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+    const automatedCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ?
+        criteriaAnalysis.automatedCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+    const manualCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ?
+        criteriaAnalysis.manualCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
+    const uncoveredCriteriaRate = (criteriaAnalysis.allCriteriaCount > 0) ?
+        criteriaAnalysis.uncoveredCriteriaCount / criteriaAnalysis.allCriteriaCount : 0;
     const infoObject = {
         specFiles: Object.keys(filters.specFiles).length,
         testcaseFiles: Object.keys(filters.testcaseFiles).length,
@@ -472,21 +475,21 @@ checkReport().then(() => {
         manualResults: Object.keys(filters.manualSpecs).length,
         allCriteriaCount: {
             count: criteriaAnalysis.allCriteriaCount,
-            percentage: `(${(criteriaAnalysis.allCriteriaCount > 0) ? 100 : 0}%)`
+            percentage: `(${(criteriaAnalysis.allCriteriaCount > 0) ? 100 : 0}%)`,
         },
         automatedCriteria: {
             count: criteriaAnalysis.automatedCriteriaCount,
-            percentage: `(~${automatedCriteriaRate.toLocaleString("en", { style: "percent" })})`
+            percentage: `(~${automatedCriteriaRate.toLocaleString('en', { style: 'percent' })})`,
         },
         manualCriteria: {
             count: criteriaAnalysis.manualCriteriaCount,
-            percentage: `(~${manualCriteriaRate.toLocaleString("en", { style: "percent" })})`
+            percentage: `(~${manualCriteriaRate.toLocaleString('en', { style: 'percent' })})`,
         },
         uncoveredCriteria: {
             count: criteriaAnalysis.uncoveredCriteriaCount,
-            percentage: `(~${uncoveredCriteriaRate.toLocaleString("en", { style: "percent" })})`
+            percentage: `(~${uncoveredCriteriaRate.toLocaleString('en', { style: 'percent' })})`,
         },
-        uncoveredCriteriaObject: {}
+        uncoveredCriteriaObject: {},
     };
     if (criteriaAnalysis.uncoveredCriteriaCount > 0) {
         for (const spec in criteriaAnalysis.specs) {
@@ -509,7 +512,7 @@ checkReport().then(() => {
         automatedCriteria: 'Automated Criteria',
         manualCriteria: 'Manual Criteria',
         uncoveredCriteria: 'Uncovered Criteria',
-        uncoveredCriteriaObject: 'Uncovered Criteria Object'
+        uncoveredCriteriaObject: 'Uncovered Criteria Object',
     };
     const invertedTranslations = __1.objectFunctions.invert(translations);
     const printObject = __1.objectFunctions.mapProperties(invertedTranslations, value => infoObject[value]);
@@ -537,12 +540,12 @@ checkReport().then(() => {
             toPercentTable(translations.automatedCriteria),
             toPercentTable(translations.manualCriteria),
             toPercentTable(translations.uncoveredCriteria),
-            toPercentTable(translations.allCriteriaCount)
+            toPercentTable(translations.allCriteriaCount),
         ], { align: ['l', 'r', 'r'] });
         console.log('\n' + infoTable + '\n');
         if (Object.keys(infoObject.uncoveredCriteriaObject).length > 0) {
             console.log('UNCOVERED CRITERIA:');
-            let uncoveredTableRows = [];
+            const uncoveredTableRows = [];
             for (const spec in infoObject.uncoveredCriteriaObject) {
                 uncoveredTableRows.push([`${spec}:`, `[${infoObject.uncoveredCriteriaObject[spec].join(', ')}]`]);
             }
@@ -570,7 +573,7 @@ checkReport().then(() => {
         argv.retries = workfloConfig.retries;
     }
     else if (typeof argv.retries !== 'undefined') {
-        argv.retries = parseInt(argv.retries);
+        argv.retries = parseInt(argv.retries, 10);
     }
     else {
         argv.retries = 0;
@@ -582,46 +585,46 @@ checkReport().then(() => {
         argv.consoleLogLevel = argv.consoleLogLevel;
     }
     else {
-        argv.consoleLogLevel = "testcases";
+        argv.consoleLogLevel = 'testcases';
     }
     if (argv.bail) {
-        bail = parseInt(argv.bail);
+        bail = parseInt(argv.bail, 10);
     }
     else if (workfloConfig.bail) {
         bail = workfloConfig.bail;
     }
-    if (["results", "testcases", "steps"].indexOf(argv.consoleLogLevel) < 0) {
+    if (['results', 'testcases', 'steps'].indexOf(argv.consoleLogLevel) < 0) {
         console.warn(`Unknown console log level: ${argv.consoleLogLevel}`);
         console.warn("Setting console log level to default value 'testcases'");
-        argv.consoleLogLevel = "testcases";
+        argv.consoleLogLevel = 'testcases';
     }
-    const defaultReportErrorsInstantly = (argv.consoleLogLevel === "steps") ? true : false;
+    const defaultReportErrorsInstantly = (argv.consoleLogLevel === 'steps') ? true : false;
     const testinfo = {
         criteriaAnalysis,
+        resultsPath,
+        latestRunPath,
+        dateTime,
+        mergedResultsPath,
+        consoleReportPath,
+        mergedAllureResultsPath,
+        bail,
+        parseResults,
+        printObject,
         executionFilters: filters,
-        parseResults: parseResults,
         traceInfo: buildTraceInfo(),
-        printObject: printObject,
         uidStorePath: workfloConfig.uidStorePath,
         allure: workfloConfig.allure,
         reportErrorsInstantly: setBooleanArg('reportErrorsInstantly', defaultReportErrorsInstantly),
         consoleLogLevel: argv.consoleLogLevel,
         automaticOnly: argv.automaticOnly,
         manualOnly: argv.manualOnly,
-        resultsPath,
-        latestRunPath,
         browser: cleanedBrowserName,
-        dateTime: dateTime,
-        mergedResultsPath,
-        consoleReportPath,
-        mergedAllureResultsPath,
         retries: argv.retries || 0,
-        bail: bail
     };
     jsonfile.writeFileSync(testInfoFilePath, testinfo);
     argv.testInfoFilePath = testInfoFilePath;
-    let args = {};
-    for (let key of ALLOWED_ARGV) {
+    const args = {};
+    for (const key of ALLOWED_ARGV) {
         if (argv[key] !== undefined) {
             args[key] = argv[key];
         }
@@ -645,10 +648,10 @@ checkReport().then(() => {
         args['reporterOptions'] = JSON.stringify({
             outputDir: path.join(resultsPath, process.env.LATEST_RUN),
             'workflo-allure': {
+                debugSeleniumCommand,
                 outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
                 debug: false,
-                debugSeleniumCommand: debugSeleniumCommand
-            }
+            },
         });
     args['bail'] = 0;
     args['cleanStackTraces'] = cleanStackTraces;
@@ -671,13 +674,13 @@ checkReport().then(() => {
         });
     }
     else {
-        console.log("No specs or testcases match execution filters. Quitting...");
+        console.log('No specs or testcases match execution filters. Quitting...');
         process.exit(0);
     }
     /**
      * run launch sequence
      */
-    let launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
+    const launcher = new webdriverio_workflo_1.Launcher(wdioConfigFile, args);
     launcher.run().then((code) => process.exit(code), (e) => process.nextTick(() => {
         throw e;
     }));
@@ -1136,8 +1139,8 @@ checkReport().then(() => {
         }
     }
     function importManualResults() {
-        let mergedManualTestcases = {};
-        let fileTable = {};
+        const mergedManualTestcases = {};
+        const fileTable = {};
         const manualTestcaseResults = io_1.getAllFiles(manDir, '.man.ts');
         for (const manualTestcaseFile of manualTestcaseResults) {
             const manualTestcase = require(manualTestcaseFile).default;
@@ -1149,14 +1152,14 @@ checkReport().then(() => {
                 else {
                     mergedManualTestcases[spec] = {
                         file: manualTestcaseFile,
-                        criteria: manualTestcase[spec]
+                        criteria: manualTestcase[spec],
                     };
                 }
             }
         }
         return {
-            fileTable: fileTable,
-            specTable: mergedManualTestcases
+            fileTable,
+            specTable: mergedManualTestcases,
         };
     }
     function analyseCriteria() {
@@ -1172,7 +1175,7 @@ checkReport().then(() => {
                 automated: {},
                 manual: {},
                 uncovered: {},
-                undefined: false
+                undefined: false,
             };
             // spec was not defined in a spec file
             if (!(spec in parseResults.specs.specTable)) {
@@ -1283,8 +1286,8 @@ checkReport().then(() => {
         }) : [];
         return {
             testcase,
+            specs,
             testcaseFile: `${testcaseFile}`,
-            specs
         };
     }
     function buildSpecTraceInfo(spec) {
@@ -1298,7 +1301,7 @@ checkReport().then(() => {
         if (manualFile.length > 0) {
             manualFile = `${manualFile.substring(1, manualFile.length).replace('\\', '\/')}`;
         }
-        let testcaseCriteria = {};
+        const testcaseCriteria = {};
         testcases.forEach(testcase => testcaseCriteria[testcase] = Object.keys(parseResults.testcases.tree[parseResults.testcases.testcaseTable[testcase].suiteId].testcaseHash[testcase].specValidateHash[spec]));
         const testcaseCriteriaStrs = Object.keys(testcaseCriteria).map(testcase => {
             let file = parseResults.testcases.testcaseTable[testcase].testcaseFile.replace(srcDir, '');
@@ -1311,13 +1314,13 @@ checkReport().then(() => {
         for (const criteria in parseResults.specs.specTable[spec].criteria) {
             if (manualCriteria.length > 0 && criteria in manualResults.specTable[spec].criteria) {
                 criteriaValidationFiles[criteria] = {
-                    manualFile
+                    manualFile,
                 };
             }
             else {
                 const tcHash = {};
-                let _testcases = [];
-                let _testcaseIds = {};
+                const _testcases = [];
+                const _testcaseIds = {};
                 for (const tc in testcaseCriteria) {
                     if (criteria in parseResults.testcases.tree[parseResults.testcases.testcaseTable[tc].suiteId].testcaseHash[tc].specValidateHash[spec]) {
                         let _testcaseFile = parseResults.testcases.testcaseTable[tc].testcaseFile.replace(srcDir, '');
@@ -1336,23 +1339,23 @@ checkReport().then(() => {
                 }
                 criteriaValidationFiles[criteria] = {
                     testcases: _testcases,
-                    testcaseIds: _testcaseIds
+                    testcaseIds: _testcaseIds,
                 };
             }
         }
         return {
             spec,
-            specFile: `${specFile}`,
             testcaseCriteriaStrs,
             criteriaValidationFiles,
             manualCriteria,
-            manualCriteriaStr
+            manualCriteriaStr,
+            specFile: `${specFile}`,
         };
     }
     function buildTraceInfo() {
-        let traceInfo = {
+        const traceInfo = {
             specs: {},
-            testcases: {}
+            testcases: {},
         };
         for (const testcase in filters.testcases) {
             traceInfo.testcases[testcase] = buildTestcaseTraceInfo(testcase);
@@ -1417,7 +1420,7 @@ checkReport().then(() => {
         }
         let runResults = {
             specs: {},
-            testcases: {}
+            testcases: {},
         };
         const resultsStr = fs.readFileSync(resultsJsonPath, 'utf8');
         if (resultsStr !== 'undefined') {
@@ -1509,9 +1512,9 @@ checkReport().then(() => {
             for (const criteria in parsedCriteria) {
                 if (!(criteria in resultsCriteria)) {
                     mergedResults.specs[spec][criteria] = {
+                        dateTime,
                         status: 'unknown',
-                        dateTime: dateTime,
-                        resultsFolder: undefined
+                        resultsFolder: undefined,
                     };
                     if (criteria in criteriaAnalysis.specs[spec].manual) {
                         mergedResults.specs[spec][criteria].manual = true;
@@ -1522,9 +1525,9 @@ checkReport().then(() => {
         for (const testcase in parseResults.testcases.testcaseTable) {
             if (!(testcase in mergedResults.testcases)) {
                 mergedResults.testcases[testcase] = {
+                    dateTime,
                     status: 'unknown',
-                    dateTime: dateTime,
-                    resultsFolder: undefined
+                    resultsFolder: undefined,
                 };
             }
         }
@@ -1533,7 +1536,7 @@ checkReport().then(() => {
     function filterSpecsByDate() {
         if (argv.dates) {
             for (const spec in filters.specs) {
-                let matched = false;
+                const matched = false;
                 for (const criteria in parseResults.specs.specTable[spec].criteria) {
                     if (!inDateFilters(mergedResults.specs[spec][criteria].dateTime)) {
                         delete filters.specs[spec];
@@ -1551,7 +1554,7 @@ checkReport().then(() => {
                 unknown: false,
                 failed: false,
                 broken: false,
-                pending: false
+                pending: false,
             };
             for (const status of parsedStatus) {
                 if (status === 'faulty') {
@@ -1590,7 +1593,7 @@ checkReport().then(() => {
                 minor: false,
                 normal: false,
                 critical: false,
-                blocker: false
+                blocker: false,
             };
             for (const severity of parsedSeverity) {
                 if (!(severity in severities)) {
@@ -1627,7 +1630,7 @@ checkReport().then(() => {
                 pending: false,
                 unknown: false,
                 failed: false,
-                broken: false
+                broken: false,
             };
             for (const status of parsedStatus) {
                 if (status === 'faulty') {
@@ -1657,7 +1660,7 @@ checkReport().then(() => {
                 minor: false,
                 normal: false,
                 critical: false,
-                blocker: false
+                blocker: false,
             };
             for (const severity of parsedSeverity) {
                 if (!(severity in severities)) {
@@ -1677,8 +1680,8 @@ checkReport().then(() => {
         }
     }
     function getDates(startDate, stopDate) {
-        var dateArray = new Array();
-        var currentDate = startDate;
+        const dateArray = [];
+        let currentDate = startDate;
         while (currentDate <= stopDate) {
             dateArray.push(new Date(currentDate));
             currentDate = currentDate.addDays(1);
@@ -1705,15 +1708,15 @@ checkReport().then(() => {
                 dateExpr = dateExpr.replace(/\s/g, '');
                 if (dateExpr.substring(0, 1) === '(' && dateExpr.substring(dateExpr.length - 1, dateExpr.length) === ')') {
                     dateExpr = dateExpr.substring(1, dateExpr.length - 1);
-                    let parts = dateExpr.split(',');
+                    const parts = dateExpr.split(',');
                     dates.push({
                         from: new Date(completeDate(parts[0])),
-                        to: new Date(completeDate(parts[1], true))
+                        to: new Date(completeDate(parts[1], true)),
                     });
                 }
                 else {
                     dates.push({
-                        at: new Date(completeDate(dateExpr))
+                        at: new Date(completeDate(dateExpr)),
                     });
                 }
             }
@@ -1753,7 +1756,7 @@ checkReport().then(() => {
                 const mergedResultsStr = fs.readFileSync(mergedResultsPath, 'utf8');
                 let mergedResults = {
                     specs: {},
-                    testcases: {}
+                    testcases: {},
                 };
                 if (mergedResultsStr !== 'undefined') {
                     mergedResults = JSON.parse(fs.readFileSync(mergedResultsPath, 'utf8'));
@@ -1764,7 +1767,7 @@ checkReport().then(() => {
                         failed: 0,
                         passed: 0,
                         pending: 0,
-                        unknown: 0
+                        unknown: 0,
                     },
                     specs: {
                         broken: 0,
@@ -1772,8 +1775,8 @@ checkReport().then(() => {
                         passed: 0,
                         unvalidated: 0,
                         unknown: 0,
-                        pending: 0
-                    }
+                        pending: 0,
+                    },
                 };
                 const suitesHash = buildPrintSuitesHash();
                 const featuresHash = buildPrintFeaturesHash();
@@ -1789,9 +1792,9 @@ checkReport().then(() => {
         }
     }
     function printTestcaseStatus(suitesHash, counts) {
-        let indents = ' ';
-        let testcaseIndents = `  `;
-        let phase = '[TESTCASE]';
+        const indents = ' ';
+        const testcaseIndents = '  ';
+        const phase = '[TESTCASE]';
         let first = true;
         function printSuiteContext(context, _indents) {
             const suites = [];
@@ -1823,10 +1826,10 @@ checkReport().then(() => {
         console.log('==================================================================');
     }
     function printSpecStatus(featuresHash, counts) {
-        let indents = ' ';
-        let specIndents = indents + '    ';
-        let criteriaIndents = specIndents + '  ';
-        let phase = '[SPEC]';
+        const indents = ' ';
+        const specIndents = indents + '    ';
+        const criteriaIndents = specIndents + '  ';
+        const phase = '[SPEC]';
         let first = true;
         for (const feature in featuresHash) {
             if (!first) {
@@ -1846,7 +1849,7 @@ checkReport().then(() => {
                     unvalidated: {},
                     failed: {},
                     broken: {},
-                    unknown: {}
+                    unknown: {},
                 };
                 for (const criteria in featuresHash[feature][spec]) {
                     const criteriaInfo = featuresHash[feature][spec][criteria];
@@ -1946,11 +1949,11 @@ checkReport().then(() => {
         }
     }
     function printTestcaseCounts(counts) {
-        console.log("Testcase Results:\n");
+        console.log('Testcase Results:\n');
         printCounts(counts);
     }
     function printSpecCounts(counts) {
-        console.log("Spec Criteria Results:\n");
+        console.log('Spec Criteria Results:\n');
         printCounts(counts);
     }
     function printCounts(counts) {
@@ -2081,7 +2084,7 @@ function ensureFolderStructure(testDir) {
         specsDir,
         manualResultsDir,
         stepsDir,
-        pageObjectsDir
+        pageObjectsDir,
     ];
     try {
         const pageObjectsExisted = fs.existsSync(pageObjectsDir);
@@ -2099,10 +2102,10 @@ function ensureFolderStructure(testDir) {
         if (!pageObjectsExisted) {
             fsExtra.copySync(path.join(templatesDir, 'src_boilerplate', 'page_objects'), pageObjectsDir);
         }
-        console.log("\nSuccessfully initialized folder structure for wdio-workflo!");
+        console.log('\nSuccessfully initialized folder structure for wdio-workflo!');
     }
     catch (error) {
-        console.error("\nFailed to initialize structure for wdio-workflo!");
+        console.error('\nFailed to initialize structure for wdio-workflo!');
         console.error(error);
         process.exit(1);
     }

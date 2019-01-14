@@ -1,4 +1,4 @@
-import { PageNodeStore, CloneFunc } from './PageNodeStore';
+import { CloneFunc, PageNodeStore } from './PageNodeStore';
 /**
  * An instance of PageNodeStore.
  */

@@ -1,8 +1,16 @@
-import { PageNode, IPageNodeOpts, PageElement, IPageElementOpts, PageNodeEventually, PageNodeCurrently, PageNodeWait } from '.'
-import { PageNodeStore } from '../stores'
-import { XPathBuilder } from '../builders'
 import _ = require('lodash');
+import {
+  IPageElementOpts,
+  IPageNodeOpts,
+  PageElement,
+  PageNode,
+  PageNodeCurrently,
+  PageNodeEventually,
+  PageNodeWait,
+} from '.';
 import { isNullOrUndefined } from '../../helpers';
+import { XPathBuilder } from '../builders';
+import { PageNodeStore } from '../stores';
 
 // https://github.com/Microsoft/TypeScript/issues/14930
 
@@ -20,7 +28,7 @@ export interface IPageElementMapIdentifier<K extends string> {
    * An object which provides the key names used to access PageElements via PageElementMap's `$` accessor and the
    * values passed to XPath modification functions in order to constrain the map's "base" XPath selector.
    */
-  mappingObject: Record<K, string>,
+  mappingObject: Record<K, string>;
   /**
    * `mappingFunc` constrains the XPath `baseSelector` of a PageElementMap by invoking XPath modification functions
    * with a `mappingValue` taken from the property values of `mappingObject`.
@@ -34,7 +42,7 @@ export interface IPageElementMapIdentifier<K extends string> {
    *
    * @returns the constrained XPath expression
    */
-  mappingFunc: ( baseSelector: string, mappingValue: string ) => XPathBuilder | string
+  mappingFunc: (baseSelector: string, mappingValue: string) => XPathBuilder | string;
 }
 
 /**
@@ -57,18 +65,18 @@ export interface IPageElementMapOpts<
    * XPath selector of PageElementMap using XPath modification functions in order to statically identify a
    * PageElementMap's managed PageElements when the PageElementMap is initially created.
    */
-  identifier: IPageElementMapIdentifier<K>,
+  identifier: IPageElementMapIdentifier<K>;
   /**
    * This function retrieves an instance of a PageElement mapped by PageElementMap from the map's PageNodeStore.
    *
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
    */
-  elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType,
+  elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType;
   /**
    * the options passed to `elementStoreFunc` to configure the retrieved PageElement instance
    */
-  elementOpts: PageElementOpts
+  elementOpts: PageElementOpts;
 }
 
 /**
@@ -127,11 +135,11 @@ implements Workflo.PageNode.IElementNode<
    * @param selector the XPath expression used to identify the retrieved PageElement in the DOM
    * @param opts the options used to configure the retrieved PageElement
    */
-  protected _elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType
+  protected _elementStoreFunc: (selector: string, options: PageElementOpts) => PageElementType;
   /**
    * the options passed to `_elementStoreFunc` to configure a managed PageElement instance
    */
-  protected _elementOpts: PageElementOpts
+  protected _elementOpts: PageElementOpts;
   /**
    * This `_identifier` provides a `mappingObject` and a `mappingFunc` which are used to constrain the "base"
    * XPath selector of PageElementMap using XPath modification functions in order to statically identify a
@@ -139,16 +147,16 @@ implements Workflo.PageNode.IElementNode<
    *
    * The identified and mapped PageElements can be accessed via PageElementMap's `$` accessor.
    */
-  protected _identifier: IPageElementMapIdentifier<K>
+  protected _identifier: IPageElementMapIdentifier<K>;
 
   /**
    * `_$` provides access to all mapped PageElements of PageElementMap.
    */
-  protected _$: Record<K, PageElementType>
+  protected _$: Record<K, PageElementType>;
 
-  readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOpts, this>
-  readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOpts, this>
-  readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOpts, this>
+  readonly currently: PageElementMapCurrently<Store, K, PageElementType, PageElementOpts, this>;
+  readonly wait: PageElementMapWait<Store, K, PageElementType, PageElementOpts, this>;
+  readonly eventually: PageElementMapEventually<Store, K, PageElementType, PageElementOpts, this>;
 
   /**
    * A PageElementMap manages multiple related "static" PageElements which all have the same type and the same "base"
@@ -161,10 +169,10 @@ implements Workflo.PageNode.IElementNode<
    * This initial identification process makes use of a `mappingObject` and a `mappingFunc` which are both defined in
    * PageElement's `identifier` object:
    *
-   * - For each property of `mappingObject`, `mappingFunc` is invoked with the map's "base" selector as the first and the
-   * value of the currently processed property as the second parameter.
-   * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the values
-   * of the currently processed properties as parameters.
+   * - For each property of `mappingObject`, `mappingFunc` is invoked with the map's "base" selector as the first and
+   * the value of the currently processed property as the second parameter.
+   * - `mappingFunc` then constrains the "base" selector by using XPath modification functions which are passed the
+   * values of the currently processed properties as parameters.
    * - Each resulting constrained selector is used to retrieve a managed PageElement from the map's PageNodeStore.
    * - These identified PageElements are then mapped to the corresponding key names of `mappingObject`'s properties
    *
@@ -195,35 +203,35 @@ implements Workflo.PageNode.IElementNode<
       elementStoreFunc,
       elementOpts: elementOptions,
       ...superOpts
-    } : IPageElementMapOpts<Store, K, PageElementType, PageElementOpts>
+    } : IPageElementMapOpts<Store, K, PageElementType, PageElementOpts>,
   ) {
-    super(selector, superOpts)
+    super(selector, superOpts);
 
-    this._selector = selector
-    this._elementOpts = elementOptions
-    this._elementStoreFunc = elementStoreFunc
-    this._identifier = identifier
+    this._selector = selector;
+    this._elementOpts = elementOptions;
+    this._elementStoreFunc = elementStoreFunc;
+    this._identifier = identifier;
 
     this._$ = Workflo.Object.mapProperties(
       this._identifier.mappingObject,
       (value, key) => <PageElementType> this._elementStoreFunc.apply(
         this._store, [
           this._identifier.mappingFunc(this._selector, value),
-          this._elementOpts
-        ]
-      )
-    )
+          this._elementOpts,
+        ],
+      ),
+    );
 
-    this.currently = new PageElementMapCurrently(this)
-    this.wait = new PageElementMapWait(this)
-    this.eventually = new PageElementMapEventually(this)
+    this.currently = new PageElementMapCurrently(this);
+    this.wait = new PageElementMapWait(this);
+    this.eventually = new PageElementMapEventually(this);
   }
 
   /**
    * `$` provides access to all mapped PageElements of PageElementMap.
    */
   get $() {
-    return this._$
+    return this._$;
   }
 
   /**
@@ -243,10 +251,10 @@ implements Workflo.PageNode.IElementNode<
       (value, key) => <PageElementType> this._elementStoreFunc.apply(
         this._store, [
           this._identifier.mappingFunc(this._selector, value),
-          this._elementOpts
-        ]
-      )
-    )
+          this._elementOpts,
+        ],
+      ),
+    );
   }
 
   // GETTER FUNCTIONS
@@ -255,7 +263,7 @@ implements Workflo.PageNode.IElementNode<
    * Returns the "base" XPath selector that identifies all PageElements managed by PageElementMap.
    */
   getSelector() {
-    return this._selector
+    return this._selector;
   }
 
   /**
@@ -266,7 +274,7 @@ implements Workflo.PageNode.IElementNode<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this.eachGet(this._$, node => node.getText(), filterMask)
+    return this.eachGet(this._$, node => node.getText(), filterMask);
   }
 
   /**
@@ -280,7 +288,7 @@ implements Workflo.PageNode.IElementNode<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this.eachGet(this._$, node => node.getDirectText(), filterMask)
+    return this.eachGet(this._$, node => node.getDirectText(), filterMask);
   }
 
   /**
@@ -291,7 +299,7 @@ implements Workflo.PageNode.IElementNode<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
-    return this.eachGet(this.$, node => node.getIsEnabled(), filterMask)
+    return this.eachGet(this.$, node => node.getIsEnabled(), filterMask);
   }
 
   /**
@@ -303,7 +311,7 @@ implements Workflo.PageNode.IElementNode<
    * @param texts the expected texts used in the comparisons which set the 'hasText' status
    */
   getHasText(texts: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.hasText(expected), texts)
+    return this.eachCompare(this.$, (element, expected) => element.currently.hasText(expected), texts);
   }
 
   /**
@@ -316,7 +324,7 @@ implements Workflo.PageNode.IElementNode<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this.eachCompare(this.$, (element) => element.currently.hasAnyText(), filterMask, true)
+    return this.eachCompare(this.$, (element) => element.currently.hasAnyText(), filterMask, true);
   }
 
   /**
@@ -328,7 +336,7 @@ implements Workflo.PageNode.IElementNode<
    * @param texts the expected texts used in the comparisons which set the 'containsText' status
    */
   getContainsText(texts: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.containsText(expected), texts)
+    return this.eachCompare(this.$, (element, expected) => element.currently.containsText(expected), texts);
   }
 
   /**
@@ -343,12 +351,12 @@ implements Workflo.PageNode.IElementNode<
    * @param directTexts the expected direct texts used in the comparisons which set the 'hasDirectText' status
    */
   getHasDirectText(directTexts: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.hasDirectText(expected), directTexts)
+    return this.eachCompare(this.$, (element, expected) => element.currently.hasDirectText(expected), directTexts);
   }
 
   /**
-   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a result map after performing
-   * the initial waiting condition of each managed PageElement.
+   * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementMap as a result map after
+   * performing the initial waiting condition of each managed PageElement.
    *
    * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
    *
@@ -359,7 +367,7 @@ implements Workflo.PageNode.IElementNode<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this.eachCompare(this.$, (element) => element.currently.hasAnyDirectText(), filterMask, true)
+    return this.eachCompare(this.$, (element) => element.currently.hasAnyDirectText(), filterMask, true);
   }
 
   /**
@@ -375,7 +383,7 @@ implements Workflo.PageNode.IElementNode<
    * @param directTexts the expected direct texts used in the comparisons which set the 'containsDirectText' status
    */
   getContainsDirectText(directTexts: Partial<Record<K, string>>) {
-    return this.eachCompare(this.$, (element, expected) => element.currently.containsDirectText(expected), directTexts)
+    return this.eachCompare(this.$, (element, expected) => element.currently.containsDirectText(expected), directTexts);
   }
 
   // HELPER FUNCTIONS
@@ -387,7 +395,7 @@ implements Workflo.PageNode.IElementNode<
    * @param filter a filterMask entry that refers to a corresponding managed PageElement
    */
   protected _includedInFilter(value: any) {
-    return (typeof value === 'boolean' && value === true)
+    return (typeof value === 'boolean' && value === true);
   }
 
   /**
@@ -408,29 +416,29 @@ implements Workflo.PageNode.IElementNode<
     context: Record<K, PageElementType>,
     checkFunc: (element: PageElementType, expected?: T) => boolean,
     expected: Partial<Record<K, T>>,
-    isFilterMask: boolean = false
+    isFilterMask: boolean = false,
   ): Partial<Record<K, boolean>> {
-    const result: Partial<Record<K, boolean>> = {}
+    const result: Partial<Record<K, boolean>> = {};
 
     for (const key in context) {
       if (isNullOrUndefined(expected)) {
-        result[key] = checkFunc(context[key])
+        result[key] = checkFunc(context[key]);
       } else {
-        const expectedValue = expected[key] as any as T
+        const expectedValue = expected[key] as any as T;
 
         if (isFilterMask) {
           if (this._includedInFilter(expectedValue)) {
-            result[key] = checkFunc(context[key], expectedValue)
+            result[key] = checkFunc(context[key], expectedValue);
           }
         } else {
           if (typeof expectedValue !== 'undefined') {
-            result[key] = checkFunc(context[key], expectedValue)
+            result[key] = checkFunc(context[key], expectedValue);
           }
         }
       }
     }
 
-    return result
+    return result;
   }
 
   /**
@@ -452,26 +460,26 @@ implements Workflo.PageNode.IElementNode<
     context: Record<K, PageElementType>,
     checkFunc: (element: PageElementType, expected?: T) => boolean,
     expected: Partial<Record<K, T>>,
-    isFilterMask: boolean = false
+    isFilterMask: boolean = false,
   ): boolean {
-    const diffs: Workflo.IDiffTree = {}
+    const diffs: Workflo.IDiffTree = {};
 
     for (const key in context) {
       if (isNullOrUndefined(expected)) {
         if (!checkFunc(context[key])) {
-          diffs[`.${key}`] = context[key].__lastDiff
+          diffs[`.${key}`] = context[key].__lastDiff;
         }
       } else {
         if (isFilterMask) {
           if (this._includedInFilter(expected[key])) {
             if (!checkFunc(context[key])) {
-              diffs[`.${key}`] = context[key].__lastDiff
+              diffs[`.${key}`] = context[key].__lastDiff;
             }
           }
         } else {
           if (typeof expected[key] !== 'undefined') {
             if (!checkFunc(context[key], expected[key] as any as T)) {
-              diffs[`.${key}`] = context[key].__lastDiff
+              diffs[`.${key}`] = context[key].__lastDiff;
             }
           }
         }
@@ -479,10 +487,10 @@ implements Workflo.PageNode.IElementNode<
     }
 
     this._lastDiff = {
-      tree: diffs
-    }
+      tree: diffs,
+    };
 
-    return Object.keys(diffs).length === 0
+    return Object.keys(diffs).length === 0;
   }
 
    /**
@@ -504,14 +512,14 @@ implements Workflo.PageNode.IElementNode<
     getFunc: (node: PageElementType) => T,
     filterMask: Workflo.PageNode.MapFilterMask<K>,
   ): Partial<Record<K, T>> {
-    let result = {} as Record<K, T>;
+    const result = {} as Record<K, T>;
 
     for (const key in context) {
       if (isNullOrUndefined(filterMask)) {
-        result[key] = getFunc(context[key])
+        result[key] = getFunc(context[key]);
       } else {
         if (this._includedInFilter(filterMask[key])) {
-          result[key] = getFunc(context[key])
+          result[key] = getFunc(context[key]);
         }
       }
     }
@@ -535,23 +543,23 @@ implements Workflo.PageNode.IElementNode<
     context: Record<K, PageElementType>,
     waitFunc: (element: PageElementType, expected?: ValueType) => PageElementType,
     expected: Partial<Record<K, ValueType>>,
-    isFilterMask: boolean = false
+    isFilterMask: boolean = false,
   ): this {
     for (const key in context) {
       if (isNullOrUndefined(expected)) {
-        waitFunc(context[key])
+        waitFunc(context[key]);
       } else {
         if (isFilterMask) {
           if (this._includedInFilter(expected[key])) {
-            waitFunc(context[key])
+            waitFunc(context[key]);
           }
         } else if (typeof expected[key] !== 'undefined') {
-          waitFunc(context[key], expected[key] as any as ValueType)
+          waitFunc(context[key], expected[key] as any as ValueType);
         }
       }
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -565,19 +573,19 @@ implements Workflo.PageNode.IElementNode<
     action: (element: PageElementType) => any,
     filterMask?: Workflo.PageNode.MapFilterMask<K>,
   ): this {
-    const context = this.$
+    const context = this.$;
 
     for (const key in context) {
       if (isNullOrUndefined(filterMask)) {
-        action(context[key])
+        action(context[key]);
       } else {
         if (this._includedInFilter(filterMask[key])) {
-          action(context[key])
+          action(context[key]);
         }
       }
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -598,14 +606,14 @@ implements Workflo.PageNode.IElementNode<
     for (const key in context) {
       if (values) {
         if (typeof values[key] !== 'undefined') {
-          setFunc(context[key], values[key] as any as T)
+          setFunc(context[key], values[key] as any as T);
         }
       } else {
-        setFunc(context[key])
+        setFunc(context[key]);
       }
     }
 
-    return this
+    return this;
   }
 }
 
@@ -635,8 +643,8 @@ export class PageElementMapCurrently<
    */
   getText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachGet(
-      this._node.$, node => node.currently.getText(), filterMask
-    )
+      this._node.$, node => node.currently.getText(), filterMask,
+    );
   }
 
   /**
@@ -650,8 +658,8 @@ export class PageElementMapCurrently<
    */
   getDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachGet(
-      this._node.$, node => node.currently.getDirectText(), filterMask
-    )
+      this._node.$, node => node.currently.getDirectText(), filterMask,
+    );
   }
 
   /**
@@ -661,7 +669,7 @@ export class PageElementMapCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getExists(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
-    return this._node.eachGet(this._node.$, node => node.currently.exists(), filterMask)
+    return this._node.eachGet(this._node.$, node => node.currently.exists(), filterMask);
   }
 
   /**
@@ -671,7 +679,7 @@ export class PageElementMapCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getIsVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
-    return this._node.eachGet(this._node.$, node => node.currently.isVisible(), filterMask)
+    return this._node.eachGet(this._node.$, node => node.currently.isVisible(), filterMask);
   }
 
   /**
@@ -681,7 +689,7 @@ export class PageElementMapCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getIsEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>): Partial<Record<K, boolean>> {
-    return this._node.eachGet(this._node.$, node => node.currently.isEnabled(), filterMask)
+    return this._node.eachGet(this._node.$, node => node.currently.isEnabled(), filterMask);
   }
 
   /**
@@ -692,7 +700,7 @@ export class PageElementMapCurrently<
    * @param texts the expected texts used in the comparisons which set the 'hasText' status
    */
   getHasText(texts: Partial<Record<K, string>>) {
-    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasText(expected), texts)
+    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.hasText(expected), texts);
   }
 
   /**
@@ -704,7 +712,7 @@ export class PageElementMapCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getHasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyText(), filterMask, true)
+    return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyText(), filterMask, true);
   }
 
   /**
@@ -715,7 +723,7 @@ export class PageElementMapCurrently<
    * @param texts the expected texts used in the comparisons which set the 'containsText' status
    */
   getContainsText(texts: Partial<Record<K, string>>) {
-    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsText(expected), texts)
+    return this._node.eachCompare(this._node.$, (element, expected) => element.currently.containsText(expected), texts);
   }
 
   /**
@@ -730,8 +738,8 @@ export class PageElementMapCurrently<
    */
   getHasDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCompare(
-      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directTexts
-    )
+      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -746,7 +754,7 @@ export class PageElementMapCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results object.
    */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
-    return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true)
+    return this._node.eachCompare(this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true);
   }
 
   /**
@@ -762,8 +770,8 @@ export class PageElementMapCurrently<
    */
   getContainsDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCompare(
-      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directTexts
-    )
+      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -774,8 +782,8 @@ export class PageElementMapCurrently<
    */
   exists(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, element => element.currently.exists(), filterMask, true
-    )
+      this._node.$, element => element.currently.exists(), filterMask, true,
+    );
   }
 
   /**
@@ -786,8 +794,8 @@ export class PageElementMapCurrently<
    */
   isVisible(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, element => element.currently.isVisible(), filterMask, true
-    )
+      this._node.$, element => element.currently.isVisible(), filterMask, true,
+    );
   }
 
   /**
@@ -798,8 +806,8 @@ export class PageElementMapCurrently<
    */
   isEnabled(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, element => element.currently.isEnabled(), filterMask, true
-    )
+      this._node.$, element => element.currently.isEnabled(), filterMask, true,
+    );
   }
 
   /**
@@ -809,8 +817,8 @@ export class PageElementMapCurrently<
    */
   hasText(texts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.hasText(expected), texts
-    )
+      this._node.$, (element, expected) => element.currently.hasText(expected), texts,
+    );
   }
 
   /**
@@ -821,19 +829,20 @@ export class PageElementMapCurrently<
    */
   hasAnyText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, (element) => element.currently.hasAnyText(), filterMask, true
-    )
+      this._node.$, (element) => element.currently.hasAnyText(), filterMask, true,
+    );
   }
 
   /**
-   * Returns true if the actual texts of all PageElements managed by PageElementMap currently contain the expected texts.
+   * Returns true if the actual texts of all PageElements managed by PageElementMap currently contain the expected
+   * texts.
    *
    * @param texts the expected texts supposed to be contained in the actual texts
    */
   containsText(texts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.containsText(expected), texts
-    )
+      this._node.$, (element, expected) => element.currently.containsText(expected), texts,
+    );
   }
 
   /**
@@ -847,8 +856,8 @@ export class PageElementMapCurrently<
    */
   hasDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directTexts
-    )
+      this._node.$, (element, expected) => element.currently.hasDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -862,8 +871,8 @@ export class PageElementMapCurrently<
    */
   hasAnyDirectText(filterMask?: Workflo.PageNode.MapFilterMask<K>) {
     return this._node.eachCheck(
-      this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true
-    )
+      this._node.$, (element) => element.currently.hasAnyDirectText(), filterMask, true,
+    );
   }
 
   /**
@@ -877,8 +886,8 @@ export class PageElementMapCurrently<
    */
   containsDirectText(directTexts: Partial<Record<K, string>>) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directTexts
-    )
+      this._node.$, (element, expected) => element.currently.containsDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -894,8 +903,8 @@ export class PageElementMapCurrently<
        */
       exists: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, element => element.currently.not.exists(), filterMask, true
-        )
+          this._node.$, element => element.currently.not.exists(), filterMask, true,
+        );
       },
       /**
        * Returns true if all PageElements managed by PageElementMap are currently not visible.
@@ -905,8 +914,8 @@ export class PageElementMapCurrently<
        */
       isVisible: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, element => element.currently.not.isVisible(), filterMask, true
-        )
+          this._node.$, element => element.currently.not.isVisible(), filterMask, true,
+        );
       },
       /**
        * Returns true if all PageElements managed by PageElementMap are currently not enabled.
@@ -916,8 +925,8 @@ export class PageElementMapCurrently<
        */
       isEnabled: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, element => element.currently.not.isEnabled(), filterMask, true
-        )
+          this._node.$, element => element.currently.not.isEnabled(), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageElements managed by PageElementMap currently do not equal the
@@ -927,8 +936,8 @@ export class PageElementMapCurrently<
        */
       hasText: (text: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.currently.not.hasText(expected), text
-        )
+          this._node.$, (element, expected) => element.currently.not.hasText(expected), text,
+        );
       },
       /**
        * Returns true if all PageElements managed by PageElementMap currently do not have any text.
@@ -938,8 +947,8 @@ export class PageElementMapCurrently<
        */
       hasAnyText: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, (element) => element.currently.not.hasAnyText(), filterMask, true
-        )
+          this._node.$, (element) => element.currently.not.hasAnyText(), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageElements managed by PageElementMap currently do not contain the
@@ -949,8 +958,8 @@ export class PageElementMapCurrently<
        */
       containsText: (text: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.currently.not.containsText(expected), text
-        )
+          this._node.$, (element, expected) => element.currently.not.containsText(expected), text,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not equal
@@ -963,8 +972,8 @@ export class PageElementMapCurrently<
        */
       hasDirectText: (directText: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.currently.not.hasDirectText(expected), directText
-        )
+          this._node.$, (element, expected) => element.currently.not.hasDirectText(expected), directText,
+        );
       },
       /**
        * Returns true if all PageElements managed by PageElementMap currently do not have any direct text.
@@ -977,8 +986,8 @@ export class PageElementMapCurrently<
        */
       hasAnyDirectText: (filterMask?: Workflo.PageNode.MapFilterMask<K>) => {
         return this._node.eachCheck(
-          this._node.$, (element) => element.currently.not.hasAnyDirectText(), filterMask, true
-        )
+          this._node.$, (element) => element.currently.not.hasAnyDirectText(), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageElements managed by PageElementMap currently do not contain
@@ -991,10 +1000,10 @@ export class PageElementMapCurrently<
        */
       containsDirectText: (directText: Partial<Record<K, string>>) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.currently.not.containsDirectText(expected), directText
-        )
-      }
-    }
+          this._node.$, (element, expected) => element.currently.not.containsDirectText(expected), directText,
+        );
+      },
+    };
   }
 }
 
@@ -1029,11 +1038,11 @@ export class PageElementMapWait<
    * @returns this (an instance of PageElementMap)
    */
   exists(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait(
-      this._node.$, element => element.wait.exists(otherOpts), filterMask, true
-    )
+      this._node.$, element => element.wait.exists(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1049,11 +1058,11 @@ export class PageElementMapWait<
    * @returns this (an instance of PageElementMap)
    */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait(
-      this._node.$, element => element.wait.isVisible(otherOpts), filterMask, true
-    )
+      this._node.$, element => element.wait.isVisible(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1069,11 +1078,11 @@ export class PageElementMapWait<
    * @returns this (an instance of PageElementMap)
    */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait(
-      this._node.$, element => element.wait.isEnabled(otherOpts), filterMask, true
-    )
+      this._node.$, element => element.wait.isEnabled(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1092,8 +1101,8 @@ export class PageElementMapWait<
    */
   hasText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.hasText(expected, opts), texts
-    )
+      this._node.$, (element, expected) => element.wait.hasText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1111,11 +1120,11 @@ export class PageElementMapWait<
    * @returns this (an instance of PageElementMap)
    */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait(
-      this._node.$, (element) => element.wait.hasAnyText(otherOpts), filterMask, true
-    )
+      this._node.$, (element) => element.wait.hasAnyText(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1134,8 +1143,8 @@ export class PageElementMapWait<
    */
   containsText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.containsText(expected, opts), texts
-    )
+      this._node.$, (element, expected) => element.wait.containsText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1157,8 +1166,8 @@ export class PageElementMapWait<
    */
   hasDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.hasDirectText(expected, opts), directTexts
-    )
+      this._node.$, (element, expected) => element.wait.hasDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1169,9 +1178,9 @@ export class PageElementMapWait<
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
    *
-   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for some
-   * or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval` used
-   * to check it
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met and the `interval`
+   * used to check it
    *
    * If no `timeout` is specified, a PageElement's default timeout is used.
    * If no `interval` is specified, a PageElement's default interval is used.
@@ -1179,11 +1188,11 @@ export class PageElementMapWait<
    * @returns this (an instance of PageElementMap)
    */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait(
-      this._node.$, (element) => element.wait.hasAnyDirectText(otherOpts), filterMask, true
-    )
+      this._node.$, (element) => element.wait.hasAnyDirectText(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1206,8 +1215,8 @@ export class PageElementMapWait<
    */
   containsDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait(
-      this._node.$, (element, expected) => element.wait.containsDirectText(expected, opts), directTexts
-    )
+      this._node.$, (element, expected) => element.wait.containsDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1228,11 +1237,11 @@ export class PageElementMapWait<
        * @returns this (an instance of PageElementMap)
        */
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait(
-          this._node.$, element => element.wait.not.exists(otherOpts), filterMask, true
-        )
+          this._node.$, element => element.wait.not.exists(otherOpts), filterMask, true,
+        );
       },
       /**
        * Waits for all PageElements managed by PageElementMap not to be visible.
@@ -1247,11 +1256,11 @@ export class PageElementMapWait<
        * @returns this (an instance of PageElementMap)
        */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait(
-          this._node.$, element => element.wait.not.isVisible(otherOpts), filterMask, true
-        )
+          this._node.$, element => element.wait.not.isVisible(otherOpts), filterMask, true,
+        );
       },
       /**
        * Waits for all PageElements managed by PageElementMap not to be enabled.
@@ -1266,11 +1275,11 @@ export class PageElementMapWait<
        * @returns this (an instance of PageElementMap)
        */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait(
-          this._node.$, element => element.wait.not.isEnabled(otherOpts), filterMask, true
-        )
+          this._node.$, element => element.wait.not.isEnabled(otherOpts), filterMask, true,
+        );
       },
       /**
        * Waits for the actual texts of all PageElements managed by PageElementMap not to equal the expected texts.
@@ -1288,8 +1297,8 @@ export class PageElementMapWait<
        */
       hasText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.hasText(expected, opts), texts
-        )
+          this._node.$, (element, expected) => element.wait.not.hasText(expected, opts), texts,
+        );
       },
       /**
        * Waits for all PageElements managed by PageElementMap not to have any text.
@@ -1306,11 +1315,11 @@ export class PageElementMapWait<
        * @returns this (an instance of PageElementMap)
        */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait(
-          this._node.$, (element) => element.wait.not.hasAnyText(otherOpts), filterMask, true
-        )
+          this._node.$, (element) => element.wait.not.hasAnyText(otherOpts), filterMask, true,
+        );
       },
       /**
        * Waits for the actual texts of all PageElements managed by PageElementMap not to contain the expected texts.
@@ -1328,8 +1337,8 @@ export class PageElementMapWait<
        */
       containsText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.containsText(expected, opts), texts
-        )
+          this._node.$, (element, expected) => element.wait.not.containsText(expected, opts), texts,
+        );
       },
       /**
        * Waits for the actual direct texts of all PageElements managed by PageElementMap not to equal the expected
@@ -1351,8 +1360,8 @@ export class PageElementMapWait<
        */
       hasDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.hasDirectText(expected, opts), directTexts
-        )
+          this._node.$, (element, expected) => element.wait.not.hasDirectText(expected, opts), directTexts,
+        );
       },
       /**
        * Waits for all PageElements managed by PageElementMap not to have any direct text.
@@ -1372,11 +1381,11 @@ export class PageElementMapWait<
        * @returns this (an instance of PageElementMap)
        */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait(
-          this._node.$, (element) => element.wait.not.hasAnyDirectText(otherOpts), filterMask, true
-        )
+          this._node.$, (element) => element.wait.not.hasAnyDirectText(otherOpts), filterMask, true,
+        );
       },
       /**
        * Waits for the actual direct texts of all PageElements managed by PageElementMap not to contain the expected
@@ -1398,10 +1407,10 @@ export class PageElementMapWait<
        */
       containsDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait(
-          this._node.$, (element, expected) => element.wait.not.containsDirectText(expected, opts), directTexts
-        )
-      }
-    }
+          this._node.$, (element, expected) => element.wait.not.containsDirectText(expected, opts), directTexts,
+        );
+      },
+    };
   }
 }
 
@@ -1432,11 +1441,11 @@ export class PageElementMapEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   exists(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck(
-      this._node.$, element => element.eventually.exists(otherOpts), filterMask, true
-    )
+      this._node.$, element => element.eventually.exists(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1448,11 +1457,11 @@ export class PageElementMapEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck(
-      this._node.$, element => element.eventually.isVisible(otherOpts), filterMask, true
-    )
+      this._node.$, element => element.eventually.isVisible(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1464,11 +1473,11 @@ export class PageElementMapEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck(
-      this._node.$, element => element.eventually.isEnabled(otherOpts), filterMask, true
-    )
+      this._node.$, element => element.eventually.isEnabled(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1484,8 +1493,8 @@ export class PageElementMapEventually<
    */
   hasText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.hasText(expected, opts), texts
-    )
+      this._node.$, (element, expected) => element.eventually.hasText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1499,16 +1508,16 @@ export class PageElementMapEventually<
    * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck(
-      this._node.$, (element) => element.eventually.hasAnyText(otherOpts), filterMask, true
-    )
+      this._node.$, (element) => element.eventually.hasAnyText(otherOpts), filterMask, true,
+    );
   }
 
   /**
-   * Returns true if the actual texts of all PageElements managed by PageElementMap eventually contain the expected texts
-   * within a specific timeout.
+   * Returns true if the actual texts of all PageElements managed by PageElementMap eventually contain the expected
+   * texts within a specific timeout.
    *
    * @param texts the expected texts supposed to be contained in the actual texts
    * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
@@ -1519,8 +1528,8 @@ export class PageElementMapEventually<
    */
   containsText(texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.containsText(expected, opts), texts
-    )
+      this._node.$, (element, expected) => element.eventually.containsText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1536,8 +1545,8 @@ export class PageElementMapEventually<
    */
   hasDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.hasDirectText(expected, opts), directTexts
-    )
+      this._node.$, (element, expected) => element.eventually.hasDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1552,11 +1561,11 @@ export class PageElementMapEventually<
    * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck(
-      this._node.$, (element) => element.eventually.hasAnyDirectText(otherOpts), filterMask, true
-    )
+      this._node.$, (element) => element.eventually.hasAnyDirectText(otherOpts), filterMask, true,
+    );
   }
 
   /**
@@ -1572,8 +1581,8 @@ export class PageElementMapEventually<
    */
   containsDirectText(directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck(
-      this._node.$, (element, expected) => element.eventually.containsDirectText(expected, opts), directTexts
-    )
+      this._node.$, (element, expected) => element.eventually.containsDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1590,14 +1599,15 @@ export class PageElementMapEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck(
-          this._node.$, element => element.eventually.not.exists(otherOpts), filterMask, true
-        )
+          this._node.$, element => element.eventually.not.exists(otherOpts), filterMask, true,
+        );
       },
       /**
-       * Returns true if all PageElements managed by PageElementMap eventually are not visible within a specific timeout.
+       * Returns true if all PageElements managed by PageElementMap eventually are not visible within a specific
+       * timeout.
        *
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `isVisible` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
@@ -1605,14 +1615,15 @@ export class PageElementMapEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck(
-          this._node.$, element => element.eventually.not.isVisible(otherOpts), filterMask, true
-        )
+          this._node.$, element => element.eventually.not.isVisible(otherOpts), filterMask, true,
+        );
       },
       /**
-       * Returns true if all PageElements managed by PageElementMap eventually are not enabled within a specific timeout.
+       * Returns true if all PageElements managed by PageElementMap eventually are not enabled within a specific
+       * timeout.
        *
        * @param opts includes a `filterMask` which can be used to skip the invocation of the `isEnabled` function for
        * some or all managed PageElements and the `timeout` within which the condition is expected to be met
@@ -1620,11 +1631,11 @@ export class PageElementMapEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck(
-          this._node.$, element => element.eventually.not.isEnabled(otherOpts), filterMask, true
-        )
+          this._node.$, element => element.eventually.not.isEnabled(otherOpts), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageElements managed by PageElementMap eventually do not equal the
@@ -1639,8 +1650,8 @@ export class PageElementMapEventually<
        */
       hasText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.hasText(expected, opts), texts
-        )
+          this._node.$, (element, expected) => element.eventually.not.hasText(expected, opts), texts,
+        );
       },
       /**
        * Returns true if all PageElements managed by PageElementMap eventually do not have any text within a specific
@@ -1654,11 +1665,11 @@ export class PageElementMapEventually<
        * If no `interval` is specified, a PageElement's default interval is used.
        */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck(
-          this._node.$, (element) => element.eventually.not.hasAnyText(otherOpts), filterMask, true
-        )
+          this._node.$, (element) => element.eventually.not.hasAnyText(otherOpts), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageElements managed by PageElementMap eventually do not contain the
@@ -1673,8 +1684,8 @@ export class PageElementMapEventually<
        */
       containsText: (texts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.containsText(expected, opts), texts
-        )
+          this._node.$, (element, expected) => element.eventually.not.containsText(expected, opts), texts,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually do not equal
@@ -1689,8 +1700,8 @@ export class PageElementMapEventually<
        */
       hasDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directTexts
-        )
+          this._node.$, (element, expected) => element.eventually.not.hasDirectText(expected, opts), directTexts,
+        );
       },
       /**
        * Returns true if all PageElements managed by PageElementMap eventually do not have any direct text within a
@@ -1704,11 +1715,11 @@ export class PageElementMapEventually<
        * If no `interval` is specified, a PageElement's default interval is used.
        */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IMapFilterMask<K> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck(
-          this._node.$, (element) => element.eventually.not.hasAnyDirectText(otherOpts), filterMask, true
-        )
+          this._node.$, (element) => element.eventually.not.hasAnyDirectText(otherOpts), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageElements managed by PageElementMap eventually do not contain
@@ -1723,9 +1734,9 @@ export class PageElementMapEventually<
        */
       containsDirectText: (directTexts: Partial<Record<K, string>>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck(
-          this._node.$, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directTexts
-        )
-      }
-    }
+          this._node.$, (element, expected) => element.eventually.not.containsDirectText(expected, opts), directTexts,
+        );
+      },
+    };
   }
 }

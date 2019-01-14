@@ -1,21 +1,21 @@
-import { PageNodeStore } from '../stores'
-import { PageNodeCurrently, PageNode } from '.';
-import { PageNodeEventually, PageNodeWait, IPageNodeOpts } from './PageNode';
+import { PageNode, PageNodeCurrently } from '.';
 import { isNullOrUndefined } from '../../helpers';
+import { PageNodeStore } from '../stores';
+import { IPageNodeOpts, PageNodeEventually, PageNodeWait } from './PageNode';
 
 /**
  * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `string`.
  */
 export type ExtractText<Content extends {[key: string]: Workflo.PageNode.INode}> =
-  Workflo.PageNode.ExtractText<Content>
+  Workflo.PageNode.ExtractText<Content>;
 
 /**
  * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `boolean`.
  */
 export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.INode}> =
-  Workflo.PageNode.ExtractBoolean<Content>
+  Workflo.PageNode.ExtractBoolean<Content>;
 
 /**
  * This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.
@@ -44,8 +44,9 @@ export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.INod
  * - hasAnyDirectText
  * - containsDirectText
  */
-type ElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> =
-Workflo.PageNode.IElementNode<ExtractText<Content>, ExtractBoolean<Content>, Workflo.PageNode.IGroupFilterMask<Content>>
+type ElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> = Workflo.PageNode.IElementNode<
+  ExtractText<Content>, ExtractBoolean<Content>, Workflo.PageNode.IGroupFilterMask<Content>
+>;
 
 /**
  * Describes the opts parameter passed to the constructor function of PageElementGroup.
@@ -58,7 +59,7 @@ export interface IPageElementGroupOpts<
   Store extends PageNodeStore,
   Content extends {[key: string] : Workflo.PageNode.INode}
 > extends IPageNodeOpts<Store> {
-  content: Content
+  content: Content;
 }
 
 /**
@@ -87,25 +88,26 @@ export class PageElementGroup<
   Content extends {[K in keyof Content] : Workflo.PageNode.INode}
 > extends PageNode<Store>
 implements ElementNode<Content> {
-  protected _id: string
-  protected _$: Content
-  protected _lastDiff: Workflo.IDiff
+  protected _id: string;
+  protected _$: Content;
+  protected _lastDiff: Workflo.IDiff;
 
-  readonly currently: PageElementGroupCurrently<Store, Content, this>
-  readonly wait: PageElementGroupWait<Store, Content, this>
-  readonly eventually: PageElementGroupEventually<Store, Content, this>
+  readonly currently: PageElementGroupCurrently<Store, Content, this>;
+  readonly wait: PageElementGroupWait<Store, Content, this>;
+  readonly eventually: PageElementGroupEventually<Store, Content, this>;
 
   /**
    * A PageElementGroup manages PageNodes of arbitrary types and structure in its `Content` which can be accessed be
    * accessed via PageElementGroup's `$` accessor.
    *
    * It provides a convenient way to handle HTML forms, because it allows for state retrieval, state check, wait and
-   * setter functions to be executed on all of its managed PageNodes with a single function call. This can greatly reduce
-   * the code required to fill in a form.
+   * setter functions to be executed on all of its managed PageNodes with a single function call. This can greatly
+   * reduce the code required to fill in a form.
    *
-   * PageElementGroup does not force its managed PageNodes to support a certain function - it simply checks if a PageNode
-   * implements the said function before invoking it. If a PageNode does not implement a function, the invocation of
-   * this function is skipped for the affected PageNode and `undefined` will be written as the PageNode's result value.
+   * PageElementGroup does not force its managed PageNodes to support a certain function - it simply checks if a
+   * PageNode implements the said function before invoking it. If a PageNode does not implement a function, the
+   * invocation of this function is skipped for the affected PageNode and `undefined` will be written as the PageNode's
+   * result value.
    *
    * The result values returned by and the parameter values passed to functions which are executed on the managed
    * PageNodes are mapped to the structure of PageElementGroup's `Content` by replacing the `Content`'s original values
@@ -119,34 +121,34 @@ implements ElementNode<Content> {
     store,
     timeout,
     interval,
-    content
+    content,
   }: IPageElementGroupOpts<Store, Content>) {
-    super(id, {store, timeout, interval})
+    super(id, { store, timeout, interval });
 
-    this._id = id
-    this._$ = content
+    this._id = id;
+    this._$ = content;
 
-    this.currently = new PageElementGroupCurrently(this)
-    this.wait = new PageElementGroupWait(this)
-    this.eventually = new PageElementGroupEventually(this)
+    this.currently = new PageElementGroupCurrently(this);
+    this.wait = new PageElementGroupWait(this);
+    this.eventually = new PageElementGroupEventually(this);
   }
 
   /**
    * provides access to a PageElementGroup's `Content`
    */
   get $() {
-    return this._$
+    return this._$;
   }
 
   toJSON(): Workflo.IElementJSON {
     return {
       pageNodeType: this.constructor.name,
-      nodeId: this._id
-    }
+      nodeId: this._id,
+    };
   }
 
   __getNodeId() {
-    return this._id
+    return this._id;
   }
 
   // GETTER FUNCTIONS
@@ -160,8 +162,8 @@ implements ElementNode<Content> {
    */
   getText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this.eachGet<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, filter}) => node.getText(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.getText(filter), filterMask,
+    );
   }
 
   /**
@@ -176,8 +178,8 @@ implements ElementNode<Content> {
    */
   getDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this.eachGet<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, filter}) => node.getDirectText(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.getDirectText(filter), filterMask,
+    );
   }
 
   /**
@@ -189,8 +191,8 @@ implements ElementNode<Content> {
    */
   getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
-      isIElementNode, ({node, filter}) => node.getIsEnabled(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.getIsEnabled(filter), filterMask,
+    );
   }
 
   /**
@@ -203,8 +205,8 @@ implements ElementNode<Content> {
    */
   getHasText(texts: ExtractText<Content>) {
     return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.getHasText(expected), texts
-    )
+      isIElementNode, ({ node, expected }) => node.getHasText(expected), texts,
+    );
   }
 
   /**
@@ -218,8 +220,8 @@ implements ElementNode<Content> {
    */
   getHasAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this.eachCompare<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.getHasAnyText(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.getHasAnyText(filter), filterMask, true,
+    );
   }
 
   /**
@@ -232,8 +234,8 @@ implements ElementNode<Content> {
    */
   getContainsText(texts: ExtractText<Content>) {
     return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.getContainsText(expected), texts
-    )
+      isIElementNode, ({ node, expected }) => node.getContainsText(expected), texts,
+    );
   }
 
   /**
@@ -249,8 +251,8 @@ implements ElementNode<Content> {
    */
   getHasDirectText(directTexts: ExtractText<Content>) {
     return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.getHasDirectText(expected), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.getHasDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -267,8 +269,8 @@ implements ElementNode<Content> {
    */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this.eachCompare<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.getHasAnyDirectText(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.getHasAnyDirectText(filter), filterMask, true,
+    );
   }
 
   /**
@@ -285,8 +287,8 @@ implements ElementNode<Content> {
    */
   getContainsDirectText(directTexts: ExtractText<Content>) {
     return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.getContainsDirectText(expected), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.getContainsDirectText(expected), directTexts,
+    );
   }
 
   // HELPER FUNCTIONS
@@ -298,7 +300,7 @@ implements ElementNode<Content> {
    * @param filter a filterMask entry that refers to a corresponding managed PageNode
    */
   protected _includedInFilter(value: any) {
-    return !!value
+    return !!value;
   }
 
   /**
@@ -326,36 +328,36 @@ implements ElementNode<Content> {
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     compareFunc: (args: {
-      node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType]
+      node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType],
     }) => any,
     expected?: ExpectedType,
-    isFilterMask: boolean = false
+    isFilterMask: boolean = false,
   ): ResultType {
-    let result = {} as ResultType;
+    const result = {} as ResultType;
 
     for (const key in this._$) {
-      const node = this._$[key] as any as NodeInterface
+      const node = this._$[key] as any as NodeInterface;
 
       if (supportsInterface(this._$[key])) {
         if (isNullOrUndefined(expected)) {
-          result[key] = compareFunc({node})
+          result[key] = compareFunc({ node });
         } else {
-          const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType]
+          const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType];
 
           if (isFilterMask) {
             if (this._includedInFilter(expectedValue)) {
-              result[key] = compareFunc({node, filter: expectedValue})
+              result[key] = compareFunc({ node, filter: expectedValue });
             }
           } else {
             if (typeof expectedValue !== 'undefined') {
-              result[key] = compareFunc({node, expected: expectedValue})
+              result[key] = compareFunc({ node, expected: expectedValue });
             }
           }
         }
       }
     }
 
-    return result
+    return result;
   }
 
   /**
@@ -380,34 +382,34 @@ implements ElementNode<Content> {
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     checkFunc: (args: {
-      node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType]
+      node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType],
     }) => boolean,
     expected?: ExpectedType,
-    isFilterMask: boolean = false
+    isFilterMask: boolean = false,
   ): boolean {
-    const diffs: Workflo.IDiffTree = {}
+    const diffs: Workflo.IDiffTree = {};
 
     for (const key in this._$) {
-      const node = this._$[key] as any as NodeInterface
+      const node = this._$[key] as any as NodeInterface;
 
       if (supportsInterface(this._$[key])) {
         if (isNullOrUndefined(expected)) {
-          if (!checkFunc({node})) {
-            diffs[`.${key}`] = this._$[key].__lastDiff
+          if (!checkFunc({ node })) {
+            diffs[`.${key}`] = this._$[key].__lastDiff;
           }
         } else {
-          const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType]
+          const expectedValue = (expected as any)[key] as ExpectedType[keyof ExpectedType];
 
           if (isFilterMask) {
             if (this._includedInFilter(expectedValue)) {
-              if (!checkFunc({node, filter: expectedValue})) {
-                diffs[`.${key}`] = this._$[key].__lastDiff
+              if (!checkFunc({ node, filter: expectedValue })) {
+                diffs[`.${key}`] = this._$[key].__lastDiff;
               }
             }
           } else {
             if (typeof expectedValue !== 'undefined') {
-              if (!checkFunc({node, expected: expectedValue})) {
-                diffs[`.${key}`] = this._$[key].__lastDiff
+              if (!checkFunc({ node, expected: expectedValue })) {
+                diffs[`.${key}`] = this._$[key].__lastDiff;
               }
             }
           }
@@ -416,8 +418,8 @@ implements ElementNode<Content> {
     }
 
     this._lastDiff = {
-      tree: diffs
-    }
+      tree: diffs,
+    };
 
     return Object.keys(diffs).length === 0;
   }
@@ -446,23 +448,23 @@ implements ElementNode<Content> {
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     getFunc: (
-      args: {node: NodeInterface, filter?: FilterType[keyof FilterType]}
+      args: {node: NodeInterface, filter?: FilterType[keyof FilterType]},
     ) => any,
     filterMask?: FilterType,
   ): ResultType {
-    let result = {} as ResultType;
+    const result = {} as ResultType;
 
     for (const key in this.$) {
       if (supportsInterface(this.$[key])) {
-        const node = this.$[key] as any as NodeInterface
+        const node = this.$[key] as any as NodeInterface;
 
         if (isNullOrUndefined(filterMask)) {
-          result[key] = getFunc({node})
+          result[key] = getFunc({ node });
         } else {
-          const filter = filterMask[key]
+          const filter = filterMask[key];
 
           if (this._includedInFilter(filter)) {
-            result[key] = getFunc({node, filter})
+            result[key] = getFunc({ node, filter });
           }
         }
       }
@@ -479,7 +481,7 @@ implements ElementNode<Content> {
    * @param supportsInterface this function checks if a PageNode implements the `NodeInterface` required to invoke
    * `waitFunc`
    * @param waitFunc is a wait function executed for each PageNode in PageElementGroup's `Content`. It is
-   * passed an `args` object containing the PageNode and either the PageNode's expected value used by the wait condition 
+   * passed an `args` object containing the PageNode and either the PageNode's expected value used by the wait condition
    * or the PageNode's optional (sub) filter mask.
    * @param expected a structure of expected values used for the wait conditions
    * @param isFilterMask If set to true, the `expected` parameter represents a filterMask which can be used to skip the
@@ -492,34 +494,34 @@ implements ElementNode<Content> {
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     waitFunc: (args: {
-      node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType]
+      node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType],
     }) => NodeInterface,
     expected?: ExpectedType,
-    isFilterMask: boolean = false
+    isFilterMask: boolean = false,
   ): this {
     for (const key in this._$) {
-      const node = this._$[key] as any as NodeInterface
+      const node = this._$[key] as any as NodeInterface;
 
       if (supportsInterface(this._$[key])) {
         if (isNullOrUndefined(expected)) {
-          waitFunc({node})
+          waitFunc({ node });
         } else {
-          const expectedValue = expected[key]
+          const expectedValue = expected[key];
 
           if (isFilterMask) {
             if (this._includedInFilter(expectedValue)) {
-              waitFunc({node, filter: expectedValue})
+              waitFunc({ node, filter: expectedValue });
             }
           } else {
             if (typeof expectedValue !== 'undefined') {
-              waitFunc({node, expected: expectedValue})
+              waitFunc({ node, expected: expectedValue });
             }
           }
         }
       }
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -541,27 +543,27 @@ implements ElementNode<Content> {
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     action: (args: {
-      node: NodeInterface, filter?: FilterType[keyof FilterType]
+      node: NodeInterface, filter?: FilterType[keyof FilterType],
     }) => any,
     filterMask?: FilterType,
   ): this {
     for (const key in this._$) {
-      const node = this._$[key] as any as NodeInterface
+      const node = this._$[key] as any as NodeInterface;
 
       if (supportsInterface(this._$[key])) {
         if (isNullOrUndefined(filterMask)) {
-          action({node})
+          action({ node });
         } else {
-          const filter = filterMask[key]
+          const filter = filterMask[key];
 
           if (this._includedInFilter(filter)) {
-            action({node, filter})
+            action({ node, filter });
           }
         }
       }
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -582,25 +584,25 @@ implements ElementNode<Content> {
   >(
     supportsInterface: (node: Workflo.PageNode.INode) => boolean,
     setFunc: (
-      args: {node: NodeInterface, value?: ValuesType[keyof ValuesType]}
+      args: {node: NodeInterface, value?: ValuesType[keyof ValuesType]},
     ) => NodeInterface,
     values: ValuesType,
   ): this {
     for (const key in this._$) {
-      const node = this._$[key] as any as NodeInterface
+      const node = this._$[key] as any as NodeInterface;
 
       if (supportsInterface(this._$[key])) {
         if (values) {
           if (typeof values[key] !== 'undefined') {
-            setFunc({node, value: values[key]})
+            setFunc({ node, value: values[key] });
           }
         } else {
-          setFunc({node})
+          setFunc({ node });
         }
       }
     }
 
-    return this
+    return this;
   }
 }
 
@@ -627,8 +629,8 @@ export class PageElementGroupCurrently<
    */
   getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.getExists(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.currently.getExists(filter), filterMask,
+    );
   }
 
   /**
@@ -639,8 +641,8 @@ export class PageElementGroupCurrently<
    */
   getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.getIsVisible(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.currently.getIsVisible(filter), filterMask,
+    );
   }
 
   /**
@@ -651,8 +653,8 @@ export class PageElementGroupCurrently<
    */
   getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.getIsEnabled(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.currently.getIsEnabled(filter), filterMask,
+    );
   }
 
   /**
@@ -664,8 +666,8 @@ export class PageElementGroupCurrently<
    */
   getHasText(texts: ExtractText<Content>) {
     return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.getHasText(expected), texts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.getHasText(expected), texts,
+    );
   }
 
   /**
@@ -678,8 +680,8 @@ export class PageElementGroupCurrently<
    */
   getHasAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachCompare<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.getHasAnyText(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.currently.getHasAnyText(filter), filterMask, true,
+    );
   }
 
   /**
@@ -691,8 +693,8 @@ export class PageElementGroupCurrently<
    */
   getContainsText(texts: ExtractText<Content>) {
     return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.getContainsText(expected), texts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.getContainsText(expected), texts,
+    );
   }
 
   /**
@@ -707,8 +709,8 @@ export class PageElementGroupCurrently<
    */
   getHasDirectText(directTexts: ExtractText<Content>) {
     return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.getHasDirectText(expected), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.getHasDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -724,8 +726,8 @@ export class PageElementGroupCurrently<
    */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachCompare<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.getHasAnyDirectText(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.currently.getHasAnyDirectText(filter), filterMask, true,
+    );
   }
 
   /**
@@ -741,8 +743,8 @@ export class PageElementGroupCurrently<
    */
   getContainsDirectText(directTexts: ExtractText<Content>) {
     return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.getContainsDirectText(expected), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.getContainsDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -753,8 +755,8 @@ export class PageElementGroupCurrently<
    */
   getText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachGet<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.getText(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.currently.getText(filter), filterMask,
+    );
   }
 
   /**
@@ -768,8 +770,8 @@ export class PageElementGroupCurrently<
    */
   getDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachGet<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.getDirectText(filter), filterMask
-    )
+      isIElementNode, ({ node, filter }) => node.currently.getDirectText(filter), filterMask,
+    );
   }
 
   /**
@@ -782,8 +784,8 @@ export class PageElementGroupCurrently<
     return this._node.eachCheck<
       ElementNode<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
     > (
-      isIElementNode, ({node, filter}) => node.currently.exists(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.currently.exists(filter), filterMask, true,
+    );
   }
 
   /**
@@ -794,8 +796,8 @@ export class PageElementGroupCurrently<
    */
   isVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachCheck<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.isVisible(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.currently.isVisible(filter), filterMask, true,
+    );
   }
 
   /**
@@ -806,8 +808,8 @@ export class PageElementGroupCurrently<
    */
   isEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachCheck<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.isEnabled(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.currently.isEnabled(filter), filterMask, true,
+    );
   }
 
   /**
@@ -817,8 +819,8 @@ export class PageElementGroupCurrently<
    */
   hasText(texts: ExtractText<Content>) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.hasText(expected), texts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.hasText(expected), texts,
+    );
   }
 
   /**
@@ -829,8 +831,8 @@ export class PageElementGroupCurrently<
    */
   hasAnyText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachCheck<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.hasAnyText(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.currently.hasAnyText(filter), filterMask, true,
+    );
   }
 
   /**
@@ -840,8 +842,8 @@ export class PageElementGroupCurrently<
    */
   containsText(texts: ExtractText<Content>) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.containsText(expected), texts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.containsText(expected), texts,
+    );
   }
 
   /**
@@ -855,8 +857,8 @@ export class PageElementGroupCurrently<
    */
   hasDirectText(directTexts: ExtractText<Content>) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.hasDirectText(expected), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.hasDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -870,8 +872,8 @@ export class PageElementGroupCurrently<
    */
   hasAnyDirectText(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
     return this._node.eachCheck<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.currently.hasAnyDirectText(filter), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.currently.hasAnyDirectText(filter), filterMask, true,
+    );
   }
 
   /**
@@ -885,8 +887,8 @@ export class PageElementGroupCurrently<
    */
   containsDirectText(directTexts: ExtractText<Content>) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.currently.containsDirectText(expected), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.currently.containsDirectText(expected), directTexts,
+    );
   }
 
   /**
@@ -904,8 +906,8 @@ export class PageElementGroupCurrently<
         return this._node.eachCheck<
           ElementNode<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
         > (
-          isIElementNode, ({node, filter}) => node.currently.not.exists(filter), filterMask, true
-        )
+          isIElementNode, ({ node, filter }) => node.currently.not.exists(filter), filterMask, true,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup are currently not visible.
@@ -915,8 +917,8 @@ export class PageElementGroupCurrently<
        */
       isVisible: (filterMask?: Workflo.PageNode.GroupFilterMask<Content>) => {
         return this._node.eachCheck<ElementNode<Content>> (
-          isIElementNode, ({node, filter}) => node.currently.not.isVisible(filter), filterMask, true
-        )
+          isIElementNode, ({ node, filter }) => node.currently.not.isVisible(filter), filterMask, true,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup are currently not enabled.
@@ -926,8 +928,8 @@ export class PageElementGroupCurrently<
        */
       isEnabled: (filterMask?: Workflo.PageNode.GroupFilterMask<Content>) => {
         return this._node.eachCheck<ElementNode<Content>> (
-          isIElementNode, ({node, filter}) => node.currently.not.isEnabled(filter), filterMask, true
-        )
+          isIElementNode, ({ node, filter }) => node.currently.not.isEnabled(filter), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageNodes managed by PageElementGroup currently do not equal the
@@ -937,8 +939,8 @@ export class PageElementGroupCurrently<
        */
       hasText: (texts: ExtractText<Content>) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.currently.not.hasText(expected), texts
-        )
+          isIElementNode, ({ node, expected }) => node.currently.not.hasText(expected), texts,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup currently do not have any text.
@@ -948,8 +950,8 @@ export class PageElementGroupCurrently<
        */
       hasAnyText: (filterMask?: Workflo.PageNode.GroupFilterMask<Content>) => {
         return this._node.eachCheck<ElementNode<Content>> (
-          isIElementNode, ({node, filter}) => node.currently.not.hasAnyText(filter), filterMask, true
-        )
+          isIElementNode, ({ node, filter }) => node.currently.not.hasAnyText(filter), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageNodes managed by PageElementGroup currently do not contain the
@@ -959,8 +961,8 @@ export class PageElementGroupCurrently<
        */
       containsText: (texts: ExtractText<Content>) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.currently.not.containsText(expected), texts
-        )
+          isIElementNode, ({ node, expected }) => node.currently.not.containsText(expected), texts,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup currently do not equal
@@ -973,8 +975,8 @@ export class PageElementGroupCurrently<
        */
       hasDirectText: (directTexts: ExtractText<Content>) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.currently.not.hasDirectText(expected), directTexts
-        )
+          isIElementNode, ({ node, expected }) => node.currently.not.hasDirectText(expected), directTexts,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup currently do not have any direct text.
@@ -987,8 +989,8 @@ export class PageElementGroupCurrently<
        */
       hasAnyDirectText: (filterMask?: Workflo.PageNode.GroupFilterMask<Content>) => {
         return this._node.eachCheck<ElementNode<Content>> (
-          isIElementNode, ({node, filter}) => node.currently.not.hasAnyDirectText(filter), filterMask, true
-        )
+          isIElementNode, ({ node, filter }) => node.currently.not.hasAnyDirectText(filter), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup currently do not contain
@@ -1001,10 +1003,10 @@ export class PageElementGroupCurrently<
        */
       containsDirectText: (directTexts: ExtractText<Content>) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.currently.not.containsDirectText(expected), directTexts
-        )
-      }
-    }
+          isIElementNode, ({ node, expected }) => node.currently.not.containsDirectText(expected), directTexts,
+        );
+      },
+    };
   }
 }
 
@@ -1035,13 +1037,13 @@ export class PageElementGroupWait<
    * @returns this (an instance of PageElementGroup)
    */
   exists(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait<
       ElementNode<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
     > (
-      isIElementNode, ({node, filter}) => node.wait.exists({filterMask: filter, ...otherOpts}), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.wait.exists({ filterMask: filter, ...otherOpts }), filterMask, true,
+    );
   }
 
   /**
@@ -1057,11 +1059,11 @@ export class PageElementGroupWait<
    * @returns this (an instance of PageElementGroup)
    */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.wait.isVisible({filterMask: filter, ...otherOpts}), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.wait.isVisible({ filterMask: filter, ...otherOpts }), filterMask, true,
+    );
   }
 
   /**
@@ -1077,11 +1079,11 @@ export class PageElementGroupWait<
    * @returns this (an instance of PageElementGroup)
    */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.wait.isEnabled({filterMask: filter, ...otherOpts}), filterMask, true
-    )
+      isIElementNode, ({ node, filter }) => node.wait.isEnabled({ filterMask: filter, ...otherOpts }), filterMask, true,
+    );
   }
 
   /**
@@ -1100,8 +1102,8 @@ export class PageElementGroupWait<
    */
   hasText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.wait.hasText(expected, opts), texts
-    )
+      isIElementNode, ({ node, expected }) => node.wait.hasText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1119,11 +1121,14 @@ export class PageElementGroupWait<
    * @returns this (an instance of PageElementGroup)
    */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait<ElementNode<Content>> (
-      isIElementNode, ({node, filter}) => node.wait.hasAnyText({filterMask: filter, ...otherOpts}), filterMask, true
-    )
+      isIElementNode,
+      ({ node, filter }) => node.wait.hasAnyText({ filterMask: filter, ...otherOpts }),
+      filterMask,
+      true,
+    );
   }
 
   /**
@@ -1142,8 +1147,8 @@ export class PageElementGroupWait<
    */
   containsText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.wait.containsText(expected, opts), texts
-    )
+      isIElementNode, ({ node, expected }) => node.wait.containsText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1165,8 +1170,8 @@ export class PageElementGroupWait<
    */
   hasDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.wait.hasDirectText(expected, opts), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.wait.hasDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1177,9 +1182,9 @@ export class PageElementGroupWait<
    * A direct text is a text that resides on the level directly below the selected HTML element.
    * It does not include any text of the HTML element's nested children HTML elements.
    *
-   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for some
-   * or all managed PageNodes, the `timeout` within which the condition is expected to be met and the `interval` used
-   * to check it
+   * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function for
+   * some or all managed PageNodes, the `timeout` within which the condition is expected to be met and the `interval`
+   * used to check it
    *
    * If no `timeout` is specified, a PageElement's default timeout is used.
    * If no `interval` is specified, a PageElement's default interval is used.
@@ -1187,14 +1192,14 @@ export class PageElementGroupWait<
    * @returns this (an instance of PageElementGroup)
    */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachWait<ElementNode<Content>> (
       isIElementNode,
-      ({node, filter}) => node.wait.hasAnyDirectText({filterMask: filter, ...otherOpts}),
+      ({ node, filter }) => node.wait.hasAnyDirectText({ filterMask: filter, ...otherOpts }),
       filterMask,
-      true
-    )
+      true,
+    );
   }
 
   /**
@@ -1217,8 +1222,8 @@ export class PageElementGroupWait<
    */
   containsDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.wait.containsDirectText(expected, opts), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.wait.containsDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1239,13 +1244,16 @@ export class PageElementGroupWait<
        * @returns this (an instance of PageElementGroup)
        */
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait<
           ElementNode<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
         > (
-          isIElementNode, ({node, filter}) => node.wait.not.exists({filterMask: filter, ...otherOpts}), filterMask, true
-        )
+          isIElementNode,
+          ({ node, filter }) => node.wait.not.exists({ filterMask: filter, ...otherOpts }),
+          filterMask,
+          true,
+        );
       },
       /**
        * Waits for all PageNodes managed by PageElementGroup not to be visible.
@@ -1260,14 +1268,14 @@ export class PageElementGroupWait<
        * @returns this (an instance of PageElementGroup)
        */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait<ElementNode<Content>> (
           isIElementNode,
-          ({node, filter}) => node.wait.not.isVisible({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.wait.not.isVisible({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Waits for all PageNodes managed by PageElementGroup not to be enabled.
@@ -1282,14 +1290,14 @@ export class PageElementGroupWait<
        * @returns this (an instance of PageElementGroup)
        */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait<ElementNode<Content>> (
           isIElementNode,
-          ({node, filter}) => node.wait.not.isEnabled({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.wait.not.isEnabled({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Waits for the actual texts of all PageNodes managed by PageElementGroup not to equal the expected texts.
@@ -1307,8 +1315,8 @@ export class PageElementGroupWait<
        */
       hasText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.wait.not.hasText(expected, opts), texts
-        )
+          isIElementNode, ({ node, expected }) => node.wait.not.hasText(expected, opts), texts,
+        );
       },
       /**
        * Waits for all PageNodes managed by PageElementGroup not to have any text.
@@ -1325,14 +1333,14 @@ export class PageElementGroupWait<
        * @returns this (an instance of PageElementGroup)
        */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait<ElementNode<Content>> (
           isIElementNode,
-          ({node, filter}) => node.wait.not.hasAnyText({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.wait.not.hasAnyText({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Waits for the actual texts of all PageNodes managed by PageElementGroup not to contain the expected texts.
@@ -1350,8 +1358,8 @@ export class PageElementGroupWait<
        */
       containsText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.wait.not.containsText(expected, opts), texts
-        )
+          isIElementNode, ({ node, expected }) => node.wait.not.containsText(expected, opts), texts,
+        );
       },
       /**
        * Waits for the actual direct texts of all PageNodes managed by PageElementGroup not to equal the expected
@@ -1373,8 +1381,8 @@ export class PageElementGroupWait<
        */
       hasDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.wait.not.hasDirectText(expected, opts), directTexts
-        )
+          isIElementNode, ({ node, expected }) => node.wait.not.hasDirectText(expected, opts), directTexts,
+        );
       },
       /**
        * Waits for all PageNodes managed by PageElementGroup not to have any direct text.
@@ -1394,14 +1402,14 @@ export class PageElementGroupWait<
        * @returns this (an instance of PageElementGroup)
        */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachWait<ElementNode<Content>> (
           isIElementNode,
-          ({node, filter}) => node.wait.not.hasAnyDirectText({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.wait.not.hasAnyDirectText({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Waits for the actual direct texts of all PageNodes managed by PageElementGroup not to contain the expected
@@ -1423,10 +1431,10 @@ export class PageElementGroupWait<
        */
       containsDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.wait.not.containsDirectText(expected, opts), directTexts
-        )
-      }
-    }
+          isIElementNode, ({ node, expected }) => node.wait.not.containsDirectText(expected, opts), directTexts,
+        );
+      },
+    };
   }
 }
 
@@ -1454,13 +1462,16 @@ export class PageElementGroupEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   exists(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck<
       ElementNode<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
     > (
-      isIElementNode, ({node, filter}) => node.eventually.exists({filterMask: filter, ...otherOpts}), filterMask, true
-    )
+      isIElementNode,
+      ({ node, filter }) => node.eventually.exists({ filterMask: filter, ...otherOpts }),
+      filterMask,
+      true,
+    );
   }
 
   /**
@@ -1472,14 +1483,14 @@ export class PageElementGroupEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode,
-      ({node, filter}) => node.eventually.isVisible({filterMask: filter, ...otherOpts}),
+      ({ node, filter }) => node.eventually.isVisible({ filterMask: filter, ...otherOpts }),
       filterMask,
-      true
-    )
+      true,
+    );
   }
 
   /**
@@ -1491,14 +1502,14 @@ export class PageElementGroupEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    */
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode,
-      ({node, filter}) => node.eventually.isEnabled({filterMask: filter, ...otherOpts}),
+      ({ node, filter }) => node.eventually.isEnabled({ filterMask: filter, ...otherOpts }),
       filterMask,
-      true
-    )
+      true,
+    );
   }
 
   /**
@@ -1514,8 +1525,8 @@ export class PageElementGroupEventually<
    */
   hasText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.eventually.hasText(expected, opts), texts
-    )
+      isIElementNode, ({ node, expected }) => node.eventually.hasText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1529,14 +1540,14 @@ export class PageElementGroupEventually<
    * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode,
-      ({node, filter}) => node.eventually.hasAnyText({filterMask: filter, ...otherOpts}),
+      ({ node, filter }) => node.eventually.hasAnyText({ filterMask: filter, ...otherOpts }),
       filterMask,
-      true
-    )
+      true,
+    );
   }
 
   /**
@@ -1552,8 +1563,8 @@ export class PageElementGroupEventually<
    */
   containsText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.eventually.containsText(expected, opts), texts
-    )
+      isIElementNode, ({ node, expected }) => node.eventually.containsText(expected, opts), texts,
+    );
   }
 
   /**
@@ -1569,8 +1580,8 @@ export class PageElementGroupEventually<
    */
   hasDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.eventually.hasDirectText(expected, opts), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.eventually.hasDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1585,14 +1596,14 @@ export class PageElementGroupEventually<
    * If no `interval` is specified, a PageElement's default interval is used.
    */
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
-    const {filterMask, ...otherOpts} = opts
+    const { filterMask, ...otherOpts } = opts;
 
     return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode,
-      ({node, filter}) => node.eventually.hasAnyDirectText({filterMask: filter, ...otherOpts}),
+      ({ node, filter }) => node.eventually.hasAnyDirectText({ filterMask: filter, ...otherOpts }),
       filterMask,
-      true
-    )
+      true,
+    );
   }
 
   /**
@@ -1608,8 +1619,8 @@ export class PageElementGroupEventually<
    */
   containsDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
     return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-      isIElementNode, ({node, expected}) => node.eventually.containsDirectText(expected, opts), directTexts
-    )
+      isIElementNode, ({ node, expected }) => node.eventually.containsDirectText(expected, opts), directTexts,
+    );
   }
 
   /**
@@ -1626,16 +1637,16 @@ export class PageElementGroupEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       exists: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck<
           ElementNode<Content>, Workflo.PageNode.GroupFilterMaskExists<Content>
         > (
           isIElementNode,
-          ({node, filter}) => node.eventually.not.exists({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.eventually.not.exists({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup eventually are not visible within a specific timeout.
@@ -1646,14 +1657,14 @@ export class PageElementGroupEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
           isIElementNode,
-          ({node, filter}) => node.eventually.not.isVisible({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.eventually.not.isVisible({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup eventually are not enabled within a specific timeout.
@@ -1664,14 +1675,14 @@ export class PageElementGroupEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        */
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
           isIElementNode,
-          ({node, filter}) => node.eventually.not.isEnabled({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.eventually.not.isEnabled({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageNodes managed by PageElementGroup eventually do not equal the
@@ -1686,8 +1697,8 @@ export class PageElementGroupEventually<
        */
       hasText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.eventually.not.hasText(expected, opts), texts
-        )
+          isIElementNode, ({ node, expected }) => node.eventually.not.hasText(expected, opts), texts,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup eventually do not have any text within a specific
@@ -1701,14 +1712,14 @@ export class PageElementGroupEventually<
        * If no `interval` is specified, a PageElement's default interval is used.
        */
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
           isIElementNode,
-          ({node, filter}) => node.eventually.not.hasAnyText({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.eventually.not.hasAnyText({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Returns true if the actual texts of all PageNodes managed by PageElementGroup eventually do not contain the
@@ -1723,8 +1734,8 @@ export class PageElementGroupEventually<
        */
       containsText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.eventually.not.containsText(expected, opts), texts
-        )
+          isIElementNode, ({ node, expected }) => node.eventually.not.containsText(expected, opts), texts,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup eventually do not equal
@@ -1739,8 +1750,8 @@ export class PageElementGroupEventually<
        */
       hasDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.eventually.not.hasDirectText(expected, opts), directTexts
-        )
+          isIElementNode, ({ node, expected }) => node.eventually.not.hasDirectText(expected, opts), directTexts,
+        );
       },
       /**
        * Returns true if all PageNodes managed by PageElementGroup eventually do not have any direct text within a
@@ -1754,14 +1765,14 @@ export class PageElementGroupEventually<
        * If no `interval` is specified, a PageElement's default interval is used.
        */
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
-        const {filterMask, ...otherOpts} = opts
+        const { filterMask, ...otherOpts } = opts;
 
         return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
           isIElementNode,
-          ({node, filter}) => node.eventually.not.hasAnyDirectText({filterMask: filter, ...otherOpts}),
+          ({ node, filter }) => node.eventually.not.hasAnyDirectText({ filterMask: filter, ...otherOpts }),
           filterMask,
-          true
-        )
+          true,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup eventually do not contain
@@ -1776,10 +1787,10 @@ export class PageElementGroupEventually<
        */
       containsDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
         return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
-          isIElementNode, ({node, expected}) => node.eventually.not.containsDirectText(expected, opts), directTexts
-        )
-      }
-    }
+          isIElementNode, ({ node, expected }) => node.eventually.not.containsDirectText(expected, opts), directTexts,
+        );
+      },
+    };
   }
 }
 
@@ -1812,5 +1823,5 @@ export function isIElementNode<
   typeof node.wait['containsDirectText'] === 'function' &&
   typeof node.eventually['hasDirectText'] === 'function' &&
   typeof node.eventually['hasAnyDirectText'] === 'function' &&
-  typeof node.eventually['containsDirectText'] === 'function'
+  typeof node.eventually['containsDirectText'] === 'function';
 }

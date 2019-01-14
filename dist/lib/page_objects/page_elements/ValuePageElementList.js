@@ -293,7 +293,8 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
  */
 class ValuePageElementListWait extends _1.PageElementListWait {
     /**
-     * Waits for the actual values of all ValuePageElements managed by ValuePageElementList to equal the expected value(s).
+     * Waits for the actual values of all ValuePageElements managed by ValuePageElementList to equal the expected
+     * value(s).
      *
      * Throws an error if the condition is not met within a specific timeout.
      *
