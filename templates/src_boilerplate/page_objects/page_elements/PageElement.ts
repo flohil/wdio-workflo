@@ -67,8 +67,8 @@ export class PageElement<Store extends PageNodeStore> extends core.elements.Page
   * with them.
   *
   * A big pitfall of scripted browser testing is that a website and its building blocks need to be loaded and rendered
-  * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to wait
-  * for elements of a page to be loaded and rendered or for certain conditions to be met.
+  * before they can be interacted with and all of this takes time. Therefore, browser based tests constantly need to
+  * wait for elements of a page to be loaded and rendered or for certain conditions to be met.
   *
   * PageElements try to overcome these hurdles be performing an "initial waiting condition" before interacting with
   * elements on the page. The supported initial wait conditions include:

@@ -13,7 +13,6 @@
         "class-name": true,
         "match-default-export-name": true,
         "no-irregular-whitespace": true,
-        "ordered-imports": true,
         "new-parens": true,
         "no-arg": true,
         "no-bitwise": true,
@@ -41,7 +40,9 @@
         "switch-default": false,
         "ter-func-call-spacing": false,
         "no-conditional-assignment": false,
-        "align": false
+        "align": false,
+        "object-literal-key-quotes": false,
+        "ordered-imports": false
     },
     "jsRules": {
         "max-line-length": {

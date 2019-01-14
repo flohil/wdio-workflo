@@ -1,7 +1,7 @@
 
-import { pageObjects as core } from 'wdio-workflo'
+import { pageObjects as core } from 'wdio-workflo';
 
-import { PageNodeStore } from '../stores'
+import { PageNodeStore } from '../stores';
 
 /**
  * Defines the opts parameter passed to the constructor of Page.
@@ -37,6 +37,6 @@ export abstract class Page<
    * @param opts the options required to create an instance of Page
    */
   constructor(opts: IPageOpts<Store>) {
-    super(opts)
+    super(opts);
   }
 }

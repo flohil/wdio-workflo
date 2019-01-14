@@ -1,4 +1,4 @@
-import { pageObjects as core } from 'wdio-workflo'
+import { pageObjects as core } from 'wdio-workflo';
 import { IPageElementOpts, PageElement } from '../page_elements';
 
  /**
@@ -30,16 +30,16 @@ export class PageNodeStore extends core.stores.PageNodeStore {
    */
   Element(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>
+    options?: Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>,
   ) {
     return this._getElement<PageElement<this>, IPageElementOpts<this>>(
       selector,
       PageElement,
       {
         store: this,
-        ...options
-      }
-    )
+        ...options,
+      },
+    );
   }
 
   /**
@@ -53,15 +53,15 @@ export class PageNodeStore extends core.stores.PageNodeStore {
    */
   ExistElement(
     selector: Workflo.XPath,
-    options?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
+    options?: Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, 'waitType'>>,
   ) {
     return this.Element(
       selector,
       {
         waitType: Workflo.WaitType.exist,
-        ...options
-      }
-    )
+        ...options,
+      },
+    );
   }
 
 // LISTS
@@ -85,16 +85,16 @@ export class PageNodeStore extends core.stores.PageNodeStore {
       >,
       Workflo.Store.ListPublicKeys,
       Workflo.Store.ListPublicPartialKeys
-    >
+    >,
   ) {
     return this.List(
       selector,
       {
         elementOpts: {},
         elementStoreFunc: this.Element,
-        ...options
-      }
-    )
+        ...options,
+      },
+    );
   }
 
   /**
@@ -111,10 +111,10 @@ export class PageNodeStore extends core.stores.PageNodeStore {
   ExistElementList(
     selector: Workflo.XPath,
     options?: Workflo.PickPartial<
-      core.elements.IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, "timeout">>,
-      Exclude<Workflo.Store.ListPublicKeys, "waitType">,
+      core.elements.IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>,
+      Exclude<Workflo.Store.ListPublicKeys, 'waitType'>,
       Workflo.Store.ListPublicPartialKeys
-    >
+    >,
   ) {
     return this.List(
       selector,
@@ -122,9 +122,9 @@ export class PageNodeStore extends core.stores.PageNodeStore {
         elementOpts: {},
         elementStoreFunc: this.ExistElement,
         waitType: Workflo.WaitType.exist,
-        ...options
-      }
-    )
+        ...options,
+      },
+    );
   }
 
 // MAPS
@@ -148,16 +148,16 @@ export class PageNodeStore extends core.stores.PageNodeStore {
       >,
       Workflo.Store.MapPublicKeys,
       Workflo.Store.MapPublicPartialKeys
-    >
+    >,
   ) {
     return this.Map(
       selector,
       {
         elementStoreFunc: this.Element,
         elementOpts: {},
-        ...options
-      }
-    )
+        ...options,
+      },
+    );
   }
 
   /**
@@ -175,19 +175,19 @@ export class PageNodeStore extends core.stores.PageNodeStore {
     selector: Workflo.XPath,
     options: Workflo.PickPartial<
       core.elements.IPageElementMapOpts<
-        this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, "waitType">>
+        this, K, PageElement<this>, Pick<IPageElementOpts<this>, Exclude<Workflo.Store.ElementPublicKeys, 'waitType'>>
       >,
       Workflo.Store.MapPublicKeys,
       Workflo.Store.MapPublicPartialKeys
-    >
+    >,
   ) {
     return this.Map(
       selector,
       {
         elementStoreFunc: this.ExistElement,
         elementOpts: {},
-        ...options
-      }
-    )
+        ...options,
+      },
+    );
   }
 }

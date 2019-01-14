@@ -2,8 +2,8 @@ import { InstallOpts, StartOpts } from 'selenium-standalone';
 import { Client, DesiredCapabilities, Element, Options, RawResult, Suite, Test } from 'webdriverio';
 import { IAnalysedCriteria, IExecutionFilters, IParseResults, ITraceInfo } from './lib/cli';
 import * as enums from './lib/enums';
-import * as helpers from './lib/helpers';
 import * as pageObjects from './lib/page_objects';
+import * as helpers from './lib/helpers';
 import { IPageElementListWaitLengthParams } from './lib/page_objects/page_elements/PageElementList';
 /**
  * This interface describes custom expectation matchers for PageElements.
