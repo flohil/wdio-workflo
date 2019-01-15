@@ -71,7 +71,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>template</dt>
-						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes</p>
+						<dd><p>Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes</p>
 						</dd>
 						<dt>template</dt>
 						<dd><p>PageElementType type of the PageElement for which PageElementEventually defines all <code>eventually</code> functions</p>
@@ -83,7 +83,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Store<span class="tsd-signature-symbol">: </span><a href="pageelementstore.html" class="tsd-signature-type">PageElementStore</a></h4>
+						<h4>Store<span class="tsd-signature-symbol">: </span><a href="pagenodestore.html" class="tsd-signature-type">PageNodeStore</a></h4>
 					</li>
 					<li>
 						<h4>PageElementType<span class="tsd-signature-symbol">: </span><a href="pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -184,7 +184,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenodeeventually.html">PageNodeEventually</a>.<a href="pagenodeeventually.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L311">lib/page_objects/page_elements/PageNode.ts:311</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L309">lib/page_objects/page_elements/PageNode.ts:309</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -217,7 +217,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenodeeventually.html">PageNodeEventually</a>.<a href="pagenodeeventually.html#_node">_node</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L311">lib/page_objects/page_elements/PageNode.ts:311</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L309">lib/page_objects/page_elements/PageNode.ts:309</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -240,7 +240,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pagenodeeventually.html">PageNodeEventually</a>.<a href="pagenodeeventually.html#not">not</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3439">lib/page_objects/page_elements/PageElement.ts:3439</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3451">lib/page_objects/page_elements/PageElement.ts:3451</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -259,7 +259,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3661">lib/page_objects/page_elements/PageElement.ts:3661</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3676">lib/page_objects/page_elements/PageElement.ts:3676</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -303,7 +303,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3704">lib/page_objects/page_elements/PageElement.ts:3704</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3719">lib/page_objects/page_elements/PageElement.ts:3719</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -347,7 +347,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3617">lib/page_objects/page_elements/PageElement.ts:3617</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3632">lib/page_objects/page_elements/PageElement.ts:3632</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -364,7 +364,8 @@
 													<h5>directText: <span class="tsd-signature-type">string</span></h5>
 													<div class="tsd-comment tsd-typography">
 														<div class="lead">
-															<p>the expected direct text which is supposed not to be contained in PageElement&#39;s actual direct text</p>
+															<p>the expected direct text which is supposed not to be contained in PageElement&#39;s actual direct
+															text</p>
 														</div>
 													</div>
 												</li>
@@ -392,7 +393,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3568">lib/page_objects/page_elements/PageElement.ts:3568</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3582">lib/page_objects/page_elements/PageElement.ts:3582</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -435,7 +436,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3746">lib/page_objects/page_elements/PageElement.ts:3746</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3761">lib/page_objects/page_elements/PageElement.ts:3761</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -479,7 +480,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3788">lib/page_objects/page_elements/PageElement.ts:3788</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3804">lib/page_objects/page_elements/PageElement.ts:3804</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -494,8 +495,8 @@
 													<h5>name: <span class="tsd-signature-type">string</span></h5>
 													<div class="tsd-comment tsd-typography">
 														<div class="lead">
-															<p>the expected value which is supposed not to be contained in the actual value of PageElement&#39;s &#39;name&#39;
-															HTML attribute</p>
+															<p>the expected value which is supposed not to be contained in the actual value of PageElement&#39;s
+															&#39;name&#39; HTML attribute</p>
 														</div>
 													</div>
 												</li>
@@ -523,7 +524,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3529">lib/page_objects/page_elements/PageElement.ts:3529</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3542">lib/page_objects/page_elements/PageElement.ts:3542</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -566,7 +567,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3448">lib/page_objects/page_elements/PageElement.ts:3448</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3460">lib/page_objects/page_elements/PageElement.ts:3460</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -598,7 +599,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3646">lib/page_objects/page_elements/PageElement.ts:3646</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3661">lib/page_objects/page_elements/PageElement.ts:3661</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -641,7 +642,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3689">lib/page_objects/page_elements/PageElement.ts:3689</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3704">lib/page_objects/page_elements/PageElement.ts:3704</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -676,7 +677,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3600">lib/page_objects/page_elements/PageElement.ts:3600</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3614">lib/page_objects/page_elements/PageElement.ts:3614</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -712,7 +713,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3554">lib/page_objects/page_elements/PageElement.ts:3554</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3568">lib/page_objects/page_elements/PageElement.ts:3568</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -746,7 +747,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3731">lib/page_objects/page_elements/PageElement.ts:3731</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3746">lib/page_objects/page_elements/PageElement.ts:3746</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -780,12 +781,13 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3773">lib/page_objects/page_elements/PageElement.ts:3773</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3789">lib/page_objects/page_elements/PageElement.ts:3789</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
 												<div class="lead">
-													<p>Returns true if PageElement&#39;s &#39;name&#39; HTML attribute eventually does not have any value within a specific timeout.</p>
+													<p>Returns true if PageElement&#39;s &#39;name&#39; HTML attribute eventually does not have any value within a specific
+													timeout.</p>
 												</div>
 											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
@@ -814,7 +816,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3515">lib/page_objects/page_elements/PageElement.ts:3515</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3528">lib/page_objects/page_elements/PageElement.ts:3528</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -848,7 +850,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3632">lib/page_objects/page_elements/PageElement.ts:3632</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3647">lib/page_objects/page_elements/PageElement.ts:3647</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -892,7 +894,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3676">lib/page_objects/page_elements/PageElement.ts:3676</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3691">lib/page_objects/page_elements/PageElement.ts:3691</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -907,8 +909,8 @@
 													<h5>className: <span class="tsd-signature-type">string</span></h5>
 													<div class="tsd-comment tsd-typography">
 														<div class="lead">
-															<p>the expected value which is supposed not to equal the actual value of PageElement&#39;s HTML &#39;class&#39;
-															attribute</p>
+															<p>the expected value which is supposed not to equal the actual value of PageElement&#39;s HTML
+															&#39;class&#39; attribute</p>
 														</div>
 													</div>
 												</li>
@@ -936,7 +938,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3585">lib/page_objects/page_elements/PageElement.ts:3585</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3599">lib/page_objects/page_elements/PageElement.ts:3599</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -981,12 +983,13 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3542">lib/page_objects/page_elements/PageElement.ts:3542</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3556">lib/page_objects/page_elements/PageElement.ts:3556</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
 												<div class="lead">
-													<p>Returns true if PageElement&#39;s actual HTML eventually does not equal the expected HTML within a specific timeout.</p>
+													<p>Returns true if PageElement&#39;s actual HTML eventually does not equal the expected HTML within a specific
+													timeout.</p>
 												</div>
 											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1023,7 +1026,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3886">lib/page_objects/page_elements/PageElement.ts:3886</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3902">lib/page_objects/page_elements/PageElement.ts:3902</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1066,7 +1069,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3719">lib/page_objects/page_elements/PageElement.ts:3719</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3734">lib/page_objects/page_elements/PageElement.ts:3734</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1110,7 +1113,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3802">lib/page_objects/page_elements/PageElement.ts:3802</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3818">lib/page_objects/page_elements/PageElement.ts:3818</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1153,7 +1156,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3761">lib/page_objects/page_elements/PageElement.ts:3761</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3776">lib/page_objects/page_elements/PageElement.ts:3776</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1197,7 +1200,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3852">lib/page_objects/page_elements/PageElement.ts:3852</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3868">lib/page_objects/page_elements/PageElement.ts:3868</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1240,12 +1243,13 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3503">lib/page_objects/page_elements/PageElement.ts:3503</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3516">lib/page_objects/page_elements/PageElement.ts:3516</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
 												<div class="lead">
-													<p>Returns true if PageElement&#39;s actual text eventually does not equal the expected text within a specific timeout.</p>
+													<p>Returns true if PageElement&#39;s actual text eventually does not equal the expected text within a specific
+													timeout.</p>
 												</div>
 											</div>
 											<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1282,7 +1286,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3870">lib/page_objects/page_elements/PageElement.ts:3870</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3886">lib/page_objects/page_elements/PageElement.ts:3886</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1325,7 +1329,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3820">lib/page_objects/page_elements/PageElement.ts:3820</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3836">lib/page_objects/page_elements/PageElement.ts:3836</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1368,7 +1372,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3836">lib/page_objects/page_elements/PageElement.ts:3836</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3852">lib/page_objects/page_elements/PageElement.ts:3852</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1406,7 +1410,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3490">lib/page_objects/page_elements/PageElement.ts:3490</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3502">lib/page_objects/page_elements/PageElement.ts:3502</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1440,7 +1444,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3468">lib/page_objects/page_elements/PageElement.ts:3468</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3480">lib/page_objects/page_elements/PageElement.ts:3480</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1472,7 +1476,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3478">lib/page_objects/page_elements/PageElement.ts:3478</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3490">lib/page_objects/page_elements/PageElement.ts:3490</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1504,7 +1508,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3458">lib/page_objects/page_elements/PageElement.ts:3458</a></li>
+													<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3470">lib/page_objects/page_elements/PageElement.ts:3470</a></li>
 												</ul>
 											</aside>
 											<div class="tsd-comment tsd-typography">
@@ -1544,7 +1548,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3167">lib/page_objects/page_elements/PageElement.ts:3167</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3179">lib/page_objects/page_elements/PageElement.ts:3179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1586,7 +1590,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3212">lib/page_objects/page_elements/PageElement.ts:3212</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3224">lib/page_objects/page_elements/PageElement.ts:3224</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1628,7 +1632,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3121">lib/page_objects/page_elements/PageElement.ts:3121</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3133">lib/page_objects/page_elements/PageElement.ts:3133</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1671,7 +1675,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3069">lib/page_objects/page_elements/PageElement.ts:3069</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3081">lib/page_objects/page_elements/PageElement.ts:3081</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1711,7 +1715,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3256">lib/page_objects/page_elements/PageElement.ts:3256</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3268">lib/page_objects/page_elements/PageElement.ts:3268</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1753,7 +1757,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3300">lib/page_objects/page_elements/PageElement.ts:3300</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3312">lib/page_objects/page_elements/PageElement.ts:3312</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1795,7 +1799,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3028">lib/page_objects/page_elements/PageElement.ts:3028</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3040">lib/page_objects/page_elements/PageElement.ts:3040</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1835,7 +1839,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L2941">lib/page_objects/page_elements/PageElement.ts:2941</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L2953">lib/page_objects/page_elements/PageElement.ts:2953</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1867,7 +1871,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3151">lib/page_objects/page_elements/PageElement.ts:3151</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3163">lib/page_objects/page_elements/PageElement.ts:3163</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1907,7 +1911,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3196">lib/page_objects/page_elements/PageElement.ts:3196</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3208">lib/page_objects/page_elements/PageElement.ts:3208</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1941,7 +1945,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3103">lib/page_objects/page_elements/PageElement.ts:3103</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3115">lib/page_objects/page_elements/PageElement.ts:3115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1977,7 +1981,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3055">lib/page_objects/page_elements/PageElement.ts:3055</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3067">lib/page_objects/page_elements/PageElement.ts:3067</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2011,7 +2015,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3240">lib/page_objects/page_elements/PageElement.ts:3240</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3252">lib/page_objects/page_elements/PageElement.ts:3252</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2045,7 +2049,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3284">lib/page_objects/page_elements/PageElement.ts:3284</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3296">lib/page_objects/page_elements/PageElement.ts:3296</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2079,7 +2083,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3014">lib/page_objects/page_elements/PageElement.ts:3014</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3026">lib/page_objects/page_elements/PageElement.ts:3026</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2113,7 +2117,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3137">lib/page_objects/page_elements/PageElement.ts:3137</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3149">lib/page_objects/page_elements/PageElement.ts:3149</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2155,7 +2159,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3183">lib/page_objects/page_elements/PageElement.ts:3183</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3195">lib/page_objects/page_elements/PageElement.ts:3195</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2197,7 +2201,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3087">lib/page_objects/page_elements/PageElement.ts:3087</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3099">lib/page_objects/page_elements/PageElement.ts:3099</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2240,7 +2244,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3042">lib/page_objects/page_elements/PageElement.ts:3042</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3054">lib/page_objects/page_elements/PageElement.ts:3054</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2280,7 +2284,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3412">lib/page_objects/page_elements/PageElement.ts:3412</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3424">lib/page_objects/page_elements/PageElement.ts:3424</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2321,7 +2325,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3227">lib/page_objects/page_elements/PageElement.ts:3227</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3239">lib/page_objects/page_elements/PageElement.ts:3239</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2362,7 +2366,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3315">lib/page_objects/page_elements/PageElement.ts:3315</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3327">lib/page_objects/page_elements/PageElement.ts:3327</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2382,8 +2386,8 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/__global.workflo.itimeoutinterval.html" class="tsd-signature-type">ITimeoutInterval</a><span class="tsd-signature-symbol"> =&nbsp;{ tolerances: { x: 0, y: 0 } }</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>includes the <code>tolerances</code> used to calculate the maximal allowed deviations from the expected coordinates,
-										the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to check it</p>
+										<p>includes the <code>tolerances</code> used to calculate the maximal allowed deviations from the expected
+										coordinates, the <code>timeout</code> within which the condition is expected to be met and the <code>interval</code> used to check it</p>
 										<p>If no <code>timeout</code> is specified, PageElement&#39;s default timeout is used.
 										If no <code>interval</code> is specified, PageElement&#39;s default interval is used.</p>
 									</div>
@@ -2403,7 +2407,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3271">lib/page_objects/page_elements/PageElement.ts:3271</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3283">lib/page_objects/page_elements/PageElement.ts:3283</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2444,7 +2448,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3373">lib/page_objects/page_elements/PageElement.ts:3373</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3385">lib/page_objects/page_elements/PageElement.ts:3385</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2485,7 +2489,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3001">lib/page_objects/page_elements/PageElement.ts:3001</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3013">lib/page_objects/page_elements/PageElement.ts:3013</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2525,7 +2529,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3393">lib/page_objects/page_elements/PageElement.ts:3393</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3405">lib/page_objects/page_elements/PageElement.ts:3405</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2566,7 +2570,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3335">lib/page_objects/page_elements/PageElement.ts:3335</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3347">lib/page_objects/page_elements/PageElement.ts:3347</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2607,7 +2611,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3354">lib/page_objects/page_elements/PageElement.ts:3354</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3366">lib/page_objects/page_elements/PageElement.ts:3366</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2648,7 +2652,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L2987">lib/page_objects/page_elements/PageElement.ts:2987</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L2999">lib/page_objects/page_elements/PageElement.ts:2999</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2682,7 +2686,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L2963">lib/page_objects/page_elements/PageElement.ts:2963</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L2975">lib/page_objects/page_elements/PageElement.ts:2975</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2714,7 +2718,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L2974">lib/page_objects/page_elements/PageElement.ts:2974</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L2986">lib/page_objects/page_elements/PageElement.ts:2986</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2746,7 +2750,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L2952">lib/page_objects/page_elements/PageElement.ts:2952</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L2964">lib/page_objects/page_elements/PageElement.ts:2964</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2778,7 +2782,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElement.ts#L3430">lib/page_objects/page_elements/PageElement.ts:3430</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElement.ts#L3442">lib/page_objects/page_elements/PageElement.ts:3442</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

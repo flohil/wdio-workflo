@@ -1,3 +1,5 @@
+https://airbrake.io/blog/software-design/behavior-driven-development
+
 allure-commandline npm module: -> dist/bin folder überschreiben mit inhalt aus template folder
 
 # all evaluations must take place in specs, because allure does not display errors with correct message?

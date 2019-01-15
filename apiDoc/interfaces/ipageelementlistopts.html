@@ -71,7 +71,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>template</dt>
-						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes</p>
+						<dd><p>Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes</p>
 						</dd>
 						<dt>template</dt>
 						<dd><p>PageElementType type of the PageElement managed by PageElementList</p>
@@ -87,7 +87,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Store<span class="tsd-signature-symbol">: </span><a href="../classes/pageelementstore.html" class="tsd-signature-type">PageElementStore</a></h4>
+						<h4>Store<span class="tsd-signature-symbol">: </span><a href="../classes/pagenodestore.html" class="tsd-signature-type">PageNodeStore</a></h4>
 					</li>
 					<li>
 						<h4>PageElementType<span class="tsd-signature-symbol">: </span><a href="../classes/pageelement.html" class="tsd-signature-type">PageElement</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -143,7 +143,7 @@
 					<div class="tsd-signature tsd-kind-icon">disable<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementList.ts#L119">lib/page_objects/page_elements/PageElementList.ts:119</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementList.ts#L119">lib/page_objects/page_elements/PageElementList.ts:119</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -164,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">element<wbr>Opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageElementOpts</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementList.ts#L100">lib/page_objects/page_elements/PageElementList.ts:100</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementList.ts#L100">lib/page_objects/page_elements/PageElementList.ts:100</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,12 +179,12 @@
 					<div class="tsd-signature tsd-kind-icon">element<wbr>Store<wbr>Func<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementList.ts#L96">lib/page_objects/page_elements/PageElementList.ts:96</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementList.ts#L96">lib/page_objects/page_elements/PageElementList.ts:96</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>This function retrieves an instance of a PageElement mapped by PageElementList from the list&#39;s PageElementStore.</p>
+							<p>This function retrieves an instance of a PageElement mapped by PageElementList from the list&#39;s PageNodeStore.</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>param</dt>
@@ -226,14 +226,14 @@
 					<div class="tsd-signature tsd-kind-icon">identifier<span class="tsd-signature-symbol">:</span> <a href="ipageelementlistidentifier.html" class="tsd-signature-type">IPageElementListIdentifier</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementList.ts#L128">lib/page_objects/page_elements/PageElementList.ts:128</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementList.ts#L128">lib/page_objects/page_elements/PageElementList.ts:128</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>This is the default <code>identifier</code> used to identify a PageElementList&#39;s managed PageElements via the key names
-								defined in <code>identifier</code>&#39;s <code>mappingObject</code> by matching <code>mappingObject</code>&#39;s values with the return values of identifier&#39;s
-							<code>mappingFunc</code>.</p>
+								defined in <code>identifier</code>&#39;s <code>mappingObject</code> by matching <code>mappingObject</code>&#39;s values with the return values of
+							identifier&#39;s <code>mappingFunc</code>.</p>
 						</div>
 						<p>This default <code>identifier</code> can be overwritten by passing a custom <code>identifier</code> in the function parameters of
 						PageElementList&#39;s <code>identify</code> function.</p>
@@ -246,7 +246,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeoutinterval.html">ITimeoutInterval</a>.<a href="__global.workflo.itimeoutinterval.html#interval">interval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/index.ts#L1869">index.ts:1869</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/index.ts#L1896">index.ts:1896</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -262,12 +262,12 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ipagenodeopts.html">IPageNodeOpts</a>.<a href="ipagenodeopts.html#store">store</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L13">lib/page_objects/page_elements/PageNode.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L13">lib/page_objects/page_elements/PageNode.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>an instance of PageElementStore which can be used to retrieve/create PageNodes</p>
+							<p>an instance of PageNodeStore which can be used to retrieve/create PageNodes</p>
 						</div>
 					</div>
 				</section>
@@ -278,7 +278,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="__global.workflo.itimeout.html">ITimeout</a>.<a href="__global.workflo.itimeout.html#timeout">timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/index.ts#L1857">index.ts:1857</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/index.ts#L1884">index.ts:1884</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -293,7 +293,7 @@
 					<div class="tsd-signature tsd-kind-icon">wait<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/waittype.html" class="tsd-signature-type">WaitType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementList.ts#L107">lib/page_objects/page_elements/PageElementList.ts:107</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementList.ts#L107">lib/page_objects/page_elements/PageElementList.ts:107</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">

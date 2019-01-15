@@ -1,5 +1,5 @@
 # Overview
-Wdio-workflo is a framework for writing automated functional system tests in TypeScript and based on a
+Wdio-workflo is a framework for writing behavior-driven automated functional system tests in TypeScript and based on a
 customized version of webdriverio v4.13 ( https://webdriver.io/ ).
 
 It allows you to define acceptance criteria which can by referenced in your testcases to automatically validate
@@ -30,7 +30,7 @@ Visit https://wdio-workflo.com (available soon) to
 
 - gain a deeper insight into wdio-workflo's features and motivation
 - find a detailed explanation of the framework's components
-- learn from examples that show you how to effectively test your browser-based application and validate its requirements 
+- learn from examples that show you how to effectively test your browser-based application and validate its requirements
 using wdio-workflo.
 
 ## API Documentation
@@ -57,9 +57,9 @@ settings manually or by extending your ```tsconfig.json``` with wdio-workflo's `
 }
 ```
 
-If you extend wdio-workflo's typescript compiler settings, be aware that any option set in your project's 
+If you extend wdio-workflo's typescript compiler settings, be aware that any option set in your project's
 ```tsconfig.json``` file will overwrite the same option of ```tsconfig.workflo.json```. Just make sure that
-the source folder of your system tests directory is included in the compiled typescript files (add its path to the 
+the source folder of your system tests directory is included in the compiled typescript files (add its path to the
 "include" option's array or do not set an "include" option at all).
 - Adapt wdio-workflo's configuration in ```workflo.conf.ts``` to your own needs.
 - Run ```./node_modules/.bin/wdio-workflo --init``` to create the boilerplate code for your functional system tests.
@@ -74,15 +74,63 @@ npm package.
 
 All code for this 'Getting Started' guide can also be found at https://github.com/flohil/wdio-workflo-example.
 
-### Configuring the Base URL
-Before we can start writing our first functional system test, we need to set the base url for our tested web application
-in wdio-workflo's configuration.
+### Basic Configuration
+First, we need to set the base url for our tested web application in wdio-workflo's configuration.
 
 To do so, open the file ```workflo.conf.ts``` in your project folder and set the value of its ```baseUrl``` property to
 "https://www.npmjs.com/"
 
+Wdio-workflo's default configuration assumes that the Google Chrome browser is installed on your system.
+If this is not the case, please install Google Chrome before proceeding or change the ```browserName``` property
+defined in the ```capabilities``` option of ```workflo.conf.ts``` file.
+
 ### Defining the Requirements
-Added shortly
+#### Information
+Wdio-workflo follows a behavior-driven software development approach and encourages you to define the requirements
+of your application in so-called 'spec' files before you start writing testcases.
+
+Spec files view the GUI of your application as a state machine. Therefore, you need to formulate your requirements
+as a sequence of initial states, state transitions and expected states using the keywords `Given`, `When` and `Then`:
+
+- `Given` describes the an initial, well-known state
+- `When` describes a transition from one state to another which is triggered by either a user or a system
+- `Then` describes an expected state and thus defines an acceptance criteria for your requirements
+
+Multiple "instances" of the keywords `Given` and `When` can be chained together sequentially with the keyword `And`.
+
+A complete sequence of states and state transitions is called a `Story`. This is similar to the term 'User Story' used
+in agile development, except that a `Story` in the context of wdio-workflo is more focused on application states
+rather than the motives of a user - you could say that `Story` only cares about the 'what' and 'how', but not about the
+'why' (unlike User Stories).
+
+Bear in mind that `Story`s are supposed to be understood by all stakeholders of your project (including non-technical
+users). Therefore, `Story`s are written in a natural language.
+
+Related `Story`s are grouped together in a `Feature`.
+
+#### Implementation
+We now define our requirements for the npmjs page in the file `npmjs.spec.ts` located in the `src/specs` folder of
+your system test directory:
+
+```
+// npmjs.spec.ts
+Feature('Packages', {}, () => {
+
+  // '1.1' is the ID of the Story and used to uniquely identify it.
+  // If our `Story` is based on a user story stored in a tool like JIRA, we can link to the corresponding JIRA issue in the generated test report by including its key in the `issues` array.
+  Story('1.1', 'Searching a package', { issues: ['NPMJS-1'] }, () => {
+    Given('the user is located on the homepage', () => {
+      When('the user enters the name of an existing npm package in the search field')
+      .And('the user clicks on the "Search" button', () => {
+
+        // The first parameter of `Then` is a numeric ID needed to reference the acceptance criteria in a testcase.
+        Then(1, 'at least one npm package is displayed in the list of search results');
+        Then(2, 'the npm package whose name exactly matches the searched term is displayed at the top');
+      });
+    });
+  });
+});
+```
 
 ### Creating Page Objects
 #### PageNodes
@@ -98,7 +146,7 @@ Added shortly
 ### Writing Testcases
 Added shortly
 
-<!-- 
+<!--
 
 ## Create PageElements and a Page to map the components of the tested web application
 Now we need to map all HTML components required to search for the wdio-workflo npm package on https://www.npmjs.com/.
@@ -168,6 +216,18 @@ show your results
  -->
 
 ## Running your tests
+### Launching selenium
+Wdio-workflo requires a selenium webdriver server to execute your testing commands in the browser.
+To make the handling of selenium as seamlessly as possible, wdio-workflo makes use of webdriverio's
+`selenium-standalone` service which automatically installs all required selenium drivers and launches a local selenium
+webdriver server when you executed your tests.
+
+You can also install the required drivers and launch a selenium webdriver server manually.
+In this case, you should disable the `selenium-standalone` service by setting the `services` option in your
+`workflo.conf.ts` file to an empty array. If your selenium server does not run locally, you also need to set the
+`host` and `port` options of you wdio-workflo configuration to the correct values.
+
+### Executing your testcases
 To start all of your tests, run ```./node_modules/.bin/wdio-workflo```
 
 You can filter the executed tests by testcases, specs and many more:
@@ -271,7 +331,7 @@ These are the recommended settings for the "NIM" chrome extension:
 The General Options Menu can be opened by hovering over the little circle in the right bottom of the Main Menu and then clicking on the "sliders" icon.
 
 ## Show all CLI options
-There are many more options available via wdio-workflo's Command Line Interface than the ones already mentioned in this 
+There are many more options available via wdio-workflo's Command Line Interface than the ones already mentioned in this
 document.
 
 To show all of them, run

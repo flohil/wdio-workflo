@@ -80,7 +80,7 @@
 						value of the currently processed property as the second parameter.</li>
 						<li><code>mappingFunc</code> then constrains the &quot;base&quot; selector by using XPath modification functions which are passed the values
 						of the currently processed properties as parameters.</li>
-						<li>Each resulting constrained selector is used to retrieve a managed PageElement from the map&#39;s PageElementStore.</li>
+						<li>Each resulting constrained selector is used to retrieve a managed PageElement from the map&#39;s PageNodeStore.</li>
 						<li>These identified PageElements are then mapped to the corresponding key names of <code>mappingObject</code>&#39;s properties</li>
 					</ul>
 					<p>The resulting object of mapped PageElements can be accessed via PageElementMap&#39;s <code>$</code> accessor.</p>
@@ -98,7 +98,7 @@
 							this.$</p>
 						</dd>
 						<dt>template</dt>
-						<dd><p>Store type of the PageElementStore instance which can be used to retrieve/create PageNodes</p>
+						<dd><p>Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes</p>
 						</dd>
 						<dt>template</dt>
 						<dd><p>K the key names of PageElementMap&#39;s <code>$</code> accessor used to access the map&#39;s managed PageElements</p>
@@ -117,7 +117,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Store<span class="tsd-signature-symbol">: </span><a href="pageelementstore.html" class="tsd-signature-type">PageElementStore</a></h4>
+						<h4>Store<span class="tsd-signature-symbol">: </span><a href="pagenodestore.html" class="tsd-signature-type">PageNodeStore</a></h4>
 					</li>
 					<li>
 						<h4>K<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h4>
@@ -234,7 +234,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L151">lib/page_objects/page_elements/PageElementMap.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L159">lib/page_objects/page_elements/PageElementMap.ts:159</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -248,11 +248,11 @@
 								<p>This initial identification process makes use of a <code>mappingObject</code> and a <code>mappingFunc</code> which are both defined in
 								PageElement&#39;s <code>identifier</code> object:</p>
 								<ul>
-									<li>For each property of <code>mappingObject</code>, <code>mappingFunc</code> is invoked with the map&#39;s &quot;base&quot; selector as the first and the
-									value of the currently processed property as the second parameter.</li>
-									<li><code>mappingFunc</code> then constrains the &quot;base&quot; selector by using XPath modification functions which are passed the values
-									of the currently processed properties as parameters.</li>
-									<li>Each resulting constrained selector is used to retrieve a managed PageElement from the map&#39;s PageElementStore.</li>
+									<li>For each property of <code>mappingObject</code>, <code>mappingFunc</code> is invoked with the map&#39;s &quot;base&quot; selector as the first and
+									the value of the currently processed property as the second parameter.</li>
+									<li><code>mappingFunc</code> then constrains the &quot;base&quot; selector by using XPath modification functions which are passed the
+									values of the currently processed properties as parameters.</li>
+									<li>Each resulting constrained selector is used to retrieve a managed PageElement from the map&#39;s PageNodeStore.</li>
 									<li>These identified PageElements are then mapped to the corresponding key names of <code>mappingObject</code>&#39;s properties</li>
 								</ul>
 								<p>The resulting object of mapped PageElements can be accessed via PageElementMap&#39;s <code>$</code> accessor.</p>
@@ -337,7 +337,7 @@
 					<div class="tsd-signature tsd-kind-icon">_$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L147">lib/page_objects/page_elements/PageElementMap.ts:147</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L155">lib/page_objects/page_elements/PageElementMap.ts:155</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -352,7 +352,7 @@
 					<div class="tsd-signature tsd-kind-icon">_element<wbr>Opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PageElementOpts</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L134">lib/page_objects/page_elements/PageElementMap.ts:134</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L142">lib/page_objects/page_elements/PageElementMap.ts:142</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -367,12 +367,12 @@
 					<div class="tsd-signature tsd-kind-icon">_element<wbr>Store<wbr>Func<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L130">lib/page_objects/page_elements/PageElementMap.ts:130</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L138">lib/page_objects/page_elements/PageElementMap.ts:138</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>This function retrieves an instance of a PageElement mapped by PageElementMap from the map&#39;s PageElementStore.</p>
+							<p>This function retrieves an instance of a PageElement mapped by PageElementMap from the map&#39;s PageNodeStore.</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>param</dt>
@@ -414,7 +414,7 @@
 					<div class="tsd-signature tsd-kind-icon">_identifier<span class="tsd-signature-symbol">:</span> <a href="../interfaces/ipageelementmapidentifier.html" class="tsd-signature-type">IPageElementMapIdentifier</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L142">lib/page_objects/page_elements/PageElementMap.ts:142</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L150">lib/page_objects/page_elements/PageElementMap.ts:150</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -433,7 +433,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_lastdiff">_lastDiff</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L31">lib/page_objects/page_elements/PageNode.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L31">lib/page_objects/page_elements/PageNode.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -450,7 +450,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_selector">_selector</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L35">lib/page_objects/page_elements/PageNode.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L35">lib/page_objects/page_elements/PageNode.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -466,12 +466,12 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_store">_store</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L25">lib/page_objects/page_elements/PageNode.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L25">lib/page_objects/page_elements/PageNode.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>an instance of PageElementStore which can be used to retrieve/create PageNodes</p>
+							<p>an instance of PageNodeStore which can be used to retrieve/create PageNodes</p>
 						</div>
 					</div>
 				</section>
@@ -483,7 +483,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#currently">currently</a></p>
 						<p>Overrides <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#currently">currently</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L149">lib/page_objects/page_elements/PageElementMap.ts:149</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L157">lib/page_objects/page_elements/PageElementMap.ts:157</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -495,7 +495,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#eventually">eventually</a></p>
 						<p>Overrides <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#eventually">eventually</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L151">lib/page_objects/page_elements/PageElementMap.ts:151</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L159">lib/page_objects/page_elements/PageElementMap.ts:159</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -507,7 +507,7 @@
 						<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#wait">wait</a></p>
 						<p>Overrides <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#wait">wait</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L150">lib/page_objects/page_elements/PageElementMap.ts:150</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L158">lib/page_objects/page_elements/PageElementMap.ts:158</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -524,7 +524,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L225">lib/page_objects/page_elements/PageElementMap.ts:225</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L233">lib/page_objects/page_elements/PageElementMap.ts:233</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -549,7 +549,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__lastdiff">__lastDiff</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L72">lib/page_objects/page_elements/PageNode.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L72">lib/page_objects/page_elements/PageNode.ts:72</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.idiff.html" class="tsd-signature-type">IDiff</a></h4>
@@ -570,7 +570,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__eventually">__eventually</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L128">lib/page_objects/page_elements/PageNode.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L127">lib/page_objects/page_elements/PageNode.ts:127</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -615,7 +615,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__execute">__execute</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L105">lib/page_objects/page_elements/PageNode.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L105">lib/page_objects/page_elements/PageNode.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -674,7 +674,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#__getnodeid">__getNodeId</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__getnodeid">__getNodeId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L68">lib/page_objects/page_elements/PageNode.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L68">lib/page_objects/page_elements/PageNode.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -692,7 +692,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__setlastdiff">__setLastDiff</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L80">lib/page_objects/page_elements/PageNode.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L80">lib/page_objects/page_elements/PageNode.ts:80</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -716,7 +716,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__wait">__wait</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L156">lib/page_objects/page_elements/PageNode.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L155">lib/page_objects/page_elements/PageNode.ts:155</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -777,7 +777,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#__waituntil">__waitUntil</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L181">lib/page_objects/page_elements/PageNode.ts:181</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L180">lib/page_objects/page_elements/PageNode.ts:180</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -856,7 +856,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#_handlewaiterror">_handleWaitError</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L215">lib/page_objects/page_elements/PageNode.ts:215</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L214">lib/page_objects/page_elements/PageNode.ts:214</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -899,7 +899,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L389">lib/page_objects/page_elements/PageElementMap.ts:389</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L397">lib/page_objects/page_elements/PageElementMap.ts:397</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -928,7 +928,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L240">lib/page_objects/page_elements/PageElementMap.ts:240</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L248">lib/page_objects/page_elements/PageElementMap.ts:248</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -963,7 +963,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L451">lib/page_objects/page_elements/PageElementMap.ts:451</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L459">lib/page_objects/page_elements/PageElementMap.ts:459</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1050,7 +1050,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L407">lib/page_objects/page_elements/PageElementMap.ts:407</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L415">lib/page_objects/page_elements/PageElementMap.ts:415</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1136,7 +1136,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L564">lib/page_objects/page_elements/PageElementMap.ts:564</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L572">lib/page_objects/page_elements/PageElementMap.ts:572</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1192,7 +1192,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L500">lib/page_objects/page_elements/PageElementMap.ts:500</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L508">lib/page_objects/page_elements/PageElementMap.ts:508</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1268,7 +1268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L593">lib/page_objects/page_elements/PageElementMap.ts:593</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L601">lib/page_objects/page_elements/PageElementMap.ts:601</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1345,7 +1345,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L534">lib/page_objects/page_elements/PageElementMap.ts:534</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L542">lib/page_objects/page_elements/PageElementMap.ts:542</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1429,7 +1429,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L377">lib/page_objects/page_elements/PageElementMap.ts:377</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L385">lib/page_objects/page_elements/PageElementMap.ts:385</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1467,7 +1467,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L330">lib/page_objects/page_elements/PageElementMap.ts:330</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L338">lib/page_objects/page_elements/PageElementMap.ts:338</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1502,7 +1502,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L282">lib/page_objects/page_elements/PageElementMap.ts:282</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L290">lib/page_objects/page_elements/PageElementMap.ts:290</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1539,13 +1539,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L361">lib/page_objects/page_elements/PageElementMap.ts:361</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L369">lib/page_objects/page_elements/PageElementMap.ts:369</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns the &#39;hasAnyDirectText&#39; status of all PageElements managed by PageElementMap as a result map after performing
-									the initial waiting condition of each managed PageElement.</p>
+									<p>Returns the &#39;hasAnyDirectText&#39; status of all PageElements managed by PageElementMap as a result map after
+									performing the initial waiting condition of each managed PageElement.</p>
 								</div>
 								<p>A PageElement&#39;s &#39;hasAnyDirectText&#39; status is set to true if the PageElement has any direct text.</p>
 								<p>A direct text is a text that resides on the level directly below the selected HTML element.
@@ -1577,7 +1577,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L318">lib/page_objects/page_elements/PageElementMap.ts:318</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L326">lib/page_objects/page_elements/PageElementMap.ts:326</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1613,7 +1613,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L345">lib/page_objects/page_elements/PageElementMap.ts:345</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L353">lib/page_objects/page_elements/PageElementMap.ts:353</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1650,7 +1650,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L305">lib/page_objects/page_elements/PageElementMap.ts:305</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L313">lib/page_objects/page_elements/PageElementMap.ts:313</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1685,7 +1685,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L293">lib/page_objects/page_elements/PageElementMap.ts:293</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L301">lib/page_objects/page_elements/PageElementMap.ts:301</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1718,7 +1718,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L257">lib/page_objects/page_elements/PageElementMap.ts:257</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L265">lib/page_objects/page_elements/PageElementMap.ts:265</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1740,7 +1740,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageElementMap.ts#L268">lib/page_objects/page_elements/PageElementMap.ts:268</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageElementMap.ts#L276">lib/page_objects/page_elements/PageElementMap.ts:276</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1777,7 +1777,7 @@
 								<p>Implementation of <a href="../interfaces/__global.workflo.pagenode.ielementnode.html">IElementNode</a>.<a href="../interfaces/__global.workflo.pagenode.ielementnode.html#tojson">toJSON</a></p>
 								<p>Inherited from <a href="pagenode.html">PageNode</a>.<a href="pagenode.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/4e5c520/src/lib/page_objects/page_elements/PageNode.ts#L86">lib/page_objects/page_elements/PageNode.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/page_elements/PageNode.ts#L86">lib/page_objects/page_elements/PageNode.ts:86</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.ielementjson.html" class="tsd-signature-type">IElementJSON</a></h4>

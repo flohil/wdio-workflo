@@ -63,8 +63,8 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<h1 id="overview">Overview</h1>
-				<p>Wdio-workflo is a framework for writing automated functional system tests and based on a customized version of
-				webdriverio v4.13 ( <a href="https://webdriver.io/">https://webdriver.io/</a> ).</p>
+				<p>Wdio-workflo is a framework for writing behavior-driven automated functional system tests in TypeScript and based on a
+				customized version of webdriverio v4.13 ( <a href="https://webdriver.io/">https://webdriver.io/</a> ).</p>
 				<p>It allows you to define acceptance criteria which can by referenced in your testcases to automatically validate
 					the requirements of your tested application. The test reports created by wdio-workflo will not only show the result
 					status of your testcases, but also indicate which requirements could not be fulfilled or validated because of failed or
@@ -72,7 +72,7 @@
 				<p>Wdio-workflo wants to get you started with writing functional system tests as quickly as possible by preconfiguring
 					webdriverio and all required services. It helps you save a lot of time and work by providing boilerplate code and the
 					basic building blocks of a sophisticated page object pattern architecture. Testcases in wdio-workflo consist of
-				reusable steps formulated in natural language to make them comprehensible for all stakeholder.</p>
+				reusable steps formulated in natural language to make them comprehensible for all stakeholders.</p>
 				<h1 id="getting-started">Getting Started</h1>
 				<p>The rest of this document shows you:</p>
 				<ul>
@@ -112,7 +112,7 @@
 {
   <span class="hljs-string">"extends"</span>: <span class="hljs-string">"./tsconfig.workflo.json"</span>,
   ...
-}</code></pre><p>If you extend wdio-workflo&#39;s typescript compiler settings, be aware that any option set in your project&#39;s 
+}</code></pre><p>If you extend wdio-workflo&#39;s typescript compiler settings, be aware that any option set in your project&#39;s
 					<code>tsconfig.json</code> file will overwrite the same option of <code>tsconfig.workflo.json</code>. Just make sure that
 					the source folder of your system tests directory is included in the compiled typescript files (add its path to the
 				&quot;include&quot; option&#39;s array or do not set an &quot;include&quot; option at all).</p>
@@ -120,17 +120,69 @@
 					<li>Adapt wdio-workflo&#39;s configuration in <code>workflo.conf.ts</code> to your own needs.</li>
 					<li>Run <code>./node_modules/.bin/wdio-workflo --init</code> to create the boilerplate code for your functional system tests.</li>
 				</ul>
-				<h2 id="writing-functional-system-tests-getting-started-guide">Writing Functional System Tests - &#39;Getting Started&#39; Guide</h2>
+				<h2 id="writing-your-first-functional-system-test">Writing your first Functional System Test</h2>
 				<h3 id="overview">Overview</h3>
 				<p>This little &#39;Getting Started&#39; guide quickly walks you through all necessary steps to write functional system tests in
 				wdio-workflo.</p>
 				<p>In our example, we will browse to the public npm registry at <a href="https://www.npmjs.com/">https://www.npmjs.com/</a> and search for the wdio-workflo
 				npm package.</p>
 				<p>All code for this &#39;Getting Started&#39; guide can also be found at <a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
-				<h3 id="configure-the-base-url-in-workflo-conf-ts">Configure the base url in workflo.conf.ts</h3>
-				<p>At first we need to set the base url for our tested web application in wdio-workflo&#39;s configuration.</p>
+				<h3 id="basic-configuration">Basic Configuration</h3>
+				<p>First, we need to set the base url for our tested web application in wdio-workflo&#39;s configuration.</p>
 				<p>To do so, open the file <code>workflo.conf.ts</code> in your project folder and set the value of its <code>baseUrl</code> property to
 				&quot;<a href="https://www.npmjs.com/&quot;">https://www.npmjs.com/&quot;</a></p>
+				<p>Wdio-workflo&#39;s default configuration assumes that the Google Chrome browser is installed on your system.
+					If this is not the case, please install Google Chrome before proceeding or change the <code>browserName</code> property
+				defined in the <code>capabilities</code> option of <code>workflo.conf.ts</code> file.</p>
+				<h3 id="defining-the-requirements">Defining the Requirements</h3>
+				<h4 id="information">Information</h4>
+				<p>Wdio-workflo follows a behavior-driven software development approach and encourages you to define the requirements
+				of your application in so-called &#39;spec&#39; files before you start writing testcases.</p>
+				<p>Spec files view the GUI of your application as a state machine. Therefore, you need to formulate your requirements
+				as a sequence of initial states, state transitions and expected states using the keywords <code>Given</code>, <code>When</code> and <code>Then</code>:</p>
+				<ul>
+					<li><code>Given</code> describes the an initial, well-known state</li>
+					<li><code>When</code> describes a transition from one state to another which is triggered by either a user or a system</li>
+					<li><code>Then</code> describes an expected state and thus defines an acceptance criteria for your requirements</li>
+				</ul>
+				<p>Multiple &quot;instances&quot; of the keywords <code>Given</code> and <code>When</code> can be chained together sequentially with the keyword <code>And</code>.</p>
+				<p>A complete sequence of states and state transitions is called a <code>Story</code>. This is similar to the term &#39;User Story&#39; used
+					in agile development, except that a <code>Story</code> in the context of wdio-workflo is more focused on application states
+					rather than the motives of a user - you could say that <code>Story</code> only cares about the &#39;what&#39; and &#39;how&#39;, but not about the
+				&#39;why&#39; (unlike User Stories).</p>
+				<p>Bear in mind that <code>Story</code>s are supposed to be understood by all stakeholders of your project (including non-technical
+				users). Therefore, <code>Story</code>s are written in a natural language.</p>
+				<p>Related <code>Story</code>s are grouped together in a <code>Feature</code>.</p>
+				<h4 id="implementation">Implementation</h4>
+				<p>We now define our requirements for the npmjs page in the file <code>npmjs.spec.ts</code> located in the <code>src/specs</code> folder of
+				your system test directory:</p>
+				<pre><code>// npmjs.spec.ts
+Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
+
+  // '<span class="hljs-number">1.1</span>' <span class="hljs-keyword">is</span> the ID <span class="hljs-keyword">of</span> the Story <span class="hljs-keyword">and</span> used to uniquely identify it.
+  // <span class="hljs-keyword">If</span> our `Story` <span class="hljs-keyword">is</span> based on a user story stored <span class="hljs-keyword">in</span> a tool like JIRA, we can link to the corresponding JIRA issue <span class="hljs-keyword">in</span> the generated test report by including its key <span class="hljs-keyword">in</span> the `issues` <span class="hljs-keyword">array</span>.
+  Story('<span class="hljs-number">1.1</span>', <span class="hljs-symbol">'Searching</span> a <span class="hljs-keyword">package</span>', { issues: [<span class="hljs-symbol">'NPMJS</span>-<span class="hljs-number">1</span>'] }, () =&gt; {
+    Given(<span class="hljs-symbol">'the</span> user <span class="hljs-keyword">is</span> located on the homepage', () =&gt; {
+      <span class="hljs-keyword">When</span>(<span class="hljs-symbol">'the</span> user enters the name <span class="hljs-keyword">of</span> an existing npm <span class="hljs-keyword">package</span> <span class="hljs-title">in the search field')</span>
+      .<span class="hljs-keyword">And</span>(<span class="hljs-symbol">'the</span> user clicks on the <span class="hljs-string">"Search"</span> button', () =&gt; {
+
+        // The first parameter <span class="hljs-keyword">of</span> `<span class="hljs-keyword">Then</span>` <span class="hljs-keyword">is</span> a numeric ID needed to reference the acceptance criteria <span class="hljs-keyword">in</span> a testcase.
+        <span class="hljs-keyword">Then</span>(<span class="hljs-number">1</span>, <span class="hljs-symbol">'at</span> least one npm <span class="hljs-keyword">package</span> <span class="hljs-title"></span><span class="hljs-keyword">is</span> displayed <span class="hljs-keyword">in</span> the list <span class="hljs-keyword">of</span> search results');
+        <span class="hljs-keyword">Then</span>(<span class="hljs-number">2</span>, <span class="hljs-symbol">'the</span> npm <span class="hljs-keyword">package</span> <span class="hljs-title">whose name exactly matches the searched term </span><span class="hljs-keyword">is</span> displayed <span class="hljs-keyword">at</span> the top');
+      });
+    });
+  });
+});</code></pre><h3 id="creating-page-objects">Creating Page Objects</h3>
+				<h4 id="pagenodes">PageNodes</h4>
+				<p>Added shortly</p>
+				<h4 id="pages">Pages</h4>
+				<p>Added shortly</p>
+				<h4 id="pagenodestores">PageNodeStores</h4>
+				<p>Added shortly</p>
+				<h3 id="implementing-steps">Implementing Steps</h3>
+				<p>Added shortly</p>
+				<h3 id="writing-testcases">Writing Testcases</h3>
+				<p>Added shortly</p>
 				<!--
 
 ## Create PageElements and a Page to map the components of the tested web application
@@ -200,6 +252,16 @@ show your results
 
  -->
 				<h2 id="running-your-tests">Running your tests</h2>
+				<h3 id="launching-selenium">Launching selenium</h3>
+				<p>Wdio-workflo requires a selenium webdriver server to execute your testing commands in the browser.
+					To make the handling of selenium as seamlessly as possible, wdio-workflo makes use of webdriverio&#39;s
+					<code>selenium-standalone</code> service which automatically installs all required selenium drivers and launches a local selenium
+				webdriver server when you executed your tests.</p>
+				<p>You can also install the required drivers and launch a selenium webdriver server manually.
+					In this case, you should disable the <code>selenium-standalone</code> service by setting the <code>services</code> option in your
+					<code>workflo.conf.ts</code> file to an empty array. If your selenium server does not run locally, you also need to set the
+				<code>host</code> and <code>port</code> options of you wdio-workflo configuration to the correct values.</p>
+				<h3 id="executing-your-testcases">Executing your testcases</h3>
 				<p>To start all of your tests, run <code>./node_modules/.bin/wdio-workflo</code></p>
 				<p>You can filter the executed tests by testcases, specs and many more:</p>
 				<pre><code><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--testcases</span> '[<span class="hljs-string">"MySuite.sample test"</span>]'
@@ -364,9 +426,6 @@ show your results
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/pageelementmapwait.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Map<wbr>Wait</a>
 					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/pageelementstore.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Store</a>
-					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/pageelementwait.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Wait</a>
 					</li>
@@ -381,6 +440,9 @@ show your results
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/pagenodeeventually.html" class="tsd-kind-icon">Page<wbr>Node<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/pagenodestore.html" class="tsd-kind-icon">Page<wbr>Node<wbr>Store</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/pagenodewait.html" class="tsd-kind-icon">Page<wbr>Node<wbr>Wait</a>
