@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import { tolerancesToString } from './helpers';
-import { elements, stores } from './page_objects';
+import { elements, stores, pages } from './page_objects';
 import { comparatorStr } from './utility_functions/util';
 
 // MATCHER FUNTCION INTERFACES
@@ -9,7 +9,7 @@ import { comparatorStr } from './utility_functions/util';
 type WithoutExpected = 'element' | 'list' | 'map' | 'group';
 
 export interface IMatcherArgs<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   ExpectedType,
   OptsType
 > {
@@ -26,7 +26,7 @@ export interface IMatcherArgs<
 }
 
 export interface IResultFuncArgs<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType,
   ExpectedType
 > {
@@ -35,8 +35,16 @@ export interface IResultFuncArgs<
   opts: OptsType;
 }
 
+export interface IPageResultFuncArgs<
+  PageType extends Workflo.IPage<any, any, any>,
+  OptsType,
+> {
+  page: PageType;
+  opts: OptsType;
+}
+
 export interface IResultFuncWithoutExpected<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType
 > {
   node: NodeType;
@@ -46,18 +54,23 @@ export interface IResultFuncWithoutExpected<
 export type ResultFunctionResult = () => boolean;
 
 export type ResultFunction<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType,
   ExpectedType
 > = (args: IResultFuncArgs<NodeType, OptsType, ExpectedType>) => ResultFunctionResult[];
 
+export type PageResultFunction<
+  PageType extends Workflo.IPage<any, any, any>,
+  OptsType,
+> = (args: IPageResultFuncArgs<PageType, OptsType>) => ResultFunctionResult[];
+
 export type ResultWithoutExpectedFunction<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType
 > = (args: IResultFuncWithoutExpected<NodeType, OptsType>) => ResultFunctionResult[];
 
 export interface ErrorFuncArgs<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType,
   ExpectedType,
 > {
@@ -67,8 +80,16 @@ export interface ErrorFuncArgs<
   opts: OptsType;
 }
 
+export interface PageErrorFuncArgs<
+  PageType extends Workflo.IPage<any, any, any>,
+  OptsType,
+> {
+  page: PageType;
+  opts: OptsType;
+}
+
 export interface ErrorFuncWithoutExpected<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType
 > {
   actual: string;
@@ -77,13 +98,18 @@ export interface ErrorFuncWithoutExpected<
 }
 
 export type ErrorTextFunction<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType,
   ExpectedType,
 > = (args: ErrorFuncArgs<NodeType, OptsType, ExpectedType>) => string[];
 
+export type PageErrorTextFunction<
+  PageType extends Workflo.IPage<any, any, any>,
+  OptsType,
+> = (args: PageErrorFuncArgs<PageType, OptsType>) => string[];
+
 export type ErrorTextWithoutExpectedFunction<
-  NodeType extends Workflo.PageNode.INode,
+  NodeType extends Workflo.PageNode.IPageNode,
   OptsType
 > = (args: ErrorFuncWithoutExpected<NodeType, OptsType>) => string[];
 
@@ -375,7 +401,7 @@ export interface ICompareEventuallyNumberWithToleranceElementFuncs extends IComp
 
 // MATCHER FUNCS
 
-function isWithoutExpected(node: Workflo.PageNode.INode, withoutExpected: WithoutExpected[] = []) {
+function isWithoutExpected(node: Workflo.PageNode.IPageNode, withoutExpected: WithoutExpected[] = []) {
   let _withoutExpected = false;
 
   if (node instanceof elements.PageElement) {
@@ -430,7 +456,7 @@ export function createBaseMatcher<
   return (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
 
     function baseCompareFunction(
-      node: Workflo.PageNode.INode,
+      node: Workflo.PageNode.IPageNode,
       negativeComparison: boolean,
       opts: OptsType = undefined,
       expected: any = undefined,
@@ -440,8 +466,8 @@ export function createBaseMatcher<
         message: '',
       };
 
-      let resultFunc: ResultFunction<Workflo.PageNode.INode, any, {timeout?: number}>;
-      let errorTextFunc: ErrorTextFunction<Workflo.PageNode.INode, any, {timeout?: number}>;
+      let resultFunc: ResultFunction<Workflo.PageNode.IPageNode, any, {timeout?: number}>;
+      let errorTextFunc: ErrorTextFunction<Workflo.PageNode.IPageNode, any, {timeout?: number}>;
 
       if (node instanceof elements.PageElement) {
         if (compareFuncs.element) {
@@ -506,7 +532,7 @@ export function createBaseMatcher<
 
     return {
       compare: (
-        node: Workflo.PageNode.INode, expectedOrOpts?: any | OptsType, opts?: OptsType,
+        node: Workflo.PageNode.IPageNode, expectedOrOpts?: any | OptsType, opts?: OptsType,
       ): jasmine.CustomMatcherResult => {
         if (isWithoutExpected(node, withoutExpected)) {
           return baseCompareFunction(node, false, expectedOrOpts as OptsType);
@@ -515,13 +541,79 @@ export function createBaseMatcher<
         }
       },
       negativeCompare: (
-        node: Workflo.PageNode.INode, expectedOrOpts?: any | OptsType, opts?: OptsType,
+        node: Workflo.PageNode.IPageNode, expectedOrOpts?: any | OptsType, opts?: OptsType,
       ): jasmine.CustomMatcherResult => {
         if (isWithoutExpected(node, withoutExpected)) {
           return baseCompareFunction(node, true, expectedOrOpts as OptsType);
         } else {
           return baseCompareFunction(node, true, opts, expectedOrOpts);
         }
+      },
+    };
+  };
+}
+
+export function createPageMatcher<
+  OptsType extends {timeout?: number} = {timeout?: number}
+>(
+  compareFuncs: {
+    resultFunc: PageResultFunction<pages.Page<any, any, any>, OptsType>,
+    errorTextFunc: PageErrorTextFunction<pages.Page<any, any, any>, OptsType>,
+  },
+) {
+  return (util: jasmine.MatchersUtil, customEqualityTesters: jasmine.CustomEqualityTester[]) => {
+
+    function baseCompareFunction(
+      page: pages.Page<any, any, any>,
+      negativeComparison: boolean,
+      opts: OptsType = undefined,
+    ): jasmine.CustomMatcherResult {
+      const result: jasmine.CustomMatcherResult = {
+        pass: true,
+        message: '',
+      };
+
+      if (typeof opts === 'undefined' || opts === null) {
+        opts = Object.create(null);
+      }
+
+      const successes = compareFuncs.resultFunc({ page, opts });
+      const success = (negativeComparison) ? successes[1]() : successes[0]();
+
+      if (!success) {
+        const optsWithTimeout: OptsType & {timeout?: number} =
+          ((typeof opts === 'object' && opts !== null) || !!opts) ? opts : Object.create(null);
+
+        if (typeof optsWithTimeout === 'object' && !optsWithTimeout['timeout']) {
+          optsWithTimeout.timeout = page.__lastTimeout;
+        }
+
+        const errorTexts = compareFuncs.errorTextFunc({ page, opts: optsWithTimeout });
+        let errorText: string = undefined;
+
+        if (negativeComparison && errorTexts.length > 1) {
+          errorText = errorTexts[1];
+        } else {
+          errorText = errorTexts[0];
+        }
+
+        result.pass = false;
+        result.message = errorText;
+      }
+
+      return result;
+    }
+
+    return {
+      compare: (
+        page: pages.Page<any, any, any>, opts?: OptsType,
+      ): jasmine.CustomMatcherResult => {
+        return baseCompareFunction(page, false, opts);
+      },
+      negativeCompare: (
+        page: pages.Page<any, any, any>, opts?: OptsType,
+      ): jasmine.CustomMatcherResult => {
+        return baseCompareFunction(page, true, opts);
       },
     };
   };
@@ -960,7 +1052,7 @@ function printValue(value: any) {
   return value.toString();
 }
 
-export function createBaseMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]) {
+export function createBaseMessage(node: Workflo.PageNode.IPageNode, errorTexts: string | string[]) {
   let errorText = undefined;
   let notErrorText = undefined;
 
@@ -978,7 +1070,7 @@ export function createBaseMessage(node: Workflo.PageNode.INode, errorTexts: stri
   ];
 }
 
-export function createMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]) {
+export function createMessage(node: Workflo.PageNode.IPageNode, errorTexts: string | string[]) {
   let errorText = undefined;
   let notErrorText = undefined;
 
@@ -996,7 +1088,9 @@ export function createMessage(node: Workflo.PageNode.INode, errorTexts: string |
   ]);
 }
 
-export function createEventuallyMessage(node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number) {
+export function createEventuallyMessage(
+  node: Workflo.PageNode.IPageNode, errorTexts: string | string[], timeout: number,
+) {
   let errorText = undefined;
   let notErrorText = undefined;
 
@@ -1015,7 +1109,7 @@ export function createEventuallyMessage(node: Workflo.PageNode.INode, errorTexts
 }
 
 export function createPropertyMessage(
-  node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: any,
+  node: Workflo.PageNode.IPageNode, property: string, comparison: string, actual: string, expected: any,
 ) {
   const _actual = printValue(actual);
   const _expected = printValue(expected);
@@ -1026,7 +1120,9 @@ export function createPropertyMessage(
   ]);
 }
 
-export function createAnyMessage(node: Workflo.PageNode.INode, property: string, comparison: string, actual: string) {
+export function createAnyMessage(
+  node: Workflo.PageNode.IPageNode, property: string, comparison: string, actual: string,
+) {
   const _actual = printValue(actual);
 
   return createBaseMessage(node, [
@@ -1036,7 +1132,12 @@ export function createAnyMessage(node: Workflo.PageNode.INode, property: string,
 }
 
 export function createEventuallyPropertyMessage(
-  node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, expected: any, timeout: number,
+  node: Workflo.PageNode.IPageNode,
+  property: string,
+  comparison: string,
+  actual: string,
+  expected: any,
+  timeout: number,
 ) {
   const _actual = printValue(actual);
   const _expected = printValue(expected);
@@ -1048,7 +1149,7 @@ export function createEventuallyPropertyMessage(
 }
 
 export function createEventuallyAnyMessage(
-  node: Workflo.PageNode.INode, property: string, comparison: string, actual: string, timeout: number,
+  node: Workflo.PageNode.IPageNode, property: string, comparison: string, actual: string, timeout: number,
 ) {
   const _actual = printValue(actual);
 
@@ -1059,7 +1160,7 @@ export function createEventuallyAnyMessage(
 }
 
 export function createEachMessage(
-  node: Workflo.PageNode.INode,
+  node: Workflo.PageNode.IPageNode,
   errorTexts: string | string[],
   actualOnly: boolean = false,
   includeTimeouts: boolean = false,
@@ -1086,12 +1187,12 @@ export function createEachMessage(
   ];
 }
 
-export function createAnyEachMessage(node: Workflo.PageNode.INode, errorTexts: string | string[]) {
+export function createAnyEachMessage(node: Workflo.PageNode.IPageNode, errorTexts: string | string[]) {
   return createEachMessage(node, errorTexts, true);
 }
 
 export function createEventuallyEachMessage(
-  node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number,
+  node: Workflo.PageNode.IPageNode, errorTexts: string | string[], timeout: number,
 ) {
   const within = _.isArray(errorTexts) ?
     errorTexts.map(errorText => `eventually ${errorText}`) :
@@ -1101,7 +1202,7 @@ export function createEventuallyEachMessage(
 }
 
 export function createEventuallyAnyEachMessage(
-  node: Workflo.PageNode.INode, errorTexts: string | string[], timeout: number,
+  node: Workflo.PageNode.IPageNode, errorTexts: string | string[], timeout: number,
 ) {
   const within = _.isArray(errorTexts) ?
     errorTexts.map(errorText => `eventually ${errorText}`) :
@@ -2305,6 +2406,45 @@ export const valueAllMatchers: jasmine.CustomMatcherFactories = {
   }),
 };
 
+export const pageMatchers: jasmine.CustomMatcherFactories = {
+  toBeOpen: createPageMatcher({
+    resultFunc: ({ page, opts }) => [
+      () => page.isOpen(opts), () => !page.isOpen(opts),
+    ],
+    errorTextFunc: ({ page }) => [
+      `Expected ${page.constructor.name} to be open.`,
+      `Expected ${page.constructor.name} not to be open.`,
+    ],
+  }),
+  toBeClosed: createPageMatcher({
+    resultFunc: ({ page, opts }) => [
+      () => page.isClosed(opts), () => !page.isClosed(opts),
+    ],
+    errorTextFunc: ({ page }) => [
+      `Expected ${page.constructor.name} to be closed.`,
+      `Expected ${page.constructor.name} not to be closed.`,
+    ],
+  }),
+  toEventuallyBeOpen: createPageMatcher({
+    resultFunc: ({ page, opts }) => [
+      () => page.eventually.isOpen(opts), () => !page.eventually.isOpen(opts),
+    ],
+    errorTextFunc: ({ page, opts }) => [
+      `Expected ${page.constructor.name} to eventually be open within ${opts.timeout}ms.`,
+      `Expected ${page.constructor.name} not to eventually be open within ${opts.timeout}ms.`,
+    ],
+  }),
+  toEventuallyBeClosed: createPageMatcher({
+    resultFunc: ({ page, opts }) => [
+      () => page.eventually.isClosed(opts), () => !page.eventually.isClosed(opts),
+    ],
+    errorTextFunc: ({ page, opts }) => [
+      `Expected ${page.constructor.name} to eventually be closed within ${opts.timeout}ms.`,
+      `Expected ${page.constructor.name} not to eventually be closed within ${opts.timeout}ms.`,
+    ],
+  }),
+};
+
 export function expectElement<
   Store extends stores.PageNodeStore,
   PageElementType extends elements.PageElement<Store>
@@ -2333,8 +2473,17 @@ export function expectMap<
 
 export function expectGroup<
   Store extends stores.PageNodeStore,
-  Content extends {[K in keyof Content] : Workflo.PageNode.INode},
+  Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode},
   PageElementGroupType extends elements.PageElementGroup<Store, Content>
 >(group: PageElementGroupType) {
   return expect(group);
+}
+
+export function expectPage<
+  Store extends stores.PageNodeStore,
+  PageType extends pages.Page<Store, IsOpenOpts, IsClosedOpts>,
+  IsOpenOpts extends {},
+  IsClosedOpts extends {}
+>(page: PageType) {
+  return expect(page);
 }

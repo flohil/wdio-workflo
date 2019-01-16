@@ -18,7 +18,7 @@ export interface IPageNodeOpts<Store extends PageNodeStore> extends Workflo.ITim
  *
  * @template Store type of the PageNodeStore used by PageNode to retrieve PageNodes from the store
  */
-export abstract class PageNode<Store extends PageNodeStore> implements Workflo.PageNode.INode {
+export abstract class PageNode<Store extends PageNodeStore> implements Workflo.PageNode.IPageNode {
   /**
    * an instance of PageNodeStore which can be used to retrieve/create PageNodes
    */

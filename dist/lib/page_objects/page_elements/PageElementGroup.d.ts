@@ -6,14 +6,14 @@ import { IPageNodeOpts, PageNodeEventually, PageNodeWait } from './PageNode';
  * content. For a PageElement, the extract return value type will be `string`.
  */
 export declare type ExtractText<Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.ExtractText<Content>;
 /**
  * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `boolean`.
  */
 export declare type ExtractBoolean<Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.ExtractBoolean<Content>;
 /**
  * This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.
@@ -43,7 +43,7 @@ export declare type ExtractBoolean<Content extends {
  * - containsDirectText
  */
 declare type ElementNode<Content extends {
-    [K in keyof Content]: Workflo.PageNode.INode;
+    [K in keyof Content]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.IElementNode<ExtractText<Content>, ExtractBoolean<Content>, Workflo.PageNode.IGroupFilterMask<Content>>;
 /**
  * Describes the opts parameter passed to the constructor function of PageElementGroup.
@@ -53,7 +53,7 @@ declare type ElementNode<Content extends {
  * these PageNodes as keys
  */
 export interface IPageElementGroupOpts<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }> extends IPageNodeOpts<Store> {
     content: Content;
 }
@@ -79,7 +79,7 @@ export interface IPageElementGroupOpts<Store extends PageNodeStore, Content exte
  * these PageNodes as keys
  */
 export declare class PageElementGroup<Store extends PageNodeStore, Content extends {
-    [K in keyof Content]: Workflo.PageNode.INode;
+    [K in keyof Content]: Workflo.PageNode.IPageNode;
 }> extends PageNode<Store> implements ElementNode<Content> {
     protected _id: string;
     protected _$: Content;
@@ -233,7 +233,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @returns a structure of results of a state check function executed for each PageNode in PageElementGroup's
      * `Content`
      */
-    eachCompare<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>, ResultType extends Partial<Content> = Workflo.PageNode.ExtractBoolean<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, compareFunc: (args: {
+    eachCompare<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>, ResultType extends Partial<Content> = Workflo.PageNode.ExtractBoolean<Content>>(supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean, compareFunc: (args: {
         node: NodeInterface;
         expected?: ExpectedType[keyof ExpectedType];
         filter?: ExpectedType[keyof ExpectedType];
@@ -254,7 +254,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * invocation of the state check function for some or all PageNodes.
      * @returns a boolean indicating whether the result of each state check function invocation was true
      */
-    eachCheck<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, checkFunc: (args: {
+    eachCheck<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean, checkFunc: (args: {
         node: NodeInterface;
         expected?: ExpectedType[keyof ExpectedType];
         filter?: ExpectedType[keyof ExpectedType];
@@ -276,7 +276,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @returns a structure of results of a state retrieval function executed for each PageNode in PageElementGroup's
      * `Content`
      */
-    eachGet<NodeInterface, ResultType extends Partial<Content>, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, getFunc: (args: {
+    eachGet<NodeInterface, ResultType extends Partial<Content>, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean, getFunc: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];
     }) => any, filterMask?: FilterType): ResultType;
@@ -295,7 +295,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
     * invocation of the wait function for some or all PageNodes.
     * @returns this (an instance of PageElementGroup)
     */
-    eachWait<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, waitFunc: (args: {
+    eachWait<NodeInterface, ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean, waitFunc: (args: {
         node: NodeInterface;
         expected?: ExpectedType[keyof ExpectedType];
         filter?: ExpectedType[keyof ExpectedType];
@@ -313,7 +313,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @param filterMask can be used to skip the invocation of an action for some or all PageNodes.
      * @returns this (an instance of PageElementGroup)
      */
-    eachDo<NodeInterface, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, action: (args: {
+    eachDo<NodeInterface, FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>>(supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean, action: (args: {
         node: NodeInterface;
         filter?: FilterType[keyof FilterType];
     }) => any, filterMask?: FilterType): this;
@@ -329,7 +329,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @param values a structure of setter values
      * @returns this (an instance of PageElementGroup)
      */
-    eachSet<NodeInterface extends Workflo.PageNode.INode, ValuesType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.INode) => boolean, setFunc: (args: {
+    eachSet<NodeInterface extends Workflo.PageNode.IPageNode, ValuesType extends Partial<Content>>(supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean, setFunc: (args: {
         node: NodeInterface;
         value?: ValuesType[keyof ValuesType];
     }) => NodeInterface, values: ValuesType): this;
@@ -344,7 +344,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
  * functions
  */
 export declare class PageElementGroupCurrently<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }, GroupType extends PageElementGroup<Store, Content>> extends PageNodeCurrently<Store, GroupType> {
     /**
      * Returns the current 'exists' status of all PageNodes managed by PageElementGroup as a result structure.
@@ -601,7 +601,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
  * @template GroupType type of the PageElementGroup for which PageElementGroupWait defines all `wait` functions
  */
 export declare class PageElementGroupWait<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }, GroupType extends PageElementGroup<Store, Content>> extends PageNodeWait<Store, GroupType> {
     /**
      * Waits for all PageNodes managed by PageElementGroup to exist.
@@ -898,7 +898,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
  * functions
  */
 export declare class PageElementGroupEventually<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }, GroupType extends PageElementGroup<Store, Content>> extends PageNodeEventually<Store, GroupType> {
     /**
      * Returns true if all PageNodes managed by PageElementGroup eventually exist within a specific timeout.
@@ -1109,6 +1109,6 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
  * @param node a PageNode
  */
 export declare function isIElementNode<Content extends {
-    [K in keyof Content]: Workflo.PageNode.INode;
-}>(node: Workflo.PageNode.INode | ElementNode<Content>): node is ElementNode<Content>;
+    [K in keyof Content]: Workflo.PageNode.IPageNode;
+}>(node: Workflo.PageNode.IPageNode | ElementNode<Content>): node is ElementNode<Content>;
 export {};

@@ -39,13 +39,15 @@ export declare class Step<ArgsType extends Object, ReturnType> implements Workfl
      */
     __description: string;
     /**
-     * The execute function of the Step.
+     * Executes the parameterized step.
      *
-     * Intended for framework-internal usage only.
+     * If a step is used as a parameter of `given`, `when` or `and`, this function will be invoked automatically.
+     *
+     * Calling this function manually is only needed when invoking a step from inside the body function of another step.
      *
      * @param prefix the prefix of a nested step (titles of its "upper" steps in the nesting hierarchy)
      */
-    __execute: (prefix: string) => void;
+    execute: (prefix?: string) => void;
     /**
      * Indicates whether browser object was already patched to create stacktrace which can be displayed on selenium errors
      * and show the line number in the testcase where the error occurred.

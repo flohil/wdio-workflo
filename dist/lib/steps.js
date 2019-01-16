@@ -125,7 +125,7 @@ class Step {
             this.__description = Kiwi_1.default.compose(params.description, params.arg);
         }
         if (typeof params.cb !== 'undefined') {
-            this.__execute = prefix => {
+            this.execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
                 process.send({ event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) });
                 const result = executionFunction(params.arg);
@@ -136,7 +136,7 @@ class Step {
             };
         }
         else {
-            this.__execute = prefix => {
+            this.execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
                 process.send({ event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) });
                 const result = executionFunction(params.arg);

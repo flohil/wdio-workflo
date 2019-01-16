@@ -389,7 +389,7 @@ export class PageNodeStore {
    * @param opts the publicly available options used to configure the retrieved PageElementGroup
    * @returns an instance of the retrieved PageElementGroup
    */
-  ElementGroup<Content extends Record<string, Workflo.PageNode.INode>> (
+  ElementGroup<Content extends Record<string, Workflo.PageNode.IPageNode>> (
     content: Content,
     opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>,
   ) {
@@ -422,7 +422,7 @@ export class PageNodeStore {
    * @param opts the publicly available options used to configure the retrieved ValuePageElementGroup
    * @returns an instance of the retrieved PageElementGroup
    */
-  ValueGroup<Content extends Record<string, Workflo.PageNode.INode>>(
+  ValueGroup<Content extends Record<string, Workflo.PageNode.IPageNode>>(
     content: Content,
     opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>,
   ) {
@@ -572,7 +572,7 @@ export class PageNodeStore {
    */
   protected _getGroup<
     Store extends PageNodeStore,
-    Content extends {[key: string] : Workflo.PageNode.INode},
+    Content extends {[key: string] : Workflo.PageNode.IPageNode},
     GroupType extends PageElementGroup<
       Store,
       Content

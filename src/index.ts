@@ -1436,6 +1436,51 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
 }
 
 /**
+ * This interface describes custom expectation matchers for Page.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template IsOpenOpts type of the opts parameter passed to Page's `isOpen` function
+ * @template IsClosedOpts type of the opts parameter passed to Page's `isClosed` function
+ */
+interface ICustomPageMatchers<
+  IsOpenOpts extends {},
+  IsClosedOpts extends {}
+> {
+  /**
+   * Checks if Page is currently open.
+   *
+   * @param opts the opts parameter passed to Page's `isOpen` function
+   */
+  toBeOpen(opts?: IsOpenOpts): boolean;
+  /**
+   * Checks if Page is currently closed.
+   *
+   * @param opts the opts parameter passed to Page's `isClosed` function
+   */
+  toBeClosed(opts?: IsClosedOpts): boolean;
+
+  /**
+   * Checks if Page is eventually open within a specific timeout.
+   *
+   * @param opts the opts parameter passed to Page's `eventually.isOpen` function which also includes
+   * the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, Page's default timeout is used.
+   */
+  toEventuallyBeOpen(opts?: Workflo.ITimeout & IsOpenOpts): boolean;
+  /**
+   * Checks if Page is eventually closed within a specific timeout.
+   *
+   * @param opts the opts parameter passed to Page's `eventually.isClosed` function which also includes
+   * the `timeout` within which the condition is expected to be met
+   *
+   * If no `timeout` is specified, Page's default timeout is used.
+   */
+  toEventuallyBeClosed(opts?: Workflo.ITimeout & IsClosedOpts): boolean;
+}
+
+/**
  * This interface describes positive and negative (.not) expectation matchers for PageElements.
  *
  * It is implemented by the return value of the `expectElement` function if expectElement was passed an instance of
@@ -1476,7 +1521,7 @@ interface IMapMatchers<K extends string | number | symbol> extends ICustomMapMat
  * @template Content the type of the content managed by the group
  */
 interface IGroupMatchers<
-  Content extends {[key: string]: Workflo.PageNode.INode}
+  Content extends {[key: string]: Workflo.PageNode.IPageNode}
 > extends ICustomGroupMatchers<Content> {
   not: ICustomGroupMatchers<Content>;
 }
@@ -1530,6 +1575,13 @@ extends ICustomValueMapMatchers<K, ValueType> {
 interface IValueGroupMatchers<Content extends Workflo.PageNode.GroupContent>
 extends ICustomValueGroupMatchers<Content> {
   not: ICustomValueGroupMatchers<Content>;
+}
+
+interface IPageMatchers<
+  IsOpenOpts extends {},
+  IsClosedOpts extends {}
+> extends ICustomPageMatchers<IsOpenOpts, IsClosedOpts> {
+  not: ICustomPageMatchers<IsOpenOpts, IsClosedOpts>;
 }
 
 declare global {
@@ -1627,6 +1679,26 @@ declare global {
     GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ?
     IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
 
+  /**
+   * This function provides expectation matchers for Pages.
+   *
+   * All template type parameters can be inferred automatically.
+   *
+   * @template Store type of PageNodeStore used by the passed element
+   * @template PageElementType type of the passed element
+   * @template ValueType If the passed element is an instance of ValuePageElement, this is the type of the values
+   * handled in element's xxxValue functions.
+   *
+   * @param element an instance of PageElement or an instance of ValuePageElement
+   * @returns the expectation matchers for PageElement or ValuePageElement
+   */
+  function expectPage<
+    Store extends pageObjects.stores.PageNodeStore,
+    PageType extends pageObjects.pages.Page<Store, IsOpenOpts, IsClosedOpts>,
+    IsOpenOpts extends {},
+    IsClosedOpts extends {}
+  >(page: PageType): IPageMatchers<IsOpenOpts, IsClosedOpts>;
+
   namespace WebdriverIO {
     interface Client<T> {
       /**
@@ -1668,7 +1740,7 @@ declare global {
      * Returns the keys of all properties of T whose values' ReturnTypes extend U.
      */
     type FilteredKeysByReturnType<T, U> = {
-      [P in keyof T]: T[P] extends (...args) => Workflo.PageNode.INode ?
+      [P in keyof T]: T[P] extends (...args) => Workflo.PageNode.IPageNode ?
       ReturnType<T[P]> extends U ? P : never :
       P
     }[keyof T];
@@ -1956,6 +2028,16 @@ declare global {
     }
 
     /**
+     * Used when converting PageNodes to JSON.
+     */
+    interface IPageJSON {
+      /**
+       * Type of the Page (usually its constructor name)
+       */
+      pageType: string;
+    }
+
+    /**
      * Used to get and set the last differences (actual vs expected values) of a PageNode's state check functions
      * (eg. hasText, hasAnyText, containsText) in order to use them in expectation matcher error messages.
      */
@@ -2016,6 +2098,71 @@ declare global {
       timeout?: number;
     }
 
+    /**
+     * This interface describes common functionalities of all Pages.
+     */
+    interface IPage<
+      Store extends pageObjects.stores.PageNodeStore,
+      IsOpenOpts = {},
+      IsClosedOpts = IsOpenOpts
+    > {
+
+      /**
+       * All functions defined inside wait, when invoked, will wait for a condition to be met and throw
+       * an error if the condition is never met within a specified timeout.
+       */
+      wait: {};
+
+      /**
+       * All functions defined inside eventually, when invoked, will wait for a condition to be met and return
+       * false if the the condition is never met within a specified timeout.
+       */
+      eventually: {};
+
+      /**
+       * Retrieves the last timeout used by Page's `wait` and `eventually` functions.
+       *
+       * Intended for framework-internal usage only.
+       */
+      __lastTimeout: number;
+
+      /**
+       * Sets the last timeout used by Page's `wait` and `eventually` functions.
+       *
+       * Intended for framework-internal usage only.
+       */
+      __setLastTimeout(timeout: number): void;
+
+      /**
+       * Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page.
+       */
+      getStore(): Store;
+
+      /**
+       * Returns the default timeout in milliseconds used by Page for its `wait` and `eventually` functions.
+       */
+      getTimeout(): number;
+
+      /**
+       * Returns the default interval in milliseconds used by Page for its `wait` and `eventually` functions.
+       */
+      getInterval(): number;
+
+      /**
+       * Checks if the Page is currently open.
+       *
+       * @param opts options needed to determine if the Page is currently open
+       */
+      isOpen(opts?: IsOpenOpts): boolean;
+
+      /**
+       * Checks if the Page is currently closed.
+       *
+       * @param opts options needed to determine if the Page is currently closed
+       */
+      isClosed(opts?: IsClosedOpts): boolean;
+    }
+
     namespace Store {
       type BaseKeys = 'timeout' | 'waitType';
       type GroupPublicKeys = 'timeout';
@@ -2032,9 +2179,9 @@ declare global {
     namespace PageNode {
 
       /**
-       * This interfaces describes common functionalities of all PageNodes.
+       * This interface describes common functionalities of all PageNodes.
        */
-      interface INode extends ILastDiff {
+      interface IPageNode extends ILastDiff {
         /**
          * Retrieves the id used to identify a PageNode in the instance cache of PageNodeStore.
          *
@@ -2067,13 +2214,13 @@ declare global {
        * The content of a PageElementGroup must be an object whose keys are arbitrary names of the PageNodes defined
        * within the content and whose values or the PageNodes themselves.
        */
-      type GroupContent = {[key: string] : Workflo.PageNode.INode};
+      type GroupContent = {[key: string] : Workflo.PageNode.IPageNode};
 
       /**
        * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
        * content. For a PageElement, the extract return value type will be `string`.
        */
-      type ExtractText<T extends {[key in keyof T]: INode}> = {
+      type ExtractText<T extends {[key in keyof T]: IPageNode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getText']>> :
         never;
@@ -2083,7 +2230,7 @@ declare global {
        * Extracts the return value types of the `currently.getExists` functions of all PageNodes defined within a
        * PageElementGroup's content.
        */
-      type ExtractExistsFilterMask<T extends {[key in keyof T]: INode}> = {
+      type ExtractExistsFilterMask<T extends {[key in keyof T]: IPageNode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayElement<ReturnType<T[P]['currently']['getExists']>> :
         never;
@@ -2093,7 +2240,7 @@ declare global {
        * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
        * PageElementGroup's content. For a PageElement, the extract return value type will be `boolean`.
        */
-      type ExtractBoolean<T extends {[key in keyof T]: INode}> = {
+      type ExtractBoolean<T extends {[key in keyof T]: IPageNode}> = {
         [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
         never;
@@ -2131,7 +2278,7 @@ declare global {
        * @template FilterType type of IElementNode's filter mask
        */
       interface IElementNode<TextType, BooleanType, FilterType = any>
-        extends INode, IGetElement<TextType, BooleanType, FilterType>
+        extends IPageNode, IGetElement<TextType, BooleanType, FilterType>
       {
         /**
          * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
@@ -2637,7 +2784,7 @@ declare global {
        * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
        * ValuePageElementGroup's content.
        */
-      type ExtractValue<T extends {[key: string]: INode}> = {
+      type ExtractValue<T extends {[key: string]: IPageNode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
           TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
       };
@@ -2646,7 +2793,7 @@ declare global {
        * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
        * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
        */
-      type ExtractValueBoolean<T extends {[key in keyof T]: INode}> = {
+      type ExtractValueBoolean<T extends {[key in keyof T]: IPageNode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
         TryArrayOrElement<ReturnType<T[P]['getHasValue']>> :
         never;
@@ -2656,7 +2803,7 @@ declare global {
        * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
        * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
        */
-      type ExtractValueBooleanWN<T extends {[key in keyof T]: INode}> = {
+      type ExtractValueBooleanWN<T extends {[key in keyof T]: IPageNode}> = {
         [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
         WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> :
         never;
@@ -2684,7 +2831,7 @@ declare global {
        * @template SetType type of a setter values structure used by a IValueElementNode's setter functions
        */
       interface IValueElementNode<GetType, FilterType = any, SetType = GetType>
-      extends INode, IGetValueElement<GetType, FilterType>
+      extends IPageNode, IGetValueElement<GetType, FilterType>
       {
         /**
          * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
@@ -3555,7 +3702,7 @@ declare global {
      */
     interface IStep {
       __description: string;
-      __execute: (prefix?: string) => void;
+      execute: (prefix?: string) => void;
     }
 
     /**
@@ -3580,7 +3727,7 @@ declare global {
    * @param str a string for which to create a unique id
    * @returns the generated unique id
    */
-  function getUid(str: string) : string;
+function getUid(str: string) : string;
 
   /**
    * A Feature in wdio-workflo represents a collection of related Stories.
@@ -3589,7 +3736,7 @@ declare global {
    * @param metadata the metadata of the Feature
    * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
-  function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
+function Feature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
 
   /**
    * If one or more Features in a scope (usually a .spec.ts file) are marked as "fFeature",
@@ -3601,7 +3748,7 @@ declare global {
    * @param metadata the metadata of the Feature
    * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
-  function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
+function fFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
 
   /**
    * All Features marked as "xFeature" will not be executed by the test runner.
@@ -3612,7 +3759,7 @@ declare global {
    * @param metadata the metadata of the Feature
    * @param bodyFunc Define all Stories that belong to this Feature in the body of this function.
    */
-  function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
+function xFeature(description: string, metadata: Workflo.IFeatureMetadata, bodyFunc: () => void) : void;
 
   /**
    * A Story describes functional requirements of the tested application as a series of application states and state
@@ -3632,7 +3779,7 @@ declare global {
    * @param metadata the metadata of the Story
    * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
-  function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
+function Story(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
 
   /**
    * If one or more Stories in a Feature are marked as "fStory",
@@ -3655,7 +3802,7 @@ declare global {
    * @param metadata the metadata of the Story
    * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
-  function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
+function fStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
 
   /**
    * All Stories marked as "xStory" will not be executed by the test runner.
@@ -3677,7 +3824,7 @@ declare global {
    * @param metadata the metadata of the Story
    * @param bodyFunc Define all states, state changes and acceptance criteria of a Story in the body of this function.
    */
-  function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
+function xStory(id: string, description: string, metadata: Workflo.IStoryMetaData, bodyFunc: () => void) : void;
 
   /**
    * Given describes an initial state of a Story.
@@ -3694,7 +3841,7 @@ declare global {
    * @param bodyFunc Use the body of this function to define acceptance criteria, nested initial states or state
    * changes.
    */
-  function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven;
+function Given(description: string, bodyFunc?: () => void) : Workflo.ISpecGiven;
 
   /**
    * When describes a state change inside a Story that is triggered either by a user or by a system.
@@ -3707,7 +3854,7 @@ declare global {
    * @param description a short description of who did what to trigger a state change
    * @param bodyFunc Use the body of this function to define acceptance criteria or nested state changes.
    */
-  function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen;
+function When(description: string, bodyFunc?: () => void) : Workflo.ISpecWhen;
 
   /**
    * Then represents an acceptance criteria that validates an application state to check if a functional requirement
@@ -3729,7 +3876,7 @@ declare global {
    * @param id the id of an acceptance criteria which must be unique within its surrounding Story
    * @param description a short description of the expected state under validation
    */
-  function Then(id: number, description: string) : void;
+function Then(id: number, description: string) : void;
 
   /**
    * If one or more acceptance criteria in a Story are marked as "fThen",
@@ -3754,7 +3901,7 @@ declare global {
    * @param id the id of an acceptance criteria which must be unique within its surrounding Story
    * @param description a short description of the expected state under validation
    */
-  function fThen(id: number, description: string) : void;
+function fThen(id: number, description: string) : void;
 
   /**
    * All acceptance criteria marked as "xThen" will not be executed by the test runner.
@@ -3778,7 +3925,7 @@ declare global {
    * @param id the id of an acceptance criteria which must be unique within its surrounding Story
    * @param description a short description of the expected state under validation
    */
-  function xThen(id: number, description: string) : void;
+function xThen(id: number, description: string) : void;
 
   /**
    * A suite is a collection of related testcases.
@@ -3787,7 +3934,7 @@ declare global {
    * @param metadata the metadata of the suite
    * @param bodyFunc define all testcases for this suite inside the body of this function
    */
-  function suite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
+function suite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
 
   /**
    * If one or more suites in a scope (usually a .tc.ts file) are marked as "fsuite",
@@ -3799,7 +3946,7 @@ declare global {
    * @param metadata the metadata of the suite
    * @param bodyFunc define all testcases for this suite inside the body of this function
    */
-  function fsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
+function fsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
 
   /**
    * All suites marked as "xsuite" will not be executed by the test runner.
@@ -3810,7 +3957,7 @@ declare global {
    * @param metadata the metadata of the suite
    * @param bodyFunc define all testcases for this suite inside the body of this function
    */
-  function xsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
+function xsuite(description: string, metadata: Workflo.ISuiteMetadata, bodyFunc: () => void) : void;
 
   /**
    * A testcase is composed of a sequence of steps strung together in a step chain.
@@ -3837,7 +3984,7 @@ declare global {
    * @param metadata the metadata of the testcase
    * @param bodyFunc define all steps for this testcase inside the body of this function
    */
-  function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
+function testcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
 
   /**
    * If one or testcases in a suite are marked as "fTestcase",
@@ -3867,7 +4014,7 @@ declare global {
    * @param metadata the metadata of the testcase
    * @param bodyFunc define all steps for this testcase inside the body of this function
    */
-  function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
+function ftestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
 
   /**
    * All testcases criteria marked as "xtestcase" will not be executed by the test runner.
@@ -3896,7 +4043,7 @@ declare global {
    * @param metadata the metadata of the testcase
    * @param bodyFunc define all steps for this testcase inside the body of this function
    */
-  function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
+function xtestcase(description: string, metadata: Workflo.ITestcaseMetadata, bodyFunc: () => void) : void;
 
   /**
    * The `given` function establishes the initial state of a tested application by executing the passed step.
@@ -3910,7 +4057,7 @@ declare global {
    *
    * @param step a step that establishes the initial state
    */
-  function given(step: Workflo.IStep) : Workflo.ITCGiven;
+function given(step: Workflo.IStep) : Workflo.ITCGiven;
 
   /**
    * The `validate` function provides the means to validate an application state.
@@ -3936,7 +4083,7 @@ declare global {
    * @param validationFunc Define all expectation matchers that together determine the result of this validation inside
    * the body of this function.
    */
-  function validate(validateObject: Workflo.IValidateSpecObject, validationFunc: (...args : any[]) => void) : void;
+function validate(validateObject: Workflo.IValidateSpecObject, validationFunc: (...args : any[]) => void) : void;
 
   /**
    * Returns an instance of XPathBuilder to create XPath expressions using functions instead of writing the whole
@@ -3948,7 +4095,7 @@ declare global {
    * @param selector the initial XPath selector (eg. "//div", "/span")
    * @returns an instance of XPathBuilder
    */
-  function xpath(selector: string) : pageObjects.builders.XPathBuilder;
+function xpath(selector: string) : pageObjects.builders.XPathBuilder;
 }
 
 /**
@@ -4171,7 +4318,10 @@ export interface ICallbackConfig extends IWorkfloCallbackConfig, IWorkfloCommonC
  */
 export interface IWorkfloCommonConfig {
   /**
-   * Root directory for all test artifacts of wdio-workflo.
+   * Root directory for all system test artifacts of wdio-workflo.
+   *
+   * If you set this value to something other than `${__dirname} + '/system_test`, you need to make sure that
+   * the `include` array in workflo's tsconfig file `tsconfig.workflo.json` contains your testDir folder.
    */
   testDir: string;
   /**

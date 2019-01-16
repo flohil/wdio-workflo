@@ -4,6 +4,14 @@ const __1 = require("../");
 /**
  * This class serves as the base class for all Pages.
  *
+ * It provides the functions `isOpen` and `isClosed` to check if the page currently is open or closed.
+ * `Page` also features a `wait` API to wait for the page to be open or closed and an `eventually` API to check
+ * if the page eventually is open or closed.
+ *
+ * Contrary to `PageNode`, `Page` does not have an initial waiting condition.
+ * Therefore, `Page` has no `currently` API (unlike `PageElement`) because all functions defined directly on `Page`
+ * (and not on its `wait` or `eventually` APIs) always describe the current state of the page.
+ *
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`, `wait.isOpen` and
  * `eventually.isOpen`
@@ -23,23 +31,26 @@ class Page {
         this.wait = new PageWait(this);
         this.eventually = new PageEventually(this);
     }
-    /**
-     * Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
-     */
+    get __lastTimeout() {
+        const lastTimeout = this._lastTimeout || this._timeout;
+        return lastTimeout;
+    }
+    __setLastTimeout(timeout) {
+        this._lastTimeout = timeout;
+    }
     getStore() {
         return this._store;
     }
-    /**
-     * Returns the default timeout in milliseconds used by Page for its `wait` and `eventually` functions.
-     */
     getTimeout() {
         return this._timeout;
     }
-    /**
-     * Returns the default interval in milliseconds used by Page for its `wait` and `eventually` functions.
-     */
     getInterval() {
         return this._interval;
+    }
+    toJSON() {
+        return {
+            pageType: this.constructor.name,
+        };
     }
 }
 exports.Page = Page;

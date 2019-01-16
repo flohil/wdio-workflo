@@ -511,7 +511,7 @@ export const xtestcase = (
 const _when = function (step: Workflo.IStep, prefix: string) {
   // process.send({event: 'step:start', title: `${prefix} ${step.description}`})
 
-  step.__execute(prefix);
+  step.execute(prefix);
 
   // process.send({event: 'step:end'})
 
@@ -523,7 +523,7 @@ const _when = function (step: Workflo.IStep, prefix: string) {
 const _given = function (step: Workflo.IStep, prefix: string) {
   // process.send({event: 'step:start', title: `${prefix} ${step.description}`})
 
-  step.__execute(prefix);
+  step.execute(prefix);
 
   // process.send({event: 'step:end'})
 

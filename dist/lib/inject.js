@@ -44,6 +44,7 @@ function inject(config) {
     context.expectList = matchers_1.expectList;
     context.expectMap = matchers_1.expectMap;
     context.expectGroup = matchers_1.expectGroup;
+    context.expectPage = matchers_1.expectPage;
     // add enum definitions
     context.Workflo.WaitType = enums_1.WaitType;
     context.Workflo.Comparator = enums_1.Comparator;
@@ -55,5 +56,6 @@ beforeAll(() => {
     jasmine.addMatchers(matchers_1.listMatchers);
     jasmine.addMatchers(matchers_1.allMatchers);
     jasmine.addMatchers(matchers_1.valueAllMatchers);
+    jasmine.addMatchers(matchers_1.pageMatchers);
 });
 //# sourceMappingURL=inject.js.map

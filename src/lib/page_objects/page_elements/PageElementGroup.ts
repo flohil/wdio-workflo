@@ -7,14 +7,14 @@ import { IPageNodeOpts, PageNodeEventually, PageNodeWait } from './PageNode';
  * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `string`.
  */
-export type ExtractText<Content extends {[key: string]: Workflo.PageNode.INode}> =
+export type ExtractText<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
   Workflo.PageNode.ExtractText<Content>;
 
 /**
  * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `boolean`.
  */
-export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.INode}> =
+export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
   Workflo.PageNode.ExtractBoolean<Content>;
 
 /**
@@ -44,7 +44,7 @@ export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.INod
  * - hasAnyDirectText
  * - containsDirectText
  */
-type ElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> = Workflo.PageNode.IElementNode<
+type ElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode}> = Workflo.PageNode.IElementNode<
   ExtractText<Content>, ExtractBoolean<Content>, Workflo.PageNode.IGroupFilterMask<Content>
 >;
 
@@ -57,7 +57,7 @@ type ElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}
  */
 export interface IPageElementGroupOpts<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode}
+  Content extends {[key: string] : Workflo.PageNode.IPageNode}
 > extends IPageNodeOpts<Store> {
   content: Content;
 }
@@ -85,7 +85,7 @@ export interface IPageElementGroupOpts<
  */
 export class PageElementGroup<
   Store extends PageNodeStore,
-  Content extends {[K in keyof Content] : Workflo.PageNode.INode}
+  Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode}
 > extends PageNode<Store>
 implements ElementNode<Content> {
   protected _id: string;
@@ -326,7 +326,7 @@ implements ElementNode<Content> {
     ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>,
     ResultType extends Partial<Content> = Workflo.PageNode.ExtractBoolean<Content>,
   >(
-    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean,
     compareFunc: (args: {
       node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType],
     }) => any,
@@ -380,7 +380,7 @@ implements ElementNode<Content> {
     NodeInterface,
     ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>,
   >(
-    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean,
     checkFunc: (args: {
       node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType],
     }) => boolean,
@@ -446,7 +446,7 @@ implements ElementNode<Content> {
     ResultType extends Partial<Content>,
     FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>
   >(
-    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean,
     getFunc: (
       args: {node: NodeInterface, filter?: FilterType[keyof FilterType]},
     ) => any,
@@ -492,7 +492,7 @@ implements ElementNode<Content> {
     NodeInterface,
     ExpectedType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>
   >(
-    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean,
     waitFunc: (args: {
       node: NodeInterface, expected?: ExpectedType[keyof ExpectedType], filter?: ExpectedType[keyof ExpectedType],
     }) => NodeInterface,
@@ -541,7 +541,7 @@ implements ElementNode<Content> {
     NodeInterface,
     FilterType extends Partial<Content> = Workflo.PageNode.GroupFilterMask<Content>
   >(
-    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean,
     action: (args: {
       node: NodeInterface, filter?: FilterType[keyof FilterType],
     }) => any,
@@ -579,10 +579,10 @@ implements ElementNode<Content> {
    * @returns this (an instance of PageElementGroup)
    */
   eachSet<
-    NodeInterface extends Workflo.PageNode.INode,
+    NodeInterface extends Workflo.PageNode.IPageNode,
     ValuesType extends Partial<Content>,
   >(
-    supportsInterface: (node: Workflo.PageNode.INode) => boolean,
+    supportsInterface: (node: Workflo.PageNode.IPageNode) => boolean,
     setFunc: (
       args: {node: NodeInterface, value?: ValuesType[keyof ValuesType]},
     ) => NodeInterface,
@@ -617,7 +617,7 @@ implements ElementNode<Content> {
  */
 export class PageElementGroupCurrently<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
+  Content extends {[key: string] : Workflo.PageNode.IPageNode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeCurrently<Store, GroupType> {
 
@@ -1020,7 +1020,7 @@ export class PageElementGroupCurrently<
  */
 export class PageElementGroupWait<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
+  Content extends {[key: string] : Workflo.PageNode.IPageNode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeWait<Store, GroupType> {
 
@@ -1449,7 +1449,7 @@ export class PageElementGroupWait<
  */
 export class PageElementGroupEventually<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
+  Content extends {[key: string] : Workflo.PageNode.IPageNode},
   GroupType extends PageElementGroup<Store, Content>
 > extends PageNodeEventually<Store, GroupType> {
 
@@ -1802,8 +1802,8 @@ export class PageElementGroupEventually<
  * @param node a PageNode
  */
 export function isIElementNode<
-  Content extends {[K in keyof Content] : Workflo.PageNode.INode}
->(node: Workflo.PageNode.INode | ElementNode<Content>): node is ElementNode<Content> {
+  Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode}
+>(node: Workflo.PageNode.IPageNode | ElementNode<Content>): node is ElementNode<Content> {
   return typeof node['getText'] === 'function' &&
   typeof node.currently['hasText'] === 'function' &&
   typeof node.currently['hasAnyText'] === 'function' &&

@@ -132,6 +132,47 @@ function createBaseMatcher(compareFuncs, ensureOpts = false, withoutExpected = [
     };
 }
 exports.createBaseMatcher = createBaseMatcher;
+function createPageMatcher(compareFuncs) {
+    return (util, customEqualityTesters) => {
+        function baseCompareFunction(page, negativeComparison, opts = undefined) {
+            const result = {
+                pass: true,
+                message: '',
+            };
+            if (typeof opts === 'undefined' || opts === null) {
+                opts = Object.create(null);
+            }
+            const successes = compareFuncs.resultFunc({ page, opts });
+            const success = (negativeComparison) ? successes[1]() : successes[0]();
+            if (!success) {
+                const optsWithTimeout = ((typeof opts === 'object' && opts !== null) || !!opts) ? opts : Object.create(null);
+                if (typeof optsWithTimeout === 'object' && !optsWithTimeout['timeout']) {
+                    optsWithTimeout.timeout = page.__lastTimeout;
+                }
+                const errorTexts = compareFuncs.errorTextFunc({ page, opts: optsWithTimeout });
+                let errorText = undefined;
+                if (negativeComparison && errorTexts.length > 1) {
+                    errorText = errorTexts[1];
+                }
+                else {
+                    errorText = errorTexts[0];
+                }
+                result.pass = false;
+                result.message = errorText;
+            }
+            return result;
+        }
+        return {
+            compare: (page, opts) => {
+                return baseCompareFunction(page, false, opts);
+            },
+            negativeCompare: (page, opts) => {
+                return baseCompareFunction(page, true, opts);
+            },
+        };
+    };
+}
+exports.createPageMatcher = createPageMatcher;
 function createMatcher(compareFuncs) {
     return createBaseMatcher(compareFuncs, false);
 }
@@ -1460,6 +1501,44 @@ exports.valueAllMatchers = {
         },
     }),
 };
+exports.pageMatchers = {
+    toBeOpen: createPageMatcher({
+        resultFunc: ({ page, opts }) => [
+            () => page.isOpen(opts), () => !page.isOpen(opts),
+        ],
+        errorTextFunc: ({ page }) => [
+            `Expected ${page.constructor.name} to be open.`,
+            `Expected ${page.constructor.name} not to be open.`,
+        ],
+    }),
+    toBeClosed: createPageMatcher({
+        resultFunc: ({ page, opts }) => [
+            () => page.isClosed(opts), () => !page.isClosed(opts),
+        ],
+        errorTextFunc: ({ page }) => [
+            `Expected ${page.constructor.name} to be closed.`,
+            `Expected ${page.constructor.name} not to be closed.`,
+        ],
+    }),
+    toEventuallyBeOpen: createPageMatcher({
+        resultFunc: ({ page, opts }) => [
+            () => page.eventually.isOpen(opts), () => !page.eventually.isOpen(opts),
+        ],
+        errorTextFunc: ({ page, opts }) => [
+            `Expected ${page.constructor.name} to eventually be open within ${opts.timeout}ms.`,
+            `Expected ${page.constructor.name} not to eventually be open within ${opts.timeout}ms.`,
+        ],
+    }),
+    toEventuallyBeClosed: createPageMatcher({
+        resultFunc: ({ page, opts }) => [
+            () => page.eventually.isClosed(opts), () => !page.eventually.isClosed(opts),
+        ],
+        errorTextFunc: ({ page, opts }) => [
+            `Expected ${page.constructor.name} to eventually be closed within ${opts.timeout}ms.`,
+            `Expected ${page.constructor.name} not to eventually be closed within ${opts.timeout}ms.`,
+        ],
+    }),
+};
 function expectElement(element) {
     return expect(element);
 }
@@ -1476,4 +1555,8 @@ function expectGroup(group) {
     return expect(group);
 }
 exports.expectGroup = expectGroup;
+function expectPage(page) {
+    return expect(page);
+}
+exports.expectPage = expectPage;
 //# sourceMappingURL=matchers.js.map

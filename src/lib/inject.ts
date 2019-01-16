@@ -7,8 +7,10 @@ import {
   expectGroup,
   expectList,
   expectMap,
+  expectPage,
   listMatchers,
   valueAllMatchers,
+  pageMatchers,
 } from './matchers';
 import * as arrayFunctions from './utility_functions/array';
 import * as classFunctions from './utility_functions/class';
@@ -58,6 +60,7 @@ function inject(config) {
   context.expectList = expectList;
   context.expectMap = expectMap;
   context.expectGroup = expectGroup;
+  context.expectPage = expectPage;
 
   // add enum definitions
   context.Workflo.WaitType = WaitType;
@@ -71,6 +74,7 @@ beforeAll(() => {
   jasmine.addMatchers(listMatchers);
   jasmine.addMatchers(allMatchers);
   jasmine.addMatchers(valueAllMatchers);
+  jasmine.addMatchers(pageMatchers);
 });
 
 export { inject };

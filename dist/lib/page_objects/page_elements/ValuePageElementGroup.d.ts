@@ -5,7 +5,7 @@ import { PageNodeStore } from '../stores';
  * ValuePageElementGroup's content.
  */
 declare type ExtractValue<Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.ExtractValue<Content>;
 /**
  * This interface is implemented by ValuePageElement, ValuePageElementList, ValuePageElementMap and
@@ -25,7 +25,7 @@ declare type ExtractValue<Content extends {
  * - containsValue
  */
 declare type ValueElementNode<Content extends {
-    [K in keyof Content]: Workflo.PageNode.INode;
+    [K in keyof Content]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>;
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementGroup.
@@ -35,7 +35,7 @@ declare type ValueElementNode<Content extends {
  * these PageNodes as keys
  */
 export interface IValuePageElementGroupOpts<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }> extends IPageElementGroupOpts<Store, Content> {
 }
 /**
@@ -47,7 +47,7 @@ export interface IValuePageElementGroupOpts<Store extends PageNodeStore, Content
  * these PageNodes as keys
  */
 export declare class ValuePageElementGroup<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }> extends PageElementGroup<Store, Content> implements ValueElementNode<Content> {
     readonly currently: ValuePageElementGroupCurrently<Store, Content, this>;
     readonly wait: ValuePageElementGroupWait<Store, Content, this>;
@@ -114,7 +114,7 @@ export declare class ValuePageElementGroup<Store extends PageNodeStore, Content 
  * `currently` functions
  */
 declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupCurrently<Store, Content, GroupType> {
     /**
      * Returns the current values of all PageNodes managed by ValuePageElementGroup as a result structure.
@@ -215,7 +215,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
  * functions
  */
 declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupWait<Store, Content, GroupType> {
     /**
      * Waits for the actual values of all PageNodes managed by ValuePageElementGroup to equal the expected values.
@@ -333,7 +333,7 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
  * `eventually` functions
  */
 declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }, GroupType extends ValuePageElementGroup<Store, Content>> extends PageElementGroupEventually<Store, Content, GroupType> {
     /**
      * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup eventually equal the expected
@@ -427,6 +427,6 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
  * @param node a PageNode
  */
 export declare function isIValueElementNode<Content extends {
-    [K in keyof Content]: Workflo.PageNode.INode;
-}>(node: Workflo.PageNode.INode | ValueElementNode<Content>): node is ValueElementNode<Content>;
+    [K in keyof Content]: Workflo.PageNode.IPageNode;
+}>(node: Workflo.PageNode.IPageNode | ValueElementNode<Content>): node is ValueElementNode<Content>;
 export {};

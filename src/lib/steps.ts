@@ -100,14 +100,17 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
    * Intended for framework-internal usage only.
    */
   public __description: string;
+
   /**
-   * The execute function of the Step.
+   * Executes the parameterized step.
    *
-   * Intended for framework-internal usage only.
+   * If a step is used as a parameter of `given`, `when` or `and`, this function will be invoked automatically.
+   *
+   * Calling this function manually is only needed when invoking a step from inside the body function of another step.
    *
    * @param prefix the prefix of a nested step (titles of its "upper" steps in the nesting hierarchy)
    */
-  public __execute: (prefix: string) => void;
+  public execute: (prefix?: string) => void;
 
   /**
    * Indicates whether browser object was already patched to create stacktrace which can be displayed on selenium errors
@@ -266,7 +269,7 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
       this.__description = Kiwi.compose(params.description, params.arg);
     }
     if (typeof params.cb !== 'undefined') {
-      this.__execute = prefix => {
+      this.execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
         process.send(
           { event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) },
@@ -278,7 +281,7 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
         process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
       };
     } else {
-      this.__execute = prefix => {
+      this.execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
         process.send(
           { event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) },

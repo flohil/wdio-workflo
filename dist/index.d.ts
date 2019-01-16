@@ -1411,6 +1411,46 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
     toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
 }
 /**
+ * This interface describes custom expectation matchers for Page.
+ *
+ * It can be used for both positive and negative (.not) comparisons.
+ *
+ * @template IsOpenOpts type of the opts parameter passed to Page's `isOpen` function
+ * @template IsClosedOpts type of the opts parameter passed to Page's `isClosed` function
+ */
+interface ICustomPageMatchers<IsOpenOpts extends {}, IsClosedOpts extends {}> {
+    /**
+     * Checks if Page is currently open.
+     *
+     * @param opts the opts parameter passed to Page's `isOpen` function
+     */
+    toBeOpen(opts?: IsOpenOpts): boolean;
+    /**
+     * Checks if Page is currently closed.
+     *
+     * @param opts the opts parameter passed to Page's `isClosed` function
+     */
+    toBeClosed(opts?: IsClosedOpts): boolean;
+    /**
+     * Checks if Page is eventually open within a specific timeout.
+     *
+     * @param opts the opts parameter passed to Page's `eventually.isOpen` function which also includes
+     * the `timeout` within which the condition is expected to be met
+     *
+     * If no `timeout` is specified, Page's default timeout is used.
+     */
+    toEventuallyBeOpen(opts?: Workflo.ITimeout & IsOpenOpts): boolean;
+    /**
+     * Checks if Page is eventually closed within a specific timeout.
+     *
+     * @param opts the opts parameter passed to Page's `eventually.isClosed` function which also includes
+     * the `timeout` within which the condition is expected to be met
+     *
+     * If no `timeout` is specified, Page's default timeout is used.
+     */
+    toEventuallyBeClosed(opts?: Workflo.ITimeout & IsClosedOpts): boolean;
+}
+/**
  * This interface describes positive and negative (.not) expectation matchers for PageElements.
  *
  * It is implemented by the return value of the `expectElement` function if expectElement was passed an instance of
@@ -1448,7 +1488,7 @@ interface IMapMatchers<K extends string | number | symbol> extends ICustomMapMat
  * @template Content the type of the content managed by the group
  */
 interface IGroupMatchers<Content extends {
-    [key: string]: Workflo.PageNode.INode;
+    [key: string]: Workflo.PageNode.IPageNode;
 }> extends ICustomGroupMatchers<Content> {
     not: ICustomGroupMatchers<Content>;
 }
@@ -1496,6 +1536,9 @@ interface IValueMapMatchers<K extends string | number | symbol, ValueType> exten
  */
 interface IValueGroupMatchers<Content extends Workflo.PageNode.GroupContent> extends ICustomValueGroupMatchers<Content> {
     not: ICustomValueGroupMatchers<Content>;
+}
+interface IPageMatchers<IsOpenOpts extends {}, IsClosedOpts extends {}> extends ICustomPageMatchers<IsOpenOpts, IsClosedOpts> {
+    not: ICustomPageMatchers<IsOpenOpts, IsClosedOpts>;
 }
 declare global {
     /**
@@ -1554,6 +1597,20 @@ declare global {
      * @returns the expectation matchers for PageElementGroup or ValuePageElementGroup
      */
     function expectGroup<Store extends pageObjects.stores.PageNodeStore, Content extends Workflo.PageNode.GroupContent, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): (typeof group) extends (infer GroupType) ? GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ? IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
+    /**
+     * This function provides expectation matchers for Pages.
+     *
+     * All template type parameters can be inferred automatically.
+     *
+     * @template Store type of PageNodeStore used by the passed element
+     * @template PageElementType type of the passed element
+     * @template ValueType If the passed element is an instance of ValuePageElement, this is the type of the values
+     * handled in element's xxxValue functions.
+     *
+     * @param element an instance of PageElement or an instance of ValuePageElement
+     * @returns the expectation matchers for PageElement or ValuePageElement
+     */
+    function expectPage<Store extends pageObjects.stores.PageNodeStore, PageType extends pageObjects.pages.Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts extends {}, IsClosedOpts extends {}>(page: PageType): IPageMatchers<IsOpenOpts, IsClosedOpts>;
     namespace WebdriverIO {
         interface Client<T> {
             /**
@@ -1590,7 +1647,7 @@ declare global {
          * Returns the keys of all properties of T whose values' ReturnTypes extend U.
          */
         type FilteredKeysByReturnType<T, U> = {
-            [P in keyof T]: T[P] extends (...args: any[]) => Workflo.PageNode.INode ? ReturnType<T[P]> extends U ? P : never : P;
+            [P in keyof T]: T[P] extends (...args: any[]) => Workflo.PageNode.IPageNode ? ReturnType<T[P]> extends U ? P : never : P;
         }[keyof T];
         /**
          * Returns the keys of all properties of T whose values are not never.
@@ -1853,6 +1910,15 @@ declare global {
             nodeId: string;
         }
         /**
+         * Used when converting PageNodes to JSON.
+         */
+        interface IPageJSON {
+            /**
+             * Type of the Page (usually its constructor name)
+             */
+            pageType: string;
+        }
+        /**
          * Used to get and set the last differences (actual vs expected values) of a PageNode's state check functions
          * (eg. hasText, hasAnyText, containsText) in order to use them in expectation matcher error messages.
          */
@@ -1910,6 +1976,57 @@ declare global {
              */
             timeout?: number;
         }
+        /**
+         * This interface describes common functionalities of all Pages.
+         */
+        interface IPage<Store extends pageObjects.stores.PageNodeStore, IsOpenOpts = {}, IsClosedOpts = IsOpenOpts> {
+            /**
+             * All functions defined inside wait, when invoked, will wait for a condition to be met and throw
+             * an error if the condition is never met within a specified timeout.
+             */
+            wait: {};
+            /**
+             * All functions defined inside eventually, when invoked, will wait for a condition to be met and return
+             * false if the the condition is never met within a specified timeout.
+             */
+            eventually: {};
+            /**
+             * Retrieves the last timeout used by Page's `wait` and `eventually` functions.
+             *
+             * Intended for framework-internal usage only.
+             */
+            __lastTimeout: number;
+            /**
+             * Sets the last timeout used by Page's `wait` and `eventually` functions.
+             *
+             * Intended for framework-internal usage only.
+             */
+            __setLastTimeout(timeout: number): void;
+            /**
+             * Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page.
+             */
+            getStore(): Store;
+            /**
+             * Returns the default timeout in milliseconds used by Page for its `wait` and `eventually` functions.
+             */
+            getTimeout(): number;
+            /**
+             * Returns the default interval in milliseconds used by Page for its `wait` and `eventually` functions.
+             */
+            getInterval(): number;
+            /**
+             * Checks if the Page is currently open.
+             *
+             * @param opts options needed to determine if the Page is currently open
+             */
+            isOpen(opts?: IsOpenOpts): boolean;
+            /**
+             * Checks if the Page is currently closed.
+             *
+             * @param opts options needed to determine if the Page is currently closed
+             */
+            isClosed(opts?: IsClosedOpts): boolean;
+        }
         namespace Store {
             type BaseKeys = 'timeout' | 'waitType';
             type GroupPublicKeys = 'timeout';
@@ -1924,9 +2041,9 @@ declare global {
         }
         namespace PageNode {
             /**
-             * This interfaces describes common functionalities of all PageNodes.
+             * This interface describes common functionalities of all PageNodes.
              */
-            interface INode extends ILastDiff {
+            interface IPageNode extends ILastDiff {
                 /**
                  * Retrieves the id used to identify a PageNode in the instance cache of PageNodeStore.
                  *
@@ -1958,14 +2075,14 @@ declare global {
              * within the content and whose values or the PageNodes themselves.
              */
             type GroupContent = {
-                [key: string]: Workflo.PageNode.INode;
+                [key: string]: Workflo.PageNode.IPageNode;
             };
             /**
              * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
              * content. For a PageElement, the extract return value type will be `string`.
              */
             type ExtractText<T extends {
-                [key in keyof T]: INode;
+                [key in keyof T]: IPageNode;
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getText']>> : never;
             };
@@ -1974,7 +2091,7 @@ declare global {
              * PageElementGroup's content.
              */
             type ExtractExistsFilterMask<T extends {
-                [key in keyof T]: INode;
+                [key in keyof T]: IPageNode;
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayElement<ReturnType<T[P]['currently']['getExists']>> : never;
             };
@@ -1983,7 +2100,7 @@ declare global {
              * PageElementGroup's content. For a PageElement, the extract return value type will be `boolean`.
              */
             type ExtractBoolean<T extends {
-                [key in keyof T]: INode;
+                [key in keyof T]: IPageNode;
             }> = {
                 [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
             };
@@ -2018,7 +2135,7 @@ declare global {
              * @template BooleanType type of IElementNode's state compare functions (getHasText...)
              * @template FilterType type of IElementNode's filter mask
              */
-            interface IElementNode<TextType, BooleanType, FilterType = any> extends INode, IGetElement<TextType, BooleanType, FilterType> {
+            interface IElementNode<TextType, BooleanType, FilterType = any> extends IPageNode, IGetElement<TextType, BooleanType, FilterType> {
                 /**
                  * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
                  * current value from the tested application's state
@@ -2532,7 +2649,7 @@ declare global {
              * ValuePageElementGroup's content.
              */
             type ExtractValue<T extends {
-                [key: string]: INode;
+                [key: string]: IPageNode;
             }> = {
                 [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
             };
@@ -2541,7 +2658,7 @@ declare global {
              * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
              */
             type ExtractValueBoolean<T extends {
-                [key in keyof T]: INode;
+                [key in keyof T]: IPageNode;
             }> = {
                 [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getHasValue']>> : never;
             };
@@ -2550,7 +2667,7 @@ declare global {
              * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
              */
             type ExtractValueBooleanWN<T extends {
-                [key in keyof T]: INode;
+                [key in keyof T]: IPageNode;
             }> = {
                 [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> : never;
             };
@@ -2575,7 +2692,7 @@ declare global {
              * @template FilterType type of IValueElementNode's filter mask
              * @template SetType type of a setter values structure used by a IValueElementNode's setter functions
              */
-            interface IValueElementNode<GetType, FilterType = any, SetType = GetType> extends INode, IGetValueElement<GetType, FilterType> {
+            interface IValueElementNode<GetType, FilterType = any, SetType = GetType> extends IPageNode, IGetValueElement<GetType, FilterType> {
                 /**
                  * defines an api for all functions of PageNode which check if a condition is currently true or which retrieve a
                  * current value from the tested application's state
@@ -3378,7 +3495,7 @@ declare global {
          */
         interface IStep {
             __description: string;
-            __execute: (prefix?: string) => void;
+            execute: (prefix?: string) => void;
         }
         /**
          * Steps in wdio-workflo need to be defined in this format - on object where the keys are the step descriptions and
@@ -3874,7 +3991,10 @@ export interface ICallbackConfig extends IWorkfloCallbackConfig, IWorkfloCommonC
  */
 export interface IWorkfloCommonConfig {
     /**
-     * Root directory for all test artifacts of wdio-workflo.
+     * Root directory for all system test artifacts of wdio-workflo.
+     *
+     * If you set this value to something other than `${__dirname} + '/system_test`, you need to make sure that
+     * the `include` array in workflo's tsconfig file `tsconfig.workflo.json` contains your testDir folder.
      */
     testDir: string;
     /**

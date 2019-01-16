@@ -13,13 +13,21 @@ export interface IPageOpts<Store extends PageNodeStore> extends Workflo.ITimeout
 /**
  * This class serves as the base class for all Pages.
  *
+ * It provides the functions `isOpen` and `isClosed` to check if the page currently is open or closed.
+ * `Page` also features a `wait` API to wait for the page to be open or closed and an `eventually` API to check
+ * if the page eventually is open or closed.
+ *
+ * Contrary to `PageNode`, `Page` does not have an initial waiting condition.
+ * Therefore, `Page` has no `currently` API (unlike `PageElement`) because all functions defined directly on `Page`
+ * (and not on its `wait` or `eventually` APIs) always describe the current state of the page.
+ *
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`, `wait.isOpen` and
  * `eventually.isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`, `wait.isClosed` and
  * `eventually.isClosed`
  */
-export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {}, IsClosedOpts = IsOpenOpts> {
+export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {}, IsClosedOpts = IsOpenOpts> implements Workflo.IPage<Store, IsOpenOpts, IsClosedOpts> {
     /**
      * an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
      */
@@ -33,13 +41,12 @@ export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {},
      */
     protected _interval: number;
     /**
-     * defines an api for all functions of Page which wait for a condition to become true within a specified timeout
+     * Stores the last timeout used by Page's `wait` and `eventually` functions.
+     *
+     * Intended for framework-internal usage only.
      */
+    protected _lastTimeout: number;
     wait: PageWait<Store, this, IsOpenOpts, IsClosedOpts>;
-    /**
-     * defines an api for all functions of Page which check if a condition eventually becomes true within a specified
-     * timeout
-     */
     eventually: PageEventually<Store, this, IsOpenOpts, IsClosedOpts>;
     /**
      * Page serves as the base class for all Pages.
@@ -47,29 +54,13 @@ export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {},
      * @param opts the options required to create an instance of Page
      */
     constructor(opts: IPageOpts<Store>);
-    /**
-     * Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
-     */
+    readonly __lastTimeout: number;
+    __setLastTimeout(timeout: number): void;
     getStore(): Store;
-    /**
-     * Returns the default timeout in milliseconds used by Page for its `wait` and `eventually` functions.
-     */
     getTimeout(): number;
-    /**
-     * Returns the default interval in milliseconds used by Page for its `wait` and `eventually` functions.
-     */
     getInterval(): number;
-    /**
-     * Checks if the Page is currently open.
-     *
-     * @param opts options needed to determine if the Page is currently open
-     */
+    toJSON(): Workflo.IPageJSON;
     abstract isOpen(opts?: IsOpenOpts): boolean;
-    /**
-     * Checks if the Page is currently closed.
-     *
-     * @param opts options needed to determine if the Page is currently closed
-     */
     abstract isClosed(opts?: IsClosedOpts): boolean;
 }
 /**

@@ -11,13 +11,13 @@ import { PageNodeStore } from '../stores';
  * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
  * ValuePageElementGroup's content.
  */
-type ExtractValue<Content extends {[key: string]: Workflo.PageNode.INode}> = Workflo.PageNode.ExtractValue<Content>;
+type ExtractValue<Content extends {[key: string]: Workflo.PageNode.IPageNode}> = Workflo.PageNode.ExtractValue<Content>;
 
 /**
  * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
  * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
  */
-type ExtractValueBoolean<Content extends {[key: string]: Workflo.PageNode.INode}> =
+type ExtractValueBoolean<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
 Workflo.PageNode.ExtractValueBoolean<Content>;
 
 /**
@@ -37,7 +37,7 @@ Workflo.PageNode.ExtractValueBoolean<Content>;
  * - hasAnyValue
  * - containsValue
  */
-type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.INode}> =
+type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode}> =
 Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>;
 
 /**
@@ -49,7 +49,7 @@ Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValu
  */
 export interface IValuePageElementGroupOpts<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode}
+  Content extends {[key: string] : Workflo.PageNode.IPageNode}
 > extends IPageElementGroupOpts<
   Store, Content
 > { }
@@ -64,7 +64,7 @@ export interface IValuePageElementGroupOpts<
  */
 export class ValuePageElementGroup<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode}
+  Content extends {[key: string] : Workflo.PageNode.IPageNode}
 > extends PageElementGroup<Store, Content>
 implements ValueElementNode<Content> {
 
@@ -173,7 +173,7 @@ implements ValueElementNode<Content> {
  */
 class ValuePageElementGroupCurrently<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
+  Content extends {[key: string] : Workflo.PageNode.IPageNode},
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupCurrently<Store, Content, GroupType> {
 
@@ -322,7 +322,7 @@ class ValuePageElementGroupCurrently<
  */
 class ValuePageElementGroupWait<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
+  Content extends {[key: string] : Workflo.PageNode.IPageNode},
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupWait<Store, Content, GroupType> {
 
@@ -474,7 +474,7 @@ class ValuePageElementGroupWait<
  */
 class ValuePageElementGroupEventually<
   Store extends PageNodeStore,
-  Content extends {[key: string] : Workflo.PageNode.INode},
+  Content extends {[key: string] : Workflo.PageNode.IPageNode},
   GroupType extends ValuePageElementGroup<Store, Content>
 > extends PageElementGroupEventually<Store, Content, GroupType> {
 
@@ -603,8 +603,8 @@ class ValuePageElementGroupEventually<
  * @param node a PageNode
  */
 export function isIValueElementNode<
-  Content extends {[K in keyof Content] : Workflo.PageNode.INode}
->(node: Workflo.PageNode.INode | ValueElementNode<Content>): node is ValueElementNode<Content> {
+  Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode}
+>(node: Workflo.PageNode.IPageNode | ValueElementNode<Content>): node is ValueElementNode<Content> {
   return typeof node['getValue'] === 'function' &&
   typeof node['setValue'] === 'function' &&
   typeof node.currently['getValue'] === 'function' &&

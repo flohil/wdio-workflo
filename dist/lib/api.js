@@ -347,7 +347,7 @@ exports.xtestcase = (description, metadata, bodyFunc) => {
 };
 const _when = function (step, prefix) {
     // process.send({event: 'step:start', title: `${prefix} ${step.description}`})
-    step.__execute(prefix);
+    step.execute(prefix);
     // process.send({event: 'step:end'})
     return {
         and: step => _when(step, words.And.toLowerCase()),
@@ -355,7 +355,7 @@ const _when = function (step, prefix) {
 };
 const _given = function (step, prefix) {
     // process.send({event: 'step:start', title: `${prefix} ${step.description}`})
-    step.__execute(prefix);
+    step.execute(prefix);
     // process.send({event: 'step:end'})
     return {
         and: step => _given(step, words.And.toLowerCase()),
