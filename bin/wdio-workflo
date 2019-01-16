@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'test';
-process.env.TS_NODE_FILES = true
+process.env.TS_NODE_FILES = true;
+process.env.TS_NODE_PROJECT = './tsconfig.workflo.json';
 
 require('../dist/lib/cli.js');
