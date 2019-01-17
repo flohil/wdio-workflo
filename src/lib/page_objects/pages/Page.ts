@@ -168,7 +168,7 @@ class PageWait<
 
       if (_error.type === 'WaitUntilTimeoutError') {
         const waitError = new Error(
-          `Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed.`,
+          `Waiting for page ${this._page.constructor.name}${conditionMessage} within ${timeout}ms failed.`,
         ) as any;
 
         waitError.type = 'WaitUntilTimeoutError';
