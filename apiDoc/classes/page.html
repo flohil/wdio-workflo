@@ -69,6 +69,12 @@
 					<div class="lead">
 						<p>This class serves as the base class for all Pages.</p>
 					</div>
+					<p>It provides the functions <code>isOpen</code> and <code>isClosed</code> to check if the page currently is open or closed.
+						<code>Page</code> also features a <code>wait</code> API to wait for the page to be open or closed and an <code>eventually</code> API to check
+					if the page eventually is open or closed.</p>
+					<p>Contrary to <code>PageNode</code>, <code>Page</code> does not have an initial waiting condition.
+						Therefore, <code>Page</code> has no <code>currently</code> API (unlike <code>PageElement</code>) because all functions defined directly on <code>Page</code>
+					(and not on its <code>wait</code> or <code>eventually</code> APIs) always describe the current state of the page.</p>
 					<dl class="tsd-comment-tags">
 						<dt>template</dt>
 						<dd><p>Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page</p>
@@ -106,6 +112,12 @@
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/__global.workflo.ipage.html" class="tsd-signature-type">IPage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">IsOpenOpts</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">IsClosedOpts</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -120,6 +132,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="page.html#_interval" class="tsd-kind-icon">_interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="page.html#_lasttimeout" class="tsd-kind-icon">_last<wbr>Timeout</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="page.html#_store" class="tsd-kind-icon">_store</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="page.html#_timeout" class="tsd-kind-icon">_timeout</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="page.html#eventually" class="tsd-kind-icon">eventually</a></li>
@@ -127,13 +140,21 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="page.html#__lasttimeout" class="tsd-kind-icon">__last<wbr>Timeout</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="page.html#__setlasttimeout" class="tsd-kind-icon">__set<wbr>Last<wbr>Timeout</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="page.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="page.html#getstore" class="tsd-kind-icon">get<wbr>Store</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="page.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="page.html#isclosed" class="tsd-kind-icon">is<wbr>Closed</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="page.html#isopen" class="tsd-kind-icon">is<wbr>Open</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="page.html#tojson" class="tsd-kind-icon">toJSON</a></li>
 							</ul>
 						</section>
 					</div>
@@ -151,7 +172,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L51">lib/page_objects/pages/Page.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L59">lib/page_objects/pages/Page.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -183,7 +204,7 @@
 					<div class="tsd-signature tsd-kind-icon">_interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L41">lib/page_objects/pages/Page.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L50">lib/page_objects/pages/Page.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -193,12 +214,28 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_lasttimeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _last<wbr>Timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">_last<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L56">lib/page_objects/pages/Page.ts:56</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Stores the last timeout used by Page&#39;s <code>wait</code> and <code>eventually</code> functions.</p>
+						</div>
+						<p>Intended for framework-internal usage only.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_store" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _store</h3>
 					<div class="tsd-signature tsd-kind-icon">_store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Store</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L33">lib/page_objects/pages/Page.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L42">lib/page_objects/pages/Page.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,7 +250,7 @@
 					<div class="tsd-signature tsd-kind-icon">_timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L37">lib/page_objects/pages/Page.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L46">lib/page_objects/pages/Page.ts:46</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -227,35 +264,70 @@
 					<h3>eventually</h3>
 					<div class="tsd-signature tsd-kind-icon">eventually<span class="tsd-signature-symbol">:</span> <a href="pageeventually.html" class="tsd-signature-type">PageEventually</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">IsOpenOpts</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">IsClosedOpts</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#eventually">eventually</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L51">lib/page_objects/pages/Page.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L59">lib/page_objects/pages/Page.ts:59</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>defines an api for all functions of Page which check if a condition eventually becomes true within a specified
-							timeout</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="wait" class="tsd-anchor"></a>
 					<h3>wait</h3>
 					<div class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">:</span> <a href="pagewait.html" class="tsd-signature-type">PageWait</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">IsOpenOpts</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">IsClosedOpts</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#wait">wait</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L46">lib/page_objects/pages/Page.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L58">lib/page_objects/pages/Page.ts:58</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>defines an api for all functions of Page which wait for a condition to become true within a specified timeout</p>
-						</div>
-					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="__lasttimeout" class="tsd-anchor"></a>
+					<h3>__last<wbr>Timeout</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __lastTimeout<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L76">lib/page_objects/pages/Page.ts:76</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="__setlasttimeout" class="tsd-anchor"></a>
+					<h3>__set<wbr>Last<wbr>Timeout</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">__set<wbr>Last<wbr>Timeout<span class="tsd-signature-symbol">(</span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#__setlasttimeout">__setLastTimeout</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L82">lib/page_objects/pages/Page.ts:82</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="getinterval" class="tsd-anchor"></a>
 					<h3>get<wbr>Interval</h3>
@@ -265,15 +337,11 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#getinterval">getInterval</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L85">lib/page_objects/pages/Page.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L94">lib/page_objects/pages/Page.ts:94</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns the default interval in milliseconds used by Page for its <code>wait</code> and <code>eventually</code> functions.</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -287,15 +355,11 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#getstore">getStore</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L71">lib/page_objects/pages/Page.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L86">lib/page_objects/pages/Page.ts:86</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Store</span></h4>
 						</li>
 					</ul>
@@ -309,15 +373,11 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#gettimeout">getTimeout</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L78">lib/page_objects/pages/Page.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L90">lib/page_objects/pages/Page.ts:90</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns the default timeout in milliseconds used by Page for its <code>wait</code> and <code>eventually</code> functions.</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -331,22 +391,15 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#isclosed">isClosed</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L101">lib/page_objects/pages/Page.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L106">lib/page_objects/pages/Page.ts:106</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Checks if the Page is currently closed.</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">IsClosedOpts</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>options needed to determine if the Page is currently closed</p>
-									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -362,25 +415,35 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/__global.workflo.ipage.html">IPage</a>.<a href="../interfaces/__global.workflo.ipage.html#isopen">isOpen</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/0c228f7/src/lib/page_objects/pages/Page.ts#L94">lib/page_objects/pages/Page.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L104">lib/page_objects/pages/Page.ts:104</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Checks if the Page is currently open.</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">IsOpenOpts</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>options needed to determine if the Page is currently open</p>
-									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="tojson" class="tsd-anchor"></a>
+					<h3>toJSON</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">toJSON<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/__global.workflo.ipagejson.html" class="tsd-signature-type">IPageJSON</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/lib/page_objects/pages/Page.ts#L98">lib/page_objects/pages/Page.ts:98</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__global.workflo.ipagejson.html" class="tsd-signature-type">IPageJSON</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -408,6 +471,9 @@
 								<a href="page.html#_interval" class="tsd-kind-icon">_interval</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="page.html#_lasttimeout" class="tsd-kind-icon">_last<wbr>Timeout</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="page.html#_store" class="tsd-kind-icon">_store</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
@@ -418,6 +484,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="page.html#wait" class="tsd-kind-icon">wait</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="page.html#__lasttimeout" class="tsd-kind-icon">__last<wbr>Timeout</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="page.html#__setlasttimeout" class="tsd-kind-icon">__set<wbr>Last<wbr>Timeout</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="page.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a>
@@ -433,6 +505,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="page.html#isopen" class="tsd-kind-icon">is<wbr>Open</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="page.html#tojson" class="tsd-kind-icon">toJSON</a>
 							</li>
 						</ul>
 					</li>

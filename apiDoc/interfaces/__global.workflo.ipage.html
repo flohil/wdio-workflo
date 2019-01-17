@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ICheckValueCurrently | wdio-workflo</title>
+	<title>IPage | wdio-workflo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,13 +60,10 @@
 					<a href="../modules/__global.workflo.html">Workflo</a>
 				</li>
 				<li>
-					<a href="../modules/__global.workflo.pagenode.html">PageNode</a>
-				</li>
-				<li>
-					<a href="__global.workflo.pagenode.icheckvaluecurrently.html">ICheckValueCurrently</a>
+					<a href="__global.workflo.ipage.html">IPage</a>
 				</li>
 			</ul>
-			<h1>Interface ICheckValueCurrently&lt;ValueType, FilterType&gt;</h1>
+			<h1>Interface IPage&lt;Store, IsOpenOpts, IsClosedOpts&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -76,8 +73,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used by IValueElementNode to describe <code>currently</code> state check and state retrieval functions supported by
-						ValuePageElement, ValuePageElementList, ValuePageElementMap and ValuePageElementGroup.</p>
+						<p>This interface describes common functionalities of all Pages.</p>
 					</div>
 				</div>
 			</section>
@@ -85,10 +81,13 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>ValueType</h4>
+						<h4>Store<span class="tsd-signature-symbol">: </span><a href="../classes/pagenodestore.html" class="tsd-signature-type">PageNodeStore</a></h4>
 					</li>
 					<li>
-						<h4>FilterType</h4>
+						<h4>IsOpenOpts</h4>
+					</li>
+					<li>
+						<h4>IsClosedOpts</h4>
 					</li>
 				</ul>
 			</section>
@@ -96,8 +95,14 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ICheckValueCurrently</span>
+						<span class="target">IPage</span>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implemented by</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../classes/page.html" class="tsd-signature-type">Page</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -107,15 +112,20 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.icheckvaluecurrently.html#not" class="tsd-kind-icon">not</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#__lasttimeout" class="tsd-kind-icon">__last<wbr>Timeout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#eventually" class="tsd-kind-icon">eventually</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#wait" class="tsd-kind-icon">wait</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.icheckvaluecurrently.html#containsvalue" class="tsd-kind-icon">contains<wbr>Value</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.icheckvaluecurrently.html#hasanyvalue" class="tsd-kind-icon">has<wbr>Any<wbr>Value</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.pagenode.icheckvaluecurrently.html#hasvalue" class="tsd-kind-icon">has<wbr>Value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#__setlasttimeout" class="tsd-kind-icon">__set<wbr>Last<wbr>Timeout</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#getstore" class="tsd-kind-icon">get<wbr>Store</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#isclosed" class="tsd-kind-icon">is<wbr>Closed</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="__global.workflo.ipage.html#isopen" class="tsd-kind-icon">is<wbr>Open</a></li>
 							</ul>
 						</section>
 					</div>
@@ -124,17 +134,50 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="not" class="tsd-anchor"></a>
-					<h3>not</h3>
-					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="../modules/__global.workflo.html#omit" class="tsd-signature-type">Omit</a><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.icheckvaluecurrently.html" class="tsd-signature-type">ICheckValueCurrently</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"not"</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="__lasttimeout" class="tsd-anchor"></a>
+					<h3>__last<wbr>Timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">__last<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2985">index.ts:2985</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2127">index.ts:2127</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>returns the negated variants of ICheckValueCurrently&#39;s state check functions</p>
+							<p>Retrieves the last timeout used by Page&#39;s <code>wait</code> and <code>eventually</code> functions.</p>
+						</div>
+						<p>Intended for framework-internal usage only.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="eventually" class="tsd-anchor"></a>
+					<h3>eventually</h3>
+					<div class="tsd-signature tsd-kind-icon">eventually<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">__type</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2120">index.ts:2120</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>All functions defined inside eventually, when invoked, will wait for a condition to be met and return
+							false if the the condition is never met within a specified timeout.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="wait" class="tsd-anchor"></a>
+					<h3>wait</h3>
+					<div class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">__type</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2114">index.ts:2114</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>All functions defined inside wait, when invoked, will wait for a condition to be met and throw
+							an error if the condition is never met within a specified timeout.</p>
 						</div>
 					</div>
 				</section>
@@ -142,30 +185,124 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="containsvalue" class="tsd-anchor"></a>
-					<h3>contains<wbr>Value</h3>
+					<a name="__setlasttimeout" class="tsd-anchor"></a>
+					<h3>__set<wbr>Last<wbr>Timeout</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">contains<wbr>Value<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">__set<wbr>Last<wbr>Timeout<span class="tsd-signature-symbol">(</span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2980">index.ts:2980</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2134">index.ts:2134</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
-									or ValuePageElementGroup currently have an actual value which contains the expected value.</p>
+									<p>Sets the last timeout used by Page&#39;s <code>wait</code> and <code>eventually</code> functions.</p>
+								</div>
+								<p>Intended for framework-internal usage only.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="getinterval" class="tsd-anchor"></a>
+					<h3>get<wbr>Interval</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Interval<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2149">index.ts:2149</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the default interval in milliseconds used by Page for its <code>wait</code> and <code>eventually</code> functions.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="getstore" class="tsd-anchor"></a>
+					<h3>get<wbr>Store</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Store<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Store</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2139">index.ts:2139</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Store</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="gettimeout" class="tsd-anchor"></a>
+					<h3>get<wbr>Timeout</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Timeout<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2144">index.ts:2144</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the default timeout in milliseconds used by Page for its <code>wait</code> and <code>eventually</code> functions.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="isclosed" class="tsd-anchor"></a>
+					<h3>is<wbr>Closed</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Closed<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">IsClosedOpts</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2163">index.ts:2163</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if the Page is currently closed.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">IsClosedOpts</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>the expected value which is supposed to be contained in the actual value</p>
+										<p>options needed to determine if the Page is currently closed</p>
 									</div>
 								</li>
 							</ul>
@@ -174,59 +311,29 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="hasanyvalue" class="tsd-anchor"></a>
-					<h3>has<wbr>Any<wbr>Value</h3>
+					<a name="isopen" class="tsd-anchor"></a>
+					<h3>is<wbr>Open</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">has<wbr>Any<wbr>Value<span class="tsd-signature-symbol">(</span>filterMask<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Open<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">IsOpenOpts</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2973">index.ts:2973</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2156">index.ts:2156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
-									or ValuePageElementGroup currently have any value.</p>
+									<p>Checks if the Page is currently open.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filterMask: <span class="tsd-signature-type">FilterType</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="hasvalue" class="tsd-anchor"></a>
-					<h3>has<wbr>Value</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">has<wbr>Value<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/b5d1495/src/index.ts#L2965">index.ts:2965</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Checks if a ValuePageElement or all ValuePageElements managed by a ValuePageElementList, ValuePageElementMap
-									or ValuePageElementGroup currently have an actual value which equals the expected value.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>value: <span class="tsd-signature-type">ValueType</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">IsOpenOpts</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>the expected value which is supposed to equal the actual value</p>
+										<p>options needed to determine if the Page is currently open</p>
 									</div>
 								</li>
 							</ul>
@@ -260,7 +367,7 @@
 									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
 										<a href="../modules/__global.workflo.object.html">Object</a>
 									</li>
-									<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
+									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
 										<a href="../modules/__global.workflo.pagenode.html">Page<wbr>Node</a>
 									</li>
 									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-not-exported">
@@ -280,111 +387,42 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckcurrently.html" class="tsd-kind-icon">ICheck<wbr>Currently</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckeventually.html" class="tsd-kind-icon">ICheck<wbr>Eventually</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckvaluecurrently.html" class="tsd-kind-icon">ICheck<wbr>Value<wbr>Currently</a>
+						<a href="__global.workflo.ipage.html" class="tsd-kind-icon">IPage</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.pagenode.icheckvaluecurrently.html#not" class="tsd-kind-icon">not</a>
+								<a href="__global.workflo.ipage.html#__lasttimeout" class="tsd-kind-icon">__last<wbr>Timeout</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="__global.workflo.ipage.html#eventually" class="tsd-kind-icon">eventually</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="__global.workflo.ipage.html#wait" class="tsd-kind-icon">wait</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.pagenode.icheckvaluecurrently.html#containsvalue" class="tsd-kind-icon">contains<wbr>Value</a>
+								<a href="__global.workflo.ipage.html#__setlasttimeout" class="tsd-kind-icon">__set<wbr>Last<wbr>Timeout</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.pagenode.icheckvaluecurrently.html#hasanyvalue" class="tsd-kind-icon">has<wbr>Any<wbr>Value</a>
+								<a href="__global.workflo.ipage.html#getinterval" class="tsd-kind-icon">get<wbr>Interval</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="__global.workflo.pagenode.icheckvaluecurrently.html#hasvalue" class="tsd-kind-icon">has<wbr>Value</a>
+								<a href="__global.workflo.ipage.html#getstore" class="tsd-kind-icon">get<wbr>Store</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="__global.workflo.ipage.html#gettimeout" class="tsd-kind-icon">get<wbr>Timeout</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="__global.workflo.ipage.html#isclosed" class="tsd-kind-icon">is<wbr>Closed</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="__global.workflo.ipage.html#isopen" class="tsd-kind-icon">is<wbr>Open</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckvalueeventually.html" class="tsd-kind-icon">ICheck<wbr>Value<wbr>Eventually</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckwait.html" class="tsd-kind-icon">ICheck<wbr>Wait</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.icheckwaitvalue.html" class="tsd-kind-icon">ICheck<wbr>Wait<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ielementnode.html" class="tsd-kind-icon">IElement<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igetelement.html" class="tsd-kind-icon">IGet<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igetvalueelement.html" class="tsd-kind-icon">IGet<wbr>Value<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igroupfiltermask.html" class="tsd-kind-icon">IGroup<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.igroupfiltermaskexists.html" class="tsd-kind-icon">IGroup<wbr>Filter<wbr>Mask<wbr>Exists</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ilistfiltermask.html" class="tsd-kind-icon">IList<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.imapfiltermask.html" class="tsd-kind-icon">IMap<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ipagenode.html" class="tsd-kind-icon">IPage<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ivalueelementnode.html" class="tsd-kind-icon">IValue<wbr>Element<wbr>Node</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="__global.workflo.pagenode.ivaluegroupfiltermask.html" class="tsd-kind-icon">IValue<wbr>Group<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractboolean" class="tsd-kind-icon">Extract<wbr>Boolean</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractexistsfiltermask" class="tsd-kind-icon">Extract<wbr>Exists<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extracttext" class="tsd-kind-icon">Extract<wbr>Text</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractvalue" class="tsd-kind-icon">Extract<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractvalueboolean" class="tsd-kind-icon">Extract<wbr>Value<wbr>Boolean</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#extractvaluebooleanwn" class="tsd-kind-icon">Extract<wbr>Value<wbr>BooleanWN</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#groupcontent" class="tsd-kind-icon">Group<wbr>Content</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#groupfiltermask" class="tsd-kind-icon">Group<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#groupfiltermaskexists" class="tsd-kind-icon">Group<wbr>Filter<wbr>Mask<wbr>Exists</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#listfiltermask" class="tsd-kind-icon">List<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#mapfiltermask" class="tsd-kind-icon">Map<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#valuegroupfiltermask" class="tsd-kind-icon">Value<wbr>Group<wbr>Filter<wbr>Mask</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../modules/__global.workflo.pagenode.html#valuegroupfiltermaskwn" class="tsd-kind-icon">Value<wbr>Group<wbr>Filter<wbr>MaskWN</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

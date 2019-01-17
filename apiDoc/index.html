@@ -73,7 +73,6 @@
 					webdriverio and all required services. It helps you save a lot of time and work by providing boilerplate code and the
 					basic building blocks of a sophisticated page object pattern architecture. Testcases in wdio-workflo consist of
 				reusable steps formulated in natural language to make them comprehensible for all stakeholders.</p>
-				<h1 id="getting-started">Getting Started</h1>
 				<p>The rest of this document shows you:</p>
 				<ul>
 					<li>Where you can learn more about wdio-workflo&#39;s features and motivation</li>
@@ -86,62 +85,52 @@
 					<li>How to show the results of your tests in a graphical report</li>
 					<li>How to show all options of wdio-workflo&#39;s Command Line Interface</li>
 				</ul>
-				<h2 id="learn-more-about-wdio-workflo">Learn more about wdio-workflo</h2>
-				<p>Visit <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> (available soon) to</p>
+				<h1 id="learn-more-about-wdio-workflo">Learn more about wdio-workflo</h1>
+				<p>Visit <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> (coming soon) to</p>
 				<ul>
 					<li>gain a deeper insight into wdio-workflo&#39;s features and motivation</li>
 					<li>find a detailed explanation of the framework&#39;s components</li>
 					<li>learn from examples that show you how to effectively test your browser-based application and validate its requirements
 					using wdio-workflo.</li>
 				</ul>
-				<h2 id="api-documentation">API Documentation</h2>
+				<h1 id="api-documentation">API Documentation</h1>
 				<p>Wdio-workflo&#39;s API documentation comes bundled with the npm package and can be displayed by opening the file <code>node_modules/wdio-workflo/apiDoc/index.html</code></p>
 				<p>Webdriverio&#39;s API docs for version 4.13 can be found at <a href="http://v4.webdriver.io/api.html">http://v4.webdriver.io/api.html</a></p>
-				<h2 id="examples">Examples</h2>
-				<p>The code for this &#39;Getting Started&#39; guide and for all examples found at <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> is available at
-				<a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
-				<h2 id="installation-and-configuration">Installation and Configuration</h2>
+				<h1 id="examples">Examples</h1>
+				<p>The code for this guide and for all examples found at <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> (coming soon) is
+				available at <a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
+				<h1 id="installation-and-configuration">Installation and Configuration</h1>
 				<ul>
 					<li>Install wdio-workflo by running <code>npm install --save-dev wdio-workflo</code> in your project folder.
 						This will automatically create wdio-workflo&#39;s configuration file <code>workflo.conf.ts</code> and wdio-workflo&#39;s typescript
 					compiler settings file <code>tsconfig.workflo.json</code> in the same directory.</li>
-					<li>Import wdio-workflo&#39;s typescript compiler settings into your project&#39;s <code>tsconfig.json</code> file by either copying the
-					settings manually or by extending your <code>tsconfig.json</code> with wdio-workflo&#39;s <code>tsconfig.workflo.json</code>:</li>
-				</ul>
-				<pre><code><span class="hljs-comment">// tsconfig.json</span>
-{
-  <span class="hljs-string">"extends"</span>: <span class="hljs-string">"./tsconfig.workflo.json"</span>,
-  ...
-}</code></pre><p>If you extend wdio-workflo&#39;s typescript compiler settings, be aware that any option set in your project&#39;s
-					<code>tsconfig.json</code> file will overwrite the same option of <code>tsconfig.workflo.json</code>. Just make sure that
-					the source folder of your system tests directory is included in the compiled typescript files (add its path to the
-				&quot;include&quot; option&#39;s array or do not set an &quot;include&quot; option at all).</p>
-				<ul>
 					<li>Adapt wdio-workflo&#39;s configuration in <code>workflo.conf.ts</code> to your own needs.</li>
 					<li>Run <code>./node_modules/.bin/wdio-workflo --init</code> to create the boilerplate code for your functional system tests.</li>
 				</ul>
-				<h2 id="writing-your-first-functional-system-test">Writing your first Functional System Test</h2>
-				<h3 id="overview">Overview</h3>
-				<p>This little &#39;Getting Started&#39; guide quickly walks you through all necessary steps to write functional system tests in
-				wdio-workflo.</p>
+				<p>If you changed the value of <code>testDir</code> in <code>workflo.conf.json</code>, you need to make sure that your changed system test
+				folder path is contained in the <code>include</code> array of <code>tsconfig.workflo.json</code>.</p>
+				<h1 id="writing-your-first-functional-system-test">Writing your first Functional System Test</h1>
+				<h2 id="overview">Overview</h2>
+				<p>This guide walks you through all stages of writing functional system tests in wdio-workflo.
+				It provides basic explanation/background information and an implementation example for each stage.</p>
 				<p>In our example, we will browse to the public npm registry at <a href="https://www.npmjs.com/">https://www.npmjs.com/</a> and search for the wdio-workflo
 				npm package.</p>
-				<p>All code for this &#39;Getting Started&#39; guide can also be found at <a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
-				<h3 id="basic-configuration">Basic Configuration</h3>
+				<p>All code for this guide can also be found at <a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
+				<h2 id="basic-configuration">Basic Configuration</h2>
 				<p>First, we need to set the base url for our tested web application in wdio-workflo&#39;s configuration.</p>
 				<p>To do so, open the file <code>workflo.conf.ts</code> in your project folder and set the value of its <code>baseUrl</code> property to
-				&quot;<a href="https://www.npmjs.com/&quot;">https://www.npmjs.com/&quot;</a></p>
+				&quot;<a href="https://www.npmjs.com/&quot;">https://www.npmjs.com/&quot;</a>.</p>
 				<p>Wdio-workflo&#39;s default configuration assumes that the Google Chrome browser is installed on your system.
 					If this is not the case, please install Google Chrome before proceeding or change the <code>browserName</code> property
 				defined in the <code>capabilities</code> option of <code>workflo.conf.ts</code> file.</p>
-				<h3 id="defining-the-requirements">Defining the Requirements</h3>
-				<h4 id="information">Information</h4>
+				<h2 id="defining-the-requirements">Defining the Requirements</h2>
+				<h3 id="information">Information</h3>
 				<p>Wdio-workflo follows a behavior-driven software development approach and encourages you to define the requirements
 				of your application in so-called &#39;spec&#39; files before you start writing testcases.</p>
 				<p>Spec files view the GUI of your application as a state machine. Therefore, you need to formulate your requirements
 				as a sequence of initial states, state transitions and expected states using the keywords <code>Given</code>, <code>When</code> and <code>Then</code>:</p>
 				<ul>
-					<li><code>Given</code> describes the an initial, well-known state</li>
+					<li><code>Given</code> describes an initial, well-known state</li>
 					<li><code>When</code> describes a transition from one state to another which is triggered by either a user or a system</li>
 					<li><code>Then</code> describes an expected state and thus defines an acceptance criteria for your requirements</li>
 				</ul>
@@ -153,7 +142,7 @@
 				<p>Bear in mind that <code>Story</code>s are supposed to be understood by all stakeholders of your project (including non-technical
 				users). Therefore, <code>Story</code>s are written in a natural language.</p>
 				<p>Related <code>Story</code>s are grouped together in a <code>Feature</code>.</p>
-				<h4 id="implementation">Implementation</h4>
+				<h3 id="implementation">Implementation</h3>
 				<p>We now define our requirements for the npmjs page in the file <code>npmjs.spec.ts</code> located in the <code>src/specs</code> folder of
 				your system test directory:</p>
 				<pre><code>// npmjs.spec.ts
@@ -172,87 +161,129 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
       });
     });
   });
-});</code></pre><h3 id="creating-page-objects">Creating Page Objects</h3>
+});</code></pre><h2 id="creating-page-objects">Creating Page Objects</h2>
+				<h3 id="information">Information</h3>
+				<p>Modern websites are usually built with reusable components which has many advantages:</p>
+				<ul>
+					<li>To change the behavior or structure of a component, we only need to edit it at one place which greatly improves
+					maintainability.</li>
+					<li>Components are always used in the same way which increases the learnability for both developers and users.</li>
+					<li>The development speed of a website can be increased by reusing existing components.</li>
+					<li>We can use 3rd party component libraries to save even more resources.</li>
+					<li>...</li>
+				</ul>
+				<p>Page objects seek to transfer these advantages to the world of functional system testing by wrapping HTML pages and the
+				components used to build these pages with an application-specific API.</p>
+				<p>In other words, page objects are reusable testing components which abstract the structure and the behavior of a website
+				and its HTML elements.</p>
+				<p>Wdio-workflo provides the main building blocks of a sophisticated page object architecture out of the box:</p>
+				<ul>
+					<li>PageNodes</li>
+					<li>Pages</li>
+					<li>PageNodeStores</li>
+				</ul>
 				<h4 id="pagenodes">PageNodes</h4>
-				<p>Added shortly</p>
+				<p>PageNodes are a family of classes used to map the structure and behavior of a website&#39;s components.</p>
+				<p>There are 4 types of <code>PageNode</code> classes:</p>
+				<ul>
+					<li><code>PageElement</code> can be thought of as wdio-workflo&#39;s counterpart to React or Angular components. This class provides
+					functions to retrieve, check and manipulate the state of a website component and its underlying HTML structure.</li>
+					<li><code>PageElementList</code> manages a collection of related <code>PageElement</code> instances which all have the same type and XPath
+						selector. The <code>PageElement</code>s managed by <code>PageElementList</code> are dynamic, which means that they can change and are
+					usually not known at compile time (eg. the entries of a news feed, the rows of a data table...).</li>
+					<li><code>PageElementMap</code> also manages a collection of related <code>PageElement</code> instances which all have the same type and the
+						same &quot;base&quot; selector. However, in contrary to <code>PageElementList</code>, the <code>PageElement</code> instances managed by <code>PageElementMap</code>
+					are static which means that they usually do not change and are known at compile time (eg. the links of a navigation menu).</li>
+					<li><code>PageElementGroup</code> manages an arbitrary structure of <code>PageNodes</code> that can all have different types and selectors (eg.
+					a form on a website, consisting of input fields, radio boxes, dropdown, checkboxes, labels...)</li>
+				</ul>
+				<p>All PageNodes classes feature the following 3 APIs:</p>
+				<ul>
+					<li><code>currently</code> to check or retrieve the current state of a website&#39;s component</li>
+					<li><code>wait</code> to wait for a website component to reach a certain state (within a specific timeout)</li>
+					<li><code>eventually</code> to check if a website component eventually reaches a certain state (within a specific timeout)</li>
+				</ul>
+				<p><code>PageElement</code> and <code>PageElementList</code> also provide an initial waiting condition that is performed implicitly each time a
+					function that interacts with a website component&#39;s state is invoked directly on these classes
+				(and not via its <code>currently</code>, <code>wait</code> or <code>eventually</code> APIs). Supported waiting conditions are</p>
+				<ul>
+					<li><code>exist</code> to wait for an element to exist in the DOM</li>
+					<li><code>visible</code> to wait for an element to be visible (not obscured by another element, visibility not set to hidden...)</li>
+					<li><code>text</code> to wait for an element (eg. a button) to have any text</li>
+					<li><code>value</code> to wait for an element to have any value (eg. read-only input fields)</li>
+				</ul>
+				<p>This spares us the need to explicitly wait for a <code>PageElement</code> to be loaded in the DOM, to become visible etc. before we
+				can interact with it.</p>
+				<p>Finally, getting or setting an HTML <code>value</code> attribute (eg. when filling in an input field, ticking a checkbox...) is
+					not supported by these 4 basic PageNode classes. If you want to get or set an HTML element&#39;s value, you need to use
+					the <code>ValuePageNode</code> class family, consisting of <code>ValuePageElement</code>, <code>ValuePageElementList</code>, <code>ValuePageElementMap</code> and
+					<code>ValuePageElementGroup</code>. <code>ValuePageElement</code> is an abstract class and requires you to implement the methods <code>setValue</code>
+				and <code>currently.getValue</code>.</p>
 				<h4 id="pages">Pages</h4>
-				<p>Added shortly</p>
+				<p>A <code>Page</code> is an aggregation of all <code>PageNode</code>s which make up a complete website or a large fragment of a website.</p>
+				<p>Pages allow us to assign meaningful names to PageNodes and they define the XPath selectors which identify a <code>PageElement</code>
+				or the elements of a <code>PageElementList</code> in the DOM.</p>
+				<p>Please be aware that wdio-workflo only supports XPath selectors because they are more &quot;flexible&quot; than CSS selectors
+				(eg. they support searching for a parent element) and because the performance differences are negligible in most cases.</p>
+				<p><code>Page</code> requires you to implement the methods <code>isOpen</code> and <code>isClosed</code> to check if a page is currently open or closed.
+					Furthermore, <code>Page</code> also provides a <code>wait</code> and a <code>eventually</code> API to wait for the page to be open/closed or to check
+				if the page is eventually open/closed within a specific timeout.</p>
 				<h4 id="pagenodestores">PageNodeStores</h4>
-				<p>Added shortly</p>
-				<h3 id="implementing-steps">Implementing Steps</h3>
-				<p>Added shortly</p>
-				<h3 id="writing-testcases">Writing Testcases</h3>
-				<p>Added shortly</p>
-				<!--
-
-## Create PageElements and a Page to map the components of the tested web application
-Now we need to map all HTML components required to search for the wdio-workflo npm package on https://www.npmjs.com/.
-
-To do so, create the files ```NpmJsPage.ts``` in the ```src/page_objects/pages``` folder and ```Input.ts``` in the
-```src/page_objects/page_elements``` folder of your system test directory.
-
-```
-// Input.ts
-import { PageElementStore } from '../stores'
-import { ValuePageElement, ValuePageElementCurrently } from './ValuePageElement'
-
-export class Input<Store extends PageElementStore> extends ValuePageElement<Store, string> {
-
-  readonly currently = new InputCurrently(this)
-
-  setValue(value: string): this {
-    this.element.setValue(value)
-
-    return this
-  }
-}
-
-export class InputCurrently<
-  Store extends PageElementStore,
-  PageElementType extends Input<Store>
-> extends ValuePageElementCurrently<Store, PageElementType, string> {
-
-  getValue(): string {
-    return this.element.getValue()
-  }
-}
-```
-
-```
-// NpmJsPage.ts
-const workfloConfig: IWorkfloConfig = {
-  /* ... */
-  baseUrl: 'https://www.npmjs.com/',
-  /* ... */
-}
-```
-
-## add input to store
-
-## Create a spec file to define your requirements
-Create the file ```npmjs.spec.ts``` in the ```src/specs``` folder of your system test directory.
-
-In this file, we will define requirements of our tested application.
-
-```
-// npmjs.spec.ts
-
-
-```
-
-write spec
-
-write testcase
-
-write steps
-
-show your results
-
-```./node_modules/.bin/wdio-workflo --report```
-
- -->
-				<h2 id="running-your-tests">Running your tests</h2>
-				<h3 id="launching-selenium">Launching selenium</h3>
+				<p>When working with wdio-workflo, PageNodes should not be created manually but instead should be retrieved from
+					a <code>PageNodeStore</code>. This is a class that caches PageNode instances which have the same type and the same selector
+				in order to consume less memory.</p>
+				<p>In addition to being a PageNode factory, <code>PageNodeStore</code> serves as a single facade that gives you access to all PageNode
+					types without having to import them from all over the place. It also makes the instantiation of PageNodes more
+					comfortable by defining a default configuration for each PageNode, so that most of the time when you want to use a
+				PageNode, you only need to pass a XPath selector to the store&#39;s factory method.</p>
+				<h3 id="implementation">Implementation</h3>
+				<h2 id="implementing-steps">Implementing Steps</h2>
+				<h3 id="information">Information</h3>
+				<p>While PageNodes already provide us with reusable testing components, Steps are wdio-workflo&#39;s main driver for
+				increased reusability.</p>
+				<p>A <code>Step</code> defines a series of interactions or a single interaction with the tested application (usually via PageNodes).
+					Each step can be reused as many times as you like within your testcases or it can also be invoked from inside another
+				step (nested steps).</p>
+				<p>Each <code>Step</code> consists of three key features:</p>
+				<ul>
+					<li>A description written in natural language, so that non-technical stakeholders too can comprehend what is going on</li>
+					<li>A body function that implements the step&#39;s interactions with the tested application</li>
+					<li>Parameters which can be used to &quot;configure&quot; the step, to provide data that is needed during the step&#39;s execution and
+					to define a callback which is executed immediately after the step has finished</li>
+				</ul>
+				<h3 id="implementation">Implementation</h3>
+				<h2 id="writing-testcases">Writing Testcases</h2>
+				<h3 id="information">Information</h3>
+				<p>A <code>testcase</code> consists of a sequence of steps and validates the requirements we defined in our spec files.
+				Sets of related testcases are grouped together in <code>suite</code>s.</p>
+				<p>The structure of a <code>testcase</code> closely resembles that of a <code>Story</code>. Each testcase provides the following functions
+				to encapsulate and automatically invoke steps:</p>
+				<ul>
+					<li><code>given</code> to establish an initial, well-known state</li>
+					<li><code>when</code> to perform changes to the tested application&#39;s state</li>
+					<li><code>and</code> to sequentially chain together multiple <code>given</code> or <code>when</code> statements</li>
+				</ul>
+				<p>In contrary to the specs defined within a <code>Story</code>, a <code>testcase</code> does not support nested <code>given</code>s or <code>when</code>s -
+				they always need to be chained together sequentially.</p>
+				<p>In order to check the expected state following the execution of a <code>Step</code>, a <code>testcase</code> can invoke the <code>validate</code>
+					function inside the step&#39;s callback. To do so, we need to pass the IDs of both the validated acceptance criteria and its
+					containing <code>Story</code> to the <code>validate</code> function.
+					Inside the <code>validate</code> function&#39;s body, we can make use of wdio-workflo&#39;s custom page object matchers or Jasmine&#39;s
+				default assertion matchers to compare the state&#39;s actual and expected values.</p>
+				<p>The following custom page object matchers are supported by wdio-workflo:</p>
+				<ul>
+					<li><code>expectElement</code></li>
+					<li><code>expectList</code></li>
+					<li><code>expectMap</code></li>
+					<li><code>expectGroup</code></li>
+					<li><code>expectPage</code></li>
+				</ul>
+				<p>The expectation failure messages produced by these custom page object matchers will be a lot more meaningful than those
+					of Jasmine&#39;s default assertion matchers (containing the <code>PageElement</code>&#39;s constructor name, the XPath selector of the
+				affected <code>PageElement</code> and the applied timeout in milliseconds if an eventuallyXXX matcher was used).</p>
+				<h3 id="implementation">Implementation</h3>
+				<h1 id="running-your-tests">Running your tests</h1>
+				<h2 id="launching-selenium">Launching selenium</h2>
 				<p>Wdio-workflo requires a selenium webdriver server to execute your testing commands in the browser.
 					To make the handling of selenium as seamlessly as possible, wdio-workflo makes use of webdriverio&#39;s
 					<code>selenium-standalone</code> service which automatically installs all required selenium drivers and launches a local selenium
@@ -261,13 +292,13 @@ show your results
 					In this case, you should disable the <code>selenium-standalone</code> service by setting the <code>services</code> option in your
 					<code>workflo.conf.ts</code> file to an empty array. If your selenium server does not run locally, you also need to set the
 				<code>host</code> and <code>port</code> options of you wdio-workflo configuration to the correct values.</p>
-				<h3 id="executing-your-testcases">Executing your testcases</h3>
+				<h2 id="executing-your-testcases">Executing your testcases</h2>
 				<p>To start all of your tests, run <code>./node_modules/.bin/wdio-workflo</code></p>
 				<p>You can filter the executed tests by testcases, specs and many more:</p>
 				<pre><code><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--testcases</span> '[<span class="hljs-string">"MySuite.sample test"</span>]'
 <span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--specs</span> '[<span class="hljs-string">"4.1.2"</span>]'</code></pre><p>To only rerun tests which failed during the latest test run, execute</p>
 				<p><code>./node_modules/.bin/wdio-workflo --rerunFaulty</code></p>
-				<h2 id="test-reports">Test reports</h2>
+				<h1 id="test-reports">Test reports</h1>
 				<p>The results of your tests are available in two different formats:</p>
 				<ul>
 					<li>Spec report (displayed as a textual report in a console window)</li>
@@ -275,7 +306,7 @@ show your results
 				</ul>
 				<p>Spec reports are shown during and after the execution of your tests in the console from where you launched your tests.
 				Allure reports need to be explicitly generated after running your tests.</p>
-				<h3 id="showing-the-results-of-the-latest-test-run">Showing the results of the latest test run</h3>
+				<h2 id="showing-the-results-of-the-latest-test-run">Showing the results of the latest test run</h2>
 				<p>To show the results of the latest test run in the spec format, run</p>
 				<p><code>./node_modules/.bin/wdio-workflo --consoleReport</code></p>
 				<p>To generate and open an allure report for the latest test run, you can either execute each command separately
@@ -285,7 +316,7 @@ show your results
 
 <span class="hljs-string">//</span> or combined
 
-<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--report</span></code></pre><h3 id="showing-the-results-of-a-specific-previous-test-run">Showing the results of a specific previous test run</h3>
+<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--report</span></code></pre><h2 id="showing-the-results-of-a-specific-previous-test-run">Showing the results of a specific previous test run</h2>
 				<p>Each time a test run is executed, wdio-workflo writes its launch time into the file <code>latestRun</code> stored
 				in the <code>results/&lt;&lt;browserName&gt;&gt;</code> folder of wdio-workflo&#39;s system test directory.</p>
 				<p>To show the results of a specific previous test run, append the time at which the test run was launched in the format
@@ -295,17 +326,17 @@ show your results
 
 <span class="hljs-comment">// allure report format:</span>
 ./node_modules/.bin/wdio-workflo --report <span class="hljs-number">2017</span><span class="hljs-number">-10</span><span class="hljs-number">-10</span>_20<span class="hljs-number">-38</span><span class="hljs-number">-13</span>
-</code></pre><h2 id="debugging">Debugging</h2>
+</code></pre><h1 id="debugging">Debugging</h1>
 				<p>If you want to debug your tests, you can choose from two available options:</p>
 				<ul>
 					<li>Webdriverio&#39;s debug command</li>
 					<li>Debugging in Chrome DevTools</li>
 				</ul>
-				<h3 id="webdriverio-s-debug-command">Webdriverio&#39;s debug command</h3>
+				<h2 id="webdriverio-s-debug-command">Webdriverio&#39;s debug command</h2>
 				<p>If you simply want to inspect the current state of the browser window in which your tests are executed, you can put the <code>browser.debug()</code> command somewhere in your test case.</p>
 				<p>This will pause your tests and your commandline interface will switch into a REPL mode that allows you to interact with the tested application via webdriverio commands.</p>
 				<p>Running the command <code>.exit</code> in your CLI will exit the breakpoint and continue the test run.</p>
-				<h3 id="debugging-in-chrome-devtools">Debugging in Chrome DevTools</h3>
+				<h2 id="debugging-in-chrome-devtools">Debugging in Chrome DevTools</h2>
 				<p>In order to be able to debug your tests using the Chrome DevTools, the following preconditions need to be met:</p>
 				<ul>
 					<li>Google&#39;s chrome browser needs to be installed on your system.</li>
@@ -336,8 +367,9 @@ show your results
 					<li>Real-time Collaboration: &quot;Off&quot;</li>
 					<li>check Interval: 0.50 secondes</li>
 				</ul>
-				<p>The General Options Menu can be opened by hovering over the little circle in the right bottom of the Main Menu and then clicking on the &quot;sliders&quot; icon.</p>
-				<h2 id="show-all-cli-options">Show all CLI options</h2>
+				<p>The General Options Menu can be opened by hovering over the little circle in the right bottom of the Main Menu and then
+				clicking on the &quot;sliders&quot; icon.</p>
+				<h1 id="showing-all-cli-options">Showing all CLI options</h1>
 				<p>There are many more options available via wdio-workflo&#39;s Command Line Interface than the ones already mentioned in this
 				document.</p>
 				<p>To show all of them, run</p>
@@ -523,6 +555,9 @@ show your results
 						<a href="interfaces/icustommapmatchers.html" class="tsd-kind-icon">ICustom<wbr>Map<wbr>Matchers</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustompagematchers.html" class="tsd-kind-icon">ICustom<wbr>Page<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
 						<a href="interfaces/icustomvalueelementmatchers.html" class="tsd-kind-icon">ICustom<wbr>Value<wbr>Element<wbr>Matchers</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
@@ -578,6 +613,9 @@ show your results
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/ipageelementopts.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/ipagematchers.html" class="tsd-kind-icon">IPage<wbr>Matchers</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/ipagenodeopts.html" class="tsd-kind-icon">IPage<wbr>Node<wbr>Opts</a>
