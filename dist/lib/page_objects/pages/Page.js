@@ -100,7 +100,7 @@ class PageWait {
         catch (untilError) {
             const _error = error || untilError;
             if (_error.type === 'WaitUntilTimeoutError') {
-                const waitError = new Error(`Waiting for page ${this.constructor.name}${conditionMessage} within ${timeout}ms failed.`);
+                const waitError = new Error(`Waiting for page ${this._page.constructor.name}${conditionMessage} within ${timeout}ms failed.`);
                 waitError.type = 'WaitUntilTimeoutError';
                 throw waitError;
             }
