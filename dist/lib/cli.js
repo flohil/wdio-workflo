@@ -386,6 +386,7 @@ checkReport().then(() => {
         specs: parser_1.specFilesParse(Object.keys(mergedFilters.specFiles)),
         testcases: parser_1.testcaseFilesParse(Object.keys(mergedFilters.testcaseFiles)),
     };
+    console.log('parseResults', parseResults);
     // check if all defined filters exist
     checkFiltersExist();
     // add manual test cases to test information

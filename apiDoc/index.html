@@ -75,15 +75,21 @@
 				reusable steps formulated in natural language to make them comprehensible for all stakeholders.</p>
 				<p>The rest of this document shows you:</p>
 				<ul>
-					<li>Where you can learn more about wdio-workflo&#39;s features and motivation</li>
-					<li>Where you can find the full API documentation for wdio-workflo and webdriverio v4.13</li>
-					<li>Where you can find code examples for the usage of wdio-workflo</li>
-					<li>How to install and configure wdio-workflo</li>
-					<li>How to write your first functional system test using wdio-workflo</li>
-					<li>How to run your tests</li>
-					<li>How to debug your tests</li>
-					<li>How to show the results of your tests in a graphical report</li>
-					<li>How to show all options of wdio-workflo&#39;s Command Line Interface</li>
+					<li><a href="#learn-more-about-wdio-workflo">Where you can learn more about wdio-workflo&#39;s features and motivation</a></li>
+					<li><a href="#api-documentation">Where you can find the full API documentation for wdio-workflo and webdriverio v4.13</a></li>
+					<li><a href="#examples">Where you can find code examples for the usage of wdio-workflo</a></li>
+					<li><a href="#installation-and-configuration">How to install and configure wdio-workflo</a></li>
+					<li><a href="#writing-your-first-functional-system-test">How to write your first functional system test using wdio-workflo</a><ul>
+							<li><a href="#defining-the-requirements">Defining the Requirements</a></li>
+							<li><a href="#creating-page-objects">Creating Page Objects</a></li>
+							<li><a href="#implementing-steps">Implementing Steps</a></li>
+							<li><a href="#writing-testcases">Writing Testcases</a></li>
+						</ul>
+					</li>
+					<li><a href="#running-your-tests">How to run your tests</a></li>
+					<li><a href="#test-reports">How to debug your tests</a></li>
+					<li><a href="#debugging">How to show the results of your tests in a graphical report</a></li>
+					<li><a href="#showing-all-cli-options">How to show all options of wdio-workflo&#39;s Command Line Interface</a></li>
 				</ul>
 				<h1 id="learn-more-about-wdio-workflo">Learn more about wdio-workflo</h1>
 				<p>Visit <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> (coming soon) to</p>
@@ -107,8 +113,13 @@
 					<li>Adapt wdio-workflo&#39;s configuration in <code>workflo.conf.ts</code> to your own needs.</li>
 					<li>Run <code>./node_modules/.bin/wdio-workflo --init</code> to create the boilerplate code for your functional system tests.</li>
 				</ul>
-				<p>If you changed the value of <code>testDir</code> in <code>workflo.conf.json</code>, you need to make sure that your changed system test
-				folder path is contained in the <code>include</code> array of <code>tsconfig.workflo.json</code>.</p>
+				<p>Please note that <code>tsconfig.workflo.json</code> defines two path aliases to avoid relative import paths:</p>
+				<ul>
+					<li><code>?</code> references the <code>src</code> folder in your system test directory</li>
+					<li><code>~</code> references your project directory (the directory in which <code>workflo.conf.ts</code> resides)</li>
+				</ul>
+				<p>If you changed the value of <code>testDir</code> in <code>workflo.conf.json</code>, you need to adapt the <code>?</code> path alias and make sure
+				that your changed system test folder path is contained in the <code>include</code> array of <code>tsconfig.workflo.json</code>.</p>
 				<h1 id="writing-your-first-functional-system-test">Writing your first Functional System Test</h1>
 				<h2 id="overview">Overview</h2>
 				<p>This guide walks you through all stages of writing functional system tests in wdio-workflo.
@@ -145,7 +156,8 @@
 				<h3 id="implementation">Implementation</h3>
 				<p>We now define our requirements for the npmjs page in the file <code>npmjs.spec.ts</code> located in the <code>src/specs</code> folder of
 				your system test directory:</p>
-				<pre><code>// npmjs.spec.ts
+				<pre><code>// src/specs/npmjs.spec.ts
+
 Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
 
   // '<span class="hljs-number">1.1</span>' <span class="hljs-keyword">is</span> the ID <span class="hljs-keyword">of</span> the Story <span class="hljs-keyword">and</span> used to uniquely identify it.
@@ -161,7 +173,8 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
       });
     });
   });
-});</code></pre><h2 id="creating-page-objects">Creating Page Objects</h2>
+});</code></pre><p>Please note that wdio-workflo only recognizes a file as a spec if its filename ends with &quot;.spec.ts&quot;.</p>
+				<h2 id="creating-page-objects">Creating Page Objects</h2>
 				<h3 id="information">Information</h3>
 				<p>Modern websites are usually built with reusable components which has many advantages:</p>
 				<ul>
@@ -205,7 +218,7 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
 				</ul>
 				<p><code>PageElement</code> and <code>PageElementList</code> also provide an initial waiting condition that is performed implicitly each time a
 					function that interacts with a website component&#39;s state is invoked directly on these classes
-				(and not via its <code>currently</code>, <code>wait</code> or <code>eventually</code> APIs). Supported waiting conditions are</p>
+				(and not via its <code>currently</code>, <code>wait</code> or <code>eventually</code> APIs). Supported waiting conditions are:</p>
 				<ul>
 					<li><code>exist</code> to wait for an element to exist in the DOM</li>
 					<li><code>visible</code> to wait for an element to be visible (not obscured by another element, visibility not set to hidden...)</li>
@@ -219,15 +232,6 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
 					the <code>ValuePageNode</code> class family, consisting of <code>ValuePageElement</code>, <code>ValuePageElementList</code>, <code>ValuePageElementMap</code> and
 					<code>ValuePageElementGroup</code>. <code>ValuePageElement</code> is an abstract class and requires you to implement the methods <code>setValue</code>
 				and <code>currently.getValue</code>.</p>
-				<h4 id="pages">Pages</h4>
-				<p>A <code>Page</code> is an aggregation of all <code>PageNode</code>s which make up a complete website or a large fragment of a website.</p>
-				<p>Pages allow us to assign meaningful names to PageNodes and they define the XPath selectors which identify a <code>PageElement</code>
-				or the elements of a <code>PageElementList</code> in the DOM.</p>
-				<p>Please be aware that wdio-workflo only supports XPath selectors because they are more &quot;flexible&quot; than CSS selectors
-				(eg. they support searching for a parent element) and because the performance differences are negligible in most cases.</p>
-				<p><code>Page</code> requires you to implement the methods <code>isOpen</code> and <code>isClosed</code> to check if a page is currently open or closed.
-					Furthermore, <code>Page</code> also provides a <code>wait</code> and a <code>eventually</code> API to wait for the page to be open/closed or to check
-				if the page is eventually open/closed within a specific timeout.</p>
 				<h4 id="pagenodestores">PageNodeStores</h4>
 				<p>When working with wdio-workflo, PageNodes should not be created manually but instead should be retrieved from
 					a <code>PageNodeStore</code>. This is a class that caches PageNode instances which have the same type and the same selector
@@ -236,8 +240,200 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
 					types without having to import them from all over the place. It also makes the instantiation of PageNodes more
 					comfortable by defining a default configuration for each PageNode, so that most of the time when you want to use a
 				PageNode, you only need to pass a XPath selector to the store&#39;s factory method.</p>
+				<h4 id="pages">Pages</h4>
+				<p>A <code>Page</code> is an aggregation of all <code>PageNode</code>s which make up a complete website or a large fragment of a website.
+				In order to create these <code>PageNode</code>s, each <code>Page</code> has a <code>PageNodeStore</code> associated with it.</p>
+				<p>Pages allow us to assign meaningful names to its PageNodes and they define the XPath selectors which identify a
+				<code>PageElement</code> or the elements of a <code>PageElementList</code> in the DOM.</p>
+				<p>It is important to realize that all state is stored in the GUI of the tested application and not within a <code>Page</code> class.
+					Therefore, a <code>Page</code> itself is always stateless and only provides an API to manipulate or retrieve the state of the
+				tested application (via its PageNodes).</p>
+				<p>Please be aware that wdio-workflo only supports XPath selectors because they are more &quot;flexible&quot; than CSS selectors
+					(eg. they support searching for a parent element) and because the performance differences are negligible in most cases.
+					Wdio-workflo also features an XPath builder that you can use as an alternative to writing &quot;raw&quot; XPath selector strings
+					so that you do not need to remember all details of the XPath syntax which can be quite complex in some scenarios.
+				In addition, the XPath builder helps to make XPath expression more readable.</p>
+				<p><code>Page</code> requires you to implement the methods <code>isOpen</code> and <code>isClosed</code> to check if a page is currently open or closed.
+					Furthermore, <code>Page</code> also provides a <code>wait</code> and a <code>eventually</code> API to wait for the page to be open/closed or to check
+				if the page is eventually open/closed within a specific timeout.</p>
 				<h3 id="implementation">Implementation</h3>
-				<h2 id="implementing-steps">Implementing Steps</h2>
+				<p>If you ran <code>./node_modules/.bin/wdio-workflo --init</code>, wdio-workflo already created some boilerplate classes
+					(<code>PageElement</code>, <code>ValuePageElement</code>, <code>Page</code> and <code>PageNodeStore</code>) in the <code>page_objects</code> folders of your system test
+				directory.</p>
+				<p>These classes inherit from their respective counterpart classes in wdio-workflo and allow you to extend or customize
+					wdio-workflo&#39;s default functionality (You could overwrite the default implementation of <code>PageElement</code>s <code>isSelected</code>
+				method or add a <code>getDataName</code> method to the class etc.).</p>
+				<h4 id="pagenodes">PageNodes</h4>
+				<p>For our npmjs page, we need an <code>Input</code> element to enter &quot;wdio-workflo&quot; as the searched package name.
+					Obviously, this <code>Input</code> element needs to be able to set and get an HTML value.
+					Therefore, <code>Input</code> needs to extend the boilerplate <code>ValuePageElement</code> class and implement its <code>setValue</code> and
+				<code>currently.getValue</code> methods.</p>
+				<p>Create the file <code>Input.ts</code> in the <code>src/page_objects/page_elements</code> folder of your system test directory with the
+				following contents:</p>
+				<pre><code><span class="hljs-comment">// src/page_objects/page_elements/Input.ts</span>
+
+<span class="hljs-keyword">import</span> { <span class="hljs-type">PageNodeStore</span> } from '../stores';
+<span class="hljs-keyword">import</span> { <span class="hljs-type">IValuePageElementOpts</span>, <span class="hljs-type">ValuePageElement</span>, <span class="hljs-type">ValuePageElementCurrently</span> } from './<span class="hljs-type">ValuePageElement</span>';
+
+<span class="hljs-comment">// Add opts parameter properties which need to be passed to Input's constructor here</span>
+export interface <span class="hljs-type">IInputOpts</span>&lt;
+ <span class="hljs-type">Store</span> <span class="hljs-keyword">extends</span> <span class="hljs-type">PageNodeStore</span>
+&gt; <span class="hljs-keyword">extends</span> <span class="hljs-type">IValuePageElementOpts</span>&lt;<span class="hljs-type">Store</span>&gt; {}
+
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Input&lt;Store</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">PageNodeStore&gt;</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ValuePageElement&lt;Store</span>, <span class="hljs-title">string&gt;</span> </span>{
+
+  <span class="hljs-comment">// The parameters of a PageNode constructor are always the same:</span>
+  <span class="hljs-comment">// 1st param is XPath selector, 2nd param is options parameter</span>
+  constructor(selector: string, opts: <span class="hljs-type">IInputOpts</span>&lt;<span class="hljs-type">Store</span>&gt;) {
+    <span class="hljs-keyword">super</span>(selector, opts);
+  }
+
+  <span class="hljs-comment">// We need to implement InputCurrently because its .getValue() method serves as the base implementation for</span>
+  <span class="hljs-comment">// all state retrieval and state check functions in Input and its .currently, .wait and .eventually api.</span>
+  readonly currently = <span class="hljs-keyword">new</span> <span class="hljs-type">InputCurrently</span>(<span class="hljs-keyword">this</span>);
+
+  <span class="hljs-comment">// Action functions (functions which change the state of the tested application) are supposed to always perform</span>
+  <span class="hljs-comment">// the PageElement's initial waiting condition before interacting with the application.</span>
+  setValue(value: string): <span class="hljs-keyword">this</span> {
+
+    <span class="hljs-comment">// PageElementBase.element implicitly invokes the PageElement's initial waiting condition</span>
+    <span class="hljs-keyword">this</span>.element.setValue(value);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+}
+
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InputCurrently&lt;</span></span>
+  <span class="hljs-type">Store</span> <span class="hljs-keyword">extends</span> <span class="hljs-type">PageNodeStore</span>,
+  <span class="hljs-type">PageElementType</span> <span class="hljs-keyword">extends</span> <span class="hljs-type">Input</span>&lt;<span class="hljs-type">Store</span>&gt;
+&gt; <span class="hljs-keyword">extends</span> <span class="hljs-type">ValuePageElementCurrently</span>&lt;<span class="hljs-type">Store</span>, <span class="hljs-type">PageElementType</span>, string&gt; {
+
+  <span class="hljs-comment">// This method serves as the "base implementation" for the functions hasValue(), hasAnyValue() and containsValue()</span>
+  <span class="hljs-comment">// in the .currently, .wait and .eventually apis and for Input.hasValue().</span>
+  getValue(): string {
+
+    <span class="hljs-comment">// PageElementBaseCurrently.element does not invoke the PageElement's initial waiting condition</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.element.getValue();
+  }
+}</code></pre><p>Do not forget to add an export for <code>Input</code> to the <code>index.ts</code> file in <code>src/page_objects/page_elements</code>:</p>
+				<pre><code><span class="hljs-comment">// src/page_objects/page_elements/index.ts</span>
+
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./PageElement'</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./ValuePageElement'</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./Input'</span>;</code></pre><h4 id="pagenodestore">PageNodeStore</h4>
+				<p>Before we can use the <code>Input</code> element we just created within our npmjs <code>Page</code>, we need to add a factory method to
+				<code>PageNodeStore</code> that returns an instance of <code>Input</code>.</p>
+				<p>Add the following code to the file <code>PageNodeStore.ts</code> located in <code>src/page_objects/store</code>:</p>
+				<pre><code><span class="hljs-comment">// src/page_objects/stores/PageNodeStore.ts</span>
+
+<span class="hljs-keyword">import</span> { pageObjects as core } from <span class="hljs-symbol">'wdio</span>-workflo';
+<span class="hljs-keyword">import</span> { <span class="hljs-type">IInputOpts</span>, <span class="hljs-type">Input</span>, <span class="hljs-type">IPageElementOpts</span>, <span class="hljs-type">PageElement</span> } from '../page_elements';
+
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PageNodeStore</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">core</span>.<span class="hljs-title">stores</span>.<span class="hljs-title">PageNodeStore</span> </span>{
+
+  ...
+
+  <span class="hljs-type">Input</span>(
+    selector: <span class="hljs-type">Workflo</span>.<span class="hljs-type">XPath</span>,
+    <span class="hljs-comment">// pick the properties of the `opts` parameter of Input's constructor which can be passed to the factory method</span>
+    options?: <span class="hljs-type">Pick</span>&lt;<span class="hljs-type">IInputOpts</span>&lt;<span class="hljs-keyword">this</span>&gt;, <span class="hljs-type">Workflo</span>.<span class="hljs-type">Store</span>.<span class="hljs-type">BaseKeys</span>&gt;,
+  ) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._getElement&lt;<span class="hljs-type">Input</span>&lt;<span class="hljs-keyword">this</span>&gt;, <span class="hljs-type">IInputOpts</span>&lt;<span class="hljs-keyword">this</span>&gt;&gt;(
+      selector,
+      <span class="hljs-type">Input</span>,
+      {
+        <span class="hljs-comment">// add pre-configured properties to the `opts` parameter of Input's constructor</span>
+        store: <span class="hljs-keyword">this</span>,
+        ...options,
+      },
+    );
+  }
+
+  ...
+
+}</code></pre><h4 id="page">Page</h4>
+				<p>After implementing our <code>Input</code> element and adding its factory method to <code>PageNodeStore</code>, we can now create the
+				<code>NpmJsPage</code> which encapsulates all of the PageNodes needed for our testcase.</p>
+				<p>It is very important that you use always use getter functions to define the PageNodes within a Page.</p>
+				<p>To quote webdiverio&#39;s docs, getter functions &quot;get evaluated when you actually access the property and not when you
+				generate the object. With that you always request the element before you do an action on it.&quot;</p>
+				<p>If we did not use getter functions to define our PageNodes, the values of the PageNodes would be evaluated at the time
+					the javascript file is parsed. However, at this time, the website containing the HTML elements that the PageNodes
+					refer to is usually not yet loaded which means that no elements matching the XPath selector of the PageNodes would
+				be found in the DOM and that all of our testcases would fail.</p>
+				<p>Create the file <code>NpmJsPage.ts</code> in the <code>src/page_objects/pages</code> folder of your system test directory with the
+				following contents:</p>
+				<pre><code><span class="hljs-comment">// src/page_objects/pages/NpmJsPage.ts</span>
+
+<span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+<span class="hljs-keyword">import</span> { IPageOpts, Page } <span class="hljs-keyword">from</span> <span class="hljs-string">'./Page'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> IBasePageOpts&lt;
+  Store <span class="hljs-keyword">extends</span> stores.PageNodeStore
+&gt; <span class="hljs-keyword">extends</span> IPageOpts&lt;Store&gt; {}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> NpmJsPage <span class="hljs-keyword">extends</span> Page&lt;stores.PageNodeStore&gt; {
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">super</span>({ store: stores.pageNode });
+  }
+
+  <span class="hljs-comment">// an outer container which encapsulates all other elements of the page</span>
+  <span class="hljs-keyword">get</span> container() {
+    <span class="hljs-comment">// we can access the `PageNodeStore` associated with `Page` via `this._store` to create/retrieve PageNode instances</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._store.Element(
+      <span class="hljs-comment">// XPath builder provides functions to create an XPath expression which identifies PageNodes on the HTML page</span>
+      xpath(<span class="hljs-string">'//div'</span>).id(<span class="hljs-string">'app'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// the button which triggers a search query</span>
+  <span class="hljs-keyword">get</span> searchButton() {
+    <span class="hljs-comment">// The `$` accessor of the `PageElement` class returns the `PageNodeStore` associated with a `PageElement`.</span>
+    <span class="hljs-comment">// It prepends the XPath selector of the `PageElement` to the selector of the PageNode retrieved from PageNodeStore.</span>
+    <span class="hljs-comment">// In this case, the resulting XPath of `searchButton` will be "//div[@id='app']//button[contains(.,'Search')]".</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.$.Element(
+      xpath(<span class="hljs-string">'//button'</span>).textContains(<span class="hljs-string">'Search'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// the input field into which we input the package name "wdio-workflo"</span>
+  <span class="hljs-keyword">get</span> searchInputField() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.$.Input(
+      xpath(<span class="hljs-string">'//input'</span>).typeContains(<span class="hljs-string">'search'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// an HTML element which acts as a container for the list of npm packages returned by the search request</span>
+  <span class="hljs-keyword">get</span> packageListContainer() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.$.Element(
+      xpath(<span class="hljs-string">'//div'</span>).classContains(<span class="hljs-string">'packageList'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// a list of level-3 HTML headings that represent the names of the npm packages returned by the search request</span>
+  <span class="hljs-keyword">get</span> packageNamesList() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.packageListContainer.$.ElementList(
+      xpath(<span class="hljs-string">'//h3'</span>),
+    );
+  }
+
+  isOpen(): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.currently.isVisible();
+  }
+
+  isClosed(): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.currently.not.isVisible();
+  }
+}
+
+<span class="hljs-comment">// Since pages are stateless, we only ever need one instance of a `Page` and this is the perfect place to create this</span>
+<span class="hljs-comment">// instance.</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> npmjs = <span class="hljs-keyword">new</span> NpmJsPage();</code></pre><p>Again, we should not forget to add exports for our <code>NpmJsPage</code> to the index file <code>src/page_objects/pages/index.ts</code>:</p>
+				<pre><code><span class="hljs-comment">// src/page_objects/pages/index.ts</span>
+
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./Page'</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./NpmJsPage'</span>;</code></pre><h2 id="implementing-steps">Implementing Steps</h2>
 				<h3 id="information">Information</h3>
 				<p>While PageNodes already provide us with reusable testing components, Steps are wdio-workflo&#39;s main driver for
 				increased reusability.</p>
@@ -248,11 +444,60 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
 				<ul>
 					<li>A description written in natural language, so that non-technical stakeholders too can comprehend what is going on</li>
 					<li>A body function that implements the step&#39;s interactions with the tested application</li>
-					<li>Parameters which can be used to &quot;configure&quot; the step, to provide data that is needed during the step&#39;s execution and
-					to define a callback which is executed immediately after the step has finished</li>
+					<li>A Params object containing<ul>
+							<li>the arguments used to &quot;configure&quot; the step and to provide data that is needed during the
+							step&#39;s execution and</li>
+							<li>a callback which is executed immediately after the step has finished and which is passed the
+							body function&#39;s result value as a single parameter</li>
+						</ul>
+					</li>
 				</ul>
 				<h3 id="implementation">Implementation</h3>
-				<h2 id="writing-testcases">Writing Testcases</h2>
+				<p>Our npmjs testcase requires two steps:</p>
+				<ul>
+					<li>a step to open the npmjs page</li>
+					<li>a step to enter the name of an npm package and trigger the search request</li>
+				</ul>
+				<p>Create the file <code>npmjs.step.ts</code> in the <code>src/steps</code> folder of your system test directory with the following contents:</p>
+				<pre><code><span class="hljs-comment">// src/steps/npmjs.step.ts</span>
+
+<span class="hljs-keyword">import</span> { pages } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+<span class="hljs-keyword">import</span> { defineSteps, IOptStepParams, IStepParams, Step } <span class="hljs-keyword">from</span> <span class="hljs-string">'wdio-workflo'</span>;
+
+<span class="hljs-keyword">const</span> npmjsSteps = defineSteps({
+  <span class="hljs-string">"open npmjs page"</span>:
+  <span class="hljs-function">(<span class="hljs-params">params?: IOptStepParams&lt;{path?: <span class="hljs-built_in">string</span>}, <span class="hljs-built_in">void</span>&gt;</span>) =&gt;</span>
+    <span class="hljs-keyword">new</span> Step(params, ({ path }): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> _path = path || <span class="hljs-string">''</span>;
+
+      <span class="hljs-comment">// the baseUrl defined in workflo.conf.ts is prepended automatically when invoking browse.url()</span>
+      browser.url(<span class="hljs-string">`<span class="hljs-subst">${_path}</span>`</span>);
+    }),
+
+  <span class="hljs-string">"search for the npm package %{packageName}"</span>:
+  <span class="hljs-function">(<span class="hljs-params">params?: IStepParams&lt;{packageName: <span class="hljs-built_in">string</span>}, <span class="hljs-built_in">void</span>&gt;</span>) =&gt;</span>
+    <span class="hljs-keyword">new</span> Step(params, ({ packageName }): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+      pages.npmjs.searchInputField.setValue(packageName);
+      pages.npmjs.searchButton.click();
+    }),
+});
+
+<span class="hljs-keyword">export</span> { npmjsSteps };</code></pre><p>Please note that the filenames of all step files should end with &quot;.step.ts&quot;.</p>
+				<p>Wdio-workflo merges all step definitions into a single steps object. To include our npmjs steps into this steps object,
+				add the following code to the file <code>index.ts</code> in the <code>src/steps</code> folder of your system test directory:</p>
+				<pre><code><span class="hljs-comment">// src/steps/index.ts</span>
+
+...
+
+<span class="hljs-comment">// IMPORT YOUR STEP DEFINITIONS</span>
+<span class="hljs-keyword">import</span> { npmjsSteps } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/steps/npmjs.step'</span>;
+
+<span class="hljs-comment">// MERGE ALL STEP DEFINITIONS INTO ONE OBJECT AS SHOWN BELOW</span>
+const stepDefinitions = defineSteps({
+  ...npmjsSteps,
+});
+
+...</code></pre><h2 id="writing-testcases">Writing Testcases</h2>
 				<h3 id="information">Information</h3>
 				<p>A <code>testcase</code> consists of a sequence of steps and validates the requirements we defined in our spec files.
 				Sets of related testcases are grouped together in <code>suite</code>s.</p>
@@ -282,6 +527,42 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
 					of Jasmine&#39;s default assertion matchers (containing the <code>PageElement</code>&#39;s constructor name, the XPath selector of the
 				affected <code>PageElement</code> and the applied timeout in milliseconds if an eventuallyXXX matcher was used).</p>
 				<h3 id="implementation">Implementation</h3>
+				<p>Finally, it is time to write a testcase which browses to npmjs.com and searches for the &quot;wdio-workflo&quot; npm package.</p>
+				<p>Create the file <code>npmjs.tc.ts</code> in the <code>src/testcases</code> folder of your system test directory with the following contents:</p>
+				<pre><code><span class="hljs-regexp">//</span> src/testcases/npmjs.tc.ts
+
+<span class="hljs-keyword">import</span> { pages } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+<span class="hljs-keyword">import</span> { steps } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/steps'</span>;
+
+suite(<span class="hljs-string">"npmjs"</span>, {}, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-regexp">//</span> If there <span class="hljs-keyword">is</span> a bug <span class="hljs-keyword">in</span> the tested application which breaks our testcase, we can link to it <span class="hljs-keyword">in</span> the `<span class="javascript">bugs</span>` array.
+  <span class="hljs-regexp">//</span> We can also define how severe it would be <span class="hljs-keyword">if</span> the testcase failed <span class="hljs-keyword">by</span> setting the `<span class="javascript">severity</span>` property.
+  testcase(<span class="hljs-string">"search for the npm package wdio-workflo"</span>, { bugs: [<span class="hljs-string">'NPMJS-387'</span>], severity: <span class="hljs-string">'blocker'</span> }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    given(steps[<span class="hljs-string">"open npmjs page"</span>]({
+      <span class="hljs-regexp">//</span> the result value <span class="hljs-keyword">of</span> the step <span class="hljs-keyword">is</span> passed <span class="hljs-keyword">as</span> single parameter to the step<span class="hljs-string">'s callback function
+      cb: (url) =&gt; {
+        console.log(`opened the npmjs website at ${url}`);
+      }
+    }))
+    // wdio-workflo uses %{} to perform string interpolation of step arguments in a step'</span>s description
+    <span class="hljs-regexp">//</span> <span class="hljs-keyword">in</span> the test reports, %{packageName} will be replaced with <span class="hljs-string">"wdio-workflo"</span>
+    .<span class="hljs-keyword">when</span>(steps[<span class="hljs-string">"search for the npm package %{packageName}"</span>]({
+      arg: { packageName: <span class="hljs-string">'wdio-workflo'</span> },
+      cb: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        validate({ <span class="hljs-string">'1.1'</span>: [<span class="hljs-number">1</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+          <span class="hljs-regexp">//</span> This function provides custom expectation matchers <span class="hljs-keyword">for</span> PageElementLists.
+          <span class="hljs-regexp">//</span> Each expectation matcher also has a negated counterpart which can be accessed via `<span class="javascript">.not</span>`.
+          expectList(pages.npmjs.packageNamesList).<span class="hljs-keyword">not</span>.toEventuallyBeEmpty();
+        });
+
+        validate({ <span class="hljs-string">'1.1'</span>: [<span class="hljs-number">2</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+          <span class="hljs-regexp">//</span> the PageElements managed <span class="hljs-keyword">by</span> PageElementList can be retrieved via `<span class="javascript">.first</span>`, `<span class="javascript">.at</span>`, `<span class="javascript">.all</span>` <span class="hljs-keyword">or</span> `<span class="javascript">.where</span>`
+          expectElement(pages.npmjs.packageNamesList.first).toEventuallyHaveText(<span class="hljs-string">'wdio-workflo'</span>);
+        });
+      },
+    }));
+  });
+});</code></pre><p>Please note that wdio-workflo only recognizes a file as a testcase if its filename ends with &quot;.tc.ts&quot;.</p>
 				<h1 id="running-your-tests">Running your tests</h1>
 				<h2 id="launching-selenium">Launching selenium</h2>
 				<p>Wdio-workflo requires a selenium webdriver server to execute your testing commands in the browser.

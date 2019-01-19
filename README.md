@@ -14,15 +14,19 @@ reusable steps formulated in natural language to make them comprehensible for al
 
 The rest of this document shows you:
 
- - Where you can learn more about wdio-workflo's features and motivation
- - Where you can find the full API documentation for wdio-workflo and webdriverio v4.13
- - Where you can find code examples for the usage of wdio-workflo
- - How to install and configure wdio-workflo
- - How to write your first functional system test using wdio-workflo
- - How to run your tests
- - How to debug your tests
- - How to show the results of your tests in a graphical report
- - How to show all options of wdio-workflo's Command Line Interface
+ - [Where you can learn more about wdio-workflo's features and motivation](#learn-more-about-wdio-workflo)
+ - [Where you can find the full API documentation for wdio-workflo and webdriverio v4.13](#api-documentation)
+ - [Where you can find code examples for the usage of wdio-workflo](#examples)
+ - [How to install and configure wdio-workflo](#installation-and-configuration)
+ - [How to write your first functional system test using wdio-workflo](#writing-your-first-functional-system-test)
+   - [Defining the Requirements](#defining-the-requirements)
+   - [Creating Page Objects](#creating-page-objects)
+   - [Implementing Steps](#implementing-steps)
+   - [Writing Testcases](#writing-testcases)
+ - [How to run your tests](#running-your-tests)
+ - [How to debug your tests](#test-reports)
+ - [How to show the results of your tests in a graphical report](#debugging)
+ - [How to show all options of wdio-workflo's Command Line Interface](#showing-all-cli-options)
 
 # Learn more about wdio-workflo
 Visit https://wdio-workflo.com (coming soon) to
@@ -48,8 +52,13 @@ compiler settings file ```tsconfig.workflo.json``` in the same directory.
 - Adapt wdio-workflo's configuration in ```workflo.conf.ts``` to your own needs.
 - Run ```./node_modules/.bin/wdio-workflo --init``` to create the boilerplate code for your functional system tests.
 
-If you changed the value of `testDir` in ```workflo.conf.json```, you need to make sure that your changed system test
-folder path is contained in the `include` array of ```tsconfig.workflo.json```.
+Please note that ```tsconfig.workflo.json``` defines two path aliases to avoid relative import paths:
+
+- `?` references the `src` folder in your system test directory
+- `~` references your project directory (the directory in which `workflo.conf.ts` resides)
+
+If you changed the value of `testDir` in ```workflo.conf.json```, you need to adapt the `?` path alias and make sure
+that your changed system test folder path is contained in the `include` array of ```tsconfig.workflo.json```.
 
 # Writing your first Functional System Test
 ## Overview
@@ -100,7 +109,8 @@ We now define our requirements for the npmjs page in the file `npmjs.spec.ts` lo
 your system test directory:
 
 ```
-// npmjs.spec.ts
+// src/specs/npmjs.spec.ts
+
 Feature('Packages', {}, () => {
 
   // '1.1' is the ID of the Story and used to uniquely identify it.
@@ -118,6 +128,8 @@ Feature('Packages', {}, () => {
   });
 });
 ```
+
+Please note that wdio-workflo only recognizes a file as a spec if its filename ends with ".spec.ts".
 
 ## Creating Page Objects
 ### Information
@@ -182,19 +194,6 @@ the `ValuePageNode` class family, consisting of `ValuePageElement`, `ValuePageEl
 `ValuePageElementGroup`. `ValuePageElement` is an abstract class and requires you to implement the methods `setValue`
 and `currently.getValue`.
 
-#### Pages
-A `Page` is an aggregation of all `PageNode`s which make up a complete website or a large fragment of a website.
-
-Pages allow us to assign meaningful names to PageNodes and they define the XPath selectors which identify a `PageElement`
-or the elements of a `PageElementList` in the DOM.
-
-Please be aware that wdio-workflo only supports XPath selectors because they are more "flexible" than CSS selectors
-(eg. they support searching for a parent element) and because the performance differences are negligible in most cases.
-
-`Page` requires you to implement the methods `isOpen` and `isClosed` to check if a page is currently open or closed.
-Furthermore, `Page` also provides a `wait` and a `eventually` API to wait for the page to be open/closed or to check
-if the page is eventually open/closed within a specific timeout.
-
 #### PageNodeStores
 When working with wdio-workflo, PageNodes should not be created manually but instead should be retrieved from
 a `PageNodeStore`. This is a class that caches PageNode instances which have the same type and the same selector
@@ -205,7 +204,236 @@ types without having to import them from all over the place. It also makes the i
 comfortable by defining a default configuration for each PageNode, so that most of the time when you want to use a
 PageNode, you only need to pass a XPath selector to the store's factory method.
 
+#### Pages
+A `Page` is an aggregation of all `PageNode`s which make up a complete website or a large fragment of a website.
+In order to create these `PageNode`s, each `Page` has a `PageNodeStore` associated with it.
+
+Pages allow us to assign meaningful names to its PageNodes and they define the XPath selectors which identify a
+`PageElement` or the elements of a `PageElementList` in the DOM.
+
+It is important to realize that all state is stored in the GUI of the tested application and not within a `Page` class.
+Therefore, a `Page` itself is always stateless and only provides an API to manipulate or retrieve the state of the
+tested application (via its PageNodes).
+
+Please be aware that wdio-workflo only supports XPath selectors because they are more "flexible" than CSS selectors
+(eg. they support searching for a parent element) and because the performance differences are negligible in most cases.
+Wdio-workflo also features an XPath builder that you can use as an alternative to writing "raw" XPath selector strings
+so that you do not need to remember all details of the XPath syntax which can be quite complex in some scenarios.
+In addition, the XPath builder helps to make XPath expression more readable.
+
+`Page` requires you to implement the methods `isOpen` and `isClosed` to check if a page is currently open or closed.
+Furthermore, `Page` also provides a `wait` and a `eventually` API to wait for the page to be open/closed or to check
+if the page is eventually open/closed within a specific timeout.
+
 ### Implementation
+If you ran ```./node_modules/.bin/wdio-workflo --init```, wdio-workflo already created some boilerplate classes
+(`PageElement`, `ValuePageElement`, `Page` and `PageNodeStore`) in the `page_objects` folders of your system test
+directory.
+
+These classes inherit from their respective counterpart classes in wdio-workflo and allow you to extend or customize
+wdio-workflo's default functionality (You could overwrite the default implementation of `PageElement`s `isSelected`
+method or add a `getDataName` method to the class etc.).
+
+#### PageNodes
+For our npmjs page, we need an `Input` element to enter "wdio-workflo" as the searched package name.
+Obviously, this `Input` element needs to be able to set and get an HTML value.
+Therefore, `Input` needs to extend the boilerplate `ValuePageElement` class and implement its `setValue` and
+`currently.getValue` methods.
+
+Create the file `Input.ts` in the `src/page_objects/page_elements` folder of your system test directory with the
+following contents:
+
+```
+// src/page_objects/page_elements/Input.ts
+
+import { PageNodeStore } from '../stores';
+import { IValuePageElementOpts, ValuePageElement, ValuePageElementCurrently } from './ValuePageElement';
+
+// Add opts parameter properties which need to be passed to Input's constructor here
+export interface IInputOpts<
+ Store extends PageNodeStore
+> extends IValuePageElementOpts<Store> {}
+
+export class Input<Store extends PageNodeStore> extends ValuePageElement<Store, string> {
+
+  // The parameters of a PageNode constructor are always the same:
+  // 1st param is XPath selector, 2nd param is options parameter
+  constructor(selector: string, opts: IInputOpts<Store>) {
+    super(selector, opts);
+  }
+
+  // We need to implement InputCurrently because its .getValue() method serves as the base implementation for
+  // all state retrieval and state check functions in Input and its .currently, .wait and .eventually api.
+  readonly currently = new InputCurrently(this);
+
+  // Action functions (functions which change the state of the tested application) are supposed to always perform
+  // the PageElement's initial waiting condition before interacting with the application.
+  setValue(value: string): this {
+
+    // PageElementBase.element implicitly invokes the PageElement's initial waiting condition
+    this.element.setValue(value);
+
+    return this;
+  }
+}
+
+export class InputCurrently<
+  Store extends PageNodeStore,
+  PageElementType extends Input<Store>
+> extends ValuePageElementCurrently<Store, PageElementType, string> {
+
+  // This method serves as the "base implementation" for the functions hasValue(), hasAnyValue() and containsValue()
+  // in the .currently, .wait and .eventually apis and for Input.hasValue().
+  getValue(): string {
+
+    // PageElementBaseCurrently.element does not invoke the PageElement's initial waiting condition
+    return this.element.getValue();
+  }
+}
+```
+
+Do not forget to add an export for `Input` to the `index.ts` file in `src/page_objects/page_elements`:
+
+```
+// src/page_objects/page_elements/index.ts
+
+export * from './PageElement';
+export * from './ValuePageElement';
+export * from './Input';
+```
+
+#### PageNodeStore
+Before we can use the `Input` element we just created within our npmjs `Page`, we need to add a factory method to
+`PageNodeStore` that returns an instance of `Input`.
+
+Add the following code to the file `PageNodeStore.ts` located in `src/page_objects/store`:
+
+```
+// src/page_objects/stores/PageNodeStore.ts
+
+import { pageObjects as core } from 'wdio-workflo';
+import { IInputOpts, Input, IPageElementOpts, PageElement } from '../page_elements';
+
+export class PageNodeStore extends core.stores.PageNodeStore {
+
+  ...
+
+  Input(
+    selector: Workflo.XPath,
+    // pick the properties of the `opts` parameter of Input's constructor which can be passed to the factory method
+    options?: Pick<IInputOpts<this>, Workflo.Store.BaseKeys>,
+  ) {
+    return this._getElement<Input<this>, IInputOpts<this>>(
+      selector,
+      Input,
+      {
+        // add pre-configured properties to the `opts` parameter of Input's constructor
+        store: this,
+        ...options,
+      },
+    );
+  }
+
+  ...
+
+}
+```
+
+#### Page
+After implementing our `Input` element and adding its factory method to `PageNodeStore`, we can now create the
+`NpmJsPage` which encapsulates all of the PageNodes needed for our testcase.
+
+It is very important that you use always use getter functions to define the PageNodes within a Page.
+
+To quote webdiverio's docs, getter functions "get evaluated when you actually access the property and not when you
+generate the object. With that you always request the element before you do an action on it."
+
+If we did not use getter functions to define our PageNodes, the values of the PageNodes would be evaluated at the time
+the javascript file is parsed. However, at this time, the website containing the HTML elements that the PageNodes
+refer to is usually not yet loaded which means that no elements matching the XPath selector of the PageNodes would
+be found in the DOM and that all of our testcases would fail.
+
+Create the file `NpmJsPage.ts` in the `src/page_objects/pages` folder of your system test directory with the
+following contents:
+
+```
+// src/page_objects/pages/NpmJsPage.ts
+
+import { stores } from '?/page_objects';
+import { IPageOpts, Page } from './Page';
+
+export interface IBasePageOpts<
+  Store extends stores.PageNodeStore
+> extends IPageOpts<Store> {}
+
+export class NpmJsPage extends Page<stores.PageNodeStore> {
+
+  constructor() {
+    super({ store: stores.pageNode });
+  }
+
+  // an outer container which encapsulates all other elements of the page
+  get container() {
+    // we can access the `PageNodeStore` associated with `Page` via `this._store` to create/retrieve PageNode instances
+    return this._store.Element(
+      // XPath builder provides functions to create an XPath expression which identifies PageNodes on the HTML page
+      xpath('//div').id('app'),
+    );
+  }
+
+  // the button which triggers a search query
+  get searchButton() {
+    // The `$` accessor of the `PageElement` class returns the `PageNodeStore` associated with a `PageElement`.
+    // It prepends the XPath selector of the `PageElement` to the selector of the PageNode retrieved from PageNodeStore.
+    // In this case, the resulting XPath of `searchButton` will be "//div[@id='app']//button[contains(.,'Search')]".
+    return this.container.$.Element(
+      xpath('//button').textContains('Search'),
+    );
+  }
+
+  // the input field into which we input the package name "wdio-workflo"
+  get searchInputField() {
+    return this.container.$.Input(
+      xpath('//input').typeContains('search'),
+    );
+  }
+
+  // an HTML element which acts as a container for the list of npm packages returned by the search request
+  get packageListContainer() {
+    return this.container.$.Element(
+      xpath('//div').classContains('packageList'),
+    );
+  }
+
+  // a list of level-3 HTML headings that represent the names of the npm packages returned by the search request
+  get packageNamesList() {
+    return this.packageListContainer.$.ElementList(
+      xpath('//h3'),
+    );
+  }
+
+  isOpen(): boolean {
+    return this.container.currently.isVisible();
+  }
+
+  isClosed(): boolean {
+    return this.container.currently.not.isVisible();
+  }
+}
+
+// Since pages are stateless, we only ever need one instance of a `Page` and this is the perfect place to create this
+// instance.
+export const npmjs = new NpmJsPage();
+```
+
+Again, we should not forget to add exports for our `NpmJsPage` to the index file `src/page_objects/pages/index.ts`:
+
+```
+// src/page_objects/pages/index.ts
+
+export * from './Page';
+export * from './NpmJsPage';
+```
 
 ## Implementing Steps
 ### Information
@@ -220,10 +448,67 @@ Each `Step` consists of three key features:
 
 - A description written in natural language, so that non-technical stakeholders too can comprehend what is going on
 - A body function that implements the step's interactions with the tested application
-- Parameters which can be used to "configure" the step, to provide data that is needed during the step's execution and
-to define a callback which is executed immediately after the step has finished
+- A Params object containing
+  - the arguments used to "configure" the step and to provide data that is needed during the
+    step's execution and
+  - a callback which is executed immediately after the step has finished and which is passed the
+    body function's result value as a single parameter
 
 ### Implementation
+Our npmjs testcase requires two steps:
+
+- a step to open the npmjs page
+- a step to enter the name of an npm package and trigger the search request
+
+Create the file `npmjs.step.ts` in the `src/steps` folder of your system test directory with the following contents:
+
+```
+// src/steps/npmjs.step.ts
+
+import { pages } from '?/page_objects';
+import { defineSteps, IOptStepParams, IStepParams, Step } from 'wdio-workflo';
+
+const npmjsSteps = defineSteps({
+  "open npmjs page":
+  (params?: IOptStepParams<{path?: string}, void>) =>
+    new Step(params, ({ path }): void => {
+      const _path = path || '';
+
+      // the baseUrl defined in workflo.conf.ts is prepended automatically when invoking browse.url()
+      browser.url(`${_path}`);
+    }),
+
+  "search for the npm package %{packageName}":
+  (params?: IStepParams<{packageName: string}, void>) =>
+    new Step(params, ({ packageName }): void => {
+      pages.npmjs.searchInputField.setValue(packageName);
+      pages.npmjs.searchButton.click();
+    }),
+});
+
+export { npmjsSteps };
+```
+
+Please note that the filenames of all step files should end with ".step.ts".
+
+Wdio-workflo merges all step definitions into a single steps object. To include our npmjs steps into this steps object,
+add the following code to the file `index.ts` in the `src/steps` folder of your system test directory:
+
+```
+// src/steps/index.ts
+
+...
+
+// IMPORT YOUR STEP DEFINITIONS
+import { npmjsSteps } from '?/steps/npmjs.step';
+
+// MERGE ALL STEP DEFINITIONS INTO ONE OBJECT AS SHOWN BELOW
+const stepDefinitions = defineSteps({
+  ...npmjsSteps,
+});
+
+...
+```
 
 ## Writing Testcases
 ### Information
@@ -259,6 +544,48 @@ of Jasmine's default assertion matchers (containing the `PageElement`'s construc
 affected `PageElement` and the applied timeout in milliseconds if an eventuallyXXX matcher was used).
 
 ### Implementation
+Finally, it is time to write a testcase which browses to npmjs.com and searches for the "wdio-workflo" npm package.
+
+Create the file `npmjs.tc.ts` in the `src/testcases` folder of your system test directory with the following contents:
+
+```
+// src/testcases/npmjs.tc.ts
+
+import { pages } from '?/page_objects';
+import { steps } from '?/steps';
+
+suite("npmjs", {}, () => {
+  // If there is a bug in the tested application which breaks our testcase, we can link to it in the `bugs` array.
+  // We can also define how severe it would be if the testcase failed by setting the `severity` property.
+  testcase("search for the npm package wdio-workflo", { bugs: ['NPMJS-387'], severity: 'blocker' }, () => {
+    given(steps["open npmjs page"]({
+      // the result value of the step is passed as single parameter to the step's callback function
+      cb: (url) => {
+        console.log(`opened the npmjs website at ${url}`);
+      }
+    }))
+    // wdio-workflo uses %{} to perform string interpolation of step arguments in a step's description
+    // in the test reports, %{packageName} will be replaced with "wdio-workflo"
+    .when(steps["search for the npm package %{packageName}"]({
+      arg: { packageName: 'wdio-workflo' },
+      cb: () => {
+        validate({ '1.1': [1] }, () => {
+          // This function provides custom expectation matchers for PageElementLists.
+          // Each expectation matcher also has a negated counterpart which can be accessed via `.not`.
+          expectList(pages.npmjs.packageNamesList).not.toEventuallyBeEmpty();
+        });
+
+        validate({ '1.1': [2] }, () => {
+          // the PageElements managed by PageElementList can be retrieved via `.first`, `.at`, `.all` or `.where`
+          expectElement(pages.npmjs.packageNamesList.first).toEventuallyHaveText('wdio-workflo');
+        });
+      },
+    }));
+  });
+});
+```
+
+Please note that wdio-workflo only recognizes a file as a testcase if its filename ends with ".tc.ts".
 
 # Running your tests
 ## Launching selenium
