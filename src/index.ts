@@ -807,7 +807,7 @@ interface ICustomListMatchers {
  *
  * @template K the names of the elements stored in the map (the map's keys) as string literals
  */
-interface ICustomMapMatchers<K extends string | number | symbol> {
+interface ICustomMapMatchers<K extends string> {
   /**
    * Checks if all of the PageElements managed by PageElementMap currently exist.
    *
@@ -1304,7 +1304,7 @@ interface ICustomValueListMatchers<ValueType> extends ICustomListMatchers {
  * @template ValueType the type of the values handled by the map's elements' xxxValue functions
  */
 interface ICustomValueMapMatchers<
-  K extends string | number | symbol,
+  K extends string,
   ValueType
 > extends ICustomMapMatchers<K> {
   /**
@@ -1508,7 +1508,7 @@ interface IListMatchers extends ICustomListMatchers {
  *
  * @template K the names of the elements stored in the map (the map's keys) as string literals
  */
-interface IMapMatchers<K extends string | number | symbol> extends ICustomMapMatchers<K> {
+interface IMapMatchers<K extends string> extends ICustomMapMatchers<K> {
   not: ICustomMapMatchers<K>;
 }
 
@@ -1559,7 +1559,7 @@ interface IValueListMatchers<ValueType> extends ICustomValueListMatchers<Workflo
  * @template K the names of the elements stored in the map (the map's keys) as string literals
  * @template ValueType the type of the values handled by the map's elements' xxxValue functions
  */
-interface IValueMapMatchers<K extends string | number | symbol, ValueType>
+interface IValueMapMatchers<K extends string, ValueType>
 extends ICustomValueMapMatchers<K, ValueType> {
   not: ICustomValueMapMatchers<K, ValueType>;
 }
@@ -3077,7 +3077,7 @@ declare global {
        * name matches the key name of the skipped filter mask entry will be missing from the state retrieval function's
        * result object.
        */
-      type MapFilterMask<K extends string | number | symbol> = Partial<Record<K, boolean>>;
+      type MapFilterMask<K extends string> = Partial<Record<K, boolean>>;
 
       /**
        * A filter mask can be passed as a parameter to PageElementGroup functions that invoke a 'child' function on each
@@ -3132,7 +3132,7 @@ declare global {
       /**
        * Used to merge a filter mask into the opts parameter of a PageElementMap's functions.
        */
-      interface IMapFilterMask<K extends string | number | symbol> {
+      interface IMapFilterMask<K extends string> {
         filterMask?: Partial<Record<K, boolean>>;
       }
 
