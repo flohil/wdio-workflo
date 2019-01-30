@@ -3457,7 +3457,7 @@ declare global {
             /**
              * Optional arguments that can, but do not have to be, passed to a step execution function.
              */
-            arg?: ArgsType;
+            args?: ArgsType;
             /**
              * A short description of the interactions a step performs with the tested application.
              */
@@ -3474,7 +3474,7 @@ declare global {
             /**
              * Mandatory arguments that a step requires in order to be executed.
              */
-            arg: ArgsType;
+            args: ArgsType;
         }
         /**
          * Steps consist of a description and an execution function.

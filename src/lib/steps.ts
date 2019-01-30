@@ -10,8 +10,8 @@ function mergeStepDefaults<I, O>(
 ): Workflo.IStepParams<I, O> {
   const _params = <any>params;
 
-  const res: { arg?: { [ key: string ]: any }, cb?: any } = _params || {};
-  res.arg = _.merge(defaults, res.arg);
+  const res: { args?: { [ key: string ]: any }, cb?: any } = _params || {};
+  res.args = _.merge(defaults, res.args);
   return _params;
 }
 
@@ -238,7 +238,7 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
    * @param params encapsulates the following step parameters: description, step arguments and step callback
    * @param executionFunction changes the state of the tested application
    */
-  constructor(params: Workflo.IOptStepParams<ArgsType, ReturnType>, executionFunction: (arg: ArgsType) => ReturnType) {
+  constructor(params: Workflo.IOptStepParams<ArgsType, ReturnType>, executionFunction: (args: ArgsType) => ReturnType) {
 
     // HACK!!!
     // patch browser object to create stacktrace which can be displayed on selenium errors
@@ -266,7 +266,7 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
     }
 
     if (typeof params.description !== 'undefined') {
-      this.__description = Kiwi.compose(params.description, params.arg);
+      this.__description = Kiwi.compose(params.description, params.args);
     }
     if (typeof params.cb !== 'undefined') {
       this.execute = prefix => {
@@ -275,10 +275,15 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
           event: 'step:start',
           title: `${prefix}${this.__description}`,
           description: this.__description,
-          arg: CircularJson.stringify(params.arg),
+          arg: CircularJson.stringify(params.args),
         });
-        const result: ReturnType = executionFunction(params.arg);
-        process.send({ event: 'step:start', title: 'Callback', arg: CircularJson.stringify(result) });
+        const result: ReturnType = executionFunction(params.args);
+        process.send({
+          event: 'step:start',
+          title: 'Callback',
+          description: 'Callback',
+          arg: CircularJson.stringify(result),
+        });
         params.cb(result);
         process.send({ event: 'step:end' });
         process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
@@ -290,9 +295,9 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
           event: 'step:start',
           title: `${prefix}${this.__description}`,
           description: this.__description,
-          arg: CircularJson.stringify(params.arg),
+          arg: CircularJson.stringify(params.args),
         });
-        const result: ReturnType = executionFunction(params.arg);
+        const result: ReturnType = executionFunction(params.args);
         process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
       };
     }

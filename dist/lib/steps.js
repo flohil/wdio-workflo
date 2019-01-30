@@ -9,7 +9,7 @@ const Kiwi_1 = require("./Kiwi");
 function mergeStepDefaults(defaults, params) {
     const _params = params;
     const res = _params || {};
-    res.arg = _.merge(defaults, res.arg);
+    res.args = _.merge(defaults, res.args);
     return _params;
 }
 /**
@@ -122,7 +122,7 @@ class Step {
             Step._patchedBrowser = true;
         }
         if (typeof params.description !== 'undefined') {
-            this.__description = Kiwi_1.default.compose(params.description, params.arg);
+            this.__description = Kiwi_1.default.compose(params.description, params.args);
         }
         if (typeof params.cb !== 'undefined') {
             this.execute = prefix => {
@@ -131,10 +131,15 @@ class Step {
                     event: 'step:start',
                     title: `${prefix}${this.__description}`,
                     description: this.__description,
-                    arg: CircularJson.stringify(params.arg),
+                    arg: CircularJson.stringify(params.args),
                 });
-                const result = executionFunction(params.arg);
-                process.send({ event: 'step:start', title: 'Callback', arg: CircularJson.stringify(result) });
+                const result = executionFunction(params.args);
+                process.send({
+                    event: 'step:start',
+                    title: 'Callback',
+                    description: 'Callback',
+                    arg: CircularJson.stringify(result),
+                });
                 params.cb(result);
                 process.send({ event: 'step:end' });
                 process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
@@ -147,9 +152,9 @@ class Step {
                     event: 'step:start',
                     title: `${prefix}${this.__description}`,
                     description: this.__description,
-                    arg: CircularJson.stringify(params.arg),
+                    arg: CircularJson.stringify(params.args),
                 });
-                const result = executionFunction(params.arg);
+                const result = executionFunction(params.args);
                 process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
             };
         }

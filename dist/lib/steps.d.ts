@@ -78,5 +78,5 @@ export declare class Step<ArgsType extends Object, ReturnType> implements Workfl
      * @param params encapsulates the following step parameters: description, step arguments and step callback
      * @param executionFunction changes the state of the tested application
      */
-    constructor(params: Workflo.IOptStepParams<ArgsType, ReturnType>, executionFunction: (arg: ArgsType) => ReturnType);
+    constructor(params: Workflo.IOptStepParams<ArgsType, ReturnType>, executionFunction: (args: ArgsType) => ReturnType);
 }

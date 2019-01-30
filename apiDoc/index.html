@@ -547,8 +547,8 @@ suite(<span class="hljs-string">"npmjs"</span>, {}, <span class="hljs-function">
   testcase(<span class="hljs-string">"search for the npm package wdio-workflo"</span>, { bugs: [<span class="hljs-string">'NPMJS-387'</span>], severity: <span class="hljs-string">'blocker'</span> }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
     given(steps[<span class="hljs-string">"open npmjs page"</span>]({
       <span class="hljs-regexp">//</span> the result value <span class="hljs-keyword">of</span> the step <span class="hljs-keyword">is</span> passed <span class="hljs-keyword">as</span> single parameter to the step<span class="hljs-string">'s callback function
-      cb: (url) =&gt; {
-        console.log(`opened the npmjs website at ${url}`);
+      cb: (path) =&gt; {
+        console.log(`opened the npmjs website at ${path}`);
       }
     }))
     // wdio-workflo uses %{} to perform string interpolation of step arguments in a step'</span>s description
