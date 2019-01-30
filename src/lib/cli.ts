@@ -2636,7 +2636,9 @@ function ensureFolderStructure(testDir: string) {
     }
 
     // add tsconfig.json file in system test folder that extends tsconfig.workflo.json
-    fsExtra.copySync(path.join(templatesDir, 'config', 'tsconfig.json'), workfloConfig.testDir);
+    fsExtra.copySync(
+      path.join(templatesDir, 'config', 'tsconfig.json'), path.join(workfloConfig.testDir, 'tsconfig.json'),
+    );
 
     console.log('\nSuccessfully initialized folder structure for wdio-workflo!');
   } catch (error) {

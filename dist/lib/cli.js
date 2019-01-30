@@ -2102,6 +2102,8 @@ function ensureFolderStructure(testDir) {
         if (!pageObjectsExisted) {
             fsExtra.copySync(path.join(templatesDir, 'src_boilerplate', 'page_objects'), pageObjectsDir);
         }
+        // add tsconfig.json file in system test folder that extends tsconfig.workflo.json
+        fsExtra.copySync(path.join(templatesDir, 'config', 'tsconfig.json'), path.join(workfloConfig.testDir, 'tsconfig.json'));
         console.log('\nSuccessfully initialized folder structure for wdio-workflo!');
     }
     catch (error) {

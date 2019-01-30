@@ -4,6 +4,7 @@
         "module": "commonjs",
         "baseUrl": ".",
         "paths": {
+            "~/*": ["./*"],
             "?/*": ["./system_test/src/*"]
         }
     },

@@ -118,8 +118,15 @@
 					<li><code>?</code> references the <code>src</code> folder in your system test directory</li>
 					<li><code>~</code> references your project directory (the directory in which <code>workflo.conf.ts</code> resides)</li>
 				</ul>
-				<p>If you changed the value of <code>testDir</code> in <code>workflo.conf.json</code>, you need to adapt the <code>?</code> path alias and make sure
-				that your changed system test folder path is contained in the <code>include</code> array of <code>tsconfig.workflo.json</code>.</p>
+				<p>Wdio-workflo also creates a <code>tsconfig.json</code> file in your system test directory that extends your <code>tsconfig.workflo.json</code>
+					config. This ensures that editors like VS Code recognize the path aliases for all typescript files in your system test
+				directory.</p>
+				<p>If you changed the value of <code>testDir</code> in <code>workflo.conf.json</code>, you therefore need to</p>
+				<ul>
+					<li>adapt the <code>?</code> path alias</li>
+					<li>make sure that your changed system test folder path is contained in the <code>include</code> array of <code>tsconfig.workflo.json</code></li>
+					<li>ensure that the <code>tsconfig.json</code> located inside your system test directory still extends <code>tsconfig.workflo.json</code></li>
+				</ul>
 				<h1 id="writing-your-first-functional-system-test">Writing your first Functional System Test</h1>
 				<h2 id="overview">Overview</h2>
 				<p>This guide walks you through all stages of writing functional system tests in wdio-workflo.

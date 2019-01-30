@@ -57,8 +57,15 @@ Please note that ```tsconfig.workflo.json``` defines two path aliases to avoid r
 - `?` references the `src` folder in your system test directory
 - `~` references your project directory (the directory in which `workflo.conf.ts` resides)
 
-If you changed the value of `testDir` in ```workflo.conf.json```, you need to adapt the `?` path alias and make sure
-that your changed system test folder path is contained in the `include` array of ```tsconfig.workflo.json```.
+Wdio-workflo also creates a `tsconfig.json` file in your system test directory that extends your `tsconfig.workflo.json`
+config. This ensures that editors like VS Code recognize the path aliases for all typescript files in your system test 
+directory.
+
+If you changed the value of `testDir` in ```workflo.conf.json```, you therefore need to
+
+- adapt the `?` path alias
+- make sure that your changed system test folder path is contained in the `include` array of `tsconfig.workflo.json`
+- ensure that the `tsconfig.json` located inside your system test directory still extends `tsconfig.workflo.json`
 
 # Writing your first Functional System Test
 ## Overview
