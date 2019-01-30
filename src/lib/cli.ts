@@ -882,16 +882,16 @@ checkReport().then(() => {
 
   // patch wdio.conf.js
   args['logOutput'] = logsPath,
-    args['seleniumLogs'] = path.relative('./', path.join(logsPath));
+  args['seleniumLogs'] = path.relative('./', path.join(logsPath));
   args['logLevel'] = 'silent',
-    args['reporterOptions'] = JSON.stringify({
-      outputDir: path.join(resultsPath, process.env.LATEST_RUN),
-      'workflo-allure': {
-        debugSeleniumCommand,
-        outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
-        debug: false,
-      },
-    });
+  args['reporterOptions'] = JSON.stringify({
+    outputDir: path.join(resultsPath, process.env.LATEST_RUN),
+    'workflo-allure': {
+      debugSeleniumCommand,
+      outputDir: path.join(resultsPath, process.env.LATEST_RUN, 'allure-results'),
+      debug: false,
+    },
+  });
   args['bail'] = 0;
   args['cleanStackTraces'] = cleanStackTraces;
   args['host'] = workfloConfig.host || '127.0.0.1';
@@ -2634,6 +2634,9 @@ function ensureFolderStructure(testDir: string) {
     if (!pageObjectsExisted) {
       fsExtra.copySync(path.join(templatesDir, 'src_boilerplate', 'page_objects'), pageObjectsDir);
     }
+
+    // add tsconfig.json file in system test folder that extends tsconfig.workflo.json
+    fsExtra.copySync(path.join(templatesDir, 'config', 'tsconfig.json'), workfloConfig.testDir);
 
     console.log('\nSuccessfully initialized folder structure for wdio-workflo!');
   } catch (error) {
