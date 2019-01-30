@@ -1656,8 +1656,8 @@ declare global {
     MapType extends pageObjects.elements.ValuePageElementMap<
       any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
     > ?
-    IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> :
-    IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>;
+    IValueMapMatchers<Extract<keyof MapType['$'], string>, ReturnType<MapType['getValue']>[keyof MapType['$']]> :
+    IMapMatchers<Extract<keyof typeof map['$'], string>> : IMapMatchers<Extract<keyof typeof map['$'], string>>;
 
   /**
    * This function provides expectation matchers for PageElementGroups or ValuePageElementGroups.

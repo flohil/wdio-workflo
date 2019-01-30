@@ -1583,7 +1583,7 @@ declare global {
      * @param map an instance of PageElementMap or an instance of ValuePageElementMap
      * @returns the expectation matchers for PageElementMap or ValuePageElementMap
      */
-    function expectMap<Store extends pageObjects.stores.PageNodeStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): (typeof map) extends (infer MapType) ? MapType extends pageObjects.elements.ValuePageElementMap<any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueMapMatchers<keyof MapType['$'], ReturnType<MapType['getValue']>[keyof MapType['$']]> : IMapMatchers<keyof typeof map['$']> : IMapMatchers<keyof typeof map['$']>;
+    function expectMap<Store extends pageObjects.stores.PageNodeStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): (typeof map) extends (infer MapType) ? MapType extends pageObjects.elements.ValuePageElementMap<any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueMapMatchers<Extract<keyof MapType['$'], string>, ReturnType<MapType['getValue']>[keyof MapType['$']]> : IMapMatchers<Extract<keyof typeof map['$'], string>> : IMapMatchers<Extract<keyof typeof map['$'], string>>;
     /**
      * This function provides expectation matchers for PageElementGroups or ValuePageElementGroups.
      *

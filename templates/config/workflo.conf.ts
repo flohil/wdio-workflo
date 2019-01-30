@@ -1,6 +1,6 @@
 import { IWorkfloConfig } from 'wdio-workflo';
 
-const testDir = `${__dirname} + '/system_test`;
+const testDir = `${__dirname}/system_test`;
 
 const workfloConfig: IWorkfloConfig = {
   testDir,
