@@ -58,7 +58,7 @@ Please note that ```tsconfig.workflo.json``` defines two path aliases to avoid r
 - `~` references your project directory (the directory in which `workflo.conf.ts` resides)
 
 Wdio-workflo also creates a `tsconfig.json` file in your system test directory that extends your `tsconfig.workflo.json`
-config. This ensures that editors like VS Code recognize the path aliases for all typescript files in your system test 
+config. This ensures that editors like VS Code recognize the path aliases for all typescript files in your system test
 directory.
 
 If you changed the value of `testDir` in ```workflo.conf.json```, you therefore need to
@@ -567,8 +567,8 @@ suite("npmjs", {}, () => {
   testcase("search for the npm package wdio-workflo", { bugs: ['NPMJS-387'], severity: 'blocker' }, () => {
     given(steps["open npmjs page"]({
       // the result value of the step is passed as single parameter to the step's callback function
-      cb: (url) => {
-        console.log(`opened the npmjs website at ${url}`);
+      cb: (path) => {
+        console.log(`opened the npmjs website at ${path}`);
       }
     }))
     // wdio-workflo uses %{} to perform string interpolation of step arguments in a step's description

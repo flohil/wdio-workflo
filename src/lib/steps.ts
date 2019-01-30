@@ -271,9 +271,12 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
     if (typeof params.cb !== 'undefined') {
       this.execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-        process.send(
-          { event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) },
-        );
+        process.send({
+          event: 'step:start',
+          title: `${prefix}${this.__description}`,
+          description: this.__description,
+          arg: CircularJson.stringify(params.arg),
+        });
         const result: ReturnType = executionFunction(params.arg);
         process.send({ event: 'step:start', title: 'Callback', arg: CircularJson.stringify(result) });
         params.cb(result);
@@ -283,9 +286,12 @@ export class Step<ArgsType extends Object, ReturnType> implements Workflo.IStep 
     } else {
       this.execute = prefix => {
         prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-        process.send(
-          { event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) },
-        );
+        process.send({
+          event: 'step:start',
+          title: `${prefix}${this.__description}`,
+          description: this.__description,
+          arg: CircularJson.stringify(params.arg),
+        });
         const result: ReturnType = executionFunction(params.arg);
         process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
       };

@@ -127,7 +127,12 @@ class Step {
         if (typeof params.cb !== 'undefined') {
             this.execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-                process.send({ event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) });
+                process.send({
+                    event: 'step:start',
+                    title: `${prefix}${this.__description}`,
+                    description: this.__description,
+                    arg: CircularJson.stringify(params.arg),
+                });
                 const result = executionFunction(params.arg);
                 process.send({ event: 'step:start', title: 'Callback', arg: CircularJson.stringify(result) });
                 params.cb(result);
@@ -138,7 +143,12 @@ class Step {
         else {
             this.execute = prefix => {
                 prefix = (typeof prefix === 'undefined') ? '' : `${prefix} `;
-                process.send({ event: 'step:start', title: `${prefix}${this.__description}`, arg: CircularJson.stringify(params.arg) });
+                process.send({
+                    event: 'step:start',
+                    title: `${prefix}${this.__description}`,
+                    description: this.__description,
+                    arg: CircularJson.stringify(params.arg),
+                });
                 const result = executionFunction(params.arg);
                 process.send({ event: 'step:end', arg: CircularJson.stringify(result) });
             };
