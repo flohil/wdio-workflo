@@ -163,24 +163,25 @@
 				<h3 id="implementation">Implementation</h3>
 				<p>We now define our requirements for the npmjs page in the file <code>npmjs.spec.ts</code> located in the <code>src/specs</code> folder of
 				your system test directory:</p>
-				<pre><code>// src/specs/npmjs.spec.ts
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/specs/npmjs.spec.ts</span>
 
-Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
+Feature(<span class="hljs-string">'Packages'</span>, {}, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
 
-  // '<span class="hljs-number">1.1</span>' <span class="hljs-keyword">is</span> the ID <span class="hljs-keyword">of</span> the Story <span class="hljs-keyword">and</span> used to uniquely identify it.
-  // <span class="hljs-keyword">If</span> our `Story` <span class="hljs-keyword">is</span> based on a user story stored <span class="hljs-keyword">in</span> a tool like JIRA, we can link to the corresponding JIRA issue <span class="hljs-keyword">in</span> the generated test report by including its key <span class="hljs-keyword">in</span> the `issues` <span class="hljs-keyword">array</span>.
-  Story('<span class="hljs-number">1.1</span>', <span class="hljs-symbol">'Searching</span> a <span class="hljs-keyword">package</span>', { issues: [<span class="hljs-symbol">'NPMJS</span>-<span class="hljs-number">1</span>'] }, () =&gt; {
-    Given(<span class="hljs-symbol">'the</span> user <span class="hljs-keyword">is</span> located on the homepage', () =&gt; {
-      <span class="hljs-keyword">When</span>(<span class="hljs-symbol">'the</span> user enters the name <span class="hljs-keyword">of</span> an existing npm <span class="hljs-keyword">package</span> <span class="hljs-title">in the search field')</span>
-      .<span class="hljs-keyword">And</span>(<span class="hljs-symbol">'the</span> user clicks on the <span class="hljs-string">"Search"</span> button', () =&gt; {
+  <span class="hljs-comment">// '1.1' is the ID of the Story and used to uniquely identify it.</span>
+  <span class="hljs-comment">// If our `Story` is based on a user story stored in a tool like JIRA, we can link to the corresponding JIRA issue in the generated test report by including its key in the `issues` array.</span>
+  Story(<span class="hljs-string">'1.1'</span>, <span class="hljs-string">'Searching a package'</span>, { issues: [<span class="hljs-string">'NPMJS-1'</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    Given(<span class="hljs-string">'the user is located on the homepage'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+      When(<span class="hljs-string">'the user enters the name of an existing npm package in the search field'</span>)
+      .And(<span class="hljs-string">'the user clicks on the "Search" button'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
 
-        // The first parameter <span class="hljs-keyword">of</span> `<span class="hljs-keyword">Then</span>` <span class="hljs-keyword">is</span> a numeric ID needed to reference the acceptance criteria <span class="hljs-keyword">in</span> a testcase.
-        <span class="hljs-keyword">Then</span>(<span class="hljs-number">1</span>, <span class="hljs-symbol">'at</span> least one npm <span class="hljs-keyword">package</span> <span class="hljs-title"></span><span class="hljs-keyword">is</span> displayed <span class="hljs-keyword">in</span> the list <span class="hljs-keyword">of</span> search results');
-        <span class="hljs-keyword">Then</span>(<span class="hljs-number">2</span>, <span class="hljs-symbol">'the</span> npm <span class="hljs-keyword">package</span> <span class="hljs-title">whose name exactly matches the searched term </span><span class="hljs-keyword">is</span> displayed <span class="hljs-keyword">at</span> the top');
+        <span class="hljs-comment">// The first parameter of `Then` is a numeric ID needed to reference the acceptance criteria in a testcase.</span>
+        Then(<span class="hljs-number">1</span>, <span class="hljs-string">'at least one npm package is displayed in the list of search results'</span>);
+        Then(<span class="hljs-number">2</span>, <span class="hljs-string">'the npm package whose name exactly matches the searched term is displayed at the top'</span>);
       });
     });
   });
-});</code></pre><p>Please note that wdio-workflo only recognizes a file as a spec if its filename ends with &quot;.spec.ts&quot;.</p>
+});</code></pre>
+				<p>Please note that wdio-workflo only recognizes a file as a spec if its filename ends with &quot;.spec.ts&quot;.</p>
 				<h2 id="creating-page-objects">Creating Page Objects</h2>
 				<h3 id="information">Information</h3>
 				<p>Modern websites are usually built with reusable components which has many advantages:</p>
@@ -277,31 +278,31 @@ Feature(<span class="hljs-symbol">'Packages</span>', {}, () =&gt; {
 				<code>currently.getValue</code> methods.</p>
 				<p>Create the file <code>Input.ts</code> in the <code>src/page_objects/page_elements</code> folder of your system test directory with the
 				following contents:</p>
-				<pre><code><span class="hljs-comment">// src/page_objects/page_elements/Input.ts</span>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/page_elements/Input.ts</span>
 
-<span class="hljs-keyword">import</span> { <span class="hljs-type">PageNodeStore</span> } from '../stores';
-<span class="hljs-keyword">import</span> { <span class="hljs-type">IValuePageElementOpts</span>, <span class="hljs-type">ValuePageElement</span>, <span class="hljs-type">ValuePageElementCurrently</span> } from './<span class="hljs-type">ValuePageElement</span>';
+<span class="hljs-keyword">import</span> { PageNodeStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'../stores'</span>;
+<span class="hljs-keyword">import</span> { IValuePageElementOpts, ValuePageElement, ValuePageElementCurrently } <span class="hljs-keyword">from</span> <span class="hljs-string">'./ValuePageElement'</span>;
 
 <span class="hljs-comment">// Add opts parameter properties which need to be passed to Input's constructor here</span>
-export interface <span class="hljs-type">IInputOpts</span>&lt;
- <span class="hljs-type">Store</span> <span class="hljs-keyword">extends</span> <span class="hljs-type">PageNodeStore</span>
-&gt; <span class="hljs-keyword">extends</span> <span class="hljs-type">IValuePageElementOpts</span>&lt;<span class="hljs-type">Store</span>&gt; {}
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> IInputOpts&lt;
+ Store <span class="hljs-keyword">extends</span> PageNodeStore
+&gt; <span class="hljs-keyword">extends</span> IValuePageElementOpts&lt;Store&gt; {}
 
-export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Input&lt;Store</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">PageNodeStore&gt;</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ValuePageElement&lt;Store</span>, <span class="hljs-title">string&gt;</span> </span>{
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> Input&lt;Store <span class="hljs-keyword">extends</span> PageNodeStore&gt; <span class="hljs-keyword">extends</span> ValuePageElement&lt;Store, <span class="hljs-built_in">string</span>&gt; {
 
   <span class="hljs-comment">// The parameters of a PageNode constructor are always the same:</span>
   <span class="hljs-comment">// 1st param is XPath selector, 2nd param is options parameter</span>
-  constructor(selector: string, opts: <span class="hljs-type">IInputOpts</span>&lt;<span class="hljs-type">Store</span>&gt;) {
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">selector: <span class="hljs-built_in">string</span>, opts: IInputOpts&lt;Store&gt;</span>) {
     <span class="hljs-keyword">super</span>(selector, opts);
   }
 
   <span class="hljs-comment">// We need to implement InputCurrently because its .getValue() method serves as the base implementation for</span>
   <span class="hljs-comment">// all state retrieval and state check functions in Input and its .currently, .wait and .eventually api.</span>
-  readonly currently = <span class="hljs-keyword">new</span> <span class="hljs-type">InputCurrently</span>(<span class="hljs-keyword">this</span>);
+  readonly currently = <span class="hljs-keyword">new</span> InputCurrently(<span class="hljs-keyword">this</span>);
 
   <span class="hljs-comment">// Action functions (functions which change the state of the tested application) are supposed to always perform</span>
   <span class="hljs-comment">// the PageElement's initial waiting condition before interacting with the application.</span>
-  setValue(value: string): <span class="hljs-keyword">this</span> {
+  setValue(value: <span class="hljs-built_in">string</span>): <span class="hljs-keyword">this</span> {
 
     <span class="hljs-comment">// PageElementBase.element implicitly invokes the PageElement's initial waiting condition</span>
     <span class="hljs-keyword">this</span>.element.setValue(value);
@@ -310,44 +311,46 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
   }
 }
 
-export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InputCurrently&lt;</span></span>
-  <span class="hljs-type">Store</span> <span class="hljs-keyword">extends</span> <span class="hljs-type">PageNodeStore</span>,
-  <span class="hljs-type">PageElementType</span> <span class="hljs-keyword">extends</span> <span class="hljs-type">Input</span>&lt;<span class="hljs-type">Store</span>&gt;
-&gt; <span class="hljs-keyword">extends</span> <span class="hljs-type">ValuePageElementCurrently</span>&lt;<span class="hljs-type">Store</span>, <span class="hljs-type">PageElementType</span>, string&gt; {
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> InputCurrently&lt;
+  Store <span class="hljs-keyword">extends</span> PageNodeStore,
+  PageElementType <span class="hljs-keyword">extends</span> Input&lt;Store&gt;
+&gt; <span class="hljs-keyword">extends</span> ValuePageElementCurrently&lt;Store, PageElementType, <span class="hljs-built_in">string</span>&gt; {
 
   <span class="hljs-comment">// This method serves as the "base implementation" for the functions hasValue(), hasAnyValue() and containsValue()</span>
   <span class="hljs-comment">// in the .currently, .wait and .eventually apis and for Input.hasValue().</span>
-  getValue(): string {
+  getValue(): <span class="hljs-built_in">string</span> {
 
     <span class="hljs-comment">// PageElementBaseCurrently.element does not invoke the PageElement's initial waiting condition</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.element.getValue();
   }
-}</code></pre><p>Do not forget to add an export for <code>Input</code> to the <code>index.ts</code> file in <code>src/page_objects/page_elements</code>:</p>
-				<pre><code><span class="hljs-comment">// src/page_objects/page_elements/index.ts</span>
+}</code></pre>
+				<p>Do not forget to add an export for <code>Input</code> to the <code>index.ts</code> file in <code>src/page_objects/page_elements</code>:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/page_elements/index.ts</span>
 
 <span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./PageElement'</span>;
 <span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./ValuePageElement'</span>;
-<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./Input'</span>;</code></pre><h4 id="pagenodestore">PageNodeStore</h4>
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./Input'</span>;</code></pre>
+				<h4 id="pagenodestore">PageNodeStore</h4>
 				<p>Before we can use the <code>Input</code> element we just created within our npmjs <code>Page</code>, we need to add a factory method to
 				<code>PageNodeStore</code> that returns an instance of <code>Input</code>.</p>
 				<p>Add the following code to the file <code>PageNodeStore.ts</code> located in <code>src/page_objects/store</code>:</p>
-				<pre><code><span class="hljs-comment">// src/page_objects/stores/PageNodeStore.ts</span>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/stores/PageNodeStore.ts</span>
 
-<span class="hljs-keyword">import</span> { pageObjects as core } from <span class="hljs-symbol">'wdio</span>-workflo';
-<span class="hljs-keyword">import</span> { <span class="hljs-type">IInputOpts</span>, <span class="hljs-type">Input</span>, <span class="hljs-type">IPageElementOpts</span>, <span class="hljs-type">PageElement</span> } from '../page_elements';
+<span class="hljs-keyword">import</span> { pageObjects <span class="hljs-keyword">as</span> core } <span class="hljs-keyword">from</span> <span class="hljs-string">'wdio-workflo'</span>;
+<span class="hljs-keyword">import</span> { IInputOpts, Input, IPageElementOpts, PageElement } <span class="hljs-keyword">from</span> <span class="hljs-string">'../page_elements'</span>;
 
-export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PageNodeStore</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">core</span>.<span class="hljs-title">stores</span>.<span class="hljs-title">PageNodeStore</span> </span>{
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> PageNodeStore <span class="hljs-keyword">extends</span> core.stores.PageNodeStore {
 
   ...
 
-  <span class="hljs-type">Input</span>(
-    selector: <span class="hljs-type">Workflo</span>.<span class="hljs-type">XPath</span>,
+  Input(
+    selector: Workflo.XPath,
     <span class="hljs-comment">// pick the properties of the `opts` parameter of Input's constructor which can be passed to the factory method</span>
-    options?: <span class="hljs-type">Pick</span>&lt;<span class="hljs-type">IInputOpts</span>&lt;<span class="hljs-keyword">this</span>&gt;, <span class="hljs-type">Workflo</span>.<span class="hljs-type">Store</span>.<span class="hljs-type">BaseKeys</span>&gt;,
+    options?: Pick&lt;IInputOpts&lt;<span class="hljs-keyword">this</span>&gt;, Workflo.Store.BaseKeys&gt;,
   ) {
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._getElement&lt;<span class="hljs-type">Input</span>&lt;<span class="hljs-keyword">this</span>&gt;, <span class="hljs-type">IInputOpts</span>&lt;<span class="hljs-keyword">this</span>&gt;&gt;(
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._getElement&lt;Input&lt;<span class="hljs-keyword">this</span>&gt;, IInputOpts&lt;<span class="hljs-keyword">this</span>&gt;&gt;(
       selector,
-      <span class="hljs-type">Input</span>,
+      Input,
       {
         <span class="hljs-comment">// add pre-configured properties to the `opts` parameter of Input's constructor</span>
         store: <span class="hljs-keyword">this</span>,
@@ -358,7 +361,8 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
 
   ...
 
-}</code></pre><h4 id="page">Page</h4>
+}</code></pre>
+				<h4 id="page">Page</h4>
 				<p>After implementing our <code>Input</code> element and adding its factory method to <code>PageNodeStore</code>, we can now create the
 				<code>NpmJsPage</code> which encapsulates all of the PageNodes needed for our testcase.</p>
 				<p>It is very important that you use always use getter functions to define the PageNodes within a Page.</p>
@@ -370,7 +374,7 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
 				be found in the DOM and that all of our testcases would fail.</p>
 				<p>Create the file <code>NpmJsPage.ts</code> in the <code>src/page_objects/pages</code> folder of your system test directory with the
 				following contents:</p>
-				<pre><code><span class="hljs-comment">// src/page_objects/pages/NpmJsPage.ts</span>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/pages/NpmJsPage.ts</span>
 
 <span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 <span class="hljs-keyword">import</span> { IPageOpts, Page } <span class="hljs-keyword">from</span> <span class="hljs-string">'./Page'</span>;
@@ -436,11 +440,13 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
 
 <span class="hljs-comment">// Since pages are stateless, we only ever need one instance of a `Page` and this is the perfect place to create this</span>
 <span class="hljs-comment">// instance.</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> npmjs = <span class="hljs-keyword">new</span> NpmJsPage();</code></pre><p>Again, we should not forget to add exports for our <code>NpmJsPage</code> to the index file <code>src/page_objects/pages/index.ts</code>:</p>
-				<pre><code><span class="hljs-comment">// src/page_objects/pages/index.ts</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> npmjs = <span class="hljs-keyword">new</span> NpmJsPage();</code></pre>
+				<p>Again, we should not forget to add exports for our <code>NpmJsPage</code> to the index file <code>src/page_objects/pages/index.ts</code>:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/pages/index.ts</span>
 
 <span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./Page'</span>;
-<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./NpmJsPage'</span>;</code></pre><h2 id="implementing-steps">Implementing Steps</h2>
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./NpmJsPage'</span>;</code></pre>
+				<h2 id="implementing-steps">Implementing Steps</h2>
 				<h3 id="information">Information</h3>
 				<p>While PageNodes already provide us with reusable testing components, Steps are wdio-workflo&#39;s main driver for
 				increased reusability.</p>
@@ -466,7 +472,7 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
 					<li>a step to enter the name of an npm package and trigger the search request</li>
 				</ul>
 				<p>Create the file <code>npmjs.step.ts</code> in the <code>src/steps</code> folder of your system test directory with the following contents:</p>
-				<pre><code><span class="hljs-comment">// src/steps/npmjs.step.ts</span>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/steps/npmjs.step.ts</span>
 
 <span class="hljs-keyword">import</span> { pages } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 <span class="hljs-keyword">import</span> { defineSteps, IOptStepParams, IStepParams, Step } <span class="hljs-keyword">from</span> <span class="hljs-string">'wdio-workflo'</span>;
@@ -489,10 +495,11 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
     }),
 });
 
-<span class="hljs-keyword">export</span> { npmjsSteps };</code></pre><p>Please note that the filenames of all step files should end with &quot;.step.ts&quot;.</p>
+<span class="hljs-keyword">export</span> { npmjsSteps };</code></pre>
+				<p>Please note that the filenames of all step files should end with &quot;.step.ts&quot;.</p>
 				<p>Wdio-workflo merges all step definitions into a single steps object. To include our npmjs steps into this steps object,
 				add the following code to the file <code>index.ts</code> in the <code>src/steps</code> folder of your system test directory:</p>
-				<pre><code><span class="hljs-comment">// src/steps/index.ts</span>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/steps/index.ts</span>
 
 ...
 
@@ -500,11 +507,12 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
 <span class="hljs-keyword">import</span> { npmjsSteps } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/steps/npmjs.step'</span>;
 
 <span class="hljs-comment">// MERGE ALL STEP DEFINITIONS INTO ONE OBJECT AS SHOWN BELOW</span>
-const stepDefinitions = defineSteps({
+<span class="hljs-keyword">const</span> stepDefinitions = defineSteps({
   ...npmjsSteps,
 });
 
-...</code></pre><h2 id="writing-testcases">Writing Testcases</h2>
+...</code></pre>
+				<h2 id="writing-testcases">Writing Testcases</h2>
 				<h3 id="information">Information</h3>
 				<p>A <code>testcase</code> consists of a sequence of steps and validates the requirements we defined in our spec files.
 				Sets of related testcases are grouped together in <code>suite</code>s.</p>
@@ -536,40 +544,41 @@ const stepDefinitions = defineSteps({
 				<h3 id="implementation">Implementation</h3>
 				<p>Finally, it is time to write a testcase which browses to npmjs.com and searches for the &quot;wdio-workflo&quot; npm package.</p>
 				<p>Create the file <code>npmjs.tc.ts</code> in the <code>src/testcases</code> folder of your system test directory with the following contents:</p>
-				<pre><code><span class="hljs-regexp">//</span> src/testcases/npmjs.tc.ts
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/testcases/npmjs.tc.ts</span>
 
 <span class="hljs-keyword">import</span> { pages } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 <span class="hljs-keyword">import</span> { steps } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/steps'</span>;
 
 suite(<span class="hljs-string">"npmjs"</span>, {}, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-  <span class="hljs-regexp">//</span> If there <span class="hljs-keyword">is</span> a bug <span class="hljs-keyword">in</span> the tested application which breaks our testcase, we can link to it <span class="hljs-keyword">in</span> the `<span class="javascript">bugs</span>` array.
-  <span class="hljs-regexp">//</span> We can also define how severe it would be <span class="hljs-keyword">if</span> the testcase failed <span class="hljs-keyword">by</span> setting the `<span class="javascript">severity</span>` property.
+  <span class="hljs-comment">// If there is a bug in the tested application which breaks our testcase, we can link to it in the `bugs` array.</span>
+  <span class="hljs-comment">// We can also define how severe it would be if the testcase failed by setting the `severity` property.</span>
   testcase(<span class="hljs-string">"search for the npm package wdio-workflo"</span>, { bugs: [<span class="hljs-string">'NPMJS-387'</span>], severity: <span class="hljs-string">'blocker'</span> }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
     given(steps[<span class="hljs-string">"open npmjs page"</span>]({
-      <span class="hljs-regexp">//</span> the result value <span class="hljs-keyword">of</span> the step <span class="hljs-keyword">is</span> passed <span class="hljs-keyword">as</span> single parameter to the step<span class="hljs-string">'s callback function
-      cb: (path) =&gt; {
-        console.log(`opened the npmjs website at ${path}`);
+      <span class="hljs-comment">// the result value of the step is passed as single parameter to the step's callback function</span>
+      cb: <span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`opened the npmjs website at <span class="hljs-subst">${path}</span>`</span>);
       }
     }))
-    // wdio-workflo uses %{} to perform string interpolation of step arguments in a step'</span>s description
-    <span class="hljs-regexp">//</span> <span class="hljs-keyword">in</span> the test reports, %{packageName} will be replaced with <span class="hljs-string">"wdio-workflo"</span>
-    .<span class="hljs-keyword">when</span>(steps[<span class="hljs-string">"search for the npm package %{packageName}"</span>]({
+    <span class="hljs-comment">// wdio-workflo uses %{} to perform string interpolation of step arguments in a step's description</span>
+    <span class="hljs-comment">// in the test reports, %{packageName} will be replaced with "wdio-workflo"</span>
+    .when(steps[<span class="hljs-string">"search for the npm package %{packageName}"</span>]({
       arg: { packageName: <span class="hljs-string">'wdio-workflo'</span> },
       cb: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
         validate({ <span class="hljs-string">'1.1'</span>: [<span class="hljs-number">1</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-          <span class="hljs-regexp">//</span> This function provides custom expectation matchers <span class="hljs-keyword">for</span> PageElementLists.
-          <span class="hljs-regexp">//</span> Each expectation matcher also has a negated counterpart which can be accessed via `<span class="javascript">.not</span>`.
-          expectList(pages.npmjs.packageNamesList).<span class="hljs-keyword">not</span>.toEventuallyBeEmpty();
+          <span class="hljs-comment">// This function provides custom expectation matchers for PageElementLists.</span>
+          <span class="hljs-comment">// Each expectation matcher also has a negated counterpart which can be accessed via `.not`.</span>
+          expectList(pages.npmjs.packageNamesList).not.toEventuallyBeEmpty();
         });
 
         validate({ <span class="hljs-string">'1.1'</span>: [<span class="hljs-number">2</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-          <span class="hljs-regexp">//</span> the PageElements managed <span class="hljs-keyword">by</span> PageElementList can be retrieved via `<span class="javascript">.first</span>`, `<span class="javascript">.at</span>`, `<span class="javascript">.all</span>` <span class="hljs-keyword">or</span> `<span class="javascript">.where</span>`
+          <span class="hljs-comment">// the PageElements managed by PageElementList can be retrieved via `.first`, `.at`, `.all` or `.where`</span>
           expectElement(pages.npmjs.packageNamesList.first).toEventuallyHaveText(<span class="hljs-string">'wdio-workflo'</span>);
         });
       },
     }));
   });
-});</code></pre><p>Please note that wdio-workflo only recognizes a file as a testcase if its filename ends with &quot;.tc.ts&quot;.</p>
+});</code></pre>
+				<p>Please note that wdio-workflo only recognizes a file as a testcase if its filename ends with &quot;.tc.ts&quot;.</p>
 				<h1 id="running-your-tests">Running your tests</h1>
 				<h2 id="launching-selenium">Launching selenium</h2>
 				<p>Wdio-workflo requires a selenium webdriver server to execute your testing commands in the browser.

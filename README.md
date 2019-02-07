@@ -115,7 +115,7 @@ Related `Story`s are grouped together in a `Feature`.
 We now define our requirements for the npmjs page in the file `npmjs.spec.ts` located in the `src/specs` folder of
 your system test directory:
 
-```
+```typescript
 // src/specs/npmjs.spec.ts
 
 Feature('Packages', {}, () => {
@@ -250,7 +250,7 @@ Therefore, `Input` needs to extend the boilerplate `ValuePageElement` class and 
 Create the file `Input.ts` in the `src/page_objects/page_elements` folder of your system test directory with the
 following contents:
 
-```
+```typescript
 // src/page_objects/page_elements/Input.ts
 
 import { PageNodeStore } from '../stores';
@@ -301,7 +301,7 @@ export class InputCurrently<
 
 Do not forget to add an export for `Input` to the `index.ts` file in `src/page_objects/page_elements`:
 
-```
+```typescript
 // src/page_objects/page_elements/index.ts
 
 export * from './PageElement';
@@ -315,7 +315,7 @@ Before we can use the `Input` element we just created within our npmjs `Page`, w
 
 Add the following code to the file `PageNodeStore.ts` located in `src/page_objects/store`:
 
-```
+```typescript
 // src/page_objects/stores/PageNodeStore.ts
 
 import { pageObjects as core } from 'wdio-workflo';
@@ -363,7 +363,7 @@ be found in the DOM and that all of our testcases would fail.
 Create the file `NpmJsPage.ts` in the `src/page_objects/pages` folder of your system test directory with the
 following contents:
 
-```
+```typescript
 // src/page_objects/pages/NpmJsPage.ts
 
 import { stores } from '?/page_objects';
@@ -435,7 +435,7 @@ export const npmjs = new NpmJsPage();
 
 Again, we should not forget to add exports for our `NpmJsPage` to the index file `src/page_objects/pages/index.ts`:
 
-```
+```typescript
 // src/page_objects/pages/index.ts
 
 export * from './Page';
@@ -469,7 +469,7 @@ Our npmjs testcase requires two steps:
 
 Create the file `npmjs.step.ts` in the `src/steps` folder of your system test directory with the following contents:
 
-```
+```typescript
 // src/steps/npmjs.step.ts
 
 import { pages } from '?/page_objects';
@@ -501,7 +501,7 @@ Please note that the filenames of all step files should end with ".step.ts".
 Wdio-workflo merges all step definitions into a single steps object. To include our npmjs steps into this steps object,
 add the following code to the file `index.ts` in the `src/steps` folder of your system test directory:
 
-```
+```typescript
 // src/steps/index.ts
 
 ...
@@ -555,7 +555,7 @@ Finally, it is time to write a testcase which browses to npmjs.com and searches 
 
 Create the file `npmjs.tc.ts` in the `src/testcases` folder of your system test directory with the following contents:
 
-```
+```typescript
 // src/testcases/npmjs.tc.ts
 
 import { pages } from '?/page_objects';
