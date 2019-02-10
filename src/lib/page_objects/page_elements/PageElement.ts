@@ -238,9 +238,9 @@ export class PageElement<
    */
   __typeToString(value: any) {
     if (isNullOrUndefined(value)) {
-      return '';
+      return value;
     } else if (typeof value === 'string') {
-      return (value.length > 0) ? value : '';
+      return (value.length > 0) ? `"${value}"` : '""';
     } else if (typeof value === 'number') {
       return value.toString();
     } else if (typeof value === 'boolean') {

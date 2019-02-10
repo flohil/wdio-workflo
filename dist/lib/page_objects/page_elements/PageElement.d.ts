@@ -145,7 +145,7 @@ export declare class PageElement<Store extends PageNodeStore> extends PageElemen
      *
      * @param value the value whose type should be converted
      */
-    __typeToString(value: any): string;
+    __typeToString(value: any): any;
     /**
      * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector without
      * performing PageElement's initial waiting condition.

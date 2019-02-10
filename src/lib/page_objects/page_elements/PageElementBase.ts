@@ -207,9 +207,7 @@ export abstract class PageElementBaseCurrently<
       timeout: this._node.getTimeout(),
     };
 
-    if (typeof expected !== 'undefined') {
-      diff.expected = this._node.__typeToString(expected);
-    }
+    diff.expected = this._node.__typeToString(expected);
 
     this._node.__setLastDiff(diff);
   }

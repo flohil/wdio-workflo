@@ -297,25 +297,30 @@ function convertDiffToMessages(diff, actualOnly = false, includeTimeouts = false
         let compareStr = '';
         if (actualOnly) {
             compareStr = (typeof diff.actual === 'undefined') ?
-                '' : `{actual: "${_actual}"}\n`;
+                '' : `{actual: <${_actual}>}\n`;
         }
         else {
             compareStr = (typeof diff.actual === 'undefined' && typeof diff.expected === 'undefined') ?
-                '' : `{actual: "${_actual}", expected: "${_expected}"}\n`;
+                '' : `{actual: <${_actual}>, expected: <${_expected}>}\n`;
         }
         const timeoutStr = (includeTimeouts) ? ` within ${timeout || diff.timeout}ms` : '';
         comparisonLines.push(`${diff.constructorName} at path '${_paths}'${timeoutStr}\n${compareStr}( ${diff.selector} )`);
     }
     return comparisonLines;
 }
-function printValue(value) {
+function printValue(value, addQuotes = false) {
     if (typeof value === 'undefined') {
-        return '';
+        return 'undefined';
     }
     else if (value === null) {
-        return '';
+        return 'null';
     }
-    return value.toString();
+    if (addQuotes) {
+        return `"${value.toString()}"`;
+    }
+    else {
+        return value.toString();
+    }
 }
 function createBaseMessage(node, errorTexts) {
     let errorText = undefined;
@@ -370,10 +375,10 @@ function createEventuallyMessage(node, errorTexts, timeout) {
 exports.createEventuallyMessage = createEventuallyMessage;
 function createPropertyMessage(node, property, comparison, actual, expected) {
     const _actual = printValue(actual);
-    const _expected = printValue(expected);
+    const _expected = printValue(expected, typeof expected === 'string');
     return createBaseMessage(node, [
-        `'s ${property} "${_actual}" to ${comparison} "${_expected}"`,
-        `'s ${property} "${_actual}" not to ${comparison} "${_expected}"`,
+        `'s ${property} <${_actual}> to ${comparison} <${_expected}>`,
+        `'s ${property} <${_actual}> not to ${comparison} <${_expected}>`,
     ]);
 }
 exports.createPropertyMessage = createPropertyMessage;
@@ -381,16 +386,16 @@ function createAnyMessage(node, property, comparison, actual) {
     const _actual = printValue(actual);
     return createBaseMessage(node, [
         ` to ${comparison} any ${property}`,
-        ` to ${comparison} no ${property} but had ${property} "${_actual}"`,
+        ` to ${comparison} no ${property} but had ${property} <${_actual}>`,
     ]);
 }
 exports.createAnyMessage = createAnyMessage;
 function createEventuallyPropertyMessage(node, property, comparison, actual, expected, timeout) {
     const _actual = printValue(actual);
-    const _expected = printValue(expected);
+    const _expected = printValue(expected, typeof expected === 'string');
     return createBaseMessage(node, [
-        `'s ${property} "${_actual}" to eventually ${comparison} "${_expected}" within ${timeout}ms`,
-        `'s ${property} "${_actual}" not to eventually ${comparison} "${_expected}" within ${timeout}ms`,
+        `'s ${property} <${_actual}> to eventually ${comparison} <${_expected}> within ${timeout}ms`,
+        `'s ${property} <${_actual}> not to eventually ${comparison} <${_expected}> within ${timeout}ms`,
     ]);
 }
 exports.createEventuallyPropertyMessage = createEventuallyPropertyMessage;
@@ -398,7 +403,7 @@ function createEventuallyAnyMessage(node, property, comparison, actual, timeout)
     const _actual = printValue(actual);
     return createBaseMessage(node, [
         ` to eventually ${comparison} any ${property} within ${timeout}ms`,
-        ` to eventually ${comparison} no ${property} within ${timeout}ms but had ${property} "${_actual}"`,
+        ` to eventually ${comparison} no ${property} within ${timeout}ms but had ${property} <${_actual}>`,
     ]);
 }
 exports.createEventuallyAnyMessage = createEventuallyAnyMessage;
@@ -542,7 +547,7 @@ exports.elementMatchers = {
             ],
             errorTextFunc: ({ node, actual, expected }) => createBaseMessage(node, [
                 ` to have any ${expected}`,
-                ` to have no ${expected} but had ${expected} "${actual}"`,
+                ` to have no ${expected} but had ${expected} <${actual}>`,
             ]),
         },
     }),
@@ -554,7 +559,7 @@ exports.elementMatchers = {
             ],
             errorTextFunc: ({ node, actual, expected, opts }) => createBaseMessage(node, [
                 ` to have any ${expected} within ${opts.timeout}ms`,
-                ` to have no ${expected} within ${opts.timeout}ms but had ${expected} "${actual}"`,
+                ` to have no ${expected} within ${opts.timeout}ms but had ${expected} <${actual}>`,
             ]),
         },
     }),

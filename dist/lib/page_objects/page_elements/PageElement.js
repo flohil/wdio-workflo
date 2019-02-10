@@ -203,10 +203,10 @@ class PageElement extends _1.PageElementBase {
      */
     __typeToString(value) {
         if (helpers_1.isNullOrUndefined(value)) {
-            return '';
+            return value;
         }
         else if (typeof value === 'string') {
-            return (value.length > 0) ? value : '';
+            return (value.length > 0) ? `"${value}"` : '""';
         }
         else if (typeof value === 'number') {
             return value.toString();

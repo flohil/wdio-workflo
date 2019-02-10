@@ -108,9 +108,7 @@ class PageElementBaseCurrently extends _1.PageNodeCurrently {
             actual: this._node.__typeToString(actual),
             timeout: this._node.getTimeout(),
         };
-        if (typeof expected !== 'undefined') {
-            diff.expected = this._node.__typeToString(expected);
-        }
+        diff.expected = this._node.__typeToString(expected);
         this._node.__setLastDiff(diff);
     }
     /**
