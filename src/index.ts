@@ -2221,9 +2221,8 @@ declare global {
        * content. For a PageElement, the extract return value type will be `string`.
        */
       type ExtractText<T extends {[key in keyof T]: IPageNode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-        TryArrayOrElement<ReturnType<T[P]['getText']>> :
-        never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
+          TryArrayOrElement<ReturnType<T[P]['getText']>> : never;
       };
 
       /**
@@ -2231,9 +2230,8 @@ declare global {
        * PageElementGroup's content.
        */
       type ExtractExistsFilterMask<T extends {[key in keyof T]: IPageNode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-        TryArrayElement<ReturnType<T[P]['currently']['getExists']>> :
-        never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
+          TryArrayElement<ReturnType<T[P]['currently']['getExists']>> : never;
       };
 
       /**
@@ -2241,9 +2239,8 @@ declare global {
        * PageElementGroup's content. For a PageElement, the extract return value type will be `boolean`.
        */
       type ExtractBoolean<T extends {[key in keyof T]: IPageNode}> = {
-        [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-        TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> :
-        never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
+          TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
       };
 
       /**
@@ -2785,7 +2782,7 @@ declare global {
        * ValuePageElementGroup's content.
        */
       type ExtractValue<T extends {[key: string]: IPageNode}> = {
-        [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
+        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
           TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
       };
 
@@ -2794,9 +2791,8 @@ declare global {
        * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
        */
       type ExtractValueBoolean<T extends {[key in keyof T]: IPageNode}> = {
-        [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
-        TryArrayOrElement<ReturnType<T[P]['getHasValue']>> :
-        never;
+        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
+          TryArrayOrElement<ReturnType<T[P]['getHasValue']>> : never;
       };
 
       /**
@@ -2804,9 +2800,8 @@ declare global {
        * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
        */
       type ExtractValueBooleanWN<T extends {[key in keyof T]: IPageNode}> = {
-        [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
-        WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> :
-        never;
+        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
+          WithoutNever<TryArrayOrElement<ReturnType<T[P]['getHasValue']>>> : never;
       };
 
       /**
