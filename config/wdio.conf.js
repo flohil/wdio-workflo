@@ -158,9 +158,12 @@ exports.config = {
 
           process.send({event: 'step:broken', assertion: assertion, ignoreErrors: global.ignoreErrors})
 
-          if (assertion.specObj && !global.ignoreErrors) {
+          if (!global.ignoreErrors) {
             increaseBailErrors()
-            process.send({event: 'validate:broken', assertion: assertion})
+
+            if (assertion.specObj) {
+              process.send({event: 'validate:broken', assertion: assertion})
+            }
           }
         }
       }
