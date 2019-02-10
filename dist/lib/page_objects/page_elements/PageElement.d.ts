@@ -97,47 +97,55 @@ export declare class PageElement<Store extends PageNodeStore> extends PageElemen
      */
     readonly __$: Store;
     /**
-     * Returns true if `actual` equals `expected`.
+     * Returns true if `actual` equals `expected`. Both `actual` and `expected` are supposed to be
+     * of the same type.
      *
-     * By default, the comparison is only implemented for the type `string`.
-     * If the comparison is not implemented for the type of `actual` and `expected`, an error will be thrown.
+     * By default, the comparison is only implemented for the types `string`, `number`, `boolean`
+     * `undefined` and `null`.
      *
-     * @template T the type of both `actual` and `expected`
+     * If the implementation is missing for the type of `actual` and `expected`, an error will be thrown.
+     *
      * @param actual an actual value retrieved from the page's state
      * @param expected an expected value
      */
-    __equals<T>(actual: T, expected: T): boolean;
+    __equals(actual: any, expected: any): boolean;
     /**
      * Returns true if `actual` has any value.
      *
-     * By default, the comparison is only implemented for the type `string`.
-     * If the comparison is not implemented for the type of `actual`, an error will be thrown.
+     * By default, the comparison is only implemented for the types `string`, `number` and `boolean`.
      *
-     * @template T the type of `actual`
+     * If `actual` is of type `number` or `boolean`, this function always returns true
+     * unless the value of `actual` is `undefined` or `null`.
+     *
+     * If the implementation is missing for the type of `actual`, an error will be thrown.
+     *
      * @param actual an actual value retrieved from the page's state
      */
-    __any<T>(actual: T): boolean;
+    __any(actual: any): boolean;
     /**
-     * Returns true if `actual` contains `expected`.
+     * Returns true if `actual` contains `expected`. Both `actual` and `expected` are supposed to be
+     * of the same type.
      *
      * By default, the comparison is only implemented for the type `string`.
-     * If the comparison is not implemented for the type of `actual` and `expected`, an error will be thrown.
+     * If the implementation is missing for the type of `actual` and `expected`, an error will be thrown.
      *
-     * @template T the type of both `actual` and `expected`
      * @param actual an actual value retrieved from the page's state
      * @param expected an expected value
      */
-    __contains<T>(actual: T, expected: T): boolean;
+    __contains(actual: any, expected: any): boolean;
     /**
      * Converts `value` to the type `string`.
      *
-     * By default, the comparison is only implemented for the types `string`, `number` and `undefined` and for the value
-     * `null`.
-     * If the comparison is not implemented for the type of `value`, an error will be thrown.
+     * This function is used to write a value of an arbitrary type into error messages and log outputs.
+     *
+     * By default, the comparison is only implemented for the types `string`, `number`, `boolean`,
+     * `undefined` and for the value `null`.
+     *
+     * If the implementation is missing for the type of `value`, an error will be thrown.
      *
      * @param value the value whose type should be converted
      */
-    __typeToString<T>(value: T): string;
+    __typeToString(value: any): string;
     /**
      * Fetches the first webdriverio element from the HTML page that is identified by PageElement's XPath selector without
      * performing PageElement's initial waiting condition.

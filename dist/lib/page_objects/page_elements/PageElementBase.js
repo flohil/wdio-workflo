@@ -41,7 +41,8 @@ class PageElementBase extends _1.PageNode {
                         // but this does not work due to typescript bugs that prevent extended generics to work with keyof.
                         // typescript bugs 3.3.0:
                         // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
-                        throw new Error('Selector chaining is not supported for PageElementGroups.');
+                        throw new Error(`Selector chaining via the '.$' accessor is not supported for PageElementGroups.
+Instead, you can retrieve PageElementGroups directly from an instance of PageNodeStore.`);
                     }
                     // chain selectors
                     _selector = `${selector}${_selector}`;

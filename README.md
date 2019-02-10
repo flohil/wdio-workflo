@@ -453,9 +453,9 @@ step (nested steps).
 
 Each `Step` consists of three key features:
 
-- A description written in natural language, so that non-technical stakeholders too can comprehend what is going on
-- A body function that implements the step's interactions with the tested application
-- A Params object containing
+- a description written in natural language, so that non-technical stakeholders too can comprehend what is going on
+- a body function that implements the step's interactions with the tested application
+- a params object containing
   - the arguments used to "configure" the step and to provide data that is needed during the
     step's execution and
   - a callback which is executed immediately after the step has finished and which is passed the
@@ -486,7 +486,7 @@ const npmjsSteps = defineSteps({
     }),
 
   "search for the npm package %{packageName}":
-  (params?: IStepParams<{packageName: string}, void>) =>
+  (params: IStepParams<{packageName: string}, void>) =>
     new Step(params, ({ packageName }): void => {
       pages.npmjs.searchInputField.setValue(packageName);
       pages.npmjs.searchButton.click();

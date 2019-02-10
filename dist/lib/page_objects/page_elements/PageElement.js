@@ -99,12 +99,14 @@ class PageElement extends _1.PageElementBase {
     }
     // ABSTRACT BASE CLASS IMPLEMENTATIONS
     /**
-     * Returns true if `actual` equals `expected`.
+     * Returns true if `actual` equals `expected`. Both `actual` and `expected` are supposed to be
+     * of the same type.
      *
-     * By default, the comparison is only implemented for the type `string`.
-     * If the comparison is not implemented for the type of `actual` and `expected`, an error will be thrown.
+     * By default, the comparison is only implemented for the types `string`, `number`, `boolean`
+     * `undefined` and `null`.
      *
-     * @template T the type of both `actual` and `expected`
+     * If the implementation is missing for the type of `actual` and `expected`, an error will be thrown.
+     *
      * @param actual an actual value retrieved from the page's state
      * @param expected an expected value
      */
@@ -112,20 +114,30 @@ class PageElement extends _1.PageElementBase {
         if (helpers_1.isEmpty(actual) && helpers_1.isEmpty(expected)) {
             return true;
         }
-        else if (typeof actual === 'string' || typeof expected === 'string') {
+        else if (typeof actual === 'string' ||
+            typeof expected === 'string' ||
+            typeof actual === 'number' ||
+            typeof expected === 'number' ||
+            typeof actual === 'boolean' ||
+            typeof expected === 'boolean') {
             return actual === expected;
         }
         else {
-            throw new Error(`${this.constructor.name}.__equals is missing an implementation for type of values: ${actual}, ${expected}`);
+            throw new Error(
+            // tslint:disable-next-line:max-line-length
+            `${this.constructor.name}.__equals is missing an implementation for type '${typeof actual}' of values: ${actual}, ${expected}`);
         }
     }
     /**
      * Returns true if `actual` has any value.
      *
-     * By default, the comparison is only implemented for the type `string`.
-     * If the comparison is not implemented for the type of `actual`, an error will be thrown.
+     * By default, the comparison is only implemented for the types `string`, `number` and `boolean`.
      *
-     * @template T the type of `actual`
+     * If `actual` is of type `number` or `boolean`, this function always returns true
+     * unless the value of `actual` is `undefined` or `null`.
+     *
+     * If the implementation is missing for the type of `actual`, an error will be thrown.
+     *
      * @param actual an actual value retrieved from the page's state
      */
     __any(actual) {
@@ -135,17 +147,23 @@ class PageElement extends _1.PageElementBase {
         else if (typeof actual === 'string') {
             return (actual) ? actual.length > 0 : false;
         }
+        else if (typeof actual === 'number') {
+            return true;
+        }
+        else if (typeof actual === 'boolean') {
+            return true;
+        }
         else {
-            throw new Error(`${this.constructor.name}.__any is missing an implementation for type of value: ${actual}`);
+            throw new Error(`${this.constructor.name}.__any is missing an implementation for type '${typeof actual}' of value: ${actual}`);
         }
     }
     /**
-     * Returns true if `actual` contains `expected`.
+     * Returns true if `actual` contains `expected`. Both `actual` and `expected` are supposed to be
+     * of the same type.
      *
      * By default, the comparison is only implemented for the type `string`.
-     * If the comparison is not implemented for the type of `actual` and `expected`, an error will be thrown.
+     * If the implementation is missing for the type of `actual` and `expected`, an error will be thrown.
      *
-     * @template T the type of both `actual` and `expected`
      * @param actual an actual value retrieved from the page's state
      * @param expected an expected value
      */
@@ -166,15 +184,20 @@ class PageElement extends _1.PageElementBase {
             }
         }
         else {
-            throw new Error(`${this.constructor.name}.__contains is missing an implementation for type of values: ${actual}, ${expected}`);
+            throw new Error(
+            // tslint:disable-next-line:max-line-length
+            `${this.constructor.name}.__contains is missing an implementation for type '${typeof actual}' of values: ${actual}, ${expected}`);
         }
     }
     /**
      * Converts `value` to the type `string`.
      *
-     * By default, the comparison is only implemented for the types `string`, `number` and `undefined` and for the value
-     * `null`.
-     * If the comparison is not implemented for the type of `value`, an error will be thrown.
+     * This function is used to write a value of an arbitrary type into error messages and log outputs.
+     *
+     * By default, the comparison is only implemented for the types `string`, `number`, `boolean`,
+     * `undefined` and for the value `null`.
+     *
+     * If the implementation is missing for the type of `value`, an error will be thrown.
      *
      * @param value the value whose type should be converted
      */
@@ -188,8 +211,16 @@ class PageElement extends _1.PageElementBase {
         else if (typeof value === 'number') {
             return value.toString();
         }
+        else if (typeof value === 'boolean') {
+            if (value) {
+                return 'true';
+            }
+            else {
+                return 'false';
+            }
+        }
         else {
-            throw new Error(`${this.constructor.name}.__typeToString is missing an implementation for type of value: ${value}`);
+            throw new Error(`${this.constructor.name}.__typeToString is missing an implementation for type '${typeof value}' and value: ${value}`);
         }
     }
     // RETRIEVE ELEMENT FUNCTIONS

@@ -75,33 +75,30 @@ export declare abstract class PageElementBase<Store extends PageNodeStore> exten
     /**
      * Compares the values of `actual` and `expected` and returns true if they are equal.
      *
-     * @template T the type of both `actual` and `expected`
      * @param actual the actual value to be compared
      * @param expected the expected value to be compared
      */
-    abstract __equals<T>(actual: T, expected: T): boolean;
+    abstract __equals(actual: any, expected: any): boolean;
     /**
-     * Return true if `actual` has any value.
+     * Returns true if `actual` has any value.
      *
-     * @template T the type of both `actual`
      * @param actual the actual value which is supposed to have any value
      */
-    abstract __any<T>(actual: T): boolean;
+    abstract __any(actual: any): boolean;
     /**
      * Compares the values of `actual` and `expected` and returns true if `actual` contains `expected`.
      *
-     * @template T the type of both `actual` and `expected`
      * @param actual the actual value to be compared
      * @param expected the expected value to be compared
      */
-    abstract __contains<T>(actual: T, expected: T): boolean;
+    abstract __contains(actual: any, expected: any): boolean;
     /**
      * This function is used to write a value of an arbitrary type
      * into error messages and log outputs.
      *
-     * @param value: T the value to convert to a string
+     * @param value the value to convert to a string
      */
-    abstract __typeToString<T>(value: T): string;
+    abstract __typeToString(value: any): string;
 }
 /**
  * This class defines all `currently` functions of PageElementBase.

@@ -93,7 +93,10 @@ export abstract class PageElementBase<
             // but this does not work due to typescript bugs that prevent extended generics to work with keyof.
             // typescript bugs 3.3.0:
           // https://github.com/Microsoft/TypeScript/issues/24560, https://github.com/Microsoft/TypeScript/issues/24791
-            throw new Error('Selector chaining is not supported for PageElementGroups.');
+            throw new Error(
+`Selector chaining via the '.$' accessor is not supported for PageElementGroups.
+Instead, you can retrieve PageElementGroups directly from an instance of PageNodeStore.`,
+            );
           }
 
           // chain selectors
@@ -144,36 +147,33 @@ export abstract class PageElementBase<
   /**
    * Compares the values of `actual` and `expected` and returns true if they are equal.
    *
-   * @template T the type of both `actual` and `expected`
    * @param actual the actual value to be compared
    * @param expected the expected value to be compared
    */
-  abstract __equals<T>(actual: T, expected: T): boolean;
+  abstract __equals(actual: any, expected: any): boolean;
 
   /**
-   * Return true if `actual` has any value.
+   * Returns true if `actual` has any value.
    *
-   * @template T the type of both `actual`
    * @param actual the actual value which is supposed to have any value
    */
-  abstract __any<T>(actual: T): boolean;
+  abstract __any(actual: any): boolean;
 
   /**
    * Compares the values of `actual` and `expected` and returns true if `actual` contains `expected`.
    *
-   * @template T the type of both `actual` and `expected`
    * @param actual the actual value to be compared
    * @param expected the expected value to be compared
    */
-  abstract __contains<T>(actual: T, expected: T): boolean;
+  abstract __contains(actual: any, expected: any): boolean;
 
   /**
    * This function is used to write a value of an arbitrary type
    * into error messages and log outputs.
    *
-   * @param value: T the value to convert to a string
+   * @param value the value to convert to a string
    */
-  abstract __typeToString<T>(value: T): string;
+  abstract __typeToString(value: any): string;
 }
 
 /**
