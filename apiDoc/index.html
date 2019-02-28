@@ -107,6 +107,10 @@
 				available at <a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
 				<h1 id="installation-and-configuration">Installation and Configuration</h1>
 				<ul>
+					<li>Wdio-workflo depends on the npm module &quot;node-gyp&quot; which requires some preconditions to be met.
+					Please read the &quot;Installation&quot; section on <a href="https://github.com/nodejs/node-gyp">https://github.com/nodejs/node-gyp</a> and install the required dependencies.</li>
+					<li><em>!!! Important node for windows users: The latest version of the windows-built-tools npm package seems bugged. Try installing version 4.0.0 instead by running
+					<code>npm install --global --production windows-build-tools@4.0.0</code> in a shell with administrator privileges.</em></li>
 					<li>Install wdio-workflo by running <code>npm install --save-dev wdio-workflo</code> in your project folder.
 						This will automatically create wdio-workflo&#39;s configuration file <code>workflo.conf.ts</code> and wdio-workflo&#39;s typescript
 					compiler settings file <code>tsconfig.workflo.json</code> in the same directory.</li>
@@ -455,9 +459,9 @@ Feature(<span class="hljs-string">'Packages'</span>, {}, <span class="hljs-funct
 				step (nested steps).</p>
 				<p>Each <code>Step</code> consists of three key features:</p>
 				<ul>
-					<li>A description written in natural language, so that non-technical stakeholders too can comprehend what is going on</li>
-					<li>A body function that implements the step&#39;s interactions with the tested application</li>
-					<li>A Params object containing<ul>
+					<li>a description written in natural language, so that non-technical stakeholders too can comprehend what is going on</li>
+					<li>a body function that implements the step&#39;s interactions with the tested application</li>
+					<li>a params object containing<ul>
 							<li>the arguments used to &quot;configure&quot; the step and to provide data that is needed during the
 							step&#39;s execution and</li>
 							<li>a callback which is executed immediately after the step has finished and which is passed the
@@ -488,7 +492,7 @@ Feature(<span class="hljs-string">'Packages'</span>, {}, <span class="hljs-funct
     }),
 
   <span class="hljs-string">"search for the npm package %{packageName}"</span>:
-  <span class="hljs-function">(<span class="hljs-params">params?: IStepParams&lt;{packageName: <span class="hljs-built_in">string</span>}, <span class="hljs-built_in">void</span>&gt;</span>) =&gt;</span>
+  <span class="hljs-function">(<span class="hljs-params">params: IStepParams&lt;{packageName: <span class="hljs-built_in">string</span>}, <span class="hljs-built_in">void</span>&gt;</span>) =&gt;</span>
     <span class="hljs-keyword">new</span> Step(params, ({ packageName }): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
       pages.npmjs.searchInputField.setValue(packageName);
       pages.npmjs.searchButton.click();

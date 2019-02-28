@@ -46,6 +46,15 @@ The code for this guide and for all examples found at https://wdio-workflo.com (
 available at https://github.com/flohil/wdio-workflo-example.
 
 # Installation and Configuration
+*Wdio-workflo was run successfully using the node versions 8 and 10. It may also work on newer versions of node,
+but if you encounter problems, please try running node 8 or node 10 instead.*
+
+- Wdio-workflo depends on the npm module "node-gyp" which requires some preconditions to be met.
+Please read the "Installation" section on https://github.com/nodejs/node-gyp and install the required dependencies.
+- *!!! Important node for windows users: If the default way of installing the prerequisites for node-gyp does not work
+on your machine, there is an alternative solution: Install chocolatey (see https://chocolatey.org/install) and then run
+```choco upgrade python2 visualstudio2017-workload-vctools``` in a shell with administrator privileges.*
+npm config set python C:\Python27\python.exe
 - Install wdio-workflo by running ```npm install --save-dev wdio-workflo``` in your project folder.
 This will automatically create wdio-workflo's configuration file ```workflo.conf.ts``` and wdio-workflo's typescript
 compiler settings file ```tsconfig.workflo.json``` in the same directory.
