@@ -13,7 +13,7 @@ interface IHeaderProps {
 
 class Header extends React.Component<IHeaderProps> {
 
-  public static PAGE_NAMES = ['Feed', 'Contact'];
+  public static PAGE_NAMES = ['Feed', 'Registration'];
 
   public renderLinks() {
     return Header.PAGE_NAMES.map(

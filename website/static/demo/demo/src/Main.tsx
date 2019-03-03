@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-import { Contact } from './Contact';
 import { Feed } from './Feed';
 import './Main.css';
+import { Registration } from './Registration';
 
 const LandingPage = (props: Route['props']) => {
   return <Redirect to="/feed"/>;
@@ -19,8 +19,8 @@ export class Main extends React.Component {
             component={Feed}
           />
           <Route
-            path="/contact"
-            component={Contact}
+            path="/registration"
+            component={Registration}
           />
           <Route
             path="/"

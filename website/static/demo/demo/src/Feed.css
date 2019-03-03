@@ -1,3 +1,8 @@
+.Feed-heading {
+  display: flex;
+  justify-content: center;
+}
+
 .Feed-itemCell {
   margin-top: 20px;
   padding: 5px;

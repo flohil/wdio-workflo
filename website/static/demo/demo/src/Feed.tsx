@@ -5,6 +5,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as React from 'react';
 
 import './Feed.css';
+import './Global.css';
 
 interface IFeedItem {
   name: string;
@@ -69,10 +70,15 @@ export class Feed extends React.Component<IFeedProps, IFeedState> {
     const resultCountText = items.length === originalItems.length ? '' : ` (${items.length} of ${originalItems.length} shown)`;
 
     return (
-      <FocusZone direction={FocusZoneDirection.vertical}>
-        <TextField label={'Filter by name' + resultCountText} onBeforeChange={this._onFilterChanged} />
-        <List items={items} onRenderCell={this._onRenderCell} />
-      </FocusZone>
+      <div>
+        <div className="Global-heading">
+          <h1>Feed</h1>
+        </div>
+        <FocusZone direction={FocusZoneDirection.vertical}>
+          <TextField label={'Filter by name' + resultCountText} onBeforeChange={this._onFilterChanged} />
+          <List items={items} onRenderCell={this._onRenderCell} />
+        </FocusZone>
+      </div>
     );
   }
 
