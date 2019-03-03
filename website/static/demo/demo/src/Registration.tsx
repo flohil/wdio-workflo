@@ -12,7 +12,19 @@ const checkboxStyles = () => {
   };
 };
 
-export class Registration extends React.Component {
+interface IRegistrationState {
+  submitted: boolean
+}
+
+export class Registration extends React.Component<{}, IRegistrationState> {
+
+  constructor(props: {}) {
+    super(props);
+
+    this.state = {
+      submitted: false
+    }
+  }
 
   public render() {
     return (
@@ -45,12 +57,27 @@ export class Registration extends React.Component {
               <PrimaryButton
                 data-automation-id="test"
                 text="Submit"
-                // onClick={this._alertClicked}
+                onClick={this.onSubmitClicked}
               />
             </div>
+            {this.renderThanks()}
           </div>
         </div>
       </div>
     );
+  }
+
+  private onSubmitClicked: PrimaryButton['props']['onClick'] = () => {
+    this.setState({
+      submitted: true
+    })
+  }
+
+  private renderThanks() {
+    if (this.state.submitted) {
+      return <div className="Registration-thanks">Thanks for your registration!</div>
+    } else {
+      return null;
+    }
   }
 }
