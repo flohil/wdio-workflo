@@ -119,10 +119,9 @@ class Index extends React.Component {
         {[
           {
             content:
-              "Wdio-workflo allows you to write functional system tests for web applications in TypeScript.<br />" +
-              "Wdio-workflo is a customized version of webdriverio-v4.<br/>" +
-              "It uses " +
-              "It allows writing functional system tests for web applications in TypeScript.",
+              "Wdio-workflo helps you write functional system tests for web applications in TypeScript. " +
+              "Its main goals are to increase the reusability, maintainability and analysability of your tests. " +
+              "The framework is based on, extends and customizes the fabulous <a href='http://v4.webdriver.io'>webdriverio-v4</a>.<br/>",
             image: `https://webdriver.io/img/webdriverio.png`,
             imageAlign: 'right',
             title: 'Description',

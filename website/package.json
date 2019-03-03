@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "docusaurus": "^1.7.2"
+  },
+  "dependencies": {
+    "office-ui-fabric-react": "^6.148.1"
   }
 }

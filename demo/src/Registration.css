@@ -1,0 +1,32 @@
+
+.Registration-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Registration-container {
+  max-width: 800px;
+  width: 600px;
+  min-width: 400px;
+}
+
+.Registration-heading {
+  display: flex;
+  justify-content: center;
+}
+
+.Registration-submit {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.Registration-thanks {
+  text-align: center;
+}
+
+.Registration-thanks-invalid {
+  color: red;
+}
