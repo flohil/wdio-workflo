@@ -35,10 +35,6 @@ class Header extends React.Component<IHeaderProps> {
   }
 
   public render() {
-
-
-    console.log(this.props);
-
     return (
       <header>
         <nav className="Header-nav">

@@ -10,7 +10,7 @@ class App extends React.Component {
     return (
       <Fabric className="App">
         <Header />
-        <Main />
+        <Main/>
       </Fabric>
     );
   }

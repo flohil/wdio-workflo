@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { Contact } from './Contact';
 import { Feed } from './Feed';
+import './Main.css';
 
 const LandingPage = (props: Route['props']) => {
   return <Redirect to="/feed"/>;
@@ -11,7 +12,7 @@ const LandingPage = (props: Route['props']) => {
 export class Main extends React.Component {
   public render() {
     return (
-      <main>
+      <main className="Main">
         <Switch>
           <Route
             path="/feed"

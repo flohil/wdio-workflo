@@ -1,0 +1,31 @@
+.Feed-itemCell {
+  margin-top: 20px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.Feed-image {
+  margin: 0px;
+}
+
+.Feed-itemHeader {
+  display: flex;
+}
+
+.Feed-itemHeaderDetails {
+  margin-left: 10px;
+}
+
+.Feed-itemName {
+  font-size: 20px;
+}
+
+.Feed-itemIndex {
+  color: grey;
+  font-size: 14px;
+}
+
+.Feed-itemDesc {
+  padding-top: 10px;
+}
