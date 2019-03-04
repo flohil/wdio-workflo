@@ -1,10 +1,13 @@
+.header {
+  background: #006bd7;
+}
+
 .Header-nav {
   display: flex;
   justify-content: center;
   height: 48px;
   bottom: 0;
   margin-bottom: 1px;
-  background: #006bd7;
 }
 
 .Header-ul {

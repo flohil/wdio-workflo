@@ -1,3 +1,4 @@
+import * as classnames from 'classnames';
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom'
 
@@ -5,14 +6,18 @@ import { Feed } from './Feed';
 import './Main.css';
 import { Registration } from './Registration';
 
+interface IMainProps {
+  className?: string
+}
+
 const LandingPage = (props: Route['props']) => {
   return <Redirect to="/demo/feed"/>;
 }
 
-export class Main extends React.Component {
+export class Main extends React.Component<IMainProps> {
   public render() {
     return (
-      <main className="Main">
+      <main className={classnames("main", this.props.className)}>
         <Switch>
           <Route
             path="/demo/feed"

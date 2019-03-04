@@ -1,17 +1,15 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
-import { withRouter } from "react-router";
+import { RouteComponentProps, RouteProps, withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 
 import './Header.css';
 
 interface IHeaderProps {
-  history: any,
-  location: any,
-  match: any
+  className?: string
 }
 
-class Header extends React.Component<IHeaderProps> {
+class Header extends React.Component<RouteProps & RouteComponentProps<any> & IHeaderProps> {
 
   public static PAGE_NAMES = ['Feed', 'Registration'];
 
@@ -36,7 +34,7 @@ class Header extends React.Component<IHeaderProps> {
 
   public render() {
     return (
-      <header>
+      <header className={classnames("header", this.props.className)}>
         <nav className="Header-nav">
           <ul className="Header-ul">
             {this.renderLinks()}

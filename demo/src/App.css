@@ -1,42 +1,29 @@
-html {
-  height: 100%;
+html,
+body,
+.App,
+#root {
+  height: 100%; /* needed for proper layout */
 }
 
 body {
-  min-height: 100%;
-}
-
-#root {
-  height: 100vh;
+  overflow: hidden;
 }
 
 .App {
-  height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+  flex: 0 0 auto;
 }
 
-.App-title {
-  font-size: 1.5em;
+.App-main {
+  flex: 1 1 auto;
+  position: relative;
+  overflow-y: auto;
 }
 
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.App-footer {
+  flex: 0 0 auto;
 }
