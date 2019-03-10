@@ -14,3 +14,23 @@
 
 @media only screen and (min-width: 1500px) {
 }
+
+.centeredList {
+  text-align: left;
+  display: flex;
+  justify-content: center;
+}
+
+div.centeredList > ul {
+  list-style: inside;
+  width: 970px;
+}
+
+.centeredText {
+  text-align: center;
+}
+
+h3 {
+  color: #006bd7
+}
+

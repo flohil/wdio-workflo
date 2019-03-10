@@ -81,7 +81,7 @@ class Index extends React.Component {
 
     const Block = props => (
       <Container
-        padding={['bottom', 'top']}
+        padding={props.padding || ['bottom', 'top']}
         id={props.id}
         background={props.background}>
         <GridBlock
@@ -96,22 +96,58 @@ class Index extends React.Component {
       <div
         className="productShowcaseSection paddingBottom"
         style={{textAlign: 'center'}}>
-        <h2>Feature Callout</h2>
-        <MarkdownBlock>These are features of this project</MarkdownBlock>
+        <h2>Features</h2>
+        <div className="centeredList">
+          <ul>
+            <li>Formulate your <b>requirements</b> in spec files using <b>Gherkin Language</b> (Given-When-Then)</li>
+            <li><b>Testcases validate</b> the acceptance criteria defined within your <b>specs</b></li>
+            <li>All test logic is encapsulated in <b>steps written in natural language</b> to increase reusability and readability</li>
+            <li>Provides a <b>sophisticated page object architecture</b> to improve the maintainability and reusability of your tests</li>
+            <li><b>Custom matcher functions</b> help you analyse errors by providing <b>meaningful error messages</b> and stack traces</li>
+            <li>Includes an <b>XPath builder</b> to construct complex XPath selectors</li>
+            <li>All necessary tools, services and packages are <b>preconfigured</b> and <b>work out of the box</b></li>
+            <li>A <b>console-based spec report</b> for development and a <b>graphic allure report</b> for continuous integration</li>
+            <li>Automatically takes <b>screenshots</b> for <b>errors and validation failures</b> to facilitate analysibility</li>
+          </ul>
+        </div>
       </div>
     );
 
-    const TryOut = () => (
-      <Block id="try">
-        {[
-          {
-            content: 'Talk about trying this out',
-            image: `${baseUrl}img/docusaurus.svg`,
-            imageAlign: 'left',
-            title: 'Try it Out',
-          },
-        ]}
-      </Block>
+    const AdvantagesAndDrawbacks = () => (
+      <div>
+        <Block id="try" padding={['top']}>
+          {[
+            {
+              content:
+  "Compared to [webdriverio-v4](http://v4.webdriver.io), wdio-workflo improves existing functionality and adds new features but also imposes some additional restrictions.<br />" +
+  "The following list helps you decide whether you should use wdio-workflo or stick with the original webdriverio.",
+              title: "Why you should or shouldn't use Wdio-Workflo",
+            },
+          ]}
+        </Block>
+        <h3 className="centeredText">Restrictions</h3>
+          <div className="centeredList restrictionsList">
+            <ul>
+              <li>Wdio-workflo is currently based on <a href="http://v4.webdriver.io/">version 4</a> of webdriverio. You <b>cannot use features added in <a href="https://webdriver.io/">version 5</a></b>.</li>
+              <li>Wdio-workflo works <b>exclusively</b> with the <b>Jasmine test framework</b> and supports <b>only spec and allure reports</b>.</li>
+              <li>Wdio-workflo does <b>not support</b> running tests in <b>different browsers</b> at the <b>same time</b>.</li>
+              <li>Wdio-workflo only works with XPath selectors. <b>CSS selectors</b> are <b>not supported</b>.</li>
+              <li>If you only need a <b>few small tests</b>, wdio-workflo might introduce too much <b>unnecessary overhead</b> code.</li>
+            </ul>
+          </div>
+        <h3 className="centeredText">Improvements / New Features</h3>
+          <div className="centeredList improvementsList">
+            <ul>
+              <li>Wdio-workflo is written completely in <b>TypeScript</b>.</li>
+              <li>All <b>services/reporters/test frameworks</b> used by wdio-workflo are preconfigured and <b>work out of the box</b>.</li>
+              <li><b>Test results</b> not only show the status of your tests, but also tell you which <b>requirements/acceptance criteria</b> were not fulfilled.</li>
+              <li>Wdio-workflo is shipped with <b>base classes</b> for a sophisticated <b>page object architecture</b> which can be used out of the box.</li>
+              <li>Wdio-workflo's <b>step functions</b> help you write complex testcases in natural language and allow you to reuse test logic.</li>
+              <li>Wdio-workflo <b>improves error handling</b> and includes <b>custom expectation matchers</b> to provide meaningful error messages.</li>
+              <li><b>Allure reports</b> include error <b>screenshots and stacktraces</b> as well as detailed descriptions of all <b>steps</b> and their <b>parameters</b>.</li>
+            </ul>
+          </div>
+      </div>
     );
 
     const Description = () => (
@@ -119,8 +155,8 @@ class Index extends React.Component {
         {[
           {
             content:
-              "Wdio-workflo helps you write functional system tests for web applications in TypeScript. " +
-              "Its main goals are to increase the reusability, maintainability and analysability of your tests. " +
+              "Wdio-workflo helps you write functional system tests for web applications.<br />" +
+              "It increases the reusability, maintainability and analysability of your tests.<br />" +
               "The framework is based on, extends and customizes the fabulous <a href='http://v4.webdriver.io'>webdriverio-v4</a>.<br/>",
             image: `https://webdriver.io/img/webdriverio.png`,
             imageAlign: 'right',
@@ -134,10 +170,16 @@ class Index extends React.Component {
       <Block background="light">
         {[
           {
-            content: 'Talk about learning how to use this',
-            image: `${baseUrl}img/docusaurus.svg`,
-            imageAlign: 'right',
-            title: 'Learn How',
+            content:
+"If you are new to wdio-workflo, you probably want to head straight for the [Getting Started](/docs/doc1) page.<br />" +
+"Subsequently, you can visit the [Guides](/docs/doc1) page to learn you how to use the main components of wdio-workflo.<br />" +
+"<br />" +
+"At [wdio-workflo-example](https://github.com/flohil/wdio-workflo-example), there are code examples demonstrating the usage of wdio-workflo.<br />" +
+"Furthermore, the [API Docs](/apiDoc) provide detailed information about each of the framework's building blocks.<br />" +
+"<br />" +
+"Wdio-workflo is the result of my master's thesis <i>\"Properties of Automation Solutions for Functional System Tests of React Web Applications\"</i>,<br />" +
+"which you can [download](https://github.com/flohil/wdio-workflo/raw/master/Hilbinger_Masterarbeit.pdf) (in German) if you are interested in the theoretical foundations of wdio-workflo.",
+            title: 'Learn how',
           },
         ]}
       </Block>
@@ -147,49 +189,23 @@ class Index extends React.Component {
       <Block layout="fourColumn">
         {[
           {
-            content: 'This is the content of my feature',
-            image: `${baseUrl}img/docusaurus.svg`,
+            content: "Harness the advantages of static typing! " +
+            "Your tests will be more robust than plain JavaScript and you will get better IDE support " +
+            "(List Members, Parameter Info, Quick Info, Complete Word...).",
+            image: `https://raw.githubusercontent.com/remojansen/logo.ts/master/ts.png`,
             imageAlign: 'top',
-            title: 'Feature One',
+            title: 'Written in TypeScript',
           },
           {
-            content: 'The content of my second feature',
-            image: `${baseUrl}img/docusaurus.svg`,
+            content: "Selenium is one of the most well known tools for browser automation. " +
+            "It is completely for free, has a huge community and contrary to alternatives like Cypress, you can test all major browser in multiple windows and tabs.",
+            image: `https://www.seleniumhq.org/images/big-logo.png`,
             imageAlign: 'top',
-            title: 'Feature Two',
+            title: 'Uses Selenium Webdriver',
           },
         ]}
       </Block>
     );
-
-    const Showcase = () => {
-      if ((siteConfig.users || []).length === 0) {
-        return null;
-      }
-
-      const showcase = siteConfig.users
-        .filter(user => user.pinned)
-        .map(user => (
-          <a href={user.infoLink} key={user.infoLink}>
-            <img src={user.image} alt={user.caption} title={user.caption} />
-          </a>
-        ));
-
-      const pageUrl = page => baseUrl + (language ? `${language}/` : '') + page;
-
-      return (
-        <div className="productShowcaseSection paddingBottom">
-          <h2>Who is Using This?</h2>
-          <p>This project is used by all these people</p>
-          <div className="logos">{showcase}</div>
-          <div className="more-users">
-            <a className="button" href={pageUrl('users.html')}>
-              More {siteConfig.title} Users
-            </a>
-          </div>
-        </div>
-      );
-    };
 
     return (
       <div>
@@ -199,8 +215,7 @@ class Index extends React.Component {
           <Features />
           <FeatureCallout />
           <LearnHow />
-          <TryOut />
-          <Showcase />
+          <AdvantagesAndDrawbacks />
         </div>
       </div>
     );

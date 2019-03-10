@@ -10,7 +10,7 @@
 
 const siteConfig = {
   title: 'Wdio-Workflo', // Title for your website.
-  tagline: 'A framework for writing Functional System Tests in TypeScript',
+  tagline: 'A Framework for writing Functional System Tests in TypeScript',
   url: 'https://flohil.github.io/wdio-workflo/', // Your website URL
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
@@ -93,7 +93,7 @@ const siteConfig = {
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-  repoUrl: 'https://github.com/flohil/wdio-workflo',
+  repoUrl: 'https://github.com/flohil/wdio-workflo'
 };
 
 module.exports = siteConfig;

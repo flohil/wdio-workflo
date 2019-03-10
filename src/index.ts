@@ -1807,6 +1807,12 @@ declare global {
     type WdioElements = Client<RawResult<Element[]>> & RawResult<Element[]>;
 
     /**
+     * Use this type instead of {} if you need to define an object
+     * which must not have any properties, eg. steps which have no parameters.
+     */
+    type EmptyObject = {[key: string]: never};
+
+    /**
      * @ignore
      */
     interface IJSError {

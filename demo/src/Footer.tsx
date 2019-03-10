@@ -14,7 +14,7 @@ export class Footer extends React.Component<IFooterProps> {
 
     return (
       <footer className={classnames("footer", this.props.className)}>
-        {frameworkStr}<a href="https://github.com/flohil/wdio-workflo" className="Footer-link">wdio-workflo</a>.
+        {frameworkStr}<a href="https://flohil.github.io/wdio-workflo/" className="Footer-link">wdio-workflo</a>.
         <br />
         {examplesStr}<a href="https://github.com/flohil/wdio-workflo-example" className="Footer-link">here</a>.
       </footer>
