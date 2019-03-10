@@ -20,6 +20,13 @@
       },
       "doc5": {
         "title": "Fifth Document"
+      },
+      "guides": {
+        "title": "guides"
+      },
+      "setup": {
+        "title": "Setup",
+        "sidebar_label": "Setup"
       }
     },
     "links": {
@@ -30,7 +37,7 @@
       "Github": "Github"
     },
     "categories": {
-      "Docusaurus": "Docusaurus",
+      "Getting Started": "Getting Started",
       "First Category": "First Category",
       "Second Category": "Second Category"
     }

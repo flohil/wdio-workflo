@@ -64,7 +64,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="#try">Get Started</Button>
+            <Button href="/docs/setup">Get Started</Button>
             <Button href="https://github.com/flohil/wdio-workflo-example">Usage Examples</Button>
             <Button href="https://github.com/flohil/wdio-workflo">Github</Button>
           </PromoSection>
@@ -138,7 +138,6 @@ class Index extends React.Component {
         <h3 className="centeredText">Improvements / New Features</h3>
           <div className="centeredList improvementsList">
             <ul>
-              <li>Wdio-workflo is written completely in <b>TypeScript</b>.</li>
               <li>All <b>services/reporters/test frameworks</b> used by wdio-workflo are preconfigured and <b>work out of the box</b>.</li>
               <li><b>Test results</b> not only show the status of your tests, but also tell you which <b>requirements/acceptance criteria</b> were not fulfilled.</li>
               <li>Wdio-workflo is shipped with <b>base classes</b> for a sophisticated <b>page object architecture</b> which can be used out of the box.</li>
@@ -171,7 +170,7 @@ class Index extends React.Component {
         {[
           {
             content:
-"If you are new to wdio-workflo, you probably want to head straight for the [Getting Started](/docs/doc1) page.<br />" +
+"If you are new to wdio-workflo, you probably want to head straight for the [Getting Started](/docs/setup) page.<br />" +
 "Subsequently, you can visit the [Guides](/docs/doc1) page to learn you how to use the main components of wdio-workflo.<br />" +
 "<br />" +
 "At [wdio-workflo-example](https://github.com/flohil/wdio-workflo-example), there are code examples demonstrating the usage of wdio-workflo.<br />" +
