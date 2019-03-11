@@ -6,10 +6,33 @@ sidebar_label: Setup
 
 ## Installation
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus elementum massa eget nulla aliquet sagittis. Proin odio tortor, vulputate ut odio in, ultrices ultricies augue. Cras ornare ultrices lorem malesuada iaculis. Etiam sit amet libero tempor, pulvinar mauris sed, sollicitudin sapien.
+To install wdio-workflo, run the following command from your project's root directory:
+
+```
+npm install --save-dev wdio-workflo
+```
+
+*If you encounter problems installing or running wdio-workflo, please try to
+switch to an environment where Node 8 or Node 10 are installed.*
 
 ## Configuration
 
-```
-Mauris vestibulum ullamcorper nibh, ut semper purus pulvinar ut. Donec volutpat orci sit amet mauris malesuada, non pulvinar augue aliquam. Vestibulum ultricies at urna ut suscipit. Morbi iaculis, erat at imperdiet semper, ipsum nulla sodales erat, eget tincidunt justo dui quis justo. Pellentesque dictum bibendum diam at aliquet. Sed pulvinar, dolor quis finibus ornare, eros odio facilisis erat, eu rhoncus nunc dui sed ex. Nunc gravida dui massa, sed ornare arcu tincidunt sit amet. Maecenas efficitur sapien neque, a laoreet libero feugiat ut.
-```
+During the installation of wdio-workflo, two files are automatically created in
+your project's root directory:
+
+- `workflo.conf.ts` defines all configuration options for wdio-workflo
+- `tsconfig.workflo.json` configures the typescript compiler for the usage of wdio-workflo
+
+To avoid relative imports across multiple hierarchies of folders, wdio-workflo
+defines two path aliases in your `tsconfig.workflo.json` file:
+
+- `?` references the `src` folder in your test directory
+- `~` references your project's root directory
+
+By default, wdio-workflo expects all of your test code to reside in the folder
+`system_test` relative to your project's root directory. You can change the
+location of your test folder by editing the value of `testDir` in `workflo.conf.ts`.
+
+
+
+## Initialization
