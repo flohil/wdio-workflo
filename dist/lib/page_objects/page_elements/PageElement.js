@@ -590,29 +590,29 @@ class PageElement extends _1.PageElementBase {
                     return error;
                 }
             }
-            const elemTop = elem.getBoundingClientRect().top;
-            const elemLeft = elem.getBoundingClientRect().left;
-            const containerTop = container.getBoundingClientRect().top;
-            const containerLeft = container.getBoundingClientRect().left;
+            const _elemTop = elem.getBoundingClientRect().top;
+            const _elemLeft = elem.getBoundingClientRect().left;
+            const _containerTop = container.getBoundingClientRect().top;
+            const _containerLeft = container.getBoundingClientRect().left;
             const previousScrollTop = container.scrollTop;
             const previousScrollLeft = container.scrollLeft;
-            const scrollTop = elemTop - containerTop + previousScrollTop + params.offsets.y;
-            const scrollLeft = elemLeft - containerLeft + previousScrollLeft + params.offsets.x;
+            const _scrollTop = _elemTop - _containerTop + previousScrollTop + params.offsets.y;
+            const _scrollLeft = _elemLeft - _containerLeft + previousScrollLeft + params.offsets.x;
             if (typeof params.directions !== 'undefined') {
                 if (params.directions.y) {
-                    container.scrollTop = scrollTop;
+                    container.scrollTop = _scrollTop;
                 }
                 if (params.directions.x) {
-                    container.scrollLeft = scrollLeft;
+                    container.scrollLeft = _scrollLeft;
                 }
             }
             return {
-                elemTop,
-                elemLeft,
-                containerTop,
-                containerLeft,
-                scrollTop,
-                scrollLeft,
+                elemTop: _elemTop,
+                elemLeft: _elemLeft,
+                containerTop: _containerTop,
+                containerLeft: _containerLeft,
+                scrollTop: _scrollTop,
+                scrollLeft: _scrollLeft,
             };
         }, this.getSelector(), params);
         if (isJsError(result)) {
