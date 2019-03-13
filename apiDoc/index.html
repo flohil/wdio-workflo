@@ -1,0 +1,1118 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>wdio-workflo</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">wdio-workflo</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> wdio-workflo</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="overview">Overview</h1>
+				<p>Wdio-workflo is a framework for writing behavior-driven automated functional system tests in TypeScript and based on a
+				customized version of webdriverio v4.13 ( <a href="https://webdriver.io/">https://webdriver.io/</a> ).</p>
+				<p>It allows you to define acceptance criteria which can by referenced in your testcases to automatically validate
+					the requirements of your tested application. The test reports created by wdio-workflo will not only show the result
+					status of your testcases, but also indicate which requirements could not be fulfilled or validated because of failed or
+				broken testcases.</p>
+				<p>Wdio-workflo wants to get you started with writing functional system tests as quickly as possible by preconfiguring
+					webdriverio and all required services. It helps you save a lot of time and work by providing boilerplate code and the
+					basic building blocks of a sophisticated page object pattern architecture. Testcases in wdio-workflo consist of
+				reusable steps formulated in natural language to make them comprehensible for all stakeholders.</p>
+				<p>The rest of this document shows you:</p>
+				<ul>
+					<li><a href="#learn-more-about-wdio-workflo">Where you can learn more about wdio-workflo&#39;s features and motivation</a></li>
+					<li><a href="#api-documentation">Where you can find the full API documentation for wdio-workflo and webdriverio v4.13</a></li>
+					<li><a href="#examples">Where you can find code examples for the usage of wdio-workflo</a></li>
+					<li><a href="#installation-and-configuration">How to install and configure wdio-workflo</a></li>
+					<li><a href="#writing-your-first-functional-system-test">How to write your first functional system test using wdio-workflo</a><ul>
+							<li><a href="#defining-the-requirements">Defining the Requirements</a></li>
+							<li><a href="#creating-page-objects">Creating Page Objects</a></li>
+							<li><a href="#implementing-steps">Implementing Steps</a></li>
+							<li><a href="#writing-testcases">Writing Testcases</a></li>
+						</ul>
+					</li>
+					<li><a href="#running-your-tests">How to run your tests</a></li>
+					<li><a href="#test-reports">How to debug your tests</a></li>
+					<li><a href="#debugging">How to show the results of your tests in a graphical report</a></li>
+					<li><a href="#showing-all-cli-options">How to show all options of wdio-workflo&#39;s Command Line Interface</a></li>
+				</ul>
+				<h1 id="learn-more-about-wdio-workflo">Learn more about wdio-workflo</h1>
+				<p>Visit <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> (coming soon) to</p>
+				<ul>
+					<li>gain a deeper insight into wdio-workflo&#39;s features and motivation</li>
+					<li>find a detailed explanation of the framework&#39;s components</li>
+					<li>learn from examples that show you how to effectively test your browser-based application and validate its requirements
+					using wdio-workflo.</li>
+				</ul>
+				<h1 id="api-documentation">API Documentation</h1>
+				<p>Wdio-workflo&#39;s API documentation comes bundled with the npm package and can be displayed by opening the file <code>node_modules/wdio-workflo/apiDoc/index.html</code></p>
+				<p>Webdriverio&#39;s API docs for version 4.13 can be found at <a href="http://v4.webdriver.io/api.html">http://v4.webdriver.io/api.html</a></p>
+				<h1 id="examples">Examples</h1>
+				<p>The code for this guide and for all examples found at <a href="https://wdio-workflo.com">https://wdio-workflo.com</a> (coming soon) is
+				available at <a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
+				<h1 id="installation-and-configuration">Installation and Configuration</h1>
+				<ul>
+					<li>Wdio-workflo depends on the npm module &quot;node-gyp&quot; which requires some preconditions to be met.
+					Please read the &quot;Installation&quot; section on <a href="https://github.com/nodejs/node-gyp">https://github.com/nodejs/node-gyp</a> and install the required dependencies.</li>
+					<li><em>!!! Important node for windows users: The latest version of the windows-built-tools npm package seems bugged. Try installing version 4.0.0 instead by running
+					<code>npm install --global --production windows-build-tools@4.0.0</code> in a shell with administrator privileges.</em></li>
+					<li>Install wdio-workflo by running <code>npm install --save-dev wdio-workflo</code> in your project folder.
+						This will automatically create wdio-workflo&#39;s configuration file <code>workflo.conf.ts</code> and wdio-workflo&#39;s typescript
+					compiler settings file <code>tsconfig.workflo.json</code> in the same directory.</li>
+					<li>Adapt wdio-workflo&#39;s configuration in <code>workflo.conf.ts</code> to your own needs.</li>
+					<li>Run <code>./node_modules/.bin/wdio-workflo --init</code> to create the boilerplate code for your functional system tests.</li>
+				</ul>
+				<p>Please note that <code>tsconfig.workflo.json</code> defines two path aliases to avoid relative import paths:</p>
+				<ul>
+					<li><code>?</code> references the <code>src</code> folder in your system test directory</li>
+					<li><code>~</code> references your project directory (the directory in which <code>workflo.conf.ts</code> resides)</li>
+				</ul>
+				<p>Wdio-workflo also creates a <code>tsconfig.json</code> file in your system test directory that extends your <code>tsconfig.workflo.json</code>
+					config. This ensures that editors like VS Code recognize the path aliases for all typescript files in your system test
+				directory.</p>
+				<p>If you changed the value of <code>testDir</code> in <code>workflo.conf.json</code>, you therefore need to</p>
+				<ul>
+					<li>adapt the <code>?</code> path alias</li>
+					<li>make sure that your changed system test folder path is contained in the <code>include</code> array of <code>tsconfig.workflo.json</code></li>
+					<li>ensure that the <code>tsconfig.json</code> located inside your system test directory still extends <code>tsconfig.workflo.json</code></li>
+				</ul>
+				<h1 id="writing-your-first-functional-system-test">Writing your first Functional System Test</h1>
+				<h2 id="overview">Overview</h2>
+				<p>This guide walks you through all stages of writing functional system tests in wdio-workflo.
+				It provides basic explanation/background information and an implementation example for each stage.</p>
+				<p>In our example, we will browse to the public npm registry at <a href="https://www.npmjs.com/">https://www.npmjs.com/</a> and search for the wdio-workflo
+				npm package.</p>
+				<p>All code for this guide can also be found at <a href="https://github.com/flohil/wdio-workflo-example">https://github.com/flohil/wdio-workflo-example</a>.</p>
+				<h2 id="basic-configuration">Basic Configuration</h2>
+				<p>First, we need to set the base url for our tested web application in wdio-workflo&#39;s configuration.</p>
+				<p>To do so, open the file <code>workflo.conf.ts</code> in your project folder and set the value of its <code>baseUrl</code> property to
+				&quot;<a href="https://www.npmjs.com/&quot;">https://www.npmjs.com/&quot;</a>.</p>
+				<p>Wdio-workflo&#39;s default configuration assumes that the Google Chrome browser is installed on your system.
+					If this is not the case, please install Google Chrome before proceeding or change the <code>browserName</code> property
+				defined in the <code>capabilities</code> option of <code>workflo.conf.ts</code> file.</p>
+				<h2 id="defining-the-requirements">Defining the Requirements</h2>
+				<h3 id="information">Information</h3>
+				<p>Wdio-workflo follows a behavior-driven software development approach and encourages you to define the requirements
+				of your application in so-called &#39;spec&#39; files before you start writing testcases.</p>
+				<p>Spec files view the GUI of your application as a state machine. Therefore, you need to formulate your requirements
+				as a sequence of initial states, state transitions and expected states using the keywords <code>Given</code>, <code>When</code> and <code>Then</code>:</p>
+				<ul>
+					<li><code>Given</code> describes an initial, well-known state</li>
+					<li><code>When</code> describes a transition from one state to another which is triggered by either a user or a system</li>
+					<li><code>Then</code> describes an expected state and thus defines an acceptance criteria for your requirements</li>
+				</ul>
+				<p>Multiple &quot;instances&quot; of the keywords <code>Given</code> and <code>When</code> can be chained together sequentially with the keyword <code>And</code>.</p>
+				<p>A complete sequence of states and state transitions is called a <code>Story</code>. This is similar to the term &#39;User Story&#39; used
+					in agile development, except that a <code>Story</code> in the context of wdio-workflo is more focused on application states
+					rather than the motives of a user - you could say that <code>Story</code> only cares about the &#39;what&#39; and &#39;how&#39;, but not about the
+				&#39;why&#39; (unlike User Stories).</p>
+				<p>Bear in mind that <code>Story</code>s are supposed to be understood by all stakeholders of your project (including non-technical
+				users). Therefore, <code>Story</code>s are written in a natural language.</p>
+				<p>Related <code>Story</code>s are grouped together in a <code>Feature</code>.</p>
+				<h3 id="implementation">Implementation</h3>
+				<p>We now define our requirements for the npmjs page in the file <code>npmjs.spec.ts</code> located in the <code>src/specs</code> folder of
+				your system test directory:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/specs/npmjs.spec.ts</span>
+
+Feature(<span class="hljs-string">'Packages'</span>, {}, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+
+  <span class="hljs-comment">// '1.1' is the ID of the Story and used to uniquely identify it.</span>
+  <span class="hljs-comment">// If our `Story` is based on a user story stored in a tool like JIRA, we can link to the corresponding JIRA issue in the generated test report by including its key in the `issues` array.</span>
+  Story(<span class="hljs-string">'1.1'</span>, <span class="hljs-string">'Searching a package'</span>, { issues: [<span class="hljs-string">'NPMJS-1'</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    Given(<span class="hljs-string">'the user is located on the homepage'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+      When(<span class="hljs-string">'the user enters the name of an existing npm package in the search field'</span>)
+      .And(<span class="hljs-string">'the user clicks on the "Search" button'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+
+        <span class="hljs-comment">// The first parameter of `Then` is a numeric ID needed to reference the acceptance criteria in a testcase.</span>
+        Then(<span class="hljs-number">1</span>, <span class="hljs-string">'at least one npm package is displayed in the list of search results'</span>);
+        Then(<span class="hljs-number">2</span>, <span class="hljs-string">'the npm package whose name exactly matches the searched term is displayed at the top'</span>);
+      });
+    });
+  });
+});</code></pre>
+				<p>Please note that wdio-workflo only recognizes a file as a spec if its filename ends with &quot;.spec.ts&quot;.</p>
+				<h2 id="creating-page-objects">Creating Page Objects</h2>
+				<h3 id="information">Information</h3>
+				<p>Modern websites are usually built with reusable components which has many advantages:</p>
+				<ul>
+					<li>To change the behavior or structure of a component, we only need to edit it at one place which greatly improves
+					maintainability.</li>
+					<li>Components are always used in the same way which increases the learnability for both developers and users.</li>
+					<li>The development speed of a website can be increased by reusing existing components.</li>
+					<li>We can use 3rd party component libraries to save even more resources.</li>
+					<li>...</li>
+				</ul>
+				<p>Page objects seek to transfer these advantages to the world of functional system testing by wrapping HTML pages and the
+				components used to build these pages with an application-specific API.</p>
+				<p>In other words, page objects are reusable testing components which abstract the structure and the behavior of a website
+				and its HTML elements.</p>
+				<p>Wdio-workflo provides the main building blocks of a sophisticated page object architecture out of the box:</p>
+				<ul>
+					<li>PageNodes</li>
+					<li>Pages</li>
+					<li>PageNodeStores</li>
+				</ul>
+				<h4 id="pagenodes">PageNodes</h4>
+				<p>PageNodes are a family of classes used to map the structure and behavior of a website&#39;s components.</p>
+				<p>There are 4 types of <code>PageNode</code> classes:</p>
+				<ul>
+					<li><code>PageElement</code> can be thought of as wdio-workflo&#39;s counterpart to React or Angular components. This class provides
+					functions to retrieve, check and manipulate the state of a website component and its underlying HTML structure.</li>
+					<li><code>PageElementList</code> manages a collection of related <code>PageElement</code> instances which all have the same type and XPath
+						selector. The <code>PageElement</code>s managed by <code>PageElementList</code> are dynamic, which means that they can change and are
+					usually not known at compile time (eg. the entries of a news feed, the rows of a data table...).</li>
+					<li><code>PageElementMap</code> also manages a collection of related <code>PageElement</code> instances which all have the same type and the
+						same &quot;base&quot; selector. However, in contrary to <code>PageElementList</code>, the <code>PageElement</code> instances managed by <code>PageElementMap</code>
+					are static which means that they usually do not change and are known at compile time (eg. the links of a navigation menu).</li>
+					<li><code>PageElementGroup</code> manages an arbitrary structure of <code>PageNodes</code> that can all have different types and selectors (eg.
+					a form on a website, consisting of input fields, radio boxes, dropdown, checkboxes, labels...)</li>
+				</ul>
+				<p>All PageNodes classes feature the following 3 APIs:</p>
+				<ul>
+					<li><code>currently</code> to check or retrieve the current state of a website&#39;s component</li>
+					<li><code>wait</code> to wait for a website component to reach a certain state (within a specific timeout)</li>
+					<li><code>eventually</code> to check if a website component eventually reaches a certain state (within a specific timeout)</li>
+				</ul>
+				<p><code>PageElement</code> and <code>PageElementList</code> also provide an initial waiting condition that is performed implicitly each time a
+					function that interacts with a website component&#39;s state is invoked directly on these classes
+				(and not via its <code>currently</code>, <code>wait</code> or <code>eventually</code> APIs). Supported waiting conditions are:</p>
+				<ul>
+					<li><code>exist</code> to wait for an element to exist in the DOM</li>
+					<li><code>visible</code> to wait for an element to be visible (not obscured by another element, visibility not set to hidden...)</li>
+					<li><code>text</code> to wait for an element (eg. a button) to have any text</li>
+					<li><code>value</code> to wait for an element to have any value (eg. read-only input fields)</li>
+				</ul>
+				<p>This spares us the need to explicitly wait for a <code>PageElement</code> to be loaded in the DOM, to become visible etc. before we
+				can interact with it.</p>
+				<p>Finally, getting or setting an HTML <code>value</code> attribute (eg. when filling in an input field, ticking a checkbox...) is
+					not supported by these 4 basic PageNode classes. If you want to get or set an HTML element&#39;s value, you need to use
+					the <code>ValuePageNode</code> class family, consisting of <code>ValuePageElement</code>, <code>ValuePageElementList</code>, <code>ValuePageElementMap</code> and
+					<code>ValuePageElementGroup</code>. <code>ValuePageElement</code> is an abstract class and requires you to implement the methods <code>setValue</code>
+				and <code>currently.getValue</code>.</p>
+				<h4 id="pagenodestores">PageNodeStores</h4>
+				<p>When working with wdio-workflo, PageNodes should not be created manually but instead should be retrieved from
+					a <code>PageNodeStore</code>. This is a class that caches PageNode instances which have the same type and the same selector
+				in order to consume less memory.</p>
+				<p>In addition to being a PageNode factory, <code>PageNodeStore</code> serves as a single facade that gives you access to all PageNode
+					types without having to import them from all over the place. It also makes the instantiation of PageNodes more
+					comfortable by defining a default configuration for each PageNode, so that most of the time when you want to use a
+				PageNode, you only need to pass a XPath selector to the store&#39;s factory method.</p>
+				<h4 id="pages">Pages</h4>
+				<p>A <code>Page</code> is an aggregation of all <code>PageNode</code>s which make up a complete website or a large fragment of a website.
+				In order to create these <code>PageNode</code>s, each <code>Page</code> has a <code>PageNodeStore</code> associated with it.</p>
+				<p>Pages allow us to assign meaningful names to its PageNodes and they define the XPath selectors which identify a
+				<code>PageElement</code> or the elements of a <code>PageElementList</code> in the DOM.</p>
+				<p>It is important to realize that all state is stored in the GUI of the tested application and not within a <code>Page</code> class.
+					Therefore, a <code>Page</code> itself is always stateless and only provides an API to manipulate or retrieve the state of the
+				tested application (via its PageNodes).</p>
+				<p>Please be aware that wdio-workflo only supports XPath selectors because they are more &quot;flexible&quot; than CSS selectors
+					(eg. they support searching for a parent element) and because the performance differences are negligible in most cases.
+					Wdio-workflo also features an XPath builder that you can use as an alternative to writing &quot;raw&quot; XPath selector strings
+					so that you do not need to remember all details of the XPath syntax which can be quite complex in some scenarios.
+				In addition, the XPath builder helps to make XPath expression more readable.</p>
+				<p><code>Page</code> requires you to implement the methods <code>isOpen</code> and <code>isClosed</code> to check if a page is currently open or closed.
+					Furthermore, <code>Page</code> also provides a <code>wait</code> and a <code>eventually</code> API to wait for the page to be open/closed or to check
+				if the page is eventually open/closed within a specific timeout.</p>
+				<h3 id="implementation">Implementation</h3>
+				<p>If you ran <code>./node_modules/.bin/wdio-workflo --init</code>, wdio-workflo already created some boilerplate classes
+					(<code>PageElement</code>, <code>ValuePageElement</code>, <code>Page</code> and <code>PageNodeStore</code>) in the <code>page_objects</code> folders of your system test
+				directory.</p>
+				<p>These classes inherit from their respective counterpart classes in wdio-workflo and allow you to extend or customize
+					wdio-workflo&#39;s default functionality (You could overwrite the default implementation of <code>PageElement</code>s <code>isSelected</code>
+				method or add a <code>getDataName</code> method to the class etc.).</p>
+				<h4 id="pagenodes">PageNodes</h4>
+				<p>For our npmjs page, we need an <code>Input</code> element to enter &quot;wdio-workflo&quot; as the searched package name.
+					Obviously, this <code>Input</code> element needs to be able to set and get an HTML value.
+					Therefore, <code>Input</code> needs to extend the boilerplate <code>ValuePageElement</code> class and implement its <code>setValue</code> and
+				<code>currently.getValue</code> methods.</p>
+				<p>Create the file <code>Input.ts</code> in the <code>src/page_objects/page_elements</code> folder of your system test directory with the
+				following contents:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/page_elements/Input.ts</span>
+
+<span class="hljs-keyword">import</span> { PageNodeStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'../stores'</span>;
+<span class="hljs-keyword">import</span> { IValuePageElementOpts, ValuePageElement, ValuePageElementCurrently } <span class="hljs-keyword">from</span> <span class="hljs-string">'./ValuePageElement'</span>;
+
+<span class="hljs-comment">// Add opts parameter properties which need to be passed to Input's constructor here</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> IInputOpts&lt;
+ Store <span class="hljs-keyword">extends</span> PageNodeStore
+&gt; <span class="hljs-keyword">extends</span> IValuePageElementOpts&lt;Store&gt; {}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> Input&lt;Store <span class="hljs-keyword">extends</span> PageNodeStore&gt; <span class="hljs-keyword">extends</span> ValuePageElement&lt;Store, <span class="hljs-built_in">string</span>&gt; {
+
+  <span class="hljs-comment">// The parameters of a PageNode constructor are always the same:</span>
+  <span class="hljs-comment">// 1st param is XPath selector, 2nd param is options parameter</span>
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">selector: <span class="hljs-built_in">string</span>, opts: IInputOpts&lt;Store&gt;</span>) {
+    <span class="hljs-keyword">super</span>(selector, opts);
+  }
+
+  <span class="hljs-comment">// We need to implement InputCurrently because its .getValue() method serves as the base implementation for</span>
+  <span class="hljs-comment">// all state retrieval and state check functions in Input and its .currently, .wait and .eventually api.</span>
+  readonly currently = <span class="hljs-keyword">new</span> InputCurrently(<span class="hljs-keyword">this</span>);
+
+  <span class="hljs-comment">// Action functions (functions which change the state of the tested application) are supposed to always perform</span>
+  <span class="hljs-comment">// the PageElement's initial waiting condition before interacting with the application.</span>
+  setValue(value: <span class="hljs-built_in">string</span>): <span class="hljs-keyword">this</span> {
+
+    <span class="hljs-comment">// PageElementBase.element implicitly invokes the PageElement's initial waiting condition</span>
+    <span class="hljs-keyword">this</span>.element.setValue(value);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> InputCurrently&lt;
+  Store <span class="hljs-keyword">extends</span> PageNodeStore,
+  PageElementType <span class="hljs-keyword">extends</span> Input&lt;Store&gt;
+&gt; <span class="hljs-keyword">extends</span> ValuePageElementCurrently&lt;Store, PageElementType, <span class="hljs-built_in">string</span>&gt; {
+
+  <span class="hljs-comment">// This method serves as the "base implementation" for the functions hasValue(), hasAnyValue() and containsValue()</span>
+  <span class="hljs-comment">// in the .currently, .wait and .eventually apis and for Input.hasValue().</span>
+  getValue(): <span class="hljs-built_in">string</span> {
+
+    <span class="hljs-comment">// PageElementBaseCurrently.element does not invoke the PageElement's initial waiting condition</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.element.getValue();
+  }
+}</code></pre>
+				<p>Do not forget to add an export for <code>Input</code> to the <code>index.ts</code> file in <code>src/page_objects/page_elements</code>:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/page_elements/index.ts</span>
+
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./PageElement'</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./ValuePageElement'</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./Input'</span>;</code></pre>
+				<h4 id="pagenodestore">PageNodeStore</h4>
+				<p>Before we can use the <code>Input</code> element we just created within our npmjs <code>Page</code>, we need to add a factory method to
+				<code>PageNodeStore</code> that returns an instance of <code>Input</code>.</p>
+				<p>Add the following code to the file <code>PageNodeStore.ts</code> located in <code>src/page_objects/store</code>:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/stores/PageNodeStore.ts</span>
+
+<span class="hljs-keyword">import</span> { pageObjects <span class="hljs-keyword">as</span> core } <span class="hljs-keyword">from</span> <span class="hljs-string">'wdio-workflo'</span>;
+<span class="hljs-keyword">import</span> { IInputOpts, Input, IPageElementOpts, PageElement } <span class="hljs-keyword">from</span> <span class="hljs-string">'../page_elements'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> PageNodeStore <span class="hljs-keyword">extends</span> core.stores.PageNodeStore {
+
+  ...
+
+  Input(
+    selector: Workflo.XPath,
+    <span class="hljs-comment">// pick the properties of the `opts` parameter of Input's constructor which can be passed to the factory method</span>
+    options?: Pick&lt;IInputOpts&lt;<span class="hljs-keyword">this</span>&gt;, Workflo.Store.BaseKeys&gt;,
+  ) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._getElement&lt;Input&lt;<span class="hljs-keyword">this</span>&gt;, IInputOpts&lt;<span class="hljs-keyword">this</span>&gt;&gt;(
+      selector,
+      Input,
+      {
+        <span class="hljs-comment">// add pre-configured properties to the `opts` parameter of Input's constructor</span>
+        store: <span class="hljs-keyword">this</span>,
+        ...options,
+      },
+    );
+  }
+
+  ...
+
+}</code></pre>
+				<h4 id="page">Page</h4>
+				<p>After implementing our <code>Input</code> element and adding its factory method to <code>PageNodeStore</code>, we can now create the
+				<code>NpmJsPage</code> which encapsulates all of the PageNodes needed for our testcase.</p>
+				<p>It is very important that you use always use getter functions to define the PageNodes within a Page.</p>
+				<p>To quote webdiverio&#39;s docs, getter functions &quot;get evaluated when you actually access the property and not when you
+				generate the object. With that you always request the element before you do an action on it.&quot;</p>
+				<p>If we did not use getter functions to define our PageNodes, the values of the PageNodes would be evaluated at the time
+					the javascript file is parsed. However, at this time, the website containing the HTML elements that the PageNodes
+					refer to is usually not yet loaded which means that no elements matching the XPath selector of the PageNodes would
+				be found in the DOM and that all of our testcases would fail.</p>
+				<p>Create the file <code>NpmJsPage.ts</code> in the <code>src/page_objects/pages</code> folder of your system test directory with the
+				following contents:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/pages/NpmJsPage.ts</span>
+
+<span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+<span class="hljs-keyword">import</span> { IPageOpts, Page } <span class="hljs-keyword">from</span> <span class="hljs-string">'./Page'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> IBasePageOpts&lt;
+  Store <span class="hljs-keyword">extends</span> stores.PageNodeStore
+&gt; <span class="hljs-keyword">extends</span> IPageOpts&lt;Store&gt; {}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> NpmJsPage <span class="hljs-keyword">extends</span> Page&lt;stores.PageNodeStore&gt; {
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">super</span>({ store: stores.pageNode });
+  }
+
+  <span class="hljs-comment">// an outer container which encapsulates all other elements of the page</span>
+  <span class="hljs-keyword">get</span> container() {
+    <span class="hljs-comment">// we can access the `PageNodeStore` associated with `Page` via `this._store` to create/retrieve PageNode instances</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._store.Element(
+      <span class="hljs-comment">// XPath builder provides functions to create an XPath expression which identifies PageNodes on the HTML page</span>
+      xpath(<span class="hljs-string">'//div'</span>).id(<span class="hljs-string">'app'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// the button which triggers a search query</span>
+  <span class="hljs-keyword">get</span> searchButton() {
+    <span class="hljs-comment">// The `$` accessor of the `PageElement` class returns the `PageNodeStore` associated with a `PageElement`.</span>
+    <span class="hljs-comment">// It prepends the XPath selector of the `PageElement` to the selector of the PageNode retrieved from PageNodeStore.</span>
+    <span class="hljs-comment">// In this case, the resulting XPath of `searchButton` will be "//div[@id='app']//button[contains(.,'Search')]".</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.$.Element(
+      xpath(<span class="hljs-string">'//button'</span>).textContains(<span class="hljs-string">'Search'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// the input field into which we input the package name "wdio-workflo"</span>
+  <span class="hljs-keyword">get</span> searchInputField() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.$.Input(
+      xpath(<span class="hljs-string">'//input'</span>).typeContains(<span class="hljs-string">'search'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// an HTML element which acts as a container for the list of npm packages returned by the search request</span>
+  <span class="hljs-keyword">get</span> packageListContainer() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.$.Element(
+      xpath(<span class="hljs-string">'//div'</span>).classContains(<span class="hljs-string">'packageList'</span>),
+    );
+  }
+
+  <span class="hljs-comment">// a list of level-3 HTML headings that represent the names of the npm packages returned by the search request</span>
+  <span class="hljs-keyword">get</span> packageNamesList() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.packageListContainer.$.ElementList(
+      xpath(<span class="hljs-string">'//h3'</span>),
+    );
+  }
+
+  isOpen(): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.currently.isVisible();
+  }
+
+  isClosed(): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.currently.not.isVisible();
+  }
+}
+
+<span class="hljs-comment">// Since pages are stateless, we only ever need one instance of a `Page` and this is the perfect place to create this</span>
+<span class="hljs-comment">// instance.</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> npmjs = <span class="hljs-keyword">new</span> NpmJsPage();</code></pre>
+				<p>Again, we should not forget to add exports for our <code>NpmJsPage</code> to the index file <code>src/page_objects/pages/index.ts</code>:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/page_objects/pages/index.ts</span>
+
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./Page'</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./NpmJsPage'</span>;</code></pre>
+				<h2 id="implementing-steps">Implementing Steps</h2>
+				<h3 id="information">Information</h3>
+				<p>While PageNodes already provide us with reusable testing components, Steps are wdio-workflo&#39;s main driver for
+				increased reusability.</p>
+				<p>A <code>Step</code> defines a series of interactions or a single interaction with the tested application (usually via PageNodes).
+					Each step can be reused as many times as you like within your testcases or it can also be invoked from inside another
+				step (nested steps).</p>
+				<p>Each <code>Step</code> consists of three key features:</p>
+				<ul>
+					<li>a description written in natural language, so that non-technical stakeholders too can comprehend what is going on</li>
+					<li>a body function that implements the step&#39;s interactions with the tested application</li>
+					<li>a params object containing<ul>
+							<li>the arguments used to &quot;configure&quot; the step and to provide data that is needed during the
+							step&#39;s execution and</li>
+							<li>a callback which is executed immediately after the step has finished and which is passed the
+							body function&#39;s result value as a single parameter</li>
+						</ul>
+					</li>
+				</ul>
+				<h3 id="implementation">Implementation</h3>
+				<p>Our npmjs testcase requires two steps:</p>
+				<ul>
+					<li>a step to open the npmjs page</li>
+					<li>a step to enter the name of an npm package and trigger the search request</li>
+				</ul>
+				<p>Create the file <code>npmjs.step.ts</code> in the <code>src/steps</code> folder of your system test directory with the following contents:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/steps/npmjs.step.ts</span>
+
+<span class="hljs-keyword">import</span> { pages } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+<span class="hljs-keyword">import</span> { defineSteps, IOptStepParams, IStepParams, Step } <span class="hljs-keyword">from</span> <span class="hljs-string">'wdio-workflo'</span>;
+
+<span class="hljs-keyword">const</span> npmjsSteps = defineSteps({
+  <span class="hljs-string">"open npmjs page"</span>:
+  <span class="hljs-function">(<span class="hljs-params">params?: IOptStepParams&lt;{path?: <span class="hljs-built_in">string</span>}, <span class="hljs-built_in">void</span>&gt;</span>) =&gt;</span>
+    <span class="hljs-keyword">new</span> Step(params, ({ path }): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> _path = path || <span class="hljs-string">''</span>;
+
+      <span class="hljs-comment">// the baseUrl defined in workflo.conf.ts is prepended automatically when invoking browse.url()</span>
+      browser.url(<span class="hljs-string">`<span class="hljs-subst">${_path}</span>`</span>);
+    }),
+
+  <span class="hljs-string">"search for the npm package %{packageName}"</span>:
+  <span class="hljs-function">(<span class="hljs-params">params: IStepParams&lt;{packageName: <span class="hljs-built_in">string</span>}, <span class="hljs-built_in">void</span>&gt;</span>) =&gt;</span>
+    <span class="hljs-keyword">new</span> Step(params, ({ packageName }): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> {
+      pages.npmjs.searchInputField.setValue(packageName);
+      pages.npmjs.searchButton.click();
+    }),
+});
+
+<span class="hljs-keyword">export</span> { npmjsSteps };</code></pre>
+				<p>Please note that the filenames of all step files should end with &quot;.step.ts&quot;.</p>
+				<p>Wdio-workflo merges all step definitions into a single steps object. To include our npmjs steps into this steps object,
+				add the following code to the file <code>index.ts</code> in the <code>src/steps</code> folder of your system test directory:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/steps/index.ts</span>
+
+...
+
+<span class="hljs-comment">// IMPORT YOUR STEP DEFINITIONS</span>
+<span class="hljs-keyword">import</span> { npmjsSteps } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/steps/npmjs.step'</span>;
+
+<span class="hljs-comment">// MERGE ALL STEP DEFINITIONS INTO ONE OBJECT AS SHOWN BELOW</span>
+<span class="hljs-keyword">const</span> stepDefinitions = defineSteps({
+  ...npmjsSteps,
+});
+
+...</code></pre>
+				<h2 id="writing-testcases">Writing Testcases</h2>
+				<h3 id="information">Information</h3>
+				<p>A <code>testcase</code> consists of a sequence of steps and validates the requirements we defined in our spec files.
+				Sets of related testcases are grouped together in <code>suite</code>s.</p>
+				<p>The structure of a <code>testcase</code> closely resembles that of a <code>Story</code>. Each testcase provides the following functions
+				to encapsulate and automatically invoke steps:</p>
+				<ul>
+					<li><code>given</code> to establish an initial, well-known state</li>
+					<li><code>when</code> to perform changes to the tested application&#39;s state</li>
+					<li><code>and</code> to sequentially chain together multiple <code>given</code> or <code>when</code> statements</li>
+				</ul>
+				<p>In contrary to the specs defined within a <code>Story</code>, a <code>testcase</code> does not support nested <code>given</code>s or <code>when</code>s -
+				they always need to be chained together sequentially.</p>
+				<p>In order to check the expected state following the execution of a <code>Step</code>, a <code>testcase</code> can invoke the <code>validate</code>
+					function inside the step&#39;s callback. To do so, we need to pass the IDs of both the validated acceptance criteria and its
+					containing <code>Story</code> to the <code>validate</code> function.
+					Inside the <code>validate</code> function&#39;s body, we can make use of wdio-workflo&#39;s custom page object matchers or Jasmine&#39;s
+				default assertion matchers to compare the state&#39;s actual and expected values.</p>
+				<p>The following custom page object matchers are supported by wdio-workflo:</p>
+				<ul>
+					<li><code>expectElement</code></li>
+					<li><code>expectList</code></li>
+					<li><code>expectMap</code></li>
+					<li><code>expectGroup</code></li>
+					<li><code>expectPage</code></li>
+				</ul>
+				<p>The expectation failure messages produced by these custom page object matchers will be a lot more meaningful than those
+					of Jasmine&#39;s default assertion matchers (containing the <code>PageElement</code>&#39;s constructor name, the XPath selector of the
+				affected <code>PageElement</code> and the applied timeout in milliseconds if an eventuallyXXX matcher was used).</p>
+				<h3 id="implementation">Implementation</h3>
+				<p>Finally, it is time to write a testcase which browses to npmjs.com and searches for the &quot;wdio-workflo&quot; npm package.</p>
+				<p>Create the file <code>npmjs.tc.ts</code> in the <code>src/testcases</code> folder of your system test directory with the following contents:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// src/testcases/npmjs.tc.ts</span>
+
+<span class="hljs-keyword">import</span> { pages } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+<span class="hljs-keyword">import</span> { steps } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/steps'</span>;
+
+suite(<span class="hljs-string">"npmjs"</span>, {}, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-comment">// If there is a bug in the tested application which breaks our testcase, we can link to it in the `bugs` array.</span>
+  <span class="hljs-comment">// We can also define how severe it would be if the testcase failed by setting the `severity` property.</span>
+  testcase(<span class="hljs-string">"search for the npm package wdio-workflo"</span>, { bugs: [<span class="hljs-string">'NPMJS-387'</span>], severity: <span class="hljs-string">'blocker'</span> }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    given(steps[<span class="hljs-string">"open npmjs page"</span>]({
+      <span class="hljs-comment">// the result value of the step is passed as single parameter to the step's callback function</span>
+      cb: <span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`opened the npmjs website at <span class="hljs-subst">${path}</span>`</span>);
+      }
+    }))
+    <span class="hljs-comment">// wdio-workflo uses %{} to perform string interpolation of step arguments in a step's description</span>
+    <span class="hljs-comment">// in the test reports, %{packageName} will be replaced with "wdio-workflo"</span>
+    .when(steps[<span class="hljs-string">"search for the npm package %{packageName}"</span>]({
+      arg: { packageName: <span class="hljs-string">'wdio-workflo'</span> },
+      cb: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        validate({ <span class="hljs-string">'1.1'</span>: [<span class="hljs-number">1</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+          <span class="hljs-comment">// This function provides custom expectation matchers for PageElementLists.</span>
+          <span class="hljs-comment">// Each expectation matcher also has a negated counterpart which can be accessed via `.not`.</span>
+          expectList(pages.npmjs.packageNamesList).not.toEventuallyBeEmpty();
+        });
+
+        validate({ <span class="hljs-string">'1.1'</span>: [<span class="hljs-number">2</span>] }, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+          <span class="hljs-comment">// the PageElements managed by PageElementList can be retrieved via `.first`, `.at`, `.all` or `.where`</span>
+          expectElement(pages.npmjs.packageNamesList.first).toEventuallyHaveText(<span class="hljs-string">'wdio-workflo'</span>);
+        });
+      },
+    }));
+  });
+});</code></pre>
+				<p>Please note that wdio-workflo only recognizes a file as a testcase if its filename ends with &quot;.tc.ts&quot;.</p>
+				<h1 id="running-your-tests">Running your tests</h1>
+				<h2 id="launching-selenium">Launching selenium</h2>
+				<p>Wdio-workflo requires a selenium webdriver server to execute your testing commands in the browser.
+					To make the handling of selenium as seamlessly as possible, wdio-workflo makes use of webdriverio&#39;s
+					<code>selenium-standalone</code> service which automatically installs all required selenium drivers and launches a local selenium
+				webdriver server when you executed your tests.</p>
+				<p>You can also install the required drivers and launch a selenium webdriver server manually.
+					In this case, you should disable the <code>selenium-standalone</code> service by setting the <code>services</code> option in your
+					<code>workflo.conf.ts</code> file to an empty array. If your selenium server does not run locally, you also need to set the
+				<code>host</code> and <code>port</code> options of you wdio-workflo configuration to the correct values.</p>
+				<h2 id="executing-your-testcases">Executing your testcases</h2>
+				<p>To start all of your tests, run <code>./node_modules/.bin/wdio-workflo</code></p>
+				<p>You can filter the executed tests by testcases, specs and many more:</p>
+				<pre><code><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--testcases</span> '[<span class="hljs-string">"MySuite.sample test"</span>]'
+<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--specs</span> '[<span class="hljs-string">"4.1.2"</span>]'</code></pre><p>To only rerun tests which failed during the latest test run, execute</p>
+				<p><code>./node_modules/.bin/wdio-workflo --rerunFaulty</code></p>
+				<h1 id="test-reports">Test reports</h1>
+				<p>The results of your tests are available in two different formats:</p>
+				<ul>
+					<li>Spec report (displayed as a textual report in a console window)</li>
+					<li>Allure report (displayed as a visual report in a browser window)</li>
+				</ul>
+				<p>Spec reports are shown during and after the execution of your tests in the console from where you launched your tests.
+				Allure reports need to be explicitly generated after running your tests.</p>
+				<h2 id="showing-the-results-of-the-latest-test-run">Showing the results of the latest test run</h2>
+				<p>To show the results of the latest test run in the spec format, run</p>
+				<p><code>./node_modules/.bin/wdio-workflo --consoleReport</code></p>
+				<p>To generate and open an allure report for the latest test run, you can either execute each command separately
+				or you can combine both commands:</p>
+				<pre><code><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--generateReport</span>
+<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--openReport</span>
+
+<span class="hljs-string">//</span> or combined
+
+<span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--report</span></code></pre><h2 id="showing-the-results-of-a-specific-previous-test-run">Showing the results of a specific previous test run</h2>
+				<p>Each time a test run is executed, wdio-workflo writes its launch time into the file <code>latestRun</code> stored
+				in the <code>results/&lt;&lt;browserName&gt;&gt;</code> folder of wdio-workflo&#39;s system test directory.</p>
+				<p>To show the results of a specific previous test run, append the time at which the test run was launched in the format
+				YYYY-MM-DD_HH-MM-SS:</p>
+				<pre><code><span class="hljs-comment">// spec report format</span>
+./node_modules/.bin/wdio-workflo --consoleReport <span class="hljs-number">2017</span><span class="hljs-number">-10</span><span class="hljs-number">-10</span>_20<span class="hljs-number">-38</span><span class="hljs-number">-13</span>
+
+<span class="hljs-comment">// allure report format:</span>
+./node_modules/.bin/wdio-workflo --report <span class="hljs-number">2017</span><span class="hljs-number">-10</span><span class="hljs-number">-10</span>_20<span class="hljs-number">-38</span><span class="hljs-number">-13</span>
+</code></pre><h1 id="debugging">Debugging</h1>
+				<p>If you want to debug your tests, you can choose from two available options:</p>
+				<ul>
+					<li>Webdriverio&#39;s debug command</li>
+					<li>Debugging in Chrome DevTools</li>
+				</ul>
+				<h2 id="webdriverio-s-debug-command">Webdriverio&#39;s debug command</h2>
+				<p>If you simply want to inspect the current state of the browser window in which your tests are executed, you can put the <code>browser.debug()</code> command somewhere in your test case.</p>
+				<p>This will pause your tests and your commandline interface will switch into a REPL mode that allows you to interact with the tested application via webdriverio commands.</p>
+				<p>Running the command <code>.exit</code> in your CLI will exit the breakpoint and continue the test run.</p>
+				<h2 id="debugging-in-chrome-devtools">Debugging in Chrome DevTools</h2>
+				<p>In order to be able to debug your tests using the Chrome DevTools, the following preconditions need to be met:</p>
+				<ul>
+					<li>Google&#39;s chrome browser needs to be installed on your system.</li>
+					<li>The chrome extension &quot;NIM (Node-Inspector Manager)&quot; needs to be added to and enabled in your chrome browser.</li>
+					<li>The &quot;debug&quot; property of wdio-workflo&#39;s configuration object in &quot;workflo.conf.ts&quot; needs to be set to true or you need
+					to invoke your tests with the --debug cli option enabled: <code>./node_modules/.bin/wdio-workflo --debug</code></li>
+					<li>You need to open a browser window in chrome before you start your tests (so that Node-Inspector Manager can hook itself into the Chrome DevTools).</li>
+					<li>The &quot;NIM&quot; extension needs to be configured correctly. Further below you can find a list of recommended NIM settings.</li>
+				</ul>
+				<p>Now putting a <code>debugger</code> statement somewhere in your code will  pause your tests and enter a breakpoint in Chrome DevTools. You can switch to the Chrome DevTools window and step through your test code, observe the state of variables etc. or you can switch to the browser window in which your tests are run and inspect the state of the tested
+				application.</p>
+				<p>Sometimes tests might get stuck after entering a <code>debugger</code> statement. In this case, closing all chrome processes,
+					opening a new chrome window, switching &quot;Open DevTools&quot; in NIM&#39;s Main Menu to &quot;Manual&quot; and then back to &quot;Auto&quot; and finally
+				restarting your tests should resolve the problem.</p>
+				<p>These are the recommended settings for the &quot;NIM&quot; chrome extension:</p>
+				<p>(Main Menu)</p>
+				<ul>
+					<li>Host: &quot;localhost&quot;</li>
+					<li>Port: &quot;9229&quot;</li>
+					<li>Open DevTools: &quot;Auto&quot;</li>
+				</ul>
+				<p>(General Options Menu)</p>
+				<ul>
+					<li>Open in a New Window: &quot;On&quot;</li>
+					<li>Make Window Focused: &quot;On&quot;</li>
+					<li>Close Automatically: &quot;On&quot;</li>
+					<li>Select DevTools Version: &quot;On&quot; -&gt; DevTools Version (default)</li>
+					<li>Real-time Collaboration: &quot;Off&quot;</li>
+					<li>check Interval: 0.50 secondes</li>
+				</ul>
+				<p>The General Options Menu can be opened by hovering over the little circle in the right bottom of the Main Menu and then
+				clicking on the &quot;sliders&quot; icon.</p>
+				<h1 id="showing-all-cli-options">Showing all CLI options</h1>
+				<p>There are many more options available via wdio-workflo&#39;s Command Line Interface than the ones already mentioned in this
+				document.</p>
+				<p>To show all of them, run</p>
+				<p><code>./node_modules/.bin/wdio-workflo --help</code></p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-not-exported">
+						<a href="modules/__global.html">__global</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="enums/comparator.html" class="tsd-kind-icon">Comparator</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/waittype.html" class="tsd-kind-icon">Wait<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/listwherebuilder.html" class="tsd-kind-icon">List<wbr>Where<wbr>Builder</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/page.html" class="tsd-kind-icon">Page</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelement.html" class="tsd-kind-icon">Page<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementbase.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Base</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementbasecurrently.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Base<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementbaseeventually.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Base<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementbasewait.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Base<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementcurrently.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementeventually.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementgroup.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementgroupcurrently.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Group<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementgroupeventually.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Group<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementgroupwait.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Group<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementlist.html" class="tsd-kind-icon">Page<wbr>Element<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementlistcurrently.html" class="tsd-kind-icon">Page<wbr>Element<wbr>List<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementlisteventually.html" class="tsd-kind-icon">Page<wbr>Element<wbr>List<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementlistwait.html" class="tsd-kind-icon">Page<wbr>Element<wbr>List<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementmap.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementmapcurrently.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Map<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementmapeventually.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Map<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementmapwait.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Map<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pageelementwait.html" class="tsd-kind-icon">Page<wbr>Element<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/pageeventually.html" class="tsd-kind-icon">Page<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pagenode.html" class="tsd-kind-icon">Page<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pagenodecurrently.html" class="tsd-kind-icon">Page<wbr>Node<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pagenodeeventually.html" class="tsd-kind-icon">Page<wbr>Node<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/pagenodestore.html" class="tsd-kind-icon">Page<wbr>Node<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/pagenodewait.html" class="tsd-kind-icon">Page<wbr>Node<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/pagewait.html" class="tsd-kind-icon">Page<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/step.html" class="tsd-kind-icon">Step</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valuepageelement.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valuepageelementcurrently.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valuepageelementeventually.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valuepageelementgroup.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementgroupcurrently.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Group<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementgroupeventually.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Group<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementgroupwait.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Group<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valuepageelementlist.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementlistcurrently.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>List<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementlisteventually.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>List<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementlistwait.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>List<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valuepageelementmap.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementmapcurrently.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Map<wbr>Currently</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementmapeventually.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Map<wbr>Eventually</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/valuepageelementmapwait.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Map<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valuepageelementwait.html" class="tsd-kind-icon">Value<wbr>Page<wbr>Element<wbr>Wait</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/xpathbuilder.html" class="tsd-kind-icon">XPath<wbr>Builder</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icallbackconfig.html" class="tsd-kind-icon">ICallback<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icapabilities.html" class="tsd-kind-icon">ICapabilities</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/icustomelementmatchers.html" class="tsd-kind-icon">ICustom<wbr>Element<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustomgroupmatchers.html" class="tsd-kind-icon">ICustom<wbr>Group<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/icustomlistmatchers.html" class="tsd-kind-icon">ICustom<wbr>List<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustommapmatchers.html" class="tsd-kind-icon">ICustom<wbr>Map<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustompagematchers.html" class="tsd-kind-icon">ICustom<wbr>Page<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustomvalueelementmatchers.html" class="tsd-kind-icon">ICustom<wbr>Value<wbr>Element<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustomvaluegroupmatchers.html" class="tsd-kind-icon">ICustom<wbr>Value<wbr>Group<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustomvaluelistmatchers.html" class="tsd-kind-icon">ICustom<wbr>Value<wbr>List<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/icustomvaluemapmatchers.html" class="tsd-kind-icon">ICustom<wbr>Value<wbr>Map<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/ielementmatchers.html" class="tsd-kind-icon">IElement<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/igroupmatchers.html" class="tsd-kind-icon">IGroup<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iintervals.html" class="tsd-kind-icon">IIntervals</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/ilistmatchers.html" class="tsd-kind-icon">IList<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/imapmatchers.html" class="tsd-kind-icon">IMap<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageelementbaseopts.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>Base<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageelementgroupopts.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>Group<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageelementlistidentifier.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>List<wbr>Identifier</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageelementlistopts.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>List<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipageelementlistwaitemptyreverseparams.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>List<wbr>Wait<wbr>Empty<wbr>Reverse<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipageelementlistwaitlengthparams.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>List<wbr>Wait<wbr>Length<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ipageelementlistwaitlengthreverseparams.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>List<wbr>Wait<wbr>Length<wbr>Reverse<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageelementmapidentifier.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>Map<wbr>Identifier</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageelementmapopts.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>Map<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageelementopts.html" class="tsd-kind-icon">IPage<wbr>Element<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/ipagematchers.html" class="tsd-kind-icon">IPage<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipagenodeopts.html" class="tsd-kind-icon">IPage<wbr>Node<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ipageopts.html" class="tsd-kind-icon">IPage<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/itimeouts.html" class="tsd-kind-icon">ITimeouts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/ivalueelementmatchers.html" class="tsd-kind-icon">IValue<wbr>Element<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/ivaluegroupmatchers.html" class="tsd-kind-icon">IValue<wbr>Group<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/ivaluelistmatchers.html" class="tsd-kind-icon">IValue<wbr>List<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/ivaluemapmatchers.html" class="tsd-kind-icon">IValue<wbr>Map<wbr>Matchers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ivaluepageelementgroupopts.html" class="tsd-kind-icon">IValue<wbr>Page<wbr>Element<wbr>Group<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ivaluepageelementlistopts.html" class="tsd-kind-icon">IValue<wbr>Page<wbr>Element<wbr>List<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ivaluepageelementmapopts.html" class="tsd-kind-icon">IValue<wbr>Page<wbr>Element<wbr>Map<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ivaluepageelementopts.html" class="tsd-kind-icon">IValue<wbr>Page<wbr>Element<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/iwherebuilderopts.html" class="tsd-kind-icon">IWhere<wbr>Builder<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iworkflocallbackconfig.html" class="tsd-kind-icon">IWorkflo<wbr>Callback<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iworkflocommonconfig.html" class="tsd-kind-icon">IWorkflo<wbr>Common<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iworkfloconfig.html" class="tsd-kind-icon">IWorkflo<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#clonefunc" class="tsd-kind-icon">Clone<wbr>Func</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-not-exported">
+						<a href="globals.html#elementnode" class="tsd-kind-icon">Element<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#extractboolean" class="tsd-kind-icon">Extract<wbr>Boolean</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#extracttext" class="tsd-kind-icon">Extract<wbr>Text</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-not-exported">
+						<a href="globals.html#extractvalue" class="tsd-kind-icon">Extract<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-not-exported">
+						<a href="globals.html#extractvalueboolean" class="tsd-kind-icon">Extract<wbr>Value<wbr>Boolean</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#ioptstepparams" class="tsd-kind-icon">IOpt<wbr>Step<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#istep" class="tsd-kind-icon">IStep</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#istepparams" class="tsd-kind-icon">IStep<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#severity" class="tsd-kind-icon">Severity</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#specstatus" class="tsd-kind-icon">Spec<wbr>Status</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#stepdefinitions" class="tsd-kind-icon">Step<wbr>Definitions</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#testcasestatus" class="tsd-kind-icon">Testcase<wbr>Status</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-not-exported">
+						<a href="globals.html#valueelementnode" class="tsd-kind-icon">Value<wbr>Element<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#default_interval" class="tsd-kind-icon">DEFAULT_<wbr>INTERVAL</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#default_timeout" class="tsd-kind-icon">DEFAULT_<wbr>TIMEOUT</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#pageelement" class="tsd-kind-icon">page<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#applymixins" class="tsd-kind-icon">apply<wbr>Mixins</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#definesteps" class="tsd-kind-icon">define<wbr>Steps</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#isempty" class="tsd-kind-icon">is<wbr>Empty</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#isielementnode" class="tsd-kind-icon">isIElement<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#isivalueelementnode" class="tsd-kind-icon">isIValue<wbr>Element<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#isjserror" class="tsd-kind-icon">is<wbr>JsError</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#isnullorundefined" class="tsd-kind-icon">is<wbr>Null<wbr>OrUndefined</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#notisnullorundefined" class="tsd-kind-icon">not<wbr>IsNull<wbr>OrUndefined</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#proxifysteps" class="tsd-kind-icon">proxify<wbr>Steps</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#tolerancestostring" class="tsd-kind-icon">tolerances<wbr>ToString</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
