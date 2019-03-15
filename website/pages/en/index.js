@@ -170,11 +170,11 @@ class Index extends React.Component {
         {[
           {
             content:
-"If you are new to wdio-workflo, you probably want to head straight for the [Getting Started](/docs/setup) page.<br />" +
-"Subsequently, you can visit the [Guides](/docs/doc1) page to learn you how to use the main components of wdio-workflo.<br />" +
+"If you are new to wdio-workflo, you probably want to head straight for the [Getting Started](/wdio-workflo/docs/setup) page.<br />" +
+"Subsequently, you can visit the [Guides](/wdio-workflo/docs/setup) page to learn you how to use the main components of wdio-workflo.<br />" +
 "<br />" +
 "At [wdio-workflo-example](https://github.com/flohil/wdio-workflo-example), there are code examples demonstrating the usage of wdio-workflo.<br />" +
-"Furthermore, the [API Docs](/apiDoc) provide detailed information about each of the framework's building blocks.<br />" +
+"Furthermore, the [API Docs](/wdio-workflo/apiDoc) provide detailed information about each of the framework's building blocks.<br />" +
 "<br />" +
 "Wdio-workflo is the result of my master's thesis <i>\"Properties of Automation Solutions for Functional System Tests of React Web Applications\"</i>,<br />" +
 "which you can [download](https://github.com/flohil/wdio-workflo/raw/master/Hilbinger_Masterarbeit.pdf) (in German) if you are interested in the theoretical foundations of wdio-workflo.",
