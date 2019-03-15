@@ -11,8 +11,8 @@
 const siteConfig = {
   title: 'Wdio-Workflo', // Title for your website.
   tagline: 'A Framework for writing Functional System Tests in TypeScript',
-  url: 'https://flohil.github.io/wdio-workflo/', // Your website URL
-  baseUrl: '/', // Base URL for your project */
+  url: 'https://flohil.github.io', // Your website URL
+  baseUrl: '/wdio-workflo/', // Base URL for your project */ // local: '/'
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
@@ -24,9 +24,12 @@ const siteConfig = {
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
 
+  // make sure docusaurus does not "delete" css from subpages
+  separateCss: ['apiDoc', 'demo'],
+
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'doc1', label: 'Guides'},
+    {doc: 'setup', label: 'Guides'},
     {page: 'demo', label: 'Demo Page'},
     {href: 'https://github.com/flohil/wdio-workflo-example', label: 'Examples'},
     {page: 'apiDoc', label: 'API'},

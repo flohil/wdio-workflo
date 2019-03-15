@@ -140,9 +140,18 @@ export class Registration extends React.Component<{}, IRegistrationState> {
   }
 
   private onSubmitClicked: IButtonProps['onClick'] = () => {
-    this.setState({
-      submitted: true
-    })
+    if (this.isValid()) {
+      // simulate wait for server response
+      setTimeout(() => {
+        this.setState({
+          submitted: true
+        })
+      }, 1000)
+    } else {
+      this.setState({
+        submitted: true
+      })
+    }
   }
 
   private isValid() {

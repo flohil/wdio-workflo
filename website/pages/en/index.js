@@ -64,7 +64,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="/docs/setup">Get Started</Button>
+            <Button href="./docs/setup">Get Started</Button>
             <Button href="https://github.com/flohil/wdio-workflo-example">Usage Examples</Button>
             <Button href="https://github.com/flohil/wdio-workflo">Github</Button>
           </PromoSection>

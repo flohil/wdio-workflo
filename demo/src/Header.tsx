@@ -18,12 +18,12 @@ class Header extends React.Component<RouteProps & RouteComponentProps<any> & IHe
       pageName => {
         const linkStyles = classnames({
           ["Header-link"]: true,
-          ["Header-link-active"]: `/demo/${pageName.toLowerCase()}` === this.props.location.pathname
+          ["Header-link-active"]: `/wdio-workflo/demo/${pageName.toLowerCase()}` === this.props.location.pathname
         })
 
         return (
-          <li key={`/demo/${pageName.toLowerCase()}`} className="Header-li">
-            <Link to={`/demo/${pageName.toLowerCase()}`} className={linkStyles}>
+          <li key={`/wdio-workflo/demo/${pageName.toLowerCase()}`} className="Header-li">
+            <Link to={`/wdio-workflo/demo/${pageName.toLowerCase()}`} className={linkStyles}>
               {pageName}
             </Link>
           </li>

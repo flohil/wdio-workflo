@@ -11,7 +11,7 @@ interface IMainProps {
 }
 
 const LandingPage = (props: Route['props']) => {
-  return <Redirect to="/demo/feed"/>;
+  return <Redirect to="/wdio-workflo/demo/feed"/>;
 }
 
 export class Main extends React.Component<IMainProps> {
@@ -20,15 +20,15 @@ export class Main extends React.Component<IMainProps> {
       <main className={classnames("main", this.props.className)}>
         <Switch>
           <Route
-            path="/demo/feed"
+            path="/wdio-workflo/demo/feed"
             component={Feed}
           />
           <Route
-            path="/demo/registration"
+            path="/wdio-workflo/demo/registration"
             component={Registration}
           />
           <Route
-            path="/demo/"
+            path="/wdio-workflo/demo/"
             component={LandingPage}
           />
           <Route
