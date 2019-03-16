@@ -1,0 +1,314 @@
+---
+id: firstTest
+title: Writing your first Functional System Test
+sidebar_label: Writing your first Functional System Test
+---
+
+## Overview
+
+This guide walks you through all stages of writing your first functional system
+test in wdio-workflo. It provides basic explanation and code examples for each stage.
+
+For more detailed information about each of the core components and concepts mentioned
+here, please refer to their respective guides.
+
+The goal of our first test is to ensure the correct functionality of a link
+located in the footer of wdio-workflo's demo site which redirects users back
+to wdio-workflo's main website.
+
+All code for this guide can also be found at https://github.com/flohil/wdio-workflo-example.
+
+## Prerequisites
+
+This guide assumes that you have installed and initialized wdio-workflo with
+its default configuration. If you haven't done so already, please follow the
+steps described in the [Setup guide](setup.md).
+
+## Defining the Requirements
+Wdio-workflo follows a behavior-driven software development approach and encourages you to define the requirements of your application in so-called 'spec' files before you start writing testcases.
+
+So, let's start by creating the file 'footer.spec.ts' in the `src/specs` folder
+of your system test directory:
+
+```typescript
+Feature("Footer", {}, () => {
+  Story("1.1", "Opening framework website", {}, () => {
+    Given("the user is located on the demo website", () => {
+      When("the user clicks on the framework link in the footer", () => {
+        Then(1, "the framework website is opened");
+      });
+    });
+  });
+});
+```
+
+As you can see, the requirements for the behavior of the link we are about to test
+are defined within a `Story`. Each `Story` consists of an id ("1.1"), a title,
+an object which stores metadata about the story ({}) and a body function.
+Related `Story`s are grouped together in a `Feature`.
+
+Inside a `Story`'s body function, we use the so-called `Gherkin` syntax to
+describe the states and state changes of our application's user interface:
+
+- `Given` describes an initial state.
+- `When` describes a transition from one state to another, triggered by a user or a system.
+- `Then` describes an expected state and thus defines an acceptance criteria for your requirements.
+
+`Story`s are supposed to be understood by all stakeholders of your project
+(including non-technical users). Therefore, `Story`s are written in natural language.
+
+Please notice that the first parameter of our `Then` function is a numerical id.
+This id is necessary to reference and validate a certain acceptance criteria of a `Story`
+from within a testcase.
+
+For more information about specs, please visit the [Specs guide](spec.md).
+
+## Creating Page Objects
+
+Wdio-workflo uses an architecture based on the [Page Object Pattern](https://martinfowler.com/bliki/PageObject.html) to map the structure of a
+website and to provide an API to interact with the website.
+
+Since wdio-workflo's page object architecture is a quite extensive topic to cover,
+we will only brush page object's in this guide. For a complete description
+of all page object components provided by wdio-workflo, please read the [Page Objects guide](pageObject.md).
+
+In a nutshell, wdio-workflo's page architecture consists of 3 main components:
+`PageNode`, `PageNodeStore` and `Page`.
+
+### Page Nodes
+
+A `PageNode` represents a component of a website. In frontend web development
+frameworks like React.js or Angular, a `PageNode` is the equivalent of a
+React/Angular Component. These components are reusable building blocks of a
+website with a certain HTML structure and behavior. Each page on a website
+usually consists of many of these components.
+
+Wdio-workflo provides 4 base classes to recreate website components in our
+testing environment:
+
+- `PageElement` to map a single component
+- `PageElementList` to map a collection of similar components with dynamic data like a news feed or a data table
+- `PageElementMap` to map a collection of similar components with static data like the entries of a navigation menu
+- `PageElementGroup` to map a composition of different components like a form (with inputs, checkboxes, dropdowns...)
+
+All of these classes are already implemented by wdio-workflo and you can use them to map very basic website components like a button or a div/span container which simply renders some text.
+
+You can, of course, derive your own `PageNode` classes from these base classes
+to map more complex website components. However, for our first functional system test, we will skip the creation of a custom `PageNode` class and use the basic `PageElement` class to map the "framework link" located on the footer.
+
+### Page Node Stores
+
+A `PageNodeStore` configures, initializes and caches instances of `PageNode`s.
+It can be thought of as a mixture of Factory and Facade pattern.
+
+Writing functional system tests with wdio-workflo, we usually never instantiate
+`PageNode`s directly but always use `PageNodeStores` to access instances of
+`PageNode`s.
+
+When you create your own custom `PageNode` classes, you have to add a factory method in a `PageNodeStore` in order to use your custom page nodes. Since we do not use any custom `PageNode` classes in our first functional system test,
+we can skip this for now.
+
+### Pages
+
+A `Page` in wdio-workflo is basically an aggregation of `PageNodes`. It maps
+the structure of a website's pages, dialogs or page fragments (eg. header, footer...).
+Each `Page` is assigned an instance of a `PageNodeStore` to create its `PageNode`s.
+
+In addition, a `Page` can also define method to abstract the behavior of a
+page, dialog of page fragment. The `Page` base class provided by wdio-workflo
+includes methods to check if the `Page` is currently or eventually open/closed
+and to wait for a page to be open/closed.
+
+For our first functional system test, we have to map the structure of the demo
+website's footer page fragment (actually, it is sufficient to only map the framework link).
+
+To do so, please create a new directory named `common` in the folder `src/page_objects/pages`
+and add the file `Footer.ts` inside this directory:
+
+´´´typescript
+import { stores } from '?/page_objects';
+
+import { Page } from '../Page';
+
+export class Footer extends Page<stores.PageNodeStore> {
+
+  constructor() {
+    super({ store: stores.pageNode });
+  }
+
+  get container() {
+    return this._store.Element(
+      xpath('//footer')
+    );
+  }
+
+  get frameworkLink() {
+    return this.container.$.Element(
+      xpath('//a').text('wdio-workflo')
+    );
+  }
+
+  isOpen(): boolean {
+    return this.container.currently.isVisible();
+  }
+
+  isClosed(): boolean {
+    return this.container.currently.not.isVisible();
+  }
+}
+
+export const footer = new Footer();
+´´´
+
+Now there is quite a lot going on here. Don't fear - let me walk you through it
+step by step.
+
+At the top of the file, you will notice there is an absolute and a relative `import` statement
+to import our `PageNodeStore` and `Page` base classes.
+`?` in the absolute import refers to the `src` folder inside your system test directory.
+
+*I usually use absolute imports ("?/page_objects") if I need to import code from a folder
+which is not a direct sibling to or a parent of the folder of the current file.
+However, if I import code from a file that resides in the same folder as or a parent folder of
+the current file, I use relative import.
+
+As a rule of thumb, all files within the same "module" (folder "family")
+should be imported with relative imports and all other files with absolute imports.
+This also helps to reduce errors related to circular dependencies in TypeScript.*
+
+Since our `Footer` class extends the base `Page` class and each `Page` class is
+associated with a `PageNodeStore` class in order to be able to create `PageNode`s,
+we need to tell the base `Page` class the type of the `PageNodeStore` that we want to use
+(`Page<stores.PageNodeStore>`). Furthermore, we need to pass an instance of said
+page node store to the parameters of the super class constructor
+(`super({ store: stores.pageNode })`).
+
+The `Page` base class also has two abstract methods `isOpen` and `isClosed`
+which need to be implemented by our `Footer` class. To indicate whether a website's page
+is open or closed, we usually check if one of the page's components currently visible (rendered).
+
+Usually, each page is wrapped within a container HTML element. If this container
+element is rendered, we assume that our page is currently open.
+
+Therefore, we now define a `PageElement` called `container` on our `Footer` page fragment.
+
+You might wonder why our `container` is implemented as a getter function. The reason for this is that each `Page` class is actually stateless - all state is stored in the website
+itself and the `Page` only provides an API to interact with the website.
+So if we want to interact with a component on a website, we must fetch its current
+state from the website first.
+
+*To do so, we could write "normal" class methods, like "getContainer()".
+These methods usually have no parameters, which allows us to use a more elegant way: JavaScript getters. These are basically functions that look like class variables
+(without function parenthesis) and they are newly evaluated each time you access them.*
+
+Inside our `container` getter function, we fetch a `PageElement` instance from
+the `PageNodeStore` associated with our `Footer` by invoking `this._store.Element()`.
+
+To identify our `container` in the website's DOM, we need to pass an XPath selector
+to the `.Element()` factory method. Here we have two options: We can either write
+the XPath selector as a "raw" string, or we can use wdio-workflo's `xpath` builder
+function. Using the `XPathBuilder` is useful for more complex XPath selectors
+whose syntax can be a bit intimidating and error-prone.
+
+To explain how wdio-workflo's `XPathBuilder` works, let's now have a look at the
+mapping of our framework link.
+
+This time, we use a different way of retrieving a `PageElement` from a `PageNodeStore`.
+Same as with `Page`s, every `PageNode` is also associated with a `PageNodeStore` in
+order to create `PageNode`s which are children of other `PageNode`s in the HTML
+structure of a website. For `PageElement`s and `PageElementList`s, the associated
+`PageNodeStore` instance is available via the `$` accessor.
+
+The `$` accessor has one special feature: It chains the XPath selectors of the
+parent and the child `PageNode`s together. In our example, this would result
+in the XPath selector '//footer//a[., "wdio-workflo"]'.
+
+So, one last remaining mystery: What does the '[., "wdio-workflo"]' part
+of our selector mean?
+
+This is the kind of question that you do not need to worry about if you use wdio-workflo's XPathBuilder instead of writing "raw" XPath strings. Using XPathBuilder, you
+only supply an XPath selector for the HTML element tag, prepended by "/" for a
+direct child or "//" for an indirect child. The XPathBuilder then provides
+a couple of functions to add constraints to your HTML element, eg. its text or
+its CSS classname. To see all available options, simple write `xpath().` and
+trigger the autocompletion mechanism of your code editor.
+
+One last thing:
+
+I usually add `index.ts` files in each page object folder, so that I can export
+and import all page objects defined within a folder as a single "module".
+
+To do so, create the file `index.ts` in the folder `src/page_objects/pages/common`:
+
+```typescript
+export * from './Footer';
+```
+
+and add the following two lines to the file `index.ts` in the folder `src/page_objects/pages`:
+
+```typescript
+import * as common from './common';
+
+export { common };
+```
+
+## Steps
+
+Now that we have mapped all of the demo website's components with which we need
+to interact, we need to write `Step`s which encapsulate these website interactions in order
+to make them reusable.
+
+A step consists of
+
+- a title in natural language
+- a body function where the actual interaction logic with the website is implemented
+- step arguments to pass parameters to the step's body function
+- a step callback which gets invoked after the body function
+
+Both step arguments and the step callback are passed to a `Step` function inside a
+`params` object. The step callback is always optional. The step arguments can be
+optional, depending on how you define the type of the `params` object
+(`IOptStepParams` vs. `IStepParams`).
+
+For our first functional system test, we only use `Step`s with optional step
+arguments to make things less complicated.
+
+So let's create a file called `demo.step.ts` in the folder `src/steps`:
+
+```typescript
+import { defineSteps, IOptStepParams, Step } from 'wdio-workflo';
+
+import { pages } from '?/page_objects';
+
+const demoSteps = defineSteps({
+  "open demo website":
+  (params?: IOptStepParams<Workflo.EmptyObject, void>) =>
+    new Step(params, (): void => {
+      // When not providing a protocol, the url is resolved relative to the baseUrl.
+      browser.url('');
+      pages.common.footer.wait.isOpen();
+    }),
+
+  "open framework link in footer":
+  (params?: IOptStepParams<Workflo.EmptyObject, void>) =>
+    new Step(params, (): void => {
+      pages.common.footer.frameworkLink.click();
+    })
+});
+
+export { demoSteps };
+```
+
+Our `Step` definitions should always be enclosed by wdio-workflo's `defineSteps`
+function which will help us avoid type errors when defining `Step`s.
+
+The object passed to the `defineSteps` function consists of the `Step` titles
+as keys, and the `Step` implementations as values.
+
+
+
+
+
+
+
+
