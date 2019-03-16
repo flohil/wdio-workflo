@@ -1,6 +1,6 @@
 {
   "name": "wdio-workflo",
-  "version": "0.2.58",
+  "version": "0.2.60",
   "description": "Wdio-workflo is a framework for writing behavior-driven automated functional system tests. It is based on a customized version of webdriverio v4.13.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,6 +22,7 @@
   "bugs": {
     "url": "https://github.com/flohil/wdio-workflo/issues"
   },
+  "keywords": ["wdio-workflo", "webdriverio", "webdriver", "selenium", "jasmine", "allure", "functional system testing"],
   "devDependencies": {
     "tslint": "^5.12.1",
     "tslint-config-airbnb": "^5.11.1",
