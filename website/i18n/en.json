@@ -22,7 +22,8 @@
         "title": "Fifth Document"
       },
       "guides": {
-        "title": "guides"
+        "title": "Guides",
+        "sidebar_label": "Overview"
       },
       "setup": {
         "title": "Setup",
@@ -37,6 +38,7 @@
       "Github": "Github"
     },
     "categories": {
+      "Overview": "Overview",
       "Getting Started": "Getting Started",
       "First Category": "First Category",
       "Second Category": "Second Category"

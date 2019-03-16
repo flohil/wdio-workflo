@@ -171,7 +171,7 @@ class Index extends React.Component {
           {
             content:
 "If you are new to wdio-workflo, you probably want to head straight for the [Getting Started](/wdio-workflo/docs/setup) page.<br />" +
-"Subsequently, you can visit the [Guides](/wdio-workflo/docs/setup) page to learn you how to use the main components of wdio-workflo.<br />" +
+"Subsequently, you can visit the [Guides](/wdio-workflo/docs/guides) page to learn you how to use the main components of wdio-workflo.<br />" +
 "<br />" +
 "At [wdio-workflo-example](https://github.com/flohil/wdio-workflo-example), there are code examples demonstrating the usage of wdio-workflo.<br />" +
 "Furthermore, the [API Docs](/wdio-workflo/apiDoc) provide detailed information about each of the framework's building blocks.<br />" +
