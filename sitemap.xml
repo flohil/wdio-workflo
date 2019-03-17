@@ -11,6 +11,7 @@
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/doc3</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/doc3" /> </url>
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/doc4</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/doc4" /> </url>
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/doc5</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/doc5" /> </url>
+<url> <loc>https://flohil.github.io/wdio-workflo/docs/firstTest</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/firstTest" /> </url>
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/guides</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/guides" /> </url>
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/setup</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/setup" /> </url>
 </urlset>
