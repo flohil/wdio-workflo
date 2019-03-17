@@ -24,6 +24,9 @@ This guide assumes that you have installed and initialized wdio-workflo with
 its default configuration. If you haven't done so already, please follow the
 steps described in the [Setup guide](setup.md).
 
+Furthermore, you need to have Google Chrome installed on your system
+(You can also change the browser used to run your tests in `workflo.conf.ts`).
+
 ## Defining the Requirements
 Wdio-workflo follows a behavior-driven software development approach and encourages you to define the requirements of your application in so-called 'spec' files before you start writing testcases.
 
@@ -255,23 +258,15 @@ export { common };
 ## Steps
 
 Now that we have mapped all of the demo website's components with which we need
-to interact, we need to write `Step`s which encapsulate these website interactions in order
-to make them reusable.
+to interact, we need to write `Step`s which encapsulate these website interactions
+in order to make them reusable.
 
-A step consists of
+Each `Step` is defined by
 
 - a title in natural language
 - a body function where the actual interaction logic with the website is implemented
-- step arguments to pass parameters to the step's body function
+- step arguments which are passed as parameters to the step's body function
 - a step callback which gets invoked after the body function
-
-Both step arguments and the step callback are passed to a `Step` function inside a
-`params` object. The step callback is always optional. The step arguments can be
-optional, depending on how you define the type of the `params` object
-(`IOptStepParams` vs. `IStepParams`).
-
-For our first functional system test, we only use `Step`s with optional step
-arguments to make things less complicated.
 
 So let's create a file called `demo.step.ts` in the folder `src/steps`:
 
@@ -283,32 +278,269 @@ import { pages } from '?/page_objects';
 const demoSteps = defineSteps({
   "open demo website":
   (params?: IOptStepParams<Workflo.EmptyObject, void>) =>
-    new Step(params, (): void => {
+    new Step(params, () => {
       // When not providing a protocol, the url is resolved relative to the baseUrl.
       browser.url('');
       pages.common.footer.wait.isOpen();
     }),
 
-  "open framework link in footer":
-  (params?: IOptStepParams<Workflo.EmptyObject, void>) =>
-    new Step(params, (): void => {
+  "open framework link in footer and return url":
+  (params?: IOptStepParams<Workflo.EmptyObject, string>) =>
+    new Step(params, () => {
       pages.common.footer.frameworkLink.click();
-    })
+
+      return browser.getUrl();
+    }),
 });
 
 export { demoSteps };
 ```
 
-Our `Step` definitions should always be enclosed by wdio-workflo's `defineSteps`
-function which will help us avoid type errors when defining `Step`s.
+To make sure wdio-workflo can handle our `Step`s correctly, we need to pass our step definitions object as a parameter to wdio-workflo's `defineSteps` function.
+This step definitions object consists of the `Step` titles as keys and
+step creation functions as values.
 
-The object passed to the `defineSteps` function consists of the `Step` titles
-as keys, and the `Step` implementations as values.
+A step creation function returns a new instance of a `Step` and is always passed
+a single step `params` object, which encapsulates our step arguments and an optional step
+callback function. This `params` object is then passed on into a `Step`'s constructor
+as first parameter, together with the `Step`'s body function as its second
+parameter.
 
+An example step `params` object could look like this:
 
+```typescript
+{
+  args: { url: "https://google.com" }
+  cb: () => {
+    console.log("step was executed")
+  }
+}
+```
 
+A `Step` might or might not require step arguments, depending on the logic implemented
+in the `Step`'s body function. If the `Step` does require step arguments, the type
+of the step `params` object becomes `IStepParams`, if it does not, the type
+`IOptStepParams` should be used.
 
+In our case, both the step "open demo website" and the step "open framework link in footer" do not require external step arguments. Therefore, the type of our step `params` object is `IOptStepParams`. Since we do not need to pass step arguments to these two steps
+and since the step callback function is always optional, we can mark the whole
+step `params` object as optional as well be putting a `?` next to the parameter name.
+This means that when we invoke these steps, we do not need to provide a step
+`params` object at all.
 
+You may have noticed that the type `IOptStepParams` (and also the type `IStepParams`)
+requires two type parameters.
 
+The first type parameter defines the type of our step arguments. If we do not have any step arguments, like in our case, we should use the `Workflo.EmptyObject` type.
 
+The second type parameter defines the return type of our `Step`'s body function.
+The return value of a `Step`'s body function is passed as a single parameter to its
+call back function. If we do not return anything, we can use the `void` type as in our step "open demo website". In our second step "open framework link in footer and return url",
+we return the browser's url after clicking on the framework link. Since this url
+is a string, we use `string` as return type.
 
+There is only one thing left which I would like to explain in a little more detail:
+the body function of the "open demo website" step. The line `browser.url('');`
+is used to navigate to different domains or paths within a domain.
+
+If you want to open a completely different website, you need to start the url with
+"http://" or "https://". If you want to open a page on the same domain, you
+can start your url parameter with a "/" to resolve it relative to the root of
+the baseUrl property defined in your `workflo.conf.ts` file. If you omit the "/",
+the path is resolved relative to the baseUrl itself.
+
+So, in our case, `browser.url('');` simply opens the base url of our demo website.
+
+The next line `pages.common.footer.wait.isOpen();` is also very important,
+because it demonstrates one of the most common pitfalls of testing web applications:
+timeouts and waiting.
+
+Keep in mind that loading and rendering a website takes some time - usually longer
+than our test runner takes to invoke the next command. Therefore, if we forget
+to wait for an element of a website to be rendered and try to interact with this element,
+we will run into errors because the element simply isn't available yet.
+
+Wdio-workflo supports two waiting mechanisms: explicit and implicit waiting.
+In this case, we explicitly tell our test to wait for our footer to be open to make
+sure that our demo website has finished loading before any interactions with elements
+on this website can take place.
+
+Explaining all aspects of wdio-workflo's waiting mechanisms is beyond the scope
+of this guide. If you are interested, you can find more information in the
+[Page Nodes guide](pageNode.md).
+
+There is one last thing left to do before we can resume our guide: We need to register
+our newly created step definitions in the `index.ts` file of our `src/steps` folder:
+
+```typescript
+import { defineSteps, proxifySteps } from 'wdio-workflo';
+
+////////////////////////////////////////////////////////////
+// EDIT THIS AREA TO CREATE A MERGED STEP DEFINITIONS OBJECT
+////////////////////////////////////////////////////////////
+
+// IMPORT YOUR STEP DEFINITIONS
+import { demoSteps } from './demo.step';
+
+// MERGE ALL STEP DEFINITIONS INTO ONE OBJECT AS SHOWN BELOW
+const stepDefinitions = defineSteps({
+  ...demoSteps,
+});
+
+////////////////////////////////////////////////////////////
+
+const steps = proxifySteps(stepDefinitions);
+
+export { steps };
+```
+
+This file merges all step definitions of different `.step.ts` files together
+into one big `steps` object. This comes in handy when writing testcases
+because we can "query" the `steps` object to see if certain steps that we
+would like to use have already been implemented.
+
+You can also exported smaller collections of steps, but you need to make sure
+that your exported steps have been proxified by calling wdio-workflo's `proxifySteps`
+function and passing it your step definitions. Otherwise, wdio-workflo will not
+be able to handle your steps correctly.
+
+## Testcases
+
+We have now finished all preliminary work to write our first actual `testcase`.
+
+A `testcase` is defined by a title, some metadata about the testcase and a body function. The body function contains a sequence of `Step`s which modify the state of the tested web application. Within the callback function of each `Step`, a testcase can validate one or many acceptance criteria of our requirements which we defined in our spec files.
+
+Multiple similar `testcase`s should be grouped together in `suite`s.
+
+For our first `testcase`, create the file `demo.tc.ts` in the folder `src/testcases`
+with the following content:
+
+```typescript
+import { pages } from '?/page_objects';
+import { steps } from '?/steps';
+
+suite("demo", {}, () => {
+  testcase("open framework link", {}, () => {
+    const frameworkUrl = 'https://flohil.github.io/wdio-workflo/';
+
+    given(steps["open demo website"]())
+    .when(steps["open framework link in footer and return url"]({
+      cb: (url) => {
+        validate({ "1.1": [1] }, () => {
+          // if step body function does not return the data we need for validation
+          // const url = browser.getUrl();
+
+          expect(url).toEqual(frameworkUrl);
+        });
+      }
+    }));
+  });
+});
+```
+
+If you wonder about the curly braces which are the second parameters of our
+`suite` and `testcase` functions, these are used to add metadata. For example,
+you can define the `severity` of a `testcase` (how severe it would be if the
+testcase failed). More details about the different kinds of metadata available
+can be found in the [Testcase guide](testcase.md).
+
+The structure of a `testcase` always follows the same pattern:
+
+- first you pass a `Step` to the `given()` function to establish a well-known, initial state in your application
+- then you use pass a `Step` to the `when()` function to modify the state of the application
+- finally, you validate the resulting state using the `validate()` function inside
+a `Step`'s callback function
+
+Of course, you can have more than one `Step` for establishing the initial state
+and for performing state modifications. To use multiple `Step`s, simply append an
+`and()` function to your `given()` or `when()` invocations.
+
+Most of our testcase code should be quite self-explanatory. I only want to give
+a little more explanation about the callback function of our "open framework link in footer and return url" step.
+
+As you can see, the callback function is passed the `url` string which we
+returned in the body function of the step. It then invokes the `validate` function
+by passing it a validation object as first parameter and a validation function
+as second parameter.
+
+The keys of validation objects are the ids of the `Story`s that we defined in our
+spec files. The values of validation objects are arrays of acceptance criteria ids
+of these `Story`s. So in our case, we tell our `testcase` to validate the
+acceptance criteria with the id 1 of our `Story` with the id "1.1". We could
+also add more acceptance criteria ids to the array of a `Story` id or even add more
+`Story` ids if one validation is used to validate multiple requirements at once.
+
+Inside a validation function, we usually need to retrieve some data from the
+tested application which describes the current state of the GUI. In our case,
+the step itself already returns the resulting url - both approaches are valid
+and wdio-workflo does not force you to use one over the other. However,
+if you fetch the data inside the callback function you can be more flexible because
+you are not limited to the data returned by a step and can access any data you like
+via page objects' API functions.
+
+The last interesting thing about the validation above is the use of the
+`expect(url).toEqual(frameworkUrl)` expectation matchers to compare the actual
+browser url with the expected framework url.
+
+Wdio-workflo uses the [Jasmine test framework](https://jasmine.github.io/) to
+compare our actual and expected data. To provide you with even more flexibility,
+wdio-workflo also added matchers from the [jasmine-expect](https://www.npmjs.com/package/jasmine-expect) npm packages.
+
+Furthermore, wdio-workflo provides some custom matchers for its page object classes: `expectElement`, `expectList`, `expectMap`, `expectGroup` and `expectPage`.
+These custom matchers will help you reduce the code required for expectation matching
+and provides very useful error messages custom-tailored to page objects.
+
+You can read more about wdio-workflo's expectation matchers in the
+`Expectation Matcher guide`(matchers.md).
+
+## Running your Test
+
+Finally, we are now able to run our first functional system test written with
+wdio-workflo.
+
+Simply execute the following command from your project's root directory:
+
+```
+./node_modules/.bin/wdio-workflo
+```
+
+This will run all your tests.
+
+You can also filter which tests should be run. For example, to only execute
+our newly created testcase, we could run:
+
+```
+./node_modules/.bin/wdio-workflo --testcases '["demo.open framework link"]'
+```
+
+You can read more about execution filters in the [Execution Filters guide]
+(executionFilters.md).
+
+Or, you can learn about all CLI options available in Wdio-Workflo by visiting
+the [CLI Options page](cli.md).
+
+## Showing the Test Report
+
+While running your tests, wdio-workflo will write a spec report into the console
+window. This report is useful for test development, because in case of errors,
+you can jump directly to the line in which the error occurred by clicking on this
+line in the error stack trace.
+
+If you run your tests on a continuous integration server like Jenkins, wdio-workflo
+also supports a nice graphical report in the [Allure Report](http://allure.qatools.ru/) format.
+
+To generate and display this report in a browser, run the following command:
+
+```
+./node_modules/.bin/wdio-workflo --report
+```
+
+Unfortunately, at the moment the Allure report generated by wdio-workflo
+does not differentiate between testcases and specs properly on all of its pages:
+
+Allure's "Overview" and "Graphs" page will treat both testcases and specs as "test cases" or "tests".
+However, you can open Allure's "Behaviors" page which groups all test artifacts into "Specs" and
+"Testcases" to examine specs and testcases separately.
+
+For more information about test reports, please read the [Test Report guide]
+(testReport.md).
