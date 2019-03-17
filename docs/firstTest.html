@@ -179,13 +179,13 @@ step by step.</p>
 <p>At the top of the file, you will notice there is an absolute and a relative <code>import</code> statement
 to import our <code>PageNodeStore</code> and <code>Page</code> base classes.
 <code>?</code> in the absolute import refers to the <code>src</code> folder inside your system test directory.</p>
-<p>*I usually use absolute imports (&quot;?/page_objects&quot;) if I need to import code from a folder
+<p><em>I usually use absolute imports (&quot;?/page_objects&quot;) if I need to import code from a folder
 which is not a direct sibling to or a parent of the folder of the current file.
 However, if I import code from a file that resides in the same folder as or a parent folder of
-the current file, I use relative import.</p>
-<p>As a rule of thumb, all files within the same &quot;module&quot; (folder &quot;family&quot;)
+the current file, I use relative import.</em></p>
+<p><em>As a rule of thumb, all files within the same &quot;module&quot; (folder &quot;family&quot;)
 should be imported with relative imports and all other files with absolute imports.
-This also helps to reduce errors related to circular dependencies in TypeScript.*</p>
+This also helps to reduce errors related to circular dependencies in TypeScript.</em></p>
 <p>Since our <code>Footer</code> class extends the base <code>Page</code> class and each <code>Page</code> class is
 associated with a <code>PageNodeStore</code> class in order to be able to create <code>PageNode</code>s,
 we need to tell the base <code>Page</code> class the type of the <code>PageNodeStore</code> that we want to use
