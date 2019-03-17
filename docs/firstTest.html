@@ -141,32 +141,39 @@ and to wait for a page to be open/closed.</p>
 website's footer page fragment (actually, it is sufficient to only map the framework link).</p>
 <p>To do so, please create a new directory named <code>common</code> in the folder <code>src/page_objects/pages</code>
 and add the file <code>Footer.ts</code> inside this directory:</p>
-<p>´´´typescript
-import { stores } from '?/page_objects';</p>
-<p>import { Page } from '../Page';</p>
-<p>export class Footer extends Page&lt;stores.PageNodeStore&gt; {</p>
-<p>constructor() {
-super({ store: stores.pageNode });
-}</p>
-<p>get container() {
-return this._store.Element(
-xpath('//footer')
-);
-}</p>
-<p>get frameworkLink() {
-return this.container.$.Element(
-xpath('//a').text('wdio-workflo')
-);
-}</p>
-<p>isOpen(): boolean {
-return this.container.currently.isVisible();
-}</p>
-<p>isClosed(): boolean {
-return this.container.currently.not.isVisible();
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">import</span> { Page } <span class="hljs-keyword">from</span> <span class="hljs-string">'../Page'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> Footer <span class="hljs-keyword">extends</span> Page&lt;stores.PageNodeStore&gt; {
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">super</span>({ store: stores.pageNode });
+  }
+
+  <span class="hljs-keyword">get</span> container() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._store.Element(
+      xpath(<span class="hljs-string">'//footer'</span>)
+    );
+  }
+
+  <span class="hljs-keyword">get</span> frameworkLink() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.$.Element(
+      xpath(<span class="hljs-string">'//a'</span>).text(<span class="hljs-string">'wdio-workflo'</span>)
+    );
+  }
+
+  isOpen(): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.currently.isVisible();
+  }
+
+  isClosed(): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.container.currently.not.isVisible();
+  }
 }
-}</p>
-<p>export const footer = new Footer();
-´´´</p>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> footer = <span class="hljs-keyword">new</span> Footer();
+</code></pre>
 <p>Now there is quite a lot going on here. Don't fear - let me walk you through it
 step by step.</p>
 <p>At the top of the file, you will notice there is an absolute and a relative <code>import</code> statement
