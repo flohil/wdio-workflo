@@ -29,7 +29,7 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'guides', label: 'Guides'},
+    {doc: 'setup', label: 'Guides'},
     {page: 'demo', label: 'Demo Page'},
     {href: 'https://github.com/flohil/wdio-workflo-example', label: 'Examples'},
     {page: 'apiDoc', label: 'API'},

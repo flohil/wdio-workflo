@@ -1,11 +1,12 @@
 {
   "docs": {
-    "Overview": ["guides"],
     "Getting Started": ["setup", "firstTest"],
-    "First Category": ["doc2"],
-    "Second Category": ["doc3"]
-  },
-  "docs-other": {
-    "First Category": ["doc4", "doc5"]
+    "Configuration": ["config"],
+    "Architecture": ["classes"],
+    "Specs": ["specs"],
+    "Page Objects": ["pageObjects", "element", "list", "map", "group", "store", "page", "customPageNodes"],
+    "Steps": ["steps"],
+    "Testcases": ["testcases"],
+    "Command Line Interface": ["executionFilters", "debugging", "reporters", "cliOptions"]
   }
 }

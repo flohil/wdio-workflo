@@ -8,13 +8,5 @@ The framework is based on, extends and customizes the fabulous [webdriverio-v4](
 
 ## Getting Started
 
-Learn how to install, configure and use wdio-workflo on the framework's
-[Getting Started page](https://flohil.github.io/wdio-workflo/docs/setup).
-
-## Further Information
-
-Wdio-workflo's [Guides page](https://flohil.github.io/wdio-workflo/docs/guides)
-contains even more useful information about the framework's core components,
-how to run specific tests, how to display the created test reports or how to
-debug tests.
-
+Learn how to install, configure and use wdio-workflo in the framework's
+[Getting Started guide](https://flohil.github.io/wdio-workflo/docs/setup).

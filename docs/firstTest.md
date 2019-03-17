@@ -1,7 +1,7 @@
 ---
 id: firstTest
-title: Writing your first Functional System Test
-sidebar_label: Writing your first Functional System Test
+title: Writing your first Test
+sidebar_label: Writing your first Test
 ---
 
 ## Overview
@@ -64,7 +64,7 @@ Please notice that the first parameter of our `Then` function is a numerical id.
 This id is necessary to reference and validate a certain acceptance criteria of a `Story`
 from within a testcase.
 
-For more information about specs, please visit the [Specs guide](spec.md).
+For more information about specs, please visit the [Specs guide](specs.md).
 
 ## Creating Page Objects
 
@@ -73,7 +73,7 @@ website and to provide an API to interact with the website.
 
 Since wdio-workflo's page object architecture is a quite extensive topic to cover,
 we will only brush page object's in this guide. For a complete description
-of all page object components provided by wdio-workflo, please read the [Page Objects guide](pageObject.md).
+of all page object components provided by wdio-workflo, please read the [Page Objects guide](pageObjects.md).
 
 In a nutshell, wdio-workflo's page architecture consists of 3 main components:
 `PageNode`, `PageNodeStore` and `Page`.
@@ -128,7 +128,7 @@ website's footer page fragment (actually, it is sufficient to only map the frame
 To do so, please create a new directory named `common` in the folder `src/page_objects/pages`
 and add the file `Footer.ts` inside this directory:
 
-´´´typescript
+```typescript
 import { stores } from '?/page_objects';
 
 import { Page } from '../Page';
@@ -161,7 +161,7 @@ export class Footer extends Page<stores.PageNodeStore> {
 }
 
 export const footer = new Footer();
-´´´
+```
 
 Now there is quite a lot going on here. Don't fear - let me walk you through it
 step by step.
@@ -173,9 +173,9 @@ to import our `PageNodeStore` and `Page` base classes.
 *I usually use absolute imports ("?/page_objects") if I need to import code from a folder
 which is not a direct sibling to or a parent of the folder of the current file.
 However, if I import code from a file that resides in the same folder as or a parent folder of
-the current file, I use relative import.
+the current file, I use relative import.*
 
-As a rule of thumb, all files within the same "module" (folder "family")
+*As a rule of thumb, all files within the same "module" (folder "family")
 should be imported with relative imports and all other files with absolute imports.
 This also helps to reduce errors related to circular dependencies in TypeScript.*
 
@@ -367,7 +367,7 @@ on this website can take place.
 
 Explaining all aspects of wdio-workflo's waiting mechanisms is beyond the scope
 of this guide. If you are interested, you can find more information in the
-[Page Nodes guide](pageNode.md).
+[Page Element guide](element.md).
 
 There is one last thing left to do before we can resume our guide: We need to register
 our newly created step definitions in the `index.ts` file of our `src/steps` folder:
@@ -442,7 +442,7 @@ If you wonder about the curly braces which are the second parameters of our
 `suite` and `testcase` functions, these are used to add metadata. For example,
 you can define the `severity` of a `testcase` (how severe it would be if the
 testcase failed). More details about the different kinds of metadata available
-can be found in the [Testcase guide](testcase.md).
+can be found in the [Testcases guide](testcases.md).
 
 The structure of a `testcase` always follows the same pattern:
 
@@ -517,7 +517,7 @@ You can read more about execution filters in the [Execution Filters guide]
 (executionFilters.md).
 
 Or, you can learn about all CLI options available in Wdio-Workflo by visiting
-the [CLI Options page](cli.md).
+the [CLI Options page](cliOptions.md).
 
 ## Showing the Test Report
 

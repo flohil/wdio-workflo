@@ -5,29 +5,81 @@
     "previous": "Previous",
     "tagline": "A Framework for writing Functional System Tests in TypeScript",
     "docs": {
-      "doc1": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
+      "classes": {
+        "title": "Class Diagram",
+        "sidebar_label": "Class Diagram"
       },
-      "doc2": {
-        "title": "document number 2"
+      "cliOptions": {
+        "title": "CLI Options",
+        "sidebar_label": "CLI Options"
       },
-      "doc3": {
-        "title": "This is document number 3"
+      "config": {
+        "title": "Configuration Options",
+        "sidebar_label": "Configuration Options"
       },
-      "doc4": {
-        "title": "Other Document"
+      "customPageNodes": {
+        "title": "Custom Page Nodes",
+        "sidebar_label": "Custom Page Nodes"
       },
-      "doc5": {
-        "title": "Fifth Document"
+      "debugging": {
+        "title": "Debugging",
+        "sidebar_label": "Debugging"
       },
-      "guides": {
-        "title": "Guides",
-        "sidebar_label": "Overview"
+      "element": {
+        "title": "Element",
+        "sidebar_label": "Element"
+      },
+      "executionFilters": {
+        "title": "Execution Filters",
+        "sidebar_label": "Execution Filters"
+      },
+      "firstTest": {
+        "title": "Writing your first Test",
+        "sidebar_label": "Writing your first Test"
+      },
+      "group": {
+        "title": "Group",
+        "sidebar_label": "Group"
+      },
+      "list": {
+        "title": "List",
+        "sidebar_label": "List"
+      },
+      "map": {
+        "title": "Map",
+        "sidebar_label": "Map"
+      },
+      "page": {
+        "title": "Page",
+        "sidebar_label": "Page"
+      },
+      "pageObjects": {
+        "title": "Page Objects",
+        "sidebar_label": "Page Objects"
+      },
+      "reporters": {
+        "title": "Reporters",
+        "sidebar_label": "Reporters"
       },
       "setup": {
         "title": "Setup",
         "sidebar_label": "Setup"
+      },
+      "specs": {
+        "title": "Specs",
+        "sidebar_label": "Specs"
+      },
+      "steps": {
+        "title": "Steps",
+        "sidebar_label": "Steps"
+      },
+      "store": {
+        "title": "Store",
+        "sidebar_label": "Store"
+      },
+      "testcases": {
+        "title": "Testcases",
+        "sidebar_label": "Testcases"
       }
     },
     "links": {
@@ -38,10 +90,14 @@
       "Github": "Github"
     },
     "categories": {
-      "Overview": "Overview",
       "Getting Started": "Getting Started",
-      "First Category": "First Category",
-      "Second Category": "Second Category"
+      "Configuration": "Configuration",
+      "Architecture": "Architecture",
+      "Specs": "Specs",
+      "Page Objects": "Page Objects",
+      "Steps": "Steps",
+      "Testcases": "Testcases",
+      "Command Line Interface": "Command Line Interface"
     }
   },
   "pages-strings": {
