@@ -21,11 +21,6 @@ function ensureRunPath(run) {
     if (!fs.existsSync(runPath)) {
         throw new Error(`Could not find folder ${runPath} for generating or opening allure report`);
     }
-    if (runPath.indexOf(' ') > -1) {
-        throw new Error(`Allure command line cannot handle paths with spaces.
-Please run your tests from a folder without spaces.
-Run path: ${runPath}`);
-    }
     return runPath;
 }
 function ensureExecutable() {
@@ -47,6 +42,12 @@ function ensureExecutable() {
 function generateReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
+        if (runPath.indexOf(' ') > -1) {
+            console.error(`Allure command line cannot handle paths with spaces.
+Please run your tests from a folder without spaces.
+Run path: ${runPath}`);
+            process.exit(1);
+        }
         ensureExecutable();
         // returns ChildProcess instance
         const generation = allure([
@@ -66,6 +67,12 @@ exports.generateReport = generateReport;
 function openReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
+        if (runPath.indexOf(' ') > -1) {
+            console.error(`Allure command line cannot handle paths with spaces.
+Please run your tests from a folder without spaces.
+Run path: ${runPath}`);
+            process.exit(1);
+        }
         ensureExecutable();
         // returns ChildProcess instance
         const open = allure([
