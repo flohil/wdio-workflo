@@ -43,7 +43,7 @@ export function generateReport(workfloConf: any, run?: string) {
 
     if (runPath.indexOf(' ') > -1) {
       console.error(
-`Allure command line cannot handle paths with spaces.
+`\nAllure command line cannot handle paths with spaces.
 Please run your tests from a folder without spaces.
 Run path: ${runPath}`,
       );
@@ -74,7 +74,7 @@ export function openReport(workfloConf: any, run?: string) {
 
     if (runPath.indexOf(' ') > -1) {
       console.error(
-`Allure command line cannot handle paths with spaces.
+`\nAllure command line cannot handle paths with spaces.
 Please run your tests from a folder without spaces.
 Run path: ${runPath}`,
       );

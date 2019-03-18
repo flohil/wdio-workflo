@@ -43,7 +43,7 @@ function generateReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
         if (runPath.indexOf(' ') > -1) {
-            console.error(`Allure command line cannot handle paths with spaces.
+            console.error(`\nAllure command line cannot handle paths with spaces.
 Please run your tests from a folder without spaces.
 Run path: ${runPath}`);
             process.exit(1);
@@ -68,7 +68,7 @@ function openReport(workfloConf, run) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         const runPath = ensureRunPath(run);
         if (runPath.indexOf(' ') > -1) {
-            console.error(`Allure command line cannot handle paths with spaces.
+            console.error(`\nAllure command line cannot handle paths with spaces.
 Please run your tests from a folder without spaces.
 Run path: ${runPath}`);
             process.exit(1);
