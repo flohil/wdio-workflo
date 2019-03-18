@@ -21,6 +21,9 @@ To install wdio-workflo, run the following command from your project's root dire
 npm install --save-dev wdio-workflo
 ```
 
+*Please make sure that your project directory's path has no spaces in it.
+Otherwise, you will not be able to generate Allure reports.*
+
 ## Configuration
 
 ### Configuration files

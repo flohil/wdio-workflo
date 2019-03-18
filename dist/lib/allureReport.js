@@ -21,6 +21,11 @@ function ensureRunPath(run) {
     if (!fs.existsSync(runPath)) {
         throw new Error(`Could not find folder ${runPath} for generating or opening allure report`);
     }
+    if (runPath.indexOf(' ') > -1) {
+        throw new Error(`Allure command line cannot handle paths with spaces.
+Please run your tests from a folder without spaces.
+Run path: ${runPath}`);
+    }
     return runPath;
 }
 function ensureExecutable() {

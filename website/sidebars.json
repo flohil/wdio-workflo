@@ -4,9 +4,10 @@
     "Configuration": ["config"],
     "Architecture": ["classes"],
     "Specs": ["specs"],
-    "Page Objects": ["pageObjects", "element", "list", "map", "group", "store", "page", "customPageNodes"],
+    "Page Objects": ["pageObjects", "element", "list", "map", "group", "store", "page"],
     "Steps": ["steps"],
     "Testcases": ["testcases"],
-    "Command Line Interface": ["executionFilters", "debugging", "reporters", "cliOptions"]
+    "Customizing Page Nodes": ["customPageNodes", "customElement", "customList", "customMap"],
+    "Command Line Interface": ["executionFilters", "headless", "debugging", "reporters", "cliOptions"]
   }
 }

@@ -17,9 +17,21 @@
         "title": "Configuration Options",
         "sidebar_label": "Configuration Options"
       },
+      "customElement": {
+        "title": "Customizing an Element",
+        "sidebar_label": "Customizing an Element"
+      },
+      "customList": {
+        "title": "Customizing a List",
+        "sidebar_label": "Customizing a List"
+      },
+      "customMap": {
+        "title": "Customizing a Map",
+        "sidebar_label": "Customizing a Map"
+      },
       "customPageNodes": {
-        "title": "Custom Page Nodes",
-        "sidebar_label": "Custom Page Nodes"
+        "title": "Introduction",
+        "sidebar_label": "Introduction"
       },
       "debugging": {
         "title": "Debugging",
@@ -40,6 +52,10 @@
       "group": {
         "title": "Group",
         "sidebar_label": "Group"
+      },
+      "headless": {
+        "title": "Running tests headless",
+        "sidebar_label": "Running tests headless"
       },
       "list": {
         "title": "List",
@@ -97,6 +113,7 @@
       "Page Objects": "Page Objects",
       "Steps": "Steps",
       "Testcases": "Testcases",
+      "Customizing Page Nodes": "Customizing Page Nodes",
       "Command Line Interface": "Command Line Interface"
     }
   },

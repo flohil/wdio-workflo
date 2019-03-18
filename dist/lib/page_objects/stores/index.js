@@ -5,5 +5,5 @@ exports.PageNodeStore = PageNodeStore_1.PageNodeStore;
 /**
  * An instance of PageNodeStore.
  */
-exports.pageElement = new PageNodeStore_1.PageNodeStore();
+exports.pageNode = new PageNodeStore_1.PageNodeStore();
 //# sourceMappingURL=index.js.map

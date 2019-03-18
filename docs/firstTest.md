@@ -173,7 +173,7 @@ to import our `PageNodeStore` and `Page` base classes.
 *I usually use absolute imports ("?/page_objects") if I need to import code from a folder
 which is not a direct sibling to or a parent of the folder of the current file.
 However, if I import code from a file that resides in the same folder as or a parent folder of
-the current file, I use relative import.*
+the current file, I use relative imports.*
 
 *As a rule of thumb, all files within the same "module" (folder "family")
 should be imported with relative imports and all other files with absolute imports.
@@ -195,13 +195,15 @@ element is rendered, we assume that our page is currently open.
 
 Therefore, we now define a `PageElement` called `container` on our `Footer` page fragment.
 
-You might wonder why our `container` is implemented as a getter function. The reason for this is that each `Page` class is actually stateless - all state is stored in the website
+You might wonder why our `container` is implemented as a getter function.
+The reason for this is that each `Page` class is actually stateless - all state is stored in the website
 itself and the `Page` only provides an API to interact with the website.
 So if we want to interact with a component on a website, we must fetch its current
 state from the website first.
 
 *To do so, we could write "normal" class methods, like "getContainer()".
-These methods usually have no parameters, which allows us to use a more elegant way: JavaScript getters. These are basically functions that look like class variables
+These methods usually have no parameters, which allows us to use a more elegant way: JavaScript getters.
+These are basically functions that look like class variables
 (without function parenthesis) and they are newly evaluated each time you access them.*
 
 Inside our `container` getter function, we fetch a `PageElement` instance from
@@ -226,10 +228,10 @@ The `$` accessor has one special feature: It chains the XPath selectors of the
 parent and the child `PageNode`s together. In our example, this would result
 in the XPath selector '//footer//a[., "wdio-workflo"]'.
 
-So, one last remaining mystery: What does the '[., "wdio-workflo"]' part
-of our selector mean?
+So, one remaining mystery: What does the '[., "wdio-workflo"]' part of our selector mean?
 
-This is the kind of question that you do not need to worry about if you use wdio-workflo's XPathBuilder instead of writing "raw" XPath strings. Using XPathBuilder, you
+This is the kind of question that you do not need to worry about if you use wdio-workflo's
+XPathBuilder instead of writing "raw" XPath strings. Using XPathBuilder, you
 only supply an XPath selector for the HTML element tag, prepended by "/" for a
 direct child or "//" for an indirect child. The XPathBuilder then provides
 a couple of functions to add constraints to your HTML element, eg. its text or
