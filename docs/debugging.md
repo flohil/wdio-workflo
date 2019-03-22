@@ -18,34 +18,42 @@ This will pause your tests and your commandline interface will switch into a REP
 Running the command `.exit` in your CLI will exit the breakpoint and continue the test run.
 
 ## Debugging in Chrome DevTools
-In order to be able to debug your tests using the Chrome DevTools, the following preconditions need to be met:
 
-- Google's chrome browser needs to be installed on your system.
-- The chrome extension "NIM (Node-Inspector Manager)" needs to be added to and enabled in your chrome browser.
-- The "debug" property of wdio-workflo's configuration object in "workflo.conf.ts" needs to be set to true or you need
-to invoke your tests with the --debug cli option enabled: `./node_modules/.bin/wdio-workflo --debug`
-- You need to open a browser window in chrome before you start your tests (so that Node-Inspector Manager can hook itself into the Chrome DevTools).
-- The "NIM" extension needs to be configured correctly. Further below you can find a list of recommended NIM settings.
+### Preconditions
 
-Now placing a `debugger` statement somewhere in your code will pause your tests and enter a breakpoint in Chrome DevTools. You can switch to the Chrome DevTools window and step through your test code, observe the state of variables etc. or you can switch to the browser window in which your tests are run and inspect the state of the tested
-application.
+The following preconditions need to be met if you want to debug your tests using the Chrome DevTools:
 
-*Sometimes tests might get stuck after entering a `debugger` statement. In this case, closing all chrome processes,
-opening a new chrome window, switching "Open DevTools" in NIM's Main Menu to "Manual" and then back to "Auto" and finally restarting your tests should resolve the problem.*
+- Google's Chrome browser needs to be installed on your system
+- The Chrome extension "NIM (Node-Inspector Manager)" needs to be added
+- You need to open a browser window in Chrome before you start your tests (so that Node-Inspector Manager can hook itself into Chrome DevTools)
+- The "NIM" extension needs to be configured correctly (see below for recommended settings)
 
-These are the recommended settings for the "NIM" chrome extension:
+Click on the "NIM" icon in your Chrome browser's toolbar to open the NIM menu:
 
-(Main Menu)
-- Host: "localhost"
-- Port: "9229"
-- Open DevTools: "Auto"
+![opening the NIM menu](assets/nim_open.png)
 
-(General Options Menu)
-- Open in a New Window: "On"
-- Make Window Focused: "On"
-- Close Automatically: "On"
-- Select DevTools Version: "On" -> DevTools Version (default)
-- Real-time Collaboration: "Off"
-- check Interval: 0.50 secondes
+Now set the your host to "localhost", your port to "9229" and the mode to "Auto":
 
-The General Options Menu can be opened by hovering over the little circle in the right bottom of the Main Menu and then clicking on the "sliders" icon.
+![NIM menu](assets/nim_menu.png)
+
+Now hover over the circle in the right bottom of the NIM menu to show the "NIM options"
+button (the one that looks like sliders) and click on it.
+
+In the NIM options, choose the following settings:
+
+![NIM options](assets/nim_options.png)
+
+
+
+### Running your tests in debug mode
+
+In order to use Chrome's DevTools for debugging, you need to either set the `debug` property in `workflo.conf.ts` to `true`
+or invoke your tests with the `--debug` cli option enabled (`./node_modules/.bin/wdio-workflo --debug`).
+
+Now placing a `debugger` statement somewhere in your code will pause your tests and enter a breakpoint in Chrome DevTools.
+You can switch to the Chrome DevTools window and step through your test code to observe the state of variables or you can switch to the browser window in which your tests are run and inspect the state of the tested application.
+
+When your tests are finished, the Chrome DevTools window should close automatically.
+
+*Sometimes tests might get stuck after entering a `debugger` statement. In this case, closing all Chrome processes,
+opening a new Chrome window, switching "Open DevTools" in NIM's Main Menu to "Manual" and then back to "Auto" and finally restarting your tests should resolve the problem.*
