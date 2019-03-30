@@ -41,10 +41,6 @@
         "title": "Element",
         "sidebar_label": "Element"
       },
-      "executionFilters": {
-        "title": "Execution Filters",
-        "sidebar_label": "Execution Filters"
-      },
       "firstTest": {
         "title": "Writing your first Test",
         "sidebar_label": "Writing your first Test"
@@ -52,10 +48,6 @@
       "group": {
         "title": "Group",
         "sidebar_label": "Group"
-      },
-      "headless": {
-        "title": "Running tests headless",
-        "sidebar_label": "Running tests headless"
       },
       "list": {
         "title": "List",
@@ -76,6 +68,10 @@
       "reporters": {
         "title": "Reporters",
         "sidebar_label": "Reporters"
+      },
+      "runningTests": {
+        "title": "Running Tests",
+        "sidebar_label": "Running Tests"
       },
       "setup": {
         "title": "Setup",

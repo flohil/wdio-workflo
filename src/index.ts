@@ -4621,7 +4621,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    */
   debugSeleniumCommand?: boolean;
   /**
-   * Skip future testcases after specific amount of already executed testcases have failed.
+   * Skip future testcases after a specific amount of already executed testcases have failed.
    * By default, does not bail.
    *
    * @default 0
@@ -4692,7 +4692,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
    */
   specStatus?: (SpecStatus | 'faulty')[];
   /**
-   * Restricts executed testcases by given status.
+   * Restricts executed testcases by their result status set during their last execution.
    *
    * @example
    * ["passed", "failed", "broken", "pending", "unknown"] => these are all available status - combine as you see fit
