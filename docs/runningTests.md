@@ -38,12 +38,13 @@ Wdio-workflo provides two mechanisms to limit the number of testcases executed a
 
 ### Modifying API function names
 
-Wdio-workflo allows you to prepend the letters `x` or `f` to any `suite`, `testcase`, `Feature` and `story` API function:
+Wdio-workflo allows you to prepend the letters `x` or `f` to any `suite`, `testcase`, `Feature`, `Story` and `Then` API function:
 
 - An API function prepended with an `x` will be skipped
 - An API function prepended with an `f` will cause all equal API functions in the same scope which are not prepended with an `f` to be skipped
 
-If you skip a `suite` or a `Feature`, all `testcase` or `story` functions defined within the scope of the `suite` / `Feature` will also be skipped.
+If you skip a `suite` or a `Feature`, all `testcase` or `Story` functions defined within the scope of the `suite` / `Feature` will also be skipped. If you skip a `Story` function,
+all `Then` functions within the scope of the `Story` function will be skipped.
 
 Examples:
 
@@ -74,6 +75,36 @@ xsuite("skipped suite", () => {
 
   // skipped
   testcase("testcase b", {}, () => {})
+})
+
+// skipped
+xFeature("feature a", {}, () => {
+  // skipped
+  Story("story a", {}, () => {
+  })
+})
+
+Feature("feature a", {}, () => {
+  // skipped
+  xStory("1.1", "story a", {}, () => {
+    Given("an initial condition", () => {
+      When("a state change occurs", () => {
+        // skipped
+        Then(1, "the result state should be: ")
+      })
+    })
+  })
+})
+
+Feature("feature a", {}, () => {
+  Story("1.1", "story a", {}, () => {
+    Given("an initial condition", () => {
+      When("a state change occurs", () => {
+        // skipped
+        xThen(1, "the result state should be: ")
+      })
+    })
+  })
 })
 
 ```
