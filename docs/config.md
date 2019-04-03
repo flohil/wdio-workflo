@@ -198,6 +198,7 @@ connectionRetryCount?: number;
 ```typescript
 /**
  * If set to true, will output errors and validation failures immediately.
+ * Will be enabled by default if consoleLogLevel is set to 'steps'.
  *
  * @default false
  */

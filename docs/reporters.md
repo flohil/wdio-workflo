@@ -22,7 +22,7 @@ result status:
 - **failed** *(red)* - At least one validation of a testcase or spec failed (actual and expected value didn't match).
 - **broken** *(yellow)* - There was a runtime error inside a testcase/one of the testcases that validate a spec.
 - **skipped** *(blue/grey)* - The execution of a testcase or spec was skipped (eg. `xtestcase` or `xThen`).
-- **unknown/unvalidated** *(magenta)* - A spec was not validated by any testcase.
+- **unknown/unvalidated** *(magenta)* - A spec was not validated (eg. because of a broken testcase).
 
 *The `broken` status always has precedence over the `failed` status. So for a testcase, if a validation fails and afterwards
 a runtime error occurs, the testcase will be marked as `broken`. For a spec, if at least one of the testcases which validate
@@ -51,49 +51,59 @@ A spec report consists of 3 main sections:
 
 #### Testcase Results
 
-Test runner executes each .tc.ts file that contains testcases which match your
-cli execution filters -> link.
+During the first phase of a test run, wdio-workflo performs the following steps for each `.tc.ts`
+file inside your `testcase` folder:
 
-For each .tc.ts,
+- Executing all testcases that match your test execution filters (if you defined any).
+- Displaying the result status for each testcase, grouped by their parent suites.
+- Showing a list of all validation failures and runtime errors that occurred during test execution.
 
-In spec report, displays result status of each testcase defined in a .tc.ts file
-and afterwards a list of all validation failures and errors which occured during
-the execution of these testcases.
-
-picture
+![Spec validation results](assets/spec_report_test_execution.png)
 
 #### Spec Validation Results
 
-Test runner executes each .spec.ts file that contains stories which match your
-cli execution filters -> link.
+After all testcases have been run, wdio-workflo now links the results of all validations
+performed within a testcase to the specs referenced by the validation object.
 
-For each .spec.ts,
+For each `.spec.ts` file inside your `specs` folder, wdio-workflo will now:
 
-In spec report, displays validation result status of each story and acceptance criteria
-defined in a .spec.ts file and afterwards a list of all validation failures and errors
+- Display the validation results of your specs (acceptance criteria) grouped by their parent stories.
+- Show a list of all validation failures and runtime errors that occurred during a spec validation.
 
-picture
+![Spec validation results](assets/spec_report_spec_validation.png)
 
 #### Summary
 
-number of spec files, testcase files, suites, testcases, features and stories which
-matches your execution filters -> link.
+The spec report's summary of your test run starts with a list of all validation failures and runtime errors
+that occurred during the execution of testcases and within spec validations.
 
-count and percentage of testcase results and spec results by category
+![Test statistics](assets/spec_report_summary_errors.png)
 
-picture
+At the very end of your spec report you can find some test statistics, including information such as:
+
+- The number of executed testcase and spec files, suites, testcases, features and specs.
+- The duration of testcase execution and spec validation.
+- The coverage of your acceptance criteria (automated, manual, unvalidated).
+- The percentage and count of passing/skipped/failing/broken/unvalidated testcases and specs.
+
+![Test statistics](assets/spec_report_summary_statistics.png)
 
 ### Configuration Options
 
-Usually, the spec reporter does not output errors or validation failures immediately,
-but first finishes all testcases defined in a `.tc.ts` file before outputting
+By default, the spec reporter does not output errors immediately and only logs the
+name of executed testcases (but not the performed steps).
 
-consoleLogLevels
-reportErrorsInstantly
+To change this behavior, your can alter the values of the options `reportErrorsInstantly` and `consoleLogLevel` in your `workflo.conf.ts` file or as CLI options.
+
+This picture shows `reportErrorsInstantly` set to `true` and `consoleLogLevel` set to `'steps'`:
+
+![{consoleLogLevel: 'steps', reportErrorsInstantly: true}](assets/spec_report_console_log_level_steps.png)
 
 ## Allure Reporter
 
-debugSeleniumCommands
+### Objective
+
+### Structure
 
 test reports - testcases vs specs
 
@@ -110,9 +120,36 @@ behaviors page
 
 (packages and suites page can be ignored)
 
-configuration of issue tool etc.
+### Configuration Options
 
+#### Disabling Selenium Commands Logging
 
-integration on build server: Jenkins, Maven, TeamCity
+By default, wdio-workflo logs each selenium command request (as well as its parameters and response object)
+as a single step in your Allure report.
 
-More information about allure here: http://allure.qatools.ru/
+If this is too much information for you, you can set the `debugSeleniumCommands` option in your
+`workflo.conf.ts` file to `false`.
+
+#### Issue Tracking And Test Management Patterns
+
+The Allure report can create links to the bugs, testIds and issues which you defined in your `testcase`
+or `Story` metadata objects. In order for this to work, you need to configure the base urls for your
+test management and issue tracking tools.
+
+To do so, set the following options in `workflo.conf.ts`:
+
+```typescript
+allure: {
+  // base url for bugs and issues, %s will be replaced by bug/issue id
+  issueTrackerPattern: 'http://example.com/issues/%s',
+  // base url for testIds, %s will be replaced by the testId
+  testManagementPattern: 'http://example.com/tms/%s',
+},
+```
+
+### Build Server Integration
+
+There are plugins available for several build servers (including Jenkins, TeamCity, Maven) which enable
+you to easily display and integrate Allure reports in your continuous integration pipeline.
+
+For more information, see https://docs.qameta.io/allure/#_reporting.

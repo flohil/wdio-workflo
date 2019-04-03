@@ -73,7 +73,7 @@ Options:
 
   --debug                  enable debugging with Node-Inspect Manager chrome extension (default: false)
 
-  --reportErrorsInstantly  report broken testcase errors and errors from validation failures immediatly (default: false)
+  --reportErrorsInstantly  report broken testcase errors and errors from validation failures immediately (default: false)
                            allowed values are (true|false)
                            will be enabled by default if consoleLogLevel is set to "steps"
 
