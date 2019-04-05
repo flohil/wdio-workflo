@@ -103,22 +103,136 @@ This picture shows `reportErrorsInstantly` set to `true` and `consoleLogLevel` s
 
 ### Objective
 
-### Structure
+The [Allure report](http://allure.qatools.ru/) was developed by Qameta Software to create test execution reports that are clear to everyone in the team.
 
-test reports - testcases vs specs
+Wdio-workflo uses its Allure reporter to assist you in analyzing the results of
+test runs executed on a build server as part of your continuous integration process.
 
-dashboard page: information about environment, correct number of testcaess and specs,
-overview of testcase results, link to build job that was tested
+### Features
 
-errors page: grouped by verification failure, broken errors (whats difference)
+Allure reports provide many features to improve the analysability of your tests:
 
-graphs page
+- An appealing visual report format served as a website
+- An overview page to deliver the most important information at one glance
+- Stacktraces and screenshots for errors and validation failures
+- Specs and testcases are hierarchically grouped, searchable and filterable to help you find
+things faster
+- A complete overview of all steps executed during a testcase with their results and parameters
+- Traceability between your specs and the testcases which validate them
+- The duration of each testcase to analyse the time behavior of your tests
 
-timeline page
+### Drawbacks
 
-behaviors page
+Unfortunately, the charts in an Allure report (eg. the pie chart on the "Overview" page)
+are not able to distinguish between wdio-workflo's testcases and specs - Allure summarizes both as "tests" and "test cases".
 
-(packages and suites page can be ignored)
+To view wdio-workflo's testcases and specs as two correctly separated groups,
+you can visit the "Behaviors" page or take a look at the "ENVIRONMENTS" section on the "Overview" page.
+
+### Pages
+
+The Allure report consists of several pages:
+
+- Overview
+- Categories
+- Graphs
+- Timeline
+- Behaviors
+
+*There are also two additional pages, "Suites" and "Packages", which can be ignored
+because they do not provide much additional value in the context of wdio-workflo.*
+
+#### Overview
+
+The "Overview" page shows you the most important information at one glance.
+
+It includes a pie charts of your test results (unfortunately summarizing testcases and specs as "tests"):
+
+![Testcases and specs are incorrectly summarized in Allure's charts](assets/allure_report_dashboard_pie_chart.png)
+
+You can also find some test statistics data in the "ENVIRONMENT" section:
+
+![The "ENVIRONMENTS" section on the "Overview" page](assets/allure_report_overview_environment.png)
+
+A trend of your previous test runs allow you to track the "health" of your tested application:
+
+![Trend](assets/allure_report_overview_trend.png)
+
+The "EXECUTORS" section provides a link to the job on your build/CI server which started the current test run:
+
+![Executor section](assets/allure_report_overview_executor.png)
+
+#### Categories
+
+The "Categories" page shows a quick summary of all validation failures ("Product defects")
+and runtime errors ("Test defects") that occurred during the current test run:
+
+![Categories](assets/allure_report_categories.png)
+
+#### Graphs
+
+The "Graphs" page uses a couple of different graphs to deliver various information.
+
+A "Status" chart shows the result status of your testcases and specs combined as "tests":
+
+![Status graph](assets/allure_report_graphs_status.png)
+
+A "Duration" chart groups your testcases (and specs) by duration of execution:
+
+![Duration graph](assets/allure_report_graphs_duration.png)
+
+A "Severity" chart groups your testcases and specs by severity:
+
+![Severity graph](assets/allure_report_graphs_severity.png)
+
+#### Timeline
+
+The "Timeline" page shows the order in which testcases were run and
+the points in time at which each testcase started and ended:
+
+![Timeline](assets/allure_report_timeline.png)
+
+#### Behaviors
+
+##### Categories Tree
+
+The "Behaviors" page is probably the most useful page for analyzing your wdio-workflo
+tests.
+
+It displays the result status of your testcases and specs separated into two categories:
+
+![Testcases and specs are correctly separated on the "Behaviors" page](assets/allure_report_behaviors_sepearated_groups.png)
+
+You can filter your testcases and specs by result status and use the search field
+at the top of the page to find specific testcases or specs. By clicking on "Specs", you can browse all Features, Stories and Acceptance Criteria. Clicking on "Testcases" displays
+all Suites and Testcases.
+
+![Browsing Features - Stories - Acceptance Criteria and Features - Testcases](assets/allure_report_behaviors_groups.png)
+
+##### Details View
+
+If you select a single testcase or spec, a detailed view of the testcase/spec
+is displayed on the right side:
+
+![Detailed view of a testcase or spec](assets/allure_report_behaviors_rightside.png)
+
+If you want to rerun a broken or failed testcase, you can copy the testcase name
+at the top of the details view.
+
+Below the testcase name, there is a list of all errors and validation failures that
+occurred during the execution of the testcase. You can click on the list to show
+the stacktraces of each error/validation failure.
+
+The next section shows the severity and duration of your testcase, as well as the
+file in which it is defined and the specs it validates.
+
+At the bottom of the details view there is a list of all steps executed within the testcase.
+You can expand each step to show the step's arguments, any nested steps and all
+selenium requests sent during the execution of a step. Additionally, if
+any runtime errors or validation failures occurred within a step, they are also
+displayed together with screenshots of the application at the time of failure:
+
+![An expanded step in the details view](assets/allure_report_behaviors_single_step.png)
 
 ### Configuration Options
 
