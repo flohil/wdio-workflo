@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Customizing a List · Wdio-Workflo</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;h2&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;customizing-the-pageelementlist-class&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#customizing-the-pageelementlist-class&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Customizing the PageElementList class&lt;/h2&gt;
-"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Customizing a List · Wdio-Workflo"/><meta property="og:type" content="website"/><meta property="og:url" content="https://flohil.github.io/wdio-workflo/index.html"/><meta property="og:description" content="&lt;h2&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;customizing-the-pageelementlist-class&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#customizing-the-pageelementlist-class&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Customizing the PageElementList class&lt;/h2&gt;
-"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/wdio-workflo/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/rainbow.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/wdio-workflo/css/main.css"/><script src="/wdio-workflo/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/wdio-workflo/"><img class="logo" src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo"/><h2 class="headerTitleWithLogo">Wdio-Workflo</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/wdio-workflo/docs/setup" target="_self">Guides</a></li><li class=""><a href="/wdio-workflo/demo" target="_self">Demo Page</a></li><li class=""><a href="https://github.com/flohil/wdio-workflo-example" target="_self">Examples</a></li><li class=""><a href="/wdio-workflo/apiDoc" target="_self">API</a></li><li class=""><a href="https://github.com/flohil/wdio-workflo" target="_self">Github</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Customizing Page Nodes</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/setup">Setup</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/firstTest">Writing your first Test</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Configuration</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/config">Configuration Options</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Architecture</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/classes">Class Diagram</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Specs</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/specs">Specs</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Page Objects</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/pageObjects">Page Objects</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/element">Element</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/list">List</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/map">Map</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/group">Group</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/store">Store</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/page">Page</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Steps</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/steps">Steps</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Testcases</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/testcases">Testcases</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Customizing Page Nodes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customPageNodes">Introduction</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customElement">Customizing an Element</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/wdio-workflo/docs/customList">Customizing a List</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customMap">Customizing a Map</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Command Line Interface</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/cliOptions">CLI Options</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/runningTests">Running Tests</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/debugging">Debugging</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/reporters">Reporters</a></li></ul></div></div></section></div><script>
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Customizing a List · Wdio-Workflo</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;There are two situations where you might want to create a custom &lt;code&gt;PageElementList&lt;/code&gt; class:&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Customizing a List · Wdio-Workflo"/><meta property="og:type" content="website"/><meta property="og:url" content="https://flohil.github.io/wdio-workflo/index.html"/><meta property="og:description" content="&lt;p&gt;There are two situations where you might want to create a custom &lt;code&gt;PageElementList&lt;/code&gt; class:&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/wdio-workflo/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/rainbow.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/wdio-workflo/css/main.css"/><script src="/wdio-workflo/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/wdio-workflo/"><img class="logo" src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo"/><h2 class="headerTitleWithLogo">Wdio-Workflo</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/wdio-workflo/docs/setup" target="_self">Guides</a></li><li class=""><a href="/wdio-workflo/demo" target="_self">Demo Page</a></li><li class=""><a href="https://github.com/flohil/wdio-workflo-example" target="_self">Examples</a></li><li class=""><a href="/wdio-workflo/apiDoc" target="_self">API</a></li><li class=""><a href="https://github.com/flohil/wdio-workflo" target="_self">Github</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Customizing Page Nodes</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/setup">Setup</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/firstTest">Writing your first Test</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Configuration</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/config">Configuration Options</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Architecture</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/classes">Class Diagram</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Specs</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/specs">Specs</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Page Objects</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/pageObjects">Page Objects</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/element">Element</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/list">List</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/map">Map</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/group">Group</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/store">Store</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/page">Page</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Steps</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/steps">Steps</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Testcases</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/testcases">Testcases</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Customizing Page Nodes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customPageNodes">Introduction</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customElement">Customizing an Element</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/wdio-workflo/docs/customList">Customizing a List</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customMap">Customizing a Map</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Testrunner</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/cliOptions">CLI Options</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/runningTests">Running Tests</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/debugging">Debugging</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/reporters">Reporters</a></li></ul></div></div></section></div><script>
             var coll = document.getElementsByClassName('collapsible');
             var checkActiveCategory = true;
             for (var i = 0; i < coll.length; i++) {
@@ -50,8 +50,189 @@
                 };
               }
             });
-        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Customizing a List</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="customizing-the-pageelementlist-class"></a><a href="#customizing-the-pageelementlist-class" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Customizing the PageElementList class</h2>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/customElement"><span class="arrow-prev">← </span><span>Customizing an Element</span></a><a class="docs-next button" href="/wdio-workflo/docs/customMap"><span>Customizing a Map</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#customizing-the-pageelementlist-class">Customizing the PageElementList class</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="./apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Customizing a List</h1></header><article><div><span><p>There are two situations where you might want to create a custom <code>PageElementList</code> class:</p>
+<ul>
+<li>To add a factory method for a list of your own custom PageElement classes</li>
+<li>To enhance the base <code>PageElementList</code> with additional functionality</li>
+</ul>
+<p>The first situation is usually much more common, so let's start with explaining it in more detail.</p>
+<h2><a class="anchor" aria-hidden="true" id="adding-a-list-factory-method-for-custom-elements"></a><a href="#adding-a-list-factory-method-for-custom-elements" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding a List Factory Method for Custom Elements</h2>
+<p>In our guide on <a href="/wdio-workflo/docs/customElement">Customizing an Element</a>, we create a custom <code>FeedItem</code> page element.</p>
+<p>If you visit wdio-workflo's demo website, you'll notice that on the &quot;Feed&quot;
+page there is not just one, but a couple of feed items. This seems like a
+perfect fit for a custom <code>FeedItemList</code>.</p>
+<p>Luckily, creating a list that manages a custom page element class
+without implementing any new functionality compared to the base <code>PageElementList</code> is very simple. All we have to do is add a new factory
+method to a <code>PageElementStore</code> class.</p>
+<p>Open the file <code>PageNodeStore.ts</code> located in the <code>src/page_objects/stores</code> folder of the wdio-workflo-example repository and have a look at the <code>FeedItemList</code> method:</p>
+<pre><code class="hljs css language-typescript">FeedItemList(
+  selector: Workflo.XPath,
+  opts: Workflo.PickPartial&lt;
+    core.elements.IPageElementListOpts&lt;
+      <span class="hljs-keyword">this</span>, FeedItem&lt;<span class="hljs-keyword">this</span>&gt;, Pick&lt;IFeedItemOpts&lt;<span class="hljs-keyword">this</span>&gt;, Workflo.Store.ElementPublicKeys&gt;
+    &gt;,
+    Workflo.Store.ListPublicKeys,
+    Workflo.Store.ListPublicPartialKeys
+  &gt; = {},
+) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.List(
+    selector,
+    {
+      elementOpts: { ...opts.elementOpts },
+      elementStoreFunc: <span class="hljs-keyword">this</span>.FeedItem,
+      ...opts,
+    },
+  );
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="picking-public-parameters"></a><a href="#picking-public-parameters" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Picking Public Parameters</h3>
+<p>Factory methods for lists are very similar to those for single elements. Their first parameter is always the XPath <code>selector</code> that identifies all elements managed by the list.
+The second parameter represents all properties of the list's <code>opts</code> object which
+can be used to configure an instance of the list.</p>
+<p>For our <code>FeedItemList</code>, we make use of the <code>Workflo.PickPartial</code> type helper.
+This allows use to pick some properties from an object as they are, and to pick some
+other properties which are additionally made optional. <code>Workflo.PickPartial</code> expects
+three type parameters:</p>
+<ul>
+<li>The original object type - in our case <code>core.elements.IPageElementListOpts</code></li>
+<li>A list of all property keys which should be picked from the original object as-is</li>
+<li>A list of all property keys which should be picked from the original object and made optional</li>
+</ul>
+<p><code>IPageElementListOpts</code> itself also expects three type parameters:</p>
+<ul>
+<li>The type of the <code>PageNodeStore</code> (always <code>this</code>)</li>
+<li>The type of the page element it manages (<code>FeedItem</code>)</li>
+<li>The type of the public <code>opts</code> properties passed to a single page element (<code>Pick&lt;IFeedItemOpts&lt;this&gt;, Workflo.Store.ElementPublicKeys&gt;</code>)</li>
+</ul>
+<p>In our example, <code>Workflo.Store.ListPublicKeys</code> consists of the property keys
+<code>timeout</code>, <code>waitType</code>, <code>disableCache</code> and <code>identifier</code>. If you examine <code>core.elements.IPageElementListOpts</code>, you will notice that all of these are already
+optional - if they weren't, we would have to explicitly declare them each time
+we invoke the <code>FeedItemList</code> factory method.</p>
+<p><code>Workflo.Store.ListPublicPartialKeys</code> consists of only one property key: <code>elementOpts</code>.
+This property describes the <code>opts</code> parameter passed to the constructor of each
+page element managed by the list. This property is required by <code>IPageElementListOpts</code>,
+which means that we cannot instantiate a page element list without providing them.
+To spare the users of our <code>FeedItemList</code> from writing a lot of boilerplate code, we provide a default <code>elementOpts</code> object in our factory method and turn the <code>elementOpts</code>
+property into a optional property by using <code>Workflo.PickPartial</code>, so that this property
+does not need to be defined each time we invoke the <code>FeedItemList</code> factory method.</p>
+<p>If a user still wants to explicitly define the <code>elementOpts</code> for our <code>FeedItem</code>,
+this is also possible because we merge the public <code>elementOpts</code> property into
+our default property (<code>elementOpts: { ...opts.elementOpts }</code>). If the user does
+not specify an <code>elementOpts</code> property, the result of the merge will be an empty object.</p>
+<h3><a class="anchor" aria-hidden="true" id="implementation-with-list-method"></a><a href="#implementation-with-list-method" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implementation with <code>List</code> method</h3>
+<p>Luckily for us, the implementation of a list factory method for custom page elements
+is very easy if we use the <code>List</code> method provided by <code>PageNodeStore</code>. This method expects
+two parameters:</p>
+<ul>
+<li>The XPath selector to identify all elements managed by the list</li>
+<li>The <code>opts</code> object used to configured the list</li>
+</ul>
+<p>The <code>opts</code> object is usually the merged result of the list's public <code>opts</code> and
+a number of preconfigured properties, like in our case <code>elementOpts</code> and <code>elementStoreFunc</code>.</p>
+<p><code>elementStoreFunc</code> defines the factory method used to create instances of the
+custom <code>PageElement</code> class managed by our custom list.</p>
+<h2><a class="anchor" aria-hidden="true" id="enhancing-a-pageelementlist-with-additional-functionality"></a><a href="#enhancing-a-pageelementlist-with-additional-functionality" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Enhancing a PageElementList with additional Functionality</h2>
+<h3><a class="anchor" aria-hidden="true" id="creating-a-custom-list-class"></a><a href="#creating-a-custom-list-class" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating a Custom List Class</h3>
+<p>If we simply added a list factory method for a custom page element class using the
+<code>List</code> method of <code>PageNodeStore</code>, we are restricted to select certain list elements
+using the <code>where</code> builder of the base <code>PageElementList</code> class.</p>
+<p>While this might be sufficient in many situations, we sometimes want to provide
+the user a more comfortable way of selecting a single element from the list.
+We could, for example, allow to select a <code>FeedItem</code> by its title.</p>
+<p>This requires us to create a custom <code>PageElementList</code> class - in our example
+the class <code>SearchableFilterItemList</code> located in the <code>src/page_objects/page_elements</code>
+folder of the wdio-workflo-example repository:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { pageObjects <span class="hljs-keyword">as</span> core } <span class="hljs-keyword">from</span> <span class="hljs-string">'wdio-workflo'</span>;
+
+<span class="hljs-keyword">import</span> { PageNodeStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'../stores'</span>;
+<span class="hljs-keyword">import</span> { FeedItem, IFeedItemOpts } <span class="hljs-keyword">from</span> <span class="hljs-string">'./'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> ISearchableFeedItemListOpts&lt;
+ Store <span class="hljs-keyword">extends</span> PageNodeStore
+&gt; <span class="hljs-keyword">extends</span> core.elements.IPageElementListOpts&lt;Store, FeedItem&lt;Store&gt;, IFeedItemOpts&lt;Store&gt;&gt; {}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> SearchableFeedItemList&lt;
+  Store <span class="hljs-keyword">extends</span> PageNodeStore
+&gt; <span class="hljs-keyword">extends</span> core.elements.PageElementList&lt;Store, FeedItem&lt;Store&gt;, IFeedItemOpts&lt;Store&gt; &gt; {
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">selector: <span class="hljs-built_in">string</span>, opts: ISearchableFeedItemListOpts&lt;Store&gt;</span>) {
+    <span class="hljs-keyword">super</span>(selector, opts);
+  }
+
+  getByTitle(title: <span class="hljs-built_in">string</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.where.hasChild(
+      <span class="hljs-string">'//div'</span>, <span class="hljs-function"><span class="hljs-params">xpath</span> =&gt;</span> xpath.classContains(<span class="hljs-string">'Feed-itemName'</span>).text(title)
+    ).getFirst();
+  }
+}
+</code></pre>
+<p>To create our custom <code>PageElementList</code> class, we simply extend our list from
+<code>core.elements.PageElementList</code> and our list's options from <code>core.elements.IPageElementListOpts</code>.
+Since our <code>SearchableFeedItemList</code> is going to only ever manage <code>FeedItem</code> elements,
+we can configure the 2nd type parameter of <code>PageElementList</code> and <code>IPageElementListOpts</code> as <code>FeedItem&lt;Store&gt;</code>
+and their 3rd type parameter as <code>IFeedItemOpts&lt;Store&gt;</code>.</p>
+<p>Our new <code>getByTitle</code> method takes a <code>title</code> as parameter and returns the first list item
+which has a nested <code>&lt;div&gt;</code> HTML element whose class contains <code>'Feed-itemName'</code> and whose
+text matches our passed <code>title</code>.</p>
+<h3><a class="anchor" aria-hidden="true" id="adding-an-export-entry-to-indexts"></a><a href="#adding-an-export-entry-to-indexts" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding an Export Entry to Index.ts</h3>
+<p>Do not forget to add an export entry for your custom list to the <code>index.ts</code> file
+located in the <code>src/page_objects/page_elements</code> folder:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./SearchableFeedItemList'</span>;
+</code></pre>
+<p>We will need this export entry to import our class type and its <code>opts</code> interface from
+a <code>PageNodeStore</code>.</p>
+<h3><a class="anchor" aria-hidden="true" id="adding-a-factory-method-for-the-custom-list"></a><a href="#adding-a-factory-method-for-the-custom-list" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding a Factory Method for the Custom List</h3>
+<p>Like before, when we added a simple list factory method for a custom element class using the <code>List</code> method of <code>PageNodeStore</code>,
+we also need to add a factory method for our custom list.</p>
+<p>Take a look at the <code>SearchableFeedItemList</code> method defined in the file
+<code>src/page_objects/stores/PageNodeStore</code> of the wdio-workflo-example repository:</p>
+<pre><code class="hljs css language-typescript">SearchableFeedItemList(
+  selector: Workflo.XPath,
+  opts: Workflo.PickPartial&lt;
+    ISearchableFeedItemListOpts&lt;<span class="hljs-keyword">this</span>&gt;,
+    Workflo.Store.ListPublicKeys,
+    Workflo.Store.ListPublicPartialKeys
+  &gt; = {},
+) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._getList&lt;
+    SearchableFeedItemList&lt;<span class="hljs-keyword">this</span>&gt;,
+    ISearchableFeedItemListOpts&lt;<span class="hljs-keyword">this</span>&gt;
+  &gt;(
+    selector,
+    SearchableFeedItemList,
+    {
+      elementOpts: {
+        store: <span class="hljs-keyword">this</span>,
+        ...opts.elementOpts
+      },
+      elementStoreFunc: <span class="hljs-keyword">this</span>.FeedItem,
+      store: <span class="hljs-keyword">this</span>,
+      ...opts,
+    },
+  );
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="picking-public-parameters-1"></a><a href="#picking-public-parameters-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Picking Public Parameters</h3>
+<p>The parameters of our <code>SearchableFeedItemList</code> method are pretty much identical to our
+<code>FeedItemList</code> method. The only difference is that we now use <code>ISearchableFeedItemListOpts</code>
+as first type parameter of <code>Workflo.PickPartial</code>.</p>
+<p>Since we already defined that <code>ISearchableFeedItemListOpts</code> always operates on a <code>FeedItem</code> with <code>IFeedItemOpts</code>,
+we don't need to specify a 2nd and 3rd type parameter for this interface.</p>
+<h3><a class="anchor" aria-hidden="true" id="implementation-with-getlist-method"></a><a href="#implementation-with-getlist-method" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implementation with <code>_getList</code> method</h3>
+<p>If we wrote a custom <code>PageElementList</code> class, we need to use <code>_getList</code> instead of the <code>List</code> method of <code>PageElementStore</code>.</p>
+<p>Actually, the <code>List</code> method is just a little wrapper method which also calls <code>_getList</code> but which only
+works with the core <code>PageElementList</code> class provided by wdio-workflo.</p>
+<p>As you can see from the code above, the <code>_getList</code> method expects two type parameters:</p>
+<ul>
+<li>The type of our custom list class</li>
+<li>Our custom list's <code>opts</code> interface</li>
+</ul>
+<p>The method parameters of <code>_getList</code> are also very similar to those of the <code>List</code> method.
+The only differences are that you need to pass your custom list class as second parameter, so
+that the <code>opts</code> parameter comes third. We also need to manually define the <code>store</code> property
+inside the <code>opts</code> object and inside its <code>elementOpts</code> property now
+(the <code>List</code> method automatically sets the <code>store</code> properties for us).</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/customElement"><span class="arrow-prev">← </span><span>Customizing an Element</span></a><a class="docs-next button" href="/wdio-workflo/docs/customMap"><span>Customizing a Map</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#adding-a-list-factory-method-for-custom-elements">Adding a List Factory Method for Custom Elements</a><ul class="toc-headings"><li><a href="#picking-public-parameters">Picking Public Parameters</a></li><li><a href="#implementation-with-list-method">Implementation with <code>List</code> method</a></li></ul></li><li><a href="#enhancing-a-pageelementlist-with-additional-functionality">Enhancing a PageElementList with additional Functionality</a><ul class="toc-headings"><li><a href="#creating-a-custom-list-class">Creating a Custom List Class</a></li><li><a href="#adding-an-export-entry-to-indexts">Adding an Export Entry to Index.ts</a></li><li><a href="#adding-a-factory-method-for-the-custom-list">Adding a Factory Method for the Custom List</a></li><li><a href="#picking-public-parameters-1">Picking Public Parameters</a></li><li><a href="#implementation-with-getlist-method">Implementation with <code>_getList</code> method</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="./apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;
