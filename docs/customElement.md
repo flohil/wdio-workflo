@@ -4,8 +4,6 @@ title: Customizing an Element
 sidebar_label: Customizing an Element
 ---
 
-## Customizing the PageElement class
-
 There are usually three main reasons to create a custom `PageElement` class:
 
 - Mapping a website component which is composed of smaller components
@@ -14,9 +12,11 @@ There are usually three main reasons to create a custom `PageElement` class:
 
 Let's have a look at each of them!
 
-### Creating a "Composed" PageElement
+## Creating a "Composed" PageElement
 
-Creating a "composed" `PageElement` only requires 3 steps:
+### Writing the Composed Element Class
+
+Writing a "composed" `PageElement` only requires 3 steps:
 
 - Extending the class `PageElement`
 - Defining the interface for the `opts` parameter of your class' constructor
@@ -58,7 +58,19 @@ export class FeedItem<
 Please notice that defining an interface for your custom `opts` parameter, even though it does not differ from
 `IPageElementOpts`, is a good practice because it makes future additions to the interface a lot easier.
 
-### Extending ValuePageElement
+### Adding an Export Entry to Index.ts
+
+Do not forget to add an export entry for your custom page element to the `index.ts` file
+located in the `src/page_objects/page_elements` folder:
+
+```typescript
+export * from './FeedItem';
+```
+
+We will need this export entry to import our class type and its `opts` interface from
+a `PageNodeStore`.
+
+## Extending ValuePageElement
 
 As soon as you want to test forms with wdio-workflo, you will need to create custom `PageElement` classes that can
 set and retrieve values from HTML elements like `<input>`. For this scenario, wdio-workflo provides an abstract
@@ -106,16 +118,16 @@ export class InputCurrently<
 }
 ```
 
-#### Defining the type of `value`
+### Defining the type of `value`
 
 If we extend `ValuePageElement` instead of `PageElement`, we need to provide a second type parameter as well:
 the type of the `value` passed to the `setValue` method and retrieved by calling `getValue()`.
 
 For our `Input` class, we use `string` as the type of our `value` parameter.
 
-#### Implementing `setValue` and `getValue`
+### Implementing `setValue` and `getValue`
 
-##### Action Methods vs. State Retrieval Methods
+#### Action Methods vs. State Retrieval Methods
 
 Our super class `ValuePageElement` requires us to implement two methods: `setValue` and `getValue`.
 
@@ -134,7 +146,7 @@ If defined on the `PageElementCurrently` class, they should return the current s
 Luckily, we only need to implement `getValue` in our `InputCurrently` class because the `Input.getValue` method
 internally invokes `InputCurrently.getValue` after performing an implicit wait.
 
-##### Invoking the Implicit Wait
+#### Invoking the Implicit Wait
 
 But where do we ever invoke the implicit wait in our `Input.setValue` implementation?
 
@@ -147,7 +159,7 @@ Be aware, though, that `this.element` only performs an implicit wait if called f
 If you call `this.element` from inside a `PageElementCurrently` class like `InputCurrently.getValue` does,
 no implicit wait will be performed.
 
-#### Setting the `currently` API accessor
+### Setting the `currently` API accessor
 
 We must not forget to set the `.currently` API accessor of our `Input` class. Otherwise, the implementation of
 `InputCurrently.getValue` will not be available to `Input`.
@@ -159,7 +171,7 @@ APIs need to access properties of their "parent".
 For this reason, `PageElementCurrently`, `PageElementWait` and `PageElementEventually` require an additional template type
 parameter: the type of their "parent" `PageElement`. This `PageElementType` is the second template type parameter after the `Store` type.
 
-### Overwriting a Base Class Method
+## Overwriting a Base Class Method
 
 Component libraries for modern web development often do not stick to HTML standards.
 A dropdown, for example, is often not implemented using a `<select>` and multiple `<option>` tags, but rather with a couple of `<div>`, `<input>` and `<span>` tags.
