@@ -6,12 +6,13 @@ sidebar_label: Customizing an Element
 
 ## Customizing the PageElement class
 
-There are usually two main reasons to create a custom `PageElement` class:
+There are usually three main reasons to create a custom `PageElement` class:
 
 - Mapping a website component which is composed of smaller components
 - Implementing the abstract `ValuePageElement` class for setting and getting values
+- Overwriting a base class method
 
-Let's have a look at both!
+Let's have a look at each of them!
 
 ### Creating a "Composed" PageElement
 
@@ -158,6 +159,85 @@ APIs need to access properties of their "parent".
 For this reason, `PageElementCurrently`, `PageElementWait` and `PageElementEventually` require an additional template type
 parameter: the type of their "parent" `PageElement`. This `PageElementType` is the second template type parameter after the `Store` type.
 
+### Overwriting a Base Class Method
+
+Component libraries for modern web development often do not stick to HTML standards.
+A dropdown, for example, is often not implemented using a `<select>` and multiple `<option>` tags, but rather with a couple of `<div>`, `<input>` and `<span>` tags.
+
+Selenium's and wdio-workflo's methods try to stick to HTML standards. If the web application
+that you want to test does not, you might need to overwrite some methods of your base `PageElement` class.
+
+Wdio-workflo's demo website, for example, is built using Microsoft's [Office UI Fabric](https://developer.microsoft.com/en-us/fabric) react component library. To indicate wether a checkbox is ticked, this library adds the CSS class `"is-checked"` to a `<div>`:
+
+![A ticked checkbox in Microsoft's Office UI Fabrics Checkbox component](assets/demo_checkbox_is_checked.png)
+
+Wdio-workflo's `PageElement` base class already ships with an implementations of the
+`isChecked` and `not.isChecked` methods. However, these implementations check if an
+HTML attribute named `checked` is set on an HTML element:
+
+![A ticked checkbox in Microsoft's Office UI Fabrics Checkbox component](assets/demo_checkbox_standard_checked.png)
+
+If you take a look at the `Checkbox` class implemented in the file `src/page_objects/page_elements/Checkbox.ts` of the wdio-workflo-example repository,
+you will notice that its `CheckboxCurrently` subclass therefore overwrites the default
+implementations of `isChecked` and `not.isChecked`:
+
+```typescript
+export class CheckboxCurrently<
+  Store extends PageNodeStore,
+  PageElementType extends Checkbox<Store>
+> extends ValuePageElementCurrently<Store, PageElementType, boolean> {
+
+  getValue() {
+    return this.not.isChecked();
+  }
+
+  isChecked() {
+    return this.containsClass('is-checked');
+  }
+
+  get not() {
+    return {
+      ...super.not,
+      isChecked: () => {
+        // we use an arrow function so that `this` is CheckboxCurrently instead of the `not` object
+        return this.not.containsClass('is-checked');
+      }
+    };
+  }
+}
+```
+
+I think the code for the `isChecked` method is pretty self-explanatory. The `not.isChecked` requires us to overwrite a method inside the `not` object which requires a little more effort
+for the first overwritten method. However, the steps are always the same:
+
+- We declare a `not` getter in our class
+- We return an object including all method implementations of our base `not` object (`...super.not`)
+- We overwrite `not` methods using arrow functions, so `this` will be the class rather than the `not` object
+
+### Implementing new State Getter/Checker Methods
+
+In our `Checkbox` example, we only needed to overwrite the `isChecked` and `not.isChecked`
+implementations of the `CheckboxCurrently` subclass. Similar API functions like
+`wait.isChecked` or `eventually.isChecked` will also work with our overwritten behavior
+out-of-the-box because they internally invoke `currently.isChecked`.
+
+If you want to add completely new state getter or checker methods, like `hasType` / `containsType` / `hasAnyType` to check
+the HTML `type` attribute, you need to implement a couple more methods:
+
+- `currently.hasType` / `currently.containsType` / `currently.hasAnyType`
+- `currently.not.hasType`  / `currently.containsType` / `currently.hasAnyType`
+- `wait.hasType`
+- `wait.not.hasType`
+- `eventually.hasType`
+- `eventually.not.hasType`
+- and maybe also a `currently.getType` and a `.getType` method on the page element class itself
+
+You probably won't need to add completely new state getter or checker methods often,
+therefore I will not add code examples in this guide. However, you can find these method implementations in the `PageElement` class located in the file `src/page_objects/page_elements/PageElement.ts` of the wdio-workflo-example repository.
+
+For even more code examples for state getter and state checker methods,
+take a look at the framework's core `PageElement` class implemented in the file `src/page_objects/page_elements/PageElement.ts` of the wdio-workflo repository.
+
 ## Adding a Factory Method to a `PageNodeStore`
 
 After creating a custom `PageElement` class, we have to add a factory method to a `PageNodeStore` so that our new
@@ -168,8 +248,7 @@ A factory method always receives two parameters:
 - The XPath selector for the `PageNode` (`Workflo.XPath` is a `string` or an `XPathBuilder` instance)
 - A subset of all properties of the `PageNode`'s `opts` parameter which can be configured "publically"
 
-The factory method for our `Input` class can be found inside the `PageNodeStore` class located at
-`src/page_objects/stores/PageNodeStore.ts`:
+The factory method for our `Input` class can be found inside the `PageNodeStore` class located at `src/page_objects/stores/PageNodeStore.ts`:
 
 ```typescript
 Input(
@@ -233,6 +312,3 @@ stores.pageNode.Input(
   xpath('//input')
 )
 ```
-
-
-
