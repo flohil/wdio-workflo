@@ -103,11 +103,11 @@ It has 4 parameters:
 The ID parameter is needed to reference the story from the validations performed within a testcase
 and must therefore be unique across all spec files.
 
-#### Story metadata
+#### Story Metadata
 
 You can define the following optional properties for the metadata parameter of a `Story` function:
 
-- `severity` => How severe the consequences of this story not being fulfilled would be (default: `normal`)
+- `severity` => How severe the implications of this story not being fulfilled would be (default: `normal`)
 - `issues` => If your story is derived from e.g. JIRA issues, you can define the JIRA issue keys here
 - `bugs` => If your story is affected by bugs which you track on e.g. JIRA, put the bugs' JIRA keys here
 
