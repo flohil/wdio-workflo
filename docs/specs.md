@@ -212,8 +212,13 @@ It must therefore be unique within a `Story`.
 
 ## Specs in Test Reports
 
+### Specs in Spec Reports
+
 Wdio-workflo's [spec report](reporters.md#spec-reporter) shows the result status
-of the validations performed for each acceptance criteria within a story.
+of the validations performed for each acceptance criteria within a story,
+grouped by features.
+
+### Specs in Allure Reports
 
 However, if you also want to read the complete sequence of all states and state changes
 performed to validate a single acceptance criteria, you need to view your test results
@@ -229,5 +234,4 @@ The details view also shows you which testcases validated the selected acceptanc
 and, if any errors or validation failures ocurred, it will display
 error stacktraces and screenshots of the GUI at the time of failure.
 
-Furthermore, the report displays the `issues` and `bugs` defined in the metadata parameter of the
-`Story` function as clickable links which take you to the corresponding JIRA issue page, for example.
+Furthermore, the report displays the `severity` of the `Story` as well as the `issues` and `bugs` defined in the metadata parameter of the `Story` function as clickable links which take you to the corresponding JIRA issue page, for example.
