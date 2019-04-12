@@ -401,7 +401,7 @@ into one big `steps` object. This comes in handy when writing testcases
 because we can "query" the `steps` object to see if certain steps that we
 would like to use have already been implemented.
 
-You can also exported smaller collections of steps, but you need to make sure
+You can also export smaller collections of steps, but you need to make sure
 that your exported steps have been proxified by calling wdio-workflo's `proxifySteps`
 function and passing it your step definitions. Otherwise, wdio-workflo will not
 be able to handle your steps correctly.

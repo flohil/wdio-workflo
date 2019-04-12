@@ -249,6 +249,13 @@ expect(actualUrl).toEqual(expectedUrl)
 The `expect` function is passed the actual value and the matcher function is
 passed the expected value.
 
+There is usually also a "reversed" variant available for each expectation matcher
+which can be used by inserting a `.not` between the `expect` and the `to` function:
+
+```typescript
+expect(23).not.toBe(41)
+```
+
 ### Default Expectation Matchers
 
 Wdio-workflo supports all of the expectation matchers provided by the [Jasmine](https://jasmine.github.io/) test framework and the [jasmine-expect](https://www.npmjs.com/package/jasmine-expect) matcher library.
