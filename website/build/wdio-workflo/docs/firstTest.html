@@ -361,7 +361,7 @@ our newly created step definitions in the <code>index.ts</code> file of our <cod
 into one big <code>steps</code> object. This comes in handy when writing testcases
 because we can &quot;query&quot; the <code>steps</code> object to see if certain steps that we
 would like to use have already been implemented.</p>
-<p>You can also exported smaller collections of steps, but you need to make sure
+<p>You can also export smaller collections of steps, but you need to make sure
 that your exported steps have been proxified by calling wdio-workflo's <code>proxifySteps</code>
 function and passing it your step definitions. Otherwise, wdio-workflo will not
 be able to handle your steps correctly.</p>

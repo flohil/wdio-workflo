@@ -161,7 +161,7 @@ when(steps["open path %{path} on demo website and return resulting url"]({
 }));
 ```
 
-### Interpolation of Step Description
+#### Interpolation of Step Description
 
 If a step has mandatory step arguments, you can display the values of these
 arguments in the step descriptions shown in test reports by using string interpolation.
@@ -183,19 +183,137 @@ of `pageName`:
 
 ![String interpolation of a step's description](assets/steps_interpolation.png)
 
-### Step `execute` Function
+### The `Step` Class
 
-interactions with page objects
+As was already mentioned, a step definition function takes step parameters and returns
+a new instance of the `Step` class:
 
+```typescript
+"fill in registration form":
+(params: IStepParams<{formData: pages.RegistrationFormData}, void>) =>
+  new Step(params, ({ formData }): void => {
+    pages.registration.form.setValue(formData);
+  })
+```
 
-### Nested Steps
+To create an instance of the `Step` class, we need to pass two parameters to its
+constructor:
 
-composed steps by nesting steps inside other steps: eg login as admin user, .execute
+- The step's parameters object which encapsulate the step's arguments `args` and its callback function `cb`
+- The step's `execute` function used to interact with the tested application
 
-nested steps -> small steps single action, also more complex ones
+Luckily for us, the step definition function already takes the step's parameters object
+`params` in the exact same form that the constructor of a `Step` requires. So we
+can simply pass along `params` to the constructor of the `Step` class.
 
-execute funciton in nested steps
+A step's `execute` function implements the actual test logic of a `Step` and its
+concept is a key element of the whole wdio-workflo test framework. It is therefore
+explained in full detail in the following section of this guide.
 
+### The `Step.execute` Function
+
+#### Overview
+
+A step's `execute` function encapsulates commands which modify or read the state of the tested
+web application.
+
+Actually, **all commands that modify the state of the tested web application
+should only ever be invoked in the context of a step's `execute` function**.
+Commands reading the state of the GUI may also be invoked from within in a step's callback `cb` function.
+
+Most of the time, you do not need to explicitly call the `Step.execute` function because
+the `given` and `when` functions of a [testcase](testcases.md), which take a `Step` instance as parameter,
+automatically invoke this step's `execute` function when they themselves are run.
+
+#### Parameters
+
+Every time the `execute` function is invoked automatically, wdio-workflo passes it
+the step's arguments object (`args` property of the step's `params` object) as parameter.
+The step's arguments object holds key-value pairs which are required by
+the `execute` function to perform interactions with the tested application:
+
+```typescript
+(params: IStepParams<{formData: pages.RegistrationFormData}, void>) =>
+  new Step(params, (args): void => {
+    pages.registration.form.setValue(args.formData);
+  })
+```
+
+To efficiently extract entries from the step's argument object, we can make use of JavaScript's
+ES6 object destructuring notation in the parameter list of the `execute` function:
+
+```typescript
+(params: IStepParams<{formData: pages.RegistrationFormData}, void>) =>
+  new Step(params, ({ formData }): void => {
+    pages.registration.form.setValue(formData);
+  })
+```
+
+#### Interaction Commands
+
+Usually, the commands which change or read the GUI's state are available as public methods
+of a `PageNode`, like the `getText` or the `click` method of the `PageElement` class.
+Page nodes in wdio-workflo are always defined within the scope of a `Page` class,
+so to invoke a public method of a `PageNode`, we need to access it via its respective page:
+
+```typescript
+new Step(params, (): void => {
+  // the "submitButton" PageElement can be accessed via the scope of the "registration" Page
+  pages.registration.submitButton.click();
+}),
+```
+
+However, there are some "global" commands which cannot be assigned to a `PageNode`,
+like the command to change the URL of the currently active browser window.
+Such commands are defined as [API functions on webdriverio's `browser` object](http://v4.webdriver.io/api.html), e.g. `browser.url()`:
+
+```typescript
+new Step(params, ({ path }): string => {
+  browser.url(path);
+}),
+```
+
+*Actually, all methods of a `PageNode` which change or read the state of the
+GUI are only abstractions. Internally, they also invoke functions defined on
+webdriverio's `browser` object. Theoretically, you could also write tests in wdio-workflo
+without using wdio-workflo's page object family of classes at all and instead
+only calling functions defined on the `browser` object in your steps.*
+
+#### Nested Steps
+
+There is one situation which forces you to invoke a step's `execute` function manually:
+Nested steps.
+
+Usually, the size of a step's `execute` function is rather small. Many steps only
+perform one single interaction with the tested application, e.g. a click on a button.
+However, it can be useful to write larger, composite steps which consist of many
+smaller steps. Let us call this concept "nested steps".
+
+Imagine, for example, that your tested application requires you to perform a login
+process at the start of each testcase. A login process might involve filling in
+some input fields with user credentials, hitting a submit button and waiting for
+your tested application to finish the authentication process and load a landing page.
+
+You now implement each of these "phases" in a separate step: one for filling in
+the login form, one for hitting the submit button, one to wait for your application
+to be in an "authenticated" state.
+
+Instead of invoking each of these steps individually in your testcases,
+you could also write a composite step called `"login as user %{username}"` whose
+`execute` function nests our three fine-grained steps. In this case, **you need to invoke
+the `execute` function of each nested step explicitly**:
+
+```typescript
+"login as user %{username}":
+(params: IStepParams<{username: string, password: string}, void>) =>
+  new Step(params, ({ username, password }): void => {
+    steps["fill in login form with username %{username} and password %{password}"]({
+      args: { username, password }
+    }).execute();
+    steps["click on submit button in login form"]().execute();
+    steps["wait for landing page to be loaded"]().execute();
+  })
+```
 
 ## Step Index File
 
@@ -249,7 +367,7 @@ export {
 };
 ```
 
-## Invoking a Step From a Testcase
+## Executing a Step from within a Testcase
 
 To execute a step inside a testcase, you need to pass a `Step` instance to a `given` or a `when` function:
 
