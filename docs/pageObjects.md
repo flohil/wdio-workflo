@@ -108,31 +108,31 @@ detail in the following guides.
 ### Page Nodes
 
 The `PageNode` class is an abstract class that serves as a base class for the
-`PageElement`, `PageElementList`, `PageElementMap` and `PageElementGroup` classes.
+[`PageElement`](element.md), [`PageElementList`](list.md), [`PageElementMap`](map.md) and [`PageElementGroup`](group.md) classes.
 
 #### `PageElement`
 
-The `PageElement` class is wdio-workflo's basic implementation of a reusable,
+The [`PageElement`](element.md) class is wdio-workflo's basic implementation of a reusable,
 encapsulated test component. It provides the capabilities to interact with and retrieve
 the state/attributes of simple HTML elements like `<div>`, `<span>`, `<button>` or `<a>`.
 
 #### `PageElementList`
 
-The `PageElementList` class manages a collection of similar dynamic `PageElement` instances,
+The [`PageElementList`](list.md) class manages a collection of similar dynamic `PageElement` instances,
 which means that the elements in the collection are all of the same type and not known at compile time.
 A good example for elements managed by a `PageElementList` are the items of a
 news feed or the rows in a data table.
 
 #### `PageElementMap`
 
-The `PageElementMap` class manages a collection of similar static `PageElement` instances,
+The [`PageElementMap`](map.md) class manages a collection of similar static `PageElement` instances,
 which means that the elements in the collection are all of the same type and known at compile time.
 A good example for elements managed by a `PageElementMap` are the links of a
 navigation menu.
 
 #### `PageElementGroup`
 
-The `PageElementGroup` class manages an arbitrary structure of `PageNode` instances.
+The [`PageElementGroup`](group.md) class manages an arbitrary structure of `PageNode` instances.
 It is a representation of the composite pattern, which allows you to perform the
 same kind of operation on each `PageNode` managed by the `PageElementGroup`.
 The prevalent use case for the `PageElementGroup` class are HTML forms, which
@@ -142,13 +142,13 @@ and pass it a single object that contains the data for all form fields.
 
 ### Page Node Stores
 
-The `PageNodeStore` class serves as a facade for retrieving instances of
+The [`PageNodeStore`](store.md) class serves as a facade for retrieving instances of
 `PageNode` classes and implements factory methods to create, preconfigure and
 cache them.
 
 ### Pages
 
-The `Page` class maps the structure of a website by encapsulating all test components
+The [`Page`](page.md) class maps the structure of a website by encapsulating all test components
 used to build the website in its scope.
 
 It fetches instances of `PageNode` classes from a `PageNodeStore` and sets
