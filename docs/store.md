@@ -39,9 +39,8 @@ you only need to change it in one place which increases maintainability.
 ## Location and Naming Convention
 
 Store files are located in the `src/page_objects/stores` folder of your system
-test directory. I usually end the class names of store with the term `Store`,
-but from a technical perspective, this is not required and you do not need to
-follow this convention.
+test directory. I usually like to name store classes so that they end with the
+term `Store`, but from a technical perspective, this is not required and you do not need to follow this convention.
 
 ## Factory Methods
 
