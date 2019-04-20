@@ -90,17 +90,31 @@ Input(
 Both parameters of a factory method are passed, in the same order, to the
 constructor of the returned `PageNode` class:
 
-The XPath selector or group content parameter is passed along to constructor of the
-`PageNode` unaltered. The `opts` parameter of the factory method, however, contains only
-the "publicly configurable" properties of the `opts` object passed to the constructor
-of the returned `PageNode` class.
+The XPath selector or group content parameter is passed along unaltered.
+The `opts` parameter of the factory method, however, contains only the "publicly configurable"
+properties of the `opts` object which is passed to the constructor of the returned `PageNode` class.
 
-To create the final, "complete" `opts` parameter, you need to merge the publicly
+To create the final, "complete" `opts` parameter object, you need to merge the publicly
 configurable `opts` object with an object of default `opts`properties in the
 body of the factory method.
 
+If all publicly configurable properties of the `opts` parameter are optional,
+you should declare the `opts` parameter of a factory method optional by either appending a
+`?` symbol to its name or by initializing it with an empty object `{}` as default value:
 
-= {} or ?
+```typescript
+Input(
+  selector: Workflo.XPath,
+  opts?: Pick<IInputOpts<this>, Workflo.Store.BaseKeys>,
+) { /*...*/ }
+
+// or
+
+Input(
+  selector: Workflo.XPath,
+  opts: Pick<IInputOpts<this>, Workflo.Store.BaseKeys> = {},
+) { /*...*/ }
+```
 
 #### Picking the publicly configurable Options
 
@@ -174,10 +188,25 @@ Input(
 }
 ```
 
-In the
+We can see that our factory method invokes the `_getElement` initializer function
+that either creates a new `Input` page element instance or fetches an existing,
+identical one from the store's page node cache.
 
+More information about all available initializer functions of a `PageNodeStore`
+can be found in the [following section](store.md#initializer-functions) of this guide.
 
-default configuration
+We need to configure the two type parameters of the `_getElement` initializer function
+(the type of the page node class and the type of its `opts` parameter) and pass it the
+XPath selector, the page node class that we want to create and its `opts` parameter object
+as arguments.
+
+To create the "full" `opts` parameter object passed to the constructor of the `Input` class,
+we merge the factory method's publicly configurable `opts` parameter object with an object of
+default properties. To do so, we create a new object `{}` and define our default properties
+within its scope. In this case, our only default property is `store` whose value we set to
+the instance of our current `PageNodeStore` using the `this` reference. Then we can simply
+use the spread operator `...` to copy our publicly configurable `opts` properties into the
+"full" `opts` parameter object.
 
 *If you wonder what happened to the `customScroll` and the `interval` properties of the
 `opts` parameter object: Both of these are optional properties. Therefore, we do

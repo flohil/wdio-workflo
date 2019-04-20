@@ -129,23 +129,23 @@ information about each of these classes, because they will be explained in full
 detail in the following guides.</p>
 <h3><a class="anchor" aria-hidden="true" id="page-nodes"></a><a href="#page-nodes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Page Nodes</h3>
 <p>The <code>PageNode</code> class is an abstract class that serves as a base class for the
-<code>PageElement</code>, <code>PageElementList</code>, <code>PageElementMap</code> and <code>PageElementGroup</code> classes.</p>
+<a href="/wdio-workflo/docs/element"><code>PageElement</code></a>, <a href="/wdio-workflo/docs/list"><code>PageElementList</code></a>, <a href="/wdio-workflo/docs/map"><code>PageElementMap</code></a> and <a href="/wdio-workflo/docs/group"><code>PageElementGroup</code></a> classes.</p>
 <h4><a class="anchor" aria-hidden="true" id="pageelement"></a><a href="#pageelement" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>PageElement</code></h4>
-<p>The <code>PageElement</code> class is wdio-workflo's basic implementation of a reusable,
+<p>The <a href="/wdio-workflo/docs/element"><code>PageElement</code></a> class is wdio-workflo's basic implementation of a reusable,
 encapsulated test component. It provides the capabilities to interact with and retrieve
 the state/attributes of simple HTML elements like <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code>.</p>
 <h4><a class="anchor" aria-hidden="true" id="pageelementlist"></a><a href="#pageelementlist" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>PageElementList</code></h4>
-<p>The <code>PageElementList</code> class manages a collection of similar dynamic <code>PageElement</code> instances,
+<p>The <a href="/wdio-workflo/docs/list"><code>PageElementList</code></a> class manages a collection of similar dynamic <code>PageElement</code> instances,
 which means that the elements in the collection are all of the same type and not known at compile time.
 A good example for elements managed by a <code>PageElementList</code> are the items of a
 news feed or the rows in a data table.</p>
 <h4><a class="anchor" aria-hidden="true" id="pageelementmap"></a><a href="#pageelementmap" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>PageElementMap</code></h4>
-<p>The <code>PageElementMap</code> class manages a collection of similar static <code>PageElement</code> instances,
+<p>The <a href="/wdio-workflo/docs/map"><code>PageElementMap</code></a> class manages a collection of similar static <code>PageElement</code> instances,
 which means that the elements in the collection are all of the same type and known at compile time.
 A good example for elements managed by a <code>PageElementMap</code> are the links of a
 navigation menu.</p>
 <h4><a class="anchor" aria-hidden="true" id="pageelementgroup"></a><a href="#pageelementgroup" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>PageElementGroup</code></h4>
-<p>The <code>PageElementGroup</code> class manages an arbitrary structure of <code>PageNode</code> instances.
+<p>The <a href="/wdio-workflo/docs/group"><code>PageElementGroup</code></a> class manages an arbitrary structure of <code>PageNode</code> instances.
 It is a representation of the composite pattern, which allows you to perform the
 same kind of operation on each <code>PageNode</code> managed by the <code>PageElementGroup</code>.
 The prevalent use case for the <code>PageElementGroup</code> class are HTML forms, which
@@ -153,11 +153,11 @@ usually contain many HTML form fields of different types. Instead of invoking a 
 function on each individual form field, you can call <code>setValue</code> on the whole form
 and pass it a single object that contains the data for all form fields.</p>
 <h3><a class="anchor" aria-hidden="true" id="page-node-stores"></a><a href="#page-node-stores" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Page Node Stores</h3>
-<p>The <code>PageNodeStore</code> class serves as a facade for retrieving instances of
+<p>The <a href="/wdio-workflo/docs/store"><code>PageNodeStore</code></a> class serves as a facade for retrieving instances of
 <code>PageNode</code> classes and implements factory methods to create, preconfigure and
 cache them.</p>
 <h3><a class="anchor" aria-hidden="true" id="pages"></a><a href="#pages" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pages</h3>
-<p>The <code>Page</code> class maps the structure of a website by encapsulating all test components
+<p>The <a href="/wdio-workflo/docs/page"><code>Page</code></a> class maps the structure of a website by encapsulating all test components
 used to build the website in its scope.</p>
 <p>It fetches instances of <code>PageNode</code> classes from a <code>PageNodeStore</code> and sets
 the XPath selectors used to locate them on the website.</p>
