@@ -606,3 +606,5 @@ export class PageNodeStore {
     return this._instanceCache[key];
   }
 }
+
+export const pageNode = new PageNodeStore();

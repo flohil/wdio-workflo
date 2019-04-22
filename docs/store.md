@@ -519,3 +519,85 @@ The XPath selector of the `label` child element alone would be `//label[contains
 However, sine the `Element` factory method of the store is invoked via the `$` accessor,
 the full resulting XPath selector of our `label` page element would be
 `//div[@role="textfield"]//label[contains(@class, "ms-Label")]`.
+
+## Extend the `PageNodeStore` class
+
+### Creating a Specialized Store class
+
+You can extend the `PageNodeStore` class to create specialized stores. These
+stores used exclusively by one `Page`. This can be useful if you have a lot of different
+`PageNode` classes and if some of these `PageNode` classes are available only on certain pages.
+
+The `FeedItem` page element, for example, is only available on the `FeedPage` page.
+You could now create a `FeedStore` which holds all factory methods that are
+available exclusively on the `FeedPage` page. This helps to avoid clutter by
+reducing the number of factory methods in the main `PageNodeStore` class.
+
+Take a look at the `FeedStore` located in the `src/page_objects/stores` folder of the
+wdio-workflo-example repository:
+
+```typescript
+import { pageObjects as core } from 'wdio-workflo';
+
+import { PageNodeStore } from "./PageNodeStore";
+import { FeedItem, IFeedItemOpts } from '../page_elements';
+
+export class FeedStore extends PageNodeStore {
+
+  FeedItem(
+    selector: Workflo.XPath,
+    opts?: Pick<IFeedItemOpts<this>, Workflo.Store.BaseKeys>,
+  ) {
+    return this._getElement<FeedItem<this>, IFeedItemOpts<this>>(
+      selector,
+      FeedItem,
+      {
+        store: this,
+        ...opts,
+      },
+    );
+  }
+}
+
+export const feeds = new FeedStore();
+```
+
+Creating our `FeedStore` is very easy - we simply extend the `PageNodeStore` class.
+
+All factory methods defined within the `FeedStore` class create instances of `PageNode` classes
+that are available exclusively on the feeds page of wdio-workflo's demo website.
+
+Usually, there doesn't need to be more than one instance of a `PageNodeStore` class.
+Therefore, at the end of each store file we typically create and export such an instance:
+`export const feeds = new FeedStore()`.
+
+### Adding an Entry to the Index File
+
+If you created a specialized `PageNodeStore` class, you need to add an `export *` entry
+for it to the `index.ts` file located in the `src/page_objects/stores` folder:
+
+```typescript
+export * from './PageNodeStore';
+export * from './FeedStore';
+```
+
+To use our specialized store from another directory, e.g. from the `FeedPage` class,
+we can import the `stores` object from the `src/page_objects` folder.
+Our store instance and its class type will now be available in the `stores` object's scope:
+
+```typescript
+import { stores } from '?/page_objects';
+import { BasePage } from '../BasePage';
+
+export class FeedPage extends BasePage<stores.FeedStore> {
+
+  constructor() {
+    super({
+      store: stores.feeds,
+      pageName: 'feed'
+    });
+  }
+
+  /* ... */
+}
+```

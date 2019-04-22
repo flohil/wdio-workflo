@@ -92,6 +92,9 @@
       "testcases": {
         "title": "Testcases",
         "sidebar_label": "Testcases"
+      },
+      "xpathBuilder": {
+        "title": "xpathBuilder"
       }
     },
     "links": {

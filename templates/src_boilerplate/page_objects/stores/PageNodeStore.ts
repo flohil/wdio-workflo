@@ -191,3 +191,5 @@ export class PageNodeStore extends core.stores.PageNodeStore {
     );
   }
 }
+
+export const pageNode = new PageNodeStore();
