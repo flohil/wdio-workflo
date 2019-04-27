@@ -73,9 +73,8 @@ and use the different types of page nodes available in your test code.</p>
 you only need to change it in one place which increases maintainability.</p>
 <h2><a class="anchor" aria-hidden="true" id="location-and-naming-convention"></a><a href="#location-and-naming-convention" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Location and Naming Convention</h2>
 <p>Store files are located in the <code>src/page_objects/stores</code> folder of your system
-test directory. I usually end the class names of store with the term <code>Store</code>,
-but from a technical perspective, this is not required and you do not need to
-follow this convention.</p>
+test directory. I usually like to name store classes so that they end with the
+term <code>Store</code>, but from a technical perspective, this is not required and you do not need to follow this convention.</p>
 <h2><a class="anchor" aria-hidden="true" id="factory-methods"></a><a href="#factory-methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Factory Methods</h2>
 <h3><a class="anchor" aria-hidden="true" id="naming-convention"></a><a href="#naming-convention" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Naming Convention</h3>
 <p>By convention, factory methods start with a capital letter to indicate that they
@@ -466,7 +465,72 @@ The XPath selector of the <code>label</code> child element alone would be <code>
 However, sine the <code>Element</code> factory method of the store is invoked via the <code>$</code> accessor,
 the full resulting XPath selector of our <code>label</code> page element would be
 <code>//div[@role=&quot;textfield&quot;]//label[contains(@class, &quot;ms-Label&quot;)]</code>.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/group"><span class="arrow-prev">← </span><span>Group</span></a><a class="docs-next button" href="/wdio-workflo/docs/page"><span>Page</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview">Overview</a><ul class="toc-headings"><li><a href="#objective">Objective</a></li><li><a href="#advantages">Advantages</a></li></ul></li><li><a href="#location-and-naming-convention">Location and Naming Convention</a></li><li><a href="#factory-methods">Factory Methods</a><ul class="toc-headings"><li><a href="#naming-convention">Naming Convention</a></li><li><a href="#parameters">Parameters</a></li><li><a href="#body">Body</a></li></ul></li><li><a href="#initializer-functions">Initializer Functions</a><ul class="toc-headings"><li><a href="#getelement">_getElement</a></li><li><a href="#getlist">_getList</a></li><li><a href="#getmap">_getMap</a></li><li><a href="#getgroup">_getGroup</a></li></ul></li><li><a href="#using-a-pagenodestore">Using a <code>PageNodeStore</code></a><ul class="toc-headings"><li><a href="#accessing-a-store-from-a-page">Accessing a Store from a Page</a></li><li><a href="#accessing-a-store-from-a-pagenode">Accessing a Store from a PageNode</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="./apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+<h2><a class="anchor" aria-hidden="true" id="extend-the-pagenodestore-class"></a><a href="#extend-the-pagenodestore-class" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Extend the <code>PageNodeStore</code> class</h2>
+<h3><a class="anchor" aria-hidden="true" id="creating-a-specialized-store-class"></a><a href="#creating-a-specialized-store-class" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating a Specialized Store class</h3>
+<p>You can extend the <code>PageNodeStore</code> class to create specialized stores. These
+stores used exclusively by one <code>Page</code>. This can be useful if you have a lot of different
+<code>PageNode</code> classes and if some of these <code>PageNode</code> classes are available only on certain pages.</p>
+<p>The <code>FeedItem</code> page element, for example, is only available on the <code>FeedPage</code> page.
+You could now create a <code>FeedStore</code> which holds all factory methods that are
+available exclusively on the <code>FeedPage</code> page. This helps to avoid clutter by
+reducing the number of factory methods in the main <code>PageNodeStore</code> class.</p>
+<p>Take a look at the <code>FeedStore</code> located in the <code>src/page_objects/stores</code> folder of the
+wdio-workflo-example repository:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { pageObjects <span class="hljs-keyword">as</span> core } <span class="hljs-keyword">from</span> <span class="hljs-string">'wdio-workflo'</span>;
+
+<span class="hljs-keyword">import</span> { PageNodeStore } <span class="hljs-keyword">from</span> <span class="hljs-string">"./PageNodeStore"</span>;
+<span class="hljs-keyword">import</span> { FeedItem, IFeedItemOpts } <span class="hljs-keyword">from</span> <span class="hljs-string">'../page_elements'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> FeedStore <span class="hljs-keyword">extends</span> PageNodeStore {
+
+  FeedItem(
+    selector: Workflo.XPath,
+    opts?: Pick&lt;IFeedItemOpts&lt;<span class="hljs-keyword">this</span>&gt;, Workflo.Store.BaseKeys&gt;,
+  ) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._getElement&lt;FeedItem&lt;<span class="hljs-keyword">this</span>&gt;, IFeedItemOpts&lt;<span class="hljs-keyword">this</span>&gt;&gt;(
+      selector,
+      FeedItem,
+      {
+        store: <span class="hljs-keyword">this</span>,
+        ...opts,
+      },
+    );
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> feeds = <span class="hljs-keyword">new</span> FeedStore();
+</code></pre>
+<p>Creating our <code>FeedStore</code> is very easy - we simply extend the <code>PageNodeStore</code> class.</p>
+<p>All factory methods defined within the <code>FeedStore</code> class create instances of <code>PageNode</code> classes
+that are available exclusively on the feeds page of wdio-workflo's demo website.</p>
+<p>Usually, there doesn't need to be more than one instance of a <code>PageNodeStore</code> class.
+Therefore, at the end of each store file we typically create and export such an instance:
+<code>export const feeds = new FeedStore()</code>.</p>
+<h3><a class="anchor" aria-hidden="true" id="adding-an-entry-to-the-index-file"></a><a href="#adding-an-entry-to-the-index-file" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding an Entry to the Index File</h3>
+<p>If you created a specialized <code>PageNodeStore</code> class, you need to add an <code>export *</code> entry
+for it to the <code>index.ts</code> file located in the <code>src/page_objects/stores</code> folder:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./PageNodeStore'</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./FeedStore'</span>;
+</code></pre>
+<p>To use our specialized store from another directory, e.g. from the <code>FeedPage</code> class,
+we can import the <code>stores</code> object from the <code>src/page_objects</code> folder.
+Our store instance and its class type will now be available in the <code>stores</code> object's scope:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+<span class="hljs-keyword">import</span> { BasePage } <span class="hljs-keyword">from</span> <span class="hljs-string">'../BasePage'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> FeedPage <span class="hljs-keyword">extends</span> BasePage&lt;stores.FeedStore&gt; {
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">super</span>({
+      store: stores.feeds,
+      pageName: <span class="hljs-string">'feed'</span>
+    });
+  }
+
+  <span class="hljs-comment">/* ... */</span>
+}
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/group"><span class="arrow-prev">← </span><span>Group</span></a><a class="docs-next button" href="/wdio-workflo/docs/page"><span>Page</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview">Overview</a><ul class="toc-headings"><li><a href="#objective">Objective</a></li><li><a href="#advantages">Advantages</a></li></ul></li><li><a href="#location-and-naming-convention">Location and Naming Convention</a></li><li><a href="#factory-methods">Factory Methods</a><ul class="toc-headings"><li><a href="#naming-convention">Naming Convention</a></li><li><a href="#parameters">Parameters</a></li><li><a href="#body">Body</a></li></ul></li><li><a href="#initializer-functions">Initializer Functions</a><ul class="toc-headings"><li><a href="#getelement">_getElement</a></li><li><a href="#getlist">_getList</a></li><li><a href="#getmap">_getMap</a></li><li><a href="#getgroup">_getGroup</a></li></ul></li><li><a href="#using-a-pagenodestore">Using a <code>PageNodeStore</code></a><ul class="toc-headings"><li><a href="#accessing-a-store-from-a-page">Accessing a Store from a Page</a></li><li><a href="#accessing-a-store-from-a-pagenode">Accessing a Store from a PageNode</a></li></ul></li><li><a href="#extend-the-pagenodestore-class">Extend the <code>PageNodeStore</code> class</a><ul class="toc-headings"><li><a href="#creating-a-specialized-store-class">Creating a Specialized Store class</a></li><li><a href="#adding-an-entry-to-the-index-file">Adding an Entry to the Index File</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="./apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;

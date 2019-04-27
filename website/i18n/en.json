@@ -94,7 +94,8 @@
         "sidebar_label": "Testcases"
       },
       "xpathBuilder": {
-        "title": "xpathBuilder"
+        "title": "XPath Builder",
+        "sidebar_label": "XPath Builder"
       }
     },
     "links": {
