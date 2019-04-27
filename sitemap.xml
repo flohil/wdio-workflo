@@ -28,4 +28,5 @@
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/steps</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/steps" /> </url>
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/store</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/store" /> </url>
 <url> <loc>https://flohil.github.io/wdio-workflo/docs/testcases</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/testcases" /> </url>
+<url> <loc>https://flohil.github.io/wdio-workflo/docs/xpathBuilder</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://flohil.github.io/wdio-workflo/docs/xpathBuilder" /> </url>
 </urlset>
