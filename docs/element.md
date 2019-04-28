@@ -4,7 +4,7 @@ title: Element
 sidebar_label: Element
 ---
 
-Element Page
+Available soon
 
 <!-- have no internal state - state lives in the gui, -->
 

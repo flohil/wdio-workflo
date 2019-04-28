@@ -4,4 +4,4 @@ title: Map
 sidebar_label: Map
 ---
 
-Map page
+Available soon

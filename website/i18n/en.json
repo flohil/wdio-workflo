@@ -41,9 +41,17 @@
         "title": "Element",
         "sidebar_label": "Element"
       },
+      "executionLists": {
+        "title": "Execution Lists",
+        "sidebar_label": "Execution Lists"
+      },
       "firstTest": {
         "title": "Writing your first Test",
         "sidebar_label": "Writing your first Test"
+      },
+      "getUid": {
+        "title": "The `getUid` Function",
+        "sidebar_label": "The `getUid` Function"
       },
       "group": {
         "title": "Group",
@@ -52,6 +60,10 @@
       "list": {
         "title": "List",
         "sidebar_label": "List"
+      },
+      "manualResults": {
+        "title": "Manual Results",
+        "sidebar_label": "Manual Results"
       },
       "map": {
         "title": "Map",

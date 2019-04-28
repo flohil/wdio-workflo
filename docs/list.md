@@ -4,4 +4,4 @@ title: List
 sidebar_label: List
 ---
 
-List page
+Available soon

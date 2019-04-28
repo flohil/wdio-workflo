@@ -261,23 +261,72 @@ of nesting
 - `selected` to constrain HTML elements to nodes which have an HTML `selected` attribute
 - `type("myType")` to constrain HTML elements by their HTML `type` attribute
 
-append, constraint
+Finally, there is also a general `constraint()` function which takes two parameters:
 
+- a constraint selector (the `constraint` function will encapsulate this selector in square brackets)
+- an optional builder function to apply XPath modifications to the constraint selector
 
-hasChild
-
-child
-
-#### Example of a complex XPath Expression
-
-To give you an idea of how using wdio-workflo's XPath builder can help you
-to write complex XPath expressions, the following code shows the same XPath
-expression written as a "normal" string and created with wdio-workflo's
-`xpath` builder function:
+The following code example shows you how to use the general `constraint()` function:
 
 ```typescript
-
+xpath('//div').constraint(
+  './/span', xpath => xpath.text('Some Text')
+);
 ```
+
+The result of the XPath from the above example would be `//div[.//span[.="Some Text"]]`.
+
+*Please notice that the above `constraint` example can also be achieved using the
+`hasChild` function described below.*
+
+#### `hasChild`
+
+The `hasChild` function is very similar to the `constraint` function and can be
+used to select a parent node which has a child node that matches a certain child selector.
+It also takes two parameters:
+
+- a selector of a child node
+- an optional builder function to apply XPath modifications to the child selector
+
+The only real difference from the above `constraint` code example is that `hasChild`
+automatically adds a `.` to the beginning of the child selector, so that the
+child selector always starts from the parent node as root:
+
+```typescript
+xpath('//div').hasChild(
+  '//span', xpath => xpath.text('Some Text')
+);
+```
+
+The result of this `hasChild` example is exactly the same as the one of the
+above `constraint` example: `//div[.//span[.="Some Text"]]`.
+
+#### `append` and `child`
+
+The `append` function simply appends an arbitrary XPath expression to the builder's
+current XPath expression:
+
+```typescript
+xpath('//div').append('/a[@href="https://flohil.github.io/wdio-workflo/"]')
+```
+
+This code example results in the XPath expression `//div/a[@href="https://flohil.github.io/wdio-workflo/"]`.
+
+The `child` function is basically an alias for the `append` function.
+They work in the exact same way:
+
+```typescript
+xpath('//div').child('/a[@href="https://flohil.github.io/wdio-workflo/"]')
+```
+
+The only thing important to note for both `append` and `child` is that the
+appended selector becomes the new target for XPath modification functions:
+
+```typescript
+xpath('//div').child('/a[@href="https://flohil.github.io/wdio-workflo/"]').text('Click Me!')
+```
+
+So the above example results in the XPath expression `//div/a[@href="https://flohil.github.io/wdio-workflo/"][.="Click Me!"]`.
 
 #### Building and Resetting the Builder's XPath Expression
 
