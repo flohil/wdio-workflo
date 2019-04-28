@@ -8,6 +8,7 @@
     "Steps": ["steps"],
     "Testcases": ["testcases"],
     "Customizing Page Nodes": ["customPageNodes", "customElement", "customList", "customMap"],
+    "Various Tools": ["xpathBuilder"],
     "Testrunner": ["cliOptions", "runningTests", "debugging", "reporters"]
   }
 }
