@@ -24,16 +24,40 @@ By convention, the filename of list files should always end with `.list.ts`.
 
 ## Usage
 
+### Definition of List Files
+
 To define an execution list, you need to create an object that implements the `Workflo.IFilterList` interface
 and make this object the default export of a list file:
 
 ```typescript
-const smokeTestList: Workflo.IFilterList = {
+//smokeTests.list.ts
 
-}
+const smokeTestList: Workflo.IFilterList = {
+  listFiles: ["otherList"],
+  testcases: ["feed.filter feed items"],
+  testcaseFiles: ["feed.tc.ts"],
+  features: ["Feed"],
+  specs: ["2.1"],
+  specFiles: ["feed.spec.ts"],
+};
 
 export default smokeTestList;
 ```
+
+You can define the following CLI execution filter options in a list file:
+
+- `listFiles` for including other list files
+- `testcases`
+- `testcaseFiles`
+- `features`
+- `specs`
+- `specFiles`
+
+Please be aware that each additional CLI execution filter further restricts the subset of executed testcases and
+validated specs. Therefore, in order for a testcase to be executed or a spec to be validated, it must be matched
+by all defined execution filters.
+
+### Executing Wdio-workflo with Execution Lists
 
 To run your test suite using the execution filters defined within a list file, you need to set the
 `--listFiles` CLI option when starting wdio-workflo. The value of the `--listFiles` CLI option is a JSON array
