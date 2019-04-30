@@ -1104,7 +1104,7 @@ checkReport().then(() => {
    * Loads all specFiles, testcaseFiles, features, specs and testcases defined in lists and sublists of argv.listFiles
    * @param argv
    */
-  function mergeLists(list: Workflo.FilterList, _filters: IExecutionFilters) {
+  function mergeLists(list: Workflo.IFilterList, _filters: IExecutionFilters) {
     if (list.specFiles) {
       list.specFiles.forEach(value => _filters.specFiles[value] = true);
     }
@@ -1128,7 +1128,7 @@ checkReport().then(() => {
         if (!fs.existsSync(listFilePath)) {
           throw new Error(`List file could not be found: ${listFilePath}`);
         } else {
-          const sublist: Workflo.FilterList = require(listFilePath).default;
+          const sublist: Workflo.IFilterList = require(listFilePath).default;
 
           // recursively traverse sub list files
           mergeLists(sublist, _filters);

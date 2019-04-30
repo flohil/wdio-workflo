@@ -3359,7 +3359,7 @@ declare global {
     /**
      * @ignore
      */
-    interface FilterList {
+    interface IFilterList {
       listFiles?: string[];
       specFiles?: string[];
       testcaseFiles?: string[];
