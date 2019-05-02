@@ -130,14 +130,176 @@ protected get __element() {
 }
 ```
 
-You can learn more about the waiting mechanisms of `PageElement` in the next section
-of this guide.
+You can learn more about the waiting mechanisms of `PageElement` in the next
+section of this guide.
 
 ## Waiting Mechanisms
 
 ### Implicit Waiting
 
+When you open a website in your browser, the website and its components are usually not available immediately. A request to load the code of the website
+needs to be processed by a webserver, the server's response needs to be transferred to your browser and your browser needs to render the contents of the website before it can be displayed. Depending on the speed of your internet connection, the size of the website and the computational power of the webserver and your computer, it might take some time before you can read the contents of a
+website and interact with them.
+
+In the age of Web 2.0, asynchronous loading of website content and single page
+applications further intensify this problem.
+
+Our tests need to take these waiting times into account, otherwise we would
+get a lot of errors because elements could not be located on the website since
+the website has not been fully loaded yet.
+
+To reduce the number of explicit waiting statements in your test code,
+wdio-workflo implements an implicit waiting mechanism: Whenever you call a method on the `PageElement` class that reads the state of its mapped HTML element
+(e.g. `getText()`) or interacts with it (e.g. `click()`), wdio-workflo automatically waits for an initial waiting condition to be fulfilled before
+executing the corresponding command.
+
+The four different kinds of initial waiting conditions are defined by the `Workflo.WaitType` enum and can be set via the `waitType` property of the page element's `opts` parameter:
+
+- `exist` waits until the element exists on the website
+- `visible` waits until the element is visible on the website (default value; not obscured by another element or hidden via CSS styles)
+- `text` waits until the element has any text content
+- `value` waits until the element has any value (only for `ValuePageElement` classes)
+
+Most [factory methods](store.md#factory-methods) of a `PageNodeStore` allow you to define the value of `waitType` as property of their publicly configurable `opts` parameter:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const hiddenContainer = stores.pageNode.Element('//div', {
+  waitType: Workflo.WaitType.exist
+});
+```
+
 ### Explicit Waiting: `currently`, `wait` and `eventually`
+
+In addition to its implicit waiting mechanism, each page node class ships with
+a `wait` API that offers you the ability to explicitly control when your tests should wait for an HTML element to reach a certain state.
+
+Furthermore, page nodes also have a `currently` API to read or check the current state of a mapped HTML element without performing an implicit wait, and an `eventually` API that lets you check if an HTML element reaches a certain state within a specific timeout.
+
+#### The `currently` API
+
+The `currently` API bypasses the implicit wait usually performed when invoking
+state retrieval methods of a page node class (e.g. `PageElement.getText()`).
+
+Let's take a look at the following code example to better understand the difference between invoking a state retrieval function directly on the `PageElement` class and invoking a state retrieval function on the `currently` API of the `PageElement`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+// implicitly waits for the element to be visible and then returns its text
+console.log( element.getText() )
+
+// immediately returns the element's text without waiting for it to be visible
+console.log( element.currently.getText() )
+```
+
+To spare you the need of first reading the current state of an HTML element and then comparing it to an expected value in a second step, the `currently` API also provides a set of functions that let you check directly if the state of an HTML element matches an expected state.
+
+These "state check functions" usually come in three variants for each attribute
+of an HTML element's state:
+
+- `hasXXX(value)` checks if the HTML attribute XXX equals an expected value
+- `containsXXX(value)` checks if the HTML attribute XXX contains an expected value
+- `hasAnyXXX()` checks if the HTML attribute XXX has any value
+
+Let's examine these three variants of `currently` state check functions by the example of an HTML element's "text" attribute:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(
+  xpath('//div').text('wdio-workflo')
+);
+
+// returns true because the actual text equals 'wdio-workflo'
+element.currently.hasText('wdio-workflo')
+
+// returns true because the actual text contains the substring 'workflo'
+element.currently.containsText('workflo')
+
+// returns true because the element has any text (it is not blank/empty)
+element.currently.hasAnyText()
+```
+
+*Please note that interaction methods of a `PageElement` like `click()` and `scrollTo()` always perform an implicit wait because interacting with elements that have not been rendered yet doesn't make much sense. Therefore, the `currently` API does not contain interaction methods like `click()`.*
+
+#### The `wait` API
+
+The `wait` API contains a set of state check functions that wait for an HTML
+element to reach a certain state within a specific timeout.
+
+If the HTML element does not reach the expected state within the specified timeout, an error will be thrown. Otherwise, the `PageElement` instance
+will be returned by each function defined on the `wait` API, so you can easily
+chain additional `PageElement` method calls:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+element.wait.hasText('wdio-workflo', {timeout: 3000}).click()
+```
+
+If you do not explicitly specify a timeout value when calling a state check function on `wait`, the default timeout of the `PageElement` will be used:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+// uses this._timeout as timeout value
+element.wait.hasText('wdio-workflo')
+```
+
+The default timeout value for a specific instance of a `PageElement` can be set by defining the `timeout` property of the publicly configurable `opts` parameter
+of a [factory method](store.md#factory-methods) in milliseconds:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div', {
+  timeout: 10000 // 10 seconds
+});
+```
+
+Alternatively, you can also define the global default timeout value that will be
+used as a fallback value for all page nodes in `workflo.conf.ts`:
+
+```typescript
+export const workfloConfig: IWorkfloConfig = {
+  /*...*/
+  timeouts: {
+    default: 6000
+  }
+  /*...*/
+};
+```
+
+#### The `eventually` API
+
+The `eventually` API is almost identical to the `wait` API: It also waits for an
+HTML element to each a certain state within a specific timeout. However, the
+state check functions defined on the `eventually` API will return `true` if the
+expected state is reached within the specified timeout and `false` if it is not:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(
+  xpath('//div').text('wdio-workflo')
+);
+
+// will probably return false since the website has not finished rendering yet
+element.eventually.hasText('wdio-workflo', {timeout: 1})
+
+// will return true if the website finishes loading within 20 seconds
+element.eventually.hasText('wdio-workflo', {timeout: 20000})
+```
+
+The `eventually` API does not throw an error if the HTML element fails to reach the expected state within the specified (or default) timeout.
 
 ## The `ValuePageElement` Class
 

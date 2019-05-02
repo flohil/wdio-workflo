@@ -233,3 +233,21 @@ To filter `testcase` and `Story` functions by the date they were run for the las
 # restricts by last run started on 2017-07-21 or at 2017-07-22 at 2 pm, 51 min, 13 sec
 ./node_modules/.bin/wdio-workflo --specStatus '["2017-07-21", "2017-07-22T14:51:13"]'
 ```
+
+## Running Tests Headless
+
+An easy way to run your tests headless is to use Google's Chrome browser
+and set the following options in `workflo.conf.ts`:
+
+```typescript
+export const workfloConfig: IWorkfloConfig = {
+  /*...*/
+  capabilities: {
+    browserName: 'chrome',
+    chromeOptions: {
+      args: ['headless', 'disable-gpu']
+    }
+  }
+  /*...*/
+}
+```
