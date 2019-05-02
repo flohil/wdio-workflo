@@ -43,7 +43,7 @@ class Footer extends React.Component {
             <a href="https://github.com/flohil/wdio-workflo-example">
               Examples
             </a>
-            <a href={"./apiDoc"}>
+            <a href="/wdio-workflo/apiDoc">
               API Reference
             </a>
           </div>
