@@ -224,6 +224,27 @@ element.currently.containsText('workflo')
 element.currently.hasAnyText()
 ```
 
+The `currently` API also offers functions to check if the state of an HTML element
+does NOT match an expected state. These negated state check functions are
+available via the `not` accessor of the `currently` API:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(
+  xpath('//div').text('wdio-workflo')
+);
+
+// returns true because the actual text does not equal 'icebears'
+element.currently.not.hasText('icebears')
+
+// returns true because the actual text does not contain the substring 'icebears'
+element.currently.not.containsText('icebears')
+
+// returns false because the element has the text 'wdio-workflo'
+element.currently.not.hasAnyText()
+```
+
 *Please note that interaction methods of a `PageElement` like `click()` and `scrollTo()` always perform an implicit wait because interacting with elements that have not been rendered yet doesn't make much sense. Therefore, the `currently` API does not contain interaction methods like `click()`.*
 
 #### The `wait` API
@@ -278,6 +299,18 @@ export const workfloConfig: IWorkfloConfig = {
 };
 ```
 
+The `wait` API also offers functions to wait for the state of an HTML element to NOT or no longer match an expected state. These negated state check functions are
+available via the `not` accessor of the `wait` API:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+// waits until the text of the element not or no longer is 'wdio-workflo'
+element.wait.not.hasText('wdio-workflo')
+```
+
 #### The `eventually` API
 
 The `eventually` API is almost identical to the `wait` API: It also waits for an
@@ -300,6 +333,88 @@ element.eventually.hasText('wdio-workflo', {timeout: 20000})
 ```
 
 The `eventually` API does not throw an error if the HTML element fails to reach the expected state within the specified (or default) timeout.
+
+Like the `currently` and the `wait` API, the `eventually` API too offers a
+`not` accessor to invoke negated variants of its state check function.
+These functions check if the state of an HTML does not match/stops to match an expected state within a specific timeout:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(
+  xpath('//div').text('wdio-workflo')
+);
+
+element.eventually.not.hasText('icebears')
+```
+
+#### Always use the `not` Accessor instead of the `!` Operator
+
+It is important to always use the `not` accessor instead of putting the
+`!` negation operator before your state check functions. These two approaches
+are not the same: The `!` operator executes your state check function as is and then negates its result, whereas the `not` accessor executes the negated version of your state check function.
+
+To better understand the difference between using the `not` accessor and the `!` negation operator, take a look at the following code examples:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(xpath('//div'));
+
+// This will wait for the text to become 'wdio-workflo' and throw an error if
+// the text stays anything other than 'wdio-workflo' until a timeout is reached.
+// If the text does become 'wdio-workflo', the return value of the function
+// (the element instance) will be negated which results in the value `false`.
+const r1 = !element.wait.hasText('wdio-workflo')
+
+// This will wait for the text to become anything other than 'wdio-workflo' and
+// throw an error if it stays 'wdio-workflo' until a timeout is reached.
+// The function returns the element itself (an instance of the PageElement class).
+const r2 = element.wait.not.hasText('wdio-workflo')
+
+// The following statements are all true because r1 !== r2.
+r1 === false
+r2 !== false
+(r1 instanceof PageElement) !== true
+(r2 instanceof PageElement) === true
+
+// This will work, because r2 is an instance of the PageElement class.
+r2.click()
+
+// This will not work, because the function 'click' does not exist on `false`.
+r1.click()
+```
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(xpath('//div'));
+
+// Let's assume that the initial text of the element is 'wdio-workflo'!
+
+// The `hasText` function would immediately return `true`, but the return value
+// would then be negated by the `!` operator, resulting in the value `false`.
+!element.eventually.hasText('wdio-workflo', {timeout: 5000})
+
+// The `hasText` function would wait for 5 seconds for the text to become
+// 'wdio-workflo' and then return the value `false` if it did not.
+element.eventually.not.hasText('wdio-workflo', {timeout: 5000})
+
+// Now let's assume that after 2 seconds, the text of the element changes to
+// something other than 'wdio-workflo'.
+
+// Since `hasText` would immediately return `true` in this example and then
+// negate the return value, the result of this statement would be `false`.
+const r1 = !element.eventually.hasText('wdio-workflo', {timeout: 5000})
+
+// This statement would wait for 2 seconds until the text changes to something
+// other than 'wdio-workflo'. Then it would return `true`!!!
+const r2 = element.eventually.not.hasText('wdio-workflo', {timeout: 5000})
+
+// The following statements are all true because r1 !== r2.
+r1 === false
+r2 === true
+```
 
 ## The `ValuePageElement` Class
 
