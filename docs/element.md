@@ -55,6 +55,13 @@ The constructor of `PageElement` requires two parameters:
 
 ![Constructor of PageElement](assets/page_element_constructor.png)
 
+The most important properties of the `opts` parameter are:
+
+- `store` => The `PageNodeStore` instance associated with the `PageElement`.
+- `timeout` => The element's default timeout for all functions of the [`eventually` and `wait` APIs](#explicit-waiting-currently-wait-and-eventually).
+- `interval` => The element's default interval for all functions of the [`eventually` and `wait` APIs](#explicit-waiting-currently-wait-and-eventually).
+- `waitType` => The waiting type used for the [initial waiting condition](#implicit-waiting) of the `PageElement`.
+
 ## The Associated `PageNodeStore`
 
 Each `PageElement` stores an instance of a `PageNodeStore` in its private `_store`
@@ -421,18 +428,48 @@ r2 === true
 Some components of a website like inputs, checkboxes, radio buttons, dropdowns, textareas
 or toggles/switches manage a value that can be modified by users.
 
-Wdio-workflo's `PageElement` class has no way of getting or setting the value of such components.
-In this event, you need to make use of wdio-workflo's `ValuePageElement` class.
-`ValuePageElement` is an abstract class that inherits all functionality of the `PageElement` class
-and in addition provides two abstract methods, `getValue` and `setValue`, to manage the value
-of components like input or checkbox.
+Wdio-workflo's `PageElement` class has no way of getting, setting or checking the
+value of such components. In this event, you need to make use of wdio-workflo's
+`ValuePageElement` class. `ValuePageElement` is an abstract class that inherits
+all functionality of the `PageElement` class and in addition provides two abstract methods, `getValue` and `setValue`, to manage the value of components like input or checkbox.
+Futhermore, the `ValuePageElement` class includes the state check functions `hasValue`, `containsValue` and `hasAnyValue` it its `currently`, `wait` and `eventually` APIs.
 
-However, since the implementation of these components can vary greatly between the different
-available component libraries for React, Angular and the like, wdio-workflo does not
-ship with a standard implementation for `getValue` and `setValue`.
+Wdio-workflo's example repository contains an `Input` class that is derived from
+`ValuePageElement` and implements its `getValue` and `setValue` methods.
+Below you can find code examples for how to use the `getValue` and `setValue` methods
+as well as the  `hasValue`, `containsValue` and `hasAnyValue` state check functions
+of the `Input` class:
 
-Instead, you need to create your own, custom page element classes that inherit
-from `ValuePageElement` and implement its `getValue` and `setValue` methods.
+```typescript
+import { stores } from '?/page_objects';
+
+const input = stores.pageNode.Input(xpath('//input'));
+
+// returns the value after performing an implicit wait
+input.getValue()
+
+// returns the value immediately, without performing an implicit wait
+input.currently.getValue()
+
+// sets the value of the input to 'wdio-workflo' after performing an implicit wait
+input.setValue('wdio-workflo')
+
+// checks if the input currently/at this very moment has the value 'wdio-workflo'
+input.currently.hasValue('wdio-workflo');
+
+// waits for the value of the input not to contain the string 'icebears'
+input.wait.not.containsValue('icebears');
+
+// checks if the input eventually has any value within 3000 milliseconds
+input.eventually.hasAnyValue({timeout: 3000})
+```
+
+Since the implementation of components like dropdowns or checkboxes can
+vary greatly between the different available component libraries for React,
+Angular and the like, wdio-workflo does not ship with a standard implementation
+for `getValue` and `setValue`. Instead, you need to create your own, custom page
+element classes that inherit from `ValuePageElement` and implement its `getValue`
+and `setValue` methods.
 
 You can read more about how to do this in the [Extending `ValuePageElement`](customElement.md#extending-valuepageelement)
 section of the [Customizing an Element](customElement.md) guide.

@@ -4,14 +4,14 @@ title: Customizing a List
 sidebar_label: Customizing a List
 ---
 
-There are two situations where you might want to create a custom `PageElementList` class:
+There are usually two reasons to create a customized version of `PageElementList`:
 
-- To add a factory method for a list of your own custom PageElement classes
+- To add a factory method for a list managing instances of customized `PageElement` classes
 - To enhance the base `PageElementList` with additional functionality
 
 The first situation is usually much more common, so let's start with explaining it in more detail.
 
-## Adding a List Factory Method for Custom Elements
+## Adding a List Factory Method for a Custom `PageElement`
 
 In our guide on [Customizing an Element](customElement.md), we create a custom `FeedItem` page element.
 
@@ -51,7 +51,20 @@ FeedItemList(
 
 Factory methods for lists are very similar to those for single elements. Their first parameter is always the XPath `selector` that identifies all elements managed by the list.
 The second parameter represents all properties of the list's `opts` object which
-can be used to configure an instance of the list.
+can be used to configure an instance of the list:
+
+```typescript
+FeedItemList(
+  selector: Workflo.XPath,
+  opts: Workflo.PickPartial<
+    core.elements.IPageElementListOpts<
+      this, FeedItem<this>, Pick<IFeedItemOpts<this>, Workflo.Store.ElementPublicKeys>
+    >,
+    Workflo.Store.ListPublicKeys,
+    Workflo.Store.ListPublicPartialKeys
+  > = {},
+) { /*...*/ }
+```
 
 For our `FeedItemList`, we make use of the `Workflo.PickPartial` type helper.
 This allows use to pick some properties from an object as they are, and to pick some
@@ -86,7 +99,7 @@ this is also possible because we merge the public `elementOpts` property into
 our default property (`elementOpts: { ...opts.elementOpts }`). If the user does
 not specify an `elementOpts` property, the result of the merge will be an empty object.
 
-### Implementation with `List` method
+### Implementation using `List()`
 
 Luckily for us, the implementation of a list factory method for custom page elements
 is very easy if we use the `List` method provided by `PageNodeStore`. This method expects
@@ -95,13 +108,69 @@ two parameters:
 - The XPath selector to identify all elements managed by the list
 - The `opts` object used to configured the list
 
+```typescript
+FeedItemList( selector: Workflo.XPath, opts: /*...*/ ) {
+  return this.List(
+    selector,
+    {
+      elementOpts: { ...opts.elementOpts },
+      elementStoreFunc: this.FeedItem,
+      ...opts,
+    },
+  );
+}
+```
+
 The `opts` object is usually the merged result of the list's public `opts` and
 a number of preconfigured properties, like in our case `elementOpts` and `elementStoreFunc`.
 
 `elementStoreFunc` defines the factory method used to create instances of the
 custom `PageElement` class managed by our custom list.
 
-## Enhancing a PageElementList with additional Functionality
+## Adding a List Factory Method for a Custom `ValuePageElement`
+
+If a list manages elements that are derived from the `ValuePageElement` class,
+the corresponding factory method should return a `ValuePageElementList` instead of a `PageElementList`. Otherwise, the `getValue` and `setValue` methods of the
+`ValuePageElementList`, as well as its  `hasValue`, `containsValue` and `hasAnyValue`
+state check functions, would not be available on the returned list.
+
+The `InputList()` factory method of the `PageNodeStore` of wdio-workflo's example
+repository gives you an example of how to do this:
+
+```typescript
+InputList(
+  selector: Workflo.XPath,
+  opts: Workflo.PickPartial<
+    core.elements.IValuePageElementListOpts<
+      this, Input<this>, Pick<IInputOpts<this>, Workflo.Store.ElementPublicKeys>, string
+    >,
+    Workflo.Store.ListPublicKeys,
+    Workflo.Store.ListPublicPartialKeys
+  > = {},
+) {
+  return this.ValueList(
+    selector,
+    {
+      elementOpts: { ...opts.elementOpts },
+      elementStoreFunc: this.Input,
+      ...opts,
+    },
+  );
+}
+```
+
+As you can see, the `InputList()` factory method implementation looks very similar
+to the `FeedItemList()` implementation from above. There are only two differences:
+
+- Instead of `IPageElementListOpts`, we now have to use `IValuePageElementListOpts`
+to describe the type of the publicly configurable `opts` of our list.
+`IValuePageElementListOpts` introduces an additional fifth type parameter that
+defines the value type of the list's elements. In our example, the value type
+of an `Input` class is `string`.
+- Instead of the `List` method, we now have to use the `ValueList` method provided
+by `PageNodeStore` to create an instance of a `ValuePageElementList`.
+
+## Extending a PageElementList with Additional Functionality
 
 ### Creating a Custom List Class
 
