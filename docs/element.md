@@ -42,7 +42,7 @@ const myElement = store.pageNode.Element('//div');
 ```
 
 However, for the sake of completeness, let's examine the type parameters and constructor
-of `PageElement` in more detail.
+of `PageElement` in more detail!
 
 The `PageElement` class requires you to define one type parameter, the type of its associated `PageNodeStore`, which can be used to create other page nodes:
 

@@ -37,17 +37,118 @@ the number of list elements is equal, smaller or bigger than an expected value.
 
 ## Creating a `PageElementList`
 
-how to construct and types -> elementFunc, elementOpts
+Instead of manually invoking the constructor of `PageElementList` using the `new` keyword,
+you should always call the `ElementList()` factory method of the [PageNodeStore](store.md)
+class to create an instance of the `PageElementList` class:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = store.pageNode.ElementList('//a');
+```
+
+However, for the sake of completeness, let's examine the type parameters and constructor
+of `PageElementList` in more detail!
+
+The `PageElementList` class has three type parameters:
+
+- The type of the `PageNodeStore` associated with the list to create other page nodes.
+- The class type of the page elements managed by the list.
+- The type of the `opts` parameter of a single page element managed by the list.
+
+```typescript
+export class PageElementList<
+  Store extends PageNodeStore,
+  PageElementType extends PageElement<Store>,
+  PageElementOptions extends Partial<IPageElementOpts<Store>>,
+> extends PageNode<Store>
+```
+
+The constructor of `PageElementList` requires two parameters:
+
+- The XPath selector that locates all of the list's page elements on a website.
+- The `opts` parameter containing properties to configure the `PageElementList`
+
+```typescript
+constructor(
+  selector: string,
+  opts: IPageElementListOpts<Store, PageElementType, PageElementOptions>,
+) { /*...*/ }
+```
+
+The most important properties of the `opts` parameter are:
+
+- `store` => The `PageNodeStore` instance associated with the `PageElementList`.
+- `timeout` => The list's default timeout for all functions of the [`eventually` and `wait` APIs](#explicit-waiting-currently-wait-and-eventually).
+- `interval` => The list's default interval for all functions of the [`eventually` and `wait` APIs](#explicit-waiting-currently-wait-and-eventually).
+- `waitType` => The waiting type used for the [initial waiting condition](#implicit-waiting) of the `PageElementList`.
+- `elementStoreFunc` => The factory method used to create a single list element.
+- `elementOpts` => The `opts` parameter passed to `elementStoreFunc` to create a list element.
 
 ## Accessing List Elements
 
 ### `first`, `at` and `all`
 
-first, at, all
+#### `first`
+
+The `first` accessor retrieves the first page element managed by a `PageElementList`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = store.pageNode.ElementList('//a');
+
+linkList.first.click();
+```
+
+#### `at`
+
+The `at` method retrieves a page element managed by a `PageElementList` at a
+specific position. It takes one parameter, the index of the retrieved page element
+(starting at 0):
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = store.pageNode.ElementList('//a');
+
+linkList.at(2).click();
+```
+
+#### `all`
+
+The `all` accessor retrieves all page elements managed by a `PageElementList` as
+an array. The order of the array elements corresponds to the order in which
+the corresponding HTML elements were located on the website:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = store.pageNode.ElementList('//a');
+
+linkList.all.forEach(
+  link => link.click()
+);
+```
 
 ### `where` Builder
 
-where builder -> getFirst, getAt, getAll, getList -> sublist
+The `where` class member of `PageElementList` let's you access a slightly modified
+version of wdio-workflo's [XPath builder](xpathBuilder.md) which allows you to query
+for certain list elements by modifying their XPath selector.
+
+very fast method to select a single lsit elemnet -> does not need to fetch
+all elements of list in advance - only fetches those elements which match the
+modified xpath selector
+
+usage is very similar to that of xpath builder - read its guide to learn more
+
+additional functions: getFirst, getAll, getAt, getList
+
+### `identify` Method
+
+can also pass `identifier` in `opts` parameter - will be overwritten by identifier
+passed explicitly to identify func
 
 ### The Underlying WebdriverIO Elements
 
