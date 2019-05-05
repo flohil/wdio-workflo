@@ -182,28 +182,168 @@ const disabledLinkList = linkList.where.disabled().getList();
 
 ### `identify` Method
 
-can also pass `identifier` in `opts` parameter - will be overwritten by identifier
-passed explicitly to identify func
+The `identify()` method converts a list's array of managed page elements
+into a hash data structure. The keys used to access certain page elements in the
+resulting hash can be determined by any criteria you like - the only precondition
+is that they have to be unique. This is useful if you want to access list elements
+by other criteria than their index.
 
-Compared to the `identify` method described in the next section of this guide,
-the `where` builder operates a lot faster because it does not need to retrieve
-all elements of a list from the website and then filter through the retrieved
-elements. Instead, the direct modification of the XPath selector using a list's
-`where` builder allows us to only fetch those elements from the website that
-match the modified XPath expression.
+Wdio-workflo's demo website, for example, has a feed page that shows a list of animals.
+Using the `identify()` method, you could make the names of the animals the keys
+of the resulting hash. This would allow you to access certain animals in the
+list by their name:
 
-Performance-wise, the `where` builder is a very fast method to select certain
-elements of a list, because it does not need to retrieve all list element from
-a website before filtering them. Instead, the modification of the XPath selector
-allows us to apply filters to the XPath itself and only fetch those elements
-from the website which match are filter.
+```typescript
+import { pages } from '?/page_objects';
 
+const animalsList = pages.feed.feedList.identify({
+  identifier: {
+    mappingObject: {
+      cat: 'Cat',
+      dog: 'Dog'
+    },
+    mappingFunc: element => element.getText()
+  }
+});
+
+animalsList.cat.click();
+animalsList.dog.click();
+```
+
+As you can see from the example above, the `identify()` method takes one object
+as parameter. This object can have two properties:
+
+- An `identifier` object.
+- A `resetCache` flag.
+
+The `identifier` object contains two properties, `mappingObject` and `mappingFunc`,
+which are needed to map the list's array of page elements to the keys of the resulting hash:
+
+The keys of the `mappingObject` also define the keys of the resulting hash.
+In other words, these are the keys you can later use to access certain elements
+of the list. During the conversion process, `mappingFunc` is invoked for
+each of the page elements managed by the list. The result of each `mappingFunc`
+invocation is then compared to the values of the `mappingObject`. If there is a match,
+the page element is linked to the corresponding hash key. In order for this to work,
+both the keys and the values of the `mappingObject` need to be unique.
+
+If you don't want to pass an `identifier` object for each invocation of `identify()`,
+you can also set a default `identifier` object via the [`opts` parameter](#creating-a-pageelementlist) of `PageElementList`. You will still be able to override the default `identifier` if you explicitly pass another `identifier` to an invocation of the
+`identify()` method.
+
+The mapping process of `identify()` requires all of the list's page elements
+to be fetched from the website which can take some time. Therefore, `PageElementList`
+caches the results of the mapping process and reuses them for later invocations
+with the same `mappingObject` and `mappingFunc`. By setting the `resetCache` flag
+to `true`, you can manually delete the cached mapping results and force the list
+to perform a new mapping process. You should do this whenever the contents of
+the list change. Alternatively, you can disable the caching of mapped results
+altogether by setting the `disableCache` property of the [`opts` parameter](#creating-a-pageelementlist) of `PageElementList` to `true`.
+
+As already mentioned, the `identify()` method can significantly increase the
+execution time of a testcase. Make sure to only use it if you have to. If all
+you want to do is access a certain list element, the [`where` builder](#where-builder)
+of the `PageElementList` class is a much faster alternative performance-wise
+because it does not have to fetch all of a list's page elements from the website
+before you can access a certain page element.
 
 ### The Underlying WebdriverIO Elements
 
-elements -> wrapper for browser.elements
+Wdio-workflo's `PageElementList` class introduces an additional layer of
+abstraction on top of WebdriverIO's
+[browser.elements](http://v4.webdriver.io/api/protocol/elements.html) method.
+The `browser.elements` function takes an XPath selector and fetches all HTML
+elements matching this selector from the website:
+
+```typescript
+browser.elements('//a');
+```
+
+You can access the underlying WebdriverIO elements of a `PageElementList` via its
+`elements` accessor. Before returning the WebdriverIO elements, the `elements` accessor
+calls the `initialWait()` method of the `PageElementList` class to make sure that
+at least one of the list's elements is fully loaded before you try to interact
+with the list or read its state:
+
+```typescript
+get elements() {
+  this.initialWait();
+
+  return browser.elements(this._selector);
+}
+```
+
+The `PageElement` instances managed by a `PageElementList` do not provide abstraction
+functions for all of WebdriverIO's commands. One command for which no abstraction function
+exists is `doubleClick`. So if you wanted to double click on each element of
+a `PageElementList`, you could access the WebdriverIO elements wrapped
+by the list and call the `doubleClick` command on each of them:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = store.pageNode.ElementList('//a');
+
+// `.elements` returns the wrapped WebdriverIO elements which provide a `doubleClick` function.
+// Throws an error if the list is empty because `initialWait()` would fail.
+linkList.elements.forEach(
+  wdioLinkElement => wdioLinkElement.doubleClick()
+)
+```
+
+Since the `initialWait()` function of `PageElementList` waits for at least
+one element of the list to exist/be visible/have any text, the above code example
+would throw an error if `linkList` was empty. You can circumvent this behavior
+by using the `elements` accessor of the list's `currently` API instead, which skips
+the invocation of the `initialWait()` function:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = store.pageNode.ElementList('//a');
+
+// Won't throw an error if the list is empty because `initialWait()` is skipped.
+linkList.currently.elements.forEach(
+  wdioLinkElement => wdioLinkElement.doubleClick()
+)
+```
+
+*To learn more about the waiting mechanisms of `PageElement` read the following
+section of this guide.*
+
+## Waiting Mechanisms
+
+### Implicit Waiting
+
+The implicit waiting mechanism of a `PageElementList` is almost identical to the
+implicit waiting mechanism of a `PageElement`. If you are not familiar with the concept
+of implicit waiting, I recommend that you read about it in the [Implicit Waiting](element.md#implicit-waiting) section of the [`PageElement` guide](element.md) first.
+
+One important thing to know about the implicit waiting mechanism of `PageElementList`
+is that its `initialWait()` function only waits until one of the list's page elements
+fulfils the list's initial waiting condition (`exists`, `isVisible`, `hasValue`).
+This is because the list's `initialWait()` function cannot know for how many page
+elements it should wait since the number of elements managed by a list can change
+any time (when the contents of the list change).
+
+### Explicit Waiting: `currently`, `wait` and `eventually`
+
+The explicit waiting mechanisms of `PageElementList` are also very similar to the
+ones used by `PageElement` and you should read about them in the [Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually) section of the
+[`PageElement` guide](element.md) before you continue reading this guide.
+
+`PageElementList` provides a `wait` API that offers you the ability to explicitly
+wait for one or more of its page elements to reach a certain state.
+
+Furthermore, `PageElementList` ships with a `currently` API to read or check
+the current state of its page elements without performing an implicit wait,
+and an `eventually` API that lets you check if its page elements reach a certain
+state within a specific timeout.
 
 ## State Retrieval and State Check Functions
+
+behave differently than the ones of `PageElement` - obviously , since
+a list can manage more than one page element.
 
 ### Reading the List Length
 
@@ -216,6 +356,10 @@ getText etc of all elements - with filtermask
 ### Implicit Waiting
 
 one of the elements in the list
+
+cannot know in advance how many elements are in the list - wait for at least one
+
+not when accessing .element
 
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 

@@ -109,11 +109,11 @@ you want to debug your testcase and output the XPath selector of the affected
 ## The Underlying WebdriverIO Element
 
 Wdio-workflo's `PageElement` class introduces an additional layer of abstraction
-on top of WebdriverIO's [browser.element](http://v4.webdriver.io/api/protocol/element.html) method. The `browser.element` method takes an XPath selector and fetches the first HTML
+on top of WebdriverIO's [browser.element](http://v4.webdriver.io/api/protocol/element.html) function. The `browser.element` function takes an XPath selector and fetches the first HTML
 element matching this selector from the website:
 
 ```typescript
-browser.element('//div')
+browser.element('//div');
 ```
 
 The `PageElement` class does not store any information about the state of its mapped HTML
@@ -137,8 +137,26 @@ protected get __element() {
 }
 ```
 
-You can learn more about the waiting mechanisms of `PageElement` in the next
-section of this guide.
+*To learn more about the waiting mechanisms of `PageElement` read the following
+section of this guide.*
+
+Most of the time you don't need to access the WebdriverIO element wrapped by the
+`PageElement` class from outside the class. In some rare cases, however,
+you might need to interact with the WebdriverIO element directly.
+
+One situation that requires you to interact with the WebdriverIO element directly
+is if your web application has a context menu that can only be opened by performing a
+right click. Wdio-workflo's `PageElement` provides no method to perform a right click
+but WebdriverIO provides a command to do exactly that:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const contentMenuZone = store.pageNode.Element('//div');
+
+// `.element` returns the wrapped WebdriverIO element which provides a `rightClick` command
+contentMenuZone.element.rightClick();
+```
 
 ## Waiting Mechanisms
 
