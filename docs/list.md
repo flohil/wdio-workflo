@@ -137,18 +137,67 @@ The `where` class member of `PageElementList` let's you access a slightly modifi
 version of wdio-workflo's [XPath builder](xpathBuilder.md) which allows you to query
 for certain list elements by modifying their XPath selector.
 
-very fast method to select a single lsit elemnet -> does not need to fetch
-all elements of list in advance - only fetches those elements which match the
-modified xpath selector
+In contrast to the original `xpath` builder, you do not need to pass an initial
+XPath expression to the `where` builder. Instead, the `where` builder always
+starts out with list's XPath selector (which locates all elements managed by a list)
+and then uses the builder functions of the `xpath` builder to expand the list's
+XPath selector and further restrict the subset of matched elements.
 
-usage is very similar to that of xpath builder - read its guide to learn more
+To learn more about available builder functions and how to apply them,
+please read the [XPath builder guide](xpathBuilder.md).
 
-additional functions: getFirst, getAll, getAt, getList
+Once you're finished modifying the XPath expression using builder functions,
+the `where` builder offers 4 methods to retrieve the page elements matched by
+the modified XPath selector:
+
+- `getFirst()` returns the first matched page element.
+- `getAt(index)` returns the n-th matched page element (index n starts at 0).
+- `getAll()` returns an array of all matched page elements.
+- `getList()` returns a new `PageElementList` whose XPath selector is set to the result of the `where` builder.
+
+Below you can find some code examples demonstrating the usage of a list's `where` builder:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = store.pageNode.ElementList('//a');
+
+// Fetch the first element from linkList whose text equals 'Feed Page'.
+// Resulting XPath: //a[.="Feed Page"]
+const feedPageLink = linkList.where.text('Feed Page').getFirst();
+
+// Fetch all elements from linkList whose class HTML attribute contains 'active'.
+// Resulting XPath: //a[contains(@class, "active")]
+const firstActiveLink = linkList.where.classContains('active').getAll();
+
+// Fetch the third list element whose 'role' HTML attribute equals 'navigation'.
+// Resulting XPath: (//a[@role, "navigation")])[3] => XPath index starts at 1
+const thirdNavigationLink = linkList.where.attribute('role', 'navigation').at(2);
+
+// Create a sublist with all elements of linkList that are disabled.
+// The sublist will be of the same class type as the original list.
+// Resulting XPath: //a[@disabled]
+const disabledLinkList = linkList.where.disabled().getList();
+```
 
 ### `identify` Method
 
 can also pass `identifier` in `opts` parameter - will be overwritten by identifier
 passed explicitly to identify func
+
+Compared to the `identify` method described in the next section of this guide,
+the `where` builder operates a lot faster because it does not need to retrieve
+all elements of a list from the website and then filter through the retrieved
+elements. Instead, the direct modification of the XPath selector using a list's
+`where` builder allows us to only fetch those elements from the website that
+match the modified XPath expression.
+
+Performance-wise, the `where` builder is a very fast method to select certain
+elements of a list, because it does not need to retrieve all list element from
+a website before filtering them. Instead, the modification of the XPath selector
+allows us to apply filters to the XPath itself and only fetch those elements
+from the website which match are filter.
+
 
 ### The Underlying WebdriverIO Elements
 
