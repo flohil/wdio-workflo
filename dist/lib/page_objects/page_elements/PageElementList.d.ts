@@ -238,31 +238,27 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
      */
     readonly $: Store;
     /**
-     * Fetches all webdriverio elements identified by PageElementList's XPath selector from the HTML page after
-     * performing PageElementList's initial waiting condition.
+     * Fetches all webdriverio elements identified by PageElementList's XPath selector from the HTML page.
      */
     readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
     /**
-     * The `.where` accessor allows to - after performing PageElementList's initial waiting condition - select and
-     * retrieve subsets of the PageElements managed by PageElementList by constraining the list's selector using XPath
-     * modification functions.
+     * The `.where` accessor allows to select and retrieve subsets of the PageElements managed by PageElementList by
+     * constraining the list's selector using XPath modification functions.
      */
     readonly where: ListWhereBuilder<Store, PageElementType, PageElementOptions, this>;
     /**
-     * Retrieves the first PageElement found in the DOM that is identified by PageElementList's XPath selector after
-     * performing PageElementList's initial waiting condition.
+     * Retrieves the first PageElement found in the DOM that is identified by PageElementList's XPath selector.
      */
     readonly first: PageElementType;
     /**
      * Retrieves the PageElement found in the DOM at the defined index of occurrence that is identified by
-     * PageElementList's XPath selector after performing PageElementList's initial waiting condition.
+     * PageElementList's XPath selector.
      *
      * @param index the index of occurrence in the DOM of the retrieved PageElement - STARTS AT 0
      */
     at(index: number): PageElementType;
     /**
-     * Retrieves all PageElements found in the DOM that are identified by PageElementList's XPath selector after
-     * performing PageElementList's initial waiting condition.
+     * Retrieves all PageElements found in the DOM that are identified by PageElementList's XPath selector.
      */
     readonly all: PageElementType[];
     /**
@@ -275,7 +271,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     setIdentifier(identifier: IPageElementListIdentifier<Store, PageElementType>): this;
     /**
      * This function identifies PageElements managed by PageElementList with the aid of an `identifier`'s `mappingObject`
-     * and `mappingFunc` after performing PageElementList's initial waiting condition.
+     * and `mappingFunc`.
      *
      * It returns an identification results object which allows for PageElements managed by PageElementList to be accessed
      * via the key names of `mappingObject`'s properties. To create this results object, an "identification process" needs
@@ -335,8 +331,13 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
      */
     getInterval(): number;
     /**
+     * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM
+     * which are identified by PageElementList's XPath selector).
+     */
+    getLength(): number;
+    /**
      * Returns the texts of all PageElements managed by PageElementList as an array after performing the initial
-     * waiting condition of PageElementList and each managed PageElement.
+     * waiting condition of each managed PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getText` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -344,7 +345,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getText(filterMask?: Workflo.PageNode.ListFilterMask): string[];
     /**
      * Returns the direct texts of all PageElements managed by PageElementList as an array after performing the initial
-     * waiting condition of PageElementList and each managed PageElement.
+     * waiting condition of each managed PageElement.
      *
      * A direct text is a text that resides on the level directly below the selected HTML element.
      * It does not include any text of the HTML element's nested children HTML elements.
@@ -355,7 +356,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getDirectText(filterMask?: Workflo.PageNode.ListFilterMask): string[];
     /**
      * Returns the 'enabled' status of all PageElements managed by PageElementList as an array after performing the
-     * initial waiting condition of PageElementList and each managed PageElement.
+     * initial waiting condition of each managed PageElement.
      *
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageElements. The results of skipped function invocations are not included in the total results array.
@@ -363,7 +364,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     /**
      * Returns the 'hasText' status of all PageElements managed by PageElementList as an array after performing the
-     * initial waiting condition of PageElementList and each managed PageElement.
+     * initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasText' status is set to true if its actual text equals the expected text.
      *
@@ -377,7 +378,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getHasText(text: string | string[]): boolean[];
     /**
      * Returns the 'hasAnyText' status of all PageElements managed by PageElementList as an array after performing the
-     * initial waiting condition of PageElementList and each managed PageElement.
+     * initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasAnyText' status is set to true if the PageElement has any text.
      *
@@ -387,7 +388,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     /**
      * Returns the 'containsText' status of all PageElements managed by PageElementList as an array after performing the
-     * initial waiting condition of PageElementList and each managed PageElement.
+     * initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'containsText' status is set to true if its actual text contains the expected text.
      *
@@ -401,7 +402,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getContainsText(text: string | string[]): boolean[];
     /**
      * Returns the 'hasDirectText' status of all PageElements managed by PageElementList as an array after performing the
-     * initial waiting condition of PageElementList and each managed PageElement.
+     * initial waiting condition each managed PageElement.
      *
      * A PageElement's 'hasDirectText' status is set to true if its actual direct text equals the expected direct text.
      *
@@ -418,7 +419,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getHasDirectText(directText: string | string[]): boolean[];
     /**
      * Returns the 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * the initial waiting condition of PageElementList and each managed PageElement.
+     * the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
      *
@@ -431,7 +432,7 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
     getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask): boolean[];
     /**
      * Returns the 'containsDirectText' status of all PageElements managed by PageElementList as an array after performing
-     * the initial waiting condition of PageElementList and each managed PageElement.
+     * the initial waiting condition of each managed PageElement.
      *
      * A PageElement's 'containsDirectText' status is set to true if its actual direct text contains the expected direct
      * text.
