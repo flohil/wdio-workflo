@@ -78,13 +78,6 @@ export interface IPageElementListOpts<Store extends PageNodeStore, PageElementTy
      */
     elementOpts: PageElementOpts;
     /**
-     * `waitType` defines the kind of waiting condition performed when `initialWait` is invoked.
-     *
-     * The initial waiting condition is performed every time before an interaction with the tested application takes place
-     * via a PageElementList's action (eg. identify).
-     */
-    waitType?: Workflo.WaitType;
-    /**
      * By default, the results of an "identification process" (the last invocation of PageElementList's `identify`
      * function) are cached for future invocations of PageElementList's `identify` function.
      *
@@ -153,13 +146,6 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
      * the options passed to `_elementStoreFunc` to configure a managed  PageElement instance
      */
     protected _elementOpts: PageElementOptions;
-    /**
-     * defines the kind of waiting condition performed when `initialWait` is invoked
-     *
-     * The initial waiting condition is performed every time before an interaction with the tested application takes place
-     * via a PageElementList's action (eg. identify).
-     */
-    protected _waitType: Workflo.WaitType;
     /**
      * By default, the results of an "identification process" (the last invocation of PageElementList's `identify`
      * function) are cached for future invocations of PageElementList's `identify` function.
@@ -246,19 +232,6 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
      * @param cloneFunc creates a copy of PageElementList which manages a subset of the original list's PageElements
      */
     init(cloneFunc: (selector: Workflo.XPath) => this): void;
-    /**
-     * This function performs PageElementList's initial waiting condition.
-     *
-     * It supports the following waiting types:
-     *
-     * - 'exist' to wait for at least one of PageElementList's managed elements to exist in the DOM
-     * - 'visible' to wait for at least one of PageElementList's managed elements to become visible
-     * (not obscured by other elements, not set to 'hidden'...)
-     * - 'text' to wait for at least one of PageElementList's managed elements to have any text
-     *
-     * @returns this (an instance of PageElementList)
-     */
-    initialWait(): void;
     /**
      * `$` provides access to the PageNode retrieval functions of PageElementList's PageNodeStore and prefixes the
      * selectors of all PageNodes retrieved via `$` with the selector of PageElementList.
@@ -361,11 +334,6 @@ export declare class PageElementList<Store extends PageNodeStore, PageElementTyp
      * is passed to one of its functions which operates with intervals (eg. wait, eventually)
      */
     getInterval(): number;
-    /**
-     * Returns the number of PageElements managed by PageElementList (the number of PageElements found in the DOM which
-     * are identified by PageElementList's XPath selector) after performing PageElementList's initial waiting condition.
-     */
-    getLength(): number;
     /**
      * Returns the texts of all PageElements managed by PageElementList as an array after performing the initial
      * waiting condition of PageElementList and each managed PageElement.
@@ -625,38 +593,6 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
      * @param opts the opts used to configure PageElementList
      */
     constructor(node: ListType, opts: IPageElementListOpts<Store, PageElementType, PageElementOpts>);
-    /**
-     * Use this method to initialize properties that rely on the this type which is not available in the constructor.
-     *
-     * Make sure that this method is invoked immediately after construction.
-     *
-     * @param cloneFunc creates a copy of PageElementList which manages a subset of the original list's PageElements
-     */
-    init(cloneFunc: (selector: Workflo.XPath) => ListType): void;
-    /**
-     * Immediatly fetches all webdriverio elements identified by PageElementList's XPath selector from the HTML page.
-     */
-    readonly elements: WebdriverIO.Client<WebdriverIO.RawResult<WebdriverIO.Element[]>> & WebdriverIO.RawResult<WebdriverIO.Element[]>;
-    /**
-     * The `.where` accessor allows to select and retrieve subsets of the PageElements managed by PageElementList by
-     * constraining the list's selector using XPath modification functions.
-     */
-    readonly where: ListWhereBuilder<Store, PageElementType, PageElementOpts, ListType>;
-    /**
-     * Retrieves the first PageElement found in the DOM that is identified by PageElementList's XPath selector.
-     */
-    readonly first: PageElementType;
-    /**
-     * Retrieves the PageElement found in the DOM at the defined index of occurrence that is identified by
-     * PageElementList's XPath selector.
-     *
-     * @param index the index of occurrence in the DOM of the retrieved PageElement - STARTS AT 0
-     */
-    at(index: number): PageElementType;
-    /**
-     * Retrieves all PageElements found in the DOM that are identified by PageElementList's XPath selector.
-     */
-    readonly all: PageElementType[];
     /**
      * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM
      * which are identified by PageElementList's XPath selector).

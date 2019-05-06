@@ -99,13 +99,6 @@ export interface IPageElementListOpts<
    */
   elementOpts: PageElementOpts;
   /**
-   * `waitType` defines the kind of waiting condition performed when `initialWait` is invoked.
-   *
-   * The initial waiting condition is performed every time before an interaction with the tested application takes place
-   * via a PageElementList's action (eg. identify).
-   */
-  waitType?: Workflo.WaitType;
-  /**
    * By default, the results of an "identification process" (the last invocation of PageElementList's `identify`
    * function) are cached for future invocations of PageElementList's `identify` function.
    *
@@ -180,13 +173,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * the options passed to `_elementStoreFunc` to configure a managed  PageElement instance
    */
   protected _elementOpts: PageElementOptions;
-  /**
-   * defines the kind of waiting condition performed when `initialWait` is invoked
-   *
-   * The initial waiting condition is performed every time before an interaction with the tested application takes place
-   * via a PageElementList's action (eg. identify).
-   */
-  protected _waitType: Workflo.WaitType;
   /**
    * By default, the results of an "identification process" (the last invocation of PageElementList's `identify`
    * function) are cached for future invocations of PageElementList's `identify` function.
@@ -277,7 +263,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
     this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || DEFAULT_TIMEOUT;
     this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || DEFAULT_INTERVAL;
 
-    this._waitType = opts.waitType || Workflo.WaitType.visible;
     this._disableCache = opts.disableCache || false;
 
     this._elementOpts = opts.elementOpts;
@@ -331,36 +316,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
       elementOpts: this._elementOpts,
       getAllFunc: list => list.all,
     });
-
-    this.currently.init(cloneFunc);
-  }
-
-  /**
-   * This function performs PageElementList's initial waiting condition.
-   *
-   * It supports the following waiting types:
-   *
-   * - 'exist' to wait for at least one of PageElementList's managed elements to exist in the DOM
-   * - 'visible' to wait for at least one of PageElementList's managed elements to become visible
-   * (not obscured by other elements, not set to 'hidden'...)
-   * - 'text' to wait for at least one of PageElementList's managed elements to have any text
-   *
-   * @returns this (an instance of PageElementList)
-   */
-  initialWait() {
-    switch (this._waitType) {
-      case Workflo.WaitType.exist:
-        this.wait.any.exists();
-        break;
-      case Workflo.WaitType.visible:
-        this.wait.any.isVisible();
-        break;
-      case Workflo.WaitType.text:
-        this.wait.any.hasAnyText();
-        break;
-      default:
-        throw Error(`${this.constructor.name}: Unknown initial wait type '${this._waitType}'`);
-    }
   }
 
 // RETRIEVAL FUNCTIONS for wdio or list elements
@@ -381,8 +336,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * performing PageElementList's initial waiting condition.
    */
   get elements() {
-    this.initialWait();
-
     return browser.elements(this._selector);
   }
 
@@ -392,8 +345,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    * modification functions.
    */
   get where() {
-    this.initialWait();
-
     return this._whereBuilder.reset();
   }
 
@@ -566,25 +517,6 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
    */
   getInterval() {
     return this._interval;
-  }
-
-  /**
-   * Returns the number of PageElements managed by PageElementList (the number of PageElements found in the DOM which
-   * are identified by PageElementList's XPath selector) after performing PageElementList's initial waiting condition.
-   */
-  getLength() {
-    try {
-      const value = this.elements.value;
-
-      if (value && value.length) {
-        return value.length;
-      } else {
-        return 0;
-      }
-    } catch (error) {
-      // this.elements will throw error if no elements were found
-      return 0;
-    }
   }
 
   /**
@@ -1092,79 +1024,6 @@ export class PageElementListCurrently<
     this._node = node;
   }
 
-  /**
-   * Use this method to initialize properties that rely on the this type which is not available in the constructor.
-   *
-   * Make sure that this method is invoked immediately after construction.
-   *
-   * @param cloneFunc creates a copy of PageElementList which manages a subset of the original list's PageElements
-   */
-  init(cloneFunc: (selector: Workflo.XPath) => ListType) {
-    this._whereBuilder = new ListWhereBuilder(this._selector, {
-      cloneFunc,
-      store: this._store,
-      elementStoreFunc: this._elementStoreFunc,
-      elementOpts: this._elementOpts,
-      getAllFunc: list => list.all,
-    });
-  }
-
-// RETRIEVAL FUNCTIONS for wdio or list elements
-
-  /**
-   * Immediatly fetches all webdriverio elements identified by PageElementList's XPath selector from the HTML page.
-   */
-  get elements() {
-    return browser.elements(this._selector);
-  }
-
-  /**
-   * The `.where` accessor allows to select and retrieve subsets of the PageElements managed by PageElementList by
-   * constraining the list's selector using XPath modification functions.
-   */
-  get where() {
-    return this._whereBuilder.reset();
-  }
-
-  /**
-   * Retrieves the first PageElement found in the DOM that is identified by PageElementList's XPath selector.
-   */
-  get first() {
-    return this.where.getFirst();
-  }
-
-  /**
-   * Retrieves the PageElement found in the DOM at the defined index of occurrence that is identified by
-   * PageElementList's XPath selector.
-   *
-   * @param index the index of occurrence in the DOM of the retrieved PageElement - STARTS AT 0
-   */
-  at(index: number) {
-    return this.where.getAt(index);
-  }
-
-  /**
-   * Retrieves all PageElements found in the DOM that are identified by PageElementList's XPath selector.
-   */
-  get all() {
-    const elements: PageElementType[] = [];
-    const value = this.elements.value;
-
-    if (value && value.length) {
-      // create list elements
-      for (let i = 0; i < value.length; i++) {
-        // make each list element individually selectable via xpath
-        const selector = `(${this._selector})[${i + 1}]`;
-
-        const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOpts]);
-
-        elements.push(listElement);
-      }
-    }
-
-    return elements;
-  }
-
 // PUBLIC GETTER FUNCTIONS
 
   /**
@@ -1173,7 +1032,7 @@ export class PageElementListCurrently<
    */
   getLength() {
     try {
-      const value = this.elements.value;
+      const value = this._node.elements.value;
 
       if (value && value.length) {
         return value.length;
@@ -1193,7 +1052,7 @@ export class PageElementListCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results array.
    */
   getText(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachGet(this.all, element => element.currently.getText(), filterMask);
+    return this._node.eachGet(this._node.all, element => element.currently.getText(), filterMask);
   }
 
   /**
@@ -1206,7 +1065,7 @@ export class PageElementListCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results array.
    */
   getDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachGet(this.all, element => element.currently.getDirectText(), filterMask);
+    return this._node.eachGet(this._node.all, element => element.currently.getDirectText(), filterMask);
   }
 
   /**
@@ -1216,7 +1075,7 @@ export class PageElementListCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results array.
    */
   getExists(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachGet(this.all, element => element.currently.exists(), filterMask);
+    return this._node.eachGet(this._node.all, element => element.currently.exists(), filterMask);
   }
 
   /**
@@ -1226,7 +1085,7 @@ export class PageElementListCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results array.
    */
   getIsVisible(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachGet(this.all, element => element.currently.isVisible(), filterMask);
+    return this._node.eachGet(this._node.all, element => element.currently.isVisible(), filterMask);
   }
 
   /**
@@ -1236,7 +1095,7 @@ export class PageElementListCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results array.
    */
   getIsEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachGet(this.all, element => element.currently.isEnabled(), filterMask);
+    return this._node.eachGet(this._node.all, element => element.currently.isEnabled(), filterMask);
   }
 
   /**
@@ -1252,7 +1111,7 @@ export class PageElementListCurrently<
    * elements are compared to the array of actual values of all PageElements.
    */
   getHasText(text: string | string[]) {
-    return this._node.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text);
+    return this._node.eachCompare(this._node.all, (element, expected) => element.currently.hasText(expected), text);
   }
 
   /**
@@ -1264,7 +1123,7 @@ export class PageElementListCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results array.
    */
   getHasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
+    return this._node.eachCompare(this._node.all, (element) => element.currently.hasAnyText(), filterMask, true);
   }
 
   /**
@@ -1280,7 +1139,9 @@ export class PageElementListCurrently<
    * elements are compared to the array of actual values of all PageElements.
    */
   getContainsText(text: string | string[]) {
-    return this._node.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text);
+    return this._node.eachCompare(
+      this._node.all, (element, expected) => element.currently.containsText(expected), text,
+    );
   }
 
   /**
@@ -1297,7 +1158,7 @@ export class PageElementListCurrently<
    */
   getHasDirectText(directText: string | string[]) {
     return this._node.eachCompare(
-      this.all, (element, expected) => element.currently.hasDirectText(expected), directText,
+      this._node.all, (element, expected) => element.currently.hasDirectText(expected), directText,
     );
   }
 
@@ -1310,7 +1171,7 @@ export class PageElementListCurrently<
    * PageElements. The results of skipped function invocations are not included in the total results array.
    */
   getHasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+    return this._node.eachCompare(this._node.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
   }
 
   /**
@@ -1328,7 +1189,7 @@ export class PageElementListCurrently<
    */
   getContainsDirectText(directText: string | string[]) {
     return this._node.eachCompare(
-      this.all, (element, expected) => element.currently.containsDirectText(expected), directText,
+      this._node.all, (element, expected) => element.currently.containsDirectText(expected), directText,
     );
   }
 
@@ -1395,7 +1256,7 @@ export class PageElementListCurrently<
    * PageElements
    */
   isVisible(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCheck(this.all, element => element.currently.isVisible(), filterMask, true);
+    return this._node.eachCheck(this._node.all, element => element.currently.isVisible(), filterMask, true);
   }
 
   /**
@@ -1405,7 +1266,7 @@ export class PageElementListCurrently<
    * PageElements
    */
   isEnabled(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCheck(this.all, element => element.currently.isEnabled(), filterMask, true);
+    return this._node.eachCheck(this._node.all, element => element.currently.isEnabled(), filterMask, true);
   }
 
   /**
@@ -1420,7 +1281,7 @@ export class PageElementListCurrently<
    * elements are compared to the array of actual values of all PageElements.
    */
   hasText(text: string | string[]) {
-    return this._node.eachCheck(this.all, (element, expected) => element.currently.hasText(expected), text);
+    return this._node.eachCheck(this._node.all, (element, expected) => element.currently.hasText(expected), text);
   }
 
   /**
@@ -1430,7 +1291,7 @@ export class PageElementListCurrently<
    * PageElements
    */
   hasAnyText(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
+    return this._node.eachCheck(this._node.all, (element) => element.currently.hasAnyText(), filterMask, true);
   }
 
   /**
@@ -1445,7 +1306,7 @@ export class PageElementListCurrently<
    * elements are compared to the array of actual values of all PageElements.
    */
   containsText(text: string | string[]) {
-    return this._node.eachCheck(this.all, (element, expected) => element.currently.containsText(expected), text);
+    return this._node.eachCheck(this._node.all, (element, expected) => element.currently.containsText(expected), text);
   }
 
   /**
@@ -1464,7 +1325,7 @@ export class PageElementListCurrently<
    */
   hasDirectText(directText: string | string[]) {
     return this._node.eachCheck(
-      this.all, (element, expected) => element.currently.hasDirectText(expected), directText,
+      this._node.all, (element, expected) => element.currently.hasDirectText(expected), directText,
     );
   }
 
@@ -1478,7 +1339,7 @@ export class PageElementListCurrently<
    * PageElements
    */
   hasAnyDirectText(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+    return this._node.eachCheck(this._node.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
   }
 
   /**
@@ -1497,7 +1358,7 @@ export class PageElementListCurrently<
    */
   containsDirectText(directText: string | string[]) {
     return this._node.eachCheck(
-      this.all, (element, expected) => element.currently.containsDirectText(expected), directText,
+      this._node.all, (element, expected) => element.currently.containsDirectText(expected), directText,
     );
   }
 
@@ -1546,7 +1407,7 @@ export class PageElementListCurrently<
        * PageElements
        */
       isVisible: (filterMask?: Workflo.PageNode.ListFilterMask) => {
-        return this._node.eachCheck(this.all, element => element.currently.not.isVisible(), filterMask, true);
+        return this._node.eachCheck(this._node.all, element => element.currently.not.isVisible(), filterMask, true);
       },
       /**
        * Returns true if all PageElements managed by PageElementList are currently not enabled.
@@ -1555,7 +1416,7 @@ export class PageElementListCurrently<
        * PageElements
        */
       isEnabled: (filterMask?: Workflo.PageNode.ListFilterMask) => {
-        return this._node.eachCheck(this.all, element => element.currently.not.isEnabled(), filterMask, true);
+        return this._node.eachCheck(this._node.all, element => element.currently.not.isEnabled(), filterMask, true);
       },
       /**
        * Returns true if the actual texts of all PageElements managed by PageElementList currently do not equal the
@@ -1569,7 +1430,9 @@ export class PageElementListCurrently<
        * array elements are compared to the array of actual values of all PageElements.
        */
       hasText: (text: string | string[]) => {
-        return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
+        return this._node.eachCheck(
+          this._node.all, (element, expected) => element.currently.not.hasText(expected), text,
+        );
       },
       /**
        * Returns true if all PageElements managed by PageElementList currently do not have any text.
@@ -1578,7 +1441,7 @@ export class PageElementListCurrently<
        * PageElements
        */
       hasAnyText: (filterMask?: Workflo.PageNode.ListFilterMask) => {
-        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText(), filterMask, true);
+        return this._node.eachCheck(this._node.all, (element) => element.currently.not.hasAnyText(), filterMask, true);
       },
       /**
        * Returns true if the actual texts of all PageElements managed by PageElementList currently do not contain the
@@ -1593,7 +1456,7 @@ export class PageElementListCurrently<
        */
       containsText: (text: string | string[]) => {
         return this._node.eachCheck(
-          this.all, (element, expected) => element.currently.not.containsText(expected), text,
+          this._node.all, (element, expected) => element.currently.not.containsText(expected), text,
         );
       },
       /**
@@ -1612,7 +1475,7 @@ export class PageElementListCurrently<
        */
       hasDirectText: (directText: string | string[]) => {
         return this._node.eachCheck(
-          this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText,
+          this._node.all, (element, expected) => element.currently.not.hasDirectText(expected), directText,
         );
       },
       /**
@@ -1625,7 +1488,9 @@ export class PageElementListCurrently<
        * PageElements
        */
       hasAnyDirectText: (filterMask?: Workflo.PageNode.ListFilterMask) => {
-        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true);
+        return this._node.eachCheck(
+          this._node.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true,
+        );
       },
       /**
        * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not contain
@@ -1643,7 +1508,7 @@ export class PageElementListCurrently<
        */
       containsDirectText: (directText: string | string[]) => {
         return this._node.eachCheck(
-          this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText,
+          this._node.all, (element, expected) => element.currently.not.containsDirectText(expected), directText,
         );
       },
     };
@@ -1670,7 +1535,7 @@ export class PageElementListWait<
    * specific timeout.
    */
   get any() {
-    return this._node.currently.first.wait as any as PageElementType['wait'];
+    return this._node.first.wait as any as PageElementType['wait'];
   }
 
   // Typescript has a bug that prevents Exclude from working with generic extended types:
@@ -1685,7 +1550,7 @@ export class PageElementListWait<
    * specific timeout.
    */
   get none(): PageElementType['wait']['not'] {
-    return this._node.currently.first.wait.not;
+    return this._node.first.wait.not;
   }
 
   /**
@@ -2264,7 +2129,7 @@ export class PageElementListEventually<
    * specific timeout.
    */
   get any() {
-    return this._node.currently.first.eventually as any as PageElementType['eventually'];
+    return this._node.first.eventually as any as PageElementType['eventually'];
   }
 
   /**
@@ -2272,7 +2137,7 @@ export class PageElementListEventually<
    * within a specific timeout.
    */
   get none(): PageElementType['eventually']['not'] {
-    return this._node.currently.first.eventually.not;
+    return this._node.first.eventually.not;
   }
 
   /**

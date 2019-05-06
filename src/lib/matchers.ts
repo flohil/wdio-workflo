@@ -429,17 +429,14 @@ Node type needs to extend PageElement, PageElementList, PageElementMap or PageEl
 }
 
 export function createBaseMatcher<
-  OptsType extends Object = Object,
+  OptsType extends Object,
   CompareFuncsType extends (ICompareElementFuncs<
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType,
     ElementOptsType, ListOptsType, MapOptsType, GroupOptsType
   > | ICompareEventuallyElementFuncs<
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType,
     ElementOptsType, ListOptsType, MapOptsType, GroupOptsType
-  >) = ICompareElementFuncs<
-    ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType,
-    ElementOptsType, ListOptsType, MapOptsType, GroupOptsType
-  >,
+  >),
   ElementExpectedType = never,
   ListExpectedType = never,
   MapExpectedType = never,
@@ -641,7 +638,7 @@ export function createMatcherWithoutExpected<
   compareFuncs: ICompareElementFuncs,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group'],
 ) {
-  return createBaseMatcher<OptsType>(compareFuncs, false, withoutExpected);
+  return createBaseMatcher<OptsType, ICompareElementFuncs>(compareFuncs, false, withoutExpected);
 }
 
 export function createEventuallyMatcher<

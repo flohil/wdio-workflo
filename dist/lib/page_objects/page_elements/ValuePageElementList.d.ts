@@ -42,20 +42,6 @@ export declare class ValuePageElementList<Store extends PageNodeStore, PageEleme
      */
     constructor(selector: string, opts: IValuePageElementListOpts<Store, PageElementType, PageElementOptions, ValueType>);
     /**
-     * This function performs ValuePageElementList's initial waiting condition.
-     *
-     * It supports the following waiting types:
-     *
-     * - 'exist' to wait for at least one of ValuePageElementList's managed elements to exist in the DOM
-     * - 'visible' to wait for at least one of ValuePageElementList's managed elements to become visible in the viewport
-     * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
-     * - 'text' to wait for at least one of ValuePageElementList's managed elements to have any text
-     * - 'value' to wait for at least one of ValuePageElementList's managed elements to have any value
-     *
-     * @returns this (an instance of ValuePageElementList)
-     */
-    initialWait(): void;
-    /**
      * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing the
      * initial waiting condition of ValuePageElementList and each managed ValuePageElement.
      *

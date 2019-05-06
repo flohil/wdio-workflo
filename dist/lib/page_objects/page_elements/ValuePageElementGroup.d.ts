@@ -186,7 +186,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
          * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
          * PageNodes
          */
-        hasAnyValue: (filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>) => boolean;
+        hasAnyValue: (filterMask?: Workflo.PageNode.ExtractValueBoolean<Content>) => boolean;
         /**
          * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain
          * the expected values.
@@ -194,14 +194,14 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
          * @param values the expected values supposed not to be contained in the actual values
          */
         containsValue: (values: Workflo.PageNode.ExtractValue<Content>) => boolean;
-        exists: (filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>) => boolean;
-        isVisible: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
-        isEnabled: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        exists: (filterMask?: Workflo.PageNode.ExtractExistsFilterMask<Content>) => boolean;
+        isVisible: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         hasText: (texts: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasAnyText: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        hasAnyText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         containsText: (texts: Workflo.PageNode.ExtractText<Content>) => boolean;
         hasDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasAnyDirectText: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         containsDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>) => boolean;
     };
 }
@@ -295,7 +295,7 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
          *
          * @returns this (an instance of ValuePageElementGroup)
          */
-        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Partial<Workflo.PageNode.ExtractValueBoolean<Content>>) => GroupType;
+        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.ExtractValueBoolean<Content>) => GroupType;
         /**
          * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected
          * values.

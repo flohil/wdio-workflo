@@ -82,7 +82,6 @@ class PageElementList extends _1.PageNode {
         this.selector = selector;
         this._timeout = opts.timeout || JSON.parse(process.env.WORKFLO_CONFIG).timeouts.default || __1.DEFAULT_TIMEOUT;
         this._interval = opts.interval || JSON.parse(process.env.WORKFLO_CONFIG).intervals.default || __1.DEFAULT_INTERVAL;
-        this._waitType = opts.waitType || Workflo.WaitType.visible;
         this._disableCache = opts.disableCache || false;
         this._elementOpts = opts.elementOpts;
         this._elementStoreFunc = opts.elementStoreFunc;
@@ -120,34 +119,6 @@ class PageElementList extends _1.PageNode {
             elementOpts: this._elementOpts,
             getAllFunc: list => list.all,
         });
-        this.currently.init(cloneFunc);
-    }
-    /**
-     * This function performs PageElementList's initial waiting condition.
-     *
-     * It supports the following waiting types:
-     *
-     * - 'exist' to wait for at least one of PageElementList's managed elements to exist in the DOM
-     * - 'visible' to wait for at least one of PageElementList's managed elements to become visible
-     * (not obscured by other elements, not set to 'hidden'...)
-     * - 'text' to wait for at least one of PageElementList's managed elements to have any text
-     *
-     * @returns this (an instance of PageElementList)
-     */
-    initialWait() {
-        switch (this._waitType) {
-            case Workflo.WaitType.exist:
-                this.wait.any.exists();
-                break;
-            case Workflo.WaitType.visible:
-                this.wait.any.isVisible();
-                break;
-            case Workflo.WaitType.text:
-                this.wait.any.hasAnyText();
-                break;
-            default:
-                throw Error(`${this.constructor.name}: Unknown initial wait type '${this._waitType}'`);
-        }
     }
     // RETRIEVAL FUNCTIONS for wdio or list elements
     // typescript bugs 3.3.0:
@@ -164,7 +135,6 @@ class PageElementList extends _1.PageNode {
      * performing PageElementList's initial waiting condition.
      */
     get elements() {
-        this.initialWait();
         return browser.elements(this._selector);
     }
     /**
@@ -173,7 +143,6 @@ class PageElementList extends _1.PageNode {
      * modification functions.
      */
     get where() {
-        this.initialWait();
         return this._whereBuilder.reset();
     }
     /**
@@ -320,25 +289,6 @@ class PageElementList extends _1.PageNode {
      */
     getInterval() {
         return this._interval;
-    }
-    /**
-     * Returns the number of PageElements managed by PageElementList (the number of PageElements found in the DOM which
-     * are identified by PageElementList's XPath selector) after performing PageElementList's initial waiting condition.
-     */
-    getLength() {
-        try {
-            const value = this.elements.value;
-            if (value && value.length) {
-                return value.length;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (error) {
-            // this.elements will throw error if no elements were found
-            return 0;
-        }
     }
     /**
      * Returns the texts of all PageElements managed by PageElementList as an array after performing the initial
@@ -740,68 +690,6 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         this._elementStoreFunc = opts.elementStoreFunc;
         this._node = node;
     }
-    /**
-     * Use this method to initialize properties that rely on the this type which is not available in the constructor.
-     *
-     * Make sure that this method is invoked immediately after construction.
-     *
-     * @param cloneFunc creates a copy of PageElementList which manages a subset of the original list's PageElements
-     */
-    init(cloneFunc) {
-        this._whereBuilder = new builders_1.ListWhereBuilder(this._selector, {
-            cloneFunc,
-            store: this._store,
-            elementStoreFunc: this._elementStoreFunc,
-            elementOpts: this._elementOpts,
-            getAllFunc: list => list.all,
-        });
-    }
-    // RETRIEVAL FUNCTIONS for wdio or list elements
-    /**
-     * Immediatly fetches all webdriverio elements identified by PageElementList's XPath selector from the HTML page.
-     */
-    get elements() {
-        return browser.elements(this._selector);
-    }
-    /**
-     * The `.where` accessor allows to select and retrieve subsets of the PageElements managed by PageElementList by
-     * constraining the list's selector using XPath modification functions.
-     */
-    get where() {
-        return this._whereBuilder.reset();
-    }
-    /**
-     * Retrieves the first PageElement found in the DOM that is identified by PageElementList's XPath selector.
-     */
-    get first() {
-        return this.where.getFirst();
-    }
-    /**
-     * Retrieves the PageElement found in the DOM at the defined index of occurrence that is identified by
-     * PageElementList's XPath selector.
-     *
-     * @param index the index of occurrence in the DOM of the retrieved PageElement - STARTS AT 0
-     */
-    at(index) {
-        return this.where.getAt(index);
-    }
-    /**
-     * Retrieves all PageElements found in the DOM that are identified by PageElementList's XPath selector.
-     */
-    get all() {
-        const elements = [];
-        const value = this.elements.value;
-        if (value && value.length) {
-            // create list elements
-            for (let i = 0; i < value.length; i++) {
-                // make each list element individually selectable via xpath
-                const selector = `(${this._selector})[${i + 1}]`;
-                const listElement = this._elementStoreFunc.apply(this._store, [selector, this._elementOpts]);
-                elements.push(listElement);
-            }
-        }
-        return elements;
-    }
     // PUBLIC GETTER FUNCTIONS
     /**
      * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM
@@ -809,7 +697,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      */
     getLength() {
         try {
-            const value = this.elements.value;
+            const value = this._node.elements.value;
             if (value && value.length) {
                 return value.length;
             }
@@ -829,7 +717,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getText(filterMask) {
-        return this._node.eachGet(this.all, element => element.currently.getText(), filterMask);
+        return this._node.eachGet(this._node.all, element => element.currently.getText(), filterMask);
     }
     /**
      * Returns the current direct texts of all PageElements managed by PageElementList as an array.
@@ -841,7 +729,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getDirectText(filterMask) {
-        return this._node.eachGet(this.all, element => element.currently.getDirectText(), filterMask);
+        return this._node.eachGet(this._node.all, element => element.currently.getDirectText(), filterMask);
     }
     /**
      * Returns the current 'exists' status of all PageElements managed by PageElementList as an array.
@@ -850,7 +738,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getExists(filterMask) {
-        return this._node.eachGet(this.all, element => element.currently.exists(), filterMask);
+        return this._node.eachGet(this._node.all, element => element.currently.exists(), filterMask);
     }
     /**
      * Returns the current 'visible' status of all PageElements managed by PageElementList as an array.
@@ -859,7 +747,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getIsVisible(filterMask) {
-        return this._node.eachGet(this.all, element => element.currently.isVisible(), filterMask);
+        return this._node.eachGet(this._node.all, element => element.currently.isVisible(), filterMask);
     }
     /**
      * Returns the current 'enabled' status of all PageElements managed by PageElementList as an array.
@@ -868,7 +756,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getIsEnabled(filterMask) {
-        return this._node.eachGet(this.all, element => element.currently.isEnabled(), filterMask);
+        return this._node.eachGet(this._node.all, element => element.currently.isEnabled(), filterMask);
     }
     /**
      * Returns the current 'hasText' status of all PageElements managed by PageElementList as an array.
@@ -883,7 +771,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * elements are compared to the array of actual values of all PageElements.
      */
     getHasText(text) {
-        return this._node.eachCompare(this.all, (element, expected) => element.currently.hasText(expected), text);
+        return this._node.eachCompare(this._node.all, (element, expected) => element.currently.hasText(expected), text);
     }
     /**
      * Returns the current 'hasAnyText' status of all PageElements managed by PageElementList as an array.
@@ -894,7 +782,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getHasAnyText(filterMask) {
-        return this._node.eachCompare(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
+        return this._node.eachCompare(this._node.all, (element) => element.currently.hasAnyText(), filterMask, true);
     }
     /**
      * Returns the current 'containsText' status of all PageElements managed by PageElementList as an array.
@@ -909,7 +797,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * elements are compared to the array of actual values of all PageElements.
      */
     getContainsText(text) {
-        return this._node.eachCompare(this.all, (element, expected) => element.currently.containsText(expected), text);
+        return this._node.eachCompare(this._node.all, (element, expected) => element.currently.containsText(expected), text);
     }
     /**
      * Returns the current 'hasDirectText' status of all PageElements managed by PageElementList as an array.
@@ -924,7 +812,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * array elements are compared to the array of actual values of all PageElements.
      */
     getHasDirectText(directText) {
-        return this._node.eachCompare(this.all, (element, expected) => element.currently.hasDirectText(expected), directText);
+        return this._node.eachCompare(this._node.all, (element, expected) => element.currently.hasDirectText(expected), directText);
     }
     /**
      * Returns the current 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array.
@@ -935,7 +823,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements. The results of skipped function invocations are not included in the total results array.
      */
     getHasAnyDirectText(filterMask) {
-        return this._node.eachCompare(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+        return this._node.eachCompare(this._node.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
     }
     /**
      * Returns the current 'containsDirectText' status of all PageElements managed by PageElementList as an array.
@@ -951,7 +839,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * array elements are compared to the array of actual values of all PageElements.
      */
     getContainsDirectText(directText) {
-        return this._node.eachCompare(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
+        return this._node.eachCompare(this._node.all, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     // CHECK STATE FUNCTIONS
     /**
@@ -1007,7 +895,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements
      */
     isVisible(filterMask) {
-        return this._node.eachCheck(this.all, element => element.currently.isVisible(), filterMask, true);
+        return this._node.eachCheck(this._node.all, element => element.currently.isVisible(), filterMask, true);
     }
     /**
      * Returns true if all PageElements managed by PageElementList are currently enabled.
@@ -1016,7 +904,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements
      */
     isEnabled(filterMask) {
-        return this._node.eachCheck(this.all, element => element.currently.isEnabled(), filterMask, true);
+        return this._node.eachCheck(this._node.all, element => element.currently.isEnabled(), filterMask, true);
     }
     /**
      * Returns true if the actual texts of all PageElements managed by PageElementList currently equal the expected
@@ -1030,7 +918,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * elements are compared to the array of actual values of all PageElements.
      */
     hasText(text) {
-        return this._node.eachCheck(this.all, (element, expected) => element.currently.hasText(expected), text);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.currently.hasText(expected), text);
     }
     /**
      * Returns true if all PageElements managed by PageElementList currently have any text.
@@ -1039,7 +927,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements
      */
     hasAnyText(filterMask) {
-        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyText(), filterMask, true);
+        return this._node.eachCheck(this._node.all, (element) => element.currently.hasAnyText(), filterMask, true);
     }
     /**
      * Returns true if the actual texts of all PageElements managed by PageElementList currently contain the expected
@@ -1053,7 +941,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * elements are compared to the array of actual values of all PageElements.
      */
     containsText(text) {
-        return this._node.eachCheck(this.all, (element, expected) => element.currently.containsText(expected), text);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.currently.containsText(expected), text);
     }
     /**
      * Returns true if the actual direct texts of all PageElements managed by PageElementList currently equal the expected
@@ -1070,7 +958,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * array elements are compared to the array of actual values of all PageElements.
      */
     hasDirectText(directText) {
-        return this._node.eachCheck(this.all, (element, expected) => element.currently.hasDirectText(expected), directText);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.currently.hasDirectText(expected), directText);
     }
     /**
      * Returns true if all PageElements managed by PageElementList currently have any direct text.
@@ -1082,7 +970,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * PageElements
      */
     hasAnyDirectText(filterMask) {
-        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
+        return this._node.eachCheck(this._node.all, (element) => element.currently.hasAnyDirectText(), filterMask, true);
     }
     /**
      * Returns true if the actual direct texts of all PageElements managed by PageElementList currently contain the
@@ -1099,7 +987,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
      * array elements are compared to the array of actual values of all PageElements.
      */
     containsDirectText(directText) {
-        return this._node.eachCheck(this.all, (element, expected) => element.currently.containsDirectText(expected), directText);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.currently.containsDirectText(expected), directText);
     }
     /**
      * returns the negated variants of PageElementListCurrently's state check functions
@@ -1145,7 +1033,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * PageElements
              */
             isVisible: (filterMask) => {
-                return this._node.eachCheck(this.all, element => element.currently.not.isVisible(), filterMask, true);
+                return this._node.eachCheck(this._node.all, element => element.currently.not.isVisible(), filterMask, true);
             },
             /**
              * Returns true if all PageElements managed by PageElementList are currently not enabled.
@@ -1154,7 +1042,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * PageElements
              */
             isEnabled: (filterMask) => {
-                return this._node.eachCheck(this.all, element => element.currently.not.isEnabled(), filterMask, true);
+                return this._node.eachCheck(this._node.all, element => element.currently.not.isEnabled(), filterMask, true);
             },
             /**
              * Returns true if the actual texts of all PageElements managed by PageElementList currently do not equal the
@@ -1168,7 +1056,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * array elements are compared to the array of actual values of all PageElements.
              */
             hasText: (text) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasText(expected), text);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.currently.not.hasText(expected), text);
             },
             /**
              * Returns true if all PageElements managed by PageElementList currently do not have any text.
@@ -1177,7 +1065,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * PageElements
              */
             hasAnyText: (filterMask) => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyText(), filterMask, true);
+                return this._node.eachCheck(this._node.all, (element) => element.currently.not.hasAnyText(), filterMask, true);
             },
             /**
              * Returns true if the actual texts of all PageElements managed by PageElementList currently do not contain the
@@ -1191,7 +1079,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * array elements are compared to the array of actual values of all PageElements.
              */
             containsText: (text) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsText(expected), text);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.currently.not.containsText(expected), text);
             },
             /**
              * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not equal
@@ -1208,7 +1096,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * its array elements are compared to the array of actual values of all PageElements.
              */
             hasDirectText: (directText) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasDirectText(expected), directText);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.currently.not.hasDirectText(expected), directText);
             },
             /**
              * Returns true if all PageElements managed by PageElementList currently do not have any direct text.
@@ -1220,7 +1108,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * PageElements
              */
             hasAnyDirectText: (filterMask) => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true);
+                return this._node.eachCheck(this._node.all, (element) => element.currently.not.hasAnyDirectText(), filterMask, true);
             },
             /**
              * Returns true if the actual direct texts of all PageElements managed by PageElementList currently do not contain
@@ -1237,7 +1125,7 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
              * its array elements are compared to the array of actual values of all PageElements.
              */
             containsDirectText: (directText) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsDirectText(expected), directText);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.currently.not.containsDirectText(expected), directText);
             },
         };
     }
@@ -1257,7 +1145,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
      * specific timeout.
      */
     get any() {
-        return this._node.currently.first.wait;
+        return this._node.first.wait;
     }
     // Typescript has a bug that prevents Exclude from working with generic extended types:
     // https://github.com/Microsoft/TypeScript/issues/24791
@@ -1270,7 +1158,7 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
      * specific timeout.
      */
     get none() {
-        return this._node.currently.first.wait.not;
+        return this._node.first.wait.not;
     }
     /**
      * Waits for the result of the comparison between PageElementList's actual length and an expected length using the
@@ -1773,14 +1661,14 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
      * specific timeout.
      */
     get any() {
-        return this._node.currently.first.eventually;
+        return this._node.first.eventually;
     }
     /**
      * Provides an API to check if none of the PageElements managed by PageElementList eventually have a certain state
      * within a specific timeout.
      */
     get none() {
-        return this._node.currently.first.eventually.not;
+        return this._node.first.eventually.not;
     }
     /**
      * Returns true if the result of the comparison between PageElementList's actual length and an expected length using

@@ -93,20 +93,6 @@ class PageNodeStore {
     ElementList(selector, opts) {
         return this.List(selector, Object.assign({ elementOpts: {}, elementStoreFunc: this.Element }, opts));
     }
-    /**
-     * Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
-     * PageElement.
-     *
-     * The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to 'exist'
-     * by default.
-     *
-     * @param selector the XPath selector of the retrieved PageElementList
-     * @param opts the publicly available options used to configure the retrieved PageElementList
-     * @returns an instance of the retrieved PageElementList
-     */
-    ExistElementList(selector, opts) {
-        return this.List(selector, Object.assign({ elementOpts: {}, elementStoreFunc: this.ExistElement, waitType: Workflo.WaitType.exist }, opts));
-    }
     // MAPS
     /**
      * Retrieves an instance of a PageElementMap from the store that manages any instance of PageElement which inherits
@@ -301,4 +287,5 @@ class PageNodeStore {
     }
 }
 exports.PageNodeStore = PageNodeStore;
+exports.pageNode = new PageNodeStore();
 //# sourceMappingURL=PageNodeStore.js.map

@@ -2174,7 +2174,7 @@ declare global {
       type GroupPublicKeys = 'timeout';
       type GroupConstructorKeys = GroupPublicKeys | 'content' | 'store';
       type ElementPublicKeys = BaseKeys | 'customScroll';
-      type ListPublicKeys = BaseKeys | 'disableCache' | 'identifier';
+      type ListPublicKeys = 'timeout' | 'disableCache' | 'identifier';
       type ListPublicPartialKeys = 'elementOpts';
       type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | 'elementStoreFunc';
       type MapPublicKeys = 'identifier' | 'timeout';
@@ -3102,18 +3102,17 @@ declare global {
        * name matches the key name of the skipped filter mask entry will be missing from the state retrieval function's
        * result object.
        */
-      type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>;
+      type GroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractBoolean<Content>;
 
       /**
        * Type of the filter mask used by exist functions of PageElementGroup.
        */
-      type GroupFilterMaskExists<Content extends GroupContent> =
-        Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>;
+      type GroupFilterMaskExists<Content extends GroupContent> = Workflo.PageNode.ExtractExistsFilterMask<Content>;
 
       /**
        * Type of the filter mask used by functions of ValuePageElementGroup.
        */
-      type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>;
+      type ValueGroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractValueBoolean<Content>;
 
       /**
        * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and

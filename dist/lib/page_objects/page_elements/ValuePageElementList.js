@@ -42,27 +42,6 @@ class ValuePageElementList extends _1.PageElementList {
         this.wait = new ValuePageElementListWait(this);
         this.eventually = new ValuePageElementListEventually(this);
     }
-    /**
-     * This function performs ValuePageElementList's initial waiting condition.
-     *
-     * It supports the following waiting types:
-     *
-     * - 'exist' to wait for at least one of ValuePageElementList's managed elements to exist in the DOM
-     * - 'visible' to wait for at least one of ValuePageElementList's managed elements to become visible in the viewport
-     * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
-     * - 'text' to wait for at least one of ValuePageElementList's managed elements to have any text
-     * - 'value' to wait for at least one of ValuePageElementList's managed elements to have any value
-     *
-     * @returns this (an instance of ValuePageElementList)
-     */
-    initialWait() {
-        if (this._waitType === Workflo.WaitType.value) {
-            this.wait.any.hasAnyValue();
-        }
-        else {
-            super.initialWait();
-        }
-    }
     // GETTER FUNCTIONS
     /**
      * Returns the values of all ValuePageElements managed by ValuePageElementList as an array after performing the
@@ -157,7 +136,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * ValuePageElements. The results of skipped function invocations are not included in the total results array.
      */
     getValue(filterMask) {
-        return this._node.eachGet(this.all, element => element.currently.getValue(), filterMask);
+        return this._node.eachGet(this._node.all, element => element.currently.getValue(), filterMask);
     }
     /**
      * Returns the current 'hasValue' status of all ValuePageElements managed by ValuePageElementList as an array.
@@ -172,7 +151,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * array elements are compared to the array of actual values of all ValuePageElements.
      */
     getHasValue(value) {
-        return this._node.eachCompare(this.all, (element, expected) => element.currently.hasValue(expected), value);
+        return this._node.eachCompare(this._node.all, (element, expected) => element.currently.hasValue(expected), value);
     }
     /**
      * Returns the current 'hasAnyValue' status of all ValuePageElements managed by ValuePageElementList as an array.
@@ -183,7 +162,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * ValuePageElements. The results of skipped function invocations are not included in the total results array.
      */
     getHasAnyValue(filterMask) {
-        return this._node.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
+        return this._node.eachCompare(this._node.all, (element) => element.currently.hasAnyValue(), filterMask, true);
     }
     /**
      * Returns the current 'containsValue' status of all ValuePageElements managed by ValuePageElementList as an array.
@@ -198,7 +177,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * array elements are compared to the array of actual values of all ValuePageElements.
      */
     getContainsValue(value) {
-        return this._node.eachCompare(this.all, (element, expected) => element.currently.containsValue(expected), value);
+        return this._node.eachCompare(this._node.all, (element, expected) => element.currently.containsValue(expected), value);
     }
     // CHECK STATE
     /**
@@ -213,7 +192,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * array elements are compared to the array of actual values of all ValuePageElements.
      */
     hasValue(value) {
-        return this._node.eachCheck(this.all, (element, expected) => element.currently.hasValue(expected), value);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.currently.hasValue(expected), value);
     }
     /**
      * Returns true if all ValuePageElements managed by ValuePageElementList currently have any value.
@@ -222,7 +201,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * ValuePageElements
      */
     hasAnyValue(filterMask) {
-        return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
+        return this._node.eachCheck(this._node.all, (element) => element.currently.hasAnyValue(), filterMask, true);
     }
     /**
      * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently contain the
@@ -236,7 +215,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
      * array elements are compared to the array of actual values of all ValuePageElements.
      */
     containsValue(value) {
-        return this._node.eachCheck(this.all, (element, expected) => element.currently.containsValue(expected), value);
+        return this._node.eachCheck(this._node.all, (element, expected) => element.currently.containsValue(expected), value);
     }
     /**
      * returns the negated variants of ValuePageElementListCurrently's state check functions
@@ -255,7 +234,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
              * its array elements are compared to the array of actual values of all ValuePageElements.
              */
             hasValue: (value) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.hasValue(expected), value);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.currently.not.hasValue(expected), value);
             }, 
             /**
              * Returns true if all ValuePageElements managed by ValuePageElementList currently do not have any value.
@@ -264,7 +243,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
              * ValuePageElements
              */
             hasAnyValue: (filterMask) => {
-                return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue(), filterMask, true);
+                return this._node.eachCheck(this._node.all, (element) => element.currently.not.hasAnyValue(), filterMask, true);
             }, 
             /**
              * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not
@@ -278,7 +257,7 @@ class ValuePageElementListCurrently extends _1.PageElementListCurrently {
              * its array elements are compared to the array of actual values of all ValuePageElements.
              */
             containsValue: (value) => {
-                return this._node.eachCheck(this.all, (element, expected) => element.currently.not.containsValue(expected), value);
+                return this._node.eachCheck(this._node.all, (element, expected) => element.currently.not.containsValue(expected), value);
             } });
     }
 }

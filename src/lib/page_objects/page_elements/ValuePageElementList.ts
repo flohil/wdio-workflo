@@ -74,27 +74,6 @@ implements Workflo.PageNode.IValueElementNode<ValueType[], boolean[], ValueType[
     this.eventually = new ValuePageElementListEventually(this);
   }
 
-  /**
-   * This function performs ValuePageElementList's initial waiting condition.
-   *
-   * It supports the following waiting types:
-   *
-   * - 'exist' to wait for at least one of ValuePageElementList's managed elements to exist in the DOM
-   * - 'visible' to wait for at least one of ValuePageElementList's managed elements to become visible in the viewport
-   * (not obscured by other elements, not set to 'hidden', not outside of the viewport...)
-   * - 'text' to wait for at least one of ValuePageElementList's managed elements to have any text
-   * - 'value' to wait for at least one of ValuePageElementList's managed elements to have any value
-   *
-   * @returns this (an instance of ValuePageElementList)
-   */
-  initialWait() {
-    if (this._waitType === Workflo.WaitType.value) {
-      this.wait.any.hasAnyValue();
-    } else {
-      super.initialWait();
-    }
-  }
-
 // GETTER FUNCTIONS
 
   /**
@@ -208,7 +187,7 @@ class ValuePageElementListCurrently<
    * ValuePageElements. The results of skipped function invocations are not included in the total results array.
    */
   getValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachGet(this.all, element => element.currently.getValue(), filterMask);
+    return this._node.eachGet(this._node.all, element => element.currently.getValue(), filterMask);
   }
 
   /**
@@ -225,7 +204,7 @@ class ValuePageElementListCurrently<
    */
   getHasValue(value: ValueType | ValueType[]) {
     return this._node.eachCompare(
-      this.all, (element, expected) => element.currently.hasValue(expected), value,
+      this._node.all, (element, expected) => element.currently.hasValue(expected), value,
     );
   }
 
@@ -238,7 +217,7 @@ class ValuePageElementListCurrently<
    * ValuePageElements. The results of skipped function invocations are not included in the total results array.
    */
   getHasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCompare(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
+    return this._node.eachCompare(this._node.all, (element) => element.currently.hasAnyValue(), filterMask, true);
   }
 
   /**
@@ -255,7 +234,7 @@ class ValuePageElementListCurrently<
    */
   getContainsValue(value: ValueType | ValueType[]) {
     return this._node.eachCompare(
-      this.all, (element, expected) => element.currently.containsValue(expected), value,
+      this._node.all, (element, expected) => element.currently.containsValue(expected), value,
     );
   }
 
@@ -274,7 +253,7 @@ class ValuePageElementListCurrently<
    */
   hasValue(value: ValueType | ValueType[]) {
     return this._node.eachCheck(
-      this.all, (element, expected) => element.currently.hasValue(expected), value,
+      this._node.all, (element, expected) => element.currently.hasValue(expected), value,
     );
   }
 
@@ -285,7 +264,7 @@ class ValuePageElementListCurrently<
    * ValuePageElements
    */
   hasAnyValue(filterMask?: Workflo.PageNode.ListFilterMask) {
-    return this._node.eachCheck(this.all, (element) => element.currently.hasAnyValue(), filterMask, true);
+    return this._node.eachCheck(this._node.all, (element) => element.currently.hasAnyValue(), filterMask, true);
   }
 
   /**
@@ -301,7 +280,7 @@ class ValuePageElementListCurrently<
    */
   containsValue(value: ValueType | ValueType[]) {
     return this._node.eachCheck(
-      this.all, (element, expected) => element.currently.containsValue(expected), value,
+      this._node.all, (element, expected) => element.currently.containsValue(expected), value,
     );
   }
 
@@ -323,7 +302,7 @@ class ValuePageElementListCurrently<
        */
       hasValue: (value: ValueType | ValueType[]) => {
         return this._node.eachCheck(
-          this.all, (element, expected) => element.currently.not.hasValue(expected), value,
+          this._node.all, (element, expected) => element.currently.not.hasValue(expected), value,
         );
       },
       /**
@@ -333,7 +312,7 @@ class ValuePageElementListCurrently<
        * ValuePageElements
        */
       hasAnyValue: (filterMask?: Workflo.PageNode.ListFilterMask) => {
-        return this._node.eachCheck(this.all, (element) => element.currently.not.hasAnyValue(), filterMask, true);
+        return this._node.eachCheck(this._node.all, (element) => element.currently.not.hasAnyValue(), filterMask, true);
       },
       /**
        * Returns true if the actual values of all ValuePageElements managed by ValuePageElementList currently do not
@@ -348,7 +327,7 @@ class ValuePageElementListCurrently<
        */
       containsValue: (value: ValueType | ValueType[]) => {
         return this._node.eachCheck(
-          this.all, (element, expected) => element.currently.not.containsValue(expected), value,
+          this._node.all, (element, expected) => element.currently.not.containsValue(expected), value,
         );
       },
     };

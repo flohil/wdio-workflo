@@ -524,21 +524,21 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
          * @param filterMask can be used to skip the invocation of the `exists` function for some or all managed
          * PageNodes
          */
-        exists: (filterMask?: Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>) => boolean;
+        exists: (filterMask?: Workflo.PageNode.ExtractExistsFilterMask<Content>) => boolean;
         /**
          * Returns true if all PageNodes managed by PageElementGroup are currently not visible.
          *
          * @param filterMask can be used to skip the invocation of the `isVisible` function for some or all managed
          * PageNodes
          */
-        isVisible: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        isVisible: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         /**
          * Returns true if all PageNodes managed by PageElementGroup are currently not enabled.
          *
          * @param filterMask can be used to skip the invocation of the `isEnabled` function for some or all managed
          * PageNodes
          */
-        isEnabled: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         /**
          * Returns true if the actual texts of all PageNodes managed by PageElementGroup currently do not equal the
          * expected texts.
@@ -552,7 +552,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
          * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
          * PageNodes
          */
-        hasAnyText: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        hasAnyText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         /**
          * Returns true if the actual texts of all PageNodes managed by PageElementGroup currently do not contain the
          * expected texts.
@@ -579,7 +579,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
          * @param filterMask can be used to skip the invocation of the `hasAnyDirectText` function for some or all managed
          * PageNodes
          */
-        hasAnyDirectText: (filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>) => boolean;
+        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
         /**
          * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup currently do not contain
          * the expected direct texts.

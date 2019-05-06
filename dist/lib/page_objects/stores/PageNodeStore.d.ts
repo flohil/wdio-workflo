@@ -94,18 +94,6 @@ export declare class PageNodeStore {
      */
     ElementList(selector: Workflo.XPath, opts?: Workflo.PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>, Workflo.Store.ListPublicKeys, Workflo.Store.ListPublicPartialKeys>): PageElementList<this, PageElement<this>, Pick<IPageElementOpts<this>, Workflo.Store.ElementPublicKeys>>;
     /**
-     * Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
-     * PageElement.
-     *
-     * The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to 'exist'
-     * by default.
-     *
-     * @param selector the XPath selector of the retrieved PageElementList
-     * @param opts the publicly available options used to configure the retrieved PageElementList
-     * @returns an instance of the retrieved PageElementList
-     */
-    ExistElementList(selector: Workflo.XPath, opts?: Workflo.PickPartial<IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>, Exclude<Workflo.Store.ListPublicKeys, 'waitType'>, Workflo.Store.ListPublicPartialKeys>): PageElementList<this, PageElement<this>, {}>;
-    /**
      * Retrieves an instance of a PageElementMap from the store that manages any instance of PageElement which inherits
      * from the PageElement class.
      *
@@ -249,3 +237,4 @@ export declare class PageNodeStore {
         new (id: string, opts: IPageElementGroupOpts<Store, Content>): GroupType;
     }, opts: GroupOptions): GroupType;
 }
+export declare const pageNode: PageNodeStore;

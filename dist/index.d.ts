@@ -2039,7 +2039,7 @@ declare global {
             type GroupPublicKeys = 'timeout';
             type GroupConstructorKeys = GroupPublicKeys | 'content' | 'store';
             type ElementPublicKeys = BaseKeys | 'customScroll';
-            type ListPublicKeys = BaseKeys | 'disableCache' | 'identifier';
+            type ListPublicKeys = 'timeout' | 'disableCache' | 'identifier';
             type ListPublicPartialKeys = 'elementOpts';
             type ListConstructorKeys = ListPublicKeys | ListPublicPartialKeys | 'elementStoreFunc';
             type MapPublicKeys = 'identifier' | 'timeout';
@@ -2960,15 +2960,15 @@ declare global {
              * name matches the key name of the skipped filter mask entry will be missing from the state retrieval function's
              * result object.
              */
-            type GroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractBoolean<Content>>;
+            type GroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractBoolean<Content>;
             /**
              * Type of the filter mask used by exist functions of PageElementGroup.
              */
-            type GroupFilterMaskExists<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractExistsFilterMask<Content>>;
+            type GroupFilterMaskExists<Content extends GroupContent> = Workflo.PageNode.ExtractExistsFilterMask<Content>;
             /**
              * Type of the filter mask used by functions of ValuePageElementGroup.
              */
-            type ValueGroupFilterMask<Content extends GroupContent> = Partial<Workflo.PageNode.ExtractValueBoolean<Content>>;
+            type ValueGroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractValueBoolean<Content>;
             /**
              * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
              * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
@@ -3180,7 +3180,7 @@ declare global {
         /**
          * @ignore
          */
-        interface FilterList {
+        interface IFilterList {
             listFiles?: string[];
             specFiles?: string[];
             testcaseFiles?: string[];
@@ -4095,7 +4095,8 @@ export interface IWorkfloCommonConfig {
      */
     consoleLogLevel?: 'results' | 'testcases' | 'steps';
     /**
-     * If set to true, will output errors and validation failures immediatly.
+     * If set to true, will output errors and validation failures immediately.
+     * Will be enabled by default if consoleLogLevel is set to 'steps'.
      *
      * @default false
      */
@@ -4298,7 +4299,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      */
     debugSeleniumCommand?: boolean;
     /**
-     * Skip future testcases after specific amount of already executed testcases have failed.
+     * Skip future testcases after a specific amount of already executed testcases have failed.
      * By default, does not bail.
      *
      * @default 0
@@ -4368,7 +4369,7 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
      */
     specStatus?: (SpecStatus | 'faulty')[];
     /**
-     * Restricts executed testcases by given status.
+     * Restricts executed testcases by their result status set during their last execution.
      *
      * @example
      * ["passed", "failed", "broken", "pending", "unknown"] => these are all available status - combine as you see fit
