@@ -97,36 +97,6 @@ export class PageNodeStore extends core.stores.PageNodeStore {
     );
   }
 
-  /**
-   * Retrieves an instance of a PageElementList from the store that manages PageElement instances of the type
-   * PageElement.
-   *
-   * The waitType of the PageElements managed by PageElementList and the waitType of the list itself are set to 'exist'
-   * by default.
-   *
-   * @param selector the XPath selector of the retrieved PageElementList
-   * @param opts the publicly available options used to configure the retrieved PageElementList
-   * @returns an instance of the retrieved PageElementList
-   */
-  ExistElementList(
-    selector: Workflo.XPath,
-    options?: Workflo.PickPartial<
-      core.elements.IPageElementListOpts<this, PageElement<this>, Pick<IPageElementOpts<this>, 'timeout'>>,
-      Exclude<Workflo.Store.ListPublicKeys, 'waitType'>,
-      Workflo.Store.ListPublicPartialKeys
-    >,
-  ) {
-    return this.List(
-      selector,
-      {
-        elementOpts: {},
-        elementStoreFunc: this.ExistElement,
-        waitType: Workflo.WaitType.exist,
-        ...options,
-      },
-    );
-  }
-
 // MAPS
 
   /**
