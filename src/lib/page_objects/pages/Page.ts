@@ -107,14 +107,14 @@ export abstract class Page<
 }
 
 /**
- * This class defines all `wait` functions of Page.
+ * This class defines all `wait` functions of a Page.
  *
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageWait defines all `wait` functions
- * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`
- * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
+ * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
+ * @template IsClosedOpts type of the opts parameter passed to the function `isClosed`
  */
-class PageWait<
+export class PageWait<
   Store extends PageNodeStore,
   PageType extends Page<Store, IsOpenOpts, IsClosedOpts>,
   IsOpenOpts,
@@ -214,14 +214,14 @@ class PageWait<
 }
 
 /**
- * This class defines all `eventually` functions of Page.
+ * This class defines all `eventually` functions of a Page.
  *
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageEventually defines all `eventually` functions
  * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
  */
-class PageEventually<
+export class PageEventually<
   Store extends PageNodeStore,
   PageType extends Page<Store, IsOpenOpts, IsClosedOpts>,
   IsOpenOpts,

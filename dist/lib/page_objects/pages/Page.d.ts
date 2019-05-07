@@ -64,14 +64,14 @@ export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {},
     abstract isClosed(opts?: IsClosedOpts): boolean;
 }
 /**
- * This class defines all `wait` functions of Page.
+ * This class defines all `wait` functions of a Page.
  *
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageWait defines all `wait` functions
- * @template IsOpenOpts type of the opts parameter passed to the functions `isOpen`
- * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
+ * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
+ * @template IsClosedOpts type of the opts parameter passed to the function `isClosed`
  */
-declare class PageWait<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
+export declare class PageWait<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
     /**
      * the Page for which PageWait defines all `wait` functions
      */
@@ -121,14 +121,14 @@ declare class PageWait<Store extends PageNodeStore, PageType extends Page<Store,
     isClosed(opts?: IsClosedOpts & Workflo.ITimeoutInterval): PageType;
 }
 /**
- * This class defines all `eventually` functions of Page.
+ * This class defines all `eventually` functions of a Page.
  *
  * @template Store type of the PageNodeStore instance which can be used to retrieve/create PageNodes via Page
  * @template PageType type of the Page for which PageEventually defines all `eventually` functions
  * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
  */
-declare class PageEventually<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
+export declare class PageEventually<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
     /**
      * the Page for which PageEventually defines all `eventually` functions
      */
@@ -172,4 +172,3 @@ declare class PageEventually<Store extends PageNodeStore, PageType extends Page<
      */
     isClosed(opts?: IsClosedOpts & Workflo.ITimeoutInterval): boolean;
 }
-export {};
