@@ -1,4 +1,4 @@
-config/workflo.conf.js
+config/workflo.conf.ts
 node_modules
 src/testDir/logs
 src/testDir/results

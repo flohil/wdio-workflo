@@ -1,0 +1,1 @@
+Do not delete this folder from your system test directory. It is needed to run wdio-workflo!

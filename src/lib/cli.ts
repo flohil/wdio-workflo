@@ -2598,11 +2598,26 @@ function ensureFolderStructure(testDir: string) {
   const pageObjectsDir = path.join(srcDir, 'page_objects');
 
   const stepsIndexPath = path.join(stepsDir, 'index.ts');
+  const tsConfigSysTestPath = path.join(workfloConfig.testDir, 'tsconfig.json');
 
   const templatesDir = path.resolve(__dirname, '../../templates/');
+  const readmeTemplatePath = path.join(templatesDir, 'readme.md');
 
   const createDirs = [
     testDir,
+    srcDir,
+    logsDir,
+    resultsDir,
+    dataDir,
+    listsDir,
+    testcasesDir,
+    specsDir,
+    manualResultsDir,
+    stepsDir,
+    pageObjectsDir,
+  ];
+
+  const readmeDirs = [
     srcDir,
     logsDir,
     resultsDir,
@@ -2635,10 +2650,21 @@ function ensureFolderStructure(testDir: string) {
       fsExtra.copySync(path.join(templatesDir, 'src_boilerplate', 'page_objects'), pageObjectsDir);
     }
 
-    // add tsconfig.json file in system test folder that extends tsconfig.workflo.json
-    fsExtra.copySync(
-      path.join(templatesDir, 'config', 'tsconfig.json'), path.join(workfloConfig.testDir, 'tsconfig.json'),
-    );
+    // create readme.md files in folders that should not be deleted
+    readmeDirs.forEach(dir => {
+      const readmePath = path.join(dir, 'readme.md');
+
+      if (!fs.existsSync(readmePath)) {
+        fsExtra.copySync(readmeTemplatePath, readmePath);
+      }
+    });
+
+    // add tsconfig_system_test_directory.json file in system test folder that extends tsconfig.workflo.json
+    if (!fs.existsSync(tsConfigSysTestPath)) {
+      fsExtra.copySync(
+        path.join(templatesDir, 'config', 'tsconfig_system_test_directory.json'), path.join(workfloConfig.testDir, 'tsconfig.json'),
+      );
+    }
 
     console.log('\nSuccessfully initialized folder structure for wdio-workflo!');
   } catch (error) {
