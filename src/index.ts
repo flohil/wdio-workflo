@@ -4617,7 +4617,10 @@ export interface IWorkfloConfig extends IWorkfloCommonConfig {
   /**
    * Outputs selenium commands in the allure report if set to true.
    *
-   * @default true
+   * ACTIVATE THIS AT YOUR OWN RISK: Sometimes there is so much output
+   * that the maximum call stack size is exceeded.
+   *
+   * @default false
    */
   debugSeleniumCommand?: boolean;
   /**

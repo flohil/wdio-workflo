@@ -629,7 +629,7 @@ checkReport().then(() => {
             args[key] = argv[key];
         }
     }
-    let debugSeleniumCommand = true;
+    let debugSeleniumCommand = false;
     if (typeof argv.debugSeleniumCommand !== 'undefined') {
         if ((argv.debugSeleniumCommand === 'false')) {
             debugSeleniumCommand = false;
