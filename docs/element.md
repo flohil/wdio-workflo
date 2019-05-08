@@ -137,9 +137,6 @@ protected get __element() {
 }
 ```
 
-*To learn more about the waiting mechanisms of `PageElement` read the following
-section of this guide.*
-
 Most of the time you don't need to access the WebdriverIO element wrapped by the
 `PageElement` class from outside the class. In some rare cases, however,
 you might need to interact with the WebdriverIO element directly.
@@ -147,24 +144,47 @@ you might need to interact with the WebdriverIO element directly.
 One situation that requires you to interact with the WebdriverIO element directly
 is if your web application has a context menu that can only be opened by performing a
 right click. Wdio-workflo's `PageElement` provides no method to perform a right click
-but WebdriverIO provides a command to do exactly that:
+but a WebdriverIO element does:
 
 ```typescript
 import { stores } from '?/page_objects';
 
 const contentMenuZone = store.pageNode.Element('//div');
 
-// `.element` returns the wrapped WebdriverIO element which provides a `rightClick` command
+// `PageElement.element` triggers an implicit wait and returns the wrapped
+// WebdriverIO element which provides a `rightClick` command.
 contentMenuZone.element.rightClick();
 ```
+
+If you want to access the underlying WebdriverIO element of a `PageElement` without
+triggering an implicit wait, you can use the `element` accessor of the `currently`
+API instead:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const contentMenuZone = store.pageNode.Element('//div');
+
+// `PageElement.currently.element` does not trigger an implicit wait.
+contentMenuZone.currently.element.rightClick();
+```
+
+*To learn more about the waiting mechanisms of `PageElement` read the following
+section of this guide.*
 
 ## Waiting Mechanisms
 
 ### Implicit Waiting
 
-When you open a website in your browser, the website and its components are usually not available immediately. A request to load the code of the website
-needs to be processed by a webserver, the server's response needs to be transferred to your browser and your browser needs to render the contents of the website before it can be displayed. Depending on the speed of your internet connection, the size of the website and the computational power of the webserver and your computer, it might take some time before you can read the contents of a
-website and interact with them.
+#### What is Implicit Waiting and how does it work?
+
+When you open a website in your browser, the website and its components are usually
+not available immediately. A request to load the code of the website needs to be processed
+by a webserver, the server's response needs to be transferred to your browser and your browser
+needs to render the contents of the website before it can be displayed. Depending on the speed
+of your internet connection, the size of the website and the computational power of the webserver
+and your computer, it might take some time before you can read the contents of a website and
+interact with them.
 
 In the age of Web 2.0, asynchronous loading of website content and single page
 applications further intensify this problem.
@@ -174,18 +194,24 @@ get a lot of errors because elements could not be located on the website since
 the website has not been fully loaded yet.
 
 To reduce the number of explicit waiting statements in your test code,
-wdio-workflo implements an implicit waiting mechanism: Whenever you call a method on the `PageElement` class that reads the state of its mapped HTML element
-(e.g. `getText()`) or interacts with it (e.g. `click()`), wdio-workflo automatically waits for an initial waiting condition to be fulfilled before
-executing the corresponding command.
+the `PageElement` class implements an implicit waiting mechanism:
+Whenever you call a method that reads the state of an HTML element mapped by `PageElement`
+(e.g. `getText()`) or interacts with it (e.g. `click()`), wdio-workflo automatically
+waits for an initial waiting condition to be fulfilled before executing the corresponding
+command.
 
-The four different kinds of initial waiting conditions are defined by the `Workflo.WaitType` enum and can be set via the `waitType` property of the page element's `opts` parameter:
+The four different kinds of initial waiting conditions are defined by the
+`Workflo.WaitType` enum and can be set via the `waitType` property of the
+page element's `opts` parameter:
 
 - `exist` waits until the element exists on the website
-- `visible` waits until the element is visible on the website (default value; not obscured by another element or hidden via CSS styles)
+- `visible` waits until the element is visible on the website
+(default value; not obscured by another element or hidden via CSS styles)
 - `text` waits until the element has any text content
 - `value` waits until the element has any value (only for `ValuePageElement` classes)
 
-Most [factory methods](store.md#factory-methods) of a `PageNodeStore` allow you to define the value of `waitType` as property of their publicly configurable `opts` parameter:
+Most [factory methods](store.md#factory-methods) of a `PageNodeStore` allow you to define
+the value of `waitType` as property of their publicly configurable `opts` parameter:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -194,6 +220,31 @@ const hiddenContainer = stores.pageNode.Element('//div', {
   waitType: Workflo.WaitType.exist
 });
 ```
+
+#### What triggers the implicit waiting mechanism?
+
+The implicit waiting mechanism is only supported by the `PageElement` class itself
+and any class that is derived from `PageElement`. Functions that trigger implicit
+waiting can be divided into two categories:
+
+- State retrieval functions => These functions read the state of the web application
+by retrieving information about the attributes of an HTML element, e.g. `getText()`.
+- Action functions => These functions change the state of the web application by interacting
+with HTML elements, e.g. `click()`.
+
+Please be aware that the implicit waiting mechanism only works for functions defined
+directly on the `PageElement` class and is not applied within the `currently`,
+`wait` and `eventually` APIs of a `PageElement`. This means that `PageElement.getText()`
+triggers implicit waiting, but `PageElement.currently.getText()` does not.
+
+Besides state retrieval and action functions, the `element` accessor of the `PageElement`
+class also performs an implicit wait before returning the WebdriverIO element wrapped
+by the `PageElement` class.
+
+Other page node classes like `PageElementList`, `PageElementMap` and `PageElementGroup`
+do not have an implicit waiting mechanism of their own. However, these three classes all
+manage instances of the `PageElement` class and whenever you invoke a state retrieval or an
+action function on a managed `PageElement` instance, its implicit waiting mechanism will be triggered.
 
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 

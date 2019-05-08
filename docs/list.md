@@ -81,7 +81,6 @@ The most important properties of the `opts` parameter are:
 - `store` => The `PageNodeStore` instance associated with the `PageElementList`.
 - `timeout` => The list's default timeout for all functions of the [`eventually` and `wait` APIs](#explicit-waiting-currently-wait-and-eventually).
 - `interval` => The list's default interval for all functions of the [`eventually` and `wait` APIs](#explicit-waiting-currently-wait-and-eventually).
-- `waitType` => The waiting type used for the [initial waiting condition](#implicit-waiting) of the `PageElementList`.
 - `elementStoreFunc` => The factory method used to create a single list element.
 - `elementOpts` => The `opts` parameter passed to `elementStoreFunc` to create a list element.
 
@@ -249,26 +248,46 @@ before you can access a certain page element.
 
 ### The Underlying WebdriverIO Elements
 
+Having read about the [underlying WebdriverIO element](element.md#the-underlying-webdriverio-element)
+of the `PageElement` class, you already know that each `PageElement` wraps a single
+WebdriverIO element returned by the `browser.element()` function. This WebdriverIO element
+is accessible via the `element` and `currently.element` accessors of `PageElement`.
+
+If you wanted to access the underlying WebdriverIO elements for all `PageElement`
+instances managed by a `PageElementList`, you could iterate over the `PageElement`
+array returned by `PageElementList.all` and then access the underlying WebdriverIO
+element for each `PageElement` using its `element` and `currently.element` accessors.
+
+However, there is a much more elegant alternative: The `PageElementList` class
+provides an `elements` accessor that returns all WebdriverIO elements which match
+the list's XPath selector as an array.
+
+If you retrieve a single `PageElement` from the collection of `PageElement` instances
+managed by `PageElementList`, you can access its underlying WebdriverIO element
+just the way you always
+
+
+Each of the `PageElement` instances managed by a `PageElementList` wraps a
+single WebdriverIO element that can be accessed via the `element` accessor
+of the `PageElement` class.
+
+As already mentioned, the `PageElementList` class manages a collection of
+`PageElement` instances. Each `PageElement` wraps a single WebdriverIO element]
+(element#the-underlying-webdriverio-element) and provides a `element` accessor
+to .
+
 Wdio-workflo's `PageElementList` class introduces an additional layer of
 abstraction on top of WebdriverIO's
-[browser.elements](http://v4.webdriver.io/api/protocol/elements.html) method.
-The `browser.elements` function takes an XPath selector and fetches all HTML
-elements matching this selector from the website:
+[browser.elements](http://v4.webdriver.io/api/protocol/elements.html) method
+which takes an XPath selector and fetches all HTML elements matching this selector
+from the website. But instead of "raw" WebdriverIO elements, `PageElemnetList`
+manages instances of
 
-```typescript
-browser.elements('//a');
-```
-
-You can access the underlying WebdriverIO elements of a `PageElementList` via its
-`elements` accessor. Before returning the WebdriverIO elements, the `elements` accessor
-calls the `initialWait()` method of the `PageElementList` class to make sure that
-at least one of the list's elements is fully loaded before you try to interact
-with the list or read its state:
+ You can access the underlying WebdriverIO elements of a `PageElementList`
+via its `elements` accessor:
 
 ```typescript
 get elements() {
-  this.initialWait();
-
   return browser.elements(this._selector);
 }
 ```
@@ -285,31 +304,10 @@ import { stores } from '?/page_objects';
 const linkList = store.pageNode.ElementList('//a');
 
 // `.elements` returns the wrapped WebdriverIO elements which provide a `doubleClick` function.
-// Throws an error if the list is empty because `initialWait()` would fail.
 linkList.elements.forEach(
   wdioLinkElement => wdioLinkElement.doubleClick()
 )
 ```
-
-Since the `initialWait()` function of `PageElementList` waits for at least
-one element of the list to exist/be visible/have any text, the above code example
-would throw an error if `linkList` was empty. You can circumvent this behavior
-by using the `elements` accessor of the list's `currently` API instead, which skips
-the invocation of the `initialWait()` function:
-
-```typescript
-import { stores } from '?/page_objects';
-
-const linkList = store.pageNode.ElementList('//a');
-
-// Won't throw an error if the list is empty because `initialWait()` is skipped.
-linkList.currently.elements.forEach(
-  wdioLinkElement => wdioLinkElement.doubleClick()
-)
-```
-
-*To learn more about the waiting mechanisms of `PageElement` read the following
-section of this guide.*
 
 ## Waiting Mechanisms
 
@@ -326,6 +324,18 @@ This is because the list's `initialWait()` function cannot know for how many pag
 elements it should wait since the number of elements managed by a list can change
 any time (when the contents of the list change).
 
+So if you called the `click()` function on each `PageElement` managed by a
+`PageElementList`, the `initialWait()` method of each `PageElement` would be
+invoked before the actual click on its mapped HTML element occurs:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a', {
+  waitType: Workflo.WaitType.exist
+});
+```
+
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 
 The explicit waiting mechanisms of `PageElementList` are also very similar to the
@@ -339,6 +349,9 @@ Furthermore, `PageElementList` ships with a `currently` API to read or check
 the current state of its page elements without performing an implicit wait,
 and an `eventually` API that lets you check if its page elements reach a certain
 state within a specific timeout.
+
+You can find more details about the state check functions of a list's
+`currently`, `wait` and `eventually` APIs in the following section of this guide.
 
 ## State Retrieval and State Check Functions
 
