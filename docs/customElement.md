@@ -94,7 +94,7 @@ export class Input<
   Store extends PageNodeStore
 > extends ValuePageElement<Store, string> {
 
-  readonly currently = new InputCurrently(this);
+  readonly currently: InputCurrently<Store, this> = new InputCurrently(this);
 
   constructor(selector: string, opts: IInputOpts<Store>) {
     super(selector, opts);
@@ -163,6 +163,22 @@ no implicit wait will be performed.
 
 We must not forget to set the `.currently` API accessor of our `Input` class. Otherwise, the implementation of
 `InputCurrently.getValue` will not be available to `Input`.
+For some strange reason, typescript (v3.4.5) is not able to infer the type of our `currently` class member when we assign an instance of `InputCurrently` to it. Therefore, we need to explicitly
+define the types of `currently`, `wait` and `eventually` whenever we overwrite them:
+
+```typescript
+export class Input<
+  Store extends PageNodeStore
+> extends ValuePageElement<Store, string> {
+  // We need to explicitly set the type of `currently` to `InputCurrently`.
+  readonly currently: InputCurrently<Store, this> = new InputCurrently(this);
+
+  /*...*/
+
+  // If we forget to explicitly set the type of `currently`, TypeScript thinks it's `any`.
+  readonly currently = new InputCurrently(this);
+}
+```
 
 When defining a `PageElementCurrently` (or a `PageElementWait` or `PageElementEventually`) class, we need to pass
 a reference of the "parent" `PageElement` to the constructor because some methods of our `currently`/`wait`/`eventually`

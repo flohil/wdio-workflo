@@ -253,6 +253,101 @@ a `wait` API that offers you the ability to explicitly control when your tests s
 
 Furthermore, page nodes also have a `currently` API to read or check the current state of a mapped HTML element without performing an implicit wait, and an `eventually` API that lets you check if an HTML element reaches a certain state within a specific timeout.
 
+#### State check functions
+
+State check functions allow you to check wether a specific attribute of the HTML element mapped by a `PageElement` has an expected value. Each state check function is available under the same name in the `currently`, `wait` and `eventually` APIs. In the case of the
+`currently` API, the check occurs only once whereas the `wait` and `eventually`
+APIs regularly perform the check until it either returns true or until a predefined
+timeout is reached.
+
+Most state check functions exist in three variants (where XXX is the name of the checked attribute):
+
+- `hasXXX(expectedValue)` to check if the attribute value equals an expected value.
+- `containsXXX(expectedValue)` to check if the attribute value contains an expected value.
+- `hasAnyXXX()` to check if the attribute has any value at all (is not empty).
+
+For the following HTML attributes, state check functions exist in the these three variants:
+
+- `Text` => All text content of an HTML element (also includes text of nested HTML elements).
+- `DirectText` => Text content that is a direct child of an HTML element (no nested HTML elements).
+- `HTML` => All HTML content of an HTML element.
+- `Class` => An HTML element's CSS classnames as a single string.
+- `Id` => The ID attribute of an HTML element.
+- `Name` => The name attribute of an HTML element.
+- `Location` => The coordinates of an HTML element in pixels (left top corner).
+- `X` => The X coordinate of an HTML element (left top corner).
+- `Y` => The Y coordinate of an HTML element (left top corner).
+- `Size` => The size of an HTML element in pixels.
+- `Width` => The width of an HTML element in pixels.
+- `Height` => The height of an HTML element in pixels.
+- `Value` => The value of an element like input, checkbox... (only available in `ValuePageElement` class).
+
+Futhermore, there are three special state check functions to check if any arbitrary
+HTML attribute has an expected value:
+
+- `hasAttribute({name: 'attrName', value: 'expectedValue'})` to check if the value of an an attribute with a specific name matches an expected value.
+- `containsAttribute({name: 'attrName', value: 'expectedContainedValue'})` to check
+if the value of an attribute with a specific name contains an expected value.
+- `hasAnyAttribute('attrName')` to check if an attribute with a specific name has any value (is not empty/undefined)
+
+Besides, there are five state check functions that don't exist in three variants:
+
+- `exists` to check if an HTML element exists in the DOM.
+- `isVisible` to check if the HTML element is visible (not obscured by another element or hidden by CSS styles).
+- `isEnabled` to check if the HTML element is enabled (can be interacted with - not disabled).
+- `isSelected` to check if an `<option>` HTML element is the selected option of a `<select>` element.
+- `isChecked` to check if an HTML `<input>` element has a `checked` HTML attribute set.
+
+Here are some code examples of state check functions for the `currently`, `wait`
+and `eventually` APIs:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+// Checks if the element currently exists in the DOM.
+element.currently.exists();
+
+// Waits until the element is visible.
+// Throws an error if element does not become visible within predefined timeout.
+element.wait.isVisible();
+
+// Checks if the element eventually has the text 'wdio'.
+element.eventually.hasText('wdio');
+
+// Waits for the CSS class string of the element to contain 'active'.
+// Throws an error if condition is not met within a predefined timeout.
+element.wait.containsClass('active');
+
+// Checks if the element currently has the `readonly` HTML attribute set.
+element.currently.hasAnyAttribute('readonly');
+
+// Checks if the element's `role` attribute eventually equals 'activeOption'.
+element.eventually.hasAnyAttribute({name: 'role', value: 'activeOption'});
+```
+
+Each state check function is also available in a negated version that checks
+for the opposite of an expected value. To use a state check function's negated
+version, you need to prepend the state check function with the `.not` modifier:
+
+#### NOT Modifier for State Check Functions
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+// Checks if the element does currently not exist in the DOM.
+element.currently.not.exists();
+
+// Waits until the element is not/no longer visible.
+element.wait.not.isVisible();
+
+// Checks if the element eventually doesn't contain/no longer contains the text 'wdio'.
+element.eventually.not.containsText('wdio');
+```
+
 #### The `currently` API
 
 The `currently` API bypasses the implicit wait usually performed when invoking
@@ -272,16 +367,9 @@ console.log( element.getText() )
 console.log( element.currently.getText() )
 ```
 
-To spare you the need of first reading the current state of an HTML element and then comparing it to an expected value in a second step, the `currently` API also provides a set of functions that let you check directly if the state of an HTML element matches an expected state.
+To spare you the need of first reading the current state of an HTML element and then comparing it to an expected value in a second step, wdio-workflo's state check functions let you check directly if the state of an HTML element matches an expected state.
 
-These "state check functions" usually come in three variants for each attribute
-of an HTML element's state:
-
-- `hasXXX(value)` checks if the HTML attribute XXX equals an expected value
-- `containsXXX(value)` checks if the HTML attribute XXX contains an expected value
-- `hasAnyXXX()` checks if the HTML attribute XXX has any value
-
-Let's examine these three variants of `currently` state check functions by the example of an HTML element's "text" attribute:
+Let's examine the three variants (`hasXXX`, `containsXXX`, `hasAnyXXX`) of `currently` state check functions by the example of an HTML element's "text" attribute:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -324,6 +412,10 @@ element.currently.not.hasAnyText()
 *Please note that interaction methods of a `PageElement` like `click()` and `scrollTo()` always perform an implicit wait because interacting with elements that have not been rendered yet doesn't make much sense. Therefore, the `currently` API does not contain interaction methods like `click()`.*
 
 #### The `wait` API
+
+untilElement function beschreiben,
+
+last parameter -> opts: allow you to set timeout and interval
 
 The `wait` API contains a set of state check functions that wait for an HTML
 element to reach a certain state within a specific timeout.
@@ -388,6 +480,11 @@ element.wait.not.hasText('wdio-workflo')
 ```
 
 #### The `eventually` API
+
+meetsCondition function
+
+last parameter -> opts: allow you to set timeout and interval
+
 
 The `eventually` API is almost identical to the `wait` API: It also waits for an
 HTML element to each a certain state within a specific timeout. However, the

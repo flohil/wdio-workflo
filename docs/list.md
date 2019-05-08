@@ -250,41 +250,18 @@ before you can access a certain page element.
 
 Having read about the [underlying WebdriverIO element](element.md#the-underlying-webdriverio-element)
 of the `PageElement` class, you already know that each `PageElement` wraps a single
-WebdriverIO element returned by the `browser.element()` function. This WebdriverIO element
-is accessible via the `element` and `currently.element` accessors of `PageElement`.
+WebdriverIO element returned by the `browser.element()` function. This WebdriverIO element is accessible via the `element` and `currently.element` accessors of
+`PageElement`.
 
-If you wanted to access the underlying WebdriverIO elements for all `PageElement`
-instances managed by a `PageElementList`, you could iterate over the `PageElement`
-array returned by `PageElementList.all` and then access the underlying WebdriverIO
-element for each `PageElement` using its `element` and `currently.element` accessors.
+To access the underlying WebdriverIO elements for all `PageElement` instances managed
+by a `PageElementList`, you could iterate over the `PageElement` array returned by
+`PageElementList.all` and then access the underlying WebdriverIO element for each
+`PageElement` using its `element` and `currently.element` accessors.
 
-However, there is a much more elegant alternative: The `PageElementList` class
-provides an `elements` accessor that returns all WebdriverIO elements which match
-the list's XPath selector as an array.
-
-If you retrieve a single `PageElement` from the collection of `PageElement` instances
-managed by `PageElementList`, you can access its underlying WebdriverIO element
-just the way you always
-
-
-Each of the `PageElement` instances managed by a `PageElementList` wraps a
-single WebdriverIO element that can be accessed via the `element` accessor
-of the `PageElement` class.
-
-As already mentioned, the `PageElementList` class manages a collection of
-`PageElement` instances. Each `PageElement` wraps a single WebdriverIO element]
-(element#the-underlying-webdriverio-element) and provides a `element` accessor
-to .
-
-Wdio-workflo's `PageElementList` class introduces an additional layer of
-abstraction on top of WebdriverIO's
-[browser.elements](http://v4.webdriver.io/api/protocol/elements.html) method
-which takes an XPath selector and fetches all HTML elements matching this selector
-from the website. But instead of "raw" WebdriverIO elements, `PageElemnetList`
-manages instances of
-
- You can access the underlying WebdriverIO elements of a `PageElementList`
-via its `elements` accessor:
+But there is a much more elegant alternative! The `PageElementList` class
+provides an `elements` accessor that returns the result of WebdriverIO's
+`browser.elements()` function, which takes the list's XPath selector and fetches
+all HTML elements matched by this selector from the website:
 
 ```typescript
 get elements() {
@@ -292,20 +269,22 @@ get elements() {
 }
 ```
 
-The `PageElement` instances managed by a `PageElementList` do not provide abstraction
-functions for all of WebdriverIO's commands. One command for which no abstraction function
-exists is `doubleClick`. So if you wanted to double click on each element of
-a `PageElementList`, you could access the WebdriverIO elements wrapped
-by the list and call the `doubleClick` command on each of them:
+You can then access the array of fetched WebdriverIO elements via the `value`
+property of the result object returned by `browser.elements()`. Consider the
+following usage example:
+
+`PageElement` instances managed by a `PageElementList` do not provide abstraction
+functions for all available WebdriverIO's commands. One command for which no abstraction function exists is `doubleClick`. So if you wanted to double click on each element of a `PageElementList`, you would need to access the WebdriverIO elements
+wrapped by the list and call the `doubleClick` command on each of them:
 
 ```typescript
 import { stores } from '?/page_objects';
 
 const linkList = store.pageNode.ElementList('//a');
 
-// `.elements` returns the wrapped WebdriverIO elements which provide a `doubleClick` function.
-linkList.elements.forEach(
-  wdioLinkElement => wdioLinkElement.doubleClick()
+// `.elements.value` returns the wrapped WebdriverIO elements which provide a `doubleClick` function.
+linkList.elements.value.forEach(
+  wdioElement => wdioElement.doubleClick()
 )
 ```
 
@@ -313,32 +292,32 @@ linkList.elements.forEach(
 
 ### Implicit Waiting
 
-The implicit waiting mechanism of a `PageElementList` is almost identical to the
-implicit waiting mechanism of a `PageElement`. If you are not familiar with the concept
-of implicit waiting, I recommend that you read about it in the [Implicit Waiting](element.md#implicit-waiting) section of the [`PageElement` guide](element.md) first.
+`PageElementList` does not have an implicit waiting mechanism of its own.
+However, if you invoke a state retrieval or action function on a `PageElement` instance managed by a `PageElementList`, the [implicit waiting mechanism of the `PageElement`](element#implicit-waiting) will be triggered.
 
-One important thing to know about the implicit waiting mechanism of `PageElementList`
-is that its `initialWait()` function only waits until one of the list's page elements
-fulfils the list's initial waiting condition (`exists`, `isVisible`, `hasValue`).
-This is because the list's `initialWait()` function cannot know for how many page
-elements it should wait since the number of elements managed by a list can change
-any time (when the contents of the list change).
-
-So if you called the `click()` function on each `PageElement` managed by a
-`PageElementList`, the `initialWait()` method of each `PageElement` would be
-invoked before the actual click on its mapped HTML element occurs:
+The publicly configurable `opts` parameter of the `ElementList()` factory method
+provides an `elementOpts.waitType` property which allows you to define the `waitType`
+of the `PageElement` instances managed by the `PageElementList`:
 
 ```typescript
 import { stores } from '?/page_objects';
 
 const linkList = stores.pageNode.ElementList('//a', {
-  waitType: Workflo.WaitType.exist
+  elementOpts: {
+    waitType: Workflo.WaitType.text
+  }
 });
+
+linkList.all.forEach(
+  // The `click()` action function triggers linkElement's implicit waiting mechanism.
+  // So, before each click, wdio-workflo waits for the linkElement to have any text.
+  linkElement => linkElement.click();
+)
 ```
 
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 
-The explicit waiting mechanisms of `PageElementList` are also very similar to the
+The explicit waiting mechanisms of `PageElementList` are very similar to the
 ones used by `PageElement` and you should read about them in the [Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually) section of the
 [`PageElement` guide](element.md) before you continue reading this guide.
 
@@ -355,18 +334,39 @@ You can find more details about the state check functions of a list's
 
 ## State Retrieval and State Check Functions
 
-behave differently than the ones of `PageElement` - obviously , since
-a list can manage more than one page element.
+### Reading and Checking the List Length
 
-### Reading the List Length
+To retrieve the length of a `PageElementList` (the number of WebdriverIO elements
+which match the list's XPath selector), you can call its `getLength()` and
+`currently.getLength()` methods. Since the `PageElementList` class has no
+implicit waiting mechanism, both of these methods return the current length
+of the list. `getLength()` is just a convenience method/an alias for `currently.getLength()`:
 
-getLength,
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+const length1 = linkList.getLength();
+const length2 = linkList.currently.getLength();
+
+// Returns `true` because `getLength()` and `currently.getLength() are the same.
+length1 === length2
+```
+
+Using the `wait.hasLength()` method, you can wait for `PageElementList` to have
+an expected length. `currently.hasLength()` allows you to check if `PageElementList` currently has an expected length and `eventually.hasLength()` lets you check if
+`PageElementList` eventually has an expected length within a specific timeout.
+
+The first parameter of each `hasLength()`
 
 hasLength (with comparators) and is empty with currently, wait, eventually
 
 getText etc of all elements - with filtermask
 
-### Implicit Waiting
+### Reading the State of List Elements
+
+currently and class itself
 
 one of the elements in the list
 
@@ -374,7 +374,7 @@ cannot know in advance how many elements are in the list - wait for at least one
 
 not when accessing .element
 
-### Explicit Waiting: `currently`, `wait` and `eventually`
+### Checking the State of List Elements
 
 exists, isVisible, isEnabled
 hasValue
