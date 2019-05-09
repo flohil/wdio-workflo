@@ -262,39 +262,85 @@ Wdio-workflo ships with three action functions:
 
 - `click()` => Clicks on a mapped HTML element.
 - `scrollTo()` => Scrolls a mapped HTML element into view.
-- `setValue()` => Sets the value of an HTML element like input, dropdown, checkbox...
+- `setValue(value)` => Sets the value of an HTML element like input, dropdown, checkbox...
 (only available for `ValuePageElement` classes).
 
-// please read documentation of click() function for full description of all click options
+##### Configuring the `click()` Function
 
--> postcondition, customScroll:
+The behavior of the `click()` function can be modified via its `opts` parameter object.
+This object includes the following properties:
 
-By defining customScroll, PageElement's default custom scrolling behavior can be overwritten.
+- `postCondition` => If set, the HTML element will be clicked and the `postCondition`
+function executed periodically until it returns `true` or until a timeout is reached.
+- `customScroll` => Allows you to overwrite the default behavior for scrolling
+an HTML element into view before clicking on it.
+- `timeout` => Used to define the timeout for evaluating the `postCondition` function
+in periodic intervals.
+- `interval` => Used to define the intervals for evaluating the `postCondition` function.
 
--> timeout, interval -> used to check postCondition
+For a detailed description of the `click()` function's behavior and the properties of
+its `opts` parameter, please read the
+[API documentation of the `click()` function](https://flohil.github.io/wdio-workflo/apiDoc/classes/pageelement.html#click).
 
-elem.click({
-  postCondition: () => dialogs.confirm.currently.not.isVisible(),
-});
+##### Configuring the `scrollTo()` Function
 
-`click`
+The behavior of the `scrollTo()` function, too, can be modified via its `opts` parameter
+object. This object includes the following properties:
 
-scrollTo
+- `closestContainerIncludesHidden` => If no explicit `containerSelector` is defined,
+setting this property to true will cause the auto-detection of the closest scrollable
+container to also recognize containers whose CSS `overflow` property is set to `hidden`.
+- `containerSelector` => The selector used to determine the parenting scroll container
+of the HTML element.
+- `directions` => Defines the directions in which the scrolling container should be scrolled.
+- `offsets` => Will be added to the final scroll position of the scrolling container.
 
-elem.scrollTo({
-  directions: {
-    x: true,
-    y: true,
-  },
-});
-
-setValue
-
-checkbox.setValue(true)
-
-input.setValue('wdio')
+For a detailed description of the `scrollTo()` function's behavior and the properties of
+its `opts` parameter, please read the
+[API documentation of the `scrollTo()` function](https://flohil.github.io/wdio-workflo/apiDoc/classes/pageelement.html#scrollto).
 
 #### Usage Examples
+
+Below, you can find some usage examples of action functions:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+const input = stores.pageNode.Input('//input'); // Input implements ValuePageElement
+const checkbox = stores.pageNode.Checkbox(
+  xpath('//div').classContains('ms-Checkbox')
+)
+
+// Clicks on the element after performing an implicit wait.
+element.click();
+
+// Repeatedly clicks on the element after performing an implicit wait
+// until the confirm dialog is no longer visible or until 3 seconds have passed.
+// If the dialog did not disappear within 3 seconds, throws an error.
+element.click({
+  postCondition: () => dialogs.confirm.currently.not.isVisible(),
+  timeout: 3000
+});
+
+// Scrolls the element into view within the nearest scrollable container
+// using the default scrolling behavior after performing an implicit wait.
+element.scrollTo();
+
+// Scrolls the element into view within the specified scroll container after
+// performing an implicit wait. Scrolling will only occur along the `y` axis
+// and not along the `x` axis => there will be no horizontal scrolling.
+elem.scrollTo({
+  containerSelector: xpath('//div').id('scrollContainer').build(),
+  directions: { y: true },
+});
+
+// Performs an implicit wait and then sets the value of the input to 'wdio'.
+input.setValue('wdio');
+
+// Performs an implicit wait and then ticks the checkbox.
+checkbox.setValue(true);
+```
 
 ### State Check Functions
 
@@ -424,9 +470,9 @@ whereas the `not` modifier executes the negated version of your state check func
 To better understand the difference between using the `not` modifier and the `!` negation
 operator, take a look at the following code examples for the `wait` and `eventually` APIs:
 
-*If you don't understand these code examples, consider reading the
+*If the below code examples make no sense to you, consider reading the
 [Explicit Waiting: `currently`, `wait` and `eventually` section](#explicit-waiting-currently-wait-and-eventually)
-of this guide first!*
+of this guide!*
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -570,12 +616,18 @@ a `wait` API that offers you the ability to explicitly control when your tests s
 Furthermore, page nodes also have a `currently` API to read or check the current state of a mapped HTML element without performing an implicit wait, and an `eventually` API that lets you check if an HTML element reaches a certain state within a specific timeout.
 
 
-#### The `currently` API
+### The `currently` API
+
+#### Overview
 
 The `currently` API bypasses the implicit wait usually performed when invoking
 state retrieval methods of a page node class (e.g. `PageElement.getText()`).
 
-Let's take a look at the following code example to better understand the difference between invoking a state retrieval function directly on the `PageElement` class and invoking a state retrieval function on the `currently` API of the `PageElement`:
+#### No Implicit Waiting
+
+Let's take a look at the following code example to better understand the difference
+between invoking a state retrieval function directly on the `PageElement` class and
+invoking a state retrieval function on the `currently` API of the `PageElement`:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -589,9 +641,14 @@ console.log( element.getText() )
 console.log( element.currently.getText() )
 ```
 
-To spare you the need of first reading the current state of an HTML element and then comparing it to an expected value in a second step, wdio-workflo's state check functions let you check directly if the state of an HTML element matches an expected state.
+#### State Check Function Examples
 
-Let's examine the three variants (`hasXXX`, `containsXXX`, `hasAnyXXX`) of `currently` state check functions by the example of an HTML element's "text" attribute:
+To spare you the need of first reading the current state of an HTML element and
+then comparing it to an expected value in a second step, wdio-workflo's state check
+functions let you check directly if the state of an HTML element matches an expected state.
+
+Let's examine the three variants (`hasXXX`, `containsXXX`, `hasAnyXXX`) of `currently`
+state check functions by the example of an HTML element's "text" attribute:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -610,9 +667,11 @@ element.currently.containsText('workflo')
 element.currently.hasAnyText()
 ```
 
+#### `not` Modifier Examples
+
 The `currently` API also offers functions to check if the state of an HTML element
 does NOT match an expected state. These negated state check functions are
-available via the `not` accessor of the `currently` API:
+available via the `not` modifier of the `currently` API:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -631,30 +690,54 @@ element.currently.not.containsText('icebears')
 element.currently.not.hasAnyText()
 ```
 
-*Please note that interaction methods of a `PageElement` like `click()` and `scrollTo()` always perform an implicit wait because interacting with elements that have not been rendered yet doesn't make much sense. Therefore, the `currently` API does not contain interaction methods like `click()`.*
+*Please note that action functions of a `PageElement` like `click()` and `scrollTo()` always perform an implicit wait because interacting with elements that have not been rendered yet doesn't make much sense. Therefore, the `currently` API does not contain action functions like `click()`.*
 
-#### The `wait` API
+### The `wait` API
 
-untilElement function beschreiben,
-
-last parameter -> opts: allow you to set timeout and interval
+#### Overview
 
 The `wait` API contains a set of state check functions that wait for an HTML
-element to reach a certain state within a specific timeout.
+element to reach a certain state within a specific timeout. If the HTML element
+does not reach the expected state within the specified timeout, an error will be thrown.
+Otherwise, the `PageElement` instance will be returned by each function defined on the
+`wait` API.
 
-If the HTML element does not reach the expected state within the specified timeout, an error will be thrown. Otherwise, the `PageElement` instance
-will be returned by each function defined on the `wait` API, so you can easily
-chain additional `PageElement` method calls:
+#### Chaining Method Calls
+
+The fact that each state check function of the `wait` API returns its `PageElement`
+instance allows you to easily chain additional `PageElement` method calls:
 
 ```typescript
 import { stores } from '?/page_objects';
 
 const element = stores.pageNode.Element('//div');
 
-element.wait.hasText('wdio-workflo', {timeout: 3000}).click()
+element.wait.hasText('wdio-workflo').click()
 ```
 
-If you do not explicitly specify a timeout value when calling a state check function on `wait`, the default timeout of the `PageElement` will be used:
+#### Defining `timeout` and `interval`
+
+The last parameter of a state check function defined on the `wait` API of `PageElement`
+always includes a `timeout` and an `interval` property. The `timeout` property
+lets you define after how many milliseconds the state check function will throw an error
+if the expected state was not reached. The `interval` property defines how
+many milliseconds should pass between each evaluation of the expected state:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+// Throws an error if the element does not have the text 'wdio-workflo' within
+// 3 seconds. The check of the element's text will occur every 500 milliseconds.
+element.wait.hasText('wdio-workflo', {
+  timeout: 3000,
+  interval: 500
+})
+```
+
+If you do not explicitly specify a timeout value when calling a state check function on `wait`,
+the default timeout of the `PageElement` will be used:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -665,7 +748,8 @@ const element = stores.pageNode.Element('//div');
 element.wait.hasText('wdio-workflo')
 ```
 
-The default timeout value for a specific instance of a `PageElement` can be set by defining the `timeout` property of the publicly configurable `opts` parameter
+The default timeout value for a specific instance of a `PageElement` can be set by
+defining the `timeout` property of the publicly configurable `opts` parameter
 of a [factory method](store.md#factory-methods) in milliseconds:
 
 ```typescript
@@ -689,7 +773,10 @@ export const workfloConfig: IWorkfloConfig = {
 };
 ```
 
-The `wait` API also offers functions to wait for the state of an HTML element to NOT or no longer match an expected state. These negated state check functions are
+#### `not` Modifier Examples
+
+The `wait` API also offers functions to wait for the state of an HTML element to
+NOT or no longer match an expected state. These negated state check functions are
 available via the `not` accessor of the `wait` API:
 
 ```typescript
@@ -701,12 +788,35 @@ const element = stores.pageNode.Element('//div');
 element.wait.not.hasText('wdio-workflo')
 ```
 
-#### The `eventually` API
+#### Generic State Checks using `untilElement()`
 
-meetsCondition function
+Finally, the `wait` API also offers an `untilElement` state check function that
+lets you check if a generic condition is met within a specific timeout:
 
-last parameter -> opts: allow you to set timeout and interval
+```typescript
+import { stores } from '?/page_objects';
 
+const element = stores.pageNode.Element('//div');
+
+element.wait.untilElement(
+  "has autocomplete off",
+  (element) => element.getAttribute("autocomplete") === 'off',
+  { timeout: 3000 }
+)
+```
+
+The `untilElement` state check function takes 3 parameters:
+
+- A string used to create an error message if the condition is not met within
+a specific timeout.
+- A function that needs to return true if the condition is currently met
+or false if it isn't. This function is passed the `PageElement` instance as parameter.
+- An `opts` parameter to define the `timeout` and `interval` used to wait for
+the condition to be met.
+
+### The `eventually` API
+
+#### Overview
 
 The `eventually` API is almost identical to the `wait` API: It also waits for an
 HTML element to each a certain state within a specific timeout. However, the
@@ -727,11 +837,36 @@ element.eventually.hasText('wdio-workflo', {timeout: 1})
 element.eventually.hasText('wdio-workflo', {timeout: 20000})
 ```
 
-The `eventually` API does not throw an error if the HTML element fails to reach the expected state within the specified (or default) timeout.
+The `eventually` API does not throw an error if the HTML element fails to reach
+the expected state within the specified (or default) timeout.
+
+#### Defining `timeout` and `interval`
+
+The last parameter of a state check function defined on the `eventually` API of 
+`PageElement` always includes a `timeout` and an `interval` property. The `timeout` 
+property lets you define after how many milliseconds the state check function will 
+throw an error if the expected state was not reached. The `interval` property defines 
+how many milliseconds should pass between each evaluation of the expected state:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+// Returns `false` if element does not have the text 'wdio-workflo' within
+// 3 seconds. The check of the element's text will occur every 500 milliseconds.
+element.eventually.hasText('wdio-workflo', {
+  timeout: 3000,
+  interval: 500
+})
+```
+
+#### `not` Modifier Examples
 
 Like the `currently` and the `wait` API, the `eventually` API too offers a
 `not` accessor to invoke negated variants of its state check function.
-These functions check if the state of an HTML does not match/stops to match an expected state within a specific timeout:
+These functions check if the state of an HTML does not match/stops to match an
+expected state within a specific timeout:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -742,6 +877,31 @@ const element = stores.pageNode.Element(
 
 element.eventually.not.hasText('icebears')
 ```
+
+#### Generic State Checks using `meetsCondition()`
+
+Like the `untilElement` function of the `wait` API, the `eventually` API also
+provides a state check function that lets you check if a generic condition
+is met within a specific timeout. For the `eventually` API, this generic
+state check function is called `meetsCondition`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+
+element.eventually.meetsCondition(
+  (element) => element.getAttribute("autocomplete") === 'off',
+  { timeout: 3000 }
+)
+```
+
+The `meetsCondition` state check function takes 2 parameters:
+
+- A function that needs to return true if the condition is currently met
+or false if it isn't. This function is passed the `PageElement` instance as parameter.
+- An `opts` parameter to define the `timeout` and `interval` used to check if
+the condition is eventually met.
 
 ## The `ValuePageElement` Class
 
