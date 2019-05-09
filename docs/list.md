@@ -288,6 +288,115 @@ linkList.elements.value.forEach(
 )
 ```
 
+## State Functions
+
+state retrieval
+
+getText  -> returns array where each array element corresponds to result
+of managed `PageElement` instance at the same/corresponding list position
+
+filterMask:
+false -> skips invocation for all elements - returns empty array
+[false, true] -> skips invocation for certain elements ->
+
+The return value of a state retrieval function's 'child' function whose invocation is skipped by the filter
+       * mask will not be written to the results array of the state retrieval function. The length of the results array
+       * can therefore differ from the number of PageElements managed by PageElementList.
+
+if all are skipped -> empty list
+
+action
+
+is executed for each element -> list.all.forEach( element => element.click() )
+
+pages.demo.dynamicControls.buttonList.eachDo(
+  element => element.click()
+  [false, true]
+)
+
+skips action invocation for list elements not included by the filtermask
+
+inputList.setValue('asdf')
+inputList.setValue(['one', 'two', 'three'])
+
+state check functions
+
+
+list.currently.hasText('asdf') -> for each
+list.eventually.hasText(['one', 'two','three'], {timeout: 3000})
+
+timeout for each element!
+
+list.currently.hasAnyText(false) // always return true
+
+list.currently.hasAnyText([true, false, true]) // returns true if first and third
+list element have any text
+
+list.currently.exists([true, false, true])
+
+
+list.wait.exists() -> returns instance of PageElementList
+
+filtermask object itself is last parameter for currently state check functions are state retrieval functions
+
+for state check wait and eventually functions, filtermask object is a property of
+opts parameter
+
+### Reading and Checking the List Length
+
+To retrieve the length of a `PageElementList` (the number of WebdriverIO elements
+which match the list's XPath selector), you can call its `getLength()` and
+`currently.getLength()` methods. Since the `PageElementList` class has no
+implicit waiting mechanism, both of these methods return the current length
+of the list. `getLength()` is just a convenience method/an alias for `currently.getLength()`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+const length1 = linkList.getLength();
+const length2 = linkList.currently.getLength();
+
+// Returns `true` because `getLength()` and `currently.getLength() are the same.
+length1 === length2
+```
+
+Using the `wait.hasLength()` method, you can wait for `PageElementList` to have
+an expected length. `currently.hasLength()` allows you to check if `PageElementList` currently has an expected length and `eventually.hasLength()` lets you check if
+`PageElementList` eventually has an expected length within a specific timeout.
+
+The first parameter of each `hasLength()`
+
+hasLength (with comparators) and is empty with currently, wait, eventually
+
+getText etc of all elements - with filtermask
+
+### State Retrieval Functions
+
+currently and class itself
+
+one of the elements in the list
+
+cannot know in advance how many elements are in the list - wait for at least one
+
+not when accessing .element
+
+### Action Functions
+
+exists, isVisible, isEnabled
+hasValue
+other statate check funcs -> hasText take single value or array -> true
+if all match - filtermask???
+
+currently, wait, eventually -> link to page element guide
+
+not
+
+any and none
+
+### State Check Functions
+
 ## Waiting Mechanisms
 
 ### Implicit Waiting
@@ -321,6 +430,28 @@ The explicit waiting mechanisms of `PageElementList` are very similar to the
 ones used by `PageElement` and you should read about them in the [Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually) section of the
 [`PageElement` guide](element.md) before you continue reading this guide.
 
+#### `currently`
+
+Like the [`currently` API of `PageElement`](element.md#state-retrieval-functions-no-implicit-waiting),
+the `currently` API of the `PageElementList` class consists of state retrieval functions
+and state check functions.
+
+if all elements have expected state,
+or if filtermask is defined: all elements that match filtermask
+
+type of available state retrieval and state check functions can be found
+in the state function types section of page element guide
+
+#### `wait`
+
+wait returns instnace of pagelementlist
+
+timeout bezieht sich auf jedes einzelne element
+
+#### `eventually`
+
+timeout bezieht sich auf jedes einzelne element
+
 `PageElementList` provides a `wait` API that offers you the ability to explicitly
 wait for one or more of its page elements to reach a certain state.
 
@@ -332,60 +463,8 @@ state within a specific timeout.
 You can find more details about the state check functions of a list's
 `currently`, `wait` and `eventually` APIs in the following section of this guide.
 
-## State Retrieval and State Check Functions
 
-### Reading and Checking the List Length
 
-To retrieve the length of a `PageElementList` (the number of WebdriverIO elements
-which match the list's XPath selector), you can call its `getLength()` and
-`currently.getLength()` methods. Since the `PageElementList` class has no
-implicit waiting mechanism, both of these methods return the current length
-of the list. `getLength()` is just a convenience method/an alias for `currently.getLength()`:
-
-```typescript
-import { stores } from '?/page_objects';
-
-const linkList = stores.pageNode.ElementList('//a');
-
-const length1 = linkList.getLength();
-const length2 = linkList.currently.getLength();
-
-// Returns `true` because `getLength()` and `currently.getLength() are the same.
-length1 === length2
-```
-
-Using the `wait.hasLength()` method, you can wait for `PageElementList` to have
-an expected length. `currently.hasLength()` allows you to check if `PageElementList` currently has an expected length and `eventually.hasLength()` lets you check if
-`PageElementList` eventually has an expected length within a specific timeout.
-
-The first parameter of each `hasLength()`
-
-hasLength (with comparators) and is empty with currently, wait, eventually
-
-getText etc of all elements - with filtermask
-
-### Reading the State of List Elements
-
-currently and class itself
-
-one of the elements in the list
-
-cannot know in advance how many elements are in the list - wait for at least one
-
-not when accessing .element
-
-### Checking the State of List Elements
-
-exists, isVisible, isEnabled
-hasValue
-other statate check funcs -> hasText take single value or array -> true
-if all match - filtermask???
-
-currently, wait, eventually -> link to page element guide
-
-not
-
-any and none
 
 ## ValuePageElementList
 

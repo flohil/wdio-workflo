@@ -620,10 +620,11 @@ Furthermore, page nodes also have a `currently` API to read or check the current
 
 #### Overview
 
-The `currently` API bypasses the implicit wait usually performed when invoking
-state retrieval methods of a page node class (e.g. `PageElement.getText()`).
+The `currently` API consists of state retrieval functions and state check functions.
+Invoking a state retrieval function on the `currently` API of a `PageElement` bypasses
+its implicit waiting.
 
-#### No Implicit Waiting
+#### State Retrieval Functions: No Implicit Waiting
 
 Let's take a look at the following code example to better understand the difference
 between invoking a state retrieval function directly on the `PageElement` class and
@@ -842,10 +843,10 @@ the expected state within the specified (or default) timeout.
 
 #### Defining `timeout` and `interval`
 
-The last parameter of a state check function defined on the `eventually` API of 
-`PageElement` always includes a `timeout` and an `interval` property. The `timeout` 
-property lets you define after how many milliseconds the state check function will 
-throw an error if the expected state was not reached. The `interval` property defines 
+The last parameter of a state check function defined on the `eventually` API of
+`PageElement` always includes a `timeout` and an `interval` property. The `timeout`
+property lets you define after how many milliseconds the state check function will
+throw an error if the expected state was not reached. The `interval` property defines
 how many milliseconds should pass between each evaluation of the expected state:
 
 ```typescript
