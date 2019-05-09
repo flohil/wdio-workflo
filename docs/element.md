@@ -172,6 +172,322 @@ contentMenuZone.currently.element.rightClick();
 *To learn more about the waiting mechanisms of `PageElement` read the following
 section of this guide.*
 
+## State Function Types
+
+The `PageElement` class offers plenty of methods to read or modify the state of
+its mapped/wrapped HTML element. These methods can be divided into three categories:
+
+- State Retrieval Functions
+- Action Functions
+- State Check Functions
+
+The following sections of this guide describe each of these function categories
+in full detail.
+
+### State Retrieval Functions
+
+#### Overview
+
+State retrieval functions retrieve the value of a specific attribute of the HTML
+element wrapped by `PageElement`. They are available either directly within the
+scope of the `PageElement` class or via the `currently` API. If invoked directly
+on the `PageElement` class, state retrieval functions trigger an
+[implicit wait](#implicit-waiting) before returning an attribute value, whereas
+calling a state retrieval function via the `currently` API does not trigger
+an implicit wait and returns the attribute value immediatly.
+
+#### Types of State Retrieval Functions
+
+State retrieval functions always start with the term `get`, followed by the name
+of the attribute whose value should be retrieved. However, not all methods of
+`PageElement` which start with the term `get` are state retrieval functions -
+methods that do not interact with the mapped HTML element (e.g. `getSelector()`,
+`getTimeout()` or `getTimeout()`) aren't state retrieval functions and therefore
+do not trigger the implicit waiting mechanism of `PageElement`.
+
+State retrieval functions exist for the following HTML attributes:
+
+- `Text` => All text content of an HTML element
+(also includes text of nested HTML elements).
+- `DirectText` => Text content that is a direct child of an HTML element
+(no nested HTML elements).
+- `HTML` => All HTML content of an HTML element.
+- `Class` => An HTML element's CSS classnames as a single string.
+- `Id` => The ID attribute of an HTML element.
+- `Name` => The name attribute of an HTML element.
+- `Location` => The coordinates of an HTML element in pixels (left top corner).
+- `X` => The X coordinate of an HTML element (left top corner).
+- `Y` => The Y coordinate of an HTML element (left top corner).
+- `Size` => The size of an HTML element in pixels.
+- `Width` => The width of an HTML element in pixels.
+- `Height` => The height of an HTML element in pixels.
+- `Value` => The value of an element like input, checkbox...
+(only available in `ValuePageElement` class).
+
+#### Usage Examples
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+const input = stores.pageNode.Input('//input'); // Input implements ValuePageElement
+
+// Retrieves the text of the element after performing an implicit wait.
+const text = element.getText();
+
+// Retrieves the text of the element immediatly, without performing an implicit wait.
+const currentText = element.currently.getText();
+
+// Retrieves the text of the input after performing an implicit wait.
+const value = input.getValue();
+
+// Retrieves the value of the element immediatly, without performing an implicit wait.
+const currentValue = input.currently.getValue();
+```
+
+### Action Functions
+
+#### Overview
+
+Action functions change the state of tested web application by interacting
+with the mapped HTML element of a `PageElement` - they could also be called
+state modification functions. Action functions are only available directly within
+the scope of `PageElement` and do not exist within its `currently`, `wait` or
+`eventually` APIs. Action functions always trigger an
+[implicit wait](#implicit-waiting) before interacting with the mapped HTML element.
+
+#### Types of State Check Functions
+
+Wdio-workflo ships with three action functions:
+
+- `click()` => Clicks on a mapped HTML element.
+- `scrollTo()` => Scrolls a mapped HTML element into view.
+- `setValue()` => Sets the value of an HTML element like input, dropdown, checkbox...
+(only available for `ValuePageElement` classes).
+
+// please read documentation of click() function for full description of all click options
+
+-> postcondition, customScroll:
+
+By defining customScroll, PageElement's default custom scrolling behavior can be overwritten.
+
+-> timeout, interval -> used to check postCondition
+
+elem.click({
+  postCondition: () => dialogs.confirm.currently.not.isVisible(),
+});
+
+`click`
+
+scrollTo
+
+elem.scrollTo({
+  directions: {
+    x: true,
+    y: true,
+  },
+});
+
+setValue
+
+checkbox.setValue(true)
+
+input.setValue('wdio')
+
+#### Usage Examples
+
+### State Check Functions
+
+#### Overview
+
+State check functions allow you to check wether a specific attribute of the HTML element
+mapped by a `PageElement` has an expected value. Each state check function is available
+under the same name in the `currently`, `wait` and `eventually` APIs. In the case of the
+`currently` API, the check occurs only once whereas the `wait` and `eventually` APIs
+regularly perform the check until it either returns true or until a predefined timeout
+is reached.
+
+#### Types of State Check Functions
+
+Most state check functions exist in three variants (where XXX is the name of the checked attribute):
+
+- `hasXXX(expectedValue)` to check if the attribute value equals an expected value.
+- `containsXXX(expectedValue)` to check if the attribute value contains an expected value.
+- `hasAnyXXX()` to check if the attribute has any value at all (is not empty).
+
+The HTML attributes supported by these three variants of state check functions are the
+same attributes which are also available for state retrieval functions:
+
+- `Text` => All text content of an HTML element (also includes text of nested HTML elements).
+- `DirectText` => Text content that is a direct child of an HTML element (no nested HTML elements).
+- `HTML` => All HTML content of an HTML element.
+- `Class` => An HTML element's CSS classnames as a single string.
+- `Id` => The ID attribute of an HTML element.
+- `Name` => The name attribute of an HTML element.
+- `Location` => The coordinates of an HTML element in pixels (left top corner).
+- `X` => The X coordinate of an HTML element (left top corner).
+- `Y` => The Y coordinate of an HTML element (left top corner).
+- `Size` => The size of an HTML element in pixels.
+- `Width` => The width of an HTML element in pixels.
+- `Height` => The height of an HTML element in pixels.
+- `Value` => The value of an element like input, checkbox... (only available in `ValuePageElement` class).
+
+Futhermore, there are three special state check functions to check if any arbitrary
+HTML attribute has an expected value:
+
+- `hasAttribute({name: 'attrName', value: 'expectedValue'})` to check if the value
+of an an attribute with a specific name matches an expected value.
+- `containsAttribute({name: 'attrName', value: 'expectedContainedValue'})` to check
+if the value of an attribute with a specific name contains an expected value.
+- `hasAnyAttribute('attrName')` to check if an attribute with a specific name has
+any value (is not empty/undefined).
+
+Besides, there are five state check functions that don't exist in three but only
+in one single variant:
+
+- `exists` to check if an HTML element exists in the DOM.
+- `isVisible` to check if the HTML element is visible
+(not obscured by another element or hidden by CSS styles).
+- `isEnabled` to check if the HTML element is enabled
+(can be interacted with - not disabled).
+- `isSelected` to check if an `<option>` HTML element is the selected option of a
+`<select>` element.
+- `isChecked` to check if an HTML `<input>` element has a `checked` HTML attribute set.
+
+#### Usage Examples
+
+Here are some code examples of state check functions for the `currently`, `wait`
+and `eventually` APIs:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+const input = stores.pageNode.Input('//input'); // Input implements ValuePageElement
+
+// Checks if the element currently exists in the DOM.
+element.currently.exists();
+
+// Waits until the element is visible.
+// Throws an error if element does not become visible within predefined timeout.
+element.wait.isVisible();
+
+// Checks if the element eventually has the text 'wdio'.
+element.eventually.hasText('wdio');
+
+// Checks if the element eventually has the value 'wdio'.
+input.eventually.hasValue('wdio');
+
+// Waits for the CSS class string of the element to contain 'active'.
+// Throws an error if condition is not met within a predefined timeout.
+element.wait.containsClass('active');
+
+// Checks if the element currently has the `readonly` HTML attribute set.
+element.currently.hasAnyAttribute('readonly');
+
+// Checks if the element's `role` attribute eventually equals 'activeOption'.
+element.eventually.hasAnyAttribute({name: 'role', value: 'activeOption'});
+```
+
+#### `not` Modifier
+
+Each state check function is also available in a negated version that checks
+for the opposite of an expected value. To use a state check function's negated
+version, you need to prepend the state check function with the `.not` modifier:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element('//div');
+const input = stores.pageNode.Input('//input'); // Input implements ValuePageElement
+
+// Checks if the element does currently not exist in the DOM.
+element.currently.not.exists();
+
+// Waits until the element is not/no longer visible.
+element.wait.not.isVisible();
+
+// Checks if the element eventually doesn't contain/no longer contains the text 'wdio'.
+element.eventually.not.containsText('wdio');
+
+// Checks if the element eventually doesn't contain/no longer contains the value 'wdio'.
+input.eventually.not.containsValue('wdio');
+```
+
+It is important to always use the `not` modifier instead of putting the
+`!` negation operator before your state check functions because these two approaches
+are not the same:
+
+The `!` operator executes your state check function as is and then negates its result,
+whereas the `not` modifier executes the negated version of your state check function.
+
+To better understand the difference between using the `not` modifier and the `!` negation
+operator, take a look at the following code examples for the `wait` and `eventually` APIs:
+
+*If you don't understand these code examples, consider reading the
+[Explicit Waiting: `currently`, `wait` and `eventually` section](#explicit-waiting-currently-wait-and-eventually)
+of this guide first!*
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(xpath('//div'));
+
+// This will wait for the text to become 'wdio-workflo' and throw an error if
+// the text stays anything other than 'wdio-workflo' until a timeout is reached.
+// If the text does become 'wdio-workflo', the return value of the function
+// (the element instance) will be negated which results in the value `false`.
+const r1 = !element.wait.hasText('wdio-workflo')
+
+// This will wait for the text to become anything other than 'wdio-workflo' and
+// throw an error if it stays 'wdio-workflo' until a timeout is reached.
+// The function returns the element itself (an instance of the PageElement class).
+const r2 = element.wait.not.hasText('wdio-workflo')
+
+// The following statements are all true because r1 !== r2.
+r1 === false
+r2 !== false
+(r1 instanceof PageElement) !== true
+(r2 instanceof PageElement) === true
+
+// This will work, because r2 is an instance of the PageElement class.
+r2.click()
+
+// This will not work, because the function 'click' does not exist on `false`.
+r1.click()
+```
+
+```typescript
+import { stores } from '?/page_objects';
+
+const element = stores.pageNode.Element(xpath('//div'));
+
+// Let's assume that the initial text of the element is 'wdio-workflo'!
+
+// The `hasText` function would immediately return `true`, but the return value
+// would then be negated by the `!` operator, resulting in the value `false`.
+!element.eventually.hasText('wdio-workflo', {timeout: 5000})
+
+// The `hasText` function would wait for 5 seconds for the text to become
+// 'wdio-workflo' and then return the value `false` if it did not.
+element.eventually.not.hasText('wdio-workflo', {timeout: 5000})
+
+// Now let's assume that after 2 seconds, the text of the element changes to
+// something other than 'wdio-workflo'.
+
+// Since `hasText` would immediately return `true` in this example and then
+// negate the return value, the result of this statement would be `false`.
+const r1 = !element.eventually.hasText('wdio-workflo', {timeout: 5000})
+
+// This statement would wait for 2 seconds until the text changes to something
+// other than 'wdio-workflo'. Then it would return `true`!!!
+const r2 = element.eventually.not.hasText('wdio-workflo', {timeout: 5000})
+
+// The following statements are all true because r1 !== r2.
+r1 === false
+r2 === true
+```
+
 ## Waiting Mechanisms
 
 ### Implicit Waiting
@@ -253,100 +569,6 @@ a `wait` API that offers you the ability to explicitly control when your tests s
 
 Furthermore, page nodes also have a `currently` API to read or check the current state of a mapped HTML element without performing an implicit wait, and an `eventually` API that lets you check if an HTML element reaches a certain state within a specific timeout.
 
-#### State check functions
-
-State check functions allow you to check wether a specific attribute of the HTML element mapped by a `PageElement` has an expected value. Each state check function is available under the same name in the `currently`, `wait` and `eventually` APIs. In the case of the
-`currently` API, the check occurs only once whereas the `wait` and `eventually`
-APIs regularly perform the check until it either returns true or until a predefined
-timeout is reached.
-
-Most state check functions exist in three variants (where XXX is the name of the checked attribute):
-
-- `hasXXX(expectedValue)` to check if the attribute value equals an expected value.
-- `containsXXX(expectedValue)` to check if the attribute value contains an expected value.
-- `hasAnyXXX()` to check if the attribute has any value at all (is not empty).
-
-For the following HTML attributes, state check functions exist in the these three variants:
-
-- `Text` => All text content of an HTML element (also includes text of nested HTML elements).
-- `DirectText` => Text content that is a direct child of an HTML element (no nested HTML elements).
-- `HTML` => All HTML content of an HTML element.
-- `Class` => An HTML element's CSS classnames as a single string.
-- `Id` => The ID attribute of an HTML element.
-- `Name` => The name attribute of an HTML element.
-- `Location` => The coordinates of an HTML element in pixels (left top corner).
-- `X` => The X coordinate of an HTML element (left top corner).
-- `Y` => The Y coordinate of an HTML element (left top corner).
-- `Size` => The size of an HTML element in pixels.
-- `Width` => The width of an HTML element in pixels.
-- `Height` => The height of an HTML element in pixels.
-- `Value` => The value of an element like input, checkbox... (only available in `ValuePageElement` class).
-
-Futhermore, there are three special state check functions to check if any arbitrary
-HTML attribute has an expected value:
-
-- `hasAttribute({name: 'attrName', value: 'expectedValue'})` to check if the value of an an attribute with a specific name matches an expected value.
-- `containsAttribute({name: 'attrName', value: 'expectedContainedValue'})` to check
-if the value of an attribute with a specific name contains an expected value.
-- `hasAnyAttribute('attrName')` to check if an attribute with a specific name has any value (is not empty/undefined)
-
-Besides, there are five state check functions that don't exist in three variants:
-
-- `exists` to check if an HTML element exists in the DOM.
-- `isVisible` to check if the HTML element is visible (not obscured by another element or hidden by CSS styles).
-- `isEnabled` to check if the HTML element is enabled (can be interacted with - not disabled).
-- `isSelected` to check if an `<option>` HTML element is the selected option of a `<select>` element.
-- `isChecked` to check if an HTML `<input>` element has a `checked` HTML attribute set.
-
-Here are some code examples of state check functions for the `currently`, `wait`
-and `eventually` APIs:
-
-```typescript
-import { stores } from '?/page_objects';
-
-const element = stores.pageNode.Element('//div');
-
-// Checks if the element currently exists in the DOM.
-element.currently.exists();
-
-// Waits until the element is visible.
-// Throws an error if element does not become visible within predefined timeout.
-element.wait.isVisible();
-
-// Checks if the element eventually has the text 'wdio'.
-element.eventually.hasText('wdio');
-
-// Waits for the CSS class string of the element to contain 'active'.
-// Throws an error if condition is not met within a predefined timeout.
-element.wait.containsClass('active');
-
-// Checks if the element currently has the `readonly` HTML attribute set.
-element.currently.hasAnyAttribute('readonly');
-
-// Checks if the element's `role` attribute eventually equals 'activeOption'.
-element.eventually.hasAnyAttribute({name: 'role', value: 'activeOption'});
-```
-
-Each state check function is also available in a negated version that checks
-for the opposite of an expected value. To use a state check function's negated
-version, you need to prepend the state check function with the `.not` modifier:
-
-#### NOT Modifier for State Check Functions
-
-```typescript
-import { stores } from '?/page_objects';
-
-const element = stores.pageNode.Element('//div');
-
-// Checks if the element does currently not exist in the DOM.
-element.currently.not.exists();
-
-// Waits until the element is not/no longer visible.
-element.wait.not.isVisible();
-
-// Checks if the element eventually doesn't contain/no longer contains the text 'wdio'.
-element.eventually.not.containsText('wdio');
-```
 
 #### The `currently` API
 
@@ -519,74 +741,6 @@ const element = stores.pageNode.Element(
 );
 
 element.eventually.not.hasText('icebears')
-```
-
-#### Always use the `not` Accessor instead of the `!` Operator
-
-It is important to always use the `not` accessor instead of putting the
-`!` negation operator before your state check functions. These two approaches
-are not the same: The `!` operator executes your state check function as is and then negates its result, whereas the `not` accessor executes the negated version of your state check function.
-
-To better understand the difference between using the `not` accessor and the `!` negation operator, take a look at the following code examples:
-
-```typescript
-import { stores } from '?/page_objects';
-
-const element = stores.pageNode.Element(xpath('//div'));
-
-// This will wait for the text to become 'wdio-workflo' and throw an error if
-// the text stays anything other than 'wdio-workflo' until a timeout is reached.
-// If the text does become 'wdio-workflo', the return value of the function
-// (the element instance) will be negated which results in the value `false`.
-const r1 = !element.wait.hasText('wdio-workflo')
-
-// This will wait for the text to become anything other than 'wdio-workflo' and
-// throw an error if it stays 'wdio-workflo' until a timeout is reached.
-// The function returns the element itself (an instance of the PageElement class).
-const r2 = element.wait.not.hasText('wdio-workflo')
-
-// The following statements are all true because r1 !== r2.
-r1 === false
-r2 !== false
-(r1 instanceof PageElement) !== true
-(r2 instanceof PageElement) === true
-
-// This will work, because r2 is an instance of the PageElement class.
-r2.click()
-
-// This will not work, because the function 'click' does not exist on `false`.
-r1.click()
-```
-
-```typescript
-import { stores } from '?/page_objects';
-
-const element = stores.pageNode.Element(xpath('//div'));
-
-// Let's assume that the initial text of the element is 'wdio-workflo'!
-
-// The `hasText` function would immediately return `true`, but the return value
-// would then be negated by the `!` operator, resulting in the value `false`.
-!element.eventually.hasText('wdio-workflo', {timeout: 5000})
-
-// The `hasText` function would wait for 5 seconds for the text to become
-// 'wdio-workflo' and then return the value `false` if it did not.
-element.eventually.not.hasText('wdio-workflo', {timeout: 5000})
-
-// Now let's assume that after 2 seconds, the text of the element changes to
-// something other than 'wdio-workflo'.
-
-// Since `hasText` would immediately return `true` in this example and then
-// negate the return value, the result of this statement would be `false`.
-const r1 = !element.eventually.hasText('wdio-workflo', {timeout: 5000})
-
-// This statement would wait for 2 seconds until the text changes to something
-// other than 'wdio-workflo'. Then it would return `true`!!!
-const r2 = element.eventually.not.hasText('wdio-workflo', {timeout: 5000})
-
-// The following statements are all true because r1 !== r2.
-r1 === false
-r2 === true
 ```
 
 ## The `ValuePageElement` Class
