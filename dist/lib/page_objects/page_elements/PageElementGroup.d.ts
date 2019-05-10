@@ -160,7 +160,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
+    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the 'hasText' status of all PageNodes managed by PageElementGroup as a result structure after executing
      * the initial waiting condition of each PageNode.
@@ -371,21 +371,21 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      * @param filterMask can be used to skip the invocation of the `getExists` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
+    getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the current 'visible' status of all PageNodes managed by PageElementGroup as a result structure.
      *
      * @param filterMask can be used to skip the invocation of the `getIsVisible` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
+    getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the current 'enabled' status of all PageNodes managed by PageElementGroup as a result structure.
      *
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
+    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the current 'hasText' status of all PageNodes managed by PageElementGroup as a result structure.
      *

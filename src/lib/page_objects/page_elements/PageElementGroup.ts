@@ -211,7 +211,7 @@ implements ElementNode<Content> {
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
+    return this.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode, ({ node, filter }) => node.getIsEnabled(filter), filterMask,
     );
   }
@@ -649,7 +649,7 @@ export class PageElementGroupCurrently<
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
+    return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode, ({ node, filter }) => node.currently.getExists(filter), filterMask,
     );
   }
@@ -661,7 +661,7 @@ export class PageElementGroupCurrently<
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
+    return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode, ({ node, filter }) => node.currently.getIsVisible(filter), filterMask,
     );
   }
@@ -673,7 +673,7 @@ export class PageElementGroupCurrently<
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
+    return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
       isIElementNode, ({ node, filter }) => node.currently.getIsEnabled(filter), filterMask,
     );
   }

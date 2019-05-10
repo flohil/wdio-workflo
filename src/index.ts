@@ -2233,8 +2233,15 @@ declare global {
        * content. For a PageElement, the extracted return value type will be `string`.
        */
       type ExtractText<T extends {[key in keyof T]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-          ReturnType<T[P]['getText']> : never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends PageElementGroup<any, any>
+            ? NodeType extends PageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractText<NodeType['$']>
+              : never
+            : ReturnType<T[P]['getText']>
+          : never
+        : never
       };
 
       /**
@@ -2244,8 +2251,15 @@ declare global {
        * an array of strings.
        */
       type ExtractTextStateChecker<T extends {[key in keyof T]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-          TryArrayOrElement<ReturnType<T[P]['getText']>> : never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends PageElementGroup<any, any>
+            ? NodeType extends PageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractTextStateChecker<NodeType['$']>
+              : never
+            : TryArrayOrElement<ReturnType<T[P]['getText']>>
+          : never
+        : never
       };
 
       /**
@@ -2255,8 +2269,15 @@ declare global {
        * an array of booleans.
        */
       type ExtractExistsFilterMask<T extends {[key in keyof T]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-          TryArrayElement<ReturnType<T[P]['currently']['getExists']>> : never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends PageElementGroup<any, any>
+            ? NodeType extends PageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractExistsFilterMask<NodeType['$']>
+              : never
+            : TryArrayOrElement<ReturnType<T[P]['currently']['getExists']>>
+          : never
+        : never
       };
 
       /**
@@ -2264,8 +2285,15 @@ declare global {
        * PageElementGroup's content. For a PageElement, the extracted return value type will be `boolean`.
        */
       type ExtractBoolean<T extends {[key in keyof T]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-          ReturnType<T[P]['getIsEnabled']> : never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends PageElementGroup<any, any>
+            ? NodeType extends PageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractBoolean<NodeType['$']>
+              : never
+            : ReturnType<T[P]['getIsEnabled']>
+          : never
+        : never
       };
 
       /**
@@ -2276,8 +2304,15 @@ declare global {
        * an array of booleans.
        */
       type ExtractBooleanStateChecker<T extends {[key in keyof T]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ?
-          TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
+        -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends PageElementGroup<any, any>
+            ? NodeType extends PageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractBooleanStateChecker<NodeType['$']>
+              : never
+            : TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>>
+          : never
+        : never
       };
 
       /**
@@ -2819,8 +2854,15 @@ declare global {
        * ValuePageElementGroup's content.
        */
       type ExtractValue<T extends {[key: string]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
-          ReturnType<T[P]['getValue']> : never;
+        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends ValuePageElementGroup<any, any>
+            ? NodeType extends ValuePageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractValue<NodeType['$']>
+              : never
+            : ReturnType<T[P]['getValue']>
+          : never
+        : never
       };
 
       /**
@@ -2830,8 +2872,15 @@ declare global {
        * an array of values.
        */
       type ExtractValueStateChecker<T extends {[key: string]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
-          TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
+        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends ValuePageElementGroup<any, any>
+            ? NodeType extends ValuePageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractValueStateChecker<NodeType['$']>
+              : never
+            : TryArrayOrElement<ReturnType<T[P]['getValue']>>
+          : never
+        : never
       };
 
       /**
@@ -2839,8 +2888,15 @@ declare global {
        * ValuePageElementGroup's content. For a ValuePageElement, the extracted return value type will be `boolean`.
        */
       type ExtractValueBoolean<T extends {[key in keyof T]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
-          ReturnType<T[P]['getHasValue']> : never;
+        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends ValuePageElementGroup<any, any>
+            ? NodeType extends ValuePageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractValueBoolean<NodeType['$']>
+              : never
+            : ReturnType<T[P]['getHasValue']>
+          : never
+        : never
       };
 
       /**
@@ -2851,8 +2907,15 @@ declare global {
        * single boolean or an array of booleans.
        */
       type ExtractValueBooleanStateChecker<T extends {[key in keyof T]: IPageNode}> = {
-        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ?
-          TryArrayOrElement<ReturnType<T[P]['getHasValue']>> : never;
+        -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any>
+        ? T[P] extends (infer NodeType)
+          ? NodeType extends ValuePageElementGroup<any, any>
+            ? NodeType extends ValuePageElementGroup<any, NodeType['$']> // NodeType['$'] infers the content of subgroups
+              ? ExtractValueBooleanStateChecker<NodeType['$']>
+              : never
+            : TryArrayOrElement<ReturnType<T[P]['getHasValue']>>
+          : never
+        : never
       };
 
       /**
@@ -4218,6 +4281,8 @@ export { pageObjects, helpers };
  * @ignore
  */
 import Kiwi from './lib/Kiwi';
+import { ValuePageElementGroup } from './lib/page_objects/page_elements/ValuePageElementGroup';
+import { PageElementGroup } from './lib/page_objects/page_elements/PageElementGroup';
 
 /**
  * @ignore

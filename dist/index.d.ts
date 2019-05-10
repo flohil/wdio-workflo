@@ -2093,7 +2093,7 @@ declare global {
             type ExtractText<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getText']> : never;
+                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? T[P] extends (infer NodeType) ? NodeType extends PageElementGroup<any, any> ? NodeType extends PageElementGroup<any, NodeType['$']> ? ExtractText<NodeType['$']> : never : ReturnType<T[P]['getText']> : never : never;
             };
             /**
              * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
@@ -2104,7 +2104,7 @@ declare global {
             type ExtractTextStateChecker<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getText']>> : never;
+                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? T[P] extends (infer NodeType) ? NodeType extends PageElementGroup<any, any> ? NodeType extends PageElementGroup<any, NodeType['$']> ? ExtractTextStateChecker<NodeType['$']> : never : TryArrayOrElement<ReturnType<T[P]['getText']>> : never : never;
             };
             /**
              * Extracts the return value types of the `currently.getExists` functions of all PageNodes defined within a
@@ -2115,7 +2115,7 @@ declare global {
             type ExtractExistsFilterMask<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayElement<ReturnType<T[P]['currently']['getExists']>> : never;
+                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? T[P] extends (infer NodeType) ? NodeType extends PageElementGroup<any, any> ? NodeType extends PageElementGroup<any, NodeType['$']> ? ExtractExistsFilterMask<NodeType['$']> : never : TryArrayOrElement<ReturnType<T[P]['currently']['getExists']>> : never : never;
             };
             /**
              * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
@@ -2124,7 +2124,7 @@ declare global {
             type ExtractBoolean<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getIsEnabled']> : never;
+                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? T[P] extends (infer NodeType) ? NodeType extends PageElementGroup<any, any> ? NodeType extends PageElementGroup<any, NodeType['$']> ? ExtractBoolean<NodeType['$']> : never : ReturnType<T[P]['getIsEnabled']> : never : never;
             };
             /**
              * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
@@ -2136,7 +2136,7 @@ declare global {
             type ExtractBooleanStateChecker<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
+                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? T[P] extends (infer NodeType) ? NodeType extends PageElementGroup<any, any> ? NodeType extends PageElementGroup<any, NodeType['$']> ? ExtractBooleanStateChecker<NodeType['$']> : never : TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never : never;
             };
             /**
              * This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.
@@ -2685,7 +2685,7 @@ declare global {
             type ExtractValue<T extends {
                 [key: string]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getValue']> : never;
+                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? T[P] extends (infer NodeType) ? NodeType extends ValuePageElementGroup<any, any> ? NodeType extends ValuePageElementGroup<any, NodeType['$']> ? ExtractValue<NodeType['$']> : never : ReturnType<T[P]['getValue']> : never : never;
             };
             /**
              * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
@@ -2696,7 +2696,7 @@ declare global {
             type ExtractValueStateChecker<T extends {
                 [key: string]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
+                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? T[P] extends (infer NodeType) ? NodeType extends ValuePageElementGroup<any, any> ? NodeType extends ValuePageElementGroup<any, NodeType['$']> ? ExtractValueStateChecker<NodeType['$']> : never : TryArrayOrElement<ReturnType<T[P]['getValue']>> : never : never;
             };
             /**
              * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
@@ -2705,7 +2705,7 @@ declare global {
             type ExtractValueBoolean<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getHasValue']> : never;
+                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? T[P] extends (infer NodeType) ? NodeType extends ValuePageElementGroup<any, any> ? NodeType extends ValuePageElementGroup<any, NodeType['$']> ? ExtractValueBoolean<NodeType['$']> : never : ReturnType<T[P]['getHasValue']> : never : never;
             };
             /**
              * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
@@ -2717,7 +2717,7 @@ declare global {
             type ExtractValueBooleanStateChecker<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
-                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getHasValue']>> : never;
+                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? T[P] extends (infer NodeType) ? NodeType extends ValuePageElementGroup<any, any> ? NodeType extends ValuePageElementGroup<any, NodeType['$']> ? ExtractValueBooleanStateChecker<NodeType['$']> : never : TryArrayOrElement<ReturnType<T[P]['getHasValue']>> : never : never;
             };
             /**
              * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
@@ -3982,6 +3982,8 @@ export { pageObjects, helpers };
  * @ignore
  */
 import Kiwi from './lib/Kiwi';
+import { ValuePageElementGroup } from './lib/page_objects/page_elements/ValuePageElementGroup';
+import { PageElementGroup } from './lib/page_objects/page_elements/PageElementGroup';
 /**
  * @ignore
  */
