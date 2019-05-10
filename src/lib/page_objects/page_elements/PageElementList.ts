@@ -778,8 +778,10 @@ implements Workflo.PageNode.IElementNode<string[], boolean[], boolean> {
           }
         }
       } else {
-        if (!checkFunc(element, _expected)) {
-          diffs[`[${i + 1}]`] = element.__lastDiff;
+        if (typeof _expected !== 'undefined') {
+          if (!checkFunc(element, _expected)) {
+            diffs[`[${i + 1}]`] = element.__lastDiff;
+          }
         }
       }
     }

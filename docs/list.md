@@ -404,6 +404,75 @@ any and none
 
 ### State Check Functions
 
+
+### Filter Masks
+
+The `PageElementList` filter mask allows you to restrict the execution of a
+state retrieval, action or state check function to certain managed `PageElement`
+instances.
+
+You can set the `PageElementList` filter mask to a boolean value or an array of
+boolean values:
+
+- If the filter mask is set to `true`, the corresponding function will be executed
+for all managed `PageElement` instances of a `PageElementList` (in this case you
+could omit the filter mask altogether).
+- If the filter mask is set to `false`, the corresponding function will be skipped
+for all managed `PageElement` instances of a `PageElementList` (this can be helpful
+when using a `PageElementList` inside the content of a `PageElementGroup`.)
+- If the filter mask is set to an array of booleans, a value of `true` means that
+the function will be executed for the corresponding `PageElement` and a value of
+`false` means that it will be skipped. The length of the filter mask array needs
+to match the number of `PageElement` instances managed by the list.
+
+The filter mask can be set via the last parameter of a function.
+If a function has other optional parameters, the filter mask can be defined via
+the `filterMask` property of the `opts` parameter (which is always the last
+function parameter). Otherwise, the filter mask itself represents the last function
+parameter.
+
+Here are some examples for how to use a `PageElementList` filter mask:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+// `texts` will be an array of two strings, because the result of the second,
+// skipped page element is not included in the result. `linkList` needs to
+// managed three page element instances in order for this to work correctly.
+const texts = linkList.getText([true, false, true]);
+
+// Since the filter mask is set to `true`, all elements of the `linkList` will
+// be clicked.
+linkList.eachDo(
+  element => element.click(),
+  true
+);
+
+// There are other optional parameters like `timeout`, therefore the filter mask
+// is defined via the `filterMask` property of the `opts` parameter.
+// Since the value of the filter mask is `false`, the invocation of `hasAnyText()`
+// will be skipped for all elements of `linkList`.
+linkList.eventually.hasAnyText({ timeout: 3000, filterMask: false });
+```
+
+Filter masks are not available for state check functions that require you to pass
+the expected attribute values as parameter, e.g. `hasText(texts)` or `containsValue(values)`.
+In these cases, you can skip the execution of the state check function for a certain `PageElement` instance by setting its corresponding value in the array of expected
+attribute values to `undefined`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+// The invocation of the `hasText` function for the second managed page element
+// of `linkList` will be skipped. The function returns true if the text of the first
+// element equals 'First Link' and the text of the third element equals 'Third Link'.
+const result = linkList.currently.hasText(['First Link', undefined, 'Third Link']);
+```
+
 ## Waiting Mechanisms
 
 ### Implicit Waiting
@@ -466,8 +535,8 @@ waits for all managed `PageElement` instances to reach their expected state.
 If one or more `PageElement` instance fail to reach their expected state within
 a specific timeout, an error will be thrown.
 
-The `timeout` within which the expected states of the `PageElement` instances must 
-be reached applies to each `PageElement` instance individually. So, if the `timeout` 
+The `timeout` within which the expected states of the `PageElement` instances must
+be reached applies to each `PageElement` instance individually. So, if the `timeout`
 was 3000 milliseconds, each `PageElement` instance managed by the list is allowed
 to take up to 3 seconds to reach its expected state:
 
@@ -499,24 +568,24 @@ please read the [`wait` API section](element.md#the-wait-api) of the `PageElemen
 
 ### The `eventually` API
 
-The `eventually` API of the `PageElementList` class checks if some or all of 
-the `PageElement` instances managed by a `PageElementList` eventually reach an 
+The `eventually` API of the `PageElementList` class checks if some or all of
+the `PageElement` instances managed by a `PageElementList` eventually reach an
 expected state within a specific timeout. It consists of state check functions only
 that return `true` if all `PageElement` instances for which the state check function
 was executed eventually reached the expected state within the timeout. Otherwise,
 `false` will be returned.
 
-If you use a filtermask, the `eventually` API only checks the state of `PageElement` 
+If you use a filtermask, the `eventually` API only checks the state of `PageElement`
 instances which are included by the filter mask. Otherwise, the `eventually` API
 checks the state of all managed `PageElement` instances.
 
-Like for the `wait` API, the `timeout` within which the expected states of the 
-`PageElement` instances must be reached applies to each `PageElement` instance 
+Like for the `wait` API, the `timeout` within which the expected states of the
+`PageElement` instances must be reached applies to each `PageElement` instance
 individually.
 
 For more information on how to configure the `timeout` and `interval` of
 state check functions defined on the `eventually` API of a page node class,
-please read the [`eventually` API section](element.md#the-eventually-api) of the 
+please read the [`eventually` API section](element.md#the-eventually-api) of the
 `PageElement` guide.
 
 ## ValuePageElementList
