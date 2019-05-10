@@ -1521,7 +1521,7 @@ interface IMapMatchers<K extends string> extends ICustomMapMatchers<K> {
  * @template Content the type of the content managed by the group
  */
 interface IGroupMatchers<
-  Content extends {[key: string]: Workflo.PageNode.IPageNode}
+  Content extends Workflo.PageNode.GroupContent
 > extends ICustomGroupMatchers<Content> {
   not: ICustomGroupMatchers<Content>;
 }
@@ -1604,7 +1604,7 @@ declare global {
     PageElementType extends pageObjects.elements.PageElement<Store>,
     ValueType
   >(element: PageElementType): (typeof element) extends (infer ElementType) ?
-    ElementType extends pageObjects.elements.ValuePageElement<any, ValueType> ?
+    ElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ?
     IValueElementMatchers<ReturnType<ElementType['getValue']>> :
     IElementMatchers : IElementMatchers;
 
@@ -1617,6 +1617,8 @@ declare global {
    * @template PageElementType type of the element's handled by the passed list
    * @template PageElementOptions options type of the element's handled by the passed list
    * @template PageElementListType type of the passed list
+   * @template ValueType If the passed list is an instance of ValuePageElementList, this is the type of the values
+   * handled in the xxxValue functions of the elements managed by the list.
    *
    * @param list an instance of PageElementList or an instance of ValuePageElementList
    * @returns the expectation matchers for PageElementList or ValuePageElementList
@@ -1626,9 +1628,10 @@ declare global {
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
     PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>,
+    ValueType
   >(list: PageElementListType): (typeof list) extends (infer ListType) ?
     ListType extends pageObjects.elements.ValuePageElementList<
-      any, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
+      Store, pageObjects.elements.ValuePageElement<Store, ValueType>, PageElementOptions, ValueType
     > ?
     IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
 
@@ -1642,6 +1645,8 @@ declare global {
    * @template PageElementType type of the element's handled by the passed map
    * @template PageElementOptions options type of the element's handled by the passed map
    * @template PageElementMapType type of the passed map
+   * @template ValueType If the passed map is an instance of ValuePageElementMap, this is the type of the values
+   * handled in the xxxValue functions of the elements managed by the map.
    *
    * @param map an instance of PageElementMap or an instance of ValuePageElementMap
    * @returns the expectation matchers for PageElementMap or ValuePageElementMap
@@ -1652,11 +1657,12 @@ declare global {
     PageElementType extends pageObjects.elements.PageElement<Store>,
     PageElementOptions,
     PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>,
+    ValueType
   >(map: PageElementMapType): (typeof map) extends (infer MapType) ?
     MapType extends pageObjects.elements.ValuePageElementMap<
-      any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any
+      Store, K, pageObjects.elements.ValuePageElement<Store, ValueType>, PageElementOptions, any
     > ?
-    IValueMapMatchers<Extract<keyof MapType['$'], string>, ReturnType<MapType['getValue']>[keyof MapType['$']]> :
+    IValueMapMatchers<Extract<keyof typeof map['$'], string>, ReturnType<MapType['getValue']>[keyof typeof map['$']]> :
     IMapMatchers<Extract<keyof typeof map['$'], string>> : IMapMatchers<Extract<keyof typeof map['$'], string>>;
 
   /**
@@ -1676,8 +1682,8 @@ declare global {
     Content extends Workflo.PageNode.GroupContent,
     PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>
   >(group: PageElementGroupType): (typeof group) extends (infer GroupType) ?
-    GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ?
-    IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
+    GroupType extends pageObjects.elements.ValuePageElementGroup<Store, Content> ?
+    IValueGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
 
   /**
    * This function provides expectation matchers for Pages.
