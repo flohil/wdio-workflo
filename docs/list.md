@@ -290,6 +290,8 @@ linkList.elements.value.forEach(
 
 ## State Functions
 
+included by the filtermask
+
 state retrieval
 
 getText  -> returns array where each array element corresponds to result
@@ -374,6 +376,11 @@ getText etc of all elements - with filtermask
 
 ### State Retrieval Functions
 
+State retrieval functions of the `currently` API return the values of the
+retrieved attribute as an array, where the position of the value in the array
+corresponds to the index of the managed `PageElement` instance in the list.
+
+
 currently and class itself
 
 one of the elements in the list
@@ -402,7 +409,9 @@ any and none
 ### Implicit Waiting
 
 `PageElementList` does not have an implicit waiting mechanism of its own.
-However, if you invoke a state retrieval or action function on a `PageElement` instance managed by a `PageElementList`, the [implicit waiting mechanism of the `PageElement`](element#implicit-waiting) will be triggered.
+However, if you invoke a state retrieval or action function on a `PageElement`
+instance  managed by a `PageElementList`, the
+[implicit waiting mechanism of the `PageElement`](element#implicit-waiting) will be triggered.
 
 The publicly configurable `opts` parameter of the `ElementList()` factory method
 provides an `elementOpts.waitType` property which allows you to define the `waitType`
@@ -427,44 +436,88 @@ linkList.all.forEach(
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 
 The explicit waiting mechanisms of `PageElementList` are very similar to the
-ones used by `PageElement` and you should read about them in the [Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually) section of the
+ones used by `PageElement` and you should read about them in the
+[Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually) section of the
 [`PageElement` guide](element.md) before you continue reading this guide.
 
-#### `currently`
+### The `currently` API
 
 Like the [`currently` API of `PageElement`](element.md#state-retrieval-functions-no-implicit-waiting),
 the `currently` API of the `PageElementList` class consists of state retrieval functions
-and state check functions.
+and state check function. It does not trigger an implicit wait on the managed `PageElement`
+instances of the `PageElementList`.
 
-if all elements have expected state,
-or if filtermask is defined: all elements that match filtermask
+To see how state retrieval and state check functions behave for a `PageElementList`,
+please read the [State Function Types section](#state-function-types) of this guide.
+The types of available state retrieval and state check functions can be found
+in the [State Function Types section](element.md#state-function-types) of the
+page element guide.
 
-type of available state retrieval and state check functions can be found
-in the state function types section of page element guide
+### The `wait` API
 
-#### `wait`
+The `wait` API of the `PageElementList` class allows you to explicitly wait
+for some or all of the list's managed `PageElement` instances to have an expected
+state. It consists of state check functions only which all return an instance
+of the `PageElementList`.
 
-wait returns instnace of pagelementlist
+If you use a filtermask, the `wait` API only waits for the `PageElement` instances
+included by the filter mask to reach an expected state. Otherwise, the `wait` API
+waits for all managed `PageElement` instances to reach their expected state.
+If one or more `PageElement` instance fail to reach their expected state within
+a specific timeout, an error will be thrown.
 
-timeout bezieht sich auf jedes einzelne element
+The `timeout` within which the expected states of the `PageElement` instances must 
+be reached applies to each `PageElement` instance individually. So, if the `timeout` 
+was 3000 milliseconds, each `PageElement` instance managed by the list is allowed
+to take up to 3 seconds to reach its expected state:
 
-#### `eventually`
+```typescript
+import { stores } from '?/page_objects';
 
-timeout bezieht sich auf jedes einzelne element
+const linkList = stores.pageNode.ElementList('//a');
 
-`PageElementList` provides a `wait` API that offers you the ability to explicitly
-wait for one or more of its page elements to reach a certain state.
+// The length of the filtermask must match the number of elements managed by the list.
+// Therefore, we know the list manages 3 elements. Out of these 3 elements,
+// only the first and the third element are included by the filter mask.
+// Each of these
+linkList.wait.hasAnyText({
+  timeout: 3000,
+  filterMask: [true, false, true]
+});
+```
 
-Furthermore, `PageElementList` ships with a `currently` API to read or check
-the current state of its page elements without performing an implicit wait,
-and an `eventually` API that lets you check if its page elements reach a certain
-state within a specific timeout.
+In the code example above, we know that the list manages three elements because
+the length of the `filterMask` array always needs to equal the number of elements
+managed by the list. Out of these three element, only the first and the third
+element are included by the filter mask. Each of these elements can take up to
+3 seconds to have any text. Therefore, the `hasAnyText` state check function
+invoke of the `wait` API of `linkList` can take a maximum of 6 seconds.
 
-You can find more details about the state check functions of a list's
-`currently`, `wait` and `eventually` APIs in the following section of this guide.
+For more information on how to configure the `timeout` and `interval` of
+state check functions defined on the `wait` API of a page node class,
+please read the [`wait` API section](element.md#the-wait-api) of the `PageElement` guide.
 
+### The `eventually` API
 
+The `eventually` API of the `PageElementList` class checks if some or all of 
+the `PageElement` instances managed by a `PageElementList` eventually reach an 
+expected state within a specific timeout. It consists of state check functions only
+that return `true` if all `PageElement` instances for which the state check function
+was executed eventually reached the expected state within the timeout. Otherwise,
+`false` will be returned.
 
+If you use a filtermask, the `eventually` API only checks the state of `PageElement` 
+instances which are included by the filter mask. Otherwise, the `eventually` API
+checks the state of all managed `PageElement` instances.
+
+Like for the `wait` API, the `timeout` within which the expected states of the 
+`PageElement` instances must be reached applies to each `PageElement` instance 
+individually.
+
+For more information on how to configure the `timeout` and `interval` of
+state check functions defined on the `eventually` API of a page node class,
+please read the [`eventually` API section](element.md#the-eventually-api) of the 
+`PageElement` guide.
 
 ## ValuePageElementList
 
