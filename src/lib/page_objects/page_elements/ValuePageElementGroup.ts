@@ -14,11 +14,31 @@ import { PageNodeStore } from '../stores';
 type ExtractValue<Content extends {[key: string]: Workflo.PageNode.IPageNode}> = Workflo.PageNode.ExtractValue<Content>;
 
 /**
+ * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
+ * ValuePageElementGroup's content for state check functions and the setValue function.
+ * Compared to `ExtractValue`, this will allow ta PageElementList to pass either a single value or
+ * an array of values.
+ */
+type ExtractValueStateChecker<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
+Workflo.PageNode.ExtractValueStateChecker<Content>;
+
+
+/**
  * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
  * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
  */
 type ExtractValueBoolean<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
 Workflo.PageNode.ExtractValueBoolean<Content>;
+
+/**
+ * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
+ * ValuePageElementGroup's content for state check functions. For a ValuePageElement, the extracted
+ * return value type will be `boolean`.
+ * Compared to `ExtractValueBoolean`, this will allow a ValuePageElementList to pass either a
+ * single boolean or an array of booleans.
+ */
+type ExtractValueBooleanStateChecker<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
+Workflo.PageNode.ExtractValueBooleanStateChecker<Content>;
 
 /**
  * This interface is implemented by ValuePageElement, ValuePageElementList, ValuePageElementMap and
@@ -38,7 +58,9 @@ Workflo.PageNode.ExtractValueBoolean<Content>;
  * - containsValue
  */
 type ValueElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode}> =
-Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>;
+Workflo.PageNode.IValueElementNode<
+  ExtractValue<Content> | ExtractValueStateChecker<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>
+>;
 
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementGroup.
@@ -112,8 +134,10 @@ implements ValueElementNode<Content> {
    *
    * @param values the expected values used in the comparisons which set the 'hasValue' status
    */
-  getHasValue(values: ExtractValue<Content>) {
-    return this.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+  getHasValue(values: ExtractValueStateChecker<Content>) {
+    return this.eachCompare<
+      ValueElementNode<Content>, ExtractValueStateChecker<Content>, ExtractValueBoolean<Content>
+    > (
       isIValueElementNode, ({ node, expected }) => node.getHasValue(expected), values,
     );
   }
@@ -143,8 +167,10 @@ implements ValueElementNode<Content> {
    *
    * @param values the expected values used in the comparisons which set the 'containsValue' status
    */
-  getContainsValue(values: ExtractValue<Content>) {
-    return this.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+  getContainsValue(values: ExtractValueStateChecker<Content>) {
+    return this.eachCompare<
+      ValueElementNode<Content>, ExtractValueStateChecker<Content>, ExtractValueBoolean<Content>
+    > (
       isIValueElementNode, ({ node, expected }) => node.getContainsValue(expected), values,
     );
   }
@@ -155,8 +181,8 @@ implements ValueElementNode<Content> {
    *
    * @param values a structure of setter values
    */
-  setValue(values: ExtractValue<Content>) {
-    return this.eachSet<ValueElementNode<Content>, ExtractValue<Content>> (
+  setValue(values: ExtractValueStateChecker<Content>) {
+    return this.eachSet<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
       isIValueElementNode, ({ node, value }) => node.setValue(value), values,
     );
   }
@@ -198,8 +224,10 @@ class ValuePageElementGroupCurrently<
    *
    * @param values the expected values used in the comparisons which set the 'hasValue' status
    */
-  getHasValue(values: ExtractValue<Content>) {
-    return this._node.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+  getHasValue(values: ExtractValueStateChecker<Content>) {
+    return this._node.eachCompare<
+      ValueElementNode<Content>, ExtractValueStateChecker<Content>, ExtractValueBoolean<Content>
+    > (
       isIValueElementNode, ({ node, expected }) => node.currently.getHasValue(expected), values,
     );
   }
@@ -227,8 +255,10 @@ class ValuePageElementGroupCurrently<
    *
    * @param values the expected values used in the comparisons which set the 'containsValue' status
    */
-  getContainsValue(values: ExtractValue<Content>) {
-    return this._node.eachCompare<ValueElementNode<Content>, ExtractValue<Content>, ExtractValueBoolean<Content>> (
+  getContainsValue(values: ExtractValueStateChecker<Content>) {
+    return this._node.eachCompare<
+      ValueElementNode<Content>, ExtractValueStateChecker<Content>, ExtractValueBoolean<Content>
+    > (
       isIValueElementNode, ({ node, expected }) => node.currently.getContainsValue(expected), values,
     );
   }
@@ -239,8 +269,8 @@ class ValuePageElementGroupCurrently<
    *
    * @param values the expected values supposed to equal the actual values
    */
-  hasValue(values: ExtractValue<Content>) {
-    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+  hasValue(values: ExtractValueStateChecker<Content>) {
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
       isIValueElementNode, ({ node, expected }) => node.currently.hasValue(expected), values,
     );
   }
@@ -263,8 +293,8 @@ class ValuePageElementGroupCurrently<
    *
    * @param values the expected values supposed to be contained in the actual values
    */
-  containsValue(values: ExtractValue<Content>) {
-    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+  containsValue(values: ExtractValueStateChecker<Content>) {
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
       isIValueElementNode, ({ node, expected }) => node.currently.containsValue(expected), values,
     );
   }
@@ -280,8 +310,8 @@ class ValuePageElementGroupCurrently<
        *
        * @param values the expected values supposed not to equal the actual values
        */
-      hasValue: (values: ExtractValue<Content>) => {
-        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+      hasValue: (values: ExtractValueStateChecker<Content>) => {
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
           isIValueElementNode, ({ node, expected }) => node.currently.not.hasValue(expected), values,
         );
       },
@@ -302,8 +332,8 @@ class ValuePageElementGroupCurrently<
        *
        * @param values the expected values supposed not to be contained in the actual values
        */
-      containsValue: (values: ExtractValue<Content>) => {
-        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+      containsValue: (values: ExtractValueStateChecker<Content>) => {
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
           isIValueElementNode, ({ node, expected }) => node.currently.not.containsValue(expected), values,
         );
       },
@@ -340,8 +370,8 @@ class ValuePageElementGroupWait<
    *
    * @returns this (an instance of ValuePageElementGroup)
    */
-  hasValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
+  hasValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachWait<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
       isIValueElementNode, ({ node, expected }) => node.wait.hasValue(expected, opts), values,
     );
   }
@@ -385,8 +415,8 @@ class ValuePageElementGroupWait<
    *
    * @returns this (an instance of ValuePageElementGroup)
    */
-  containsValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
+  containsValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachWait<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
       isIValueElementNode, ({ node, expected }) => node.wait.containsValue(expected, opts), values,
     );
   }
@@ -410,8 +440,8 @@ class ValuePageElementGroupWait<
        *
        * @returns this (an instance of ValuePageElementGroup)
        */
-      hasValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
+      hasValue: (values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachWait<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
           isIValueElementNode, ({ node, expected }) => node.wait.hasValue(expected, opts), values,
         );
       },
@@ -454,8 +484,8 @@ class ValuePageElementGroupWait<
        *
        * @returns this (an instance of ValuePageElementGroup)
        */
-      containsValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachWait<ValueElementNode<Content>, ExtractValue<Content>> (
+      containsValue: (values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachWait<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
           isIValueElementNode, ({ node, expected }) => node.wait.containsValue(expected, opts), values,
         );
       },
@@ -489,8 +519,8 @@ class ValuePageElementGroupEventually<
    * If no `timeout` is specified, a ValuePageElement's default timeout is used.
    * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
-  hasValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+  hasValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
       isIValueElementNode, ({ node, expected }) => node.eventually.hasValue(expected, opts), values,
     );
   }
@@ -527,8 +557,8 @@ class ValuePageElementGroupEventually<
    * If no `timeout` is specified, a ValuePageElement's default timeout is used.
    * If no `interval` is specified, a ValuePageElement's default interval is used.
    */
-  containsValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+  containsValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
       isIValueElementNode, ({ node, expected }) => node.eventually.containsValue(expected, opts), values,
     );
   }
@@ -549,8 +579,8 @@ class ValuePageElementGroupEventually<
        * If no `timeout` is specified, a ValuePageElement's default timeout is used.
        * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
-      hasValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+      hasValue: (values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
           isIValueElementNode, ({ node, expected }) => node.eventually.not.hasValue(expected, opts), values,
         );
       },
@@ -586,8 +616,8 @@ class ValuePageElementGroupEventually<
        * If no `timeout` is specified, a ValuePageElement's default timeout is used.
        * If no `interval` is specified, a ValuePageElement's default interval is used.
        */
-      containsValue: (values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachCheck<ValueElementNode<Content>, ExtractValue<Content>> (
+      containsValue: (values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachCheck<ValueElementNode<Content>, ExtractValueStateChecker<Content>> (
           isIValueElementNode, ({ node, expected }) => node.eventually.not.containsValue(expected, opts), values,
         );
       },

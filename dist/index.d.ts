@@ -999,7 +999,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      *
      * @param text An object with the names of the corresponding PageNodes as keys and the expected texts as values.
      */
-    toHaveText(text: Workflo.PageNode.ExtractText<Content>): boolean;
+    toHaveText(text: Workflo.PageNode.ExtractTextStateChecker<Content>): boolean;
     /**
      * Checks if all of the PageNodes managed by PageElementGroup currently have any text.
      *
@@ -1013,7 +1013,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param text An object with the names of the corresponding PageNodes as keys and the expected contained texts as
      * values.
      */
-    toContainText(text: Workflo.PageNode.ExtractText<Content>): boolean;
+    toContainText(text: Workflo.PageNode.ExtractTextStateChecker<Content>): boolean;
     /**
      * Checks if all of the PageNodes managed by PageElementGroup currently have the expected direct text.
      *
@@ -1023,7 +1023,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param directText An object with the names of the corresponding PageNodes as keys and the expected direct texts as
      * values.
      */
-    toHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean;
+    toHaveDirectText(directText: Workflo.PageNode.ExtractTextStateChecker<Content>): boolean;
     /**
      * Checks if all of the PageNodes managed by PageElementGroup currently have any direct text.
      *
@@ -1043,7 +1043,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * @param directText An object with the names of the corresponding PageNodes as keys and the expected contained direct
      * texts as values.
      */
-    toContainDirectText(directText: Workflo.PageNode.ExtractText<Content>): boolean;
+    toContainDirectText(directText: Workflo.PageNode.ExtractTextStateChecker<Content>): boolean;
     /**
      * Checks if all of the PageNodes defined within the content of PageElementGroup eventually exist within a specific
      * timeout.
@@ -1085,7 +1085,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * If no `timeout` is specified, PageElementGroup's default timeout is used.
      * If no `interval` is specified, PageElementGroup's default interval is used.
      */
-    toEventuallyHaveText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    toEventuallyHaveText(text: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have any text within a
      * specific timeout.
@@ -1109,7 +1109,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * If no `timeout` is specified, PageElementGroup's default timeout is used.
      * If no `interval` is specified, PageElementGroup's default interval is used.
      */
-    toEventuallyContainText(text: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    toEventuallyContainText(text: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have the expected direct
      * text within a specific timeout.
@@ -1125,7 +1125,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * If no `timeout` is specified, PageElementGroup's default timeout is used.
      * If no `interval` is specified, PageElementGroup's default interval is used.
      */
-    toEventuallyHaveDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    toEventuallyHaveDirectText(directText: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * Checks if all of the PageNodes defined within the content of PageElementGroup eventually have any direct text
      * within a specific timeout.
@@ -1155,7 +1155,7 @@ interface ICustomGroupMatchers<Content extends Workflo.PageNode.GroupContent> {
      * If no `timeout` is specified, PageElementGroup's default timeout is used.
      * If no `interval` is specified, PageElementGroup's default interval is used.
      */
-    toEventuallyContainDirectText(directText: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    toEventuallyContainDirectText(directText: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
 }
 /**
  * This interface describes custom expectation matchers for ValuePageElements.
@@ -1358,7 +1358,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
      *
      * @param value An object with the names of the corresponding PageNodes as keys and the expected values as values.
      */
-    toHaveValue(value: Workflo.PageNode.ExtractValue<Content>): boolean;
+    toHaveValue(value: Workflo.PageNode.ExtractValueStateChecker<Content>): boolean;
     /**
      * Checks if all of the PageNodes managed by ValuePageElementGroup currently have any value.
      *
@@ -1372,7 +1372,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
      * @param value An object with the names of the corresponding PageNodes as keys and the expected contained values as
      * values.
      */
-    toContainValue(value: Workflo.PageNode.ExtractValue<Content>): boolean;
+    toContainValue(value: Workflo.PageNode.ExtractValueStateChecker<Content>): boolean;
     /**
      * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually have the expected
      * value within a specific timeout.
@@ -1384,7 +1384,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
      * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
      * If no `interval` is specified, ValuePageElementGroup's default interval is used.
      */
-    toEventuallyHaveValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    toEventuallyHaveValue(value: Workflo.PageNode.ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
     * Checks if all of the PageNodes defined within the content of ValuePageElementGroup eventually have any value within
     * a specific timeout.
@@ -1408,7 +1408,7 @@ interface ICustomValueGroupMatchers<Content extends Workflo.PageNode.GroupConten
      * If no `timeout` is specified, ValuePageElementGroup's default timeout is used.
      * If no `interval` is specified, ValuePageElementGroup's default interval is used.
      */
-    toEventuallyContainValue(value: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    toEventuallyContainValue(value: Workflo.PageNode.ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
 }
 /**
  * This interface describes custom expectation matchers for Page.
@@ -1487,9 +1487,7 @@ interface IMapMatchers<K extends string> extends ICustomMapMatchers<K> {
  *
  * @template Content the type of the content managed by the group
  */
-interface IGroupMatchers<Content extends {
-    [key: string]: Workflo.PageNode.IPageNode;
-}> extends ICustomGroupMatchers<Content> {
+interface IGroupMatchers<Content extends Workflo.PageNode.GroupContent> extends ICustomGroupMatchers<Content> {
     not: ICustomGroupMatchers<Content>;
 }
 /**
@@ -1554,7 +1552,7 @@ declare global {
      * @param element an instance of PageElement or an instance of ValuePageElement
      * @returns the expectation matchers for PageElement or ValuePageElement
      */
-    function expectElement<Store extends pageObjects.stores.PageNodeStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): (typeof element) extends (infer ElementType) ? ElementType extends pageObjects.elements.ValuePageElement<any, ValueType> ? IValueElementMatchers<ReturnType<ElementType['getValue']>> : IElementMatchers : IElementMatchers;
+    function expectElement<Store extends pageObjects.stores.PageNodeStore, PageElementType extends pageObjects.elements.PageElement<Store>, ValueType>(element: PageElementType): (typeof element) extends (infer ElementType) ? ElementType extends pageObjects.elements.ValuePageElement<Store, ValueType> ? IValueElementMatchers<ReturnType<ElementType['getValue']>> : IElementMatchers : IElementMatchers;
     /**
      * This function provides expectation matchers for PageElementLists or ValuePageElementLists.
      *
@@ -1564,11 +1562,13 @@ declare global {
      * @template PageElementType type of the element's handled by the passed list
      * @template PageElementOptions options type of the element's handled by the passed list
      * @template PageElementListType type of the passed list
+     * @template ValueType If the passed list is an instance of ValuePageElementList, this is the type of the values
+     * handled in the xxxValue functions of the elements managed by the list.
      *
      * @param list an instance of PageElementList or an instance of ValuePageElementList
      * @returns the expectation matchers for PageElementList or ValuePageElementList
      */
-    function expectList<Store extends pageObjects.stores.PageNodeStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>>(list: PageElementListType): (typeof list) extends (infer ListType) ? ListType extends pageObjects.elements.ValuePageElementList<any, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
+    function expectList<Store extends pageObjects.stores.PageNodeStore, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementListType extends pageObjects.elements.PageElementList<Store, PageElementType, PageElementOptions>, ValueType>(list: PageElementListType): (typeof list) extends (infer ListType) ? ListType extends pageObjects.elements.ValuePageElementList<Store, pageObjects.elements.ValuePageElement<Store, ValueType>, PageElementOptions, ValueType> ? IValueListMatchers<ReturnType<ListType['getValue']>> : IListMatchers : IListMatchers;
     /**
      * This function provides expectation matchers for PageElementMaps or ValuePageElementMaps.
      *
@@ -1579,11 +1579,13 @@ declare global {
      * @template PageElementType type of the element's handled by the passed map
      * @template PageElementOptions options type of the element's handled by the passed map
      * @template PageElementMapType type of the passed map
+     * @template ValueType If the passed map is an instance of ValuePageElementMap, this is the type of the values
+     * handled in the xxxValue functions of the elements managed by the map.
      *
      * @param map an instance of PageElementMap or an instance of ValuePageElementMap
      * @returns the expectation matchers for PageElementMap or ValuePageElementMap
      */
-    function expectMap<Store extends pageObjects.stores.PageNodeStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>>(map: PageElementMapType): (typeof map) extends (infer MapType) ? MapType extends pageObjects.elements.ValuePageElementMap<any, K, pageObjects.elements.ValuePageElement<any, any>, PageElementOptions, any> ? IValueMapMatchers<Extract<keyof MapType['$'], string>, ReturnType<MapType['getValue']>[keyof MapType['$']]> : IMapMatchers<Extract<keyof typeof map['$'], string>> : IMapMatchers<Extract<keyof typeof map['$'], string>>;
+    function expectMap<Store extends pageObjects.stores.PageNodeStore, K extends string, PageElementType extends pageObjects.elements.PageElement<Store>, PageElementOptions, PageElementMapType extends pageObjects.elements.PageElementMap<Store, K, PageElementType, PageElementOptions>, ValueType>(map: PageElementMapType): (typeof map) extends (infer MapType) ? MapType extends pageObjects.elements.ValuePageElementMap<Store, K, pageObjects.elements.ValuePageElement<Store, ValueType>, PageElementOptions, any> ? IValueMapMatchers<Extract<keyof typeof map['$'], string>, ReturnType<MapType['getValue']>[keyof typeof map['$']]> : IMapMatchers<Extract<keyof typeof map['$'], string>> : IMapMatchers<Extract<keyof typeof map['$'], string>>;
     /**
      * This function provides expectation matchers for PageElementGroups or ValuePageElementGroups.
      *
@@ -1596,7 +1598,7 @@ declare global {
      * @param group an instance of PageElementGroup or an instance of ValuePageElementGroup
      * @returns the expectation matchers for PageElementGroup or ValuePageElementGroup
      */
-    function expectGroup<Store extends pageObjects.stores.PageNodeStore, Content extends Workflo.PageNode.GroupContent, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): (typeof group) extends (infer GroupType) ? GroupType extends pageObjects.elements.ValuePageElementGroup<any, Content> ? IValueGroupMatchers<GroupType['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
+    function expectGroup<Store extends pageObjects.stores.PageNodeStore, Content extends Workflo.PageNode.GroupContent, PageElementGroupType extends pageObjects.elements.PageElementGroup<Store, Content>>(group: PageElementGroupType): (typeof group) extends (infer GroupType) ? GroupType extends pageObjects.elements.ValuePageElementGroup<Store, Content> ? IValueGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']> : IGroupMatchers<typeof group['$']>;
     /**
      * This function provides expectation matchers for Pages.
      *
@@ -2086,16 +2088,29 @@ declare global {
             };
             /**
              * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
-             * content. For a PageElement, the extract return value type will be `string`.
+             * content. For a PageElement, the extracted return value type will be `string`.
              */
             type ExtractText<T extends {
+                [key in keyof T]: IPageNode;
+            }> = {
+                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getText']> : never;
+            };
+            /**
+             * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
+             * content for state check functions. For a PageElement, the extracted return value type will be `string`.
+             * Compared to `ExtractText`, this will allow a PageElementList to pass either a single string or
+             * an array of strings.
+             */
+            type ExtractTextStateChecker<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
                 -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getText']>> : never;
             };
             /**
              * Extracts the return value types of the `currently.getExists` functions of all PageNodes defined within a
-             * PageElementGroup's content.
+             * PageElementGroup's content for filter masks.
+             * This will allow the a PageElementList to pass either a single boolean or
+             * an array of booleans.
              */
             type ExtractExistsFilterMask<T extends {
                 [key in keyof T]: IPageNode;
@@ -2104,9 +2119,21 @@ declare global {
             };
             /**
              * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
-             * PageElementGroup's content. For a PageElement, the extract return value type will be `boolean`.
+             * PageElementGroup's content. For a PageElement, the extracted return value type will be `boolean`.
              */
             type ExtractBoolean<T extends {
+                [key in keyof T]: IPageNode;
+            }> = {
+                -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? ReturnType<T[P]['getIsEnabled']> : never;
+            };
+            /**
+             * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
+             * PageElementGroup's content for state check functions. For a PageElement, the extracted return value
+             * type will be `boolean`.
+             * Compared to `ExtractBoolean`, this will allow the a PageElementList to pass either a single boolean or
+             * an array of booleans.
+             */
+            type ExtractBooleanStateChecker<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
                 -readonly [P in keyof T]?: T[P] extends IElementNode<any, any, any> ? TryArrayOrElement<ReturnType<T[P]['getIsEnabled']>> : never;
@@ -2658,13 +2685,36 @@ declare global {
             type ExtractValue<T extends {
                 [key: string]: IPageNode;
             }> = {
+                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getValue']> : never;
+            };
+            /**
+             * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
+             * ValuePageElementGroup's content for state check functions and the setValue function.
+             * Compared to `ExtractValue`, this will allow ta PageElementList to pass either a single value or
+             * an array of values.
+             */
+            type ExtractValueStateChecker<T extends {
+                [key: string]: IPageNode;
+            }> = {
                 -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getValue']>> : never;
             };
             /**
              * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
-             * ValuePageElementGroup's content. For a ValuePageElement, the return value type will be `boolean`.
+             * ValuePageElementGroup's content. For a ValuePageElement, the extracted return value type will be `boolean`.
              */
             type ExtractValueBoolean<T extends {
+                [key in keyof T]: IPageNode;
+            }> = {
+                -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? ReturnType<T[P]['getHasValue']> : never;
+            };
+            /**
+             * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
+             * ValuePageElementGroup's content for state check functions. For a ValuePageElement, the extracted
+             * return value type will be `boolean`.
+             * Compared to `ExtractValueBoolean`, this will allow a ValuePageElementList to pass either a
+             * single boolean or an array of booleans.
+             */
+            type ExtractValueBooleanStateChecker<T extends {
                 [key in keyof T]: IPageNode;
             }> = {
                 -readonly [P in keyof T]?: T[P] extends IValueElementNode<any, any> ? TryArrayOrElement<ReturnType<T[P]['getHasValue']>> : never;
@@ -2960,7 +3010,7 @@ declare global {
              * name matches the key name of the skipped filter mask entry will be missing from the state retrieval function's
              * result object.
              */
-            type GroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractBoolean<Content>;
+            type GroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractBooleanStateChecker<Content>;
             /**
              * Type of the filter mask used by exist functions of PageElementGroup.
              */
@@ -2968,10 +3018,10 @@ declare global {
             /**
              * Type of the filter mask used by functions of ValuePageElementGroup.
              */
-            type ValueGroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractValueBoolean<Content>;
+            type ValueGroupFilterMask<Content extends GroupContent> = Workflo.PageNode.ExtractValueBooleanStateChecker<Content>;
             /**
              * Reserved for future use when typescript bugs https://github.com/Microsoft/TypeScript/issues/24560 and
-             * https://github.com/Microsoft/TypeScript/issues/24791are are resolved.
+             * https://github.com/Microsoft/TypeScript/issues/24791 are are resolved.
              */
             type ValueGroupFilterMaskWN<Content extends GroupContent> = WithoutNever<Partial<Workflo.PageNode.ExtractValueBooleanWN<Content>>>;
             /**
@@ -2990,7 +3040,7 @@ declare global {
              * Used to merge a filter mask into the opts parameter of a PageElementGroup's functions.
              */
             interface IGroupFilterMask<Content extends GroupContent> {
-                filterMask?: Partial<Workflo.PageNode.ExtractBoolean<Content>>;
+                filterMask?: Partial<Workflo.PageNode.ExtractBooleanStateChecker<Content>>;
             }
             /**
              * Used to merge a filter mask into the opts parameter of a PageElementGroup's exist functions.
@@ -3002,7 +3052,7 @@ declare global {
              * Used to merge a filter mask into the opts parameter of a ValuePageElementGroup's functions.
              */
             interface IValueGroupFilterMask<Content extends GroupContent> {
-                filterMask?: Partial<Workflo.PageNode.ExtractValueBoolean<Content>>;
+                filterMask?: Partial<Workflo.PageNode.ExtractValueBooleanStateChecker<Content>>;
             }
         }
         /**

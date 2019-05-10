@@ -8,6 +8,15 @@ declare type ExtractValue<Content extends {
     [key: string]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.ExtractValue<Content>;
 /**
+ * Extracts the return value types of the `getValue` functions of all PageNodes defined within a
+ * ValuePageElementGroup's content for state check functions and the setValue function.
+ * Compared to `ExtractValue`, this will allow ta PageElementList to pass either a single value or
+ * an array of values.
+ */
+declare type ExtractValueStateChecker<Content extends {
+    [key: string]: Workflo.PageNode.IPageNode;
+}> = Workflo.PageNode.ExtractValueStateChecker<Content>;
+/**
  * This interface is implemented by ValuePageElement, ValuePageElementList, ValuePageElementMap and
  * ValuePageElementGroup.
  *
@@ -26,7 +35,7 @@ declare type ExtractValue<Content extends {
  */
 declare type ValueElementNode<Content extends {
     [K in keyof Content]: Workflo.PageNode.IPageNode;
-}> = Workflo.PageNode.IValueElementNode<ExtractValue<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>;
+}> = Workflo.PageNode.IValueElementNode<ExtractValue<Content> | ExtractValueStateChecker<Content>, Workflo.PageNode.IValueGroupFilterMask<Content>>;
 /**
  * Describes the opts parameter passed to the constructor function of ValuePageElementGroup.
  *
@@ -76,7 +85,7 @@ export declare class ValuePageElementGroup<Store extends PageNodeStore, Content 
      *
      * @param values the expected values used in the comparisons which set the 'hasValue' status
      */
-    getHasValue(values: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getHasValue(values: ExtractValueStateChecker<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     /**
      * Returns the 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure after
      * performing the initial waiting condition of each PageNode.
@@ -95,14 +104,14 @@ export declare class ValuePageElementGroup<Store extends PageNodeStore, Content 
      *
      * @param values the expected values used in the comparisons which set the 'containsValue' status
      */
-    getContainsValue(values: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getContainsValue(values: ExtractValueStateChecker<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     /**
      * This function sets the passed values to all ValuePageElements managed by ValuePageElementGroup
      * after performing the initial waiting condition of each ValuePageElement.
      *
      * @param values a structure of setter values
      */
-    setValue(values: ExtractValue<Content>): this;
+    setValue(values: ExtractValueStateChecker<Content>): this;
 }
 /**
  * This class defines all `currently` functions of ValuePageElementGroup.
@@ -130,7 +139,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
      *
      * @param values the expected values used in the comparisons which set the 'hasValue' status
      */
-    getHasValue(values: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getHasValue(values: ExtractValueStateChecker<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     /**
      * Returns the current 'hasAnyValue' status of all PageNodes managed by ValuePageElementGroup as a result structure.
      *
@@ -147,14 +156,14 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
      *
      * @param values the expected values used in the comparisons which set the 'containsValue' status
      */
-    getContainsValue(values: ExtractValue<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
+    getContainsValue(values: ExtractValueStateChecker<Content>): Workflo.PageNode.ExtractValueBoolean<Content>;
     /**
      * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently equal the expected
      * values.
      *
      * @param values the expected values supposed to equal the actual values
      */
-    hasValue(values: ExtractValue<Content>): boolean;
+    hasValue(values: ExtractValueStateChecker<Content>): boolean;
     /**
      * Returns true if all PageNodes managed by ValuePageElementGroup currently have any value.
      *
@@ -168,7 +177,7 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
      *
      * @param values the expected values supposed to be contained in the actual values
      */
-    containsValue(values: ExtractValue<Content>): boolean;
+    containsValue(values: ExtractValueStateChecker<Content>): boolean;
     /**
      * returns the negated variants of ValuePageElementGroupCurrently's state check functions
      */
@@ -179,30 +188,30 @@ declare class ValuePageElementGroupCurrently<Store extends PageNodeStore, Conten
          *
          * @param values the expected values supposed not to equal the actual values
          */
-        hasValue: (values: Workflo.PageNode.ExtractValue<Content>) => boolean;
+        hasValue: (values: Workflo.PageNode.ExtractValueStateChecker<Content>) => boolean;
         /**
          * Returns true if all PageNodes managed by ValuePageElementGroup currently do not have any value.
          *
          * @param filterMask can be used to skip the invocation of the `hasAnyValue` function for some or all managed
          * PageNodes
          */
-        hasAnyValue: (filterMask?: Workflo.PageNode.ExtractValueBoolean<Content>) => boolean;
+        hasAnyValue: (filterMask?: Workflo.PageNode.ExtractValueBooleanStateChecker<Content>) => boolean;
         /**
          * Returns true if the actual values of all PageNodes managed by ValuePageElementGroup currently do not contain
          * the expected values.
          *
          * @param values the expected values supposed not to be contained in the actual values
          */
-        containsValue: (values: Workflo.PageNode.ExtractValue<Content>) => boolean;
+        containsValue: (values: Workflo.PageNode.ExtractValueStateChecker<Content>) => boolean;
         exists: (filterMask?: Workflo.PageNode.ExtractExistsFilterMask<Content>) => boolean;
-        isVisible: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
-        isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
-        hasText: (texts: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasAnyText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
-        containsText: (texts: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>) => boolean;
-        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
-        containsDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>) => boolean;
+        isVisible: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
+        isEnabled: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
+        hasText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
+        hasAnyText: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
+        containsText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
+        hasDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
+        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
+        containsDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
     };
 }
 /**
@@ -231,7 +240,7 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
      *
      * @returns this (an instance of ValuePageElementGroup)
      */
-    hasValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
+    hasValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
     /**
      * Waits for all PageNodes managed by ValuePageElementGroup to have any value.
      *
@@ -261,7 +270,7 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
      *
      * @returns this (an instance of ValuePageElementGroup)
      */
-    containsValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
+    containsValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
     /**
      * returns the negated variants of ValuePageElementGroupWait's state check functions
      */
@@ -280,7 +289,7 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
          *
          * @returns this (an instance of ValuePageElementGroup)
          */
-        hasValue: (values: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasValue: (values: Workflo.PageNode.ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
         /**
          * Waits for all PageNodes managed by ValuePageElementGroup not to have any value.
          *
@@ -295,7 +304,7 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
          *
          * @returns this (an instance of ValuePageElementGroup)
          */
-        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.ExtractValueBoolean<Content>) => GroupType;
+        hasAnyValue: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.ExtractValueBooleanStateChecker<Content>) => GroupType;
         /**
          * Waits for the actual values of all PageNodes managed by ValuePageElementGroup not to contain the expected
          * values.
@@ -311,16 +320,16 @@ declare class ValuePageElementGroupWait<Store extends PageNodeStore, Content ext
          *
          * @returns this (an instance of ValuePageElementGroup)
          */
-        containsValue: (values: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        containsValue: (values: Workflo.PageNode.ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
         exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content>) => GroupType;
         isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
         isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
-        hasText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
         hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
-        containsText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
-        hasDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        containsText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
         hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => GroupType;
-        containsDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        containsDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
     };
 }
 /**
@@ -346,7 +355,7 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
      * If no `timeout` is specified, a ValuePageElement's default timeout is used.
      * If no `interval` is specified, a ValuePageElement's default interval is used.
      */
-    hasValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    hasValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * Returns true if all PageNodes managed by ValuePageElementGroup eventually have any value within a specific timeout.
      *
@@ -369,7 +378,7 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
      * If no `timeout` is specified, a ValuePageElement's default timeout is used.
      * If no `interval` is specified, a ValuePageElement's default interval is used.
      */
-    containsValue(values: ExtractValue<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    containsValue(values: ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * returns the negated variants of ValuePageElementGroupEventually's state check functions
      */
@@ -385,7 +394,7 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
          * If no `timeout` is specified, a ValuePageElement's default timeout is used.
          * If no `interval` is specified, a ValuePageElement's default interval is used.
          */
-        hasValue: (values: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasValue: (values: Workflo.PageNode.ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         /**
          * Returns true if all PageNodes managed by ValuePageElementGroup eventually do not have any value within a
          * specific timeout.
@@ -409,16 +418,16 @@ declare class ValuePageElementGroupEventually<Store extends PageNodeStore, Conte
          * If no `timeout` is specified, a ValuePageElement's default timeout is used.
          * If no `interval` is specified, a ValuePageElement's default interval is used.
          */
-        containsValue: (values: Workflo.PageNode.ExtractValue<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        containsValue: (values: Workflo.PageNode.ExtractValueStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         exists: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMaskExists<Content>) => boolean;
         isVisible: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
         isEnabled: (opts?: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        hasText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         hasAnyText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        containsText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
-        hasDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        containsText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         hasAnyDirectText: (opts?: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content>) => boolean;
-        containsDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        containsDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
     };
 }
 /**

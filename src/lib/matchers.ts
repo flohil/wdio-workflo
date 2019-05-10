@@ -199,7 +199,7 @@ export interface ICompareValueElementFuncs<
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
-  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+  GroupValueType = Workflo.PageNode.ExtractValueStateChecker<Workflo.PageNode.GroupContent>
 > extends ICompareElementFuncs<
   ElementValueType,
   ListValueType,
@@ -247,7 +247,7 @@ export interface ICompareEventuallyValueElementFuncs<
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
-  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+  GroupValueType = Workflo.PageNode.ExtractValueStateChecker<Workflo.PageNode.GroupContent>
 > extends ICompareElementFuncs<
   ElementValueType,
   ListValueType,
@@ -663,7 +663,7 @@ export function createTextMatcher<
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
-  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractTextStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
 ) {
@@ -679,7 +679,7 @@ export function createTextMatcherWithoutExpected<
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
-  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractTextStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group'],
@@ -696,7 +696,7 @@ export function createEventuallyTextMatcher<
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
-  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractTextStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareEventuallyElementFuncs<
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
@@ -714,7 +714,7 @@ export function createEventuallyTextMatcherWithoutExpected<
   ElementExpectedType = string,
   ListExpectedType = string | string[],
   MapExpectedType = Record<string, string>,
-  GroupExpectedType = Workflo.PageNode.ExtractText<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractTextStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareEventuallyElementFuncs<
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
@@ -733,7 +733,7 @@ export function createBooleanMatcher<
   ElementExpectedType = boolean,
   ListExpectedType = boolean | boolean[],
   MapExpectedType = Record<string, boolean>,
-  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractBooleanStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
 ) {
@@ -749,7 +749,7 @@ export function createBooleanMatcherWithoutExpected<
   ElementExpectedType = boolean,
   ListExpectedType = boolean | boolean[],
   MapExpectedType = Record<string, boolean>,
-  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractBooleanStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareElementFuncs<ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType>,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group'],
@@ -766,7 +766,7 @@ export function createEventuallyBooleanMatcher<
   ElementExpectedType = boolean,
   ListExpectedType = boolean | boolean[],
   MapExpectedType = Record<string, boolean>,
-  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractBooleanStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareEventuallyElementFuncs<
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
@@ -784,7 +784,7 @@ export function createEventuallyBooleanMatcherWithoutExpected<
   ElementExpectedType = boolean,
   ListExpectedType = boolean | boolean[],
   MapExpectedType = Record<string, boolean>,
-  GroupExpectedType = Workflo.PageNode.ExtractBoolean<Workflo.PageNode.GroupContent>,
+  GroupExpectedType = Workflo.PageNode.ExtractBooleanStateChecker<Workflo.PageNode.GroupContent>,
 >(
   compareFuncs: ICompareEventuallyElementFuncs<
     ElementExpectedType, ListExpectedType, MapExpectedType, GroupExpectedType
@@ -803,7 +803,7 @@ export function createValueMatcher<
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
-  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+  GroupValueType = Workflo.PageNode.ExtractValueStateChecker<Workflo.PageNode.GroupContent>
 >(
   compareFuncs: ICompareValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
 ) {
@@ -819,7 +819,7 @@ export function createValueMatcherWithoutExpected<
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
-  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+  GroupValueType = Workflo.PageNode.ExtractValueStateChecker<Workflo.PageNode.GroupContent>
 >(
   compareFuncs: ICompareValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group'],
@@ -836,7 +836,7 @@ export function createEventuallyValueMatcher<
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
-  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+  GroupValueType = Workflo.PageNode.ExtractValueStateChecker<Workflo.PageNode.GroupContent>
 >(
   compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
 ) {
@@ -852,7 +852,7 @@ export function createEventuallyValueMatcherWithoutExpected<
   ElementValueType = any,
   ListValueType = any | any[],
   MapValueType = Partial<Record<string, any>>,
-  GroupValueType = Workflo.PageNode.ExtractValue<Workflo.PageNode.GroupContent>
+  GroupValueType = Workflo.PageNode.ExtractValueStateChecker<Workflo.PageNode.GroupContent>
 >(
   compareFuncs: ICompareEventuallyValueElementFuncs<ElementValueType, ListValueType, MapValueType, GroupValueType>,
   withoutExpected: WithoutExpected[] = ['element', 'list', 'map', 'group'],

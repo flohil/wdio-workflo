@@ -9,12 +9,31 @@ export declare type ExtractText<Content extends {
     [key: string]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.ExtractText<Content>;
 /**
+ * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
+ * content for state check functions. For a PageElement, the extracted return value type will be `string`.
+ * Compared to `ExtractText`, this will allow a PageElementList to pass either a single string or
+ * an array of strings.
+ */
+export declare type ExtractTextStateChecker<Content extends {
+    [key: string]: Workflo.PageNode.IPageNode;
+}> = Workflo.PageNode.ExtractTextStateChecker<Content>;
+/**
  * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `boolean`.
  */
 export declare type ExtractBoolean<Content extends {
     [key: string]: Workflo.PageNode.IPageNode;
 }> = Workflo.PageNode.ExtractBoolean<Content>;
+/**
+ * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
+ * PageElementGroup's content for state check functions. For a PageElement, the extracted return value
+ * type will be `boolean`.
+ * Compared to `ExtractBoolean`, this will allow the a PageElementList to pass either a single boolean or
+ * an array of booleans.
+ */
+export declare type ExtractBooleanStateChecker<Content extends {
+    [key: string]: Workflo.PageNode.IPageNode;
+}> = Workflo.PageNode.ExtractBooleanStateChecker<Content>;
 /**
  * This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.
  *
@@ -44,7 +63,7 @@ export declare type ExtractBoolean<Content extends {
  */
 declare type ElementNode<Content extends {
     [K in keyof Content]: Workflo.PageNode.IPageNode;
-}> = Workflo.PageNode.IElementNode<ExtractText<Content>, ExtractBoolean<Content>, Workflo.PageNode.IGroupFilterMask<Content>>;
+}> = Workflo.PageNode.IElementNode<ExtractText<Content> | ExtractTextStateChecker<Content>, ExtractBoolean<Content> | ExtractBooleanStateChecker<Content>, Workflo.PageNode.IGroupFilterMask<Content>>;
 /**
  * Describes the opts parameter passed to the constructor function of PageElementGroup.
  *
@@ -141,7 +160,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
     /**
      * Returns the 'hasText' status of all PageNodes managed by PageElementGroup as a result structure after executing
      * the initial waiting condition of each PageNode.
@@ -150,7 +169,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      *
      * @param texts the expected texts used in the comparisons which set the 'hasText' status
      */
-    getHasText(texts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasText(texts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the 'hasAnyText' status of all PageNodes managed by PageElementGroup as a result structure after performing
      * the initial waiting condition of each PageNode.
@@ -169,7 +188,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      *
      * @param texts the expected texts used in the comparisons which set the 'containsText' status
      */
-    getContainsText(texts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsText(texts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the 'hasDirectText' status of all PageNodes managed by PageElementGroup as a result structure after
      * executing the initial waiting condition of each PageNode.
@@ -181,7 +200,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      *
      * @param directTexts the expected direct texts used in the comparisons which set the 'hasDirectText' status
      */
-    getHasDirectText(directTexts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasDirectText(directTexts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the 'hasAnyDirectText' status of all PageNodes managed by PageElementGroup as a result structure after
      * performing the initial waiting condition of each PageNode.
@@ -207,7 +226,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      *
      * @param directTexts the expected direct texts used in the comparisons which set the 'containsDirectText' status
      */
-    getContainsDirectText(directTexts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsDirectText(directTexts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Used to determine if a function of a managed PageNode should be invoked or if its invocation should be skipped
      * because the PageNode is not included by a filterMask.
@@ -352,21 +371,21 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      * @param filterMask can be used to skip the invocation of the `getExists` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
     /**
      * Returns the current 'visible' status of all PageNodes managed by PageElementGroup as a result structure.
      *
      * @param filterMask can be used to skip the invocation of the `getIsVisible` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
     /**
      * Returns the current 'enabled' status of all PageNodes managed by PageElementGroup as a result structure.
      *
      * @param filterMask can be used to skip the invocation of the `getIsEnabled` function for some or all managed
      * PageNodes. The results of skipped function invocations are not included in the total results structure.
      */
-    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>): Workflo.PageNode.ExtractBooleanStateChecker<Content>;
     /**
      * Returns the current 'hasText' status of all PageNodes managed by PageElementGroup as a result structure.
      *
@@ -374,7 +393,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param texts the expected texts used in the comparisons which set the 'hasText' status
      */
-    getHasText(texts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasText(texts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the current 'hasAnyText' status of all PageNodes managed by PageElementGroup as a result structure.
      *
@@ -391,7 +410,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param texts the expected texts used in the comparisons which set the 'containsText' status
      */
-    getContainsText(texts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsText(texts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the current 'hasDirectText' status of all PageNodes managed by PageElementGroup as a result structure.
      *
@@ -402,7 +421,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param directTexts the expected direct texts used in the comparisons which set the 'hasDirectText' status
      */
-    getHasDirectText(directTexts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getHasDirectText(directTexts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the current 'hasAnyDirectText' status of all PageNodes managed by PageElementGroup as a result structure.
      *
@@ -426,7 +445,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param directTexts the expected direct texts used in the comparisons which set the 'containsDirectText' status
      */
-    getContainsDirectText(directTexts: ExtractText<Content>): Workflo.PageNode.ExtractBoolean<Content>;
+    getContainsDirectText(directTexts: ExtractTextStateChecker<Content>): Workflo.PageNode.ExtractBoolean<Content>;
     /**
      * Returns the current texts of all PageNodes managed by PageElementGroup as a result structure.
      *
@@ -470,7 +489,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param texts the expected texts supposed to equal the actual texts
      */
-    hasText(texts: ExtractText<Content>): boolean;
+    hasText(texts: ExtractTextStateChecker<Content>): boolean;
     /**
      * Returns true if all PageNodes managed by PageElementGroup currently have any text.
      *
@@ -483,7 +502,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param texts the expected texts supposed to be contained in the actual texts
      */
-    containsText(texts: ExtractText<Content>): boolean;
+    containsText(texts: ExtractTextStateChecker<Content>): boolean;
     /**
      * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup currently equal the expected
      * direct texts.
@@ -493,7 +512,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param directTexts the expected direct texts supposed to equal the actual direct texts
      */
-    hasDirectText(directTexts: ExtractText<Content>): boolean;
+    hasDirectText(directTexts: ExtractTextStateChecker<Content>): boolean;
     /**
      * Returns true if all PageNodes managed by PageElementGroup currently have any direct text.
      *
@@ -513,7 +532,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
      *
      * @param directTexts the expected direct texts supposed to be contained in the actual direct texts
      */
-    containsDirectText(directTexts: ExtractText<Content>): boolean;
+    containsDirectText(directTexts: ExtractTextStateChecker<Content>): boolean;
     /**
      * returns the negated variants of PageElementGroupCurrently's state check functions
      */
@@ -531,35 +550,35 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
          * @param filterMask can be used to skip the invocation of the `isVisible` function for some or all managed
          * PageNodes
          */
-        isVisible: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        isVisible: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
         /**
          * Returns true if all PageNodes managed by PageElementGroup are currently not enabled.
          *
          * @param filterMask can be used to skip the invocation of the `isEnabled` function for some or all managed
          * PageNodes
          */
-        isEnabled: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        isEnabled: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
         /**
          * Returns true if the actual texts of all PageNodes managed by PageElementGroup currently do not equal the
          * expected texts.
          *
          * @param texts the expected texts supposed not to equal the actual texts
          */
-        hasText: (texts: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
         /**
          * Returns true if all PageNodes managed by PageElementGroup currently do not have any text.
          *
          * @param filterMask can be used to skip the invocation of the `hasAnyText` function for some or all managed
          * PageNodes
          */
-        hasAnyText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        hasAnyText: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
         /**
          * Returns true if the actual texts of all PageNodes managed by PageElementGroup currently do not contain the
          * expected texts.
          *
          * @param texts the expected texts supposed not to be contained in the actual texts
          */
-        containsText: (texts: Workflo.PageNode.ExtractText<Content>) => boolean;
+        containsText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
         /**
          * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup currently do not equal
          * the expected direct texts.
@@ -569,7 +588,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
          *
          * @param directTexts the expected direct texts supposed not to equal the actual direct texts
          */
-        hasDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>) => boolean;
+        hasDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
         /**
          * Returns true if all PageNodes managed by PageElementGroup currently do not have any direct text.
          *
@@ -579,7 +598,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
          * @param filterMask can be used to skip the invocation of the `hasAnyDirectText` function for some or all managed
          * PageNodes
          */
-        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractBoolean<Content>) => boolean;
+        hasAnyDirectText: (filterMask?: Workflo.PageNode.ExtractBooleanStateChecker<Content>) => boolean;
         /**
          * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup currently do not contain
          * the expected direct texts.
@@ -589,7 +608,7 @@ export declare class PageElementGroupCurrently<Store extends PageNodeStore, Cont
          *
          * @param directTexts the expected direct texts supposed not to be contained in the actual direct texts
          */
-        containsDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>) => boolean;
+        containsDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>) => boolean;
     };
 }
 /**
@@ -656,7 +675,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
      *
      * @returns this (an instance of PageElementGroup)
      */
-    hasText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
+    hasText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
     /**
      * Waits for all PageNodes managed by PageElementGroup to have any text.
      *
@@ -686,7 +705,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
      *
      * @returns this (an instance of PageElementGroup)
      */
-    containsText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
+    containsText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
     /**
      * Waits for the actual direct texts of all PageNodes managed by PageElementGroup to equal the expected direct texts.
      *
@@ -704,7 +723,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
      *
      * @returns this (an instance of PageElementGroup)
      */
-    hasDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
+    hasDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
     /**
      * Waits for all PageNodes managed by PageElementGroup to have any direct text.
      *
@@ -741,7 +760,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
      *
      * @returns this (an instance of PageElementGroup)
      */
-    containsDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
+    containsDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): GroupType;
     /**
      * returns the negated variants of PageElementGroupWait's state check functions
      */
@@ -799,7 +818,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
          *
          * @returns this (an instance of PageElementGroup)
          */
-        hasText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
         /**
          * Waits for all PageNodes managed by PageElementGroup not to have any text.
          *
@@ -829,7 +848,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
          *
          * @returns this (an instance of PageElementGroup)
          */
-        containsText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        containsText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
         /**
          * Waits for the actual direct texts of all PageNodes managed by PageElementGroup not to equal the expected
          * direct texts.
@@ -848,7 +867,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
          *
          * @returns this (an instance of PageElementGroup)
          */
-        hasDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        hasDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
         /**
          * Waits for all PageNodes managed by PageElementGroup not to have any direct text.
          *
@@ -885,7 +904,7 @@ export declare class PageElementGroupWait<Store extends PageNodeStore, Content e
          *
          * @returns this (an instance of PageElementGroup)
          */
-        containsDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
+        containsDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => GroupType;
     };
 }
 /**
@@ -938,7 +957,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
      * If no `timeout` is specified, a PageElement's default timeout is used.
      * If no `interval` is specified, a PageElement's default interval is used.
      */
-    hasText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    hasText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * Returns true if all PageNodes managed by PageElementGroup eventually have any text within a specific timeout.
      *
@@ -961,7 +980,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
      * If no `timeout` is specified, a PageElement's default timeout is used.
      * If no `interval` is specified, a PageElement's default interval is used.
      */
-    containsText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    containsText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup eventually equal the expected
      * direct texts within a specific timeout.
@@ -973,7 +992,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
      * If no `timeout` is specified, a PageElement's default timeout is used.
      * If no `interval` is specified, a PageElement's default interval is used.
      */
-    hasDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    hasDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * Returns true if all PageNodes managed by PageElementGroup eventually have any direct text within a specific
      * timeout.
@@ -997,7 +1016,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
      * If no `timeout` is specified, a PageElement's default timeout is used.
      * If no `interval` is specified, a PageElement's default interval is used.
      */
-    containsDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval): boolean;
+    containsDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval): boolean;
     /**
      * returns the negated variants of PageElementGroupEventually's state check functions
      */
@@ -1040,7 +1059,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
          * If no `timeout` is specified, a PageElement's default timeout is used.
          * If no `interval` is specified, a PageElement's default interval is used.
          */
-        hasText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         /**
          * Returns true if all PageNodes managed by PageElementGroup eventually do not have any text within a specific
          * timeout.
@@ -1064,7 +1083,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
          * If no `timeout` is specified, a PageElement's default timeout is used.
          * If no `interval` is specified, a PageElement's default interval is used.
          */
-        containsText: (texts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        containsText: (texts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         /**
          * Returns true if the actual direct texts of all PageNodes managed by PageElementGroup eventually do not equal
          * the expected direct texts within a specific timeout.
@@ -1076,7 +1095,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
          * If no `timeout` is specified, a PageElement's default timeout is used.
          * If no `interval` is specified, a PageElement's default interval is used.
          */
-        hasDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
         /**
          * Returns true if all PageNodes managed by PageElementGroup eventually do not have any direct text within a
          * specific timeout.
@@ -1100,7 +1119,7 @@ export declare class PageElementGroupEventually<Store extends PageNodeStore, Con
          * If no `timeout` is specified, a PageElement's default timeout is used.
          * If no `interval` is specified, a PageElement's default interval is used.
          */
-        containsDirectText: (directTexts: Workflo.PageNode.ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
+        containsDirectText: (directTexts: Workflo.PageNode.ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => boolean;
     };
 }
 /**

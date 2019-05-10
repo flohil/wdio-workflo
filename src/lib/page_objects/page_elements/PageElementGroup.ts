@@ -11,11 +11,30 @@ export type ExtractText<Content extends {[key: string]: Workflo.PageNode.IPageNo
   Workflo.PageNode.ExtractText<Content>;
 
 /**
+ * Extracts the return value types of the `getText` functions of all PageNodes defined within a PageElementGroup's
+ * content for state check functions. For a PageElement, the extracted return value type will be `string`.
+ * Compared to `ExtractText`, this will allow a PageElementList to pass either a single string or
+ * an array of strings.
+ */
+export type ExtractTextStateChecker<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
+  Workflo.PageNode.ExtractTextStateChecker<Content>;
+
+/**
  * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a PageElementGroup's
  * content. For a PageElement, the extract return value type will be `boolean`.
  */
 export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
   Workflo.PageNode.ExtractBoolean<Content>;
+
+/**
+ * Extracts the return value types of the `getIsEnabled` functions of all PageNodes defined within a
+ * PageElementGroup's content for state check functions. For a PageElement, the extracted return value
+ * type will be `boolean`.
+ * Compared to `ExtractBoolean`, this will allow the a PageElementList to pass either a single boolean or
+ * an array of booleans.
+ */
+export type ExtractBooleanStateChecker<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
+  Workflo.PageNode.ExtractBooleanStateChecker<Content>;
 
 /**
  * This interface is implemented by PageElement, PageElementList, PageElementMap and PageElementGroup.
@@ -45,7 +64,9 @@ export type ExtractBoolean<Content extends {[key: string]: Workflo.PageNode.IPag
  * - containsDirectText
  */
 type ElementNode<Content extends {[K in keyof Content] : Workflo.PageNode.IPageNode}> = Workflo.PageNode.IElementNode<
-  ExtractText<Content>, ExtractBoolean<Content>, Workflo.PageNode.IGroupFilterMask<Content>
+  ExtractText<Content> | ExtractTextStateChecker<Content>,
+  ExtractBoolean<Content> | ExtractBooleanStateChecker<Content>,
+  Workflo.PageNode.IGroupFilterMask<Content>
 >;
 
 /**
@@ -190,7 +211,7 @@ implements ElementNode<Content> {
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode, ({ node, filter }) => node.getIsEnabled(filter), filterMask,
     );
   }
@@ -203,8 +224,8 @@ implements ElementNode<Content> {
    *
    * @param texts the expected texts used in the comparisons which set the 'hasText' status
    */
-  getHasText(texts: ExtractText<Content>) {
-    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getHasText(texts: ExtractTextStateChecker<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.getHasText(expected), texts,
     );
   }
@@ -232,8 +253,8 @@ implements ElementNode<Content> {
    *
    * @param texts the expected texts used in the comparisons which set the 'containsText' status
    */
-  getContainsText(texts: ExtractText<Content>) {
-    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getContainsText(texts: ExtractTextStateChecker<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.getContainsText(expected), texts,
     );
   }
@@ -249,8 +270,8 @@ implements ElementNode<Content> {
    *
    * @param directTexts the expected direct texts used in the comparisons which set the 'hasDirectText' status
    */
-  getHasDirectText(directTexts: ExtractText<Content>) {
-    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getHasDirectText(directTexts: ExtractTextStateChecker<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.getHasDirectText(expected), directTexts,
     );
   }
@@ -285,8 +306,8 @@ implements ElementNode<Content> {
    *
    * @param directTexts the expected direct texts used in the comparisons which set the 'containsDirectText' status
    */
-  getContainsDirectText(directTexts: ExtractText<Content>) {
-    return this.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getContainsDirectText(directTexts: ExtractTextStateChecker<Content>) {
+    return this.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.getContainsDirectText(expected), directTexts,
     );
   }
@@ -628,7 +649,7 @@ export class PageElementGroupCurrently<
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getExists(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode, ({ node, filter }) => node.currently.getExists(filter), filterMask,
     );
   }
@@ -640,7 +661,7 @@ export class PageElementGroupCurrently<
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getIsVisible(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode, ({ node, filter }) => node.currently.getIsVisible(filter), filterMask,
     );
   }
@@ -652,7 +673,7 @@ export class PageElementGroupCurrently<
    * PageNodes. The results of skipped function invocations are not included in the total results structure.
    */
   getIsEnabled(filterMask?: Workflo.PageNode.GroupFilterMask<Content>) {
-    return this._node.eachGet<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachGet<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode, ({ node, filter }) => node.currently.getIsEnabled(filter), filterMask,
     );
   }
@@ -664,8 +685,8 @@ export class PageElementGroupCurrently<
    *
    * @param texts the expected texts used in the comparisons which set the 'hasText' status
    */
-  getHasText(texts: ExtractText<Content>) {
-    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getHasText(texts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.getHasText(expected), texts,
     );
   }
@@ -691,8 +712,8 @@ export class PageElementGroupCurrently<
    *
    * @param texts the expected texts used in the comparisons which set the 'containsText' status
    */
-  getContainsText(texts: ExtractText<Content>) {
-    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getContainsText(texts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.getContainsText(expected), texts,
     );
   }
@@ -707,8 +728,8 @@ export class PageElementGroupCurrently<
    *
    * @param directTexts the expected direct texts used in the comparisons which set the 'hasDirectText' status
    */
-  getHasDirectText(directTexts: ExtractText<Content>) {
-    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getHasDirectText(directTexts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.getHasDirectText(expected), directTexts,
     );
   }
@@ -741,8 +762,8 @@ export class PageElementGroupCurrently<
    *
    * @param directTexts the expected direct texts used in the comparisons which set the 'containsDirectText' status
    */
-  getContainsDirectText(directTexts: ExtractText<Content>) {
-    return this._node.eachCompare<ElementNode<Content>, ExtractText<Content>> (
+  getContainsDirectText(directTexts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCompare<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.getContainsDirectText(expected), directTexts,
     );
   }
@@ -817,8 +838,8 @@ export class PageElementGroupCurrently<
    *
    * @param texts the expected texts supposed to equal the actual texts
    */
-  hasText(texts: ExtractText<Content>) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  hasText(texts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.hasText(expected), texts,
     );
   }
@@ -840,8 +861,8 @@ export class PageElementGroupCurrently<
    *
    * @param texts the expected texts supposed to be contained in the actual texts
    */
-  containsText(texts: ExtractText<Content>) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  containsText(texts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.containsText(expected), texts,
     );
   }
@@ -855,8 +876,8 @@ export class PageElementGroupCurrently<
    *
    * @param directTexts the expected direct texts supposed to equal the actual direct texts
    */
-  hasDirectText(directTexts: ExtractText<Content>) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  hasDirectText(directTexts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.hasDirectText(expected), directTexts,
     );
   }
@@ -885,8 +906,8 @@ export class PageElementGroupCurrently<
    *
    * @param directTexts the expected direct texts supposed to be contained in the actual direct texts
    */
-  containsDirectText(directTexts: ExtractText<Content>) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  containsDirectText(directTexts: ExtractTextStateChecker<Content>) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.currently.containsDirectText(expected), directTexts,
     );
   }
@@ -937,8 +958,8 @@ export class PageElementGroupCurrently<
        *
        * @param texts the expected texts supposed not to equal the actual texts
        */
-      hasText: (texts: ExtractText<Content>) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      hasText: (texts: ExtractTextStateChecker<Content>) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.currently.not.hasText(expected), texts,
         );
       },
@@ -959,8 +980,8 @@ export class PageElementGroupCurrently<
        *
        * @param texts the expected texts supposed not to be contained in the actual texts
        */
-      containsText: (texts: ExtractText<Content>) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      containsText: (texts: ExtractTextStateChecker<Content>) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.currently.not.containsText(expected), texts,
         );
       },
@@ -973,8 +994,8 @@ export class PageElementGroupCurrently<
        *
        * @param directTexts the expected direct texts supposed not to equal the actual direct texts
        */
-      hasDirectText: (directTexts: ExtractText<Content>) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      hasDirectText: (directTexts: ExtractTextStateChecker<Content>) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.currently.not.hasDirectText(expected), directTexts,
         );
       },
@@ -1001,8 +1022,8 @@ export class PageElementGroupCurrently<
        *
        * @param directTexts the expected direct texts supposed not to be contained in the actual direct texts
        */
-      containsDirectText: (directTexts: ExtractText<Content>) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      containsDirectText: (directTexts: ExtractTextStateChecker<Content>) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.currently.not.containsDirectText(expected), directTexts,
         );
       },
@@ -1100,8 +1121,8 @@ export class PageElementGroupWait<
    *
    * @returns this (an instance of PageElementGroup)
    */
-  hasText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+  hasText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.wait.hasText(expected, opts), texts,
     );
   }
@@ -1145,8 +1166,8 @@ export class PageElementGroupWait<
    *
    * @returns this (an instance of PageElementGroup)
    */
-  containsText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+  containsText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.wait.containsText(expected, opts), texts,
     );
   }
@@ -1168,8 +1189,8 @@ export class PageElementGroupWait<
    *
    * @returns this (an instance of PageElementGroup)
    */
-  hasDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+  hasDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.wait.hasDirectText(expected, opts), directTexts,
     );
   }
@@ -1220,8 +1241,8 @@ export class PageElementGroupWait<
    *
    * @returns this (an instance of PageElementGroup)
    */
-  containsDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+  containsDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.wait.containsDirectText(expected, opts), directTexts,
     );
   }
@@ -1313,8 +1334,8 @@ export class PageElementGroupWait<
        *
        * @returns this (an instance of PageElementGroup)
        */
-      hasText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+      hasText: (texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.wait.not.hasText(expected, opts), texts,
         );
       },
@@ -1356,8 +1377,8 @@ export class PageElementGroupWait<
        *
        * @returns this (an instance of PageElementGroup)
        */
-      containsText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+      containsText: (texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.wait.not.containsText(expected, opts), texts,
         );
       },
@@ -1379,8 +1400,8 @@ export class PageElementGroupWait<
        *
        * @returns this (an instance of PageElementGroup)
        */
-      hasDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+      hasDirectText: (directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.wait.not.hasDirectText(expected, opts), directTexts,
         );
       },
@@ -1429,8 +1450,8 @@ export class PageElementGroupWait<
        *
        * @returns this (an instance of PageElementGroup)
        */
-      containsDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachWait<ElementNode<Content>, ExtractText<Content>> (
+      containsDirectText: (directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachWait<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.wait.not.containsDirectText(expected, opts), directTexts,
         );
       },
@@ -1485,7 +1506,7 @@ export class PageElementGroupEventually<
   isVisible(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const { filterMask, ...otherOpts } = opts;
 
-    return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode,
       ({ node, filter }) => node.eventually.isVisible({ filterMask: filter, ...otherOpts }),
       filterMask,
@@ -1504,7 +1525,7 @@ export class PageElementGroupEventually<
   isEnabled(opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const { filterMask, ...otherOpts } = opts;
 
-    return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode,
       ({ node, filter }) => node.eventually.isEnabled({ filterMask: filter, ...otherOpts }),
       filterMask,
@@ -1523,8 +1544,8 @@ export class PageElementGroupEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    * If no `interval` is specified, a PageElement's default interval is used.
    */
-  hasText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  hasText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.eventually.hasText(expected, opts), texts,
     );
   }
@@ -1542,7 +1563,7 @@ export class PageElementGroupEventually<
   hasAnyText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const { filterMask, ...otherOpts } = opts;
 
-    return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode,
       ({ node, filter }) => node.eventually.hasAnyText({ filterMask: filter, ...otherOpts }),
       filterMask,
@@ -1561,8 +1582,8 @@ export class PageElementGroupEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    * If no `interval` is specified, a PageElement's default interval is used.
    */
-  containsText(texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  containsText(texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.eventually.containsText(expected, opts), texts,
     );
   }
@@ -1578,8 +1599,8 @@ export class PageElementGroupEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    * If no `interval` is specified, a PageElement's default interval is used.
    */
-  hasDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  hasDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.eventually.hasDirectText(expected, opts), directTexts,
     );
   }
@@ -1598,7 +1619,7 @@ export class PageElementGroupEventually<
   hasAnyDirectText(opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) {
     const { filterMask, ...otherOpts } = opts;
 
-    return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+    return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
       isIElementNode,
       ({ node, filter }) => node.eventually.hasAnyDirectText({ filterMask: filter, ...otherOpts }),
       filterMask,
@@ -1617,8 +1638,8 @@ export class PageElementGroupEventually<
    * If no `timeout` is specified, a PageElement's default timeout is used.
    * If no `interval` is specified, a PageElement's default interval is used.
    */
-  containsDirectText(directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) {
-    return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+  containsDirectText(directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) {
+    return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
       isIElementNode, ({ node, expected }) => node.eventually.containsDirectText(expected, opts), directTexts,
     );
   }
@@ -1659,7 +1680,7 @@ export class PageElementGroupEventually<
       isVisible: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const { filterMask, ...otherOpts } = opts;
 
-        return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+        return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
           isIElementNode,
           ({ node, filter }) => node.eventually.not.isVisible({ filterMask: filter, ...otherOpts }),
           filterMask,
@@ -1677,7 +1698,7 @@ export class PageElementGroupEventually<
       isEnabled: (opts: Workflo.ITimeout & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const { filterMask, ...otherOpts } = opts;
 
-        return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+        return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
           isIElementNode,
           ({ node, filter }) => node.eventually.not.isEnabled({ filterMask: filter, ...otherOpts }),
           filterMask,
@@ -1695,8 +1716,8 @@ export class PageElementGroupEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        * If no `interval` is specified, a PageElement's default interval is used.
        */
-      hasText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      hasText: (texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.eventually.not.hasText(expected, opts), texts,
         );
       },
@@ -1714,7 +1735,7 @@ export class PageElementGroupEventually<
       hasAnyText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const { filterMask, ...otherOpts } = opts;
 
-        return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+        return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
           isIElementNode,
           ({ node, filter }) => node.eventually.not.hasAnyText({ filterMask: filter, ...otherOpts }),
           filterMask,
@@ -1732,8 +1753,8 @@ export class PageElementGroupEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        * If no `interval` is specified, a PageElement's default interval is used.
        */
-      containsText: (texts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      containsText: (texts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.eventually.not.containsText(expected, opts), texts,
         );
       },
@@ -1748,8 +1769,8 @@ export class PageElementGroupEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        * If no `interval` is specified, a PageElement's default interval is used.
        */
-      hasDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      hasDirectText: (directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.eventually.not.hasDirectText(expected, opts), directTexts,
         );
       },
@@ -1767,7 +1788,7 @@ export class PageElementGroupEventually<
       hasAnyDirectText: (opts: Workflo.ITimeoutInterval & Workflo.PageNode.IGroupFilterMask<Content> = {}) => {
         const { filterMask, ...otherOpts } = opts;
 
-        return this._node.eachCheck<ElementNode<Content>, ExtractBoolean<Content>> (
+        return this._node.eachCheck<ElementNode<Content>, ExtractBooleanStateChecker<Content>> (
           isIElementNode,
           ({ node, filter }) => node.eventually.not.hasAnyDirectText({ filterMask: filter, ...otherOpts }),
           filterMask,
@@ -1785,8 +1806,8 @@ export class PageElementGroupEventually<
        * If no `timeout` is specified, a PageElement's default timeout is used.
        * If no `interval` is specified, a PageElement's default interval is used.
        */
-      containsDirectText: (directTexts: ExtractText<Content>, opts?: Workflo.ITimeoutInterval) => {
-        return this._node.eachCheck<ElementNode<Content>, ExtractText<Content>> (
+      containsDirectText: (directTexts: ExtractTextStateChecker<Content>, opts?: Workflo.ITimeoutInterval) => {
+        return this._node.eachCheck<ElementNode<Content>, ExtractTextStateChecker<Content>> (
           isIElementNode, ({ node, expected }) => node.eventually.not.containsDirectText(expected, opts), directTexts,
         );
       },
