@@ -511,6 +511,8 @@ ones used by `PageElement` and you should read about them in the
 
 ### The `currently` API
 
+#### Overview
+
 Like the [`currently` API of `PageElement`](element.md#state-retrieval-functions-no-implicit-waiting),
 the `currently` API of the `PageElementList` class consists of state retrieval functions
 and state check function. It does not trigger an implicit wait on the managed `PageElement`
@@ -524,6 +526,8 @@ page element guide.
 
 ### The `wait` API
 
+#### Overview
+
 The `wait` API of the `PageElementList` class allows you to explicitly wait
 for some or all of the list's managed `PageElement` instances to have an expected
 state. It consists of state check functions only which all return an instance
@@ -534,6 +538,8 @@ included by the filter mask to reach an expected state. Otherwise, the `wait` AP
 waits for all managed `PageElement` instances to reach their expected state.
 If one or more `PageElement` instance fail to reach their expected state within
 a specific timeout, an error will be thrown.
+
+#### Timeouts
 
 The `timeout` within which the expected states of the `PageElement` instances must
 be reached applies to each `PageElement` instance individually. So, if the `timeout`
@@ -566,7 +572,29 @@ For more information on how to configure the `timeout` and `interval` of
 state check functions defined on the `wait` API of a page node class,
 please read the [`wait` API section](element.md#the-wait-api) of the `PageElement` guide.
 
+#### `any` and `none`
+
+The `wait` API of `PageElementList` has two special accessors, `any` and `none`,
+to wait until any or none of the `PageElement` instances managed by the list
+reach an expected state:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+// Waits until any of the page elements managed by `linkList` has the text
+// 'wdio-workflo'.
+linkList.wait.any.hasText('wdio-workflo');
+
+// Waits until none of the page elements managed by `linkList` contains the term
+// 'active' in its CSS class string.
+linkList.wait.none.containsClass('active');
+```
+
 ### The `eventually` API
+
+#### Overview
 
 The `eventually` API of the `PageElementList` class checks if some or all of
 the `PageElement` instances managed by a `PageElementList` eventually reach an
@@ -579,14 +607,36 @@ If you use a filtermask, the `eventually` API only checks the state of `PageElem
 instances which are included by the filter mask. Otherwise, the `eventually` API
 checks the state of all managed `PageElement` instances.
 
-Like for the `wait` API, the `timeout` within which the expected states of the
-`PageElement` instances must be reached applies to each `PageElement` instance
-individually.
+#### Timeout
+
+Like for the `wait` API, for the `eventually` API too the `timeout` within which
+the expected states of the `PageElement` instances must be reached applies to
+each `PageElement` instance individually.
 
 For more information on how to configure the `timeout` and `interval` of
 state check functions defined on the `eventually` API of a page node class,
 please read the [`eventually` API section](element.md#the-eventually-api) of the
 `PageElement` guide.
+
+#### `any` and `none`
+
+The `eventually` API of `PageElementList` also has two special accessors,
+`any` and `none`, to check if any or none of the `PageElement` instances managed
+by the list eventually reaches an expected state:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+// Waits until any of the page elements managed by `linkList` has the text
+// 'wdio-workflo'.
+linkList.eventually.any.hasText('wdio-workflo');
+
+// Waits until none of the page elements managed by `linkList` contains the term
+// 'active' in its CSS class string.
+linkList.eventually.none.containsClass('active');
+```
 
 ## ValuePageElementList
 
