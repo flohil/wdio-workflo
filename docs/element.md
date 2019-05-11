@@ -30,6 +30,8 @@ of components like inputs, checkboxes or dropdowns.
 
 ## Creating a `PageElement`
 
+### `Element()` Factory Method
+
 Instead of manually invoking the constructor of `PageElement` using the `new` keyword,
 you should always call the `Element()` factory method of the [PageNodeStore](store.md)
 class to create an instance of the `PageElement` class:
@@ -44,9 +46,13 @@ const myElement = store.pageNode.Element('//div');
 However, for the sake of completeness, let's examine the type parameters and constructor
 of `PageElement` in more detail!
 
+### Type Parameters
+
 The `PageElement` class requires you to define one type parameter, the type of its associated `PageNodeStore`, which can be used to create other page nodes:
 
 ![The Store type parameter of PageElement](assets/page_element_type_parameters.png)
+
+### Constructor
 
 The constructor of `PageElement` requires two parameters:
 

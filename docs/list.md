@@ -37,6 +37,8 @@ the number of list elements is equal, smaller or bigger than an expected value.
 
 ## Creating a `PageElementList`
 
+### `ElementList()` Factory Method
+
 Instead of manually invoking the constructor of `PageElementList` using the `new` keyword,
 you should always call the `ElementList()` factory method of the [PageNodeStore](store.md)
 class to create an instance of the `PageElementList` class:
@@ -44,11 +46,13 @@ class to create an instance of the `PageElementList` class:
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkList = store.pageNode.ElementList('//a');
+const linkList = stores.pageNode.ElementList('//a');
 ```
 
 However, for the sake of completeness, let's examine the type parameters and constructor
 of `PageElementList` in more detail!
+
+### Type Parameters
 
 The `PageElementList` class has three type parameters:
 
@@ -63,6 +67,8 @@ export class PageElementList<
   PageElementOptions extends Partial<IPageElementOpts<Store>>,
 > extends PageNode<Store>
 ```
+
+### Constructor
 
 The constructor of `PageElementList` requires two parameters:
 
@@ -95,7 +101,7 @@ The `first` accessor retrieves the first page element managed by a `PageElementL
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkList = store.pageNode.ElementList('//a');
+const linkList = stores.pageNode.ElementList('//a');
 
 linkList.first.click();
 ```
@@ -109,7 +115,7 @@ specific position. It takes one parameter, the index of the retrieved page eleme
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkList = store.pageNode.ElementList('//a');
+const linkList = stores.pageNode.ElementList('//a');
 
 linkList.at(2).click();
 ```
@@ -123,7 +129,7 @@ the corresponding HTML elements were located on the website:
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkList = store.pageNode.ElementList('//a');
+const linkList = stores.pageNode.ElementList('//a');
 
 linkList.all.forEach(
   link => link.click()
@@ -159,7 +165,7 @@ Below you can find some code examples demonstrating the usage of a list's `where
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkList = store.pageNode.ElementList('//a');
+const linkList = stores.pageNode.ElementList('//a');
 
 // Fetch the first element from linkList whose text equals 'Feed Page'.
 // Resulting XPath: //a[.="Feed Page"]
@@ -280,7 +286,7 @@ wrapped by the list and call the `doubleClick` command on each of them:
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkList = store.pageNode.ElementList('//a');
+const linkList = stores.pageNode.ElementList('//a');
 
 // `.elements.value` returns the wrapped WebdriverIO elements which provide a `doubleClick` function.
 linkList.elements.value.forEach(
@@ -751,7 +757,7 @@ linkList.eventually.any.hasText('wdio-workflo');
 linkList.eventually.none.containsClass('active');
 ```
 
-## ValuePageElementList
+## The `ValuePageElementList` Class
 
 If you want a list to manage page elements that are derived from the
 `ValuePageElement` class, you need to use a `ValuePageElementList` instead
