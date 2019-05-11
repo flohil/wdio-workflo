@@ -595,6 +595,49 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
      */
     constructor(node: ListType, opts: IPageElementListOpts<Store, PageElementType, PageElementOpts>);
     /**
+     * Provides an API to check if any PageElement managed by PageElementList has
+     * a certain state within a specific timeout.
+     */
+    readonly any: import("./PageElement").PageElementCurrently<Store, PageElementType>;
+    /**
+     * Provides an API to check if none of PageElementList's managed PageElements
+     * has a certain state within a specific timeout.
+     */
+    readonly none: {
+        exists: () => boolean;
+        isVisible: () => boolean;
+        isEnabled: () => boolean;
+        isSelected: () => boolean;
+        isChecked: () => boolean;
+        hasText: (text: string) => boolean;
+        hasAnyText: () => boolean;
+        containsText: (text: string) => boolean;
+        hasDirectText: (directText: string) => boolean;
+        hasAnyDirectText: () => boolean;
+        containsDirectText: (directText: string) => boolean;
+        hasHTML: (html: string) => boolean;
+        hasAnyHTML: () => boolean;
+        containsHTML: (html: string) => boolean;
+        hasAttribute: (attribute: Workflo.IAttribute) => boolean;
+        hasAnyAttribute: (attributeName: string) => boolean;
+        containsAttribute: (attribute: Workflo.IAttribute) => boolean;
+        hasClass: (className: string) => boolean;
+        hasAnyClass: () => boolean;
+        containsClass: (className: string) => boolean;
+        hasId: (id: string) => boolean;
+        hasAnyId: () => boolean;
+        containsId: (id: string) => boolean;
+        hasName: (name: string) => boolean;
+        hasAnyName: () => boolean;
+        containsName: (name: string) => boolean;
+        hasLocation: (coordinates: Workflo.ICoordinates, tolerances?: Partial<Workflo.ICoordinates>) => boolean;
+        hasX: (x: number, tolerance?: number) => boolean;
+        hasY: (y: number, tolerance?: number) => boolean;
+        hasSize: (size: Workflo.ISize, tolerances?: Partial<Workflo.ISize>) => boolean;
+        hasWidth: (width: number, tolerance?: number) => boolean;
+        hasHeight: (height: number, tolerance?: number) => boolean;
+    };
+    /**
      * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM
      * which are identified by PageElementList's XPath selector).
      */
@@ -947,12 +990,57 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
      * Provides an API to wait for any PageElement managed by PageElementList to reach a certain state within a
      * specific timeout.
      */
-    readonly any: PageElementType["wait"];
+    readonly any: import("./PageElement").PageElementWait<Store, PageElementType>;
     /**
      * Provides an API to wait for none of PageElementList's managed PageElements to reach a certain state within a
      * specific timeout.
      */
-    readonly none: PageElementType['wait']['not'];
+    readonly none: {
+        exists: (opts?: Workflo.ITimeout) => PageElementType;
+        isVisible: (opts?: Workflo.ITimeout) => PageElementType;
+        isEnabled: (opts?: Workflo.ITimeout) => PageElementType;
+        isSelected: (opts?: Workflo.ITimeout) => PageElementType;
+        isChecked: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasText: (text: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsText: (text: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyAttribute: (attributeName: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyClass: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyId: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasName: (name: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasAnyName: (opts?: Workflo.ITimeoutInterval) => PageElementType;
+        containsName: (name: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasLocation: (coordinates: Workflo.ICoordinates, opts?: {
+            tolerances?: Partial<Workflo.ICoordinates>;
+        } & Workflo.ITimeoutInterval) => PageElementType;
+        hasX: (x: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => PageElementType;
+        hasY: (y: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => PageElementType;
+        hasSize: (size: Workflo.ISize, opts?: {
+            tolerances?: Partial<Workflo.ISize>;
+        } & Workflo.ITimeoutInterval) => PageElementType;
+        hasWidth: (width: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => PageElementType;
+        hasHeight: (height: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => PageElementType;
+    };
     /**
      * Waits for the result of the comparison between PageElementList's actual length and an expected length using the
      * comparison method defined in `comparator` to return true.
@@ -1369,15 +1457,60 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
  */
 export declare class PageElementListEventually<Store extends PageNodeStore, PageElementType extends PageElement<Store>, PageElementOptions extends Partial<IPageElementOpts<Store>>, ListType extends PageElementList<Store, PageElementType, PageElementOptions>> extends PageNodeEventually<Store, ListType> {
     /**
-     * Provides an API to check if any PageElement managed by PageElementList eventually has a certain state within a
-     * specific timeout.
+     * Provides an API to check if any PageElement managed by PageElementList eventually
+     * has a certain state within a specific timeout.
      */
-    readonly any: PageElementType["eventually"];
+    readonly any: import("./PageElement").PageElementEventually<Store, PageElementType>;
     /**
-     * Provides an API to check if none of the PageElements managed by PageElementList eventually have a certain state
-     * within a specific timeout.
+     * Provides an API to check if none of the PageElements managed by PageElementList
+     * eventually have a certain state within a specific timeout.
      */
-    readonly none: PageElementType['eventually']['not'];
+    readonly none: {
+        exists: (opts?: Workflo.ITimeout) => boolean;
+        isVisible: (opts?: Workflo.ITimeout) => boolean;
+        isEnabled: (opts?: Workflo.ITimeout) => boolean;
+        isSelected: (opts?: Workflo.ITimeout) => boolean;
+        isChecked: (opts?: Workflo.ITimeoutInterval) => boolean;
+        hasText: (text: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyText: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsText: (text: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyDirectText: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyAttribute: (attributeName: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        containsAttribute: (attribute: Workflo.IAttribute, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyClass: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyId: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsId: (id: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasName: (name: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasAnyName: (opts?: Workflo.ITimeoutInterval) => boolean;
+        containsName: (name: string, opts?: Workflo.ITimeoutInterval) => boolean;
+        hasLocation: (coordinates: Workflo.ICoordinates, opts?: {
+            tolerances?: Partial<Workflo.ICoordinates>;
+        } & Workflo.ITimeoutInterval) => boolean;
+        hasX: (x: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => boolean;
+        hasY: (y: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => boolean;
+        hasSize: (size: Workflo.ISize, opts?: {
+            tolerances?: Partial<Workflo.ISize>;
+        } & Workflo.ITimeoutInterval) => boolean;
+        hasWidth: (width: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => boolean;
+        hasHeight: (height: number, opts?: {
+            tolerance?: number;
+        } & Workflo.ITimeoutInterval) => boolean;
+    };
     /**
      * Returns true if the result of the comparison between PageElementList's actual length and an expected length using
      * the comparison method defined in `comparator` eventually returns true within a specific timeout.

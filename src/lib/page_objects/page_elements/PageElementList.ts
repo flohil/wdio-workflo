@@ -1030,6 +1030,22 @@ export class PageElementListCurrently<
     this._node = node;
   }
 
+  /**
+   * Provides an API to check if any PageElement managed by PageElementList has
+   * a certain state within a specific timeout.
+   */
+  get any() {
+    return this._node.first.currently;
+  }
+
+  /**
+   * Provides an API to check if none of PageElementList's managed PageElements
+   * has a certain state within a specific timeout.
+   */
+  get none() {
+    return this.any.not;
+  }
+
 // PUBLIC GETTER FUNCTIONS
 
   /**
@@ -1541,22 +1557,15 @@ export class PageElementListWait<
    * specific timeout.
    */
   get any() {
-    return this._node.first.wait as any as PageElementType['wait'];
+    return this._node.first.wait;
   }
-
-  // Typescript has a bug that prevents Exclude from working with generic extended types:
-  // https://github.com/Microsoft/TypeScript/issues/24791
-  // Bug will be fixed in Typescript 3.3.0
-  // get any() {
-  //   return excludeNot(this._list.currently.first.wait)
-  // }
 
   /**
    * Provides an API to wait for none of PageElementList's managed PageElements to reach a certain state within a
    * specific timeout.
    */
-  get none(): PageElementType['wait']['not'] {
-    return this._node.first.wait.not;
+  get none() {
+    return this.any.not;
   }
 
   /**
@@ -2131,19 +2140,19 @@ export class PageElementListEventually<
   // }
 
   /**
-   * Provides an API to check if any PageElement managed by PageElementList eventually has a certain state within a
-   * specific timeout.
+   * Provides an API to check if any PageElement managed by PageElementList eventually
+   * has a certain state within a specific timeout.
    */
   get any() {
-    return this._node.first.eventually as any as PageElementType['eventually'];
+    return this._node.first.eventually;
   }
 
   /**
-   * Provides an API to check if none of the PageElements managed by PageElementList eventually have a certain state
-   * within a specific timeout.
+   * Provides an API to check if none of the PageElements managed by PageElementList
+   * eventually have a certain state within a specific timeout.
    */
-  get none(): PageElementType['eventually']['not'] {
-    return this._node.first.eventually.not;
+  get none() {
+    return this.any.not;
   }
 
   /**

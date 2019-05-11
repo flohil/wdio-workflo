@@ -695,6 +695,20 @@ class PageElementListCurrently extends PageNode_1.PageNodeCurrently {
         this._elementStoreFunc = opts.elementStoreFunc;
         this._node = node;
     }
+    /**
+     * Provides an API to check if any PageElement managed by PageElementList has
+     * a certain state within a specific timeout.
+     */
+    get any() {
+        return this._node.first.currently;
+    }
+    /**
+     * Provides an API to check if none of PageElementList's managed PageElements
+     * has a certain state within a specific timeout.
+     */
+    get none() {
+        return this.any.not;
+    }
     // PUBLIC GETTER FUNCTIONS
     /**
      * Returns the current number of PageElements managed by PageElementList (the number of PageElements found in the DOM
@@ -1152,18 +1166,12 @@ class PageElementListWait extends PageNode_1.PageNodeWait {
     get any() {
         return this._node.first.wait;
     }
-    // Typescript has a bug that prevents Exclude from working with generic extended types:
-    // https://github.com/Microsoft/TypeScript/issues/24791
-    // Bug will be fixed in Typescript 3.3.0
-    // get any() {
-    //   return excludeNot(this._list.currently.first.wait)
-    // }
     /**
      * Provides an API to wait for none of PageElementList's managed PageElements to reach a certain state within a
      * specific timeout.
      */
     get none() {
-        return this._node.first.wait.not;
+        return this.any.not;
     }
     /**
      * Waits for the result of the comparison between PageElementList's actual length and an expected length using the
@@ -1662,18 +1670,18 @@ class PageElementListEventually extends PageNode_1.PageNodeEventually {
     //   return excludeNot(this._list.currently.first.eventually)
     // }
     /**
-     * Provides an API to check if any PageElement managed by PageElementList eventually has a certain state within a
-     * specific timeout.
+     * Provides an API to check if any PageElement managed by PageElementList eventually
+     * has a certain state within a specific timeout.
      */
     get any() {
         return this._node.first.eventually;
     }
     /**
-     * Provides an API to check if none of the PageElements managed by PageElementList eventually have a certain state
-     * within a specific timeout.
+     * Provides an API to check if none of the PageElements managed by PageElementList
+     * eventually have a certain state within a specific timeout.
      */
     get none() {
-        return this._node.first.eventually.not;
+        return this.any.not;
     }
     /**
      * Returns true if the result of the comparison between PageElementList's actual length and an expected length using
