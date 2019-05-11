@@ -121,7 +121,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3740">index.ts:3740</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3856">index.ts:3856</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -176,7 +176,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3845">index.ts:3845</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3961">index.ts:3961</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -231,7 +231,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3783">index.ts:3783</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3899">index.ts:3899</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -301,7 +301,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3880">index.ts:3880</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3996">index.ts:3996</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -351,7 +351,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3858">index.ts:3858</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3974">index.ts:3974</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,13 +397,13 @@
 					<a name="expectelement" class="tsd-anchor"></a>
 					<h3>expect<wbr>Element</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">expect<wbr>Element&lt;Store, PageElementType, ValueType&gt;<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType extends infer ElementType ? ElementType extends ValuePageElement&lt;any, ValueType&gt; ? IValueElementMatchers&lt;ReturnType&lt;ElementType[&quot;getValue&quot;]&gt;&gt; : IElementMatchers : IElementMatchers</span></li>
+						<li class="tsd-signature tsd-kind-icon">expect<wbr>Element&lt;Store, PageElementType, ValueType&gt;<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementType extends infer ElementType ? ElementType extends ValuePageElement&lt;Store, ValueType&gt; ? IValueElementMatchers&lt;ReturnType&lt;ElementType[&quot;getValue&quot;]&gt;&gt; : IElementMatchers : IElementMatchers</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L1602">index.ts:1602</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L1602">index.ts:1602</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -445,7 +445,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType extends infer ElementType ? ElementType extends ValuePageElement&lt;any, ValueType&gt; ? IValueElementMatchers&lt;ReturnType&lt;ElementType[&quot;getValue&quot;]&gt;&gt; : IElementMatchers : IElementMatchers</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementType extends infer ElementType ? ElementType extends ValuePageElement&lt;Store, ValueType&gt; ? IValueElementMatchers&lt;ReturnType&lt;ElementType[&quot;getValue&quot;]&gt;&gt; : IElementMatchers : IElementMatchers</span></h4>
 							<p>the expectation matchers for PageElement or ValuePageElement</p>
 						</li>
 					</ul>
@@ -454,13 +454,13 @@
 					<a name="expectgroup" class="tsd-anchor"></a>
 					<h3>expect<wbr>Group</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">expect<wbr>Group&lt;Store, Content, PageElementGroupType&gt;<span class="tsd-signature-symbol">(</span>group<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementGroupType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementGroupType extends infer GroupType ? GroupType extends ValuePageElementGroup&lt;any, Content&gt; ? IValueGroupMatchers&lt;GroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;PageElementGroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;...&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">expect<wbr>Group&lt;Store, Content, PageElementGroupType&gt;<span class="tsd-signature-symbol">(</span>group<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementGroupType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementGroupType extends infer GroupType ? GroupType extends ValuePageElementGroup&lt;Store, Content&gt; ? IValueGroupMatchers&lt;PageElementGroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;PageElementGroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;...&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L1674">index.ts:1674</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L1680">index.ts:1680</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -501,7 +501,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementGroupType extends infer GroupType ? GroupType extends ValuePageElementGroup&lt;any, Content&gt; ? IValueGroupMatchers&lt;GroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;PageElementGroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;...&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementGroupType extends infer GroupType ? GroupType extends ValuePageElementGroup&lt;Store, Content&gt; ? IValueGroupMatchers&lt;PageElementGroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;PageElementGroupType[&quot;$&quot;]&gt; : IGroupMatchers&lt;...&gt;</span></h4>
 							<p>the expectation matchers for PageElementGroup or ValuePageElementGroup</p>
 						</li>
 					</ul>
@@ -510,13 +510,13 @@
 					<a name="expectlist" class="tsd-anchor"></a>
 					<h3>expect<wbr>List</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">expect<wbr>List&lt;Store, PageElementType, PageElementOptions, PageElementListType&gt;<span class="tsd-signature-symbol">(</span>list<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementListType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementListType extends infer ListType ? ListType extends ValuePageElementList&lt;any, ValuePageElement&lt;any, any&gt;, PageElementOptions, any&gt; ? IValueListMatchers&lt;ReturnType&lt;ListType[&quot;getValue&quot;]&gt;&gt; : IListMatchers : IListMatchers</span></li>
+						<li class="tsd-signature tsd-kind-icon">expect<wbr>List&lt;Store, PageElementType, PageElementOptions, PageElementListType, ValueType&gt;<span class="tsd-signature-symbol">(</span>list<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementListType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementListType extends infer ListType ? ListType extends ValuePageElementList&lt;Store, ValuePageElement&lt;Store, ValueType&gt;, PageElementOptions, ValueType&gt; ? IValueListMatchers&lt;ReturnType&lt;ListType[&quot;getValue&quot;]&gt;&gt; : IListMatchers : IListMatchers</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L1624">index.ts:1624</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L1626">index.ts:1626</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -537,6 +537,10 @@
 									<dt>template</dt>
 									<dd><p>PageElementListType type of the passed list</p>
 									</dd>
+									<dt>template</dt>
+									<dd><p>ValueType If the passed list is an instance of ValuePageElementList, this is the type of the values
+										handled in the xxxValue functions of the elements managed by the list.</p>
+									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -553,6 +557,9 @@
 								<li>
 									<h4>PageElementListType<span class="tsd-signature-symbol">: </span><a href="../classes/pageelementlist.html" class="tsd-signature-type">PageElementList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
+								<li>
+									<h4>ValueType</h4>
+								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -563,7 +570,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementListType extends infer ListType ? ListType extends ValuePageElementList&lt;any, ValuePageElement&lt;any, any&gt;, PageElementOptions, any&gt; ? IValueListMatchers&lt;ReturnType&lt;ListType[&quot;getValue&quot;]&gt;&gt; : IListMatchers : IListMatchers</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementListType extends infer ListType ? ListType extends ValuePageElementList&lt;Store, ValuePageElement&lt;Store, ValueType&gt;, PageElementOptions, ValueType&gt; ? IValueListMatchers&lt;ReturnType&lt;ListType[&quot;getValue&quot;]&gt;&gt; : IListMatchers : IListMatchers</span></h4>
 							<p>the expectation matchers for PageElementList or ValuePageElementList</p>
 						</li>
 					</ul>
@@ -572,13 +579,13 @@
 					<a name="expectmap" class="tsd-anchor"></a>
 					<h3>expect<wbr>Map</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">expect<wbr>Map&lt;Store, K, PageElementType, PageElementOptions, PageElementMapType&gt;<span class="tsd-signature-symbol">(</span>map<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementMapType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementMapType extends infer MapType ? MapType extends ValuePageElementMap&lt;any, K, ValuePageElement&lt;any, any&gt;, PageElementOptions, any&gt; ? IValueMapMatchers&lt;Extract&lt;keyof MapType[&quot;$&quot;], string&gt;, ReturnType&lt;...&gt;[keyof MapType[&quot;$&quot;]]&gt; : IMapMatchers&lt;...&gt; : IMapMatchers&lt;...&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">expect<wbr>Map&lt;Store, K, PageElementType, PageElementOptions, PageElementMapType, ValueType&gt;<span class="tsd-signature-symbol">(</span>map<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementMapType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PageElementMapType extends infer MapType ? MapType extends ValuePageElementMap&lt;Store, K, ValuePageElement&lt;Store, ValueType&gt;, PageElementOptions, any&gt; ? IValueMapMatchers&lt;Extract&lt;keyof PageElementMapType[&quot;$&quot;], string&gt;, ReturnType&lt;...&gt;[keyof PageElementMapType[&quot;$&quot;]]&gt; : IMapMatchers&lt;...&gt; : IMapMatchers&lt;...&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L1649">index.ts:1649</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L1654">index.ts:1654</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -602,6 +609,10 @@
 									<dt>template</dt>
 									<dd><p>PageElementMapType type of the passed map</p>
 									</dd>
+									<dt>template</dt>
+									<dd><p>ValueType If the passed map is an instance of ValuePageElementMap, this is the type of the values
+										handled in the xxxValue functions of the elements managed by the map.</p>
+									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -621,6 +632,9 @@
 								<li>
 									<h4>PageElementMapType<span class="tsd-signature-symbol">: </span><a href="../classes/pageelementmap.html" class="tsd-signature-type">PageElementMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementType</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">PageElementOptions</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
+								<li>
+									<h4>ValueType</h4>
+								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -631,7 +645,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementMapType extends infer MapType ? MapType extends ValuePageElementMap&lt;any, K, ValuePageElement&lt;any, any&gt;, PageElementOptions, any&gt; ? IValueMapMatchers&lt;Extract&lt;keyof MapType[&quot;$&quot;], string&gt;, ReturnType&lt;...&gt;[keyof MapType[&quot;$&quot;]]&gt; : IMapMatchers&lt;...&gt; : IMapMatchers&lt;...&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PageElementMapType extends infer MapType ? MapType extends ValuePageElementMap&lt;Store, K, ValuePageElement&lt;Store, ValueType&gt;, PageElementOptions, any&gt; ? IValueMapMatchers&lt;Extract&lt;keyof PageElementMapType[&quot;$&quot;], string&gt;, ReturnType&lt;...&gt;[keyof PageElementMapType[&quot;$&quot;]]&gt; : IMapMatchers&lt;...&gt; : IMapMatchers&lt;...&gt;</span></h4>
 							<p>the expectation matchers for PageElementMap or ValuePageElementMap</p>
 						</li>
 					</ul>
@@ -646,7 +660,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L1695">index.ts:1695</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L1701">index.ts:1701</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -703,7 +717,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3752">index.ts:3752</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3868">index.ts:3868</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -760,7 +774,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3806">index.ts:3806</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3922">index.ts:3922</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -832,7 +846,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3905">index.ts:3905</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4021">index.ts:4021</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -884,7 +898,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3950">index.ts:3950</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4066">index.ts:4066</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -941,7 +955,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L4018">index.ts:4018</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4134">index.ts:4134</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1015,7 +1029,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3731">index.ts:3731</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3847">index.ts:3847</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1051,7 +1065,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L4061">index.ts:4061</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4177">index.ts:4177</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1087,7 +1101,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3938">index.ts:3938</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4054">index.ts:4054</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1142,7 +1156,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3988">index.ts:3988</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4104">index.ts:4104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1214,7 +1228,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L4087">index.ts:4087</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4203">index.ts:4203</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1285,7 +1299,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3763">index.ts:3763</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3879">index.ts:3879</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1341,7 +1355,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3828">index.ts:3828</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3944">index.ts:3944</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1412,7 +1426,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3929">index.ts:3929</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4045">index.ts:4045</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1463,7 +1477,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L4099">index.ts:4099</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4215">index.ts:4215</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1498,7 +1512,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3961">index.ts:3961</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4077">index.ts:4077</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1554,7 +1568,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L4047">index.ts:4047</a></li>
+									<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L4163">index.ts:4163</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

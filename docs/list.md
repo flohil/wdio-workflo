@@ -290,67 +290,16 @@ linkList.elements.value.forEach(
 
 ## State Functions
 
-included by the filtermask
-
-state retrieval
-
-getText  -> returns array where each array element corresponds to result
-of managed `PageElement` instance at the same/corresponding list position
-
-filterMask:
-false -> skips invocation for all elements - returns empty array
-[false, true] -> skips invocation for certain elements ->
-
-The return value of a state retrieval function's 'child' function whose invocation is skipped by the filter
-       * mask will not be written to the results array of the state retrieval function. The length of the results array
-       * can therefore differ from the number of PageElements managed by PageElementList.
-
-if all are skipped -> empty list
-
-action
-
-is executed for each element -> list.all.forEach( element => element.click() )
-
-pages.demo.dynamicControls.buttonList.eachDo(
-  element => element.click()
-  [false, true]
-)
-
-skips action invocation for list elements not included by the filtermask
-
-inputList.setValue('asdf')
-inputList.setValue(['one', 'two', 'three'])
-
-state check functions
-
-
-list.currently.hasText('asdf') -> for each
-list.eventually.hasText(['one', 'two','three'], {timeout: 3000})
-
-timeout for each element!
-
-list.currently.hasAnyText(false) // always return true
-
-list.currently.hasAnyText([true, false, true]) // returns true if first and third
-list element have any text
-
-list.currently.exists([true, false, true])
-
-
-list.wait.exists() -> returns instance of PageElementList
-
-filtermask object itself is last parameter for currently state check functions are state retrieval functions
-
-for state check wait and eventually functions, filtermask object is a property of
-opts parameter
-
 ### Reading and Checking the List Length
+
+#### Reading the List Length
 
 To retrieve the length of a `PageElementList` (the number of WebdriverIO elements
 which match the list's XPath selector), you can call its `getLength()` and
 `currently.getLength()` methods. Since the `PageElementList` class has no
 implicit waiting mechanism, both of these methods return the current length
-of the list. `getLength()` is just a convenience method/an alias for `currently.getLength()`:
+of the list. `getLength()` is just a convenience method/an alias for
+`currently.getLength()`:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -364,46 +313,190 @@ const length2 = linkList.currently.getLength();
 length1 === length2
 ```
 
+#### Checking the List Length
+
 Using the `wait.hasLength()` method, you can wait for `PageElementList` to have
-an expected length. `currently.hasLength()` allows you to check if `PageElementList` currently has an expected length and `eventually.hasLength()` lets you check if
+an expected length. `currently.hasLength()` allows you to check if `PageElementList`
+currently has an expected length and `eventually.hasLength()` lets you check if
 `PageElementList` eventually has an expected length within a specific timeout.
 
-The first parameter of each `hasLength()`
+The `hasLength()` method always takes parameters:
 
-hasLength (with comparators) and is empty with currently, wait, eventually
+- The expected length as a number.
+- A comparator to compare the expected and the list's actual length. Per default,
+the comparator checks if the two values are equal (`==`), but you can also use
+less than (`<`), greater than (`>`) or other than (`!=`) comparisons. For the `wait`
+and `eventually` APIs, the comparator is wrapped in the `opts` parameter object
+as its `comparator` property. To set the comparator value, you need to use
+the `Workflo.Comparator` enum.
 
-getText etc of all elements - with filtermask
+The following code examples demonstrate the usage of the `hasLength()` function:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+// Checks if the list currently has 5 elements.
+linkList.currently.hasLength(5);
+
+// Checks if the list currently does not have 5 elements.
+// Both statements below achieve the same outcome.
+linkList.currently.not.hasLength(5);
+linkList.currently.hasLength(5, Workflo.Comparator.notEqualTo);
+
+// Waits for the list to have more than 5 elements.
+linkList.wait.hasLength(5, { comparator: Workflo.Comparator.greaterThan });
+
+// Checks if the list eventually has less then 5 elements within 3 seconds.
+linkList.eventually.hasLength(5, {
+  comparator: Workflo.Comparator.lessThan,
+  timeout: 3000
+});
+```
 
 ### State Retrieval Functions
 
-State retrieval functions of the `currently` API return the values of the
-retrieved attribute as an array, where the position of the value in the array
-corresponds to the index of the managed `PageElement` instance in the list.
+State retrieval functions of the `PageElementList` class fulfil the same purpose
+as those of the `PageElement` class: They retrieve the values of a certain attribute
+of HTML elements mapped by `PageElement` instances from the website.
 
+However, since a `PageElementList` manages a collection of `PageElement` instances,
+the state retrieval functions defined on the `PageElementList` class do not return
+a single attribute value, but an array of attribute values - one for each
+`PageElement` instance managed by the list. The order of the returned attribute
+values corresponds to the positions of their corresponding `PageElement` instances
+in the list.
 
-currently and class itself
+Let's assume our `PageElementList` manages all link `<a>` elements in the following
+HTML structure:
 
-one of the elements in the list
+![A list of links](assets/list_links.png)
 
-cannot know in advance how many elements are in the list - wait for at least one
+```typescript
+import { stores } from '?/page_objects';
 
-not when accessing .element
+const linkList = stores.pageNode.ElementList('//a');
+
+// Retrieves the texts of all link elements managed by the list as a string array.
+const linkTexts = linkList.getText();
+```
+
+In the above example, the `linkTexts` variable would now store
+`["Demo Page", "Examples", "API"]`.
+
+Internally, `PageElementList` simply loops over all of its managed
+`PageElement` instances and invokes the respective state retrieval function
+on each `PageElement`. You can also skip the invocation of the state retrieval
+function for certain `PageElement` instances by using a filter mask. The
+[Filter Masks section](#filter-masks) of this guide shows you how to do that.
+
+For more information about the types of available state retrieval functions,
+please read the [State Retrieval Functions section](element.md#state-retrieval-functions) of the `PageElement` guide.
 
 ### Action Functions
 
-exists, isVisible, isEnabled
-hasValue
-other statate check funcs -> hasText take single value or array -> true
-if all match - filtermask???
+Action functions change the state of the tested web application by interacting
+with HTML elements that are mapped by `PageElement` instances. To execute an
+action function on each `PageElement` instance managed by a `PageElementList`,
+you have two options:
 
-currently, wait, eventually -> link to page element guide
+- You can simply loop over the array of `PageElement` instances returned by the
+`all` accessor of `PageElementList` and invoke an action function on each.
+- You can use the `eachDo()` method of the `PageElementList` which automatically
+loops over the `PageElementList` instances and invokes an action function which
+you need to pass to `eachDo()` on each page element. Using `eachDo()` allows you to
+optionally pass a [filter mask](#filter-masks) as second parameter to skip the action
+function's invocation for certain `PageElement` instances.
 
-not
+The following code example compares both options for executing action functions
+on each element of a list:
 
-any and none
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+// Clicks on each element of `linkList`.
+linkList.all.forEach( element => element.click() )
+
+// Clicks on the second element of `linkList` but skips the click for the
+// first element because its corresponding filter mask value is set to `false`.
+linkList.eachDo(
+  element => element.click()
+  [false, true]
+)
+```
+
+For more information about the types of available action functions,
+please read the [Action Functions section](element.md#action-functions) of the `PageElement` guide.
 
 ### State Check Functions
 
+The state check functions of the `PageElementList` class let you check if all
+or some of the `PageElement` instances managed by a `PageElementList` currently
+or eventually have an expected state. They also allow you to wait for some or all
+page elements of a list to reach an expected state within a specific timeout.
+
+If a state check function of `PageElementList` requires you to pass the expected
+attribute states as a parameter, you can define this parameter in two ways:
+
+- You can pass an array of expected attribute values. This length of this array
+needs to equal the number of page elements managed by the list. The index of
+a value in the array corresponds to the position of a page element in the list
+(The third value in the expected attribute values array will be used to invoke
+the state check function on the third page element in the list).
+- You can pass a single attribute value. This value will be used to call the
+state check function of each page element manged by the list.
+
+If you set a value in the array of expected attribute values to `undefined`,
+the invocation of the state check function for the corresponding page element
+will be skipped.
+
+For state check functions that do not require you to pass the expected attribute
+states as a parameter, you can use a [filter mask](#filter-masks) to skip the
+invocation of the state check function for certain `PageElement` instances.
+
+The following code example demonstrates the usage of the state check functions
+of a `PageElementList`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const animalsList = stores.pageNode.ElementList(
+  xpath('//div').classContains('animalName')
+);
+
+// Checks if the text of the first element is 'Cattle', the text of the second
+// element is 'Cat' and the text of the third element is 'Elephant'.
+animalsList.currently.hasText(['Cattle', 'Cat', 'Elephant']);
+
+// Checks if each the text of each list element contains the letter 'a'.
+animalsList.currently.containsText('a');
+
+// Checks if the first and the third element of the list have any text (are not empty).
+animalsList.currently.hasAnyText([true, false, true]);
+
+// Waits for all elements of the list to exist.
+animalsList.wait.exists();
+
+// Waits until the first and third element of the list are not/no longer visible.
+animalsList.wait.not.isVisible({ filterMask: [true, false, true] });
+
+// Checks if the text of the first element contains the letter 'l' and if
+// the text of the third element contains the letter 'p'.
+animalsList.eventually.not.containsText(['l', undefined, 'p']);
+```
+
+To find out how state check functions behave differently when invoked on the
+`currently`, `wait` or `eventually` API of a `PageElementList`, please read the
+corresponding sections of this guide:
+[The `currently` API](#the-currently-api),
+[The `wait` API](#the-wait-api),
+[The `eventually` API](#the-eventually-api).
+
+For more information about the types of available state check functions,
+please read the [State Check Functions section](element.md#state-check-functions) of the `PageElement` guide.
 
 ### Filter Masks
 
@@ -524,6 +617,26 @@ The types of available state retrieval and state check functions can be found
 in the [State Function Types section](element.md#state-function-types) of the
 page element guide.
 
+#### `any` and `none`
+
+The `currently` API of `PageElementList` has two special accessors, `any` and `none`,
+to check if any or none of the `PageElement` instances managed by the list currently
+has an expected state:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkList = stores.pageNode.ElementList('//a');
+
+// Checks if any of the page elements managed by `linkList` currently has the text
+// 'wdio-workflo'.
+linkList.currently.any.hasText('wdio-workflo');
+
+// Checks if none of the page elements managed by `linkList` currently contains the
+// term 'active' in its CSS class string.
+linkList.currently.none.containsClass('active');
+```
+
 ### The `wait` API
 
 #### Overview
@@ -574,9 +687,9 @@ please read the [`wait` API section](element.md#the-wait-api) of the `PageElemen
 
 #### `any` and `none`
 
-The `wait` API of `PageElementList` has two special accessors, `any` and `none`,
-to wait until any or none of the `PageElement` instances managed by the list
-reach an expected state:
+Like, the `currently` API, the `wait` API of `PageElementList` has two special
+accessors, `any` and `none`, to wait until any or none of the `PageElement`
+instances managed by the list reach an expected state:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -629,12 +742,12 @@ import { stores } from '?/page_objects';
 
 const linkList = stores.pageNode.ElementList('//a');
 
-// Waits until any of the page elements managed by `linkList` has the text
+// Checks if any of the page elements managed by `linkList` eventually has the text
 // 'wdio-workflo'.
 linkList.eventually.any.hasText('wdio-workflo');
 
-// Waits until none of the page elements managed by `linkList` contains the term
-// 'active' in its CSS class string.
+// Checks if none of the page elements managed by `linkList` eventually contains the
+// term 'active' in its CSS class string.
 linkList.eventually.none.containsClass('active');
 ```
 

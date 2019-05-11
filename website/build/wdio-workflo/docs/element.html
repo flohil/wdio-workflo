@@ -79,7 +79,7 @@ class to create an instance of the <code>PageElement</code> class:</p>
 <span class="hljs-keyword">const</span> myElement = store.pageNode.Element(<span class="hljs-string">'//div'</span>);
 </code></pre>
 <p>However, for the sake of completeness, let's examine the type parameters and constructor
-of <code>PageElement</code> in more detail.</p>
+of <code>PageElement</code> in more detail!</p>
 <p>The <code>PageElement</code> class requires you to define one type parameter, the type of its associated <code>PageNodeStore</code>, which can be used to create other page nodes:</p>
 <p><img src="/wdio-workflo/docs/assets/page_element_type_parameters.png" alt="The Store type parameter of PageElement"></p>
 <p>The constructor of <code>PageElement</code> requires two parameters:</p>
@@ -88,6 +88,13 @@ of <code>PageElement</code> in more detail.</p>
 <li>The <code>opts</code> parameter containing properties to configure the <code>PageElement</code></li>
 </ul>
 <p><img src="/wdio-workflo/docs/assets/page_element_constructor.png" alt="Constructor of PageElement"></p>
+<p>The most important properties of the <code>opts</code> parameter are:</p>
+<ul>
+<li><code>store</code> =&gt; The <code>PageNodeStore</code> instance associated with the <code>PageElement</code>.</li>
+<li><code>timeout</code> =&gt; The element's default timeout for all functions of the <a href="#explicit-waiting-currently-wait-and-eventually"><code>eventually</code> and <code>wait</code> APIs</a>.</li>
+<li><code>interval</code> =&gt; The element's default interval for all functions of the <a href="#explicit-waiting-currently-wait-and-eventually"><code>eventually</code> and <code>wait</code> APIs</a>.</li>
+<li><code>waitType</code> =&gt; The waiting type used for the <a href="#implicit-waiting">initial waiting condition</a> of the <code>PageElement</code>.</li>
+</ul>
 <h2><a class="anchor" aria-hidden="true" id="the-associated-pagenodestore"></a><a href="#the-associated-pagenodestore" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The Associated <code>PageNodeStore</code></h2>
 <p>Each <code>PageElement</code> stores an instance of a <code>PageNodeStore</code> in its private <code>_store</code>
 class member variable.</p>
@@ -122,9 +129,9 @@ you want to debug your testcase and output the XPath selector of the affected
 <code>PageElement</code>.</p>
 <h2><a class="anchor" aria-hidden="true" id="the-underlying-webdriverio-element"></a><a href="#the-underlying-webdriverio-element" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The Underlying WebdriverIO Element</h2>
 <p>Wdio-workflo's <code>PageElement</code> class introduces an additional layer of abstraction
-on top of WebdriverIO's <a href="http://v4.webdriver.io/api/protocol/element.html">browser.element</a> method. The <code>browser.element</code> method takes an XPath selector and fetches the first HTML
+on top of WebdriverIO's <a href="http://v4.webdriver.io/api/protocol/element.html">browser.element</a> function. The <code>browser.element</code> function takes an XPath selector and fetches the first HTML
 element matching this selector from the website:</p>
-<pre><code class="hljs css language-typescript">browser.element(<span class="hljs-string">'//div'</span>)
+<pre><code class="hljs css language-typescript">browser.element(<span class="hljs-string">'//div'</span>);
 </code></pre>
 <p>The <code>PageElement</code> class does not store any information about the state of its mapped HTML
 element. Instead, the state retrieval methods defined on <code>PageElement</code> internally invoke <a href="http://v4.webdriver.io/api.html">WebdriverIO commands</a> on the element returned by <code>browser.element</code> to read information about the state of the mapped HTML element
@@ -143,44 +150,426 @@ the HTML element is fully loaded before you try to interact with it or read its 
   <span class="hljs-keyword">return</span> browser.element(<span class="hljs-keyword">this</span>._selector);
 }
 </code></pre>
-<p>You can learn more about the waiting mechanisms of <code>PageElement</code> in the next
-section of this guide.</p>
+<p>Most of the time you don't need to access the WebdriverIO element wrapped by the
+<code>PageElement</code> class from outside the class. In some rare cases, however,
+you might need to interact with the WebdriverIO element directly.</p>
+<p>One situation that requires you to interact with the WebdriverIO element directly
+is if your web application has a context menu that can only be opened by performing a
+right click. Wdio-workflo's <code>PageElement</code> provides no method to perform a right click
+but a WebdriverIO element does:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> contentMenuZone = store.pageNode.Element(<span class="hljs-string">'//div'</span>);
+
+<span class="hljs-comment">// `PageElement.element` triggers an implicit wait and returns the wrapped</span>
+<span class="hljs-comment">// WebdriverIO element which provides a `rightClick` command.</span>
+contentMenuZone.element.rightClick();
+</code></pre>
+<p>If you want to access the underlying WebdriverIO element of a <code>PageElement</code> without
+triggering an implicit wait, you can use the <code>element</code> accessor of the <code>currently</code>
+API instead:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> contentMenuZone = store.pageNode.Element(<span class="hljs-string">'//div'</span>);
+
+<span class="hljs-comment">// `PageElement.currently.element` does not trigger an implicit wait.</span>
+contentMenuZone.currently.element.rightClick();
+</code></pre>
+<p><em>To learn more about the waiting mechanisms of <code>PageElement</code> read the following
+section of this guide.</em></p>
+<h2><a class="anchor" aria-hidden="true" id="state-function-types"></a><a href="#state-function-types" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Function Types</h2>
+<p>The <code>PageElement</code> class offers plenty of methods to read or modify the state of
+its mapped/wrapped HTML element. These methods can be divided into three categories:</p>
+<ul>
+<li>State Retrieval Functions</li>
+<li>Action Functions</li>
+<li>State Check Functions</li>
+</ul>
+<p>The following sections of this guide describe each of these function categories
+in full detail.</p>
+<h3><a class="anchor" aria-hidden="true" id="state-retrieval-functions"></a><a href="#state-retrieval-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Retrieval Functions</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview"></a><a href="#overview" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
+<p>State retrieval functions retrieve the value of a specific attribute of the HTML
+element wrapped by <code>PageElement</code>. They are available either directly within the
+scope of the <code>PageElement</code> class or via the <code>currently</code> API. If invoked directly
+on the <code>PageElement</code> class, state retrieval functions trigger an
+<a href="#implicit-waiting">implicit wait</a> before returning an attribute value, whereas
+calling a state retrieval function via the <code>currently</code> API does not trigger
+an implicit wait and returns the attribute value immediatly.</p>
+<h4><a class="anchor" aria-hidden="true" id="types-of-state-retrieval-functions"></a><a href="#types-of-state-retrieval-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Types of State Retrieval Functions</h4>
+<p>State retrieval functions always start with the term <code>get</code>, followed by the name
+of the attribute whose value should be retrieved. However, not all methods of
+<code>PageElement</code> which start with the term <code>get</code> are state retrieval functions -
+methods that do not interact with the mapped HTML element (e.g. <code>getSelector()</code>,
+<code>getTimeout()</code> or <code>getTimeout()</code>) aren't state retrieval functions and therefore
+do not trigger the implicit waiting mechanism of <code>PageElement</code>.</p>
+<p>State retrieval functions exist for the following HTML attributes:</p>
+<ul>
+<li><code>Text</code> =&gt; All text content of an HTML element
+(also includes text of nested HTML elements).</li>
+<li><code>DirectText</code> =&gt; Text content that is a direct child of an HTML element
+(no nested HTML elements).</li>
+<li><code>HTML</code> =&gt; All HTML content of an HTML element.</li>
+<li><code>Class</code> =&gt; An HTML element's CSS classnames as a single string.</li>
+<li><code>Id</code> =&gt; The ID attribute of an HTML element.</li>
+<li><code>Name</code> =&gt; The name attribute of an HTML element.</li>
+<li><code>Location</code> =&gt; The coordinates of an HTML element in pixels (left top corner).</li>
+<li><code>X</code> =&gt; The X coordinate of an HTML element (left top corner).</li>
+<li><code>Y</code> =&gt; The Y coordinate of an HTML element (left top corner).</li>
+<li><code>Size</code> =&gt; The size of an HTML element in pixels.</li>
+<li><code>Width</code> =&gt; The width of an HTML element in pixels.</li>
+<li><code>Height</code> =&gt; The height of an HTML element in pixels.</li>
+<li><code>Value</code> =&gt; The value of an element like input, checkbox...
+(only available in <code>ValuePageElement</code> class).</li>
+</ul>
+<h4><a class="anchor" aria-hidden="true" id="usage-examples"></a><a href="#usage-examples" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage Examples</h4>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+<span class="hljs-keyword">const</span> input = stores.pageNode.Input(<span class="hljs-string">'//input'</span>); <span class="hljs-comment">// Input implements ValuePageElement</span>
+
+<span class="hljs-comment">// Retrieves the text of the element after performing an implicit wait.</span>
+<span class="hljs-keyword">const</span> text = element.getText();
+
+<span class="hljs-comment">// Retrieves the text of the element immediatly, without performing an implicit wait.</span>
+<span class="hljs-keyword">const</span> currentText = element.currently.getText();
+
+<span class="hljs-comment">// Retrieves the text of the input after performing an implicit wait.</span>
+<span class="hljs-keyword">const</span> value = input.getValue();
+
+<span class="hljs-comment">// Retrieves the value of the element immediatly, without performing an implicit wait.</span>
+<span class="hljs-keyword">const</span> currentValue = input.currently.getValue();
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="action-functions"></a><a href="#action-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Action Functions</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview-1"></a><a href="#overview-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
+<p>Action functions change the state of tested web application by interacting
+with the mapped HTML element of a <code>PageElement</code> - they could also be called
+state modification functions. Action functions are only available directly within
+the scope of <code>PageElement</code> and do not exist within its <code>currently</code>, <code>wait</code> or
+<code>eventually</code> APIs. Action functions always trigger an
+<a href="#implicit-waiting">implicit wait</a> before interacting with the mapped HTML element.</p>
+<h4><a class="anchor" aria-hidden="true" id="types-of-state-check-functions"></a><a href="#types-of-state-check-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Types of State Check Functions</h4>
+<p>Wdio-workflo ships with three action functions:</p>
+<ul>
+<li><code>click()</code> =&gt; Clicks on a mapped HTML element.</li>
+<li><code>scrollTo()</code> =&gt; Scrolls a mapped HTML element into view.</li>
+<li><code>setValue(value)</code> =&gt; Sets the value of an HTML element like input, dropdown, checkbox...
+(only available for <code>ValuePageElement</code> classes).</li>
+</ul>
+<h5><a class="anchor" aria-hidden="true" id="configuring-the-click-function"></a><a href="#configuring-the-click-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuring the <code>click()</code> Function</h5>
+<p>The behavior of the <code>click()</code> function can be modified via its <code>opts</code> parameter object.
+This object includes the following properties:</p>
+<ul>
+<li><code>postCondition</code> =&gt; If set, the HTML element will be clicked and the <code>postCondition</code>
+function executed periodically until it returns <code>true</code> or until a timeout is reached.</li>
+<li><code>customScroll</code> =&gt; Allows you to overwrite the default behavior for scrolling
+an HTML element into view before clicking on it.</li>
+<li><code>timeout</code> =&gt; Used to define the timeout for evaluating the <code>postCondition</code> function
+in periodic intervals.</li>
+<li><code>interval</code> =&gt; Used to define the intervals for evaluating the <code>postCondition</code> function.</li>
+</ul>
+<p>For a detailed description of the <code>click()</code> function's behavior and the properties of
+its <code>opts</code> parameter, please read the
+<a href="https://flohil.github.io/wdio-workflo/apiDoc/classes/pageelement.html#click">API documentation of the <code>click()</code> function</a>.</p>
+<h5><a class="anchor" aria-hidden="true" id="configuring-the-scrollto-function"></a><a href="#configuring-the-scrollto-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuring the <code>scrollTo()</code> Function</h5>
+<p>The behavior of the <code>scrollTo()</code> function, too, can be modified via its <code>opts</code> parameter
+object. This object includes the following properties:</p>
+<ul>
+<li><code>closestContainerIncludesHidden</code> =&gt; If no explicit <code>containerSelector</code> is defined,
+setting this property to true will cause the auto-detection of the closest scrollable
+container to also recognize containers whose CSS <code>overflow</code> property is set to <code>hidden</code>.</li>
+<li><code>containerSelector</code> =&gt; The selector used to determine the parenting scroll container
+of the HTML element.</li>
+<li><code>directions</code> =&gt; Defines the directions in which the scrolling container should be scrolled.</li>
+<li><code>offsets</code> =&gt; Will be added to the final scroll position of the scrolling container.</li>
+</ul>
+<p>For a detailed description of the <code>scrollTo()</code> function's behavior and the properties of
+its <code>opts</code> parameter, please read the
+<a href="https://flohil.github.io/wdio-workflo/apiDoc/classes/pageelement.html#scrollto">API documentation of the <code>scrollTo()</code> function</a>.</p>
+<h4><a class="anchor" aria-hidden="true" id="usage-examples-1"></a><a href="#usage-examples-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage Examples</h4>
+<p>Below, you can find some usage examples of action functions:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+<span class="hljs-keyword">const</span> input = stores.pageNode.Input(<span class="hljs-string">'//input'</span>); <span class="hljs-comment">// Input implements ValuePageElement</span>
+<span class="hljs-keyword">const</span> checkbox = stores.pageNode.Checkbox(
+  xpath(<span class="hljs-string">'//div'</span>).classContains(<span class="hljs-string">'ms-Checkbox'</span>)
+)
+
+<span class="hljs-comment">// Clicks on the element after performing an implicit wait.</span>
+element.click();
+
+<span class="hljs-comment">// Repeatedly clicks on the element after performing an implicit wait</span>
+<span class="hljs-comment">// until the confirm dialog is no longer visible or until 3 seconds have passed.</span>
+<span class="hljs-comment">// If the dialog did not disappear within 3 seconds, throws an error.</span>
+element.click({
+  postCondition: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> dialogs.confirm.currently.not.isVisible(),
+  timeout: <span class="hljs-number">3000</span>
+});
+
+<span class="hljs-comment">// Scrolls the element into view within the nearest scrollable container</span>
+<span class="hljs-comment">// using the default scrolling behavior after performing an implicit wait.</span>
+element.scrollTo();
+
+<span class="hljs-comment">// Scrolls the element into view within the specified scroll container after</span>
+<span class="hljs-comment">// performing an implicit wait. Scrolling will only occur along the `y` axis</span>
+<span class="hljs-comment">// and not along the `x` axis =&gt; there will be no horizontal scrolling.</span>
+elem.scrollTo({
+  containerSelector: xpath(<span class="hljs-string">'//div'</span>).id(<span class="hljs-string">'scrollContainer'</span>).build(),
+  directions: { y: <span class="hljs-literal">true</span> },
+});
+
+<span class="hljs-comment">// Performs an implicit wait and then sets the value of the input to 'wdio'.</span>
+input.setValue(<span class="hljs-string">'wdio'</span>);
+
+<span class="hljs-comment">// Performs an implicit wait and then ticks the checkbox.</span>
+checkbox.setValue(<span class="hljs-literal">true</span>);
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="state-check-functions"></a><a href="#state-check-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Check Functions</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview-2"></a><a href="#overview-2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
+<p>State check functions allow you to check wether a specific attribute of the HTML element
+mapped by a <code>PageElement</code> has an expected value. Each state check function is available
+under the same name in the <code>currently</code>, <code>wait</code> and <code>eventually</code> APIs. In the case of the
+<code>currently</code> API, the check occurs only once whereas the <code>wait</code> and <code>eventually</code> APIs
+regularly perform the check until it either returns true or until a predefined timeout
+is reached.</p>
+<h4><a class="anchor" aria-hidden="true" id="types-of-state-check-functions-1"></a><a href="#types-of-state-check-functions-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Types of State Check Functions</h4>
+<p>Most state check functions exist in three variants (where XXX is the name of the checked attribute):</p>
+<ul>
+<li><code>hasXXX(expectedValue)</code> to check if the attribute value equals an expected value.</li>
+<li><code>containsXXX(expectedValue)</code> to check if the attribute value contains an expected value.</li>
+<li><code>hasAnyXXX()</code> to check if the attribute has any value at all (is not empty).</li>
+</ul>
+<p>The HTML attributes supported by these three variants of state check functions are the
+same attributes which are also available for state retrieval functions:</p>
+<ul>
+<li><code>Text</code> =&gt; All text content of an HTML element (also includes text of nested HTML elements).</li>
+<li><code>DirectText</code> =&gt; Text content that is a direct child of an HTML element (no nested HTML elements).</li>
+<li><code>HTML</code> =&gt; All HTML content of an HTML element.</li>
+<li><code>Class</code> =&gt; An HTML element's CSS classnames as a single string.</li>
+<li><code>Id</code> =&gt; The ID attribute of an HTML element.</li>
+<li><code>Name</code> =&gt; The name attribute of an HTML element.</li>
+<li><code>Location</code> =&gt; The coordinates of an HTML element in pixels (left top corner).</li>
+<li><code>X</code> =&gt; The X coordinate of an HTML element (left top corner).</li>
+<li><code>Y</code> =&gt; The Y coordinate of an HTML element (left top corner).</li>
+<li><code>Size</code> =&gt; The size of an HTML element in pixels.</li>
+<li><code>Width</code> =&gt; The width of an HTML element in pixels.</li>
+<li><code>Height</code> =&gt; The height of an HTML element in pixels.</li>
+<li><code>Value</code> =&gt; The value of an element like input, checkbox... (only available in <code>ValuePageElement</code> class).</li>
+</ul>
+<p>Futhermore, there are three special state check functions to check if any arbitrary
+HTML attribute has an expected value:</p>
+<ul>
+<li><code>hasAttribute({name: 'attrName', value: 'expectedValue'})</code> to check if the value
+of an an attribute with a specific name matches an expected value.</li>
+<li><code>containsAttribute({name: 'attrName', value: 'expectedContainedValue'})</code> to check
+if the value of an attribute with a specific name contains an expected value.</li>
+<li><code>hasAnyAttribute('attrName')</code> to check if an attribute with a specific name has
+any value (is not empty/undefined).</li>
+</ul>
+<p>Besides, there are five state check functions that don't exist in three but only
+in one single variant:</p>
+<ul>
+<li><code>exists</code> to check if an HTML element exists in the DOM.</li>
+<li><code>isVisible</code> to check if the HTML element is visible
+(not obscured by another element or hidden by CSS styles).</li>
+<li><code>isEnabled</code> to check if the HTML element is enabled
+(can be interacted with - not disabled).</li>
+<li><code>isSelected</code> to check if an <code>&lt;option&gt;</code> HTML element is the selected option of a
+<code>&lt;select&gt;</code> element.</li>
+<li><code>isChecked</code> to check if an HTML <code>&lt;input&gt;</code> element has a <code>checked</code> HTML attribute set.</li>
+</ul>
+<h4><a class="anchor" aria-hidden="true" id="usage-examples-2"></a><a href="#usage-examples-2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage Examples</h4>
+<p>Here are some code examples of state check functions for the <code>currently</code>, <code>wait</code>
+and <code>eventually</code> APIs:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+<span class="hljs-keyword">const</span> input = stores.pageNode.Input(<span class="hljs-string">'//input'</span>); <span class="hljs-comment">// Input implements ValuePageElement</span>
+
+<span class="hljs-comment">// Checks if the element currently exists in the DOM.</span>
+element.currently.exists();
+
+<span class="hljs-comment">// Waits until the element is visible.</span>
+<span class="hljs-comment">// Throws an error if element does not become visible within predefined timeout.</span>
+element.wait.isVisible();
+
+<span class="hljs-comment">// Checks if the element eventually has the text 'wdio'.</span>
+element.eventually.hasText(<span class="hljs-string">'wdio'</span>);
+
+<span class="hljs-comment">// Checks if the element eventually has the value 'wdio'.</span>
+input.eventually.hasValue(<span class="hljs-string">'wdio'</span>);
+
+<span class="hljs-comment">// Waits for the CSS class string of the element to contain 'active'.</span>
+<span class="hljs-comment">// Throws an error if condition is not met within a predefined timeout.</span>
+element.wait.containsClass(<span class="hljs-string">'active'</span>);
+
+<span class="hljs-comment">// Checks if the element currently has the `readonly` HTML attribute set.</span>
+element.currently.hasAnyAttribute(<span class="hljs-string">'readonly'</span>);
+
+<span class="hljs-comment">// Checks if the element's `role` attribute eventually equals 'activeOption'.</span>
+element.eventually.hasAnyAttribute({name: <span class="hljs-string">'role'</span>, value: <span class="hljs-string">'activeOption'</span>});
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="not-modifier"></a><a href="#not-modifier" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>not</code> Modifier</h4>
+<p>Each state check function is also available in a negated version that checks
+for the opposite of an expected value. To use a state check function's negated
+version, you need to prepend the state check function with the <code>.not</code> modifier:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+<span class="hljs-keyword">const</span> input = stores.pageNode.Input(<span class="hljs-string">'//input'</span>); <span class="hljs-comment">// Input implements ValuePageElement</span>
+
+<span class="hljs-comment">// Checks if the element does currently not exist in the DOM.</span>
+element.currently.not.exists();
+
+<span class="hljs-comment">// Waits until the element is not/no longer visible.</span>
+element.wait.not.isVisible();
+
+<span class="hljs-comment">// Checks if the element eventually doesn't contain/no longer contains the text 'wdio'.</span>
+element.eventually.not.containsText(<span class="hljs-string">'wdio'</span>);
+
+<span class="hljs-comment">// Checks if the element eventually doesn't contain/no longer contains the value 'wdio'.</span>
+input.eventually.not.containsValue(<span class="hljs-string">'wdio'</span>);
+</code></pre>
+<p>It is important to always use the <code>not</code> modifier instead of putting the
+<code>!</code> negation operator before your state check functions because these two approaches
+are not the same:</p>
+<p>The <code>!</code> operator executes your state check function as is and then negates its result,
+whereas the <code>not</code> modifier executes the negated version of your state check function.</p>
+<p>To better understand the difference between using the <code>not</code> modifier and the <code>!</code> negation
+operator, take a look at the following code examples for the <code>wait</code> and <code>eventually</code> APIs:</p>
+<p><em>If the below code examples make no sense to you, consider reading the
+<a href="#explicit-waiting-currently-wait-and-eventually">Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code> section</a>
+of this guide!</em></p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(xpath(<span class="hljs-string">'//div'</span>));
+
+<span class="hljs-comment">// This will wait for the text to become 'wdio-workflo' and throw an error if</span>
+<span class="hljs-comment">// the text stays anything other than 'wdio-workflo' until a timeout is reached.</span>
+<span class="hljs-comment">// If the text does become 'wdio-workflo', the return value of the function</span>
+<span class="hljs-comment">// (the element instance) will be negated which results in the value `false`.</span>
+<span class="hljs-keyword">const</span> r1 = !element.wait.hasText(<span class="hljs-string">'wdio-workflo'</span>)
+
+<span class="hljs-comment">// This will wait for the text to become anything other than 'wdio-workflo' and</span>
+<span class="hljs-comment">// throw an error if it stays 'wdio-workflo' until a timeout is reached.</span>
+<span class="hljs-comment">// The function returns the element itself (an instance of the PageElement class).</span>
+<span class="hljs-keyword">const</span> r2 = element.wait.not.hasText(<span class="hljs-string">'wdio-workflo'</span>)
+
+<span class="hljs-comment">// The following statements are all true because r1 !== r2.</span>
+r1 === <span class="hljs-literal">false</span>
+r2 !== <span class="hljs-literal">false</span>
+(r1 <span class="hljs-keyword">instanceof</span> PageElement) !== <span class="hljs-literal">true</span>
+(r2 <span class="hljs-keyword">instanceof</span> PageElement) === <span class="hljs-literal">true</span>
+
+<span class="hljs-comment">// This will work, because r2 is an instance of the PageElement class.</span>
+r2.click()
+
+<span class="hljs-comment">// This will not work, because the function 'click' does not exist on `false`.</span>
+r1.click()
+</code></pre>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(xpath(<span class="hljs-string">'//div'</span>));
+
+<span class="hljs-comment">// Let's assume that the initial text of the element is 'wdio-workflo'!</span>
+
+<span class="hljs-comment">// The `hasText` function would immediately return `true`, but the return value</span>
+<span class="hljs-comment">// would then be negated by the `!` operator, resulting in the value `false`.</span>
+!element.eventually.hasText(<span class="hljs-string">'wdio-workflo'</span>, {timeout: <span class="hljs-number">5000</span>})
+
+<span class="hljs-comment">// The `hasText` function would wait for 5 seconds for the text to become</span>
+<span class="hljs-comment">// 'wdio-workflo' and then return the value `false` if it did not.</span>
+element.eventually.not.hasText(<span class="hljs-string">'wdio-workflo'</span>, {timeout: <span class="hljs-number">5000</span>})
+
+<span class="hljs-comment">// Now let's assume that after 2 seconds, the text of the element changes to</span>
+<span class="hljs-comment">// something other than 'wdio-workflo'.</span>
+
+<span class="hljs-comment">// Since `hasText` would immediately return `true` in this example and then</span>
+<span class="hljs-comment">// negate the return value, the result of this statement would be `false`.</span>
+<span class="hljs-keyword">const</span> r1 = !element.eventually.hasText(<span class="hljs-string">'wdio-workflo'</span>, {timeout: <span class="hljs-number">5000</span>})
+
+<span class="hljs-comment">// This statement would wait for 2 seconds until the text changes to something</span>
+<span class="hljs-comment">// other than 'wdio-workflo'. Then it would return `true`!!!</span>
+<span class="hljs-keyword">const</span> r2 = element.eventually.not.hasText(<span class="hljs-string">'wdio-workflo'</span>, {timeout: <span class="hljs-number">5000</span>})
+
+<span class="hljs-comment">// The following statements are all true because r1 !== r2.</span>
+r1 === <span class="hljs-literal">false</span>
+r2 === <span class="hljs-literal">true</span>
+</code></pre>
 <h2><a class="anchor" aria-hidden="true" id="waiting-mechanisms"></a><a href="#waiting-mechanisms" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Waiting Mechanisms</h2>
 <h3><a class="anchor" aria-hidden="true" id="implicit-waiting"></a><a href="#implicit-waiting" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implicit Waiting</h3>
-<p>When you open a website in your browser, the website and its components are usually not available immediately. A request to load the code of the website
-needs to be processed by a webserver, the server's response needs to be transferred to your browser and your browser needs to render the contents of the website before it can be displayed. Depending on the speed of your internet connection, the size of the website and the computational power of the webserver and your computer, it might take some time before you can read the contents of a
-website and interact with them.</p>
+<h4><a class="anchor" aria-hidden="true" id="what-is-implicit-waiting-and-how-does-it-work"></a><a href="#what-is-implicit-waiting-and-how-does-it-work" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is Implicit Waiting and how does it work?</h4>
+<p>When you open a website in your browser, the website and its components are usually
+not available immediately. A request to load the code of the website needs to be processed
+by a webserver, the server's response needs to be transferred to your browser and your browser
+needs to render the contents of the website before it can be displayed. Depending on the speed
+of your internet connection, the size of the website and the computational power of the webserver
+and your computer, it might take some time before you can read the contents of a website and
+interact with them.</p>
 <p>In the age of Web 2.0, asynchronous loading of website content and single page
 applications further intensify this problem.</p>
 <p>Our tests need to take these waiting times into account, otherwise we would
 get a lot of errors because elements could not be located on the website since
 the website has not been fully loaded yet.</p>
 <p>To reduce the number of explicit waiting statements in your test code,
-wdio-workflo implements an implicit waiting mechanism: Whenever you call a method on the <code>PageElement</code> class that reads the state of its mapped HTML element
-(e.g. <code>getText()</code>) or interacts with it (e.g. <code>click()</code>), wdio-workflo automatically waits for an initial waiting condition to be fulfilled before
-executing the corresponding command.</p>
-<p>The four different kinds of initial waiting conditions are defined by the <code>Workflo.WaitType</code> enum and can be set via the <code>waitType</code> property of the page element's <code>opts</code> parameter:</p>
+the <code>PageElement</code> class implements an implicit waiting mechanism:
+Whenever you call a method that reads the state of an HTML element mapped by <code>PageElement</code>
+(e.g. <code>getText()</code>) or interacts with it (e.g. <code>click()</code>), wdio-workflo automatically
+waits for an initial waiting condition to be fulfilled before executing the corresponding
+command.</p>
+<p>The four different kinds of initial waiting conditions are defined by the
+<code>Workflo.WaitType</code> enum and can be set via the <code>waitType</code> property of the
+page element's <code>opts</code> parameter:</p>
 <ul>
 <li><code>exist</code> waits until the element exists on the website</li>
-<li><code>visible</code> waits until the element is visible on the website (default value; not obscured by another element or hidden via CSS styles)</li>
+<li><code>visible</code> waits until the element is visible on the website
+(default value; not obscured by another element or hidden via CSS styles)</li>
 <li><code>text</code> waits until the element has any text content</li>
 <li><code>value</code> waits until the element has any value (only for <code>ValuePageElement</code> classes)</li>
 </ul>
-<p>Most <a href="/wdio-workflo/docs/store#factory-methods">factory methods</a> of a <code>PageNodeStore</code> allow you to define the value of <code>waitType</code> as property of their publicly configurable <code>opts</code> parameter:</p>
+<p>Most <a href="/wdio-workflo/docs/store#factory-methods">factory methods</a> of a <code>PageNodeStore</code> allow you to define
+the value of <code>waitType</code> as property of their publicly configurable <code>opts</code> parameter:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
 <span class="hljs-keyword">const</span> hiddenContainer = stores.pageNode.Element(<span class="hljs-string">'//div'</span>, {
   waitType: Workflo.WaitType.exist
 });
 </code></pre>
+<h4><a class="anchor" aria-hidden="true" id="what-triggers-the-implicit-waiting-mechanism"></a><a href="#what-triggers-the-implicit-waiting-mechanism" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What triggers the implicit waiting mechanism?</h4>
+<p>The implicit waiting mechanism is only supported by the <code>PageElement</code> class itself
+and any class that is derived from <code>PageElement</code>. Functions that trigger implicit
+waiting can be divided into two categories:</p>
+<ul>
+<li>State retrieval functions =&gt; These functions read the state of the web application
+by retrieving information about the attributes of an HTML element, e.g. <code>getText()</code>.</li>
+<li>Action functions =&gt; These functions change the state of the web application by interacting
+with HTML elements, e.g. <code>click()</code>.</li>
+</ul>
+<p>Please be aware that the implicit waiting mechanism only works for functions defined
+directly on the <code>PageElement</code> class and is not applied within the <code>currently</code>,
+<code>wait</code> and <code>eventually</code> APIs of a <code>PageElement</code>. This means that <code>PageElement.getText()</code>
+triggers implicit waiting, but <code>PageElement.currently.getText()</code> does not.</p>
+<p>Besides state retrieval and action functions, the <code>element</code> accessor of the <code>PageElement</code>
+class also performs an implicit wait before returning the WebdriverIO element wrapped
+by the <code>PageElement</code> class.</p>
+<p>Other page node classes like <code>PageElementList</code>, <code>PageElementMap</code> and <code>PageElementGroup</code>
+do not have an implicit waiting mechanism of their own. However, these three classes all
+manage instances of the <code>PageElement</code> class and whenever you invoke a state retrieval or an
+action function on a managed <code>PageElement</code> instance, its implicit waiting mechanism will be triggered.</p>
 <h3><a class="anchor" aria-hidden="true" id="explicit-waiting-currently-wait-and-eventually"></a><a href="#explicit-waiting-currently-wait-and-eventually" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></h3>
 <p>In addition to its implicit waiting mechanism, each page node class ships with
 a <code>wait</code> API that offers you the ability to explicitly control when your tests should wait for an HTML element to reach a certain state.</p>
 <p>Furthermore, page nodes also have a <code>currently</code> API to read or check the current state of a mapped HTML element without performing an implicit wait, and an <code>eventually</code> API that lets you check if an HTML element reaches a certain state within a specific timeout.</p>
-<h4><a class="anchor" aria-hidden="true" id="the-currently-api"></a><a href="#the-currently-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>currently</code> API</h4>
-<p>The <code>currently</code> API bypasses the implicit wait usually performed when invoking
-state retrieval methods of a page node class (e.g. <code>PageElement.getText()</code>).</p>
-<p>Let's take a look at the following code example to better understand the difference between invoking a state retrieval function directly on the <code>PageElement</code> class and invoking a state retrieval function on the <code>currently</code> API of the <code>PageElement</code>:</p>
+<h3><a class="anchor" aria-hidden="true" id="the-currently-api"></a><a href="#the-currently-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>currently</code> API</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview-3"></a><a href="#overview-3" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
+<p>The <code>currently</code> API consists of state retrieval functions and state check functions.
+Invoking a state retrieval function on the <code>currently</code> API of a <code>PageElement</code> bypasses
+its implicit waiting.</p>
+<h4><a class="anchor" aria-hidden="true" id="state-retrieval-functions-no-implicit-waiting"></a><a href="#state-retrieval-functions-no-implicit-waiting" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Retrieval Functions: No Implicit Waiting</h4>
+<p>Let's take a look at the following code example to better understand the difference
+between invoking a state retrieval function directly on the <code>PageElement</code> class and
+invoking a state retrieval function on the <code>currently</code> API of the <code>PageElement</code>:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
 <span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
@@ -191,15 +580,12 @@ state retrieval methods of a page node class (e.g. <code>PageElement.getText()</
 <span class="hljs-comment">// immediately returns the element's text without waiting for it to be visible</span>
 <span class="hljs-built_in">console</span>.log( element.currently.getText() )
 </code></pre>
-<p>To spare you the need of first reading the current state of an HTML element and then comparing it to an expected value in a second step, the <code>currently</code> API also provides a set of functions that let you check directly if the state of an HTML element matches an expected state.</p>
-<p>These &quot;state check functions&quot; usually come in three variants for each attribute
-of an HTML element's state:</p>
-<ul>
-<li><code>hasXXX(value)</code> checks if the HTML attribute XXX equals an expected value</li>
-<li><code>containsXXX(value)</code> checks if the HTML attribute XXX contains an expected value</li>
-<li><code>hasAnyXXX()</code> checks if the HTML attribute XXX has any value</li>
-</ul>
-<p>Let's examine these three variants of <code>currently</code> state check functions by the example of an HTML element's &quot;text&quot; attribute:</p>
+<h4><a class="anchor" aria-hidden="true" id="state-check-function-examples"></a><a href="#state-check-function-examples" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Check Function Examples</h4>
+<p>To spare you the need of first reading the current state of an HTML element and
+then comparing it to an expected value in a second step, wdio-workflo's state check
+functions let you check directly if the state of an HTML element matches an expected state.</p>
+<p>Let's examine the three variants (<code>hasXXX</code>, <code>containsXXX</code>, <code>hasAnyXXX</code>) of <code>currently</code>
+state check functions by the example of an HTML element's &quot;text&quot; attribute:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
 <span class="hljs-keyword">const</span> element = stores.pageNode.Element(
@@ -215,20 +601,61 @@ element.currently.containsText(<span class="hljs-string">'workflo'</span>)
 <span class="hljs-comment">// returns true because the element has any text (it is not blank/empty)</span>
 element.currently.hasAnyText()
 </code></pre>
-<p><em>Please note that interaction methods of a <code>PageElement</code> like <code>click()</code> and <code>scrollTo()</code> always perform an implicit wait because interacting with elements that have not been rendered yet doesn't make much sense. Therefore, the <code>currently</code> API does not contain interaction methods like <code>click()</code>.</em></p>
-<h4><a class="anchor" aria-hidden="true" id="the-wait-api"></a><a href="#the-wait-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>wait</code> API</h4>
+<h4><a class="anchor" aria-hidden="true" id="not-modifier-examples"></a><a href="#not-modifier-examples" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>not</code> Modifier Examples</h4>
+<p>The <code>currently</code> API also offers functions to check if the state of an HTML element
+does NOT match an expected state. These negated state check functions are
+available via the <code>not</code> modifier of the <code>currently</code> API:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(
+  xpath(<span class="hljs-string">'//div'</span>).text(<span class="hljs-string">'wdio-workflo'</span>)
+);
+
+<span class="hljs-comment">// returns true because the actual text does not equal 'icebears'</span>
+element.currently.not.hasText(<span class="hljs-string">'icebears'</span>)
+
+<span class="hljs-comment">// returns true because the actual text does not contain the substring 'icebears'</span>
+element.currently.not.containsText(<span class="hljs-string">'icebears'</span>)
+
+<span class="hljs-comment">// returns false because the element has the text 'wdio-workflo'</span>
+element.currently.not.hasAnyText()
+</code></pre>
+<p><em>Please note that action functions of a <code>PageElement</code> like <code>click()</code> and <code>scrollTo()</code> always perform an implicit wait because interacting with elements that have not been rendered yet doesn't make much sense. Therefore, the <code>currently</code> API does not contain action functions like <code>click()</code>.</em></p>
+<h3><a class="anchor" aria-hidden="true" id="the-wait-api"></a><a href="#the-wait-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>wait</code> API</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview-4"></a><a href="#overview-4" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
 <p>The <code>wait</code> API contains a set of state check functions that wait for an HTML
-element to reach a certain state within a specific timeout.</p>
-<p>If the HTML element does not reach the expected state within the specified timeout, an error will be thrown. Otherwise, the <code>PageElement</code> instance
-will be returned by each function defined on the <code>wait</code> API, so you can easily
-chain additional <code>PageElement</code> method calls:</p>
+element to reach a certain state within a specific timeout. If the HTML element
+does not reach the expected state within the specified timeout, an error will be thrown.
+Otherwise, the <code>PageElement</code> instance will be returned by each function defined on the
+<code>wait</code> API.</p>
+<h4><a class="anchor" aria-hidden="true" id="chaining-method-calls"></a><a href="#chaining-method-calls" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Chaining Method Calls</h4>
+<p>The fact that each state check function of the <code>wait</code> API returns its <code>PageElement</code>
+instance allows you to easily chain additional <code>PageElement</code> method calls:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
 <span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
 
-element.wait.hasText(<span class="hljs-string">'wdio-workflo'</span>, {timeout: <span class="hljs-number">3000</span>}).click()
+element.wait.hasText(<span class="hljs-string">'wdio-workflo'</span>).click()
 </code></pre>
-<p>If you do not explicitly specify a timeout value when calling a state check function on <code>wait</code>, the default timeout of the <code>PageElement</code> will be used:</p>
+<h4><a class="anchor" aria-hidden="true" id="defining-timeout-and-interval"></a><a href="#defining-timeout-and-interval" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Defining <code>timeout</code> and <code>interval</code></h4>
+<p>The last parameter of a state check function defined on the <code>wait</code> API of <code>PageElement</code>
+always includes a <code>timeout</code> and an <code>interval</code> property. The <code>timeout</code> property
+lets you define after how many milliseconds the state check function will throw an error
+if the expected state was not reached. The <code>interval</code> property defines how
+many milliseconds should pass between each evaluation of the expected state:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+
+<span class="hljs-comment">// Throws an error if the element does not have the text 'wdio-workflo' within</span>
+<span class="hljs-comment">// 3 seconds. The check of the element's text will occur every 500 milliseconds.</span>
+element.wait.hasText(<span class="hljs-string">'wdio-workflo'</span>, {
+  timeout: <span class="hljs-number">3000</span>,
+  interval: <span class="hljs-number">500</span>
+})
+</code></pre>
+<p>If you do not explicitly specify a timeout value when calling a state check function on <code>wait</code>,
+the default timeout of the <code>PageElement</code> will be used:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
 <span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
@@ -236,7 +663,8 @@ element.wait.hasText(<span class="hljs-string">'wdio-workflo'</span>, {timeout: 
 <span class="hljs-comment">// uses this._timeout as timeout value</span>
 element.wait.hasText(<span class="hljs-string">'wdio-workflo'</span>)
 </code></pre>
-<p>The default timeout value for a specific instance of a <code>PageElement</code> can be set by defining the <code>timeout</code> property of the publicly configurable <code>opts</code> parameter
+<p>The default timeout value for a specific instance of a <code>PageElement</code> can be set by
+defining the <code>timeout</code> property of the publicly configurable <code>opts</code> parameter
 of a <a href="/wdio-workflo/docs/store#factory-methods">factory method</a> in milliseconds:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
@@ -254,7 +682,41 @@ used as a fallback value for all page nodes in <code>workflo.conf.ts</code>:</p>
   <span class="hljs-comment">/*...*/</span>
 };
 </code></pre>
-<h4><a class="anchor" aria-hidden="true" id="the-eventually-api"></a><a href="#the-eventually-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>eventually</code> API</h4>
+<h4><a class="anchor" aria-hidden="true" id="not-modifier-examples-1"></a><a href="#not-modifier-examples-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>not</code> Modifier Examples</h4>
+<p>The <code>wait</code> API also offers functions to wait for the state of an HTML element to
+NOT or no longer match an expected state. These negated state check functions are
+available via the <code>not</code> accessor of the <code>wait</code> API:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+
+<span class="hljs-comment">// waits until the text of the element not or no longer is 'wdio-workflo'</span>
+element.wait.not.hasText(<span class="hljs-string">'wdio-workflo'</span>)
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="generic-state-checks-using-untilelement"></a><a href="#generic-state-checks-using-untilelement" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Generic State Checks using <code>untilElement()</code></h4>
+<p>Finally, the <code>wait</code> API also offers an <code>untilElement</code> state check function that
+lets you check if a generic condition is met within a specific timeout:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+
+element.wait.untilElement(
+  <span class="hljs-string">"has autocomplete off"</span>,
+  <span class="hljs-function">(<span class="hljs-params">element</span>) =&gt;</span> element.getAttribute(<span class="hljs-string">"autocomplete"</span>) === <span class="hljs-string">'off'</span>,
+  { timeout: <span class="hljs-number">3000</span> }
+)
+</code></pre>
+<p>The <code>untilElement</code> state check function takes 3 parameters:</p>
+<ul>
+<li>A string used to create an error message if the condition is not met within
+a specific timeout.</li>
+<li>A function that needs to return true if the condition is currently met
+or false if it isn't. This function is passed the <code>PageElement</code> instance as parameter.</li>
+<li>An <code>opts</code> parameter to define the <code>timeout</code> and <code>interval</code> used to wait for
+the condition to be met.</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="the-eventually-api"></a><a href="#the-eventually-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>eventually</code> API</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview-5"></a><a href="#overview-5" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
 <p>The <code>eventually</code> API is almost identical to the <code>wait</code> API: It also waits for an
 HTML element to each a certain state within a specific timeout. However, the
 state check functions defined on the <code>eventually</code> API will return <code>true</code> if the
@@ -271,23 +733,103 @@ element.eventually.hasText(<span class="hljs-string">'wdio-workflo'</span>, {tim
 <span class="hljs-comment">// will return true if the website finishes loading within 20 seconds</span>
 element.eventually.hasText(<span class="hljs-string">'wdio-workflo'</span>, {timeout: <span class="hljs-number">20000</span>})
 </code></pre>
-<p>The <code>eventually</code> API does not throw an error if the HTML element fails to reach the expected state within the specified (or default) timeout.</p>
+<p>The <code>eventually</code> API does not throw an error if the HTML element fails to reach
+the expected state within the specified (or default) timeout.</p>
+<h4><a class="anchor" aria-hidden="true" id="defining-timeout-and-interval-1"></a><a href="#defining-timeout-and-interval-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Defining <code>timeout</code> and <code>interval</code></h4>
+<p>The last parameter of a state check function defined on the <code>eventually</code> API of
+<code>PageElement</code> always includes a <code>timeout</code> and an <code>interval</code> property. The <code>timeout</code>
+property lets you define after how many milliseconds the state check function will
+throw an error if the expected state was not reached. The <code>interval</code> property defines
+how many milliseconds should pass between each evaluation of the expected state:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+
+<span class="hljs-comment">// Returns `false` if element does not have the text 'wdio-workflo' within</span>
+<span class="hljs-comment">// 3 seconds. The check of the element's text will occur every 500 milliseconds.</span>
+element.eventually.hasText(<span class="hljs-string">'wdio-workflo'</span>, {
+  timeout: <span class="hljs-number">3000</span>,
+  interval: <span class="hljs-number">500</span>
+})
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="not-modifier-examples-2"></a><a href="#not-modifier-examples-2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>not</code> Modifier Examples</h4>
+<p>Like the <code>currently</code> and the <code>wait</code> API, the <code>eventually</code> API too offers a
+<code>not</code> accessor to invoke negated variants of its state check function.
+These functions check if the state of an HTML does not match/stops to match an
+expected state within a specific timeout:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(
+  xpath(<span class="hljs-string">'//div'</span>).text(<span class="hljs-string">'wdio-workflo'</span>)
+);
+
+element.eventually.not.hasText(<span class="hljs-string">'icebears'</span>)
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="generic-state-checks-using-meetscondition"></a><a href="#generic-state-checks-using-meetscondition" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Generic State Checks using <code>meetsCondition()</code></h4>
+<p>Like the <code>untilElement</code> function of the <code>wait</code> API, the <code>eventually</code> API also
+provides a state check function that lets you check if a generic condition
+is met within a specific timeout. For the <code>eventually</code> API, this generic
+state check function is called <code>meetsCondition</code>:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> element = stores.pageNode.Element(<span class="hljs-string">'//div'</span>);
+
+element.eventually.meetsCondition(
+  <span class="hljs-function">(<span class="hljs-params">element</span>) =&gt;</span> element.getAttribute(<span class="hljs-string">"autocomplete"</span>) === <span class="hljs-string">'off'</span>,
+  { timeout: <span class="hljs-number">3000</span> }
+)
+</code></pre>
+<p>The <code>meetsCondition</code> state check function takes 2 parameters:</p>
+<ul>
+<li>A function that needs to return true if the condition is currently met
+or false if it isn't. This function is passed the <code>PageElement</code> instance as parameter.</li>
+<li>An <code>opts</code> parameter to define the <code>timeout</code> and <code>interval</code> used to check if
+the condition is eventually met.</li>
+</ul>
 <h2><a class="anchor" aria-hidden="true" id="the-valuepageelement-class"></a><a href="#the-valuepageelement-class" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>ValuePageElement</code> Class</h2>
 <p>Some components of a website like inputs, checkboxes, radio buttons, dropdowns, textareas
 or toggles/switches manage a value that can be modified by users.</p>
-<p>Wdio-workflo's <code>PageElement</code> class has no way of getting or setting the value of such components.
-In this event, you need to make use of wdio-workflo's <code>ValuePageElement</code> class.
-<code>ValuePageElement</code> is an abstract class that inherits all functionality of the <code>PageElement</code> class
-and in addition provides two abstract methods, <code>getValue</code> and <code>setValue</code>, to manage the value
-of components like input or checkbox.</p>
-<p>However, since the implementation of these components can vary greatly between the different
-available component libraries for React, Angular and the like, wdio-workflo does not
-ship with a standard implementation for <code>getValue</code> and <code>setValue</code>.</p>
-<p>Instead, you need to create your own, custom page element classes that inherit
-from <code>ValuePageElement</code> and implement its <code>getValue</code> and <code>setValue</code> methods.</p>
+<p>Wdio-workflo's <code>PageElement</code> class has no way of getting, setting or checking the
+value of such components. In this event, you need to make use of wdio-workflo's
+<code>ValuePageElement</code> class. <code>ValuePageElement</code> is an abstract class that inherits
+all functionality of the <code>PageElement</code> class and in addition provides two abstract methods, <code>getValue</code> and <code>setValue</code>, to manage the value of components like input or checkbox.
+Futhermore, the <code>ValuePageElement</code> class includes the state check functions <code>hasValue</code>, <code>containsValue</code> and <code>hasAnyValue</code> it its <code>currently</code>, <code>wait</code> and <code>eventually</code> APIs.</p>
+<p>Wdio-workflo's example repository contains an <code>Input</code> class that is derived from
+<code>ValuePageElement</code> and implements its <code>getValue</code> and <code>setValue</code> methods.
+Below you can find code examples for how to use the <code>getValue</code> and <code>setValue</code> methods
+as well as the  <code>hasValue</code>, <code>containsValue</code> and <code>hasAnyValue</code> state check functions
+of the <code>Input</code> class:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> input = stores.pageNode.Input(xpath(<span class="hljs-string">'//input'</span>));
+
+<span class="hljs-comment">// returns the value after performing an implicit wait</span>
+input.getValue()
+
+<span class="hljs-comment">// returns the value immediately, without performing an implicit wait</span>
+input.currently.getValue()
+
+<span class="hljs-comment">// sets the value of the input to 'wdio-workflo' after performing an implicit wait</span>
+input.setValue(<span class="hljs-string">'wdio-workflo'</span>)
+
+<span class="hljs-comment">// checks if the input currently/at this very moment has the value 'wdio-workflo'</span>
+input.currently.hasValue(<span class="hljs-string">'wdio-workflo'</span>);
+
+<span class="hljs-comment">// waits for the value of the input not to contain the string 'icebears'</span>
+input.wait.not.containsValue(<span class="hljs-string">'icebears'</span>);
+
+<span class="hljs-comment">// checks if the input eventually has any value within 3000 milliseconds</span>
+input.eventually.hasAnyValue({timeout: <span class="hljs-number">3000</span>})
+</code></pre>
+<p>Since the implementation of components like dropdowns or checkboxes can
+vary greatly between the different available component libraries for React,
+Angular and the like, wdio-workflo does not ship with a standard implementation
+for <code>getValue</code> and <code>setValue</code>. Instead, you need to create your own, custom page
+element classes that inherit from <code>ValuePageElement</code> and implement its <code>getValue</code>
+and <code>setValue</code> methods.</p>
 <p>You can read more about how to do this in the <a href="/wdio-workflo/docs/customElement#extending-valuepageelement">Extending <code>ValuePageElement</code></a>
 section of the <a href="/wdio-workflo/docs/customElement">Customizing an Element</a> guide.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/pageObjects"><span class="arrow-prev">← </span><span>Page Objects</span></a><a class="docs-next button" href="/wdio-workflo/docs/list"><span>List</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview-and-objective">Overview and Objective</a></li><li><a href="#creating-a-pageelement">Creating a <code>PageElement</code></a></li><li><a href="#the-associated-pagenodestore">The Associated <code>PageNodeStore</code></a></li><li><a href="#the-getselector-method">The <code>getSelector()</code> Method</a></li><li><a href="#the-underlying-webdriverio-element">The Underlying WebdriverIO Element</a></li><li><a href="#waiting-mechanisms">Waiting Mechanisms</a><ul class="toc-headings"><li><a href="#implicit-waiting">Implicit Waiting</a></li><li><a href="#explicit-waiting-currently-wait-and-eventually">Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></a></li></ul></li><li><a href="#the-valuepageelement-class">The <code>ValuePageElement</code> Class</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="/wdio-workflo/apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/pageObjects"><span class="arrow-prev">← </span><span>Page Objects</span></a><a class="docs-next button" href="/wdio-workflo/docs/list"><span>List</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview-and-objective">Overview and Objective</a></li><li><a href="#creating-a-pageelement">Creating a <code>PageElement</code></a></li><li><a href="#the-associated-pagenodestore">The Associated <code>PageNodeStore</code></a></li><li><a href="#the-getselector-method">The <code>getSelector()</code> Method</a></li><li><a href="#the-underlying-webdriverio-element">The Underlying WebdriverIO Element</a></li><li><a href="#state-function-types">State Function Types</a><ul class="toc-headings"><li><a href="#state-retrieval-functions">State Retrieval Functions</a></li><li><a href="#action-functions">Action Functions</a></li><li><a href="#state-check-functions">State Check Functions</a></li></ul></li><li><a href="#waiting-mechanisms">Waiting Mechanisms</a><ul class="toc-headings"><li><a href="#implicit-waiting">Implicit Waiting</a></li><li><a href="#explicit-waiting-currently-wait-and-eventually">Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></a></li><li><a href="#the-currently-api">The <code>currently</code> API</a></li><li><a href="#the-wait-api">The <code>wait</code> API</a></li><li><a href="#the-eventually-api">The <code>eventually</code> API</a></li></ul></li><li><a href="#the-valuepageelement-class">The <code>ValuePageElement</code> Class</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="/wdio-workflo/apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;

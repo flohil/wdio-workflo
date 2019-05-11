@@ -99,11 +99,15 @@
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractboolean" class="tsd-kind-icon">Extract<wbr>Boolean</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractbooleanstatechecker" class="tsd-kind-icon">Extract<wbr>Boolean<wbr>State<wbr>Checker</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractexistsfiltermask" class="tsd-kind-icon">Extract<wbr>Exists<wbr>Filter<wbr>Mask</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extracttext" class="tsd-kind-icon">Extract<wbr>Text</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extracttextstatechecker" class="tsd-kind-icon">Extract<wbr>Text<wbr>State<wbr>Checker</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractvalue" class="tsd-kind-icon">Extract<wbr>Value</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractvalueboolean" class="tsd-kind-icon">Extract<wbr>Value<wbr>Boolean</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractvaluebooleanstatechecker" class="tsd-kind-icon">Extract<wbr>Value<wbr>Boolean<wbr>State<wbr>Checker</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractvaluebooleanwn" class="tsd-kind-icon">Extract<wbr>Value<wbr>BooleanWN</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#extractvaluestatechecker" class="tsd-kind-icon">Extract<wbr>Value<wbr>State<wbr>Checker</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported"><a href="__global.workflo.pagenode.html#groupcontent" class="tsd-kind-icon">Group<wbr>Content</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#groupfiltermask" class="tsd-kind-icon">Group<wbr>Filter<wbr>Mask</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="__global.workflo.pagenode.html#groupfiltermaskexists" class="tsd-kind-icon">Group<wbr>Filter<wbr>Mask<wbr>Exists</a></li>
@@ -124,13 +128,37 @@
 					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Boolean<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L2247">index.ts:2247</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2287">index.ts:2287</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Extracts the return value types of the <code>getIsEnabled</code> functions of all PageNodes defined within a
-							PageElementGroup&#39;s content. For a PageElement, the extract return value type will be <code>boolean</code>.</p>
+							PageElementGroup&#39;s content. For a PageElement, the extracted return value type will be <code>boolean</code>.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+					<a name="extractbooleanstatechecker" class="tsd-anchor"></a>
+					<h3>Extract<wbr>Boolean<wbr>State<wbr>Checker</h3>
+					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Boolean<wbr>State<wbr>Checker<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2306">index.ts:2306</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Extracts the return value types of the <code>getIsEnabled</code> functions of all PageNodes defined within a
+								PageElementGroup&#39;s content for state check functions. For a PageElement, the extracted return value
+								type will be <code>boolean</code>.
+								Compared to <code>ExtractBoolean</code>, this will allow the a PageElementList to pass either a single boolean or
+							an array of booleans.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -145,13 +173,15 @@
 					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Exists<wbr>Filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L2238">index.ts:2238</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2271">index.ts:2271</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Extracts the return value types of the <code>currently.getExists</code> functions of all PageNodes defined within a
-							PageElementGroup&#39;s content.</p>
+								PageElementGroup&#39;s content for filter masks.
+								This will allow the a PageElementList to pass either a single boolean or
+							an array of booleans.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -166,13 +196,36 @@
 					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L2229">index.ts:2229</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2235">index.ts:2235</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Extracts the return value types of the <code>getText</code> functions of all PageNodes defined within a PageElementGroup&#39;s
-							content. For a PageElement, the extract return value type will be <code>string</code>.</p>
+							content. For a PageElement, the extracted return value type will be <code>string</code>.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+					<a name="extracttextstatechecker" class="tsd-anchor"></a>
+					<h3>Extract<wbr>Text<wbr>State<wbr>Checker</h3>
+					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Text<wbr>State<wbr>Checker<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2253">index.ts:2253</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Extracts the return value types of the <code>getText</code> functions of all PageNodes defined within a PageElementGroup&#39;s
+								content for state check functions. For a PageElement, the extracted return value type will be <code>string</code>.
+								Compared to <code>ExtractText</code>, this will allow a PageElementList to pass either a single string or
+							an array of strings.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -187,7 +240,7 @@
 					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L2790">index.ts:2790</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2856">index.ts:2856</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -208,13 +261,37 @@
 					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Value<wbr>Boolean<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L2799">index.ts:2799</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2890">index.ts:2890</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Extracts the return value types of the <code>getHasValue</code> functions of all PageNodes defined within a
-							ValuePageElementGroup&#39;s content. For a ValuePageElement, the return value type will be <code>boolean</code>.</p>
+							ValuePageElementGroup&#39;s content. For a ValuePageElement, the extracted return value type will be <code>boolean</code>.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+					<a name="extractvaluebooleanstatechecker" class="tsd-anchor"></a>
+					<h3>Extract<wbr>Value<wbr>Boolean<wbr>State<wbr>Checker</h3>
+					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Value<wbr>Boolean<wbr>State<wbr>Checker<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2909">index.ts:2909</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Extracts the return value types of the <code>getHasValue</code> functions of all PageNodes defined within a
+								ValuePageElementGroup&#39;s content for state check functions. For a ValuePageElement, the extracted
+								return value type will be <code>boolean</code>.
+								Compared to <code>ExtractValueBoolean</code>, this will allow a ValuePageElementList to pass either a
+							single boolean or an array of booleans.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -229,7 +306,7 @@
 					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Value<wbr>BooleanWN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L2808">index.ts:2808</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2925">index.ts:2925</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -244,13 +321,36 @@
 						</ul>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+					<a name="extractvaluestatechecker" class="tsd-anchor"></a>
+					<h3>Extract<wbr>Value<wbr>State<wbr>Checker</h3>
+					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Value<wbr>State<wbr>Checker<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2874">index.ts:2874</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Extracts the return value types of the <code>getValue</code> functions of all PageNodes defined within a
+								ValuePageElementGroup&#39;s content for state check functions and the setValue function.
+								Compared to <code>ExtractValue</code>, this will allow ta PageElementList to pass either a single value or
+							an array of values.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+						</ul>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
 					<a name="groupcontent" class="tsd-anchor"></a>
 					<h3>Group<wbr>Content</h3>
 					<div class="tsd-signature tsd-kind-icon">Group<wbr>Content<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L2223">index.ts:2223</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L2229">index.ts:2229</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -271,10 +371,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 					<a name="groupfiltermask" class="tsd-anchor"></a>
 					<h3>Group<wbr>Filter<wbr>Mask</h3>
-					<div class="tsd-signature tsd-kind-icon">Group<wbr>Filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.html#extractboolean" class="tsd-signature-type">ExtractBoolean</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Group<wbr>Filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.html#extractbooleanstatechecker" class="tsd-signature-type">ExtractBooleanStateChecker</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3105">index.ts:3105</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3222">index.ts:3222</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -305,10 +405,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 					<a name="groupfiltermaskexists" class="tsd-anchor"></a>
 					<h3>Group<wbr>Filter<wbr>Mask<wbr>Exists</h3>
-					<div class="tsd-signature tsd-kind-icon">Group<wbr>Filter<wbr>Mask<wbr>Exists<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.html#extractexistsfiltermask" class="tsd-signature-type">ExtractExistsFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Group<wbr>Filter<wbr>Mask<wbr>Exists<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.html#extractexistsfiltermask" class="tsd-signature-type">ExtractExistsFilterMask</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3110">index.ts:3110</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3227">index.ts:3227</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -323,7 +423,7 @@
 					<div class="tsd-signature tsd-kind-icon">List<wbr>Filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3059">index.ts:3059</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3176">index.ts:3176</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -355,7 +455,7 @@
 					<div class="tsd-signature tsd-kind-icon">Map<wbr>Filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3081">index.ts:3081</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3198">index.ts:3198</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -384,10 +484,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 					<a name="valuegroupfiltermask" class="tsd-anchor"></a>
 					<h3>Value<wbr>Group<wbr>Filter<wbr>Mask</h3>
-					<div class="tsd-signature tsd-kind-icon">Value<wbr>Group<wbr>Filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.html#extractvalueboolean" class="tsd-signature-type">ExtractValueBoolean</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Value<wbr>Group<wbr>Filter<wbr>Mask<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.pagenode.html#extractvaluebooleanstatechecker" class="tsd-signature-type">ExtractValueBooleanStateChecker</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3116">index.ts:3116</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3232">index.ts:3232</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -402,13 +502,13 @@
 					<div class="tsd-signature tsd-kind-icon">Value<wbr>Group<wbr>Filter<wbr>MaskWN<span class="tsd-signature-symbol">:</span> <a href="__global.workflo.html#withoutnever" class="tsd-signature-type">WithoutNever</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="__global.workflo.pagenode.html#extractvaluebooleanwn" class="tsd-signature-type">ExtractValueBooleanWN</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Content</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/d73b25d/src/index.ts#L3122">index.ts:3122</a></li>
+							<li>Defined in <a href="https://github.com/flohil/wdio-workflo/blob/08e4080/src/index.ts#L3238">index.ts:3238</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Reserved for future use when typescript bugs <a href="https://github.com/Microsoft/TypeScript/issues/24560">https://github.com/Microsoft/TypeScript/issues/24560</a> and
-							<a href="https://github.com/Microsoft/TypeScript/issues/24791are">https://github.com/Microsoft/TypeScript/issues/24791are</a> are resolved.</p>
+							<a href="https://github.com/Microsoft/TypeScript/issues/24791">https://github.com/Microsoft/TypeScript/issues/24791</a> are are resolved.</p>
 						</div>
 					</div>
 				</section>
@@ -510,10 +610,16 @@
 						<a href="__global.workflo.pagenode.html#extractboolean" class="tsd-kind-icon">Extract<wbr>Boolean</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="__global.workflo.pagenode.html#extractbooleanstatechecker" class="tsd-kind-icon">Extract<wbr>Boolean<wbr>State<wbr>Checker</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.html#extractexistsfiltermask" class="tsd-kind-icon">Extract<wbr>Exists<wbr>Filter<wbr>Mask</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.html#extracttext" class="tsd-kind-icon">Extract<wbr>Text</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="__global.workflo.pagenode.html#extracttextstatechecker" class="tsd-kind-icon">Extract<wbr>Text<wbr>State<wbr>Checker</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.html#extractvalue" class="tsd-kind-icon">Extract<wbr>Value</a>
@@ -522,7 +628,13 @@
 						<a href="__global.workflo.pagenode.html#extractvalueboolean" class="tsd-kind-icon">Extract<wbr>Value<wbr>Boolean</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="__global.workflo.pagenode.html#extractvaluebooleanstatechecker" class="tsd-kind-icon">Extract<wbr>Value<wbr>Boolean<wbr>State<wbr>Checker</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.html#extractvaluebooleanwn" class="tsd-kind-icon">Extract<wbr>Value<wbr>BooleanWN</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="__global.workflo.pagenode.html#extractvaluestatechecker" class="tsd-kind-icon">Extract<wbr>Value<wbr>State<wbr>Checker</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
 						<a href="__global.workflo.pagenode.html#groupcontent" class="tsd-kind-icon">Group<wbr>Content</a>
