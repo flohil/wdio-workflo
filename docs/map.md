@@ -187,6 +187,8 @@ linkMap.$.api.click();
 
 ### Behavior of State Functions for `PageElementMap`
 
+muss nicht alle setzen bei setValue
+
 ### Filter Masks
 
 ## Waiting Mechanisms
@@ -196,3 +198,105 @@ linkMap.$.api.click();
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 
 ## The `ValuePageElementMap` Class
+
+If you want a map to manage page elements that are derived from the
+`ValuePageElement` class, you need to use a `ValuePageElementMap` instead
+of a `PageElementMap`.
+
+The `ValuePageElementMap` class adds the methods `getValue` and `setValue`
+to set and retrieve the values of all page elements managed by the map. Furthermore,
+its `currently`, `wait` and `eventually` APIs include the state check functions
+`hasValue`, `containsValue` and `hasAnyValue` to wait for or check if some or all
+map elements have certain expected values.
+
+Wdio-workflo's example repository contains an `Input` class that is derived from
+`ValuePageElement`. To create a `ValuePageElementMap` that manages instances
+of the `Input` class, the `PageNodeStore` of the example repository provides
+an `InputMap()` [factory method](store.md#factory-methods).
+Below you can find code examples for how to use the `getValue` and `setValue` methods
+as well as the  `hasValue`, `containsValue` and `hasAnyValue` state check functions
+of our `ValuePageElementMap` managing instances of `Input`:
+
+```typescript
+const inputMap = stores.pageNode.InputMap('//input', {
+  identifier: {
+    mappingObject: {
+      username: 'username',
+      password: 'password',
+      email: 'email'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+  }
+});
+
+// Performs an implicit wait for each input element of the map and then returns
+// the values of the map's input elements as an object whose keys are taken from
+// `mappingObject`.
+const values: Record<'username' | 'password' | 'email', string> =
+inputMap.getValue();
+
+// Returns the values of all input elements managed by the map an object whose
+// keys are taken from `mappingObject` withing performing an implicit wait.
+const currentValues: Record<'username' | 'password' | 'email', string> =
+inputMap.currently.getValue();
+
+// Performs an implicit wait for each map element and then the values of the
+// `username` input to 'johnDoe', of the `password` input to 'superSecret' and
+// of the `email` input to 'john@doe.com'.
+inputMap.setValue({
+  username: 'johnDoe',
+  password: 'superSecret',
+  email: 'john@doe.com'
+});
+
+// Performs an implicit wait for the `username` and the `password` input elements
+// and then sets the value of the `username` input to 'johnDoe' and the value
+// of the `password` input to 'superSecret'.
+inputMap.setValue({
+  username: 'johnDoe',
+  password: 'superSecret',
+});
+
+// Checks if currently, the `username` input has the value 'johnDoe' and the
+// `email` input has the value 'john@doe.com'.
+inputMap.currently.hasValue({
+  username: 'johnDoe',
+  email: 'john@doe.com'
+});
+
+// Waits for the `username` input to have the value 'johnDoe', the `password`
+// input to have the value 'superSecret' and the `email` input to have the value
+// 'john@doe.com' within half a second.
+inputMap.wait.not.containsValue({
+  username: 'johnDoe',
+  password: 'superSecret',
+  email: 'john@doe.com'
+}, { timeout: 500 });
+
+// Checks if all input elements of `inputMap` eventually have any value
+// (are not empty) within the default timeout of our map class.
+inputMap.eventually.hasAnyValue();
+
+// Checks if, eventually, the `username` and the `email` input have any value
+// (are not empty) within the default timeout of our map class.
+inputMap.eventually.hasAnyValue({ filterMask: {
+  username: true,
+  email: true,
+}});
+```
+
+Unlike the `ValuePageElement` class, `ValuePageElementMap` is not an abstract
+class. The `getValue` and `setValue` methods of the `ValuePageElementMap`
+are already implemented and internally invoke the `getValue` and `setValue` methods
+of the `ValuePageElement` instances managed by the map. Therefore, we can simply use `ValuePageElementMap` directly and don't need to create a custom map class just
+for the sake of implementing `getValue` and `setValue`.
+
+We should, however, add a new factory method to our `PageNodeStore` that returns
+an instance of a `ValuePageElementMap` whose types (or rather the types of its
+map elements) are already configured. Like in the above code example, where the
+`InputMap()` factory method returns a `ValuePageElementMap` that is configured
+to manage instances of the `Input` class.
+
+To learn how to create a factory method that returns a configured `ValuePageElementMap`, please read the
+[Adding a map factory method for a custom `ValuePageElement`](customMap.md#adding-a-map-factory-method-for-custom-elements)
+section of the [Customizing a Map](customMap.md) guide.

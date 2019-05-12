@@ -766,8 +766,8 @@ of a `PageElementList`.
 The `ValuePageElementList` class adds the methods `getValue` and `setValue`
 to set and retrieve the values of all page elements managed by the list. Furthermore,
 its `currently`, `wait` and `eventually` APIs include the state check functions
-`hasValue`, `containsValue` and `hasAnyValue` to wait for or check if all list
-elements have certain expected values.
+`hasValue`, `containsValue` and `hasAnyValue` to wait for or check if some or all
+list elements have certain expected values.
 
 Wdio-workflo's example repository contains an `Input` class that is derived from
 `ValuePageElement`. To create a `ValuePageElementList` that manages instances
@@ -781,21 +781,21 @@ of our `ValuePageElementList` managing instances of `Input`:
 const inputList = stores.pageNode.InputList(xpath('//input'));
 
 // Returns the values of all input elements managed by the list as an array
-// after an implicit wait (e.g. waiting for at least one element to be visible).
+// after performing an implicit wait for each element in the list.
 const values: string[] = inputList.getValue();
 
 // Returns the values of all input elements managed by the list as an array
-// withing performing an implicit wait.
+// without performing an implicit wait for any of the list elements.
 const currentValues: string[] = inputList.currently.getValue();
 
 // Performs an implicit wait and then sets the values of all input elements
 // to 'wdio-workflo'.
 inputList.setValue('wdio-workflo');
 
-// Performs an implicit wait and then sets the first input's value to 'workflo',
-// the second input's value to 'webdriverio' and the third input's value to 'cool'.
-// In order for this to work, the number of elements managed by the list must
-// equal the number of values passed as an array to `setValue`.
+// Performs an implicit wait for each list element and then sets the first input's
+// value to 'workflo', the second input's value to 'webdriverio' and the third
+// input's value to 'cool'. In order for this to work, the number of elements managed
+// by the list must equal the number of values passed as an array to `setValue`.
 inputList.setValue(['workflo', 'webdriverio', 'cool']);
 
 // Checks if all inputs of the list currently have the value 'wdio-workflo'.
@@ -831,5 +831,5 @@ list elements) are already configured. Like in the above code example, where the
 to manage instances of the `Input` class.
 
 To learn how to create a factory method that returns a configured `ValuePageElementList`,
-please read the [Adding a list factory method for a custom `ValuePageElement`](customElement.md#adding-a-list-factory-method-for-a-custom-valuepageelement)
+please read the [Adding a list factory method for a custom `ValuePageElement`](customList.md#adding-a-list-factory-method-for-a-custom-valuepageelement)
 section of the [Customizing a List](customList.md) guide.
