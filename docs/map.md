@@ -113,14 +113,75 @@ of a map to a set of unique keys.
 ### `identifier` Object
 
 The `identifier` object, which is passed to the constructor of a `PageElementMap`
-as a property of the `opts` parameter object, contains all information required
+as a property of the `opts` parameters object, contains all information required
 to map the `PageElement` instances managed by a `PageElementMap` to a set of
-unique keys. It consists of two properties:
+unique keys. It consists of two properties: `mappingObject` and `mappingFunc`.
 
-- The `mappingObject`
-- The `mappingFunc`
+As already mentioned, the precondition for using a `PageElementMap` is that all
+of its `PageElement` instances have a unique value for a certain HTML attribute.
+Simply speaking, the task of the `mappingFunc` is to define which kind of
+HTML attribute is to be used for the mapping process, whereas the `mappingObject`
+defines the unique values of this HTML attribute for each `PageElement` instance
+and the unique keys used to access these `PageElement` instances on the map.
+
+During the mapping process, `PageElementMap` iterates over all key-value pairs
+of the `mappingObject` and invokes `mappingFunc` for each pair, passing it
+the base XPath selector that identifies all page elements of a map as first parameter
+and the unique HTML attribute value of the currently iterated entry of `mappingObject`
+as second parameter. `mappingFunc` now uses the base XPath selector and the unique
+HTML attribute value to create an XPath expression that uniquely identifies
+each of the map's `PageElement` instances. Finally, `PageElementMap` creates
+a `PageElement` instance for each unique XPath expression and assigns the
+created page element to the corresponding key of the `mappingObject`.
+
+To help you better understand this mapping process, let's revisit our
+`ElementMap()` factory method code example from above:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'Demo Page',
+      examples: 'Examples',
+      api: 'API'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+  }
+});
+```
+
+In this example, our `PageElementMap` manages three `PageElement` instances,
+each wrapping an HTML link `<a>` element - hence the base XPath selector is `'//a'`.
+Looking a the `mappingFunc` implementation, we can see that the HTML attribute
+used to uniquely identify each of these `PageElement` instances is the `text` of
+the HTML element. Therefore, the values of our `mappingObject` represent the texts
+of the HTML link elements, and its keys determine the names by which we will later be
+able to access each `PageElement` instance of the map.
+
+The following section of this guide shows you how we can access the `PageElement`
+instances managed by a `PageElementMap` via the keys defined in the `mappingObject`.
 
 ## Accessing Map Elements
+
+In the previous section of this guide, I explained the mapping process of
+`PageElementMap` that links each of the map's `PageElement` instances to a
+unique key.
+
+To access these `PageElement` instances, we need to use the `$` accessor of the
+`PageElementMap` class. The `$` accessor returns an object whose keys are taken
+from `mappingObject` and whose values are the `PageElement` instances assigned
+to the respective key during the mapping process:
+
+![The `$` accessor of `PageElementMap`](assets/map_dollar_accessor.png)
+
+So if we wanted to click on the `api` link of our `linkMap` from the above
+code example, we would write:
+
+```typescript
+linkMap.$.api.click();
+```
 
 ## State Functions
 
