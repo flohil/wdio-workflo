@@ -191,6 +191,107 @@ muss nicht alle setzen bei setValue
 
 ### Filter Masks
 
+The `PageElementMap` filter mask allows you to restrict the execution of a
+state retrieval, action or state check function to certain managed `PageElement`
+instances.
+
+You can set the `PageElementMap` filter mask to a boolean value or an object
+whose keys are taken from the map's `mappingObject` and whose values are also
+booleans:
+
+- If the filter mask is set to `true`, the corresponding function will be executed
+for all managed `PageElement` instances of a `PageElementMap`.
+- If the filter mask is set to `false`, the corresponding function will be skipped
+for all managed `PageElement` instances of a `PageElementMap` (this can be helpful
+when using a `PageElementList` inside the content of a `PageElementGroup`).
+- If the filter mask is set to an object, a property value of `true` means that
+the function will be executed for the corresponding `PageElement`. A value of
+`false` or simply not defining a property for a certain key means that the
+function execution will be skipped.
+
+The filter mask can be set via the last parameter of a state retrieval, action or
+state check function. If such a function has other optional parameters, the filter
+mask can be defined via the `filterMask` property of the `opts` parameter (which
+is always the last function parameter). Otherwise, the filter mask itself represents
+the last function parameter.
+
+Here are some examples for how to use a `PageElementMap` filter mask:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'Demo Page',
+      examples: 'Examples',
+      api: 'API'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+  }
+});
+
+// `texts` will be an object containing two properties, one with the key
+// 'demo' and one with the key 'api', whose values are the text of the respective
+// page elements. The text of the skipped `examples` page element is not included
+// in the result object.
+const texts = linkMap.getText({
+  demo: true,
+  api: true
+});
+
+// Only the `examples` page element will be clicked, because the `api` page element's
+// filter mask value is set to `false` and the `demo` page element is not included
+// in the filter mask at all.
+linkMap.eachDo(
+  element => element.click(), {
+    examples: true,
+    api: false
+  }
+);
+
+// There are other optional parameters like `timeout`, therefore the filter mask
+// is defined via the `filterMask` property of the `opts` parameter.
+// The `hasAnyText` function will return true if within 3 seconds, the `api`
+// page element and the `demo` page element have any text (are not empty).
+linkMap.eventually.hasAnyText({ timeout: 3000, filterMask: {
+  api: true,
+  examples: false,
+  demo: true
+}});
+```
+
+Filter masks are not available for state check functions that require you to pass
+the expected attribute values as a parameter, e.g. `hasText(texts)` or
+`containsValue(values)`. In these cases, you can skip the execution of the state
+check function for a certain `PageElement` instance by simply not defining
+an object property for the corresponding key:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'Demo Page',
+      examples: 'Examples',
+      api: 'API'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+  }
+});
+
+// The `hasDirectText` function will be invoked for the `demo` and `api` page
+// elements of `linkMap` but skipped for the `examples` page element. The function
+// returns `true` if the direct text (the text that resides directly/one layer below
+// the HTML element) of the `demo` page element is currently 'Demo Page' and the
+// direct text of the `api` page element is currently 'API'.
+const result = linkMap.currently.hasDirectText({
+  demo: 'Demo Page',
+  api: 'API'
+});
+```
+
 ## Waiting Mechanisms
 
 ### Implicit Waiting

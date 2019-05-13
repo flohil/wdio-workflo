@@ -514,21 +514,20 @@ You can set the `PageElementList` filter mask to a boolean value or an array of
 boolean values:
 
 - If the filter mask is set to `true`, the corresponding function will be executed
-for all managed `PageElement` instances of a `PageElementList` (in this case you
-could omit the filter mask altogether).
+for all managed `PageElement` instances of a `PageElementList`.
 - If the filter mask is set to `false`, the corresponding function will be skipped
 for all managed `PageElement` instances of a `PageElementList` (this can be helpful
-when using a `PageElementList` inside the content of a `PageElementGroup`.)
+when using a `PageElementList` inside the content of a `PageElementGroup`).
 - If the filter mask is set to an array of booleans, a value of `true` means that
 the function will be executed for the corresponding `PageElement` and a value of
 `false` means that it will be skipped. The length of the filter mask array needs
 to match the number of `PageElement` instances managed by the list.
 
-The filter mask can be set via the last parameter of a function.
-If a function has other optional parameters, the filter mask can be defined via
-the `filterMask` property of the `opts` parameter (which is always the last
-function parameter). Otherwise, the filter mask itself represents the last function
-parameter.
+The filter mask can be set via the last parameter of a state retrieval, action or
+state check function. If such a function has other optional parameters, the filter
+mask can be defined via the `filterMask` property of the `opts` parameter (which
+is always the last function parameter). Otherwise, the filter mask itself represents
+the last function parameter.
 
 Here are some examples for how to use a `PageElementList` filter mask:
 
@@ -557,9 +556,10 @@ linkList.eventually.hasAnyText({ timeout: 3000, filterMask: false });
 ```
 
 Filter masks are not available for state check functions that require you to pass
-the expected attribute values as parameter, e.g. `hasText(texts)` or `containsValue(values)`.
-In these cases, you can skip the execution of the state check function for a certain `PageElement` instance by setting its corresponding value in the array of expected
-attribute values to `undefined`:
+the expected attribute values as a parameter, e.g. `hasText(texts)` or
+`containsValue(values)`. In these cases, you can skip the execution of the state
+check function for a certain `PageElement` instance by setting its corresponding
+value in the array of expected attribute values to `undefined`:
 
 ```typescript
 import { stores } from '?/page_objects';
