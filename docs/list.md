@@ -605,8 +605,16 @@ linkList.all.forEach(
 
 The explicit waiting mechanisms of `PageElementList` are very similar to the
 ones used by `PageElement` and you should read about them in the
-[Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually) section of the
-[`PageElement` guide](element.md) before you continue reading this guide.
+[Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually)
+section of the [`PageElement` guide](element.md) before you continue reading
+this guide.
+
+To learn how the behavior of state retrieval and state check functions of the
+`PageElementList` class differs from its `PageElement` class equivalents, please
+read the [State Function Types section of this guide](#state-function-types).
+The types of available state retrieval and state check functions can be found
+in the [State Function Types section](element.md#state-function-types) of the
+page element guide.
 
 ### The `currently` API
 
@@ -614,14 +622,18 @@ ones used by `PageElement` and you should read about them in the
 
 Like the [`currently` API of `PageElement`](element.md#state-retrieval-functions-no-implicit-waiting),
 the `currently` API of the `PageElementList` class consists of state retrieval functions
-and state check function. It does not trigger an implicit wait on the managed `PageElement`
+and state check functions. It does not trigger an implicit wait on the managed `PageElement`
 instances of the `PageElementList`.
 
-To see how state retrieval and state check functions behave for a `PageElementList`,
-please read the [State Function Types section](#state-function-types) of this guide.
-The types of available state retrieval and state check functions can be found
-in the [State Function Types section](element.md#state-function-types) of the
-page element guide.
+The state retrieval functions of a list's `currently` API return the current values
+of a certain HTML attribute for each `PageElement` instance managed by the list as
+an array. The state check functions of a list's `currently` API check the page elements
+managed by the `PageElementList` currently have an expected state for a certain
+HTML attribute.
+
+By using a [filter mask](#filter-masks), you can skip the invocation of a
+state retrieval or state check function for certain `PageElement` instances of
+the list.
 
 #### `any` and `none`
 
@@ -652,7 +664,7 @@ for some or all of the list's managed `PageElement` instances to have an expecte
 state. It consists of state check functions only which all return an instance
 of the `PageElementList`.
 
-If you use a filtermask, the `wait` API only waits for the `PageElement` instances
+If you use a filter mask, the `wait` API only waits for the `PageElement` instances
 included by the filter mask to reach an expected state. Otherwise, the `wait` API
 waits for all managed `PageElement` instances to reach their expected state.
 If one or more `PageElement` instance fail to reach their expected state within
@@ -722,7 +734,7 @@ that return `true` if all `PageElement` instances for which the state check func
 was executed eventually reached the expected state within the timeout. Otherwise,
 `false` will be returned.
 
-If you use a filtermask, the `eventually` API only checks the state of `PageElement`
+If you use a filter mask, the `eventually` API only checks the state of `PageElement`
 instances which are included by the filter mask. Otherwise, the `eventually` API
 checks the state of all managed `PageElement` instances.
 

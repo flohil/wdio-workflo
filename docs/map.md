@@ -195,17 +195,9 @@ The `PageElementMap` filter mask allows you to restrict the execution of a
 state retrieval, action or state check function to certain managed `PageElement`
 instances.
 
-You can set the `PageElementMap` filter mask to a boolean value or an object
-whose keys are taken from the map's `mappingObject` and whose values are also
-booleans:
-
-- If the filter mask is set to `true`, the corresponding function will be executed
-for all managed `PageElement` instances of a `PageElementMap`.
-- If the filter mask is set to `false`, the corresponding function will be skipped
-for all managed `PageElement` instances of a `PageElementMap` (this can be helpful
-when using a `PageElementList` inside the content of a `PageElementGroup`).
-- If the filter mask is set to an object, a property value of `true` means that
-the function will be executed for the corresponding `PageElement`. A value of
+The `PageElementMap` filter mask is an object whose keys are taken from the map's
+`mappingObject` and whose values are booleans. A property value of `true` means
+that the function will be executed for the corresponding `PageElement`. A value of
 `false` or simply not defining a property for a certain key means that the
 function execution will be skipped.
 
@@ -296,7 +288,107 @@ const result = linkMap.currently.hasDirectText({
 
 ### Implicit Waiting
 
+`PageElementMap` does not have an implicit waiting mechanism of its own.
+However, if you invoke a state retrieval or action function on a `PageElement`
+instance  managed by a `PageElementMap`, the
+[implicit waiting mechanism of the `PageElement`](element#implicit-waiting) will be triggered.
+
+The publicly configurable `opts` parameter of the `ElementMap()` factory method
+provides an `elementOpts.waitType` property which allows you to define the `waitType`
+of the `PageElement` instances managed by the `PageElementMap`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'demoLink',
+      examples: 'examplesLink',
+      api: 'apiLink'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+  },
+  elementOpts: { waitType: Workflo.WaitType.text }
+});
+
+linkMap.eachDo(
+  // The `click()` action function triggers linkElement's implicit waiting mechanism.
+  // So, before each click, wdio-workflo waits for the linkElement to have any text.
+  linkElement => linkElement.click()
+);
+```
+
 ### Explicit Waiting: `currently`, `wait` and `eventually`
+
+#### Preface
+
+The explicit waiting mechanisms of `PageElementMap` are very similar to the
+ones used by `PageElement` and you should read about them in the
+[Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually)
+section of the [`PageElement` guide](element.md) before you continue reading
+this guide.
+
+To learn how the behavior of state retrieval and state check functions of the `PageElementMap` class differs from its `PageElement` class equivalents, please
+read the [State Function Types section of this guide](#state-function-types).
+The types of available state retrieval and state check functions can be
+found in the [State Function Types section of the `PageElement` guide](element.md#state-function-types) .
+
+#### The `currently` API
+
+The `currently` API of the `PageElementMap` class consists of state retrieval
+functions and state check functions. It does not trigger an implicit wait on the
+managed `PageElement` instances of the `PageElementMap`.
+
+The state retrieval functions of a map's `currently` API return an object whose
+keys are taken from the map's `mappingObject` and whose values represent the
+current values of the retrieved HTML attribute for each page element managed the map.
+The state check functions of the `currently` API check wether the page elements
+managed by the `PageElementMap` currently have an expected state for a certain
+HTML attribute.
+
+By using a [filter mask](#filter-masks), you can skip the invocation of a
+state retrieval or state check function for certain `PageElement` instances of
+the map.
+
+#### The `wait` API
+
+The `wait` API of the `PageElementMap` class allows you to explicitly wait
+for some or all of the list's managed `PageElement` instances to have an expected
+state. It consists of state check functions only which all return an instance
+of the `PageElementList`.
+
+If you use a filtermask, the `wait` API only waits for the `PageElement` instances
+included by the filter mask to reach an expected state. Otherwise, the `wait` API
+waits for all managed `PageElement` instances to reach their expected state.
+If one or more `PageElement` instance fail to reach their expected state within
+a specific timeout, an error will be thrown.
+
+
+FINISH this!!!
+
+#### The `eventually` API
+
+
+
+
+The `eventually` API of the `PageElementList` class checks if some or all of
+the `PageElement` instances managed by a `PageElementList` eventually reach an
+expected state within a specific timeout. It consists of state check functions only
+that return `true` if all `PageElement` instances for which the state check function
+was executed eventually reached the expected state within the timeout. Otherwise,
+`false` will be returned.
+
+If you use a filtermask, the `eventually` API only checks the state of `PageElement`
+instances which are included by the filter mask. Otherwise, the `eventually` API
+checks the state of all managed `PageElement` instances.
+
+timeouts
+
+available types of functions -> above
+
+
+
 
 ## The `ValuePageElementMap` Class
 
