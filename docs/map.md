@@ -185,9 +185,173 @@ linkMap.$.api.click();
 
 ## State Functions
 
-### Behavior of State Functions for `PageElementMap`
+### State Retrieval Functions
 
-muss nicht alle setzen bei setValue
+State retrieval functions of the `PageElementMap` class fulfil the same purpose
+as those of the `PageElement` class: For each `PageElement` instance managed by the
+map, they retrieve the value of a certain attribute of the HTML element that is
+wrapped by `PageElement` from the website. They return an object whose keys are
+taken from the map's `mappingObject` and whose values represent the values
+of the retrieved HTML attribute for each `PageElement`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'Demo Page',
+      api: 'API'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+  }
+});
+
+const linkTexts = linkMap.getText();
+```
+
+In the above examples, the `linkTexts` variable would now store
+`{demo: 'Demo Page', api: 'API'}`;
+
+Internally, `PageElementMap` simply iterates over all of its managed
+`PageElement` instances and invokes the respective state retrieval function
+on each `PageElement`. You can also skip the invocation of the state retrieval
+function for certain `PageElement` instances by using a filter mask. The
+[Filter Masks section](#filter-masks) of this guide shows you how to do that.
+
+For more information about the types of available state retrieval functions,
+please read the [State Retrieval Functions section](element.md#state-retrieval-functions)
+of the `PageElement` guide.
+
+### Action Functions
+
+Action functions change the state of the tested web application by interacting
+with HTML elements that are mapped by `PageElement` instances. To execute an
+action function on each `PageElement` instance managed by a `PageElementMap`,
+you have two options:
+
+- You can access each `PageElement` instance via the `$` accessor and invoke an
+action function on each.
+- You can use the `eachDo()` method of the `PageElementMap` which automatically
+loops over the `PageElementMap` instances and invokes an action function which
+you need to pass to `eachDo()` on each page element. Using `eachDo()` allows you to
+optionally pass a [filter mask](#filter-masks) as second parameter to skip the action
+function's invocation for certain `PageElement` instances.
+
+The following code example compares both options for executing action functions
+on each element of a list:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'demoLink',
+      examples: 'examplesLink',
+      api: 'apiLink'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+  },
+  elementOpts: { waitType: Workflo.WaitType.text }
+});
+
+// Click on each page element of the map after accessing the page elements via the `$` accessor.
+linkMap.$.demo.click();
+linkMap.$.examples.click();
+linkMap.$.api.click();
+
+// Clicks on the `demo` and the `api` but not on the `examples` page element of
+// `linkMap` because `examples` is not included in the filter mask.
+linkMap.eachDo(
+  linkElement => linkElement.click(),
+  {
+    demo: true,
+    api: true
+  }
+);
+```
+
+For more information about the types of available action functions,
+please read the [Action Functions section](element.md#action-functions) of the `PageElement` guide.
+
+### State Check Functions
+
+The state check functions of the `PageElementMap` class let you check if all
+or some of the `PageElement` instances managed by a `PageElementMap` currently
+or eventually have an expected state. They also allow you to wait for some or all
+page elements of a map to reach an expected state within a specific timeout.
+
+If a state check function of `PageElementMap` requires you to pass the expected
+attribute states as a parameter, this parameter needs to be an object whose
+keys are taken from the map's `mappingObject` and whose values represent the values
+of the checked HTML attribute for each `PageElement` instance. If you omit
+a property representing a certain page element in the parameter object, the
+invocation of the state check function will be skipped for this page element.
+
+For state check functions that do not require you to pass the expected attribute
+states as a parameter, you can use a [filter mask](#filter-masks) to skip the
+invocation of the state check function for certain `PageElement` instances.
+
+The following code example demonstrates the usage of the state check functions
+of a `PageElementList`:
+
+```typescript
+import { stores } from '?/page_objects';
+
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'demoLink',
+      examples: 'examplesLink',
+      api: 'apiLink'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+  },
+  elementOpts: { waitType: Workflo.WaitType.text }
+});
+
+// Checks if the text of the `demo` element is 'Demo Page', the text of the `examples`
+// element is 'Examples' and the text of the `api` element is 'API'.
+linkMap.currently.hasText({
+  demo: 'Demo Page',
+  examples: 'Examples',
+  api: 'API'
+});
+
+// Checks if the `demo` and the `api` element of the map currently have any text.
+linkMap.currently.hasAnyText({
+  demo: true,
+  api: true
+});
+
+// Waits for all elements of the map to become visible.
+linkMap.wait.isVisible();
+
+// Waits until the `demo` and `examples` elements of the map are not/no longer visible.
+linkMap.wait.not.isVisible({ filterMask: {
+  demo: true,
+  examples: true,
+  api: false,
+}});
+
+// Checks if the text of the `demo` element does not eventually contain the string 'ap'
+// and if the text of the `api` element does not eventually contain the string 'em'.
+linkMap.eventually.not.containsText({
+  demo: 'ap',
+  api: 'em'
+});
+```
+
+To find out how state check functions behave differently when invoked on the
+`currently`, `wait` or `eventually` API of a `PageElementMap`, please read the
+corresponding sections of this guide:
+[The `currently` API](#the-currently-api),
+[The `wait` API](#the-wait-api),
+[The `eventually` API](#the-eventually-api).
+
+For more information about the types of available state check functions,
+please read the [State Check Functions section](element.md#state-check-functions) of the `PageElement` guide.
 
 ### Filter Masks
 
@@ -321,8 +485,6 @@ linkMap.eachDo(
 
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 
-#### Preface
-
 The explicit waiting mechanisms of `PageElementMap` are very similar to the
 ones used by `PageElement` and you should read about them in the
 [Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually)
@@ -334,7 +496,7 @@ read the [State Function Types section of this guide](#state-function-types).
 The types of available state retrieval and state check functions can be
 found in the [State Function Types section of the `PageElement` guide](element.md#state-function-types) .
 
-#### The `currently` API
+### The `currently` API
 
 The `currently` API of the `PageElementMap` class consists of state retrieval
 functions and state check functions. It does not trigger an implicit wait on the
@@ -351,44 +513,86 @@ By using a [filter mask](#filter-masks), you can skip the invocation of a
 state retrieval or state check function for certain `PageElement` instances of
 the map.
 
-#### The `wait` API
+### The `wait` API
+
+#### Overview
 
 The `wait` API of the `PageElementMap` class allows you to explicitly wait
 for some or all of the list's managed `PageElement` instances to have an expected
 state. It consists of state check functions only which all return an instance
 of the `PageElementList`.
 
-If you use a filtermask, the `wait` API only waits for the `PageElement` instances
-included by the filter mask to reach an expected state. Otherwise, the `wait` API
-waits for all managed `PageElement` instances to reach their expected state.
-If one or more `PageElement` instance fail to reach their expected state within
-a specific timeout, an error will be thrown.
+If you use a [filter mask](#filter-masks), the `wait` API only waits for the
+`PageElement` instances included by the filter mask to reach an expected state.
+Otherwise, the `wait` API waits for all managed `PageElement` instances to reach
+their expected state. If one or more `PageElement` instance fail to reach their
+expected state within a specific timeout, an error will be thrown.
 
+#### Timeout
 
-FINISH this!!!
+The `timeout` within which the expected states of the `PageElement` instances must
+be reached applies to each `PageElement` instance individually. So, if the `timeout`
+was 3000 milliseconds, each `PageElement` instance managed by the map is allowed
+to take up to 3 seconds to reach its expected state:
 
-#### The `eventually` API
+```typescript
+import { stores } from '?/page_objects';
 
+const linkMap = stores.pageNode.ElementMap('//a', {
+  identifier: {
+    mappingObject: {
+      demo: 'demoLink',
+      examples: 'examplesLink',
+      api: 'apiLink'
+    },
+    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+  }
+});
 
+linkMap.wait.isVisible({
+  timeout: 3000,
+  filterMask: {
+    demo: true,
+    api: true
+  }
+});
+```
 
+In the code example above, both the `demo` and the `api` page element of `linkMap`
+can take up to 3 seconds to become visible. So in total, the maximum possible wait
+time for this `isVisible` invocation is 6 seconds. If either the `demo`, or the `api`,
+or both page elements do not become visible within 3 seconds, `wait.isVisible`
+will throw an error.
 
-The `eventually` API of the `PageElementList` class checks if some or all of
-the `PageElement` instances managed by a `PageElementList` eventually reach an
+For more information on how to configure the `timeout` and `interval` of
+state check functions defined on the `wait` API of a page node class,
+please read the [`wait` API section](element.md#the-wait-api) of the `PageElement` guide.
+
+### The `eventually` API
+
+#### Overview
+
+The `eventually` API of the `PageElementMap` class checks if some or all of
+the `PageElement` instances managed by a `PageElementMap` eventually reach an
 expected state within a specific timeout. It consists of state check functions only
 that return `true` if all `PageElement` instances for which the state check function
-was executed eventually reached the expected state within the timeout. Otherwise,
-`false` will be returned.
+was executed eventually reached the expected state within specified the timeout.
+Otherwise, `false` will be returned.
 
-If you use a filtermask, the `eventually` API only checks the state of `PageElement`
-instances which are included by the filter mask. Otherwise, the `eventually` API
-checks the state of all managed `PageElement` instances.
+If you use a [filter mask](#filter-masks), the `eventually` API only checks the
+state of `PageElement` instances which are included by the filter mask. Otherwise,
+the `eventually` API checks the state of all managed `PageElement` instances.
 
-timeouts
+#### Timeout
 
-available types of functions -> above
+Like for the `wait` API, for the `eventually` API too the `timeout` within which
+the expected states of the `PageElement` instances must be reached applies to
+each `PageElement` instance individually.
 
-
-
+For more information on how to configure the `timeout` and `interval` of
+state check functions defined on the `eventually` API of a page node class,
+please read the [`eventually` API section](element.md#the-eventually-api) of the
+`PageElement` guide.
 
 ## The `ValuePageElementMap` Class
 

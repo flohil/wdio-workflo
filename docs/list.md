@@ -364,8 +364,9 @@ linkList.eventually.hasLength(5, {
 ### State Retrieval Functions
 
 State retrieval functions of the `PageElementList` class fulfil the same purpose
-as those of the `PageElement` class: They retrieve the values of a certain attribute
-of HTML elements mapped by `PageElement` instances from the website.
+as those of the `PageElement` class: For each `PageElement` instance managed by the
+list, they retrieve the value of a certain attribute of the HTML element that is
+wrapped by `PageElement` from the website.
 
 However, since a `PageElementList` manages a collection of `PageElement` instances,
 the state retrieval functions defined on the `PageElementList` class do not return
@@ -483,15 +484,15 @@ animalsList.currently.containsText('a');
 // Checks if the first and the third element of the list have any text (are not empty).
 animalsList.currently.hasAnyText([true, false, true]);
 
-// Waits for all elements of the list to exist.
-animalsList.wait.exists();
+// Waits for all elements of the list to become visible.
+animalsList.wait.isVisible();
 
 // Waits until the first and third element of the list are not/no longer visible.
 animalsList.wait.not.isVisible({ filterMask: [true, false, true] });
 
-// Checks if the text of the first element contains the letter 'l' and if
-// the text of the third element contains the letter 'p'.
-animalsList.eventually.not.containsText(['l', undefined, 'p']);
+// Checks if the text of the first element does not eventually contain the letter 'u'
+// and if the text of the third element does not eventually contain the letter 'i'.
+animalsList.eventually.not.containsText(['u', undefined, 'i']);
 ```
 
 To find out how state check functions behave differently when invoked on the
@@ -664,11 +665,11 @@ for some or all of the list's managed `PageElement` instances to have an expecte
 state. It consists of state check functions only which all return an instance
 of the `PageElementList`.
 
-If you use a filter mask, the `wait` API only waits for the `PageElement` instances
-included by the filter mask to reach an expected state. Otherwise, the `wait` API
-waits for all managed `PageElement` instances to reach their expected state.
-If one or more `PageElement` instance fail to reach their expected state within
-a specific timeout, an error will be thrown.
+If you use a [filter mask](#filter-masks), the `wait` API only waits for the
+`PageElement` instances included by the filter mask to reach an expected state.
+Otherwise, the `wait` API waits for all managed `PageElement` instances to reach
+their expected state. If one or more `PageElement` instance fail to reach their
+expected state within a specific timeout, an error will be thrown.
 
 #### Timeouts
 
@@ -682,10 +683,6 @@ import { stores } from '?/page_objects';
 
 const linkList = stores.pageNode.ElementList('//a');
 
-// The length of the filtermask must match the number of elements managed by the list.
-// Therefore, we know the list manages 3 elements. Out of these 3 elements,
-// only the first and the third element are included by the filter mask.
-// Each of these
 linkList.wait.hasAnyText({
   timeout: 3000,
   filterMask: [true, false, true]
@@ -731,12 +728,12 @@ The `eventually` API of the `PageElementList` class checks if some or all of
 the `PageElement` instances managed by a `PageElementList` eventually reach an
 expected state within a specific timeout. It consists of state check functions only
 that return `true` if all `PageElement` instances for which the state check function
-was executed eventually reached the expected state within the timeout. Otherwise,
-`false` will be returned.
+was executed eventually reached the expected state within the specified timeout.
+Otherwise, `false` will be returned.
 
-If you use a filter mask, the `eventually` API only checks the state of `PageElement`
-instances which are included by the filter mask. Otherwise, the `eventually` API
-checks the state of all managed `PageElement` instances.
+If you use a [filter mask](#filter-masks), the `eventually` API only checks the
+state of `PageElement` instances which are included by the filter mask. Otherwise,
+the `eventually` API checks the state of all managed `PageElement` instances.
 
 #### Timeout
 

@@ -328,7 +328,7 @@ xpath('//div').child('/a[@href="https://flohil.github.io/wdio-workflo/"]').text(
 
 So the above example results in the XPath expression `//div/a[@href="https://flohil.github.io/wdio-workflo/"][.="Click Me!"]`.
 
-#### Building and Resetting the Builder's XPath Expression
+### Building and Resetting the Builder's XPath Expression
 
 If you invoke the `build()` method on an XPath builder, the XPath expression
 created by the builder will be returned as a string.
