@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Map · Wdio-Workflo</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Available soon&lt;/p&gt;
-"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Map · Wdio-Workflo"/><meta property="og:type" content="website"/><meta property="og:url" content="https://flohil.github.io/wdio-workflo/index.html"/><meta property="og:description" content="&lt;p&gt;Available soon&lt;/p&gt;
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Map · Wdio-Workflo</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;*This guide provides a detailed explanation of wdio-workflo&#x27;s &lt;code&gt;PageElementMap&lt;/code&gt; and&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Map · Wdio-Workflo"/><meta property="og:type" content="website"/><meta property="og:url" content="https://flohil.github.io/wdio-workflo/index.html"/><meta property="og:description" content="&lt;p&gt;*This guide provides a detailed explanation of wdio-workflo&#x27;s &lt;code&gt;PageElementMap&lt;/code&gt; and&lt;/p&gt;
 "/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/wdio-workflo/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/rainbow.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/wdio-workflo/css/main.css"/><script src="/wdio-workflo/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/wdio-workflo/"><img class="logo" src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo"/><h2 class="headerTitleWithLogo">Wdio-Workflo</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/wdio-workflo/docs/setup" target="_self">Guides</a></li><li class=""><a href="/wdio-workflo/demo" target="_self">Demo Page</a></li><li class=""><a href="https://github.com/flohil/wdio-workflo-example" target="_self">Examples</a></li><li class=""><a href="/wdio-workflo/apiDoc" target="_self">API</a></li><li class=""><a href="https://github.com/flohil/wdio-workflo" target="_self">Github</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Page Objects</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/setup">Setup</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/firstTest">Writing your first Test</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Configuration</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/config">Configuration Options</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Architecture</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/classes">Class Diagram</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Specs</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/specs">Specs</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Page Objects</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/pageObjects">Page Objects</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/element">Element</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/list">List</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/wdio-workflo/docs/map">Map</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/group">Group</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/store">Store</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/page">Page</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Steps</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/steps">Steps</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Testcases</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/testcases">Testcases</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Customizing Page Nodes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customPageNodes">Introduction</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customElement">Customizing an Element</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customList">Customizing a List</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/customMap">Customizing a Map</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Various Tools</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/xpathBuilder">XPath Builder</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/getUid">The `getUid` Function</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/executionLists">Execution Lists</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/manualResults">Manual Results</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Testrunner</h3><ul class=""><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/cliOptions">CLI Options</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/runningTests">Running Tests</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/debugging">Debugging</a></li><li class="navListItem"><a class="navItem" href="/wdio-workflo/docs/reporters">Reporters</a></li></ul></div></div></section></div><script>
             var coll = document.getElementsByClassName('collapsible');
             var checkActiveCategory = true;
@@ -50,8 +50,595 @@
                 };
               }
             });
-        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Map</h1></header><article><div><span><p>Available soon</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/list"><span class="arrow-prev">← </span><span>List</span></a><a class="docs-next button" href="/wdio-workflo/docs/group"><span>Group</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="/wdio-workflo/apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Map</h1></header><article><div><span><p><em>This guide provides a detailed explanation of wdio-workflo's <code>PageElementMap</code> and
+<code>ValuePageElementMap</code> classes. However, it does not show you how to customize these
+classes. If you want to learn how to create your own, customized map classes
+by extending wdio-workflo's <code>PageElementMap</code> or <code>ValuePageElementMap</code> class, read the
+<a href="/wdio-workflo/docs/customMap">Customizing a Map</a> guide.</em></p>
+<h2><a class="anchor" aria-hidden="true" id="overview-and-objective"></a><a href="#overview-and-objective" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview and Objective</h2>
+<p>Wdio-workflo's <code>PageElementMap</code> manages a static collection of <code>PageElement</code> instances
+or of instances of a class derived from the <code>PageElement</code> class. Static means
+that the contents of the collection/the individual page elements managed by the
+collection are already known at compile time and do not change during runtime.</p>
+<p>Some typical website components that should be mapped by a <code>PageElementMap</code>
+are a the links in a navigation menu, because they are usually known at the time
+of test creation and do not change during the runtime of your web application.</p>
+<p>All <code>PageElement</code> instances managed by a <code>PageElementMap</code> share a common
+base XPath selector, for example, they could all be HTML link <code>&lt;a&gt;</code> elements
+located by the XPath selector <code>//a[@role=&quot;navigationLink&quot;]</code>. Although the
+page elements all share the same base XPath selector, each of them can be
+accessed via a unique key. In order for this to work, all page elements of
+a map need to have unique values for a certain HTML attribute.
+The <code>PageElementMap</code> class maps its managed <code>PageElement</code> instances to the
+aforementioned unique keys based on the HTML attribute values you provided.</p>
+<p>If this sounds very theoretical to you, there are plenty of practical examples
+and explanations further down this guide. All in all, the objective of the
+<code>PageElementMap</code> class is to greatly reduce the amount of code needed to define
+a couple of similar <code>PageElement</code> instances.</p>
+<p>Finally, like the <code>PageElement</code> and the <code>PageElementList</code> classes,  <code>PageElementMap</code>
+also features a <code>currently</code> and an <code>eventually</code> API to check if some, none or all
+of the map's elements currently/eventually have a certain state, and a <code>wait</code> API
+to wait for some, none or all of the map's elements to reach a certain state.</p>
+<h2><a class="anchor" aria-hidden="true" id="creating-a-pageelementmap"></a><a href="#creating-a-pageelementmap" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating a <code>PageElementMap</code></h2>
+<h3><a class="anchor" aria-hidden="true" id="elementmap-factory-method"></a><a href="#elementmap-factory-method" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>ElementMap()</code> Factory Method</h3>
+<p>Instead of manually invoking the constructor of <code>PageElementMap</code> using the <code>new</code> keyword,
+you should always call the <code>ElementMap()</code> factory method of the <a href="/wdio-workflo/docs/store">PageNodeStore</a>
+class to create an instance of the <code>PageElementMap</code> class:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'Demo Page'</span>,
+      examples: <span class="hljs-string">'Examples'</span>,
+      api: <span class="hljs-string">'API'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).text(value)
+  }
+});
+</code></pre>
+<p>As you can see from the example above, the <code>ElementMap()</code> factory method requires
+us to pass an <code>identifier</code> property in its publicly configurable <code>opts</code> parameter.
+To understand how the <code>identifier</code> property works, let us examine the type parameters
+and constructor of <code>PageElementMap</code> in more detail!</p>
+<h3><a class="anchor" aria-hidden="true" id="type-parameters"></a><a href="#type-parameters" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type Parameters</h3>
+<p>The <code>PageElementMap</code> class has four type parameters:</p>
+<ul>
+<li>The type of the <code>PageNodeStore</code> associated with the map to create other page nodes.</li>
+<li>The unique keys used to access the page elements managed by the map.</li>
+<li>The class type of the page elements managed by the map.</li>
+<li>The type of the <code>opts</code> parameter of a single page element managed by the map.</li>
+</ul>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> PageElementMap&lt;
+  Store <span class="hljs-keyword">extends</span> PageNodeStore,
+  K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span>,
+  PageElementType <span class="hljs-keyword">extends</span> PageElement&lt;Store&gt;,
+  PageElementOpts <span class="hljs-keyword">extends</span> Partial&lt;IPageElementOpts&lt;Store&gt;&gt;
+&gt; <span class="hljs-keyword">extends</span> PageNode&lt;Store&gt;
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="constructor"></a><a href="#constructor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Constructor</h3>
+<p>The constructor of <code>PageElementMap</code> requires two parameters:</p>
+<ul>
+<li>The XPath selector that locates all of the map's page elements on a website.</li>
+<li>The <code>opts</code> parameter containing properties to configure the <code>PageElementMap</code></li>
+</ul>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">constructor</span>(<span class="hljs-params">
+  selector: <span class="hljs-built_in">string</span>,
+  opts: IPageElementMapOpts&lt;Store, K, PageElementType, PageElementOpts&gt;,
+</span>) { <span class="hljs-comment">/*...*/</span> }
+</code></pre>
+<p>The most important properties of the <code>opts</code> parameter are:</p>
+<ul>
+<li><code>store</code> =&gt; The <code>PageNodeStore</code> instance associated with the <code>PageElementMap</code>.</li>
+<li><code>identifier</code> =&gt; An object containing all information required to map the page elements
+of a map to a set of unique keys.</li>
+<li><code>timeout</code> =&gt; The map's default timeout for all functions of the <a href="#explicit-waiting-currently-wait-and-eventually"><code>eventually</code> and <code>wait</code> APIs</a>.</li>
+<li><code>interval</code> =&gt; The map's default interval for all functions of the <a href="#explicit-waiting-currently-wait-and-eventually"><code>eventually</code> and <code>wait</code> APIs</a>.</li>
+<li><code>elementStoreFunc</code> =&gt; The factory method used to create a single map element.</li>
+<li><code>elementOpts</code> =&gt; The <code>opts</code> parameter passed to <code>elementStoreFunc</code> to create a map element.</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="identifier-object"></a><a href="#identifier-object" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>identifier</code> Object</h3>
+<p>The <code>identifier</code> object, which is passed to the constructor of a <code>PageElementMap</code>
+as a property of the <code>opts</code> parameters object, contains all information required
+to map the <code>PageElement</code> instances managed by a <code>PageElementMap</code> to a set of
+unique keys. It consists of two properties: <code>mappingObject</code> and <code>mappingFunc</code>.</p>
+<p>As already mentioned, the precondition for using a <code>PageElementMap</code> is that all
+of its <code>PageElement</code> instances have a unique value for a certain HTML attribute.
+Simply speaking, the task of the <code>mappingFunc</code> is to define which kind of
+HTML attribute is to be used for the mapping process, whereas the <code>mappingObject</code>
+defines the unique values of this HTML attribute for each <code>PageElement</code> instance
+and the unique keys used to access these <code>PageElement</code> instances on the map.</p>
+<p>During the mapping process, <code>PageElementMap</code> iterates over all key-value pairs
+of the <code>mappingObject</code> and invokes <code>mappingFunc</code> for each pair, passing it
+the base XPath selector that identifies all page elements of a map as first parameter
+and the unique HTML attribute value of the currently iterated entry of <code>mappingObject</code>
+as second parameter. <code>mappingFunc</code> now uses the base XPath selector and the unique
+HTML attribute value to create an XPath expression that uniquely identifies
+each of the map's <code>PageElement</code> instances. Finally, <code>PageElementMap</code> creates
+a <code>PageElement</code> instance for each unique XPath expression and assigns the
+created page element to the corresponding key of the <code>mappingObject</code>.</p>
+<p>To help you better understand this mapping process, let's revisit our
+<code>ElementMap()</code> factory method code example from above:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'Demo Page'</span>,
+      examples: <span class="hljs-string">'Examples'</span>,
+      api: <span class="hljs-string">'API'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).text(value)
+  }
+});
+</code></pre>
+<p>In this example, our <code>PageElementMap</code> manages three <code>PageElement</code> instances,
+each wrapping an HTML link <code>&lt;a&gt;</code> element - hence the base XPath selector is <code>'//a'</code>.
+Looking a the <code>mappingFunc</code> implementation, we can see that the HTML attribute
+used to uniquely identify each of these <code>PageElement</code> instances is the <code>text</code> of
+the HTML element. Therefore, the values of our <code>mappingObject</code> represent the texts
+of the HTML link elements, and its keys determine the names by which we will later be
+able to access each <code>PageElement</code> instance of the map.</p>
+<p>The following section of this guide shows you how we can access the <code>PageElement</code>
+instances managed by a <code>PageElementMap</code> via the keys defined in the <code>mappingObject</code>.</p>
+<h2><a class="anchor" aria-hidden="true" id="accessing-map-elements"></a><a href="#accessing-map-elements" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Accessing Map Elements</h2>
+<p>In the previous section of this guide, I explained the mapping process of
+<code>PageElementMap</code> that links each of the map's <code>PageElement</code> instances to a
+unique key.</p>
+<p>To access these <code>PageElement</code> instances, we need to use the <code>$</code> accessor of the
+<code>PageElementMap</code> class. The <code>$</code> accessor returns an object whose keys are taken
+from <code>mappingObject</code> and whose values are the <code>PageElement</code> instances assigned
+to the respective key during the mapping process:</p>
+<p><img src="/wdio-workflo/docs/assets/map_dollar_accessor.png" alt="The `$` accessor of `PageElementMap`"></p>
+<p>So if we wanted to click on the <code>api</code> link of our <code>linkMap</code> from the above
+code example, we would write:</p>
+<pre><code class="hljs css language-typescript">linkMap.$.api.click();
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="state-functions"></a><a href="#state-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Functions</h2>
+<h3><a class="anchor" aria-hidden="true" id="state-retrieval-functions"></a><a href="#state-retrieval-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Retrieval Functions</h3>
+<p>State retrieval functions of the <code>PageElementMap</code> class fulfil the same purpose
+as those of the <code>PageElement</code> class: For each <code>PageElement</code> instance managed by the
+map, they retrieve the value of a certain attribute of the HTML element that is
+wrapped by <code>PageElement</code> from the website. They return an object whose keys are
+taken from the map's <code>mappingObject</code> and whose values represent the values
+of the retrieved HTML attribute for each <code>PageElement</code>:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'Demo Page'</span>,
+      api: <span class="hljs-string">'API'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).text(value)
+  }
+});
+
+<span class="hljs-keyword">const</span> linkTexts = linkMap.getText();
+</code></pre>
+<p>In the above examples, the <code>linkTexts</code> variable would now store
+<code>{demo: 'Demo Page', api: 'API'}</code>;</p>
+<p>Internally, <code>PageElementMap</code> simply iterates over all of its managed
+<code>PageElement</code> instances and invokes the respective state retrieval function
+on each <code>PageElement</code>. You can also skip the invocation of the state retrieval
+function for certain <code>PageElement</code> instances by using a filter mask. The
+<a href="#filter-masks">Filter Masks section</a> of this guide shows you how to do that.</p>
+<p>For more information about the types of available state retrieval functions,
+please read the <a href="/wdio-workflo/docs/element#state-retrieval-functions">State Retrieval Functions section</a>
+of the <code>PageElement</code> guide.</p>
+<h3><a class="anchor" aria-hidden="true" id="action-functions"></a><a href="#action-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Action Functions</h3>
+<p>Action functions change the state of the tested web application by interacting
+with HTML elements that are mapped by <code>PageElement</code> instances. To execute an
+action function on each <code>PageElement</code> instance managed by a <code>PageElementMap</code>,
+you have two options:</p>
+<ul>
+<li>You can access each <code>PageElement</code> instance via the <code>$</code> accessor and invoke an
+action function on each.</li>
+<li>You can use the <code>eachDo()</code> method of the <code>PageElementMap</code> which automatically
+loops over the <code>PageElementMap</code> instances and invokes an action function which
+you need to pass to <code>eachDo()</code> on each page element. Using <code>eachDo()</code> allows you to
+optionally pass a <a href="#filter-masks">filter mask</a> as second parameter to skip the action
+function's invocation for certain <code>PageElement</code> instances.</li>
+</ul>
+<p>The following code example compares both options for executing action functions
+on each element of a list:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'demoLink'</span>,
+      examples: <span class="hljs-string">'examplesLink'</span>,
+      api: <span class="hljs-string">'apiLink'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).id(value)
+  },
+  elementOpts: { waitType: Workflo.WaitType.text }
+});
+
+<span class="hljs-comment">// Click on each page element of the map after accessing the page elements via the `$` accessor.</span>
+linkMap.$.demo.click();
+linkMap.$.examples.click();
+linkMap.$.api.click();
+
+<span class="hljs-comment">// Clicks on the `demo` and the `api` but not on the `examples` page element of</span>
+<span class="hljs-comment">// `linkMap` because `examples` is not included in the filter mask.</span>
+linkMap.eachDo(
+  <span class="hljs-function"><span class="hljs-params">linkElement</span> =&gt;</span> linkElement.click(),
+  {
+    demo: <span class="hljs-literal">true</span>,
+    api: <span class="hljs-literal">true</span>
+  }
+);
+</code></pre>
+<p>For more information about the types of available action functions,
+please read the <a href="/wdio-workflo/docs/element#action-functions">Action Functions section</a> of the <code>PageElement</code> guide.</p>
+<h3><a class="anchor" aria-hidden="true" id="state-check-functions"></a><a href="#state-check-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Check Functions</h3>
+<p>The state check functions of the <code>PageElementMap</code> class let you check if all
+or some of the <code>PageElement</code> instances managed by a <code>PageElementMap</code> currently
+or eventually have an expected state. They also allow you to wait for some or all
+page elements of a map to reach an expected state within a specific timeout.</p>
+<p>If a state check function of <code>PageElementMap</code> requires you to pass the expected
+attribute states as a parameter, this parameter needs to be an object whose
+keys are taken from the map's <code>mappingObject</code> and whose values represent the values
+of the checked HTML attribute for each <code>PageElement</code> instance. If you omit
+a property representing a certain page element in the parameter object, the
+invocation of the state check function will be skipped for this page element.</p>
+<p>For state check functions that do not require you to pass the expected attribute
+states as a parameter, you can use a <a href="#filter-masks">filter mask</a> to skip the
+invocation of the state check function for certain <code>PageElement</code> instances.</p>
+<p>The following code example demonstrates the usage of the state check functions
+of a <code>PageElementList</code>:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'demoLink'</span>,
+      examples: <span class="hljs-string">'examplesLink'</span>,
+      api: <span class="hljs-string">'apiLink'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).id(value)
+  },
+  elementOpts: { waitType: Workflo.WaitType.text }
+});
+
+<span class="hljs-comment">// Checks if the text of the `demo` element is 'Demo Page', the text of the `examples`</span>
+<span class="hljs-comment">// element is 'Examples' and the text of the `api` element is 'API'.</span>
+linkMap.currently.hasText({
+  demo: <span class="hljs-string">'Demo Page'</span>,
+  examples: <span class="hljs-string">'Examples'</span>,
+  api: <span class="hljs-string">'API'</span>
+});
+
+<span class="hljs-comment">// Checks if the `demo` and the `api` element of the map currently have any text.</span>
+linkMap.currently.hasAnyText({
+  demo: <span class="hljs-literal">true</span>,
+  api: <span class="hljs-literal">true</span>
+});
+
+<span class="hljs-comment">// Waits for all elements of the map to become visible.</span>
+linkMap.wait.isVisible();
+
+<span class="hljs-comment">// Waits until the `demo` and `examples` elements of the map are not/no longer visible.</span>
+linkMap.wait.not.isVisible({ filterMask: {
+  demo: <span class="hljs-literal">true</span>,
+  examples: <span class="hljs-literal">true</span>,
+  api: <span class="hljs-literal">false</span>,
+}});
+
+<span class="hljs-comment">// Checks if the text of the `demo` element does not eventually contain the string 'ap'</span>
+<span class="hljs-comment">// and if the text of the `api` element does not eventually contain the string 'em'.</span>
+linkMap.eventually.not.containsText({
+  demo: <span class="hljs-string">'ap'</span>,
+  api: <span class="hljs-string">'em'</span>
+});
+</code></pre>
+<p>To find out how state check functions behave differently when invoked on the
+<code>currently</code>, <code>wait</code> or <code>eventually</code> API of a <code>PageElementMap</code>, please read the
+corresponding sections of this guide:
+<a href="#the-currently-api">The <code>currently</code> API</a>,
+<a href="#the-wait-api">The <code>wait</code> API</a>,
+<a href="#the-eventually-api">The <code>eventually</code> API</a>.</p>
+<p>For more information about the types of available state check functions,
+please read the <a href="/wdio-workflo/docs/element#state-check-functions">State Check Functions section</a> of the <code>PageElement</code> guide.</p>
+<h3><a class="anchor" aria-hidden="true" id="filter-masks"></a><a href="#filter-masks" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Filter Masks</h3>
+<p>The <code>PageElementMap</code> filter mask allows you to restrict the execution of a
+state retrieval, action or state check function to certain managed <code>PageElement</code>
+instances.</p>
+<p>The <code>PageElementMap</code> filter mask is an object whose keys are taken from the map's
+<code>mappingObject</code> and whose values are booleans. A property value of <code>true</code> means
+that the function will be executed for the corresponding <code>PageElement</code>. A value of
+<code>false</code> or simply not defining a property for a certain key means that the
+function execution will be skipped.</p>
+<p>The filter mask can be set via the last parameter of a state retrieval, action or
+state check function. If such a function has other optional parameters, the filter
+mask can be defined via the <code>filterMask</code> property of the <code>opts</code> parameter (which
+is always the last function parameter). Otherwise, the filter mask itself represents
+the last function parameter.</p>
+<p>Here are some examples for how to use a <code>PageElementMap</code> filter mask:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'Demo Page'</span>,
+      examples: <span class="hljs-string">'Examples'</span>,
+      api: <span class="hljs-string">'API'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).text(value)
+  }
+});
+
+<span class="hljs-comment">// `texts` will be an object containing two properties, one with the key</span>
+<span class="hljs-comment">// 'demo' and one with the key 'api', whose values are the text of the respective</span>
+<span class="hljs-comment">// page elements. The text of the skipped `examples` page element is not included</span>
+<span class="hljs-comment">// in the result object.</span>
+<span class="hljs-keyword">const</span> texts = linkMap.getText({
+  demo: <span class="hljs-literal">true</span>,
+  api: <span class="hljs-literal">true</span>
+});
+
+<span class="hljs-comment">// Only the `examples` page element will be clicked, because the `api` page element's</span>
+<span class="hljs-comment">// filter mask value is set to `false` and the `demo` page element is not included</span>
+<span class="hljs-comment">// in the filter mask at all.</span>
+linkMap.eachDo(
+  <span class="hljs-function"><span class="hljs-params">element</span> =&gt;</span> element.click(), {
+    examples: <span class="hljs-literal">true</span>,
+    api: <span class="hljs-literal">false</span>
+  }
+);
+
+<span class="hljs-comment">// There are other optional parameters like `timeout`, therefore the filter mask</span>
+<span class="hljs-comment">// is defined via the `filterMask` property of the `opts` parameter.</span>
+<span class="hljs-comment">// The `hasAnyText` function will return true if within 3 seconds, the `api`</span>
+<span class="hljs-comment">// page element and the `demo` page element have any text (are not empty).</span>
+linkMap.eventually.hasAnyText({ timeout: <span class="hljs-number">3000</span>, filterMask: {
+  api: <span class="hljs-literal">true</span>,
+  examples: <span class="hljs-literal">false</span>,
+  demo: <span class="hljs-literal">true</span>
+}});
+</code></pre>
+<p>Filter masks are not available for state check functions that require you to pass
+the expected attribute values as a parameter, e.g. <code>hasText(texts)</code> or
+<code>containsValue(values)</code>. In these cases, you can skip the execution of the state
+check function for a certain <code>PageElement</code> instance by simply not defining
+an object property for the corresponding key:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'Demo Page'</span>,
+      examples: <span class="hljs-string">'Examples'</span>,
+      api: <span class="hljs-string">'API'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).text(value)
+  }
+});
+
+<span class="hljs-comment">// The `hasDirectText` function will be invoked for the `demo` and `api` page</span>
+<span class="hljs-comment">// elements of `linkMap` but skipped for the `examples` page element. The function</span>
+<span class="hljs-comment">// returns `true` if the direct text (the text that resides directly/one layer below</span>
+<span class="hljs-comment">// the HTML element) of the `demo` page element is currently 'Demo Page' and the</span>
+<span class="hljs-comment">// direct text of the `api` page element is currently 'API'.</span>
+<span class="hljs-keyword">const</span> result = linkMap.currently.hasDirectText({
+  demo: <span class="hljs-string">'Demo Page'</span>,
+  api: <span class="hljs-string">'API'</span>
+});
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="waiting-mechanisms"></a><a href="#waiting-mechanisms" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Waiting Mechanisms</h2>
+<h3><a class="anchor" aria-hidden="true" id="implicit-waiting"></a><a href="#implicit-waiting" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implicit Waiting</h3>
+<p><code>PageElementMap</code> does not have an implicit waiting mechanism of its own.
+However, if you invoke a state retrieval or action function on a <code>PageElement</code>
+instance  managed by a <code>PageElementMap</code>, the
+<a href="element#implicit-waiting">implicit waiting mechanism of the <code>PageElement</code></a> will be triggered.</p>
+<p>The publicly configurable <code>opts</code> parameter of the <code>ElementMap()</code> factory method
+provides an <code>elementOpts.waitType</code> property which allows you to define the <code>waitType</code>
+of the <code>PageElement</code> instances managed by the <code>PageElementMap</code>:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'demoLink'</span>,
+      examples: <span class="hljs-string">'examplesLink'</span>,
+      api: <span class="hljs-string">'apiLink'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).id(value)
+  },
+  elementOpts: { waitType: Workflo.WaitType.text }
+});
+
+linkMap.eachDo(
+  <span class="hljs-comment">// The `click()` action function triggers linkElement's implicit waiting mechanism.</span>
+  <span class="hljs-comment">// So, before each click, wdio-workflo waits for the linkElement to have any text.</span>
+  linkElement =&gt; linkElement.click()
+);
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="explicit-waiting-currently-wait-and-eventually"></a><a href="#explicit-waiting-currently-wait-and-eventually" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></h3>
+<p>The explicit waiting mechanisms of <code>PageElementMap</code> are very similar to the
+ones used by <code>PageElement</code> and you should read about them in the
+<a href="/wdio-workflo/docs/element#explicit-waiting-currently-wait-and-eventually">Explicit Waiting</a>
+section of the <a href="/wdio-workflo/docs/element"><code>PageElement</code> guide</a> before you continue reading
+this guide.</p>
+<p>To learn how the behavior of state retrieval and state check functions of the <code>PageElementMap</code> class differs from its <code>PageElement</code> class equivalents, please
+read the <a href="#state-function-types">State Function Types section of this guide</a>.
+The types of available state retrieval and state check functions can be
+found in the <a href="/wdio-workflo/docs/element#state-function-types">State Function Types section of the <code>PageElement</code> guide</a> .</p>
+<h3><a class="anchor" aria-hidden="true" id="the-currently-api"></a><a href="#the-currently-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>currently</code> API</h3>
+<p>The <code>currently</code> API of the <code>PageElementMap</code> class consists of state retrieval
+functions and state check functions. It does not trigger an implicit wait on the
+managed <code>PageElement</code> instances of the <code>PageElementMap</code>.</p>
+<p>The state retrieval functions of a map's <code>currently</code> API return an object whose
+keys are taken from the map's <code>mappingObject</code> and whose values represent the
+current values of the retrieved HTML attribute for each page element managed the map.
+The state check functions of the <code>currently</code> API check wether the page elements
+managed by the <code>PageElementMap</code> currently have an expected state for a certain
+HTML attribute.</p>
+<p>By using a <a href="#filter-masks">filter mask</a>, you can skip the invocation of a
+state retrieval or state check function for certain <code>PageElement</code> instances of
+the map.</p>
+<h3><a class="anchor" aria-hidden="true" id="the-wait-api"></a><a href="#the-wait-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>wait</code> API</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview"></a><a href="#overview" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
+<p>The <code>wait</code> API of the <code>PageElementMap</code> class allows you to explicitly wait
+for some or all of the list's managed <code>PageElement</code> instances to have an expected
+state. It consists of state check functions only which all return an instance
+of the <code>PageElementList</code>.</p>
+<p>If you use a <a href="#filter-masks">filter mask</a>, the <code>wait</code> API only waits for the
+<code>PageElement</code> instances included by the filter mask to reach an expected state.
+Otherwise, the <code>wait</code> API waits for all managed <code>PageElement</code> instances to reach
+their expected state. If one or more <code>PageElement</code> instance fail to reach their
+expected state within a specific timeout, an error will be thrown.</p>
+<h4><a class="anchor" aria-hidden="true" id="timeout"></a><a href="#timeout" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Timeout</h4>
+<p>The <code>timeout</code> within which the expected states of the <code>PageElement</code> instances must
+be reached applies to each <code>PageElement</code> instance individually. So, if the <code>timeout</code>
+was 3000 milliseconds, each <code>PageElement</code> instance managed by the map is allowed
+to take up to 3 seconds to reach its expected state:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
+
+<span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
+  identifier: {
+    mappingObject: {
+      demo: <span class="hljs-string">'demoLink'</span>,
+      examples: <span class="hljs-string">'examplesLink'</span>,
+      api: <span class="hljs-string">'apiLink'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).id(value)
+  }
+});
+
+linkMap.wait.isVisible({
+  timeout: <span class="hljs-number">3000</span>,
+  filterMask: {
+    demo: <span class="hljs-literal">true</span>,
+    api: <span class="hljs-literal">true</span>
+  }
+});
+</code></pre>
+<p>In the code example above, both the <code>demo</code> and the <code>api</code> page element of <code>linkMap</code>
+can take up to 3 seconds to become visible. So in total, the maximum possible wait
+time for this <code>isVisible</code> invocation is 6 seconds. If either the <code>demo</code>, or the <code>api</code>,
+or both page elements do not become visible within 3 seconds, <code>wait.isVisible</code>
+will throw an error.</p>
+<p>For more information on how to configure the <code>timeout</code> and <code>interval</code> of
+state check functions defined on the <code>wait</code> API of a page node class,
+please read the <a href="/wdio-workflo/docs/element#the-wait-api"><code>wait</code> API section</a> of the <code>PageElement</code> guide.</p>
+<h3><a class="anchor" aria-hidden="true" id="the-eventually-api"></a><a href="#the-eventually-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>eventually</code> API</h3>
+<h4><a class="anchor" aria-hidden="true" id="overview-1"></a><a href="#overview-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
+<p>The <code>eventually</code> API of the <code>PageElementMap</code> class checks if some or all of
+the <code>PageElement</code> instances managed by a <code>PageElementMap</code> eventually reach an
+expected state within a specific timeout. It consists of state check functions only
+that return <code>true</code> if all <code>PageElement</code> instances for which the state check function
+was executed eventually reached the expected state within specified the timeout.
+Otherwise, <code>false</code> will be returned.</p>
+<p>If you use a <a href="#filter-masks">filter mask</a>, the <code>eventually</code> API only checks the
+state of <code>PageElement</code> instances which are included by the filter mask. Otherwise,
+the <code>eventually</code> API checks the state of all managed <code>PageElement</code> instances.</p>
+<h4><a class="anchor" aria-hidden="true" id="timeout-1"></a><a href="#timeout-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Timeout</h4>
+<p>Like for the <code>wait</code> API, for the <code>eventually</code> API too the <code>timeout</code> within which
+the expected states of the <code>PageElement</code> instances must be reached applies to
+each <code>PageElement</code> instance individually.</p>
+<p>For more information on how to configure the <code>timeout</code> and <code>interval</code> of
+state check functions defined on the <code>eventually</code> API of a page node class,
+please read the <a href="/wdio-workflo/docs/element#the-eventually-api"><code>eventually</code> API section</a> of the
+<code>PageElement</code> guide.</p>
+<h2><a class="anchor" aria-hidden="true" id="the-valuepageelementmap-class"></a><a href="#the-valuepageelementmap-class" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>ValuePageElementMap</code> Class</h2>
+<p>If you want a map to manage page elements that are derived from the
+<code>ValuePageElement</code> class, you need to use a <code>ValuePageElementMap</code> instead
+of a <code>PageElementMap</code>.</p>
+<p>The <code>ValuePageElementMap</code> class adds the methods <code>getValue</code> and <code>setValue</code>
+to set and retrieve the values of all page elements managed by the map. Furthermore,
+its <code>currently</code>, <code>wait</code> and <code>eventually</code> APIs include the state check functions
+<code>hasValue</code>, <code>containsValue</code> and <code>hasAnyValue</code> to wait for or check if some or all
+map elements have certain expected values.</p>
+<p>Wdio-workflo's example repository contains an <code>Input</code> class that is derived from
+<code>ValuePageElement</code>. To create a <code>ValuePageElementMap</code> that manages instances
+of the <code>Input</code> class, the <code>PageNodeStore</code> of the example repository provides
+an <code>InputMap()</code> <a href="/wdio-workflo/docs/store#factory-methods">factory method</a>.
+Below you can find code examples for how to use the <code>getValue</code> and <code>setValue</code> methods
+as well as the  <code>hasValue</code>, <code>containsValue</code> and <code>hasAnyValue</code> state check functions
+of our <code>ValuePageElementMap</code> managing instances of <code>Input</code>:</p>
+<pre><code class="hljs css language-typescript"><span class="hljs-keyword">const</span> inputMap = stores.pageNode.InputMap(<span class="hljs-string">'//input'</span>, {
+  identifier: {
+    mappingObject: {
+      username: <span class="hljs-string">'username'</span>,
+      password: <span class="hljs-string">'password'</span>,
+      email: <span class="hljs-string">'email'</span>
+    },
+    mappingFunc: <span class="hljs-function">(<span class="hljs-params">baseSelector, value</span>) =&gt;</span> xpath(baseSelector).id(value)
+  }
+});
+
+<span class="hljs-comment">// Performs an implicit wait for each input element of the map and then returns</span>
+<span class="hljs-comment">// the values of the map's input elements as an object whose keys are taken from</span>
+<span class="hljs-comment">// `mappingObject`.</span>
+<span class="hljs-keyword">const</span> values: Record&lt;<span class="hljs-string">'username'</span> | <span class="hljs-string">'password'</span> | <span class="hljs-string">'email'</span>, <span class="hljs-built_in">string</span>&gt; =
+inputMap.getValue();
+
+<span class="hljs-comment">// Returns the values of all input elements managed by the map an object whose</span>
+<span class="hljs-comment">// keys are taken from `mappingObject` withing performing an implicit wait.</span>
+<span class="hljs-keyword">const</span> currentValues: Record&lt;<span class="hljs-string">'username'</span> | <span class="hljs-string">'password'</span> | <span class="hljs-string">'email'</span>, <span class="hljs-built_in">string</span>&gt; =
+inputMap.currently.getValue();
+
+<span class="hljs-comment">// Performs an implicit wait for each map element and then the values of the</span>
+<span class="hljs-comment">// `username` input to 'johnDoe', of the `password` input to 'superSecret' and</span>
+<span class="hljs-comment">// of the `email` input to 'john@doe.com'.</span>
+inputMap.setValue({
+  username: <span class="hljs-string">'johnDoe'</span>,
+  password: <span class="hljs-string">'superSecret'</span>,
+  email: <span class="hljs-string">'john@doe.com'</span>
+});
+
+<span class="hljs-comment">// Performs an implicit wait for the `username` and the `password` input elements</span>
+<span class="hljs-comment">// and then sets the value of the `username` input to 'johnDoe' and the value</span>
+<span class="hljs-comment">// of the `password` input to 'superSecret'.</span>
+inputMap.setValue({
+  username: <span class="hljs-string">'johnDoe'</span>,
+  password: <span class="hljs-string">'superSecret'</span>,
+});
+
+<span class="hljs-comment">// Checks if currently, the `username` input has the value 'johnDoe' and the</span>
+<span class="hljs-comment">// `email` input has the value 'john@doe.com'.</span>
+inputMap.currently.hasValue({
+  username: <span class="hljs-string">'johnDoe'</span>,
+  email: <span class="hljs-string">'john@doe.com'</span>
+});
+
+<span class="hljs-comment">// Waits for the `username` input to have the value 'johnDoe', the `password`</span>
+<span class="hljs-comment">// input to have the value 'superSecret' and the `email` input to have the value</span>
+<span class="hljs-comment">// 'john@doe.com' within half a second.</span>
+inputMap.wait.not.containsValue({
+  username: <span class="hljs-string">'johnDoe'</span>,
+  password: <span class="hljs-string">'superSecret'</span>,
+  email: <span class="hljs-string">'john@doe.com'</span>
+}, { timeout: <span class="hljs-number">500</span> });
+
+<span class="hljs-comment">// Checks if all input elements of `inputMap` eventually have any value</span>
+<span class="hljs-comment">// (are not empty) within the default timeout of our map class.</span>
+inputMap.eventually.hasAnyValue();
+
+<span class="hljs-comment">// Checks if, eventually, the `username` and the `email` input have any value</span>
+<span class="hljs-comment">// (are not empty) within the default timeout of our map class.</span>
+inputMap.eventually.hasAnyValue({ filterMask: {
+  username: <span class="hljs-literal">true</span>,
+  email: <span class="hljs-literal">true</span>,
+}});
+</code></pre>
+<p>Unlike the <code>ValuePageElement</code> class, <code>ValuePageElementMap</code> is not an abstract
+class. The <code>getValue</code> and <code>setValue</code> methods of the <code>ValuePageElementMap</code>
+are already implemented and internally invoke the <code>getValue</code> and <code>setValue</code> methods
+of the <code>ValuePageElement</code> instances managed by the map. Therefore, we can simply use <code>ValuePageElementMap</code> directly and don't need to create a custom map class just
+for the sake of implementing <code>getValue</code> and <code>setValue</code>.</p>
+<p>We should, however, add a new factory method to our <code>PageNodeStore</code> that returns
+an instance of a <code>ValuePageElementMap</code> whose types (or rather the types of its
+map elements) are already configured. Like in the above code example, where the
+<code>InputMap()</code> factory method returns a <code>ValuePageElementMap</code> that is configured
+to manage instances of the <code>Input</code> class.</p>
+<p>To learn how to create a factory method that returns a configured <code>ValuePageElementMap</code>, please read the
+<a href="/wdio-workflo/docs/customMap#adding-a-map-factory-method-for-custom-elements">Adding a map factory method for a custom <code>ValuePageElement</code></a>
+section of the <a href="/wdio-workflo/docs/customMap">Customizing a Map</a> guide.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/list"><span class="arrow-prev">← </span><span>List</span></a><a class="docs-next button" href="/wdio-workflo/docs/group"><span>Group</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview-and-objective">Overview and Objective</a></li><li><a href="#creating-a-pageelementmap">Creating a <code>PageElementMap</code></a><ul class="toc-headings"><li><a href="#elementmap-factory-method"><code>ElementMap()</code> Factory Method</a></li><li><a href="#type-parameters">Type Parameters</a></li><li><a href="#constructor">Constructor</a></li><li><a href="#identifier-object"><code>identifier</code> Object</a></li></ul></li><li><a href="#accessing-map-elements">Accessing Map Elements</a></li><li><a href="#state-functions">State Functions</a><ul class="toc-headings"><li><a href="#state-retrieval-functions">State Retrieval Functions</a></li><li><a href="#action-functions">Action Functions</a></li><li><a href="#state-check-functions">State Check Functions</a></li><li><a href="#filter-masks">Filter Masks</a></li></ul></li><li><a href="#waiting-mechanisms">Waiting Mechanisms</a><ul class="toc-headings"><li><a href="#implicit-waiting">Implicit Waiting</a></li><li><a href="#explicit-waiting-currently-wait-and-eventually">Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></a></li><li><a href="#the-currently-api">The <code>currently</code> API</a></li><li><a href="#the-wait-api">The <code>wait</code> API</a></li><li><a href="#the-eventually-api">The <code>eventually</code> API</a></li></ul></li><li><a href="#the-valuepageelementmap-class">The <code>ValuePageElementMap</code> Class</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="/wdio-workflo/apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;

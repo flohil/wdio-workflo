@@ -75,15 +75,17 @@ elements to reach a certain state.</p>
 the number of elements managed by the list and to check if the list is empty or if
 the number of list elements is equal, smaller or bigger than an expected value.</p>
 <h2><a class="anchor" aria-hidden="true" id="creating-a-pageelementlist"></a><a href="#creating-a-pageelementlist" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating a <code>PageElementList</code></h2>
+<h3><a class="anchor" aria-hidden="true" id="elementlist-factory-method"></a><a href="#elementlist-factory-method" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>ElementList()</code> Factory Method</h3>
 <p>Instead of manually invoking the constructor of <code>PageElementList</code> using the <code>new</code> keyword,
 you should always call the <code>ElementList()</code> factory method of the <a href="/wdio-workflo/docs/store">PageNodeStore</a>
 class to create an instance of the <code>PageElementList</code> class:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
-<span class="hljs-keyword">const</span> linkList = store.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
+<span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
 </code></pre>
 <p>However, for the sake of completeness, let's examine the type parameters and constructor
 of <code>PageElementList</code> in more detail!</p>
+<h3><a class="anchor" aria-hidden="true" id="type-parameters"></a><a href="#type-parameters" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type Parameters</h3>
 <p>The <code>PageElementList</code> class has three type parameters:</p>
 <ul>
 <li>The type of the <code>PageNodeStore</code> associated with the list to create other page nodes.</li>
@@ -96,6 +98,7 @@ of <code>PageElementList</code> in more detail!</p>
   PageElementOptions <span class="hljs-keyword">extends</span> Partial&lt;IPageElementOpts&lt;Store&gt;&gt;,
 &gt; <span class="hljs-keyword">extends</span> PageNode&lt;Store&gt;
 </code></pre>
+<h3><a class="anchor" aria-hidden="true" id="constructor"></a><a href="#constructor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Constructor</h3>
 <p>The constructor of <code>PageElementList</code> requires two parameters:</p>
 <ul>
 <li>The XPath selector that locates all of the list's page elements on a website.</li>
@@ -120,7 +123,7 @@ of <code>PageElementList</code> in more detail!</p>
 <p>The <code>first</code> accessor retrieves the first page element managed by a <code>PageElementList</code>:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
-<span class="hljs-keyword">const</span> linkList = store.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
+<span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
 
 linkList.first.click();
 </code></pre>
@@ -130,7 +133,7 @@ specific position. It takes one parameter, the index of the retrieved page eleme
 (starting at 0):</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
-<span class="hljs-keyword">const</span> linkList = store.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
+<span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
 
 linkList.at(<span class="hljs-number">2</span>).click();
 </code></pre>
@@ -140,7 +143,7 @@ an array. The order of the array elements corresponds to the order in which
 the corresponding HTML elements were located on the website:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
-<span class="hljs-keyword">const</span> linkList = store.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
+<span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
 
 linkList.all.forEach(
   <span class="hljs-function"><span class="hljs-params">link</span> =&gt;</span> link.click()
@@ -169,7 +172,7 @@ the modified XPath selector:</p>
 <p>Below you can find some code examples demonstrating the usage of a list's <code>where</code> builder:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
-<span class="hljs-keyword">const</span> linkList = store.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
+<span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
 
 <span class="hljs-comment">// Fetch the first element from linkList whose text equals 'Feed Page'.</span>
 <span class="hljs-comment">// Resulting XPath: //a[.="Feed Page"]</span>
@@ -270,7 +273,7 @@ functions for all available WebdriverIO's commands. One command for which no abs
 wrapped by the list and call the <code>doubleClick</code> command on each of them:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
-<span class="hljs-keyword">const</span> linkList = store.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
+<span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
 
 <span class="hljs-comment">// `.elements.value` returns the wrapped WebdriverIO elements which provide a `doubleClick` function.</span>
 linkList.elements.value.forEach(
@@ -335,8 +338,9 @@ linkList.eventually.hasLength(<span class="hljs-number">5</span>, {
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" id="state-retrieval-functions"></a><a href="#state-retrieval-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>State Retrieval Functions</h3>
 <p>State retrieval functions of the <code>PageElementList</code> class fulfil the same purpose
-as those of the <code>PageElement</code> class: They retrieve the values of a certain attribute
-of HTML elements mapped by <code>PageElement</code> instances from the website.</p>
+as those of the <code>PageElement</code> class: For each <code>PageElement</code> instance managed by the
+list, they retrieve the value of a certain attribute of the HTML element that is
+wrapped by <code>PageElement</code> from the website.</p>
 <p>However, since a <code>PageElementList</code> manages a collection of <code>PageElement</code> instances,
 the state retrieval functions defined on the <code>PageElementList</code> class do not return
 a single attribute value, but an array of attribute values - one for each
@@ -434,15 +438,15 @@ animalsList.currently.containsText(<span class="hljs-string">'a'</span>);
 <span class="hljs-comment">// Checks if the first and the third element of the list have any text (are not empty).</span>
 animalsList.currently.hasAnyText([<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>]);
 
-<span class="hljs-comment">// Waits for all elements of the list to exist.</span>
-animalsList.wait.exists();
+<span class="hljs-comment">// Waits for all elements of the list to become visible.</span>
+animalsList.wait.isVisible();
 
 <span class="hljs-comment">// Waits until the first and third element of the list are not/no longer visible.</span>
 animalsList.wait.not.isVisible({ filterMask: [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>] });
 
-<span class="hljs-comment">// Checks if the text of the first element contains the letter 'l' and if</span>
-<span class="hljs-comment">// the text of the third element contains the letter 'p'.</span>
-animalsList.eventually.not.containsText([<span class="hljs-string">'l'</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-string">'p'</span>]);
+<span class="hljs-comment">// Checks if the text of the first element does not eventually contain the letter 'u'</span>
+<span class="hljs-comment">// and if the text of the third element does not eventually contain the letter 'i'.</span>
+animalsList.eventually.not.containsText([<span class="hljs-string">'u'</span>, <span class="hljs-literal">undefined</span>, <span class="hljs-string">'i'</span>]);
 </code></pre>
 <p>To find out how state check functions behave differently when invoked on the
 <code>currently</code>, <code>wait</code> or <code>eventually</code> API of a <code>PageElementList</code>, please read the
@@ -460,21 +464,20 @@ instances.</p>
 boolean values:</p>
 <ul>
 <li>If the filter mask is set to <code>true</code>, the corresponding function will be executed
-for all managed <code>PageElement</code> instances of a <code>PageElementList</code> (in this case you
-could omit the filter mask altogether).</li>
+for all managed <code>PageElement</code> instances of a <code>PageElementList</code>.</li>
 <li>If the filter mask is set to <code>false</code>, the corresponding function will be skipped
 for all managed <code>PageElement</code> instances of a <code>PageElementList</code> (this can be helpful
-when using a <code>PageElementList</code> inside the content of a <code>PageElementGroup</code>.)</li>
+when using a <code>PageElementList</code> inside the content of a <code>PageElementGroup</code>).</li>
 <li>If the filter mask is set to an array of booleans, a value of <code>true</code> means that
 the function will be executed for the corresponding <code>PageElement</code> and a value of
 <code>false</code> means that it will be skipped. The length of the filter mask array needs
 to match the number of <code>PageElement</code> instances managed by the list.</li>
 </ul>
-<p>The filter mask can be set via the last parameter of a function.
-If a function has other optional parameters, the filter mask can be defined via
-the <code>filterMask</code> property of the <code>opts</code> parameter (which is always the last
-function parameter). Otherwise, the filter mask itself represents the last function
-parameter.</p>
+<p>The filter mask can be set via the last parameter of a state retrieval, action or
+state check function. If such a function has other optional parameters, the filter
+mask can be defined via the <code>filterMask</code> property of the <code>opts</code> parameter (which
+is always the last function parameter). Otherwise, the filter mask itself represents
+the last function parameter.</p>
 <p>Here are some examples for how to use a <code>PageElementList</code> filter mask:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
@@ -499,9 +502,10 @@ linkList.eachDo(
 linkList.eventually.hasAnyText({ timeout: <span class="hljs-number">3000</span>, filterMask: <span class="hljs-literal">false</span> });
 </code></pre>
 <p>Filter masks are not available for state check functions that require you to pass
-the expected attribute values as parameter, e.g. <code>hasText(texts)</code> or <code>containsValue(values)</code>.
-In these cases, you can skip the execution of the state check function for a certain <code>PageElement</code> instance by setting its corresponding value in the array of expected
-attribute values to <code>undefined</code>:</p>
+the expected attribute values as a parameter, e.g. <code>hasText(texts)</code> or
+<code>containsValue(values)</code>. In these cases, you can skip the execution of the state
+check function for a certain <code>PageElement</code> instance by setting its corresponding
+value in the array of expected attribute values to <code>undefined</code>:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
 <span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
@@ -537,19 +541,29 @@ linkList.all.forEach(
 <h3><a class="anchor" aria-hidden="true" id="explicit-waiting-currently-wait-and-eventually"></a><a href="#explicit-waiting-currently-wait-and-eventually" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></h3>
 <p>The explicit waiting mechanisms of <code>PageElementList</code> are very similar to the
 ones used by <code>PageElement</code> and you should read about them in the
-<a href="/wdio-workflo/docs/element#explicit-waiting-currently-wait-and-eventually">Explicit Waiting</a> section of the
-<a href="/wdio-workflo/docs/element"><code>PageElement</code> guide</a> before you continue reading this guide.</p>
+<a href="/wdio-workflo/docs/element#explicit-waiting-currently-wait-and-eventually">Explicit Waiting</a>
+section of the <a href="/wdio-workflo/docs/element"><code>PageElement</code> guide</a> before you continue reading
+this guide.</p>
+<p>To learn how the behavior of state retrieval and state check functions of the
+<code>PageElementList</code> class differs from its <code>PageElement</code> class equivalents, please
+read the <a href="#state-function-types">State Function Types section of this guide</a>.
+The types of available state retrieval and state check functions can be found
+in the <a href="/wdio-workflo/docs/element#state-function-types">State Function Types section</a> of the
+page element guide.</p>
 <h3><a class="anchor" aria-hidden="true" id="the-currently-api"></a><a href="#the-currently-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>currently</code> API</h3>
 <h4><a class="anchor" aria-hidden="true" id="overview"></a><a href="#overview" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
 <p>Like the <a href="/wdio-workflo/docs/element#state-retrieval-functions-no-implicit-waiting"><code>currently</code> API of <code>PageElement</code></a>,
 the <code>currently</code> API of the <code>PageElementList</code> class consists of state retrieval functions
-and state check function. It does not trigger an implicit wait on the managed <code>PageElement</code>
+and state check functions. It does not trigger an implicit wait on the managed <code>PageElement</code>
 instances of the <code>PageElementList</code>.</p>
-<p>To see how state retrieval and state check functions behave for a <code>PageElementList</code>,
-please read the <a href="#state-function-types">State Function Types section</a> of this guide.
-The types of available state retrieval and state check functions can be found
-in the <a href="/wdio-workflo/docs/element#state-function-types">State Function Types section</a> of the
-page element guide.</p>
+<p>The state retrieval functions of a list's <code>currently</code> API return the current values
+of a certain HTML attribute for each <code>PageElement</code> instance managed by the list as
+an array. The state check functions of a list's <code>currently</code> API check the page elements
+managed by the <code>PageElementList</code> currently have an expected state for a certain
+HTML attribute.</p>
+<p>By using a <a href="#filter-masks">filter mask</a>, you can skip the invocation of a
+state retrieval or state check function for certain <code>PageElement</code> instances of
+the list.</p>
 <h4><a class="anchor" aria-hidden="true" id="any-and-none"></a><a href="#any-and-none" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>any</code> and <code>none</code></h4>
 <p>The <code>currently</code> API of <code>PageElementList</code> has two special accessors, <code>any</code> and <code>none</code>,
 to check if any or none of the <code>PageElement</code> instances managed by the list currently
@@ -572,11 +586,11 @@ linkList.currently.none.containsClass(<span class="hljs-string">'active'</span>)
 for some or all of the list's managed <code>PageElement</code> instances to have an expected
 state. It consists of state check functions only which all return an instance
 of the <code>PageElementList</code>.</p>
-<p>If you use a filtermask, the <code>wait</code> API only waits for the <code>PageElement</code> instances
-included by the filter mask to reach an expected state. Otherwise, the <code>wait</code> API
-waits for all managed <code>PageElement</code> instances to reach their expected state.
-If one or more <code>PageElement</code> instance fail to reach their expected state within
-a specific timeout, an error will be thrown.</p>
+<p>If you use a <a href="#filter-masks">filter mask</a>, the <code>wait</code> API only waits for the
+<code>PageElement</code> instances included by the filter mask to reach an expected state.
+Otherwise, the <code>wait</code> API waits for all managed <code>PageElement</code> instances to reach
+their expected state. If one or more <code>PageElement</code> instance fail to reach their
+expected state within a specific timeout, an error will be thrown.</p>
 <h4><a class="anchor" aria-hidden="true" id="timeouts"></a><a href="#timeouts" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Timeouts</h4>
 <p>The <code>timeout</code> within which the expected states of the <code>PageElement</code> instances must
 be reached applies to each <code>PageElement</code> instance individually. So, if the <code>timeout</code>
@@ -586,10 +600,6 @@ to take up to 3 seconds to reach its expected state:</p>
 
 <span class="hljs-keyword">const</span> linkList = stores.pageNode.ElementList(<span class="hljs-string">'//a'</span>);
 
-<span class="hljs-comment">// The length of the filtermask must match the number of elements managed by the list.</span>
-<span class="hljs-comment">// Therefore, we know the list manages 3 elements. Out of these 3 elements,</span>
-<span class="hljs-comment">// only the first and the third element are included by the filter mask.</span>
-<span class="hljs-comment">// Each of these</span>
 linkList.wait.hasAnyText({
   timeout: <span class="hljs-number">3000</span>,
   filterMask: [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>]
@@ -626,11 +636,11 @@ linkList.wait.none.containsClass(<span class="hljs-string">'active'</span>);
 the <code>PageElement</code> instances managed by a <code>PageElementList</code> eventually reach an
 expected state within a specific timeout. It consists of state check functions only
 that return <code>true</code> if all <code>PageElement</code> instances for which the state check function
-was executed eventually reached the expected state within the timeout. Otherwise,
-<code>false</code> will be returned.</p>
-<p>If you use a filtermask, the <code>eventually</code> API only checks the state of <code>PageElement</code>
-instances which are included by the filter mask. Otherwise, the <code>eventually</code> API
-checks the state of all managed <code>PageElement</code> instances.</p>
+was executed eventually reached the expected state within the specified timeout.
+Otherwise, <code>false</code> will be returned.</p>
+<p>If you use a <a href="#filter-masks">filter mask</a>, the <code>eventually</code> API only checks the
+state of <code>PageElement</code> instances which are included by the filter mask. Otherwise,
+the <code>eventually</code> API checks the state of all managed <code>PageElement</code> instances.</p>
 <h4><a class="anchor" aria-hidden="true" id="timeout"></a><a href="#timeout" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Timeout</h4>
 <p>Like for the <code>wait</code> API, for the <code>eventually</code> API too the <code>timeout</code> within which
 the expected states of the <code>PageElement</code> instances must be reached applies to
@@ -655,15 +665,15 @@ linkList.eventually.any.hasText(<span class="hljs-string">'wdio-workflo'</span>)
 <span class="hljs-comment">// term 'active' in its CSS class string.</span>
 linkList.eventually.none.containsClass(<span class="hljs-string">'active'</span>);
 </code></pre>
-<h2><a class="anchor" aria-hidden="true" id="valuepageelementlist"></a><a href="#valuepageelementlist" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ValuePageElementList</h2>
+<h2><a class="anchor" aria-hidden="true" id="the-valuepageelementlist-class"></a><a href="#the-valuepageelementlist-class" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>ValuePageElementList</code> Class</h2>
 <p>If you want a list to manage page elements that are derived from the
 <code>ValuePageElement</code> class, you need to use a <code>ValuePageElementList</code> instead
 of a <code>PageElementList</code>.</p>
 <p>The <code>ValuePageElementList</code> class adds the methods <code>getValue</code> and <code>setValue</code>
 to set and retrieve the values of all page elements managed by the list. Furthermore,
 its <code>currently</code>, <code>wait</code> and <code>eventually</code> APIs include the state check functions
-<code>hasValue</code>, <code>containsValue</code> and <code>hasAnyValue</code> to wait for or check if all list
-elements have certain expected values.</p>
+<code>hasValue</code>, <code>containsValue</code> and <code>hasAnyValue</code> to wait for or check if some or all
+list elements have certain expected values.</p>
 <p>Wdio-workflo's example repository contains an <code>Input</code> class that is derived from
 <code>ValuePageElement</code>. To create a <code>ValuePageElementList</code> that manages instances
 of the <code>Input</code> class, the <code>PageNodeStore</code> of the example repository provides
@@ -674,21 +684,21 @@ of our <code>ValuePageElementList</code> managing instances of <code>Input</code
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">const</span> inputList = stores.pageNode.InputList(xpath(<span class="hljs-string">'//input'</span>));
 
 <span class="hljs-comment">// Returns the values of all input elements managed by the list as an array</span>
-<span class="hljs-comment">// after an implicit wait (e.g. waiting for at least one element to be visible).</span>
+<span class="hljs-comment">// after performing an implicit wait for each element in the list.</span>
 <span class="hljs-keyword">const</span> values: <span class="hljs-built_in">string</span>[] = inputList.getValue();
 
 <span class="hljs-comment">// Returns the values of all input elements managed by the list as an array</span>
-<span class="hljs-comment">// withing performing an implicit wait.</span>
+<span class="hljs-comment">// without performing an implicit wait for any of the list elements.</span>
 <span class="hljs-keyword">const</span> currentValues: <span class="hljs-built_in">string</span>[] = inputList.currently.getValue();
 
 <span class="hljs-comment">// Performs an implicit wait and then sets the values of all input elements</span>
 <span class="hljs-comment">// to 'wdio-workflo'.</span>
 inputList.setValue(<span class="hljs-string">'wdio-workflo'</span>);
 
-<span class="hljs-comment">// Performs an implicit wait and then sets the first input's value to 'workflo',</span>
-<span class="hljs-comment">// the second input's value to 'webdriverio' and the third input's value to 'cool'.</span>
-<span class="hljs-comment">// In order for this to work, the number of elements managed by the list must</span>
-<span class="hljs-comment">// equal the number of values passed as an array to `setValue`.</span>
+<span class="hljs-comment">// Performs an implicit wait for each list element and then sets the first input's</span>
+<span class="hljs-comment">// value to 'workflo', the second input's value to 'webdriverio' and the third</span>
+<span class="hljs-comment">// input's value to 'cool'. In order for this to work, the number of elements managed</span>
+<span class="hljs-comment">// by the list must equal the number of values passed as an array to `setValue`.</span>
 inputList.setValue([<span class="hljs-string">'workflo'</span>, <span class="hljs-string">'webdriverio'</span>, <span class="hljs-string">'cool'</span>]);
 
 <span class="hljs-comment">// Checks if all inputs of the list currently have the value 'wdio-workflo'.</span>
@@ -721,9 +731,9 @@ list elements) are already configured. Like in the above code example, where the
 <code>InputList()</code> factory method returns a <code>ValuePageElementList</code> that is configured
 to manage instances of the <code>Input</code> class.</p>
 <p>To learn how to create a factory method that returns a configured <code>ValuePageElementList</code>,
-please read the <a href="/wdio-workflo/docs/customElement#adding-a-list-factory-method-for-a-custom-valuepageelement">Adding a list factory method for a custom <code>ValuePageElement</code></a>
+please read the <a href="/wdio-workflo/docs/customList#adding-a-list-factory-method-for-a-custom-valuepageelement">Adding a list factory method for a custom <code>ValuePageElement</code></a>
 section of the <a href="/wdio-workflo/docs/customList">Customizing a List</a> guide.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/element"><span class="arrow-prev">← </span><span>Element</span></a><a class="docs-next button" href="/wdio-workflo/docs/map"><span>Map</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview-and-objective">Overview and Objective</a></li><li><a href="#creating-a-pageelementlist">Creating a <code>PageElementList</code></a></li><li><a href="#accessing-list-elements">Accessing List Elements</a><ul class="toc-headings"><li><a href="#first-at-and-all"><code>first</code>, <code>at</code> and <code>all</code></a></li><li><a href="#where-builder"><code>where</code> Builder</a></li><li><a href="#identify-method"><code>identify</code> Method</a></li><li><a href="#the-underlying-webdriverio-elements">The Underlying WebdriverIO Elements</a></li></ul></li><li><a href="#state-functions">State Functions</a><ul class="toc-headings"><li><a href="#reading-and-checking-the-list-length">Reading and Checking the List Length</a></li><li><a href="#state-retrieval-functions">State Retrieval Functions</a></li><li><a href="#action-functions">Action Functions</a></li><li><a href="#state-check-functions">State Check Functions</a></li><li><a href="#filter-masks">Filter Masks</a></li></ul></li><li><a href="#waiting-mechanisms">Waiting Mechanisms</a><ul class="toc-headings"><li><a href="#implicit-waiting">Implicit Waiting</a></li><li><a href="#explicit-waiting-currently-wait-and-eventually">Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></a></li><li><a href="#the-currently-api">The <code>currently</code> API</a></li><li><a href="#the-wait-api">The <code>wait</code> API</a></li><li><a href="#the-eventually-api">The <code>eventually</code> API</a></li></ul></li><li><a href="#valuepageelementlist">ValuePageElementList</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="/wdio-workflo/apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/element"><span class="arrow-prev">← </span><span>Element</span></a><a class="docs-next button" href="/wdio-workflo/docs/map"><span>Map</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview-and-objective">Overview and Objective</a></li><li><a href="#creating-a-pageelementlist">Creating a <code>PageElementList</code></a><ul class="toc-headings"><li><a href="#elementlist-factory-method"><code>ElementList()</code> Factory Method</a></li><li><a href="#type-parameters">Type Parameters</a></li><li><a href="#constructor">Constructor</a></li></ul></li><li><a href="#accessing-list-elements">Accessing List Elements</a><ul class="toc-headings"><li><a href="#first-at-and-all"><code>first</code>, <code>at</code> and <code>all</code></a></li><li><a href="#where-builder"><code>where</code> Builder</a></li><li><a href="#identify-method"><code>identify</code> Method</a></li><li><a href="#the-underlying-webdriverio-elements">The Underlying WebdriverIO Elements</a></li></ul></li><li><a href="#state-functions">State Functions</a><ul class="toc-headings"><li><a href="#reading-and-checking-the-list-length">Reading and Checking the List Length</a></li><li><a href="#state-retrieval-functions">State Retrieval Functions</a></li><li><a href="#action-functions">Action Functions</a></li><li><a href="#state-check-functions">State Check Functions</a></li><li><a href="#filter-masks">Filter Masks</a></li></ul></li><li><a href="#waiting-mechanisms">Waiting Mechanisms</a><ul class="toc-headings"><li><a href="#implicit-waiting">Implicit Waiting</a></li><li><a href="#explicit-waiting-currently-wait-and-eventually">Explicit Waiting: <code>currently</code>, <code>wait</code> and <code>eventually</code></a></li><li><a href="#the-currently-api">The <code>currently</code> API</a></li><li><a href="#the-wait-api">The <code>wait</code> API</a></li><li><a href="#the-eventually-api">The <code>eventually</code> API</a></li></ul></li><li><a href="#the-valuepageelementlist-class">The <code>ValuePageElementList</code> Class</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="/wdio-workflo/apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;
