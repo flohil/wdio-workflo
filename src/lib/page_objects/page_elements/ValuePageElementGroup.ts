@@ -31,16 +31,6 @@ type ExtractValueBoolean<Content extends {[key: string]: Workflo.PageNode.IPageN
 Workflo.PageNode.ExtractValueBoolean<Content>;
 
 /**
- * Extracts the return value types of the `getHasValue` functions of all PageNodes defined within a
- * ValuePageElementGroup's content for state check functions. For a ValuePageElement, the extracted
- * return value type will be `boolean`.
- * Compared to `ExtractValueBoolean`, this will allow a ValuePageElementList to pass either a
- * single boolean or an array of booleans.
- */
-type ExtractValueBooleanStateChecker<Content extends {[key: string]: Workflo.PageNode.IPageNode}> =
-Workflo.PageNode.ExtractValueBooleanStateChecker<Content>;
-
-/**
  * This interface is implemented by ValuePageElement, ValuePageElementList, ValuePageElementMap and
  * ValuePageElementGroup.
  *

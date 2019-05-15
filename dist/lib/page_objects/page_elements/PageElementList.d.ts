@@ -65,7 +65,7 @@ export interface IPageElementListWaitLengthReverseParams extends IPageElementLis
  * @template PageElementOpts type of the opts parameter passed to the constructor function of the PageElements managed
  * by PageElementList
  */
-export interface IPageElementListOpts<Store extends PageNodeStore, PageElementType extends PageElement<Store>, PageElementOpts extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store> {
+export interface IPageElementListOpts<Store extends PageNodeStore, PageElementType extends PageElement<Store>, PageElementOpts extends Partial<IPageElementOpts<Store>>> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
     /**
      * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageNodeStore.
      *
@@ -605,6 +605,15 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
      */
     readonly none: {
         exists: () => boolean;
+        /**
+         * Returns the current direct texts of all PageElements managed by PageElementList as an array.
+         *
+         * A direct text is a text that resides on the level directly below the selected HTML element.
+         * It does not include any text of the HTML element's nested children HTML elements.
+         *
+         * @param filterMask can be used to skip the invocation of the `getDirectText` function for some or all managed
+         * PageElements. The results of skipped function invocations are not included in the total results array.
+         */
         isVisible: () => boolean;
         isEnabled: () => boolean;
         isSelected: () => boolean;
@@ -996,7 +1005,29 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
      * specific timeout.
      */
     readonly none: {
-        exists: (opts?: Workflo.ITimeout) => PageElementType;
+        exists: (opts?: Workflo.ITimeout) => PageElementType; /**
+         * Waits for the actual direct texts of all PageElements managed by PageElementList not to equal the expected
+         * direct text(s).
+         *
+         * Throws an error if the condition is not met within a specific timeout.
+         *
+         * A direct text is a text that resides on the level directly below the selected HTML element.
+         * It does not include any text of the HTML element's nested children HTML elements.
+         *
+         * @param directText the expected direct text(s) supposed not to equal the actual direct texts
+         *
+         * If `directText` is a single value, this value is compared to each element in the array of actual values of all
+         * PageElements.
+         * If `directText` is an array of values, its length must match the length of PageElementList and the values of
+         * its array elements are compared to the array of actual values of all PageElements.
+         * @param opts includes the `timeout` within which the condition is expected to be met and the `interval` used
+         * to check it
+         *
+         * If no `timeout` is specified, a PageElement's default timeout is used.
+         * If no `interval` is specified, a PageElement's default interval is used.
+         *
+         * @returns this (an instance of PageElementList)
+         */
         isVisible: (opts?: Workflo.ITimeout) => PageElementType;
         isEnabled: (opts?: Workflo.ITimeout) => PageElementType;
         isSelected: (opts?: Workflo.ITimeout) => PageElementType;
@@ -1005,6 +1036,10 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
         hasAnyText: (opts?: Workflo.ITimeoutInterval) => PageElementType;
         containsText: (text: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasHTML: (html: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        /**
+         * Provides an API to check if any PageElement managed by PageElementList eventually
+         * has a certain state within a specific timeout.
+         */
         hasAnyHTML: (opts?: Workflo.ITimeoutInterval) => PageElementType;
         containsHTML: (html: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasDirectText: (directText: string, opts?: Workflo.ITimeoutInterval) => PageElementType;

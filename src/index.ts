@@ -2177,8 +2177,7 @@ declare global {
 
     namespace Store {
       type BaseKeys = 'timeout' | 'waitType';
-      type GroupPublicKeys = 'timeout';
-      type GroupConstructorKeys = GroupPublicKeys | 'content' | 'store';
+      type GroupConstructorKeys = 'content' | 'store';
       type ElementPublicKeys = BaseKeys | 'customScroll';
       type ListPublicKeys = 'timeout' | 'disableCache' | 'identifier';
       type ListPublicPartialKeys = 'elementOpts';

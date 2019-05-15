@@ -59,7 +59,7 @@ export interface IPageElementMapOpts<
   K extends string,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>
-> extends IPageNodeOpts<Store> {
+> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
   /**
    * This `identifier` provides a `mappingObject` and a `mappingFunc` which are used to constrain the "base"
    * XPath selector of PageElementMap using XPath modification functions in order to statically identify a

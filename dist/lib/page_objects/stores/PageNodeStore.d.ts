@@ -158,7 +158,7 @@ export declare class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved PageElementGroup
      * @returns an instance of the retrieved PageElementGroup
      */
-    ElementGroup<Content extends Record<string, Workflo.PageNode.IPageNode>>(content: Content, opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): PageElementGroup<this, Content>;
+    ElementGroup<Content extends Record<string, Workflo.PageNode.IPageNode>>(content: Content): PageElementGroup<this, Content>;
     /**
      * Retrieves an instance of a ValuePageElementGroup from the store.
      *
@@ -170,7 +170,7 @@ export declare class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved ValuePageElementGroup
      * @returns an instance of the retrieved PageElementGroup
      */
-    ValueGroup<Content extends Record<string, Workflo.PageNode.IPageNode>>(content: Content, opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>): ValuePageElementGroup<this, Content>;
+    ValueGroup<Content extends Record<string, Workflo.PageNode.IPageNode>>(content: Content): ValuePageElementGroup<this, Content>;
     /**
      * Creates or retrieves a cached version of a PageNode instance with the given selector, type and opts.
      *

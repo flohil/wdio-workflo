@@ -6,7 +6,7 @@ import { PageNodeStore } from '../stores';
  *
  * @template Store type of the PageNodeStore used by PageElementBase to retrieve PageNodes from the store
  */
-export interface IPageElementBaseOpts<Store extends PageNodeStore> extends IPageNodeOpts<Store> {
+export interface IPageElementBaseOpts<Store extends PageNodeStore> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
     /**
      * Defines the kind of waiting condition performed when `initialWait` is invoked.
      *

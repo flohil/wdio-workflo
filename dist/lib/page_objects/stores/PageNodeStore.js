@@ -168,8 +168,11 @@ class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved PageElementGroup
      * @returns an instance of the retrieved PageElementGroup
      */
-    ElementGroup(content, opts) {
-        return this._getGroup(page_elements_1.PageElementGroup, Object.assign({ content, store: this }, opts));
+    ElementGroup(content) {
+        return this._getGroup(page_elements_1.PageElementGroup, {
+            content,
+            store: this,
+        });
     }
     /**
      * Retrieves an instance of a ValuePageElementGroup from the store.
@@ -182,8 +185,11 @@ class PageNodeStore {
      * @param opts the publicly available options used to configure the retrieved ValuePageElementGroup
      * @returns an instance of the retrieved PageElementGroup
      */
-    ValueGroup(content, opts) {
-        return this._getGroup(page_elements_1.ValuePageElementGroup, Object.assign({ content, store: this }, opts));
+    ValueGroup(content) {
+        return this._getGroup(page_elements_1.ValuePageElementGroup, {
+            content,
+            store: this,
+        });
     }
     // Functions to retrieve PageNode instances
     /**

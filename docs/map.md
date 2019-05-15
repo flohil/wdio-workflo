@@ -13,9 +13,7 @@ by extending wdio-workflo's `PageElementMap` or `ValuePageElementMap` class, rea
 ## Overview and Objective
 
 Wdio-workflo's `PageElementMap` manages a static collection of `PageElement` instances
-or of instances of a class derived from the `PageElement` class. Static means
-that the contents of the collection/the individual page elements managed by the
-collection are already known at compile time and do not change during runtime.
+of the same class. Static means that the contents of the collection/the individual page elements managed by the collection are already known at compile time and do not change during runtime.
 
 Some typical website components that should be mapped by a `PageElementMap`
 are a the links in a navigation menu, because they are usually known at the time

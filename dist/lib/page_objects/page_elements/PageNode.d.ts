@@ -4,7 +4,7 @@ import { PageNodeStore } from '../stores';
  *
  * @template Store type of the PageNodeStore used by PageNode to retrieve PageNodes from the store
  */
-export interface IPageNodeOpts<Store extends PageNodeStore> extends Workflo.ITimeoutInterval {
+export interface IPageNodeOpts<Store extends PageNodeStore> {
     /**
      * an instance of PageNodeStore which can be used to retrieve/create PageNodes
      */

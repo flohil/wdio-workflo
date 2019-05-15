@@ -13,9 +13,9 @@ by extending wdio-workflo's `PageElementList` or `ValuePageElementList` class, r
 ## Overview and Objective
 
 Wdio-workflo's `PageElementList` manages a dynamic collection of `PageElement` instances
-or of instances of a class derived from the `PageElement` class. Dynamic means
-that the contents of the collection/the individual page elements managed by the
-collection are not known at compile time and can change during runtime.
+of the same class. Dynamic means that the contents of the collection/the individual
+page elements managed by the collection are not known at compile time and can change
+during runtime.
 
 Some typical website components that should be mapped by a `PageElementList`
 are a the items of a news feed and the rows of a data table, because news feed items

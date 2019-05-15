@@ -86,7 +86,7 @@ export interface IPageElementListOpts<
   Store extends PageNodeStore,
   PageElementType extends PageElement<Store>,
   PageElementOpts extends Partial<IPageElementOpts<Store>>
-> extends IPageNodeOpts<Store> {
+> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
   /**
    * This function retrieves an instance of a PageElement mapped by PageElementList from the list's PageNodeStore.
    *

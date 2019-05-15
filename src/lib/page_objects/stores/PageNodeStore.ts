@@ -361,7 +361,6 @@ export class PageNodeStore {
    */
   ElementGroup<Content extends Record<string, Workflo.PageNode.IPageNode>> (
     content: Content,
-    opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>,
   ) {
     return this._getGroup<
       this,
@@ -376,7 +375,6 @@ export class PageNodeStore {
       {
         content,
         store: this,
-        ...opts,
       },
     );
   }
@@ -394,7 +392,6 @@ export class PageNodeStore {
    */
   ValueGroup<Content extends Record<string, Workflo.PageNode.IPageNode>>(
     content: Content,
-    opts?: Pick<IPageElementGroupOpts<this, Content>, Workflo.Store.GroupPublicKeys>,
   ) {
     return this._getGroup<
       this,
@@ -408,7 +405,6 @@ export class PageNodeStore {
       {
         content,
         store: this,
-        ...opts,
       },
     );
   }

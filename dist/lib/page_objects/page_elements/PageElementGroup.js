@@ -55,8 +55,8 @@ class PageElementGroup extends _1.PageNode {
      * @param id a string which uniquely identifies a PageElementGroup in a PageNodeStore
      * @param opts the options used to configure PageElementGroup
      */
-    constructor(id, { store, timeout, interval, content, }) {
-        super(id, { store, timeout, interval });
+    constructor(id, { store, content, }) {
+        super(id, { store });
         this._id = id;
         this._$ = content;
         this.currently = new PageElementGroupCurrently(this);

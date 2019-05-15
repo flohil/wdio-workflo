@@ -140,11 +140,9 @@ implements ElementNode<Content> {
    */
   constructor(id: string, {
     store,
-    timeout,
-    interval,
     content,
   }: IPageElementGroupOpts<Store, Content>) {
-    super(id, { store, timeout, interval });
+    super(id, { store });
 
     this._id = id;
     this._$ = content;

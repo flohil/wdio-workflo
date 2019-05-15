@@ -12,7 +12,7 @@ import { PageNodeStore } from '../stores';
  */
 export interface IPageElementBaseOpts<
   Store extends PageNodeStore,
-> extends IPageNodeOpts<Store> {
+> extends IPageNodeOpts<Store>, Workflo.ITimeoutInterval {
   /**
    * Defines the kind of waiting condition performed when `initialWait` is invoked.
    *

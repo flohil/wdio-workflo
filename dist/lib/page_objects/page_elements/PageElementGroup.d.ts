@@ -127,7 +127,7 @@ export declare class PageElementGroup<Store extends PageNodeStore, Content exten
      * @param id a string which uniquely identifies a PageElementGroup in a PageNodeStore
      * @param opts the options used to configure PageElementGroup
      */
-    constructor(id: string, { store, timeout, interval, content, }: IPageElementGroupOpts<Store, Content>);
+    constructor(id: string, { store, content, }: IPageElementGroupOpts<Store, Content>);
     /**
      * provides access to a PageElementGroup's `Content`
      */
