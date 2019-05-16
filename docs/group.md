@@ -597,112 +597,292 @@ state check functions defined on the `eventually` API of a page node class,
 please read the [`eventually` API section](element.md#the-eventually-api) of the
 `PageElement` guide.
 
-## The `ValuePageElementMap` Class
+## The `ValuePageElementGroup` Class
 
-If you want a map to manage page elements that are derived from the
-`ValuePageElement` class, you need to use a `ValuePageElementMap` instead
-of a `PageElementMap`.
+### Overview and Objective
 
-The `ValuePageElementMap` class adds the methods `getValue` and `setValue`
-to set and retrieve the values of all page elements managed by the map. Furthermore,
+If you want a group to manage page elements that are derived from the
+`ValuePageElement` class, like in the case of HTML forms, you need to use a `ValuePageElementGroup` instead of a `PageElementGroup`.
+
+The `ValuePageElementGroup` class adds the methods `getValue` and `setValue`
+to set and retrieve the values of all page nodes managed by the group. Furthermore,
 its `currently`, `wait` and `eventually` APIs include the state check functions
 `hasValue`, `containsValue` and `hasAnyValue` to wait for or check if some or all
-map elements have certain expected values.
+managed page nodes have certain expected values.
 
-Wdio-workflo's example repository contains an `Input` class that is derived from
-`ValuePageElement`. To create a `ValuePageElementMap` that manages instances
-of the `Input` class, the `PageNodeStore` of the example repository provides
-an `InputMap()` [factory method](store.md#factory-methods).
-Below you can find code examples for how to use the `getValue` and `setValue` methods
-as well as the  `hasValue`, `containsValue` and `hasAnyValue` state check functions
-of our `ValuePageElementMap` managing instances of `Input`:
+### Example Definition of a Form
+
+*Please note that the following code is meant for demonstrative purposes only.
+In a real use case, a group used to represent an HTML form usually only
+manages different `ValuePageElement` classes and does not contain a
+`ValuePageElementList`, `ValuePageElementMap` or a nested `ValuePageElementGroup`.
+However, from a purely technical perspective, this would be possible.*
 
 ```typescript
-const inputMap = stores.pageNode.InputMap('//input', {
-  identifier: {
-    mappingObject: {
-      username: 'username',
-      password: 'password',
-      email: 'email'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+export const feed = new FeedPage();
+
+const container = stores.pageNode.Element(
+  xpath('//div').id('groupContainer')
+);
+
+const form = stores.pageNode.ValueGroup({
+  get email() {
+    return container.$.Textfield(
+      xpath('//div').attribute('role', 'textfield').id('username')
+    );
+  },
+  get acceptTerms() {
+    return container.$.Checkbox(
+      xpath('//div').attribute('role', 'checkbox').id('acceptTerms')
+    );
+  },
+  get country() {
+    return container.$.Dropdown(
+      xpath('//div').attribute('role', 'dropdown').id('country')
+    );
+  },
+  get label() {
+    return container.$.Element(
+      xpath('//label')
+    );
+  },
+  get inputList() {
+    return container.$.InputList(
+      xpath('//input').classContains('dynamicMetadata')
+    );
+  },
+  get inputMap() {
+    return container.$.InputMap(
+      xpath('//input'), {
+        identifier: {
+          mappingObject: {
+            username: 'username',
+            password: 'password',
+
+          },
+          mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+        }
+      }
+    );
+  },
+  get nestedForm() {
+    return container.$.ValueGroup({
+      get subscribe() {
+        return container.$.Checkbox(
+          xpath('//div').attribute('role', 'checkbox').id('acceptTerms')
+        );
+      },
+    });
+  }
+});
+```
+
+Please notice that all page nodes of our `ValuePageElementGroup`, except for
+the `label` page element, are either derived from `ValuePageElement` or a class
+that manages a collection of `ValuePageElement` instances, like `ValuePageElementList`
+and `ValuePageElementMap`. This means that all page nodes, except for `label`,
+support the methods `setValue()` and `getValue()` as well as `hasValue()`,
+`containsValue()` and `hasAnyValue()` which are defined on the `currently`,
+`wait` and `eventually` APIs of the respective page nodes.
+
+So why does our `form` include a `label` page element that is not derived
+from `ValuePageElement` and does therefore not implement the `setValue()`
+and `getValue()` methods? Well, even though all `value` related methods are
+not supported, other state retrieval, state check and action functions still
+also work with the `label` page element.
+
+This means that you can call functions like `click()`, `getText()` or
+`currently.isVisible()` on each page node of our `form` group, whereas
+other methods like `setValue()` can only be invoked on these page nodes
+which are derived from the `ValuePageElement` class are which manage instances
+of `ValuePageElement` classes.
+
+In the next section of this guide that shows you how to set the values of our
+form's page nodes, you'll also see what happens of we try to set a value for
+our `label` page element which does not support this operation.
+
+### Setting Form Values
+
+To set the values of our `form` group, we need to invoke its `setValue()` function:
+
+```typescript
+const enteredValues: Workflo.PageNode.ExtractValueStateChecker<(typeof form)['$']> = {
+  email: 'john@doe.com',
+  acceptTerms: true,
+  country: 'Nepal',
+  label: 123,
+  inputList: ['FirstListValue', 'SecondListValue'],
+  inputMap: {
+    username: 'johnDoe',
+    password: 'soSafe1234'
+  },
+  nestedForm: {
+    subscribe: false
+  }
+};
+
+form.setValue(enteredValues);
+```
+
+#### Declaring the type of our form's values
+
+In the example above, we defined the values that we want to use to fill in our
+form in the `enteredValues` variable. To find out which type our `enteredValues`
+variable needs to have in order to be compatible with the `setValue()` function,
+we can hover over the `setValue()` function and VS Code will show us the type
+information for this function (alternatively, we can also hold Ctrl and click
+on the function name to jump to its declaration):
+
+![How to extract the type of the `values` parameter of `setValue()`](assets/group_extract.png)
+
+In the type information popup, we can see that the type of our `enteredValues`
+needs to be `Workflo.PageNode.ExtractValueStateChecker`. Each of wdio-workflo's
+`ExtractXXX` types takes one type parameter: the type of the content of a
+`PageElementGroup`. To retrieve the content type, we can use the `typeof` operator
+to get the type of our `form` group and then access it's content via the `$` accessor:
+`(typeof form)['$']`.
+
+#### Skipping the `setValue()` function for certain page nodes
+
+Although the above code example defines values for all page nodes of our group that
+support the `setValue()` method, we do not need to do so. We could also only
+provide values for some, or even only one page node. In this case, the invocation
+of the `setValue()` method will be skipped for all page nodes for which we
+did not provide values:
+
+```typescript
+// Invokes `setValue()` on the `email` and `acceptTerms` page nodes only.
+form.setValue({
+  email: 'john@doe.com',
+  acceptTerms: true
+});
+```
+
+#### Trying to set a value on a page node not derived from `ValuePageElement`
+
+You might have noticed that our `setValue()` code example sets the values of all
+page nodes except for the `label` page element. This is due to the fact that
+`label` is not derived from `ValuePageElement` and therefore does not implement
+the `setValue()` method. Wdio-workflo prevents you from accidentally setting
+a value for `label` by setting the type of the `label` property of our `enteredValues`
+object to `never`. So no matter which can of value you try to set for `label`,
+TypeScript will always throw a compile error:
+
+![Trying to set a value for a `PageElement`](assets/group_label_error.png)
+
+![The type of the value of a `PageElement` is `never`](assets/group_label_error_full.png)
+
+### Retrieving Form Values
+
+To retrieve the values of our `form` group, we need to invoke its `getValue()`
+method:
+
+```typescript
+const retrievedValues = form.getValue();
+
+// `retrievedValues` contains:
+//
+// {
+//   email: 'john@doe.com',
+//   acceptTerms: true,
+//   country: 'Nepal',
+//   inputList: ['FirstListValue', 'SecondListValue'],
+//   inputMap: {
+//     username: 'johnDoe',
+//     password: 'soSafe1234'
+//   },
+//   nestedForm: {
+//     subscribe: false
+//   }
+// };
+```
+
+The result of the `getValue()` method is an object whose structure equals
+the structure of the group`s content. However, the page node instances are
+replaced by their values.
+
+If we do not need to retrieve the values of all page nodes, we can skip
+the `getValue()` function invocation for certain page nodes by using a
+[filter mask](#filter-masks):
+
+```typescript
+const filteredRetrievedValues = form.getValue({
+  email: false,
+  country: true,
+  inputList: [true, false],
+  inputMap: {
+    password: true
+  },
+  nestedForm: {
+    subscribe: false
   }
 });
 
-// Performs an implicit wait for each input element of the map and then returns
-// the values of the map's input elements as an object whose keys are taken from
-// `mappingObject`.
-const values: Record<'username' | 'password' | 'email', string> =
-inputMap.getValue();
-
-// Returns the values of all input elements managed by the map an object whose
-// keys are taken from `mappingObject` withing performing an implicit wait.
-const currentValues: Record<'username' | 'password' | 'email', string> =
-inputMap.currently.getValue();
-
-// Performs an implicit wait for each map element and then the values of the
-// `username` input to 'johnDoe', of the `password` input to 'superSecret' and
-// of the `email` input to 'john@doe.com'.
-inputMap.setValue({
-  username: 'johnDoe',
-  password: 'superSecret',
-  email: 'john@doe.com'
-});
-
-// Performs an implicit wait for the `username` and the `password` input elements
-// and then sets the value of the `username` input to 'johnDoe' and the value
-// of the `password` input to 'superSecret'.
-inputMap.setValue({
-  username: 'johnDoe',
-  password: 'superSecret',
-});
-
-// Checks if currently, the `username` input has the value 'johnDoe' and the
-// `email` input has the value 'john@doe.com'.
-inputMap.currently.hasValue({
-  username: 'johnDoe',
-  email: 'john@doe.com'
-});
-
-// Waits for the `username` input to have the value 'johnDoe', the `password`
-// input to have the value 'superSecret' and the `email` input to have the value
-// 'john@doe.com' within half a second.
-inputMap.wait.not.containsValue({
-  username: 'johnDoe',
-  password: 'superSecret',
-  email: 'john@doe.com'
-}, { timeout: 500 });
-
-// Checks if all input elements of `inputMap` eventually have any value
-// (are not empty) within the default timeout of our map class.
-inputMap.eventually.hasAnyValue();
-
-// Checks if, eventually, the `username` and the `email` input have any value
-// (are not empty) within the default timeout of our map class.
-inputMap.eventually.hasAnyValue({ filterMask: {
-  username: true,
-  email: true,
-}});
+// `filteredRetrievedValues` contains:
+//
+// {
+//   email: undefined,
+//   acceptTerms: undefined,
+//   country: 'Nepal',
+//   inputList: ['FirstListValue', undefined],
+//   inputMap: {
+//     username: undefined,
+//     password: 'soSafe1234'
+//   },
+//   nestedForm: {
+//     subscribe: undefined
+//   }
+// };
 ```
 
-Unlike the `ValuePageElement` class, `ValuePageElementMap` is not an abstract
-class. The `getValue` and `setValue` methods of the `ValuePageElementMap`
-are already implemented and internally invoke the `getValue` and `setValue` methods
-of the `ValuePageElement` instances managed by the map. Therefore, we can simply use `ValuePageElementMap` directly and don't need to create a custom map class just
-for the sake of implementing `getValue` and `setValue`.
+### Checking Form Values
 
-We should, however, add a new factory method to our `PageNodeStore` that returns
-an instance of a `ValuePageElementMap` whose types (or rather the types of its
-map elements) are already configured. Like in the above code example, where the
-`InputMap()` factory method returns a `ValuePageElementMap` that is configured
-to manage instances of the `Input` class.
+To check the values of our `form` group, we could invoke the `hasValue()`,
+`containsValue()` or `hasAnyValue()` functions defined on the `currently` and
+`eventually` APIs of `ValuePageElementGroup` and then use the `expect()`
+matcher to check if the resulting value is `true`.
 
-To learn how to create a factory method that returns a configured `ValuePageElementMap`, please read the
-[Adding a map factory method for a custom `ValuePageElement`](customMap.md#adding-a-map-factory-method-for-custom-elements)
-section of the [Customizing a Map](customMap.md) guide.
+However, this way the error messages thrown if the expectation fails are not
+very meaningful.
 
+A much better way to check if our `form` group's values equal certain expected
+values is to pass our `form` group to `expectGroup` and invoke its
+`toHaveValue()` or `toEventuallyHaveValue()` expectation matchers. This will
+give us much more detailed error message in case the expected values do not
+match the actual values of our `form`:
 
+```typescript
+const expectedValues: Workflo.PageNode.ExtractValueStateChecker<(typeof form)['$']> = {
+  email: 'john@doe.com',
+  country: 'Nepal',
+  inputMap: {
+    username: 'johnDoe'
+  },
+  nestedForm: { subscribe: true }
+};
 
-container around form, then use container for elements
+// If this expectation fails, the error message will simply say:
+// 'Expected false to be true'.
+expect(
+  form.eventually.hasValue(expectedValues, { timeout: 3000 })
+).toBe(true);
 
-export type RegistrationFormData = Workflo.PageNode.ExtractValue<RegistrationPage['form']['$']>;
+// If this expectation fails, the error message will tell you exactly
+// which actual value did not match the expected value, print both values
+// and the XPath of the respective page node.
+expectGroup(form).toEventuallyHaveValue(expectedValues, { timeout: 3000 });
+```
+
+Please note that in the example above, the timeout of 3 seconds will be applied to
+each "leaf page element" separately, so the total amount of time needed to complete
+these checks can substantially exceed 3 seconds.
+
+## No Need For Customization
+
+Unlike a `PageElementList` or a `PageElementMap`, which are "bound" to a particular
+`PageElement` class because they can only manage `PageElement` instances that are all
+of the same class, a `PageElementGroup` can manage any combination of `PageNode`
+instances of various classes. Therefore, we usually don't need to create custom `PageElementGroup` classes and we also don't have to add additional group factory
+methods to a `PageNodeStore`. Instead, we can simply use the two factory
+methods `ElementGroup()` and `ValueGroup()`, which already ship with wdio-workflo,
+in pretty much any situation.
