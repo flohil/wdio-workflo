@@ -22,6 +22,11 @@ a `PageElementGroup` works similar to the
 
 *"In software engineering, the composite pattern is a partitioning design pattern. The composite pattern describes a group of objects that is treated the same way as a single instance of the same type of object. The intent of a composite is to "compose" objects into tree structures to represent part-whole hierarchies. Implementing the composite pattern lets clients treat individual objects and compositions uniformly."* - Quote from wikipedia.org
 
+As noted in the above quote, a `PageElementGroup` manages a tree-like structure
+of page nodes. The leaf page nodes are always `PageElement` instances that either
+reside directly within the group's content, or are managed by one of the
+lists, maps or nested groups located in the group's content.
+
 The main advantage of using a `PageElementGroup` to represent an HTML form
 is that if you want to fill in the form, you don't need to invoke the `setValue()`
 function for each form element, but instead, you simply pass the values of all
@@ -358,15 +363,20 @@ please read the [State Check Functions section](element.md#state-check-functions
 
 ### Filter Masks
 
-The `PageElementMap` filter mask allows you to restrict the execution of a
-state retrieval, action or state check function to certain managed `PageElement`
-instances.
+The `PageElementGroup` filter mask allows you to restrict the execution of a
+state retrieval, action or state check function to certain `PageNode` instances
+managed by the group.
 
-The `PageElementMap` filter mask is an object whose keys are taken from the map's
-`mappingObject` and whose values are booleans. A property value of `true` means
-that the function will be executed for the corresponding `PageElement`. A value of
-`false` or simply not defining a property for a certain key means that the
-function execution will be skipped.
+The `PageElementGroup` filter mask is an object whose keys are taken from the group's
+content object and whose values are determined by the filter masks of the
+respective `PageNode` instances:
+
+- For `PageElement` instances, you can set the value of a filter mask property
+to `true` if you want a function to be executed for the respective page element,
+and `false` if you want to skip the function invocation.
+- The filter mask formats of lists and maps are explained in full detail in the
+filter mask sections of the [PageElementList](list#filter-masks) and [PageElementMap](map#filter-masks) guides.
+- If you don't define a property for a specific `PageNode` in the filter mask object, the function call for the respective page node will be skipped.
 
 The filter mask can be set via the last parameter of a state retrieval, action or
 state check function. If such a function has other optional parameters, the filter
@@ -374,80 +384,99 @@ mask can be defined via the `filterMask` property of the `opts` parameter (which
 is always the last function parameter). Otherwise, the filter mask itself represents
 the last function parameter.
 
-Here are some examples for how to use a `PageElementMap` filter mask:
+Here are some examples for how to use filter masks with a `PageElementGroup`:
 
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkMap = stores.pageNode.ElementMap('//a', {
-  identifier: {
-    mappingObject: {
-      demo: 'Demo Page',
-      examples: 'Examples',
-      api: 'API'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
-  }
-});
-
-// `texts` will be an object containing two properties, one with the key
-// 'demo' and one with the key 'api', whose values are the text of the respective
-// page elements. The text of the skipped `examples` page element is not included
-// in the result object.
-const texts = linkMap.getText({
-  demo: true,
-  api: true
-});
-
-// Only the `examples` page element will be clicked, because the `api` page element's
-// filter mask value is set to `false` and the `demo` page element is not included
-// in the filter mask at all.
-linkMap.eachDo(
-  element => element.click(), {
-    examples: true,
-    api: false
-  }
+const container = stores.pageNode.Element(
+  xpath('//div').id('groupContainer')
 );
+
+const group = stores.pageNode.ElementGroup({
+  get element() {
+    return container.$.Element('//span');
+  },
+  get list() {
+    return container.$.ElementList('//h3');
+  },
+  get map() {
+    return container.$.ElementMap('//a', {
+      identifier: {
+        mappingObject: {
+          demo: 'Demo Page',
+          examples: 'Examples',
+        },
+        mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+      }
+    });
+  },
+  get nestedGroup() {
+    return container.$.ElementGroup({
+      get nestedElement() {
+        return container.$.Element(xpath('//div'));
+      },
+    });
+  }
+});
+
+// The `getText()` function will be invoked for the `element` page element,
+// all page elements of `list`, the `demo` page element of `map` and the
+// `nestedElement` page element of `nestedGroup`.
+// The `getText()` invocation will be skipped for the `examples` page element
+// of `map` because its filter mask value is set to `false`.
+const texts = group.getText({
+  element: true,
+  list: true,
+  map: {
+    demo: true,
+    examples: false
+  },
+  nestedGroup: {
+    nestedElement: true
+  }
+})
+
+// The `click()` function will only be invoked for the second page element
+// of `list`. It will be skipped for the `element` page element because its
+// filter mask value is `false`, for the first page element of `list` because
+// its filter mask value is also `false`, and for all page elements managed by
+// `map` and `nestedGroup` because the filter mask contains no property for them.
+group.eachDo(
+  node => node.click(), {
+  element: false,
+  list: [false, true],
+})
 
 // There are other optional parameters like `timeout`, therefore the filter mask
 // is defined via the `filterMask` property of the `opts` parameter.
-// The `hasAnyText` function will return true if within 3 seconds, the `api`
-// page element and the `demo` page element have any text (are not empty).
-linkMap.eventually.hasAnyText({ timeout: 3000, filterMask: {
-  api: true,
-  examples: false,
-  demo: true
+// The `hasAnyText` function will return `true` if the `element` and the `nestedElement`,
+// both within 3 seconds each, have any text (are not empty).
+group.eventually.hasAnyText({ timeout: 3000, filterMask: {
+  element: true,
+  nestedGroup: {
+    nestedElement: true
+  }
 }});
 ```
 
 Filter masks are not available for state check functions that require you to pass
 the expected attribute values as a parameter, e.g. `hasText(texts)` or
 `containsValue(values)`. In these cases, you can skip the execution of the state
-check function for a certain `PageElement` instance by simply not defining
+check function for a certain `PageNode` instance by simply not defining
 an object property for the corresponding key:
 
 ```typescript
-import { stores } from '?/page_objects';
-
-const linkMap = stores.pageNode.ElementMap('//a', {
-  identifier: {
-    mappingObject: {
-      demo: 'Demo Page',
-      examples: 'Examples',
-      api: 'API'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+// The `hasDirectText` function will only be invoked for the `element` page element
+// and the `examples` page element of `map`. It will return `true` if the direct text
+// (the text that resides directly/one layer below the HTML element) of `element`
+// is currently 'Element text' and the direct text of `map.examples` is currently
+// 'Examples'.
+const result = group.currently.hasDirectText({
+  element: 'Element text',
+  map: {
+    examples: 'Examples'
   }
-});
-
-// The `hasDirectText` function will be invoked for the `demo` and `api` page
-// elements of `linkMap` but skipped for the `examples` page element. The function
-// returns `true` if the direct text (the text that resides directly/one layer below
-// the HTML element) of the `demo` page element is currently 'Demo Page' and the
-// direct text of the `api` page element is currently 'API'.
-const result = linkMap.currently.hasDirectText({
-  demo: 'Demo Page',
-  api: 'API'
 });
 ```
 
@@ -455,117 +484,124 @@ const result = linkMap.currently.hasDirectText({
 
 ### Implicit Waiting
 
-`PageElementMap` does not have an implicit waiting mechanism of its own.
+`PageElementGroup` does not have an implicit waiting mechanism of its own.
 However, if you invoke a state retrieval or action function on a `PageElement`
-instance  managed by a `PageElementMap`, the
+leaf node managed by a `PageElementGroup`, the
 [implicit waiting mechanism of the `PageElement`](element#implicit-waiting) will be triggered.
-
-The publicly configurable `opts` parameter of the `ElementMap()` factory method
-provides an `elementOpts.waitType` property which allows you to define the `waitType`
-of the `PageElement` instances managed by the `PageElementMap`:
-
-```typescript
-import { stores } from '?/page_objects';
-
-const linkMap = stores.pageNode.ElementMap('//a', {
-  identifier: {
-    mappingObject: {
-      demo: 'demoLink',
-      examples: 'examplesLink',
-      api: 'apiLink'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
-  },
-  elementOpts: { waitType: Workflo.WaitType.text }
-});
-
-linkMap.eachDo(
-  // The `click()` action function triggers linkElement's implicit waiting mechanism.
-  // So, before each click, wdio-workflo waits for the linkElement to have any text.
-  linkElement => linkElement.click()
-);
-```
 
 ### Explicit Waiting: `currently`, `wait` and `eventually`
 
-The explicit waiting mechanisms of `PageElementMap` are very similar to the
+The explicit waiting mechanisms of `PageElementGroup` are very similar to the
 ones used by `PageElement` and you should read about them in the
 [Explicit Waiting](element.md#explicit-waiting-currently-wait-and-eventually)
 section of the [`PageElement` guide](element.md) before you continue reading
 this guide.
 
-To learn how the behavior of state retrieval and state check functions of the `PageElementMap` class differs from its `PageElement` class equivalents, please
+To learn how the behavior of state retrieval and state check functions of the `PageElementGroup` class differs from its `PageElement` class equivalents, please
 read the [State Function Types section of this guide](#state-function-types).
+
 The types of available state retrieval and state check functions can be
-found in the [State Function Types section of the `PageElement` guide](element.md#state-function-types) .
+found in the [State Function Types section of the `PageElement` guide](element.md#state-function-types). Please note that not all types of `PageElement`
+state retrieval and state check functions are also available on a `PageElementGroup`.
 
 ### The `currently` API
 
-The `currently` API of the `PageElementMap` class consists of state retrieval
+The `currently` API of the `PageElementGroup` class consists of state retrieval
 functions and state check functions. It does not trigger an implicit wait on the
-managed `PageElement` instances of the `PageElementMap`.
+`PageNode` instances managed by the `PageElementGroup`.
 
-The state retrieval functions of a map's `currently` API return an object whose
-keys are taken from the map's `mappingObject` and whose values represent the
-current values of the retrieved HTML attribute for each page element managed the map.
-The state check functions of the `currently` API check wether the page elements
-managed by the `PageElementMap` currently have an expected state for a certain
-HTML attribute.
+The state retrieval functions of a group's `currently` API retrieve the values
+of a certain HTML attribute for each `PageElement` leaf node managed by the group.
+They return an object whose keys are taken from the group's content object and whose
+values represent the current values of the retrieved HTML attribute for the respective
+page nodes managed by the group.
+
+The state check functions of the `currently` API check wether the `PageElement`
+leaf nodes managed by the `PageElementGroup` currently have an expected state for a
+certain HTML attribute.
 
 By using a [filter mask](#filter-masks), you can skip the invocation of a
-state retrieval or state check function for certain `PageElement` instances of
-the map.
+state retrieval or state check function for certain `PageElement` leaf nodes of
+the group.
 
 ### The `wait` API
 
 #### Overview
 
-The `wait` API of the `PageElementMap` class allows you to explicitly wait
-for some or all of the list's managed `PageElement` instances to have an expected
+The `wait` API of the `PageElementGroup` class allows you to explicitly wait
+for some or all of the group's managed `PageElement` leaf nodes to have an expected
 state. It consists of state check functions only which all return an instance
-of the `PageElementList`.
+of the `PageElementGroup`.
 
-If you use a [filter mask](#filter-masks), the `wait` API only waits for the
-`PageElement` instances included by the filter mask to reach an expected state.
-Otherwise, the `wait` API waits for all managed `PageElement` instances to reach
-their expected state. If one or more `PageElement` instance fail to reach their
+If you use a [filter mask](#filter-masks), the `wait` API only waits for the group's
+`PageElement` leaf nodes which are included by the filter mask to reach an expected
+state. Otherwise, the `wait` API waits for all managed `PageElement` leaf nodes to reach
+their expected state. If one or more `PageElement` leaf nodes fail to reach their
 expected state within a specific timeout, an error will be thrown.
 
 #### Timeout
 
-The `timeout` within which the expected states of the `PageElement` instances must
+The `timeout` within which the expected states of the `PageNode` instances must
 be reached applies to each `PageElement` instance individually. So, if the `timeout`
-was 3000 milliseconds, each `PageElement` instance managed by the map is allowed
+was 3000 milliseconds, each `PageElement` instance managed by the group, or by
+one of the group's `PageElementList` and `PageElementMap` page nodes, is allowed
 to take up to 3 seconds to reach its expected state:
 
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkMap = stores.pageNode.ElementMap('//a', {
-  identifier: {
-    mappingObject: {
-      demo: 'demoLink',
-      examples: 'examplesLink',
-      api: 'apiLink'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+const container = stores.pageNode.Element(
+  xpath('//div').id('groupContainer')
+);
+
+const group = stores.pageNode.ElementGroup({
+  get element() {
+    return container.$.Element('//span');
+  },
+  get list() {
+    return container.$.ElementList('//h3');
+  },
+  get map() {
+    return container.$.ElementMap('//a', {
+      identifier: {
+        mappingObject: {
+          demo: 'Demo Page',
+          examples: 'Examples',
+        },
+        mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+      }
+    });
+  },
+  get nestedGroup() {
+    return container.$.ElementGroup({
+      get nestedElement() {
+        return container.$.Element(xpath('//div'));
+      },
+    });
   }
 });
 
+// The `element` page element, all page elements managed by the `list` page node,
+// all page elements managed by the `map` page node and all page elements
+// managed by page nodes of `nestedGroup` are allowed to take up to 3 seconds each
+// to become visible.
 linkMap.wait.isVisible({
-  timeout: 3000,
-  filterMask: {
-    demo: true,
-    api: true
-  }
+  timeout: 3000
 });
 ```
 
-In the code example above, both the `demo` and the `api` page element of `linkMap`
-can take up to 3 seconds to become visible. So in total, the maximum possible wait
-time for this `isVisible` invocation is 6 seconds. If either the `demo`, or the `api`,
-or both page elements do not become visible within 3 seconds, `wait.isVisible`
-will throw an error.
+If we assume that the group's `list` page node in the above code examples manages
+two page elements, there is a total of 6 page element leaf nodes:
+
+- The `element` page element.
+- The two page elements managed by `list`.
+- The `demo` and `examples` page elements managed by `map`.
+- The `nestedElement` page element residing in the content of `nestedGroup`.
+
+Each of these 6 page elements can take up to 3 seconds to become visible.
+So in total, the maximum possible wait time for this `isVisible()` invocation is
+18 seconds. If one or more leaf page elements of `group` do not become visible
+within 3 seconds, an error will be thrown.
 
 For more information on how to configure the `timeout` and `interval` of
 state check functions defined on the `wait` API of a page node class,
@@ -575,22 +611,23 @@ please read the [`wait` API section](element.md#the-wait-api) of the `PageElemen
 
 #### Overview
 
-The `eventually` API of the `PageElementMap` class checks if some or all of
-the `PageElement` instances managed by a `PageElementMap` eventually reach an
+The `eventually` API of the `PageElementGroup` class checks if some or all of
+the `PageNode` instances managed by a `PageElementGroup` eventually reach an
 expected state within a specific timeout. It consists of state check functions only
-that return `true` if all `PageElement` instances for which the state check function
-was executed eventually reached the expected state within specified the timeout.
+that return `true` if all `PageNode` instances for which the state check function
+was executed eventually reached the expected state within the specified timeout.
 Otherwise, `false` will be returned.
 
 If you use a [filter mask](#filter-masks), the `eventually` API only checks the
-state of `PageElement` instances which are included by the filter mask. Otherwise,
-the `eventually` API checks the state of all managed `PageElement` instances.
+state of `PageElement` leaf nodes which are included by the group's filter mask.
+Otherwise, the `eventually` API checks the state of all managed `PageElement`
+leaf nodes of the group.
 
 #### Timeout
 
 Like for the `wait` API, for the `eventually` API too the `timeout` within which
-the expected states of the `PageElement` instances must be reached applies to
-each `PageElement` instance individually.
+the expected states of the `PageElement` leaf nodes must be reached applies to
+each `PageElement` leaf node individually.
 
 For more information on how to configure the `timeout` and `interval` of
 state check functions defined on the `eventually` API of a page node class,

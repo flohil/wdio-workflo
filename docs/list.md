@@ -399,7 +399,9 @@ function for certain `PageElement` instances by using a filter mask. The
 [Filter Masks section](#filter-masks) of this guide shows you how to do that.
 
 For more information about the types of available state retrieval functions,
-please read the [State Retrieval Functions section](element.md#state-retrieval-functions) of the `PageElement` guide.
+please read the [State Retrieval Functions section](element.md#state-retrieval-functions)
+of the `PageElement` guide. Please note that not all types of `PageElement` state
+retrieval functions are also available on a `PageElementList`.
 
 ### Action Functions
 
@@ -436,7 +438,8 @@ linkList.eachDo(
 ```
 
 For more information about the types of available action functions,
-please read the [Action Functions section](element.md#action-functions) of the `PageElement` guide.
+please read the [Action Functions section](element.md#action-functions) of the
+`PageElement` guide.
 
 ### State Check Functions
 
@@ -503,7 +506,9 @@ corresponding sections of this guide:
 [The `eventually` API](#the-eventually-api).
 
 For more information about the types of available state check functions,
-please read the [State Check Functions section](element.md#state-check-functions) of the `PageElement` guide.
+please read the [State Check Functions section](element.md#state-check-functions)
+of the `PageElement` guide. Please note that not all types of `PageElement` state
+check functions are also available on a `PageElementList`.
 
 ### Filter Masks
 
@@ -613,9 +618,11 @@ this guide.
 To learn how the behavior of state retrieval and state check functions of the
 `PageElementList` class differs from its `PageElement` class equivalents, please
 read the [State Function Types section of this guide](#state-function-types).
+
 The types of available state retrieval and state check functions can be found
 in the [State Function Types section](element.md#state-function-types) of the
-page element guide.
+page element guide. Please note that not all types of `PageElement` state
+retrieval and state check functions are also available on a `PageElementList`.
 
 ### The `currently` API
 
@@ -628,7 +635,9 @@ instances of the `PageElementList`.
 
 The state retrieval functions of a list's `currently` API return the current values
 of a certain HTML attribute for each `PageElement` instance managed by the list as
-an array. The state check functions of a list's `currently` API check the page elements
+an array.
+
+The state check functions of a list's `currently` API check the page elements
 managed by the `PageElementList` currently have an expected state for a certain
 HTML attribute.
 
@@ -668,7 +677,7 @@ of the `PageElementList`.
 If you use a [filter mask](#filter-masks), the `wait` API only waits for the
 `PageElement` instances included by the filter mask to reach an expected state.
 Otherwise, the `wait` API waits for all managed `PageElement` instances to reach
-their expected state. If one or more `PageElement` instance fail to reach their
+their expected state. If one or more `PageElement` instances fail to reach their
 expected state within a specific timeout, an error will be thrown.
 
 #### Timeouts

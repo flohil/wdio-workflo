@@ -219,7 +219,8 @@ function for certain `PageElement` instances by using a filter mask. The
 
 For more information about the types of available state retrieval functions,
 please read the [State Retrieval Functions section](element.md#state-retrieval-functions)
-of the `PageElement` guide.
+of the `PageElement` guide. Please note that not all types of `PageElement` state
+retrieval functions are also available on a `PageElementMap`.
 
 ### Action Functions
 
@@ -237,7 +238,7 @@ optionally pass a [filter mask](#filter-masks) as second parameter to skip the a
 function's invocation for certain `PageElement` instances.
 
 The following code example compares both options for executing action functions
-on each element of a list:
+on each element of a map:
 
 ```typescript
 import { stores } from '?/page_objects';
@@ -349,7 +350,8 @@ corresponding sections of this guide:
 [The `eventually` API](#the-eventually-api).
 
 For more information about the types of available state check functions,
-please read the [State Check Functions section](element.md#state-check-functions) of the `PageElement` guide.
+please read the [State Check Functions section](element.md#state-check-functions) of the `PageElement` guide. Please note that not all types of `PageElement` state
+check functions are also available on a `PageElementMap`.
 
 ### Filter Masks
 
@@ -491,8 +493,10 @@ this guide.
 
 To learn how the behavior of state retrieval and state check functions of the `PageElementMap` class differs from its `PageElement` class equivalents, please
 read the [State Function Types section of this guide](#state-function-types).
+
 The types of available state retrieval and state check functions can be
-found in the [State Function Types section of the `PageElement` guide](element.md#state-function-types) .
+found in the [State Function Types section of the `PageElement` guide](element.md#state-function-types). Please note that not all types of `PageElement`
+state retrieval and state check functions are also available on a `PageElementMap`.
 
 ### The `currently` API
 
@@ -500,9 +504,12 @@ The `currently` API of the `PageElementMap` class consists of state retrieval
 functions and state check functions. It does not trigger an implicit wait on the
 managed `PageElement` instances of the `PageElementMap`.
 
-The state retrieval functions of a map's `currently` API return an object whose
-keys are taken from the map's `mappingObject` and whose values represent the
-current values of the retrieved HTML attribute for each page element managed the map.
+The state retrieval functions of a map's `currently` API retrieve the values
+of a certain HTML attribute for each `PageElement` managed by the map. The return
+an object whose keys are taken from the map's `mappingObject` and whose values
+represent the current values of the retrieved HTML attribute for the respective
+page elements.
+
 The state check functions of the `currently` API check wether the page elements
 managed by the `PageElementMap` currently have an expected state for a certain
 HTML attribute.
@@ -516,14 +523,14 @@ the map.
 #### Overview
 
 The `wait` API of the `PageElementMap` class allows you to explicitly wait
-for some or all of the list's managed `PageElement` instances to have an expected
+for some or all of the map's managed `PageElement` instances to have an expected
 state. It consists of state check functions only which all return an instance
 of the `PageElementList`.
 
 If you use a [filter mask](#filter-masks), the `wait` API only waits for the
 `PageElement` instances included by the filter mask to reach an expected state.
 Otherwise, the `wait` API waits for all managed `PageElement` instances to reach
-their expected state. If one or more `PageElement` instance fail to reach their
+their expected state. If one or more `PageElement` instances fail to reach their
 expected state within a specific timeout, an error will be thrown.
 
 #### Timeout
@@ -574,7 +581,7 @@ The `eventually` API of the `PageElementMap` class checks if some or all of
 the `PageElement` instances managed by a `PageElementMap` eventually reach an
 expected state within a specific timeout. It consists of state check functions only
 that return `true` if all `PageElement` instances for which the state check function
-was executed eventually reached the expected state within specified the timeout.
+was executed eventually reached the expected state within the specified timeout.
 Otherwise, `false` will be returned.
 
 If you use a [filter mask](#filter-masks), the `eventually` API only checks the
