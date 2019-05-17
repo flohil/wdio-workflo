@@ -32,8 +32,8 @@ export interface IPageOpts<Store extends PageNodeStore> extends Workflo.ITimeout
  */
 export abstract class Page<
   Store extends PageNodeStore,
-  IsOpenOpts = {},
-  IsClosedOpts = IsOpenOpts
+  IsOpenOpts extends object = object,
+  IsClosedOpts extends object = IsOpenOpts
 > implements Workflo.IPage<Store, IsOpenOpts, IsClosedOpts> {
 
   /**
@@ -117,8 +117,8 @@ export abstract class Page<
 export class PageWait<
   Store extends PageNodeStore,
   PageType extends Page<Store, IsOpenOpts, IsClosedOpts>,
-  IsOpenOpts,
-  IsClosedOpts
+  IsOpenOpts extends object,
+  IsClosedOpts extends object
 > {
 
   /**
@@ -224,8 +224,8 @@ export class PageWait<
 export class PageEventually<
   Store extends PageNodeStore,
   PageType extends Page<Store, IsOpenOpts, IsClosedOpts>,
-  IsOpenOpts,
-  IsClosedOpts
+  IsOpenOpts extends object,
+  IsClosedOpts extends object
 > {
 
   /**
