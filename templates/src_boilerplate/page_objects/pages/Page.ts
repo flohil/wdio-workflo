@@ -27,8 +27,8 @@ export interface IPageOpts<
  */
 export abstract class Page<
   Store extends PageNodeStore,
-  IsOpenOpts = {},
-  IsClosedOpts = IsOpenOpts
+  IsOpenOpts extends object = object,
+  IsClosedOpts extends object = IsOpenOpts
 > extends core.pages.Page<Store, IsOpenOpts, IsClosedOpts> {
 
   /**
@@ -53,8 +53,8 @@ export abstract class Page<
 export class PageWait<
   Store extends PageNodeStore,
   PageType extends Page<Store, IsOpenOpts, IsClosedOpts>,
-  IsOpenOpts,
-  IsClosedOpts
+  IsOpenOpts extends object,
+  IsClosedOpts extends object
 > extends core.pages.PageWait<Store, PageType, IsOpenOpts, IsClosedOpts> {}
 
 /**
@@ -69,6 +69,6 @@ export class PageWait<
 export class PageEventually<
   Store extends PageNodeStore,
   PageType extends Page<Store, IsOpenOpts, IsClosedOpts>,
-  IsOpenOpts,
-  IsClosedOpts
+  IsOpenOpts extends object,
+  IsClosedOpts extends object
 > extends core.pages.PageEventually<Store, PageType, IsOpenOpts, IsClosedOpts> {}
