@@ -27,7 +27,7 @@ export interface IPageOpts<Store extends PageNodeStore> extends Workflo.ITimeout
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`, `wait.isClosed` and
  * `eventually.isClosed`
  */
-export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {}, IsClosedOpts = IsOpenOpts> implements Workflo.IPage<Store, IsOpenOpts, IsClosedOpts> {
+export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts extends object = object, IsClosedOpts extends object = IsOpenOpts> implements Workflo.IPage<Store, IsOpenOpts, IsClosedOpts> {
     /**
      * an instance of PageNodeStore which can be used to retrieve/create PageNodes via Page
      */
@@ -71,7 +71,7 @@ export declare abstract class Page<Store extends PageNodeStore, IsOpenOpts = {},
  * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the function `isClosed`
  */
-export declare class PageWait<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
+export declare class PageWait<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts extends object, IsClosedOpts extends object> {
     /**
      * the Page for which PageWait defines all `wait` functions
      */
@@ -128,7 +128,7 @@ export declare class PageWait<Store extends PageNodeStore, PageType extends Page
  * @template IsOpenOpts type of the opts parameter passed to the function `isOpen`
  * @template IsClosedOpts type of the opts parameter passed to the functions `isClosed`
  */
-export declare class PageEventually<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts, IsClosedOpts> {
+export declare class PageEventually<Store extends PageNodeStore, PageType extends Page<Store, IsOpenOpts, IsClosedOpts>, IsOpenOpts extends object, IsClosedOpts extends object> {
     /**
      * the Page for which PageEventually defines all `eventually` functions
      */
