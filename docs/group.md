@@ -193,89 +193,175 @@ group.$.label.click();
 
 ## State Functions
 
-### State Retrieval Functions
+### `PageElementGroup` Example Code
 
-State retrieval functions of the `PageElementMap` class fulfil the same purpose
-as those of the `PageElement` class: For each `PageElement` instance managed by the
-map, they retrieve the value of a certain attribute of the HTML element that is
-wrapped by `PageElement` from the website. They return an object whose keys are
-taken from the map's `mappingObject` and whose values represent the values
-of the retrieved HTML attribute for each `PageElement`:
+The following sections of the "State Functions" chapter refer to the below
+example code of a `PageElementGroup` definition to avoid code duplication:
 
 ```typescript
 import { stores } from '?/page_objects';
 
-const linkMap = stores.pageNode.ElementMap('//a', {
-  identifier: {
-    mappingObject: {
-      demo: 'Demo Page',
-      api: 'API'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+const container = stores.pageNode.Element(
+  xpath('//div').id('groupContainer')
+);
+
+const group = stores.pageNode.ElementGroup({
+  get element() {
+    return container.$.Element('//span');
+  },
+  get list() {
+    return container.$.ElementList('//h3');
+  },
+  get map() {
+    return container.$.ElementMap('//a', {
+      identifier: {
+        mappingObject: {
+          demo: 'Demo Page',
+          examples: 'Examples',
+        },
+        mappingFunc: (baseSelector, value) => xpath(baseSelector).text(value)
+      }
+    });
+  },
+  get nestedGroup() {
+    return container.$.ElementGroup({
+      get nestedElement() {
+        return container.$.Element(xpath('//div'));
+      },
+    });
+  }
+});
+```
+
+### Composite Pattern
+
+As already mentioned, the content of a `PageElementGroup` defines an arbitrary
+tree structure of `PageNode` instances. Each `PageNode` instance can be
+a `PageElement`, `PageElementList`, `PageElementMap` or a nested `PageElementGroup`.
+The leaf nodes of this tree structure are always `PageElement` instances.
+
+The `PageElementGroup` allows us to invoke state retrieval, state check and
+action functions on each `PageNode` instance managed by the group with one simple
+call of a function defined on the group itself.
+
+Together, these two features of a `PageElementGroup` represent an implementation
+of the [composite pattern](https://en.wikipedia.org/wiki/Composite_pattern),
+which allows us to treat a group of `PageNode` instances the same way as a single
+`PageNode` instance.
+
+When you invoke a state retrieval, state check or action function on the
+`PageElementGroup` class, the group iterates over all of its managed `PageNode`
+instances and invokes the respective function on each `PageNode` of the group:
+
+- If this `PageNode` is a `PageElement`, the group has reached a leaf node.
+- If this `PageNode` is a `PageElementList` or `PageElementMap`, the group further
+invokes the respective function on the `PageElement` instances managed by the list
+or map.
+- If the `PageNode` is a nested `PageElementGroup`, it invokes the respective
+function on each of its managed `PageNode` instances.
+
+This process of function invocations continues recursively until the function was
+invoked on each `PageElement` leaf node of the outermost group.
+
+You can skip the invocation of the function for certain `PageNode` instances
+by using a filter mask. The [Filter Masks section](#filter-masks) of this guide
+shows you how to do that.
+
+### State Retrieval Functions
+
+State retrieval functions of the `PageElementGroup` class fulfil the same purpose
+as those of the `PageElement` class: For each `PageElement` leaf node managed by the
+group, they retrieve the value of a certain attribute of the HTML element that is
+wrapped by `PageElement` from the website. They return an object whose keys are
+taken from the group's content object and whose values represent the values
+of the retrieved HTML attribute for each `PageNode` managed by the group:
+
+```typescript
+const groupTexts = group.getText();
+
+// Assuming the group's `list` page node manages two page elements,
+// the content of the `groupTexts` variable could be:
+//
+// {
+//   element: 'Text of Element',
+//   list: ['Text of first List Element', 'Text of second List Element'],
+//   map: {
+//     demo: 'Demo Page',
+//     examples: 'Examples'
+//   },
+//   nestedGroup: {
+//     nestedElement: 'Text of Nested Element'
+//   }
+// };
+```
+
+You can use a [filter mask](#filter-masks) to skip the invocation of a state
+retrieval function for certain `PageElement` leaf nodes:
+
+```typescript
+const filteredGroupTexts = group.getText({
+  element: true,
+  map: {
+    examples: true
   }
 });
 
-const linkTexts = linkMap.getText();
+// The content of the `filteredGroupTexts` variable would now be:
+//
+// {
+//   element: 'Text of Element',
+//   list: undefined,
+//   map: {
+//     demo: undefined,
+//     examples: 'Examples'
+//   },
+//   nestedGroup: undefined
+// };
 ```
-
-In the above examples, the `linkTexts` variable would now store
-`{demo: 'Demo Page', api: 'API'}`;
-
-Internally, `PageElementMap` simply iterates over all of its managed
-`PageElement` instances and invokes the respective state retrieval function
-on each `PageElement`. You can also skip the invocation of the state retrieval
-function for certain `PageElement` instances by using a filter mask. The
-[Filter Masks section](#filter-masks) of this guide shows you how to do that.
 
 For more information about the types of available state retrieval functions,
 please read the [State Retrieval Functions section](element.md#state-retrieval-functions)
-of the `PageElement` guide.
+of the `PageElement` guide. Please note that not all types of `PageElement` state
+retrieval functions are also available on a `PageElementGroup`.
 
 ### Action Functions
 
 Action functions change the state of the tested web application by interacting
 with HTML elements that are mapped by `PageElement` instances. To execute an
-action function on each `PageElement` instance managed by a `PageElementMap`,
-you have two options:
+action function on each `PageElement` leaf node of a `PageElementGroup`, you have
+two options:
 
-- You can access each `PageElement` instance via the `$` accessor and invoke an
-action function on each.
-- You can use the `eachDo()` method of the `PageElementMap` which automatically
-loops over the `PageElementMap` instances and invokes an action function which
-you need to pass to `eachDo()` on each page element. Using `eachDo()` allows you to
+- You can access each `PageNode` instance of the group and its nested groups
+via the `$` accessor and invoke an action function on each.
+- You can use the `eachDo()` method of the `PageElementGroup` which automatically
+loops over the managed `PageNode` instances and invokes an action function which
+you need to pass to `eachDo()` on each page node. Using `eachDo()` allows you to
 optionally pass a [filter mask](#filter-masks) as second parameter to skip the action
-function's invocation for certain `PageElement` instances.
+function's invocation for certain `PageElement` leaf nodes.
 
 The following code example compares both options for executing action functions
-on each element of a list:
+on each page node of a `PageElementGroup`:
 
 ```typescript
-import { stores } from '?/page_objects';
+// Click on each page element leaf node of the group after accessing the group's
+// page nodes via the '$' accessor.
+group.$.element.click();
+group.$.list.click();
+group.$.map.click();
+group.$.nestedGroup.$.nestedElement.click();
 
-const linkMap = stores.pageNode.ElementMap('//a', {
-  identifier: {
-    mappingObject: {
-      demo: 'demoLink',
-      examples: 'examplesLink',
-      api: 'apiLink'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
-  },
-  elementOpts: { waitType: Workflo.WaitType.text }
-});
-
-// Click on each page element of the map after accessing the page elements via the `$` accessor.
-linkMap.$.demo.click();
-linkMap.$.examples.click();
-linkMap.$.api.click();
-
-// Clicks on the `demo` and the `api` but not on the `examples` page element of
-// `linkMap` because `examples` is not included in the filter mask.
-linkMap.eachDo(
-  linkElement => linkElement.click(),
+// Clicks on the `element` page element, each page element managed by the `list`
+// page node and the `demo` page element of the `map` page node. For all other
+// page element leaf nodes of the group, the invocation of the `click()` function
+// will be skipped because they are not included in the filter mask.
+group.eachDo(
+  pageNode => pageNode.click(),
   {
-    demo: true,
-    api: true
+    element: true,
+    list: true,
+    map: {
+      demo: true
+    }
   }
 );
 ```
@@ -285,81 +371,92 @@ please read the [Action Functions section](element.md#action-functions) of the `
 
 ### State Check Functions
 
-The state check functions of the `PageElementMap` class let you check if all
-or some of the `PageElement` instances managed by a `PageElementMap` currently
-or eventually have an expected state. They also allow you to wait for some or all
-page elements of a map to reach an expected state within a specific timeout.
+The state check functions of the `PageElementGroup` class let you check if all
+or some of the group's `PageElement` leaf nodes currently or eventually have an
+expected state. They also allow you to wait for some or all page element leaf
+nodes of a group to reach an expected state within a specific timeout.
 
-If a state check function of `PageElementMap` requires you to pass the expected
+If a state check function of `PageElementGroup` requires you to pass the expected
 attribute states as a parameter, this parameter needs to be an object whose
-keys are taken from the map's `mappingObject` and whose values represent the values
-of the checked HTML attribute for each `PageElement` instance. If you omit
-a property representing a certain page element in the parameter object, the
-invocation of the state check function will be skipped for this page element.
+keys are taken from the group's content object and whose values represent the values
+of the checked HTML attribute for each `PageNode` instance. If you omit a property
+representing a certain managed `PageNode` instance in the parameter object,
+the invocation of the state check function will be skipped for this page node
+(and all of its page element leaf nodes of the page node is a list, map or group).
 
 For state check functions that do not require you to pass the expected attribute
 states as a parameter, you can use a [filter mask](#filter-masks) to skip the
-invocation of the state check function for certain `PageElement` instances.
+invocation of the state check function for certain `PageElement` leaf nodes.
 
 The following code example demonstrates the usage of the state check functions
-of a `PageElementList`:
+of a `PageElementGroup`:
 
 ```typescript
-import { stores } from '?/page_objects';
 
-const linkMap = stores.pageNode.ElementMap('//a', {
-  identifier: {
-    mappingObject: {
-      demo: 'demoLink',
-      examples: 'examplesLink',
-      api: 'apiLink'
-    },
-    mappingFunc: (baseSelector, value) => xpath(baseSelector).id(value)
+// Checks if the texts of all page element leaf nodes currently match the
+// expected values.
+group.currently.hasText({
+  element: 'Text of Element',
+  list: ['Text of first List Element', 'Text of second List Element'],
+  map: {
+    demo: 'Demo Page',
+    examples: 'Examples'
   },
-  elementOpts: { waitType: Workflo.WaitType.text }
+  nestedGroup: {
+    nestedElement: 'Text of Nested Element'
+  }
 });
 
-// Checks if the text of the `demo` element is 'Demo Page', the text of the `examples`
-// element is 'Examples' and the text of the `api` element is 'API'.
-linkMap.currently.hasText({
-  demo: 'Demo Page',
-  examples: 'Examples',
-  api: 'API'
-});
-
-// Checks if the `demo` and the `api` element of the map currently have any text.
+// Checks if the `element` page element and the `nestedElement` page element of
+// `nestedGroup` currently have any text (are not empty).
 linkMap.currently.hasAnyText({
-  demo: true,
-  api: true
+  element: true,
+  nestedGroup: {
+    nestedElement: true
+  }
 });
 
-// Waits for all elements of the map to become visible.
-linkMap.wait.isVisible();
+// Waits for all page element leaf nodes of the group to become visible.
+// If one or more page element leaf nodes do not become visible within the default
+// timeout defined for each managed page element, list or map, an error will
+// be thrown.
+group.wait.isVisible();
 
-// Waits until the `demo` and `examples` elements of the map are not/no longer visible.
-linkMap.wait.not.isVisible({ filterMask: {
-  demo: true,
-  examples: true,
-  api: false,
+// Waits until the `element` page element and the `nestedElement` page element of
+// `nestedGroup` are no longer visible. Both of these page element are allowed
+// to take up to 3 seconds each to become no longer visible. If they fail to do
+// so, an error will be thrown.
+linkMap.wait.not.isVisible({ timeout: 3000, filterMask: {
+  element: true,
+  nestedGroup: {
+    nestedElement: true
+  }
 }});
 
-// Checks if the text of the `demo` element does not eventually contain the string 'ap'
-// and if the text of the `api` element does not eventually contain the string 'em'.
-linkMap.eventually.not.containsText({
-  demo: 'ap',
-  api: 'em'
+// Checks if the text of `element` eventually contains 'of Element', if the text
+// of the second page element managed by `list` eventually contains
+// 'second List Element' and if the text of the `nestedElement` page element of
+// `nestedGroup` contains 'of Nested'.
+group.eventually.containsText({
+  element: 'of Element',
+  list: [undefined, 'second List Element'],
+  nestedGroup: {
+    nestedElement: 'of Nested'
+  }
 });
 ```
 
 To find out how state check functions behave differently when invoked on the
-`currently`, `wait` or `eventually` API of a `PageElementMap`, please read the
+`currently`, `wait` or `eventually` API of a `PageElementGroup`, please read the
 corresponding sections of this guide:
 [The `currently` API](#the-currently-api),
 [The `wait` API](#the-wait-api),
 [The `eventually` API](#the-eventually-api).
 
 For more information about the types of available state check functions,
-please read the [State Check Functions section](element.md#state-check-functions) of the `PageElement` guide.
+please read the [State Check Functions section](element.md#state-check-functions)
+of the `PageElement` guide. Please note that not all types of `PageElement` state
+check functions are also available on a `PageElementGroup`.
 
 ### Filter Masks
 

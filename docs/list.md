@@ -413,7 +413,7 @@ you have two options:
 - You can simply loop over the array of `PageElement` instances returned by the
 `all` accessor of `PageElementList` and invoke an action function on each.
 - You can use the `eachDo()` method of the `PageElementList` which automatically
-loops over the `PageElementList` instances and invokes an action function which
+loops over the managed `PageElement` instances and invokes an action function which
 you need to pass to `eachDo()` on each page element. Using `eachDo()` allows you to
 optionally pass a [filter mask](#filter-masks) as second parameter to skip the action
 function's invocation for certain `PageElement` instances.
