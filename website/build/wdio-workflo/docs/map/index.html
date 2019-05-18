@@ -57,9 +57,7 @@ by extending wdio-workflo's <code>PageElementMap</code> or <code>ValuePageElemen
 <a href="/wdio-workflo/docs/customMap">Customizing a Map</a> guide.</em></p>
 <h2><a class="anchor" aria-hidden="true" id="overview-and-objective"></a><a href="#overview-and-objective" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview and Objective</h2>
 <p>Wdio-workflo's <code>PageElementMap</code> manages a static collection of <code>PageElement</code> instances
-or of instances of a class derived from the <code>PageElement</code> class. Static means
-that the contents of the collection/the individual page elements managed by the
-collection are already known at compile time and do not change during runtime.</p>
+of the same class. Static means that the contents of the collection/the individual page elements managed by the collection are already known at compile time and do not change during runtime.</p>
 <p>Some typical website components that should be mapped by a <code>PageElementMap</code>
 are a the links in a navigation menu, because they are usually known at the time
 of test creation and do not change during the runtime of your web application.</p>
@@ -225,7 +223,8 @@ function for certain <code>PageElement</code> instances by using a filter mask. 
 <a href="#filter-masks">Filter Masks section</a> of this guide shows you how to do that.</p>
 <p>For more information about the types of available state retrieval functions,
 please read the <a href="/wdio-workflo/docs/element#state-retrieval-functions">State Retrieval Functions section</a>
-of the <code>PageElement</code> guide.</p>
+of the <code>PageElement</code> guide. Please note that not all types of <code>PageElement</code> state
+retrieval functions are also available on a <code>PageElementMap</code>.</p>
 <h3><a class="anchor" aria-hidden="true" id="action-functions"></a><a href="#action-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Action Functions</h3>
 <p>Action functions change the state of the tested web application by interacting
 with HTML elements that are mapped by <code>PageElement</code> instances. To execute an
@@ -235,13 +234,13 @@ you have two options:</p>
 <li>You can access each <code>PageElement</code> instance via the <code>$</code> accessor and invoke an
 action function on each.</li>
 <li>You can use the <code>eachDo()</code> method of the <code>PageElementMap</code> which automatically
-loops over the <code>PageElementMap</code> instances and invokes an action function which
+loops over the managed <code>PageElement</code> instances and invokes an action function which
 you need to pass to <code>eachDo()</code> on each page element. Using <code>eachDo()</code> allows you to
 optionally pass a <a href="#filter-masks">filter mask</a> as second parameter to skip the action
 function's invocation for certain <code>PageElement</code> instances.</li>
 </ul>
 <p>The following code example compares both options for executing action functions
-on each element of a list:</p>
+on each element of a map:</p>
 <pre><code class="hljs css language-typescript"><span class="hljs-keyword">import</span> { stores } <span class="hljs-keyword">from</span> <span class="hljs-string">'?/page_objects'</span>;
 
 <span class="hljs-keyword">const</span> linkMap = stores.pageNode.ElementMap(<span class="hljs-string">'//a'</span>, {
@@ -341,7 +340,8 @@ corresponding sections of this guide:
 <a href="#the-wait-api">The <code>wait</code> API</a>,
 <a href="#the-eventually-api">The <code>eventually</code> API</a>.</p>
 <p>For more information about the types of available state check functions,
-please read the <a href="/wdio-workflo/docs/element#state-check-functions">State Check Functions section</a> of the <code>PageElement</code> guide.</p>
+please read the <a href="/wdio-workflo/docs/element#state-check-functions">State Check Functions section</a> of the <code>PageElement</code> guide. Please note that not all types of <code>PageElement</code> state
+check functions are also available on a <code>PageElementMap</code>.</p>
 <h3><a class="anchor" aria-hidden="true" id="filter-masks"></a><a href="#filter-masks" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Filter Masks</h3>
 <p>The <code>PageElementMap</code> filter mask allows you to restrict the execution of a
 state retrieval, action or state check function to certain managed <code>PageElement</code>
@@ -463,17 +463,20 @@ ones used by <code>PageElement</code> and you should read about them in the
 section of the <a href="/wdio-workflo/docs/element"><code>PageElement</code> guide</a> before you continue reading
 this guide.</p>
 <p>To learn how the behavior of state retrieval and state check functions of the <code>PageElementMap</code> class differs from its <code>PageElement</code> class equivalents, please
-read the <a href="#state-function-types">State Function Types section of this guide</a>.
-The types of available state retrieval and state check functions can be
-found in the <a href="/wdio-workflo/docs/element#state-function-types">State Function Types section of the <code>PageElement</code> guide</a> .</p>
+read the <a href="#state-function-types">State Function Types section of this guide</a>.</p>
+<p>The types of available state retrieval and state check functions can be
+found in the <a href="/wdio-workflo/docs/element#state-function-types">State Function Types section of the <code>PageElement</code> guide</a>. Please note that not all types of <code>PageElement</code>
+state retrieval and state check functions are also available on a <code>PageElementMap</code>.</p>
 <h3><a class="anchor" aria-hidden="true" id="the-currently-api"></a><a href="#the-currently-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>currently</code> API</h3>
 <p>The <code>currently</code> API of the <code>PageElementMap</code> class consists of state retrieval
 functions and state check functions. It does not trigger an implicit wait on the
 managed <code>PageElement</code> instances of the <code>PageElementMap</code>.</p>
-<p>The state retrieval functions of a map's <code>currently</code> API return an object whose
-keys are taken from the map's <code>mappingObject</code> and whose values represent the
-current values of the retrieved HTML attribute for each page element managed the map.
-The state check functions of the <code>currently</code> API check wether the page elements
+<p>The state retrieval functions of a map's <code>currently</code> API retrieve the values
+of a certain HTML attribute for each <code>PageElement</code> managed by the map. The return
+an object whose keys are taken from the map's <code>mappingObject</code> and whose values
+represent the current values of the retrieved HTML attribute for the respective
+page elements.</p>
+<p>The state check functions of the <code>currently</code> API check wether the page elements
 managed by the <code>PageElementMap</code> currently have an expected state for a certain
 HTML attribute.</p>
 <p>By using a <a href="#filter-masks">filter mask</a>, you can skip the invocation of a
@@ -482,13 +485,13 @@ the map.</p>
 <h3><a class="anchor" aria-hidden="true" id="the-wait-api"></a><a href="#the-wait-api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The <code>wait</code> API</h3>
 <h4><a class="anchor" aria-hidden="true" id="overview"></a><a href="#overview" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h4>
 <p>The <code>wait</code> API of the <code>PageElementMap</code> class allows you to explicitly wait
-for some or all of the list's managed <code>PageElement</code> instances to have an expected
+for some or all of the map's managed <code>PageElement</code> instances to have an expected
 state. It consists of state check functions only which all return an instance
 of the <code>PageElementList</code>.</p>
 <p>If you use a <a href="#filter-masks">filter mask</a>, the <code>wait</code> API only waits for the
 <code>PageElement</code> instances included by the filter mask to reach an expected state.
 Otherwise, the <code>wait</code> API waits for all managed <code>PageElement</code> instances to reach
-their expected state. If one or more <code>PageElement</code> instance fail to reach their
+their expected state. If one or more <code>PageElement</code> instances fail to reach their
 expected state within a specific timeout, an error will be thrown.</p>
 <h4><a class="anchor" aria-hidden="true" id="timeout"></a><a href="#timeout" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Timeout</h4>
 <p>The <code>timeout</code> within which the expected states of the <code>PageElement</code> instances must
@@ -530,7 +533,7 @@ please read the <a href="/wdio-workflo/docs/element#the-wait-api"><code>wait</co
 the <code>PageElement</code> instances managed by a <code>PageElementMap</code> eventually reach an
 expected state within a specific timeout. It consists of state check functions only
 that return <code>true</code> if all <code>PageElement</code> instances for which the state check function
-was executed eventually reached the expected state within specified the timeout.
+was executed eventually reached the expected state within the specified timeout.
 Otherwise, <code>false</code> will be returned.</p>
 <p>If you use a <a href="#filter-masks">filter mask</a>, the <code>eventually</code> API only checks the
 state of <code>PageElement</code> instances which are included by the filter mask. Otherwise,
