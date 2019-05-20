@@ -924,40 +924,49 @@ export declare class PageElementWait<Store extends PageNodeStore, PageElementTyp
      *
      * Throws an error if the condition is not met within a specific timeout.
      *
-     * @param opts includes the `timeout` within which the condition is expected to be met and a `reverse` flag that, if
-     * set to true, checks for the condition NOT to be met instead
+     * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+     * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
+     * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+     * instead
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      *
      * @returns this (an instance of PageElement)
      */
-    isVisible(opts?: Workflo.ITimeoutReverse): PageElementType;
+    isVisible(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
     /**
      * Waits for PageElement to be enabled.
      *
      * Throws an error if the condition is not met within a specific timeout.
      *
-     * @param opts includes the `timeout` within which the condition is expected to be met and a `reverse` flag that, if
-     * set to true, checks for the condition NOT to be met instead
+     * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+     * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
+     * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+     * instead
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      *
      * @returns this (an instance of PageElement)
      */
-    isEnabled(opts?: Workflo.ITimeoutReverse): PageElementType;
+    isEnabled(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
     /**
      * Waits for PageElement to be selected.
      *
      * Throws an error if the condition is not met within a specific timeout.
      *
-     * @param opts includes the `timeout` within which the condition is expected to be met and a `reverse` flag that, if
-     * set to true, checks for the condition NOT to be met instead
+     * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+     * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
+     * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+     * instead
      *
      * If no `timeout` is specified, PageElement's default timeout is used.
+     * If no `interval` is specified, PageElement's default interval is used.
      *
      * @returns this (an instance of PageElement)
      */
-    isSelected(opts?: Workflo.ITimeoutReverse): PageElementType;
+    isSelected(opts?: Workflo.ITimeoutReverseInterval): PageElementType;
     /**
      * Waits for PageElement to be checked.
      *

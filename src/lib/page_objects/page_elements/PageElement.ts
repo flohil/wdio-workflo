@@ -1613,17 +1613,33 @@ export class PageElementWait<
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
-   * @param opts includes the `timeout` within which the condition is expected to be met and a `reverse` flag that, if
-   * set to true, checks for the condition NOT to be met instead
+   * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
+   * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+   * instead
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
+   * If no `interval` is specified, PageElement's default interval is used.
    *
    * @returns this (an instance of PageElement)
    */
-  isVisible(opts: Workflo.ITimeoutReverse = {}) {
-    return this._waitWdioCheckFunc(
-      'became visible', opts => this._node.currently.element.waitForVisible(opts.timeout, opts.reverse), opts,
+  isVisible(opts: Workflo.ITimeoutReverseInterval = {}) {
+    const reverseStr = (opts.reverse) ? ' not' : '';
+
+    this._node.__waitUntil(
+      () => {
+        if (opts.reverse) {
+          return this._node.currently.not.isVisible();
+        } else {
+          return this._node.currently.isVisible();
+        }
+      },
+      () => ` never${reverseStr} became visible`,
+      opts.timeout || this._node.getTimeout(),
+      opts.interval || this._node.getInterval(),
     );
+
+    return this._node;
   }
 
   /**
@@ -1631,17 +1647,33 @@ export class PageElementWait<
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
-   * @param opts includes the `timeout` within which the condition is expected to be met and a `reverse` flag that, if
-   * set to true, checks for the condition NOT to be met instead
+   * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
+   * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+   * instead
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
+   * If no `interval` is specified, PageElement's default interval is used.
    *
    * @returns this (an instance of PageElement)
    */
-  isEnabled(opts: Workflo.ITimeoutReverse = {}) {
-    return this._waitWdioCheckFunc(
-      'became enabled', opts => this._node.currently.element.waitForEnabled(opts.timeout, opts.reverse), opts,
+  isEnabled(opts: Workflo.ITimeoutReverseInterval = {}) {
+    const reverseStr = (opts.reverse) ? ' not' : '';
+
+    this._node.__waitUntil(
+      () => {
+        if (opts.reverse) {
+          return this._node.currently.not.isEnabled();
+        } else {
+          return this._node.currently.isEnabled();
+        }
+      },
+      () => ` never${reverseStr} became enabled`,
+      opts.timeout || this._node.getTimeout(),
+      opts.interval || this._node.getInterval(),
     );
+
+    return this._node;
   }
 
   /**
@@ -1649,17 +1681,33 @@ export class PageElementWait<
    *
    * Throws an error if the condition is not met within a specific timeout.
    *
-   * @param opts includes the `timeout` within which the condition is expected to be met and a `reverse` flag that, if
-   * set to true, checks for the condition NOT to be met instead
+   * @param opts includes `filterMask` which can be used to skip the invocation of the state check function for
+   * some or all managed PageElements, the `timeout` within which the condition is expected to be met, the
+   * `interval` used to check it and a `reverse` flag that, if set to true, checks for the condition NOT to be met
+   * instead
    *
    * If no `timeout` is specified, PageElement's default timeout is used.
+   * If no `interval` is specified, PageElement's default interval is used.
    *
    * @returns this (an instance of PageElement)
    */
-  isSelected(opts: Workflo.ITimeoutReverse = {}) {
-    return this._waitWdioCheckFunc(
-      'became selected', opts => this._node.currently.element.waitForSelected(opts.timeout, opts.reverse), opts,
+  isSelected(opts: Workflo.ITimeoutReverseInterval = {}) {
+    const reverseStr = (opts.reverse) ? ' not' : '';
+
+    this._node.__waitUntil(
+      () => {
+        if (opts.reverse) {
+          return this._node.currently.not.isSelected();
+        } else {
+          return this._node.currently.isSelected();
+        }
+      },
+      () => ` never${reverseStr} became selected`,
+      opts.timeout || this._node.getTimeout(),
+      opts.interval || this._node.getInterval(),
     );
+
+    return this._node;
   }
 
   /**
@@ -1678,8 +1726,6 @@ export class PageElementWait<
    * @returns this (an instance of PageElement)
    */
   isChecked(opts: Workflo.ITimeoutReverseInterval = {}) {
-    const timeout = opts.timeout || this._node.getTimeout();
-    const interval = opts.interval || this._node.getInterval();
     const reverseStr = (opts.reverse) ? ' not' : '';
 
     this._node.__waitUntil(
@@ -1691,8 +1737,8 @@ export class PageElementWait<
         }
       },
       () => ` never${reverseStr} became checked`,
-      timeout,
-      interval,
+      opts.timeout || this._node.getTimeout(),
+      opts.interval || this._node.getInterval(),
     );
 
     return this._node;
