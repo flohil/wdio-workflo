@@ -1626,17 +1626,10 @@ export class PageElementWait<
   isVisible(opts: Workflo.ITimeoutReverseInterval = {}) {
     const reverseStr = (opts.reverse) ? ' not' : '';
 
-    this._node.__waitUntil(
-      () => {
-        if (opts.reverse) {
-          return this._node.currently.not.isVisible();
-        } else {
-          return this._node.currently.isVisible();
-        }
-      },
+    this._waitUntil(
+      () => opts.reverse ? this._node.currently.not.isVisible() : this._node.currently.isVisible(),
       () => ` never${reverseStr} became visible`,
-      opts.timeout || this._node.getTimeout(),
-      opts.interval || this._node.getInterval(),
+      opts,
     );
 
     return this._node;
@@ -1660,17 +1653,10 @@ export class PageElementWait<
   isEnabled(opts: Workflo.ITimeoutReverseInterval = {}) {
     const reverseStr = (opts.reverse) ? ' not' : '';
 
-    this._node.__waitUntil(
-      () => {
-        if (opts.reverse) {
-          return this._node.currently.not.isEnabled();
-        } else {
-          return this._node.currently.isEnabled();
-        }
-      },
+    this._waitUntil(
+      () => opts.reverse ? this._node.currently.not.isEnabled() : this._node.currently.isEnabled(),
       () => ` never${reverseStr} became enabled`,
-      opts.timeout || this._node.getTimeout(),
-      opts.interval || this._node.getInterval(),
+      opts,
     );
 
     return this._node;
@@ -1694,17 +1680,10 @@ export class PageElementWait<
   isSelected(opts: Workflo.ITimeoutReverseInterval = {}) {
     const reverseStr = (opts.reverse) ? ' not' : '';
 
-    this._node.__waitUntil(
-      () => {
-        if (opts.reverse) {
-          return this._node.currently.not.isSelected();
-        } else {
-          return this._node.currently.isSelected();
-        }
-      },
+    this._waitUntil(
+      () => opts.reverse ? this._node.currently.not.isSelected() : this._node.currently.isSelected(),
       () => ` never${reverseStr} became selected`,
-      opts.timeout || this._node.getTimeout(),
-      opts.interval || this._node.getInterval(),
+      opts,
     );
 
     return this._node;
@@ -1728,17 +1707,10 @@ export class PageElementWait<
   isChecked(opts: Workflo.ITimeoutReverseInterval = {}) {
     const reverseStr = (opts.reverse) ? ' not' : '';
 
-    this._node.__waitUntil(
-      () => {
-        if (opts.reverse) {
-          return this._node.currently.not.isChecked();
-        } else {
-          return this._node.currently.isChecked();
-        }
-      },
+    this._waitUntil(
+      () => opts.reverse ? this._node.currently.not.isChecked() : this._node.currently.isChecked(),
       () => ` never${reverseStr} became checked`,
-      opts.timeout || this._node.getTimeout(),
-      opts.interval || this._node.getInterval(),
+      opts,
     );
 
     return this._node;

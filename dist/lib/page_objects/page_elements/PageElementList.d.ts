@@ -1005,23 +1005,7 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
      * specific timeout.
      */
     readonly none: {
-        exists: (opts?: Workflo.ITimeout) => PageElementType; /**
-         * Waits for all PageElements managed by PageElementList not to have any direct text.
-         *
-         * Throws an error if the condition is not met within a specific timeout.
-         *
-         * A direct text is a text that resides on the level directly below the selected HTML element.
-         * It does not include any text of the HTML element's nested children HTML elements.
-         *
-         * @param opts includes a `filterMask` which can be used to skip the invocation of the `hasAnyDirectText` function
-         * for some or all managed PageElements, the `timeout` within which the condition is expected to be met and the
-         * `interval` used to check it
-         *
-         * If no `timeout` is specified, a PageElement's default timeout is used.
-         * If no `interval` is specified, a PageElement's default interval is used.
-         *
-         * @returns this (an instance of PageElementList)
-         */
+        exists: (opts?: Workflo.ITimeout) => PageElementType;
         isVisible: (opts?: Workflo.ITimeout) => PageElementType;
         isEnabled: (opts?: Workflo.ITimeout) => PageElementType;
         isSelected: (opts?: Workflo.ITimeout) => PageElementType;
@@ -1041,7 +1025,9 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
         hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasAnyClass: (opts?: Workflo.ITimeoutInterval) => PageElementType;
         containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
-        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
+        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType; /**
+         * returns the negated variants of PageElementListEventually's state check functions
+         */
         hasAnyId: (opts?: Workflo.ITimeoutInterval) => PageElementType;
         containsId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasName: (name: string, opts?: Workflo.ITimeoutInterval) => PageElementType;

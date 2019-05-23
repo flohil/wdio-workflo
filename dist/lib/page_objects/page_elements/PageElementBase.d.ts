@@ -160,7 +160,7 @@ export declare abstract class PageElementBaseCurrently<Store extends PageNodeSto
  */
 export declare abstract class PageElementBaseWait<Store extends PageNodeStore, PageElementType extends PageElementBase<Store>> extends PageNodeWait<Store, PageElementType> {
     /**
-     * This function waits for a certain condition to be met.
+     * This function wraps webdriverio commands that wait for an HTML element to reach a certain state.
      *
      * It does so by invoking a condition function which checks if a certain condition eventually becomes true within a
      * specific timeout.
@@ -176,9 +176,27 @@ export declare abstract class PageElementBaseWait<Store extends PageNodeStore, P
      */
     protected _waitWdioCheckFunc(checkTypeStr: string, conditionFunc: (opts: Workflo.ITimeoutReverseInterval) => boolean, { timeout, reverse, interval }?: Workflo.ITimeoutReverseInterval): PageElementType;
     /**
-     * This function can be used to assemble and execute a `wait` state check function.
+     * This function can be used to assemble and execute a `wait` state check function
+     * to wait for an HMTL element to reach an expected state.
      *
      * It regularly invokes a condition function until it returns true or until a specific timeout is reached.
+     *
+     * A `WaitUntilTimeoutError` will be thrown if the condition function's return value does not become true within the
+     * specific timeout.
+     *
+     * @param conditionFunc a function which checks if an HTML element has an expected state
+     * @param errorMessageFunc a function that returns an errorMessage if the HTML element didn't reach its expected state
+     * @param opts includes the `timeout` within which the condition function is expected to become true, the `interval`
+     * used to invoke the condition function and a `reverse` flag which, if set to `true`, negates the result of the
+     * condition function
+     */
+    protected _waitUntil<T>(conditionFunc: () => boolean, errorMessageFunc: () => string, { timeout, interval }?: Workflo.ITimeoutInterval): PageElementType;
+    /**
+     * This function can be used to assemble and execute a `wait` state check function
+     * to wait for the value of a certain property of an HMTL element to reach an expected state.
+     *
+     * It regularly invokes a condition function until it returns true or until a specific timeout is reached.
+     * If an expected value was provided, this value will be passed to the condition function as second parameter.
      *
      * A `WaitUntilTimeoutError` will be thrown if the condition function's return value does not become true within the
      * specific timeout.
