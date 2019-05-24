@@ -292,10 +292,19 @@ export declare class PageElement<Store extends PageNodeStore> extends PageElemen
        * If a postCondition is defined in `click`'s options, the click will be repeated until the postCondition function
        * returns true or until a specific timeout is reached.
        *
-       * @param options configures the scrolling behavior
+       * @param opts includes options used to configure the behavior of the click function:
+       *
+       *  - postCondition: If defined, a click on PageElement will be repeated until the result this function returns true.
+       *  - customScroll: Overwrites the default custom scrolling behavior used by the click function.
+       *  - timeout: Defines how long the PageElement can take to become clickable and the postCondition to be met.
+       *  - interval: The interval used to wait for PageElement to become clickable and the postCondition to be met.
+       *
+       * If no `timeout` is specified, PageElement's default timeout is used.
+       * If no `interval` is specified, PageElement's default interval is used.
+       *
        * @returns this (an instance of PageElement)
        */
-    click(options?: Workflo.IClickOpts): this;
+    click(opts?: Workflo.IClickOpts): this;
     /**
      * Scrolls PageElement into view if PageElement resides in a scrollable container.
      *

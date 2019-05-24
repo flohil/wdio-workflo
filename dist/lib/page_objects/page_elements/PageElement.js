@@ -438,26 +438,33 @@ class PageElement extends _1.PageElementBase {
        * If a postCondition is defined in `click`'s options, the click will be repeated until the postCondition function
        * returns true or until a specific timeout is reached.
        *
-       * @param options configures the scrolling behavior
+       * @param opts includes options used to configure the behavior of the click function:
+       *
+       *  - postCondition: If defined, a click on PageElement will be repeated until the result this function returns true.
+       *  - customScroll: Overwrites the default custom scrolling behavior used by the click function.
+       *  - timeout: Defines how long the PageElement can take to become clickable and the postCondition to be met.
+       *  - interval: The interval used to wait for PageElement to become clickable and the postCondition to be met.
+       *
+       * If no `timeout` is specified, PageElement's default timeout is used.
+       * If no `interval` is specified, PageElement's default interval is used.
+       *
        * @returns this (an instance of PageElement)
        */
-    click(options = {}) {
-        this.initialWait();
+    click(opts = {}) {
+        const interval = opts.interval || this._interval;
+        const timeout = opts.timeout || this._timeout;
+        let remainingTimeout = timeout;
         let errorMessage = '';
-        const interval = options.interval || this._interval;
-        const viewPortSize = browser.getViewportSize();
-        const y = viewPortSize.height / 2;
-        const x = viewPortSize.width / 2;
-        let remainingTimeout = this._timeout;
-        if (!options) {
-            options = {};
+        this.initialWait();
+        if (!opts) {
+            opts = {};
         }
-        if (options && !options.customScroll) {
+        if (opts && !opts.customScroll) {
             if (this._customScroll) {
-                options.customScroll = this._customScroll;
+                opts.customScroll = this._customScroll;
             }
         }
-        const clickFunc = !options.customScroll ? () => this.__element.click() : () => {
+        const clickFunc = !opts.customScroll ? () => this.__element.click() : () => {
             const result = browser.selectorExecute(
             // tslint:disable-next-line:ter-prefer-arrow-callback
             this.getSelector(), function (elems, selector) {
@@ -472,8 +479,8 @@ class PageElement extends _1.PageElementBase {
                 throw new Error(`${this.constructor.name} could not be clicked: ${result.notFound.join(', ')}\n( ${this._selector} )`);
             }
         };
-        if (options.customScroll) {
-            this._scrollTo(options.customScroll);
+        if (opts.customScroll) {
+            this._scrollTo(opts.customScroll);
         }
         // wait for other overlapping elements to disappear
         try {
@@ -494,18 +501,20 @@ class PageElement extends _1.PageElementBase {
                         throw error;
                     }
                 }
-            }, this._timeout, `${this.constructor.name} did not become clickable after timeout.\n( ${this._selector} )`, interval);
+            }, timeout, `${this.constructor.name} did not become clickable within ${timeout}ms.\n( ${this._selector} )`, interval);
         }
         catch (waitE) {
-            waitE.message = errorMessage.replace('unknown error: ', '');
+            if (errorMessage) {
+                waitE.message = errorMessage.replace('unknown error: ', '');
+            }
             throw waitE;
         }
-        if (options && options.postCondition && remainingTimeout > 0) {
-            options.timeout = options.timeout || this._timeout;
+        if (opts && opts.postCondition && remainingTimeout > 0) {
+            const msg = `Postcondition for click on ${this.constructor.name} never became true within ${remainingTimeout}ms.`;
             try {
                 browser.waitUntil(() => {
                     try {
-                        if (options.postCondition()) {
+                        if (opts.postCondition()) {
                             return true;
                         }
                         else {
@@ -517,10 +526,12 @@ class PageElement extends _1.PageElementBase {
                     catch (error) {
                         errorMessage = error.message;
                     }
-                }, remainingTimeout + options.timeout, `${this.constructor.name}: Postcondition for click never became true.\n( ${this._selector} )`, interval);
+                }, remainingTimeout, `${msg}\n( ${this._selector} )`, interval);
             }
             catch (waitE) {
-                waitE.message = errorMessage.replace('unknown error: ', '');
+                if (errorMessage) {
+                    waitE.message = errorMessage.replace('unknown error: ', '');
+                }
                 throw waitE;
             }
         }

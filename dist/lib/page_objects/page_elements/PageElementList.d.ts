@@ -605,15 +605,6 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
      */
     readonly none: {
         exists: () => boolean;
-        /**
-         * Returns the current direct texts of all PageElements managed by PageElementList as an array.
-         *
-         * A direct text is a text that resides on the level directly below the selected HTML element.
-         * It does not include any text of the HTML element's nested children HTML elements.
-         *
-         * @param filterMask can be used to skip the invocation of the `getDirectText` function for some or all managed
-         * PageElements. The results of skipped function invocations are not included in the total results array.
-         */
         isVisible: () => boolean;
         isEnabled: () => boolean;
         isSelected: () => boolean;
@@ -630,7 +621,14 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
         hasAttribute: (attribute: Workflo.IAttribute) => boolean;
         hasAnyAttribute: (attributeName: string) => boolean;
         containsAttribute: (attribute: Workflo.IAttribute) => boolean;
-        hasClass: (className: string) => boolean;
+        hasClass: (className: string) => boolean; /**
+         * Returns the current 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array.
+         *
+         * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
+         *
+         * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
+         * PageElements. The results of skipped function invocations are not included in the total results array.
+         */
         hasAnyClass: () => boolean;
         containsClass: (className: string) => boolean;
         hasId: (id: string) => boolean;
@@ -1025,9 +1023,7 @@ export declare class PageElementListWait<Store extends PageNodeStore, PageElemen
         hasClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasAnyClass: (opts?: Workflo.ITimeoutInterval) => PageElementType;
         containsClass: (className: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
-        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType; /**
-         * returns the negated variants of PageElementListEventually's state check functions
-         */
+        hasId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasAnyId: (opts?: Workflo.ITimeoutInterval) => PageElementType;
         containsId: (id: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
         hasName: (name: string, opts?: Workflo.ITimeoutInterval) => PageElementType;
