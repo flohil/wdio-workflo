@@ -621,14 +621,7 @@ export declare class PageElementListCurrently<Store extends PageNodeStore, PageE
         hasAttribute: (attribute: Workflo.IAttribute) => boolean;
         hasAnyAttribute: (attributeName: string) => boolean;
         containsAttribute: (attribute: Workflo.IAttribute) => boolean;
-        hasClass: (className: string) => boolean; /**
-         * Returns the current 'hasAnyDirectText' status of all PageElements managed by PageElementList as an array.
-         *
-         * A PageElement's 'hasAnyDirectText' status is set to true if the PageElement has any direct text.
-         *
-         * @param filterMask can be used to skip the invocation of the `getHasAnyDirectText` function for some or all managed
-         * PageElements. The results of skipped function invocations are not included in the total results array.
-         */
+        hasClass: (className: string) => boolean;
         hasAnyClass: () => boolean;
         containsClass: (className: string) => boolean;
         hasId: (id: string) => boolean;

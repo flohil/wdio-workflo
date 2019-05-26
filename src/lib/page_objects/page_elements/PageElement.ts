@@ -589,7 +589,7 @@ export class PageElement<
     }
 
     if (opts && opts.postCondition && remainingTimeout > 0) {
-      const msg = `Postcondition for click on ${this.constructor.name} never became true within ${remainingTimeout}ms.`;
+      const msg = `Postcondition for click on ${this.constructor.name} never became true within ${timeout}ms.`;
 
       try {
         browser.waitUntil(
