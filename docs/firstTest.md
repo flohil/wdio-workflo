@@ -89,31 +89,36 @@ usually consists of many of these components.
 Wdio-workflo provides 4 base classes to recreate website components in our
 testing environment:
 
-- `PageElement` to map a single component
-- `PageElementList` to map a collection of similar components with dynamic data like a news feed or a data table
-- `PageElementMap` to map a collection of similar components with static data like the entries of a navigation menu
-- `PageElementGroup` to map a composition of different components like a form (with inputs, checkboxes, dropdowns...)
+- [`PageElement`](element.md) to map a single component
+- [`PageElementList`](list.md) to map a collection of similar components with dynamic data like a news feed
+- [`PageElementMap`](map.md) to map a collection of similar components with static data like navigation menu entries
+- [`PageElementGroup`](group.md) to map a composition of different components like a form
+(with inputs, checkboxes, dropdowns...)
 
 All of these classes are already implemented by wdio-workflo and you can use them to map very basic website components like a button or a div/span container which simply renders some text.
 
 You can, of course, derive your own `PageNode` classes from these base classes
-to map more complex website components. However, for our first functional system test, we will skip the creation of a custom `PageNode` class and use the basic `PageElement` class to map the "framework link" located on the footer.
+to map more complex website components. However, for our first functional system test,
+we will skip the creation of a custom `PageNode` class and use the basic `PageElement`
+class to map the "framework link" located on the footer.
 
 ### Page Node Stores
 
-A `PageNodeStore` configures, initializes and caches instances of `PageNode`s.
+A [`PageNodeStore`](store.md) configures, initializes and caches instances of `PageNode`s.
 It can be thought of as a mixture of Factory and Facade pattern.
 
 Writing functional system tests with wdio-workflo, we usually never instantiate
 `PageNode`s directly but always use `PageNodeStores` to access instances of
 `PageNode`s.
 
-When you create your own custom `PageNode` classes, you have to add a factory method in a `PageNodeStore` in order to use your custom page nodes. Since we do not use any custom `PageNode` classes in our first functional system test,
+When you create your own custom `PageNode` classes, you have to add a factory method
+in a `PageNodeStore` in order to use your custom page nodes.
+Since we do not use any custom `PageNode` classes in our first functional system test,
 we can skip this for now.
 
 ### Pages
 
-A `Page` in wdio-workflo is basically an aggregation of `PageNodes`. It maps
+A [`Page`](page.md) in wdio-workflo is basically an aggregation of `PageNodes`. It maps
 the structure of a website's pages, dialogs or page fragments (eg. header, footer...).
 Each `Page` is assigned an instance of a `PageNodeStore` to create its `PageNode`s.
 
@@ -260,7 +265,7 @@ export { common };
 ## Steps
 
 Now that we have mapped all of the demo website's components with which we need
-to interact, we need to write `Step`s which encapsulate these website interactions
+to interact, we need to write [Steps](steps.md) which encapsulate these website interactions
 in order to make them reusable.
 
 Each `Step` is defined by
@@ -408,7 +413,7 @@ be able to handle your steps correctly.
 
 ## Testcases
 
-We have now finished all preliminary work to write our first actual `testcase`.
+We have now finished all preliminary work to write our first actual [testcase](testcases.md).
 
 A `testcase` is defined by a title, some metadata about the testcase and a body function. The body function contains a sequence of `Step`s which modify the state of the tested web application. Within the callback function of each `Step`, a testcase can validate one or many acceptance criteria of our requirements which we defined in our spec files.
 
@@ -515,17 +520,16 @@ our newly created testcase, we could run:
 ./node_modules/.bin/wdio-workflo --testcases '["demo.open framework link"]'
 ```
 
-You can read more about execution filters in the [Execution Filters guide]
-(executionFilters.md).
+You can read more about execution filters in the [Execution Filters guide](runningTests.md#cli-execution-filters).
 
 Or, you can learn about all CLI options available in Wdio-Workflo by visiting
 the [CLI Options page](cliOptions.md).
 
 ## Showing the Test Report
 
-While running your tests, wdio-workflo will write a spec report into the console
-window. This report is useful for test development, because in case of errors,
-you can jump directly to the line in which the error occurred by clicking on this
+While running your tests, wdio-workflo will write a [spec report](reporters#spec-reporter)
+into the console window. This report is useful for test development, because in case of
+errors, you can jump directly to the line in which the error occurred by clicking on this
 line in the error stack trace.
 
 If you run your tests on a continuous integration server like Jenkins, wdio-workflo
@@ -544,5 +548,4 @@ Allure's "Overview" and "Graphs" page will treat both testcases and specs as "te
 However, you can open Allure's "Behaviors" page which groups all test artifacts into "Specs" and
 "Testcases" to examine specs and testcases separately.
 
-For more information about test reports, please read the [Test Report guide]
-(testReport.md).
+For more information about test reports, please read the [Reporters guide](reporters.md).

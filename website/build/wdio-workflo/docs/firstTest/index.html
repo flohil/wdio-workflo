@@ -113,24 +113,29 @@ usually consists of many of these components.</p>
 <p>Wdio-workflo provides 4 base classes to recreate website components in our
 testing environment:</p>
 <ul>
-<li><code>PageElement</code> to map a single component</li>
-<li><code>PageElementList</code> to map a collection of similar components with dynamic data like a news feed or a data table</li>
-<li><code>PageElementMap</code> to map a collection of similar components with static data like the entries of a navigation menu</li>
-<li><code>PageElementGroup</code> to map a composition of different components like a form (with inputs, checkboxes, dropdowns...)</li>
+<li><a href="/wdio-workflo/docs/element"><code>PageElement</code></a> to map a single component</li>
+<li><a href="/wdio-workflo/docs/list"><code>PageElementList</code></a> to map a collection of similar components with dynamic data like a news feed</li>
+<li><a href="/wdio-workflo/docs/map"><code>PageElementMap</code></a> to map a collection of similar components with static data like navigation menu entries</li>
+<li><a href="/wdio-workflo/docs/group"><code>PageElementGroup</code></a> to map a composition of different components like a form
+(with inputs, checkboxes, dropdowns...)</li>
 </ul>
 <p>All of these classes are already implemented by wdio-workflo and you can use them to map very basic website components like a button or a div/span container which simply renders some text.</p>
 <p>You can, of course, derive your own <code>PageNode</code> classes from these base classes
-to map more complex website components. However, for our first functional system test, we will skip the creation of a custom <code>PageNode</code> class and use the basic <code>PageElement</code> class to map the &quot;framework link&quot; located on the footer.</p>
+to map more complex website components. However, for our first functional system test,
+we will skip the creation of a custom <code>PageNode</code> class and use the basic <code>PageElement</code>
+class to map the &quot;framework link&quot; located on the footer.</p>
 <h3><a class="anchor" aria-hidden="true" id="page-node-stores"></a><a href="#page-node-stores" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Page Node Stores</h3>
-<p>A <code>PageNodeStore</code> configures, initializes and caches instances of <code>PageNode</code>s.
+<p>A <a href="/wdio-workflo/docs/store"><code>PageNodeStore</code></a> configures, initializes and caches instances of <code>PageNode</code>s.
 It can be thought of as a mixture of Factory and Facade pattern.</p>
 <p>Writing functional system tests with wdio-workflo, we usually never instantiate
 <code>PageNode</code>s directly but always use <code>PageNodeStores</code> to access instances of
 <code>PageNode</code>s.</p>
-<p>When you create your own custom <code>PageNode</code> classes, you have to add a factory method in a <code>PageNodeStore</code> in order to use your custom page nodes. Since we do not use any custom <code>PageNode</code> classes in our first functional system test,
+<p>When you create your own custom <code>PageNode</code> classes, you have to add a factory method
+in a <code>PageNodeStore</code> in order to use your custom page nodes.
+Since we do not use any custom <code>PageNode</code> classes in our first functional system test,
 we can skip this for now.</p>
 <h3><a class="anchor" aria-hidden="true" id="pages"></a><a href="#pages" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pages</h3>
-<p>A <code>Page</code> in wdio-workflo is basically an aggregation of <code>PageNodes</code>. It maps
+<p>A <a href="/wdio-workflo/docs/page"><code>Page</code></a> in wdio-workflo is basically an aggregation of <code>PageNodes</code>. It maps
 the structure of a website's pages, dialogs or page fragments (eg. header, footer...).
 Each <code>Page</code> is assigned an instance of a <code>PageNodeStore</code> to create its <code>PageNode</code>s.</p>
 <p>In addition, a <code>Page</code> can also define method to abstract the behavior of a
@@ -245,7 +250,7 @@ and import all page objects defined within a folder as a single &quot;module&quo
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="steps"></a><a href="#steps" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Steps</h2>
 <p>Now that we have mapped all of the demo website's components with which we need
-to interact, we need to write <code>Step</code>s which encapsulate these website interactions
+to interact, we need to write <a href="/wdio-workflo/docs/steps">Steps</a> which encapsulate these website interactions
 in order to make them reusable.</p>
 <p>Each <code>Step</code> is defined by</p>
 <ul>
@@ -366,7 +371,7 @@ that your exported steps have been proxified by calling wdio-workflo's <code>pro
 function and passing it your step definitions. Otherwise, wdio-workflo will not
 be able to handle your steps correctly.</p>
 <h2><a class="anchor" aria-hidden="true" id="testcases"></a><a href="#testcases" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testcases</h2>
-<p>We have now finished all preliminary work to write our first actual <code>testcase</code>.</p>
+<p>We have now finished all preliminary work to write our first actual <a href="/wdio-workflo/docs/testcases">testcase</a>.</p>
 <p>A <code>testcase</code> is defined by a title, some metadata about the testcase and a body function. The body function contains a sequence of <code>Step</code>s which modify the state of the tested web application. Within the callback function of each <code>Step</code>, a testcase can validate one or many acceptance criteria of our requirements which we defined in our spec files.</p>
 <p>Multiple similar <code>testcase</code>s should be grouped together in <code>suite</code>s.</p>
 <p>For our first <code>testcase</code>, create the file <code>demo.tc.ts</code> in the folder <code>src/testcases</code>
@@ -448,14 +453,13 @@ wdio-workflo.</p>
 our newly created testcase, we could run:</p>
 <pre><code class="hljs"><span class="hljs-string">./node_modules/.bin/wdio-workflo</span> <span class="hljs-params">--testcases</span> '[<span class="hljs-string">"demo.open framework link"</span>]'
 </code></pre>
-<p>You can read more about execution filters in the [Execution Filters guide]
-(executionFilters.md).</p>
+<p>You can read more about execution filters in the <a href="/wdio-workflo/docs/runningTests#cli-execution-filters">Execution Filters guide</a>.</p>
 <p>Or, you can learn about all CLI options available in Wdio-Workflo by visiting
 the <a href="/wdio-workflo/docs/cliOptions">CLI Options page</a>.</p>
 <h2><a class="anchor" aria-hidden="true" id="showing-the-test-report"></a><a href="#showing-the-test-report" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Showing the Test Report</h2>
-<p>While running your tests, wdio-workflo will write a spec report into the console
-window. This report is useful for test development, because in case of errors,
-you can jump directly to the line in which the error occurred by clicking on this
+<p>While running your tests, wdio-workflo will write a <a href="reporters#spec-reporter">spec report</a>
+into the console window. This report is useful for test development, because in case of
+errors, you can jump directly to the line in which the error occurred by clicking on this
 line in the error stack trace.</p>
 <p>If you run your tests on a continuous integration server like Jenkins, wdio-workflo
 also supports a nice graphical report in the <a href="http://allure.qatools.ru/">Allure Report</a> format.</p>
@@ -467,8 +471,7 @@ does not differentiate between testcases and specs properly on all of its pages:
 <p>Allure's &quot;Overview&quot; and &quot;Graphs&quot; page will treat both testcases and specs as &quot;test cases&quot; or &quot;tests&quot;.
 However, you can open Allure's &quot;Behaviors&quot; page which groups all test artifacts into &quot;Specs&quot; and
 &quot;Testcases&quot; to examine specs and testcases separately.</p>
-<p>For more information about test reports, please read the [Test Report guide]
-(testReport.md).</p>
+<p>For more information about test reports, please read the <a href="/wdio-workflo/docs/reporters">Reporters guide</a>.</p>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/wdio-workflo/docs/setup"><span class="arrow-prev">← </span><span>Setup</span></a><a class="docs-next button" href="/wdio-workflo/docs/config"><span>Configuration Options</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview">Overview</a></li><li><a href="#prerequisites">Prerequisites</a></li><li><a href="#defining-the-requirements">Defining the Requirements</a></li><li><a href="#creating-page-objects">Creating Page Objects</a><ul class="toc-headings"><li><a href="#page-nodes">Page Nodes</a></li><li><a href="#page-node-stores">Page Node Stores</a></li><li><a href="#pages">Pages</a></li></ul></li><li><a href="#steps">Steps</a></li><li><a href="#testcases">Testcases</a></li><li><a href="#running-your-test">Running your Test</a></li><li><a href="#showing-the-test-report">Showing the Test Report</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/wdio-workflo/" class="nav-home"><img src="/wdio-workflo/img/logo.svg" alt="Wdio-Workflo" width="66" height="58"/></a><div><h5>Docs</h5><a href="/wdio-workflo/docs/setup">Guides</a><a href="https://github.com/flohil/wdio-workflo-example">Examples</a><a href="/wdio-workflo/apiDoc">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/flohil/wdio-workflo">GitHub</a><a class="github-button" href="https://github.com/flohil/wdio-workflo" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Florian Hilbinger</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
