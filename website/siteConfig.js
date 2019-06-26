@@ -40,7 +40,9 @@ const siteConfig = {
   ],
 
   algolia: {
-    placeholder: 'Search'
+    placeholder: 'Search',
+    apiKey: '06ded81a116783d66e7d32d28ee42d05',
+    indexName: 'wdio-workflo',
   },
 
   /* path to images for header/footer */
