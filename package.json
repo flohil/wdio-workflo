@@ -60,7 +60,7 @@
     "jasmine-object-matchers-jest": "^0.1.0",
     "jasmine-reporters": "^2.2.1",
     "jasmine2-custom-message": "^0.8.2",
-    "json5": "^0.5.1",
+    "json5": "^1.0.2",
     "jsonfile": "^3.0.1",
     "lodash": "^4.17.11",
     "nodemon": "^1.11.0",
